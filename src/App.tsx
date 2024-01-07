@@ -1,8 +1,13 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useState } from 'react'
+import { useAtom } from 'jotai'
+import jwtDecode from 'jwt-decode'
 import Router from './router'
 import Spinner from './components/Spinner'
 import { setAuthHeader } from './api/ApiConfig'
+import { colorBlindModeAtom, tokenAtom } from './store'
+import { applyTheme, parseTheme } from './utilities/theme'
+import { Auth0AppMetadata } from './types/appMetadata'
 
 // Sentry.init({
 //     dsn: 'https://f1ec1f17fb784a12af5cd4f7ddf29d09@sen.kaytu.io/2',
@@ -36,8 +41,9 @@ import { setAuthHeader } from './api/ApiConfig'
 
 export default function App() {
     const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0()
-    const [token, setToken] = useState<string>('')
+    const [token, setToken] = useAtom(tokenAtom)
     const [accessTokenLoading, setAccessTokenLoading] = useState<boolean>(false)
+    const [colorBlindMode, setColorBlindMode] = useAtom(colorBlindModeAtom)
 
     useEffect(() => {
         if (isAuthenticated && token === '') {
@@ -48,6 +54,22 @@ export default function App() {
                         setToken(accessToken)
                         setAuthHeader(accessToken)
                         setAccessTokenLoading(false)
+                        const decodedToken =
+                            accessToken === undefined || accessToken === ''
+                                ? undefined
+                                : jwtDecode<Auth0AppMetadata>(accessToken)
+                        if (decodedToken !== undefined) {
+                            applyTheme(
+                                parseTheme(
+                                    decodedToken['https://app.kaytu.io/theme']
+                                )
+                            )
+                            setColorBlindMode(
+                                decodedToken[
+                                    'https://app.kaytu.io/colorBlindMode'
+                                ] || false
+                            )
+                        }
                     })
                     .catch((err) => {
                         console.error(err)

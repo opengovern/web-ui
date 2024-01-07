@@ -1,11 +1,9 @@
 import ReactEcharts from 'echarts-for-react'
 import { Flex, Text } from '@tremor/react'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
-import {
-    exactPriceDisplay,
-    numberDisplay,
-    numericDisplay,
-} from '../../../utilities/numericDisplay'
+import { useAtomValue } from 'jotai'
+import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+import { colorBlindModeAtom } from '../../../store'
 
 export interface StackItem {
     label: string
@@ -35,6 +33,8 @@ export default function StackedChart({
     onRefresh,
     onClick,
 }: IChart) {
+    const colorBlindMode = useAtomValue(colorBlindModeAtom)
+
     const uniqueStackLabels = chartData
         .flatMap((v) => v.map((i) => i.label))
         .filter((l, idx, arr) => arr.indexOf(l) === idx)
@@ -60,6 +60,12 @@ export default function StackedChart({
 
     const options = () => {
         return {
+            aria: {
+                enable: colorBlindMode,
+                decal: {
+                    show: colorBlindMode,
+                },
+            },
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {

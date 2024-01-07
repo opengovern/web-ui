@@ -7,8 +7,8 @@ import {
     UserIcon,
 } from '@heroicons/react/24/outline'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
-import { useAuth0 } from '@auth0/auth0-react'
 import jwtDecode from 'jwt-decode'
+import { useAtomValue } from 'jotai'
 import Layout from '../../components/Layout'
 import SettingsEntitlement from './Entitlement'
 import SettingsMembers from './Members'
@@ -18,8 +18,11 @@ import SettingsOrganization from './Organization'
 import SettingsGitRepositories from './GitRepositories'
 import { useWorkspaceApiV1WorkspaceCurrentList } from '../../api/workspace.gen'
 import Spinner from '../../components/Spinner'
+
+import { tokenAtom } from '../../store'
 import SettingsJobs from './Jobs'
 import SettingsCustomization from './Customization'
+import { Auth0AppMetadata } from '../../types/appMetadata'
 
 const navigation = [
     {
@@ -94,24 +97,18 @@ const navigation = [
 
 export default function Settings() {
     const [selectedTab, setSelectedTab] = useState(<SettingsEntitlement />)
-    const [decodedToken, SetDecodedToken] = useState()
-    const [tokenLoading, setTokenLoading] = useState(true)
-    const { getAccessTokenSilently } = useAuth0()
+    const token = useAtomValue(tokenAtom)
+    const decodedToken =
+        token === undefined || token === ''
+            ? undefined
+            : jwtDecode<Auth0AppMetadata>(token)
+
     const { response: curWorkspace, isLoading } =
         useWorkspaceApiV1WorkspaceCurrentList()
     const workspace = useParams<{ ws: string }>().ws
 
     const [searchParams, setSearchParams] = useSearchParams()
     const currentSubPage = searchParams.get('sp')
-
-    useEffect(() => {
-        getAccessTokenSilently().then((e) => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const decoded: any = jwtDecode(e)
-            SetDecodedToken(decoded)
-            setTokenLoading(false)
-        })
-    }, [])
 
     useEffect(() => {
         switch (currentSubPage) {
@@ -203,7 +200,7 @@ export default function Settings() {
                         </ul>
                     </nav>
                 </Flex>
-                {isLoading || tokenLoading ? (
+                {isLoading ? (
                     <Flex justifyContent="center" className="mt-56">
                         <Spinner />
                     </Flex>

@@ -111,10 +111,10 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
         name: 'Passed',
         color: '#54B584',
         percent:
-            ((benchmark?.conformanceStatusSummary?.okCount || 0) /
+            ((benchmark?.conformanceStatusSummary?.passed || 0) /
                 benchmarkChecks(benchmark).total) *
             100,
-        count: benchmark?.conformanceStatusSummary?.okCount || 0,
+        count: benchmark?.conformanceStatusSummary?.passed || 0,
         controlPercent:
             ((benchmark?.controlsSeverityStatus?.total?.passed || 0) /
                 (benchmark?.controlsSeverityStatus?.total?.total || 1)) *

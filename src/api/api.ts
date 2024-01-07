@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -180,6 +181,11 @@ export enum GithubComKaytuIoKaytuEnginePkgAnalyticsDbMetricType {
     MetricTypeSpend = 'spend',
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiChangeUserPreferencesRequest {
+    enableColorBlindMode?: boolean
+    theme?: GithubComKaytuIoKaytuEnginePkgAuthApiTheme
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest {
     /** Name of the key */
     name?: string
@@ -358,6 +364,12 @@ export enum GithubComKaytuIoKaytuEnginePkgAuthApiRole {
     AdminRole = 'admin',
     EditorRole = 'editor',
     ViewerRole = 'viewer',
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgAuthApiTheme {
+    ThemeSystem = 'system',
+    ThemeLight = 'light',
+    ThemeDark = 'dark',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiUserRoleBinding {
@@ -661,7 +673,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      */
     children?: string[]
     /** Compliance result summary */
-    conformanceStatusSummary?: TypesConformanceStatusSummary
+    conformanceStatusSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatusSummary
     /**
      * Benchmark connectors
      * @example ["[azure]"]
@@ -766,6 +778,16 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapo
     timestamp?: number
 }
 
+export enum GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus {
+    ConformanceStatusFailed = 'failed',
+    ConformanceStatusPassed = 'passed',
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatusSummary {
+    passed?: number
+    total?: number
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControl {
     /** @example "To enable multi-factor authentication for a user, run the following command..." */
     cliRemediation?: string
@@ -833,7 +855,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     /** @example 1 */
     complianceJobID?: number
     /** @example "alarm" */
-    conformanceStatus?: TypesConformanceStatus
+    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus
     /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
     connectionID?: string
     /** @example "Azure" */
@@ -841,8 +863,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     /** @example "azure_cis_v140_7_5" */
     controlID?: string
     controlTitle?: string
-    es_id?: string
-    es_index?: string
     /** @example 1589395200 */
     evaluatedAt?: number
     /** @example "steampipe-v0.5" */
@@ -912,7 +932,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
      */
     benchmarkID?: string[]
     /** @example ["alarm"] */
-    conformanceStatus?: TypesConformanceStatus[]
+    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
     /**
      * Connection ID
      * @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"]
@@ -982,7 +1002,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsS
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse {
     benchmarkSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary[]
     totalChecks?: TypesSeverityResult
-    totalConformanceStatusSummary?: TypesConformanceStatusSummary
+    totalConformanceStatusSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatusSummary
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest {
@@ -1230,7 +1250,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsFilt
     /** @example ["azure_cis_v140"] */
     benchmarkID?: string[]
     /** @example ["alarm"] */
-    conformanceStatus?: TypesConformanceStatus[]
+    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
     /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
     connectionID?: string[]
     /** @example ["Azure"] */
@@ -1257,11 +1277,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsSort
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSummary {
     conformanceStatusesCount?: {
-        error?: number
         failed?: number
-        info?: number
         passed?: number
-        skip?: number
     }
     securityScore?: number
     serviceLabel?: string
@@ -2747,27 +2764,6 @@ export enum SourceType {
     CloudAzure = 'Azure',
 }
 
-export enum TypesConformanceStatus {
-    ConformanceStatusOK = 'ok',
-    ConformanceStatusALARM = 'alarm',
-    ConformanceStatusINFO = 'info',
-    ConformanceStatusSKIP = 'skip',
-    ConformanceStatusERROR = 'error',
-}
-
-export interface TypesConformanceStatusSummary {
-    /** @example 1 */
-    alarmCount?: number
-    /** @example 1 */
-    errorCount?: number
-    /** @example 1 */
-    infoCount?: number
-    /** @example 1 */
-    okCount?: number
-    /** @example 1 */
-    skipCount?: number
-}
-
 export enum TypesFindingSeverity {
     FindingSeverityNone = 'none',
     FindingSeverityLow = 'low',
@@ -3332,6 +3328,28 @@ export class Api<
             this.request<void, any>({
                 path: `/auth/api/v1/user/invite`,
                 method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
+         * @description Changes user color blind mode and color mode
+         *
+         * @tags users
+         * @name ApiV1UserPreferencesUpdate
+         * @summary Change User Preferences
+         * @request PUT:/auth/api/v1/user/preferences
+         * @secure
+         */
+        apiV1UserPreferencesUpdate: (
+            request: GithubComKaytuIoKaytuEnginePkgAuthApiChangeUserPreferencesRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/auth/api/v1/user/preferences`,
+                method: 'PUT',
                 body: request,
                 secure: true,
                 type: ContentType.Json,

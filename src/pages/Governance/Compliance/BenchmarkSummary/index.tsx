@@ -352,7 +352,7 @@ export default function BenchmarkSummary() {
                                                 {numberDisplay(
                                                     benchmarkDetail
                                                         ?.conformanceStatusSummary
-                                                        ?.okCount || 0,
+                                                        ?.passed || 0,
                                                     0
                                                 )}
                                             </Text>
@@ -367,7 +367,7 @@ export default function BenchmarkSummary() {
                                                     ).total -
                                                         (benchmarkDetail
                                                             ?.conformanceStatusSummary
-                                                            ?.okCount || 0),
+                                                            ?.passed || 0),
                                                     0
                                                 )}
                                             </Text>
