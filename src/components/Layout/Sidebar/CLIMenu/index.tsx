@@ -6,9 +6,9 @@ import {
 } from '@heroicons/react/24/outline'
 import { Button, Card, Flex, Text } from '@tremor/react'
 import clipboardCopy from 'clipboard-copy'
-import { ReactComponent as AppleIcon } from '../../../icons/Apple.svg'
-import { ReactComponent as LinuxIcon } from '../../../icons/Vector.svg'
-import { ReactComponent as WindowsIcon } from '../../../icons/windows-174-svgrepo-com 1.svg'
+import { ReactComponent as AppleIcon } from '../../../../icons/Apple.svg'
+import { ReactComponent as LinuxIcon } from '../../../../icons/Vector.svg'
+import { ReactComponent as WindowsIcon } from '../../../../icons/windows-174-svgrepo-com 1.svg'
 
 const tabs = [
     {

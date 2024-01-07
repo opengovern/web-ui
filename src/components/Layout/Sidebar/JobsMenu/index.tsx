@@ -14,9 +14,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 import {
     GithubComKaytuIoKaytuEnginePkgDescribeApiJobSummary,
     GithubComKaytuIoKaytuEnginePkgDescribeApiJobType,
-} from '../../../api/api'
-import { numberDisplay } from '../../../utilities/numericDisplay'
-import { useScheduleApiV1JobsCreate } from '../../../api/schedule.gen'
+} from '../../../../api/api'
+import { numberDisplay } from '../../../../utilities/numericDisplay'
+import { useScheduleApiV1JobsCreate } from '../../../../api/schedule.gen'
 
 interface IJobCategoryItem {
     title: string

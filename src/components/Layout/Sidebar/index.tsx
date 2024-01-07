@@ -22,8 +22,8 @@ import {
 import { useAtom } from 'jotai'
 import { sideBarCollapsedAtom } from '../../../store'
 import Workspace from './Workspace'
-import JobsMenu from '../JobsMenu'
-import CLIMenu from '../CLIMenu'
+import JobsMenu from './JobsMenu'
+import CLIMenu from './CLIMenu'
 
 const navigation = [
     {
