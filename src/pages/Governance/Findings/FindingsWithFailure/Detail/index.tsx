@@ -15,7 +15,10 @@ import {
 import { useEffect } from 'react'
 import ReactJson from '@microlink/react-json-view'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiFinding } from '../../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+} from '../../../../../api/api'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../../../components/Cards/ConnectorCard'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
@@ -107,7 +110,7 @@ export default function FindingDetail({
                                             </Text>
                                             <Flex justifyContent="start">
                                                 {control.conformanceStatus ===
-                                                'ok' ? (
+                                                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed ? (
                                                     <Flex className="w-fit gap-1.5">
                                                         <CheckCircleIcon className="h-4 text-emerald-500" />
                                                         <Text>Passed</Text>

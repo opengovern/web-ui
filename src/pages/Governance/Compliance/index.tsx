@@ -117,7 +117,7 @@ export const activeColumns: IColumn<any, any>[] = [
         ) =>
             param.data &&
             `${(
-                ((param.data?.conformanceStatusSummary?.okCount || 0) /
+                ((param.data?.conformanceStatusSummary?.passed || 0) /
                     benchmarkChecks(param.data).total) *
                 100
             ).toFixed(2)} %`,

@@ -36,7 +36,7 @@ export const benchmarkChecks = (
         medium +
         low +
         none +
-        (ben?.conformanceStatusSummary?.okCount || 0)
+        (ben?.conformanceStatusSummary?.passed || 0)
     const failed = critical + high + medium + low + none
 
     return {
@@ -93,9 +93,9 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                         <Text>Security score:</Text>
                         <Text className="font-semibold">
                             {(
-                                ((benchmark?.conformanceStatusSummary
-                                    ?.okCount || 0) /
-                                    benchmarkChecks(benchmark).total || 0) * 100
+                                ((benchmark?.conformanceStatusSummary?.passed ||
+                                    0) / benchmarkChecks(benchmark).total ||
+                                    0) * 100
                             ).toFixed(2)}{' '}
                             %
                         </Text>
@@ -116,7 +116,7 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                                 benchmarkChecks(benchmark).total) *
                                 100 || 0,
                             1,
-                            ((benchmark?.conformanceStatusSummary?.okCount ||
+                            ((benchmark?.conformanceStatusSummary?.passed ||
                                 0) /
                                 benchmarkChecks(benchmark).total) *
                                 100 || 0,
@@ -135,7 +135,7 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                                 benchmarkChecks(benchmark).high +
                                 benchmarkChecks(benchmark).medium +
                                 benchmarkChecks(benchmark).low +
-                                (benchmark?.conformanceStatusSummary?.okCount ||
+                                (benchmark?.conformanceStatusSummary?.passed ||
                                     0) +
                                 1) /
                                 benchmarkChecks(benchmark).total) *

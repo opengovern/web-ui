@@ -56,3 +56,6 @@ export const workspaceAtom = atom<{
 }>({ list: [], current: undefined })
 export const previewAtom = atom(localStorage.preview)
 export const runQueryAtom = atom('')
+
+export const tokenAtom = atom<string>('')
+export const colorBlindModeAtom = atom<boolean>(false)

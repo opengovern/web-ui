@@ -1,12 +1,13 @@
 import ReactEcharts from 'echarts-for-react'
 import { Flex, Text } from '@tremor/react'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
+import { useAtomValue } from 'jotai'
 import {
     exactPriceDisplay,
     numberDisplay,
     numericDisplay,
 } from '../../utilities/numericDisplay'
-import StackedChart from './Stacked'
+import { colorBlindModeAtom } from '../../store'
 
 interface IChart {
     labels: string[]
@@ -73,10 +74,17 @@ export default function Chart({
     onClick,
     colorful = false,
 }: IChart) {
+    const colorBlindMode = useAtomValue(colorBlindModeAtom)
     const options = () => {
         if (chartLayout === 'basic') {
             if (chartAggregation === 'trend') {
                 return {
+                    aria: {
+                        enable: colorBlindMode,
+                        decal: {
+                            show: colorBlindMode,
+                        },
+                    },
                     xAxis: {
                         type: labelType,
                         data: labels,
@@ -150,6 +158,12 @@ export default function Chart({
             }
             if (chartAggregation === 'cumulative') {
                 return {
+                    aria: {
+                        enable: colorBlindMode,
+                        decal: {
+                            show: colorBlindMode,
+                        },
+                    },
                     xAxis: {
                         type: labelType,
                         data: labels,
@@ -225,6 +239,12 @@ export default function Chart({
         }
         if (chartType === 'doughnut') {
             return {
+                aria: {
+                    enable: colorBlindMode,
+                    decal: {
+                        show: colorBlindMode,
+                    },
+                },
                 tooltip: {
                     trigger: 'item',
                     formatter: (params: any) => {
@@ -304,6 +324,12 @@ export default function Chart({
         }
         if (chartType === 'half-doughnut') {
             return {
+                aria: {
+                    enable: colorBlindMode,
+                    decal: {
+                        show: colorBlindMode,
+                    },
+                },
                 tooltip: {
                     trigger: 'item',
                 },
