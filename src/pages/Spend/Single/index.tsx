@@ -36,7 +36,11 @@ export default function SingleSpend() {
     const renderPage = () => {
         if (urlParams[urlParams.length - 1].startsWith('account_')) {
             return (
-                <Layout currentPage="spend">
+                <Layout
+                    currentPage="spend"
+                    breadCrumb={['Cloud account spend detail']}
+                    datePicker
+                >
                     <SingleSpendConnection
                         activeTimeRange={activeTimeRange}
                         id={idGenerator()}
@@ -46,7 +50,12 @@ export default function SingleSpend() {
         }
         if (urlParams[urlParams.length - 1].startsWith('metric_')) {
             return (
-                <Layout currentPage="spend">
+                <Layout
+                    currentPage="spend"
+                    breadCrumb={['Metric spend detail']}
+                    datePicker
+                    filter
+                >
                     <SingleSpendMetric
                         activeTimeRange={activeTimeRange}
                         metricId={idGenerator()}

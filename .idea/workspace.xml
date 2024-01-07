@@ -6,9 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Assets/Single/SingleConnection/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Assets/Single/SingleConnection/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Assets/Single/SingleMetric/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Assets/Single/SingleMetric/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Assets/Single/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Assets/Single/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Spend/Single/SingleConnection/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Spend/Single/SingleConnection/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Spend/Single/SingleMetric/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Spend/Single/SingleMetric/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Spend/Single/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Spend/Single/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -297,7 +297,7 @@
       <workItem from="1704277923140" duration="13880000" />
       <workItem from="1704315564158" duration="5511000" />
       <workItem from="1704445829116" duration="17429000" />
-      <workItem from="1704617555083" duration="6728000" />
+      <workItem from="1704617555083" duration="7552000" />
     </task>
     <servers />
   </component>

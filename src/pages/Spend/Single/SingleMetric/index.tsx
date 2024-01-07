@@ -377,13 +377,6 @@ export default function SingleSpendMetric({
 
     return (
         <>
-            <Header
-                breadCrumb={[
-                    metricName ? metricName.name : 'Single metric detail',
-                ]}
-                datePicker
-                filter
-            />
             <Flex className="mb-6">
                 <Flex alignItems="start" className="gap-2">
                     {getConnectorIcon(
