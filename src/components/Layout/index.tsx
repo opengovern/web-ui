@@ -73,7 +73,7 @@ export default function Layout({
                         <div
                             className={`${
                                 currentPage === 'settings' ? '' : 'max-w-7xl'
-                            } w-full py-8 ${hFull ? 'h-full' : ''}`}
+                            } w-full py-6 ${hFull ? 'h-full' : ''}`}
                         >
                             {children}
                         </div>
