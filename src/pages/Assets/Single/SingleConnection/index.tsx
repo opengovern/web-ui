@@ -115,16 +115,6 @@ export default function SingleConnection({
 
     return (
         <>
-            {!!window.location.pathname.split('/')[3] && (
-                <Header
-                    breadCrumb={[
-                        connection
-                            ? connection?.providerConnectionName
-                            : 'Single cloud account detail',
-                    ]}
-                    datePicker
-                />
-            )}
             <Grid numItems={2} className="w-full gap-4">
                 <Card>
                     <Flex
