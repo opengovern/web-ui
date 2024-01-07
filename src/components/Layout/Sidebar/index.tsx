@@ -22,6 +22,8 @@ import {
 import { useAtom } from 'jotai'
 import { sideBarCollapsedAtom } from '../../../store'
 import Workspace from './Workspace'
+import JobsMenu from '../JobsMenu'
+import CLIMenu from '../CLIMenu'
 
 const navigation = [
     {
@@ -101,15 +103,15 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             alignItems="start"
             className="z-20 h-full w-fit pb-4 bg-kaytu-950 relative"
         >
-            <Flex flexDirection="col" className="h-full">
+            <Flex flexDirection="col" className="h-full w-72">
                 <Flex
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="start"
-                    className="h-full p-2 gap-0.5 w-72"
+                    className="h-full p-2 gap-0.5"
                 >
                     <Workspace isCollapsed={collapsed} />
-                    <Text className="ml-3 mt-4">OVERVIEW</Text>
+                    <Text className="ml-3 mt-4 mb-2">OVERVIEW</Text>
                     {navigation.map((item) =>
                         item.children && !collapsed ? (
                             <Accordion
@@ -206,8 +208,21 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     )}
                 </Flex>
             </Flex>
-            <Flex flexDirection="col" alignItems="start">
-                <Text className="ml-3 mt-4">ACTIONS</Text>
+            <Flex
+                flexDirection="col"
+                alignItems="start"
+                className="border-t border-t-gray-700"
+            >
+                <Text className="ml-3 mt-4 mb-2">ACTIONS</Text>
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="start"
+                    className="p-2 gap-0.5"
+                >
+                    <JobsMenu isCollapsed={collapsed} />
+                    <CLIMenu />
+                </Flex>
             </Flex>
         </Flex>
     )
