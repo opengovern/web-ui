@@ -24,6 +24,7 @@ import { sideBarCollapsedAtom } from '../../../store'
 import Workspace from './Workspace'
 import JobsMenu from './JobsMenu'
 import CLIMenu from './CLIMenu'
+import Profile from './Profile'
 
 const navigation = [
     {
@@ -211,18 +212,13 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             <Flex
                 flexDirection="col"
                 alignItems="start"
-                className="border-t border-t-gray-700"
+                justifyContent="start"
+                className="p-2 gap-0.5 border-t border-t-gray-700"
             >
-                <Text className="ml-3 mt-4 mb-2">ACTIONS</Text>
-                <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    justifyContent="start"
-                    className="p-2 gap-0.5"
-                >
-                    <JobsMenu isCollapsed={collapsed} />
-                    <CLIMenu isCollapsed={collapsed} />
-                </Flex>
+                <Text className="ml-3 mt-2 mb-2">ACTIONS</Text>
+                <JobsMenu isCollapsed={collapsed} />
+                <CLIMenu isCollapsed={collapsed} />
+                <Profile isCollapsed={collapsed} />
             </Flex>
         </Flex>
     )
