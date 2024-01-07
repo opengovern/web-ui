@@ -177,3 +177,7 @@ code {
 .compliance-fix span {
     width: 100%;
 }
+
+.sidebar-accordion .tremor-AccordionHeader-arrowIcon {
+    opacity: 0;
+}
