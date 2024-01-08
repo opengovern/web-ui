@@ -162,9 +162,6 @@ export default function ResourcesWithFailure({ count }: ICount) {
     const ssr = () => {
         return {
             getRows: (params: IServerSideGetRowsParams) => {
-                if (params.request.sortModel.length) {
-                    sortKey = ''
-                }
                 const api = new Api()
                 api.instance = AxiosAPI
                 api.compliance
