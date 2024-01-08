@@ -120,7 +120,7 @@ const columns = (isDemo: boolean) => {
         },
         {
             field: 'providerConnectionID',
-            headerName: 'Cloud provider ID',
+            headerName: 'Account ID',
             type: 'string',
             hide: true,
             enableRowGroup: true,
