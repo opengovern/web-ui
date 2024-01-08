@@ -57,22 +57,6 @@ export const cloudAccountColumns = (isDemo: boolean) => {
                 </Flex>
             ),
         },
-        {
-            field: 'lastInventory',
-            headerName: 'Last inventory',
-            type: 'datetime',
-            hide: true,
-            resizable: true,
-            sortable: true,
-        },
-        {
-            field: 'onboardDate',
-            headerName: 'Onboard Date',
-            type: 'datetime',
-            hide: true,
-            resizable: true,
-            sortable: true,
-        },
     ]
     return temp
 }
