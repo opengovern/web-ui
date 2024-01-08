@@ -338,7 +338,7 @@ export default function ControlDetail() {
                                                 controlDetail?.control
                                                     ?.manualRemediation
                                             )
-                                            setDocTitle('Manual')
+                                            setDocTitle('Manual Remediation')
                                         }
                                     }}
                                 >
@@ -382,7 +382,9 @@ export default function ControlDetail() {
                                                 controlDetail?.control
                                                     ?.cliRemediation
                                             )
-                                            setDocTitle('Command line (CLI)')
+                                            setDocTitle(
+                                                'Command line (CLI) Remediation'
+                                            )
                                         }
                                     }}
                                 >
