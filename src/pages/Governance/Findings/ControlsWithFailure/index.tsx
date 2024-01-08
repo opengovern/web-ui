@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Flex, Text } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
-import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
+import {
+    ICellRendererParams,
+    RowClickedEvent,
+    ValueFormatterParams,
+} from 'ag-grid-community'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.gen'
 import { SourceType } from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
@@ -41,6 +45,13 @@ const policyColumns: IColumn<any, any>[] = [
                 {severityBadge(params.data?.severity)}
             </Flex>
         ),
+        valueFormatter: (params: ValueFormatterParams) => {
+            if (params.data?.severity === 'critical') return '5'
+            if (params.data?.severity === 'high') return '4'
+            if (params.data?.severity === 'medium') return '3'
+            if (params.data?.severity === 'low') return '2'
+            return '1'
+        },
     },
     {
         headerName: 'Findings',
