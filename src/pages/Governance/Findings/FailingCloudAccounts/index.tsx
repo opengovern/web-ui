@@ -11,16 +11,6 @@ import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 const cloudAccountColumns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
-            field: 'connector',
-            headerName: 'Cloud provider',
-            type: 'string',
-            width: 140,
-            hide: true,
-            sortable: true,
-            filter: true,
-            enableRowGroup: true,
-        },
-        {
             field: 'providerConnectionName',
             headerName: 'Account name',
             resizable: true,
@@ -88,22 +78,6 @@ const cloudAccountColumns = (isDemo: boolean) => {
                     </Text>
                 </Flex>
             ),
-        },
-        {
-            field: 'lastInventory',
-            headerName: 'Last inventory',
-            type: 'datetime',
-            hide: true,
-            resizable: true,
-            sortable: true,
-        },
-        {
-            field: 'onboardDate',
-            headerName: 'Onboard Date',
-            type: 'datetime',
-            hide: true,
-            resizable: true,
-            sortable: true,
         },
     ]
     return temp
