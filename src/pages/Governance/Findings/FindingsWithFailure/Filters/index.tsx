@@ -283,7 +283,7 @@ export default function FindingFilters({
                                     onClick={() =>
                                         setStatus(['failed', 'passed'])
                                     }
-                                    checked={status.length === 5}
+                                    checked={status.length === 2}
                                 >
                                     All
                                 </Radio>
