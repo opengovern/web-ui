@@ -88,9 +88,9 @@ export const columns = (isDemo: boolean) => {
         },
         {
             field: 'benchmarkID',
-            headerName: 'Benchmark ID',
+            headerName: 'Benchmark',
             type: 'string',
-            enableRowGroup: true,
+            enableRowGroup: false,
             sortable: false,
             hide: true,
             filter: true,
@@ -102,7 +102,9 @@ export const columns = (isDemo: boolean) => {
                     alignItems="start"
                     className={isDemo ? 'blur-md' : ''}
                 >
-                    <Text className="text-gray-800">{param.value}</Text>
+                    <Text className="text-gray-800">
+                        {param.data.parentBenchmarkNames[0]}
+                    </Text>
                     <Text>
                         {
                             param.data.parentBenchmarkNames[
@@ -110,6 +112,29 @@ export const columns = (isDemo: boolean) => {
                             ]
                         }
                     </Text>
+                </Flex>
+            ),
+        },
+        {
+            field: 'controlID',
+            headerName: 'Control',
+            type: 'string',
+            enableRowGroup: true,
+            sortable: false,
+            hide: false,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    className={isDemo ? 'blur-md' : ''}
+                >
+                    <Text className="text-gray-800">
+                        {param.data.parentBenchmarkNames[0]}
+                    </Text>
+                    <Text>{param.data.controlTitle}</Text>
                 </Flex>
             ),
         },
@@ -194,12 +219,7 @@ export default function FindingsWithFailure({ count }: ICount) {
         'low',
         'none',
     ])
-    const [statusFilter, setStatusFilter] = useState([
-        'alarm',
-        'info',
-        'skip',
-        'error',
-    ])
+    const [statusFilter, setStatusFilter] = useState(['failed'])
 
     const ssr = () => {
         return {
@@ -287,7 +307,7 @@ export default function FindingsWithFailure({ count }: ICount) {
                     setProviderFilter(obj.provider)
                     setStatusFilter(obj.status)
                     setConnectionFilter(obj.connection)
-                    setBenchmarkFilter(obj.connection)
+                    setBenchmarkFilter(obj.benchmark)
                     setResourceFilter(obj.resource)
                     setSeverityFilter(obj.severity)
                 }}

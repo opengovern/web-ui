@@ -173,7 +173,7 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                     ) : (
                                                         <XCircleIcon className="w-5 text-rose-600" />
                                                     )}
-                                                    <Text className="font-semibold">{`Passed controls: ${numberDisplay(
+                                                    <Text className="font-semibold whitespace-nowrap">{`Passed controls: ${numberDisplay(
                                                         value?.filter(
                                                             (c: any) => c.passed
                                                         ).length,

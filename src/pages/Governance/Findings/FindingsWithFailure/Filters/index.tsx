@@ -92,7 +92,7 @@ export default function FindingFilters({
     const [resourceSearch, setResourceSearch] = useState('')
 
     const [provider, setProvider] = useState('')
-    const [status, setStatus] = useState(['alarm', 'info', 'skip', 'error'])
+    const [status, setStatus] = useState(['failed'])
     const connectionCheckbox = useCheckboxState({ state: [] })
     const benchmarkCheckbox = useCheckboxState({ state: [] })
     const resourceCheckbox = useCheckboxState({ state: [] })
@@ -162,7 +162,7 @@ export default function FindingFilters({
 
     const resetFilters = () => {
         setProvider('')
-        setStatus(['alarm', 'info', 'skip', 'error'])
+        setStatus(['failed'])
         connectionCheckbox.setState([])
         benchmarkCheckbox.setState([])
         resourceCheckbox.setState([])
@@ -170,7 +170,7 @@ export default function FindingFilters({
 
         return {
             provider: [],
-            status: ['alarm', 'info', 'skip', 'error'],
+            status: ['failed'],
             connection: [],
             benchmark: [],
             resource: [],
@@ -183,10 +183,7 @@ export default function FindingFilters({
             connectionFilter.length ||
             benchmarkFilter.length ||
             (statusFilter
-                ? !compareArrays(
-                      statusFilter.sort(),
-                      ['alarm', 'info', 'skip', 'error'].sort()
-                  )
+                ? !compareArrays(statusFilter.sort(), ['failed'].sort())
                 : false) ||
             (resourceFilter ? resourceFilter.length : false) ||
             (severityFilter
@@ -284,13 +281,7 @@ export default function FindingFilters({
                                 <Radio
                                     name={`${type}-status`}
                                     onClick={() =>
-                                        setStatus([
-                                            'ok',
-                                            'alarm',
-                                            'info',
-                                            'skip',
-                                            'error',
-                                        ])
+                                        setStatus(['failed', 'passed'])
                                     }
                                     checked={status.length === 5}
                                 >
@@ -298,10 +289,10 @@ export default function FindingFilters({
                                 </Radio>
                                 <Radio
                                     name={`${type}-status`}
-                                    onClick={() => setStatus(['ok'])}
+                                    onClick={() => setStatus(['passed'])}
                                     checked={
                                         status.length === 1 &&
-                                        status.includes('ok')
+                                        status.includes('passed')
                                     }
                                 >
                                     <Flex className="gap-1">
@@ -311,15 +302,11 @@ export default function FindingFilters({
                                 </Radio>
                                 <Radio
                                     name={`${type}-status`}
-                                    onClick={() =>
-                                        setStatus([
-                                            'alarm',
-                                            'info',
-                                            'skip',
-                                            'error',
-                                        ])
+                                    onClick={() => setStatus(['failed'])}
+                                    checked={
+                                        status.length === 1 &&
+                                        status.includes('failed')
                                     }
-                                    checked={status.length === 4}
                                 >
                                     <Flex className="gap-1">
                                         <XCircleIcon className="w-4 text-rose-600" />

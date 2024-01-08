@@ -51,7 +51,7 @@ export default function TopDetails({
         }
     }
     return (
-        <DrawerPanel open={open} onClose={onClose} title="Contorls">
+        <DrawerPanel open={open} onClose={onClose} title="Top">
             {renderDetail()}
         </DrawerPanel>
     )

@@ -51,6 +51,7 @@ export default function ControlDetail() {
 
     const [openDetail, setOpenDetail] = useState(false)
     const [doc, setDoc] = useState('')
+    const [docTitle, setDocTitle] = useState('')
     const setQuery = useSetAtom(queryAtom)
 
     const { response: controlDetail, isLoading } =
@@ -307,6 +308,7 @@ export default function ControlDetail() {
                             className="h-full"
                         >
                             <DrawerPanel
+                                title={docTitle}
                                 open={doc.length > 0}
                                 onClose={() => setDoc('')}
                             >
@@ -336,6 +338,7 @@ export default function ControlDetail() {
                                                 controlDetail?.control
                                                     ?.manualRemediation
                                             )
+                                            setDocTitle('Manual')
                                         }
                                     }}
                                 >
@@ -379,6 +382,7 @@ export default function ControlDetail() {
                                                 controlDetail?.control
                                                     ?.cliRemediation
                                             )
+                                            setDocTitle('Command line (CLI)')
                                         }
                                     }}
                                 >

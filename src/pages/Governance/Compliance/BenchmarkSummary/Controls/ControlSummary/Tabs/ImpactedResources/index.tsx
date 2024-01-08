@@ -179,23 +179,9 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                     .apiV1FindingsCreate({
                         filters: {
                             controlID: [controlId || ''],
-                            conformanceStatus: [
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                'ok',
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                'alarm',
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                'info',
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                'skip',
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                'error',
-                            ],
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            conformanceStatus: ['passed', 'failed'],
                         },
                         sort: params.request.sortModel.length
                             ? [
