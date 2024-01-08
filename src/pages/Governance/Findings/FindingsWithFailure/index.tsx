@@ -242,12 +242,14 @@ export default function FindingsWithFailure({ count }: ICount) {
                               ]
                             : [],
                         limit: 100,
+                        // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
+                        // @ts-ignore
                         afterSortKey:
                             params.request.startRow === 0 ||
                             sortKey.length < 1 ||
                             sortKey === 'none'
                                 ? []
-                                : [sortKey],
+                                : sortKey,
                     })
                     .then((resp) => {
                         params.success({
