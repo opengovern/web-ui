@@ -51,7 +51,7 @@ const cloudAccountColumns = (isDemo: boolean) => {
             cellRenderer: (param: ICellRendererParams) => (
                 <Flex flexDirection="col" alignItems="start">
                     <Text className="text-gray-800">{param.value} issues</Text>
-                    <Text>{param.value - param.data.count} passed</Text>
+                    <Text>{param.value - (param.data.count || 0)} passed</Text>
                 </Flex>
             ),
         },
@@ -66,7 +66,9 @@ const cloudAccountColumns = (isDemo: boolean) => {
             cellRenderer: (param: ICellRendererParams) => (
                 <Flex flexDirection="col" alignItems="start">
                     <Text className="text-gray-800">{param.value} issues</Text>
-                    <Text>{param.value - param.data.resourceCount} passed</Text>
+                    <Text>
+                        {param.value - (param.data.resourceCount || 0)} passed
+                    </Text>
                 </Flex>
             ),
         },
@@ -81,7 +83,9 @@ const cloudAccountColumns = (isDemo: boolean) => {
             cellRenderer: (param: ICellRendererParams) => (
                 <Flex flexDirection="col" alignItems="start">
                     <Text className="text-gray-800">{param.value} issues</Text>
-                    <Text>{param.value - param.data.controlCount} passed</Text>
+                    <Text>
+                        {param.value - (param.data.controlCount || 0)} passed
+                    </Text>
                 </Flex>
             ),
         },
