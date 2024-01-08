@@ -91,7 +91,9 @@ export default function Findings() {
                                                 ({numberDisplay(t.count, 0)})
                                             </Text>
                                         ) : (
-                                            'x'
+                                            <div className="animate-pulse">
+                                                <div className="h-4 w-10 rounded bg-slate-400" />
+                                            </div>
                                         )}
                                     </Flex>
                                     {tab === t.type ? (
