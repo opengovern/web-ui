@@ -54,6 +54,8 @@ export default function Controls({ id }: IFinder) {
     return (
         <Table
             id="compliance_policies"
+            title="Controls"
+            downloadable
             loading={isLoading}
             columns={policyColumns}
             rowData={topControls(controls?.records)}
