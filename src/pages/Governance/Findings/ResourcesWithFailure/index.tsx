@@ -158,12 +158,7 @@ export default function ResourcesWithFailure({ count }: ICount) {
         'low',
         'none',
     ])
-    const [statusFilter, setStatusFilter] = useState([
-        'alarm',
-        'info',
-        'skip',
-        'error',
-    ])
+    const [statusFilter, setStatusFilter] = useState(['failed'])
     const ssr = () => {
         return {
             getRows: (params: IServerSideGetRowsParams) => {
