@@ -108,7 +108,7 @@ export default function ControlsWithFailure({ count }: ICount) {
                 onApply={(obj) => {
                     setProviderFilter(obj.provider)
                     setConnectionFilter(obj.connection)
-                    setBenchmarkFilter(obj.connection)
+                    setBenchmarkFilter(obj.benchmark)
                 }}
             />
             <Table
