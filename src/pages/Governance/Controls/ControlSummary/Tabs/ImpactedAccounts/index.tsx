@@ -1,8 +1,8 @@
 import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
 import { Flex, Text } from '@tremor/react'
-import { useComplianceApiV1FindingsTopDetail } from '../../../../../../../../api/compliance.gen'
-import Table, { IColumn } from '../../../../../../../../components/Table'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse } from '../../../../../../../../api/api'
+import { useComplianceApiV1FindingsTopDetail } from '../../../../../../api/compliance.gen'
+import Table, { IColumn } from '../../../../../../components/Table'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse } from '../../../../../../api/api'
 
 interface IImpactedAccounts {
     controlId: string | undefined

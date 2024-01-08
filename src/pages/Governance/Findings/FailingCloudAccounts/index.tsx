@@ -4,7 +4,7 @@ import { ICellRendererParams } from 'ag-grid-community'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.gen'
 import { SourceType } from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
-import { topConnections } from '../../Compliance/BenchmarkSummary/Controls/ControlSummary/Tabs/ImpactedAccounts'
+import { topConnections } from '../../Controls/ControlSummary/Tabs/ImpactedAccounts'
 import FindingFilters from '../FindingsWithFailure/Filters'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
@@ -84,7 +84,7 @@ const cloudAccountColumns = (isDemo: boolean) => {
 }
 
 interface ICount {
-    count: (x: number) => void
+    count: (x: number | undefined) => void
 }
 
 export default function FailingCloudAccounts({ count }: ICount) {
