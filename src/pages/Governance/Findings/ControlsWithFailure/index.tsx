@@ -30,7 +30,7 @@ const policyColumns: IColumn<any, any>[] = [
     },
     {
         headerName: 'Severity',
-        field: 'severity',
+        field: 'sev',
         width: 120,
         type: 'string',
         sortable: true,
@@ -42,16 +42,9 @@ const policyColumns: IColumn<any, any>[] = [
                 justifyContent="center"
                 alignItems="center"
             >
-                {severityBadge(params.data?.severity)}
+                {severityBadge(params.data.severity)}
             </Flex>
         ),
-        valueFormatter: (params: ValueFormatterParams) => {
-            if (params.data?.severity === 'critical') return '5'
-            if (params.data?.severity === 'high') return '4'
-            if (params.data?.severity === 'medium') return '3'
-            if (params.data?.severity === 'low') return '2'
-            return '1'
-        },
     },
     {
         headerName: 'Findings',
@@ -110,6 +103,7 @@ export default function ControlsWithFailure({ count }: ICount) {
             count(controls.totalCount || 0)
         }
     }, [controls])
+    console.log(topControls(controls?.records))
 
     return (
         <Flex alignItems="start" className="gap-4">

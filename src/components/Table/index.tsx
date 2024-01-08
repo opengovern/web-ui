@@ -35,6 +35,7 @@ export interface IColumn<TData, TValue> {
     headerName?: string
     cellDataType?: boolean | string
     valueFormatter?: string | ValueFormatterFunc<TData, TValue>
+    comparator?: any
     cellRenderer?: any
     rowGroup?: boolean
     enableRowGroup?: boolean
@@ -143,6 +144,7 @@ export default function Table<TData = any, TValue = any>({
                 floatingFilter: item.floatingFilter || false,
                 pivot: item.pivot || false,
                 valueFormatter: item.valueFormatter,
+                comparator: item.comparator,
             }
 
             if (
@@ -166,7 +168,7 @@ export default function Table<TData = any, TValue = any>({
                 v.cellDataType = 'number'
                 v.valueFormatter = (param: any) => {
                     return param.value || param.value === 0
-                        ? numberGroupedDisplay(String(param.value))
+                        ? numberGroupedDisplay(param.value)
                         : 'Not available'
                 }
             } else if (item.type === 'date') {

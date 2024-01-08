@@ -18,6 +18,29 @@ export const topControls = (
     const data = []
     if (input) {
         for (let i = 0; i < input.length; i += 1) {
+            let sev = ''
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            if (input[i].Control?.severity === 'critical') sev = 'e'
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            if (input[i].Control?.severity === 'high') sev = 'd'
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            if (input[i].Control?.severity === 'medium') sev = 'c'
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            if (input[i].Control?.severity === 'low') sev = 'b'
+            if (
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                input[i].Control?.severity === 'none' ||
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                input[i].Control?.severity === ''
+            )
+                sev = 'a'
+
             data.push({
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -26,6 +49,7 @@ export const topControls = (
                 totalCount: input[i].totalCount,
                 resourceCount: input[i].resourceCount,
                 resourceTotalCount: input[i].resourceTotalCount,
+                sev,
             })
         }
     }
