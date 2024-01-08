@@ -1,7 +1,11 @@
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import { useMemo, useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai/index'
-import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
+import {
+    ICellRendererParams,
+    RowClickedEvent,
+    ValueFormatterParams,
+} from 'ag-grid-community'
 import { Flex, Text } from '@tremor/react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import Table, { IColumn } from '../../../../../../../../components/Table'
@@ -68,6 +72,29 @@ const columns = (isDemo: boolean) => {
         },
         {
             field: 'benchmarkID',
+            headerName: 'Benchmark',
+            type: 'string',
+            enableRowGroup: true,
+            sortable: false,
+            hide: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    className={isDemo ? 'blur-md' : ''}
+                >
+                    <Text className="text-gray-800">
+                        {param.data.parentBenchmarkNames[0]}
+                    </Text>
+                    <Text>{param.value}</Text>
+                </Flex>
+            ),
+        },
+        {
+            field: 'benchmarkID',
             headerName: 'Benchmark ID',
             type: 'string',
             enableRowGroup: true,
@@ -79,7 +106,7 @@ const columns = (isDemo: boolean) => {
         },
         {
             field: 'providerConnectionName',
-            headerName: 'Cloud provider name',
+            headerName: 'Account name',
             type: 'string',
             enableRowGroup: true,
             hide: true,
