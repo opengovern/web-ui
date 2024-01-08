@@ -323,13 +323,15 @@ export default function Spend() {
     const [selectedGranularity, setSelectedGranularity] = useState<
         'daily' | 'monthly' | 'yearly'
     >(
-        checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
+        checkGranularity(activeTimeRange.start, activeTimeRange.end)
+            .monthlyByDefault
             ? 'monthly'
             : 'daily'
     )
     useEffect(() => {
         setSelectedGranularity(
-            checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
+            checkGranularity(activeTimeRange.start, activeTimeRange.end)
+                .monthlyByDefault
                 ? 'monthly'
                 : 'daily'
         )

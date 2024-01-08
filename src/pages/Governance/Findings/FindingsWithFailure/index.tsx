@@ -165,17 +165,6 @@ export const columns = (isDemo: boolean) => {
             ),
         },
         {
-            field: 'noOfOccurrences',
-            headerName: '# of issues',
-            type: 'number',
-            hide: false,
-            enableRowGroup: true,
-            sortable: false,
-            filter: true,
-            resizable: true,
-            width: 115,
-        },
-        {
             field: 'evaluatedAt',
             headerName: 'Last checked',
             type: 'datetime',

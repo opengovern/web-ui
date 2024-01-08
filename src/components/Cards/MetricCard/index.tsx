@@ -122,7 +122,11 @@ export default function MetricCard({
                 </Flex>
 
                 {!!metricPrev && (
-                    <Flex flexDirection="row" alignItems="center">
+                    <Flex
+                        flexDirection="row"
+                        alignItems="center"
+                        className="cursor-default"
+                    >
                         <BadgeDelta
                             deltaType={badgeTypeByDelta(metricPrev, metric)}
                         />
