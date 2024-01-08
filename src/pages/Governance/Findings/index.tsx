@@ -92,7 +92,7 @@ export default function Findings() {
                                             </Text>
                                         ) : (
                                             <div className="animate-pulse">
-                                                <div className="h-4 w-10 rounded bg-slate-400" />
+                                                <div className="h-4 w-10 rounded bg-slate-200" />
                                             </div>
                                         )}
                                     </Flex>
