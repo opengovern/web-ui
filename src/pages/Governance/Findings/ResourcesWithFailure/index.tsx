@@ -209,7 +209,8 @@ export default function ResourcesWithFailure({ count }: ICount) {
                             rowCount: resp.data.totalCount || 0,
                         })
                         count(resp.data.totalCount || 0)
-                        // eslint-disable-next-line prefer-destructuring
+                        // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
+                        // @ts-ignore
                         sortKey =
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
@@ -219,7 +220,7 @@ export default function ResourcesWithFailure({ count }: ICount) {
                                 // @ts-ignore
                                 // eslint-disable-next-line no-unsafe-optional-chaining
                                 resp.data.resourceFindings?.length - 1
-                            ].sortKey[0]
+                            ].sortKey
                     })
                     .catch((err) => {
                         params.fail()

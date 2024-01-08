@@ -86,7 +86,7 @@ export default function Findings() {
                                         <Text className="text-gray-800 w-fit">
                                             {t.name}
                                         </Text>
-                                        {Number(t.count) ? (
+                                        {Number(t.count) > -1 ? (
                                             <Text className="!text-xs">
                                                 ({numberDisplay(t.count, 0)})
                                             </Text>
