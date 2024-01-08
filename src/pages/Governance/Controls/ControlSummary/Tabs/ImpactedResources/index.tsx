@@ -219,12 +219,14 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                               ]
                             : [],
                         limit: 100,
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
                         afterSortKey:
                             params.request.startRow === 0 ||
                             sortKey.length < 1 ||
                             sortKey === 'none'
                                 ? []
-                                : [sortKey],
+                                : sortKey,
                     })
                     .then((resp) => {
                         params.success({
@@ -232,16 +234,18 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                             rowCount: resp.data.totalCount || 0,
                         })
 
-                        if ((resp.data.findings?.length || 0) > 0) {
-                            // eslint-disable-next-line prefer-destructuring
-                            sortKey =
+                        // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        sortKey =
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            // eslint-disable-next-line no-unsafe-optional-chaining
+                            resp.data.findings[
                                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                 // @ts-ignore
                                 // eslint-disable-next-line no-unsafe-optional-chaining
-                                resp.data.findings[
-                                    (resp.data.findings?.length || 0) - 1
-                                ].sortKey[0]
-                        }
+                                resp.data.findings?.length - 1
+                            ].sortKey
                     })
                     .catch((err) => {
                         if (
