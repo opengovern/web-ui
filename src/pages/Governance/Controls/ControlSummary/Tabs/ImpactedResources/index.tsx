@@ -231,13 +231,17 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                             rowData: resp.data.findings || [],
                             rowCount: resp.data.totalCount || 0,
                         })
-                        // eslint-disable-next-line prefer-destructuring
-                        sortKey =
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            // eslint-disable-next-line no-unsafe-optional-chaining
-                            resp.data.findings[resp.data.findings?.length - 1]
-                                .sortKey[0]
+
+                        if ((resp.data.findings?.length || 0) > 0) {
+                            // eslint-disable-next-line prefer-destructuring
+                            sortKey =
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                // eslint-disable-next-line no-unsafe-optional-chaining
+                                resp.data.findings[
+                                    (resp.data.findings?.length || 0) - 1
+                                ].sortKey[0]
+                        }
                     })
                     .catch((err) => {
                         if (
