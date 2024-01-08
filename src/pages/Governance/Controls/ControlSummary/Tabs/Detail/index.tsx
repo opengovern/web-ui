@@ -2,7 +2,7 @@ import { Flex, Text } from '@tremor/react'
 import { useState } from 'react'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiControl } from '../../../../../../../../api/api'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiControl } from '../../../../../../api/api'
 
 interface IDetail {
     control: GithubComKaytuIoKaytuEnginePkgComplianceApiControl | undefined

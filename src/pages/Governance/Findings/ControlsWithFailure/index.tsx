@@ -11,7 +11,7 @@ import { SourceType } from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
 import { topControls } from '../../Compliance/BenchmarkSummary/TopDetails/Controls'
 import FindingFilters from '../FindingsWithFailure/Filters'
-import { severityBadge } from '../../Compliance/BenchmarkSummary/Controls'
+import { severityBadge } from '../../Controls'
 
 const policyColumns: IColumn<any, any>[] = [
     {
@@ -81,7 +81,7 @@ const policyColumns: IColumn<any, any>[] = [
 ]
 
 interface ICount {
-    count: (x: number) => void
+    count: (x: number | undefined) => void
 }
 
 export default function ControlsWithFailure({ count }: ICount) {

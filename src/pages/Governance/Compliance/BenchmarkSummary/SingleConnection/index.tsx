@@ -40,8 +40,8 @@ import Table from '../../../../../components/Table'
 import { columns } from '../../../Findings/FindingsWithFailure'
 import Breakdown from '../../../../../components/Breakdown'
 import FindingDetail from '../../../Findings/FindingsWithFailure/Detail'
-import { policyColumns } from '../Controls/ControlList'
 import { benchmarkChecks } from '../../../../../components/Cards/ComplianceCard'
+import { policyColumns } from '../TopDetails/Controls'
 
 export default function SingleComplianceConnection() {
     const [openDrawer, setOpenDrawer] = useState(false)

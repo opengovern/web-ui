@@ -1,8 +1,8 @@
 import { Badge, Card, Flex, Text, Title } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
 import { useNavigate, useParams } from 'react-router-dom'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark } from '../../../../../../../../api/api'
-import { getConnectorIcon } from '../../../../../../../../components/Cards/ConnectorCard'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark } from '../../../../../../api/api'
+import { getConnectorIcon } from '../../../../../../components/Cards/ConnectorCard'
 
 interface IBenchmarks {
     benchmarks:

@@ -134,7 +134,7 @@ const columns = (isDemo: boolean) => {
 let sortKey = ''
 
 interface ICount {
-    count: (x: number) => void
+    count: (x: number | undefined) => void
 }
 
 export default function ResourcesWithFailure({ count }: ICount) {

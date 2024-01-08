@@ -31,7 +31,7 @@ import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedul
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse } from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
 import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
-import Controls from './Controls'
+import Controls from '../../Controls'
 import Settings from './Settings'
 import TopDetails from './TopDetails'
 import { numberDisplay } from '../../../../utilities/numericDisplay'

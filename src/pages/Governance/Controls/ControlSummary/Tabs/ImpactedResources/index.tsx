@@ -8,16 +8,16 @@ import {
 } from 'ag-grid-community'
 import { Flex, Text } from '@tremor/react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import Table, { IColumn } from '../../../../../../../../components/Table'
-import FindingDetail from '../../../../../../Findings/FindingsWithFailure/Detail'
-import { isDemoAtom, notificationAtom } from '../../../../../../../../store'
+import Table, { IColumn } from '../../../../../../components/Table'
+import FindingDetail from '../../../../Findings/FindingsWithFailure/Detail'
+import { isDemoAtom, notificationAtom } from '../../../../../../store'
 import {
     Api,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
-} from '../../../../../../../../api/api'
-import AxiosAPI from '../../../../../../../../api/ApiConfig'
+} from '../../../../../../api/api'
+import AxiosAPI from '../../../../../../api/ApiConfig'
 import { statusBadge } from '../../../index'
-import { dateTimeDisplay } from '../../../../../../../../utilities/dateDisplay'
+import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
 
 let sortKey = ''
 

@@ -17,7 +17,7 @@ import {
 } from '../../../../api/api'
 import AxiosAPI from '../../../../api/ApiConfig'
 import FindingDetail from './Detail'
-import { severityBadge } from '../../Compliance/BenchmarkSummary/Controls'
+import { severityBadge } from '../../Controls'
 import FindingFilters from './Filters'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
@@ -195,7 +195,7 @@ export const columns = (isDemo: boolean) => {
 let sortKey = ''
 
 interface ICount {
-    count: (x: number) => void
+    count: (x: number | undefined) => void
 }
 
 export default function FindingsWithFailure({ count }: ICount) {

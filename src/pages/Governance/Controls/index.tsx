@@ -23,9 +23,9 @@ import {
     CommandLineIcon,
     XCircleIcon,
 } from '@heroicons/react/24/outline'
-import { useComplianceApiV1BenchmarksControlsDetail } from '../../../../../api/compliance.gen'
-import Spinner from '../../../../../components/Spinner'
-import { numberDisplay } from '../../../../../utilities/numericDisplay'
+import { useComplianceApiV1BenchmarksControlsDetail } from '../../../api/compliance.gen'
+import Spinner from '../../../components/Spinner'
+import { numberDisplay } from '../../../utilities/numericDisplay'
 
 interface IPolicies {
     id: string | undefined

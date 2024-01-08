@@ -26,10 +26,18 @@ import { numberDisplay } from '../../../utilities/numericDisplay'
 
 export default function Findings() {
     const [tab, setTab] = useState(0)
-    const [findingCount, setFindingCount] = useState(0)
-    const [resourceCount, setResourceCount] = useState(0)
-    const [controlCount, setControlCount] = useState(0)
-    const [accountCount, setAccountCount] = useState(0)
+    const [findingCount, setFindingCount] = useState<number | undefined>(
+        undefined
+    )
+    const [resourceCount, setResourceCount] = useState<number | undefined>(
+        undefined
+    )
+    const [controlCount, setControlCount] = useState<number | undefined>(
+        undefined
+    )
+    const [accountCount, setAccountCount] = useState<number | undefined>(
+        undefined
+    )
 
     const tabs = [
         {
@@ -78,9 +86,13 @@ export default function Findings() {
                                         <Text className="text-gray-800 w-fit">
                                             {t.name}
                                         </Text>
-                                        <Text className="!text-xs">
-                                            ({numberDisplay(t.count, 0)})
-                                        </Text>
+                                        {Number(t.count) ? (
+                                            <Text className="!text-xs">
+                                                ({numberDisplay(t.count, 0)})
+                                            </Text>
+                                        ) : (
+                                            'x'
+                                        )}
                                     </Flex>
                                     {tab === t.type ? (
                                         <div />
