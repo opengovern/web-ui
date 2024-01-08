@@ -43,7 +43,7 @@ const columns = (isDemo: boolean) => {
             ),
         },
         {
-            field: 'resourceName',
+            field: 'resourceType',
             headerName: 'Resource type',
             type: 'string',
             enableRowGroup: true,
@@ -254,7 +254,7 @@ export default function ResourcesWithFailure({ count }: ICount) {
                     setProviderFilter(obj.provider)
                     setStatusFilter(obj.status)
                     setConnectionFilter(obj.connection)
-                    setBenchmarkFilter(obj.connection)
+                    setBenchmarkFilter(obj.benchmark)
                     setResourceFilter(obj.resource)
                     setSeverityFilter(obj.severity)
                 }}

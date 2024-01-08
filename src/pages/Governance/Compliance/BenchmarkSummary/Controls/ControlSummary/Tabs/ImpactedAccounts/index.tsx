@@ -1,4 +1,5 @@
-import { ValueFormatterParams } from 'ag-grid-community'
+import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
+import { Flex, Text } from '@tremor/react'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../../../../../api/compliance.gen'
 import Table, { IColumn } from '../../../../../../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse } from '../../../../../../../../api/api'
@@ -42,20 +43,19 @@ export const cloudAccountColumns = (isDemo: boolean) => {
             ),
         },
         {
-            field: 'passed',
-            headerName: '# of passed resources',
+            headerName: 'Resources',
+            field: 'resourceTotalCount',
             type: 'number',
-            width: 200,
-            resizable: true,
             sortable: true,
-        },
-        {
-            field: 'failed',
-            headerName: '# of failed resources',
-            type: 'number',
-            width: 200,
+            filter: true,
             resizable: true,
-            sortable: true,
+            width: 150,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex flexDirection="col" alignItems="start">
+                    <Text className="text-gray-800">{param.value} issues</Text>
+                    <Text>{param.value - param.data.resourceCount} passed</Text>
+                </Flex>
+            ),
         },
         {
             field: 'lastInventory',

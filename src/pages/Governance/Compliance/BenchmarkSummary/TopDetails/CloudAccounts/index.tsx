@@ -26,7 +26,7 @@ const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
             field: 'accountName',
-            headerName: 'Discovered name',
+            headerName: 'Account name',
             type: 'string',
             sortable: true,
             filter: true,
@@ -38,7 +38,7 @@ const columns = (isDemo: boolean) => {
         },
         {
             field: 'accountId',
-            headerName: 'Discovered ID',
+            headerName: 'Account ID',
             type: 'string',
             sortable: true,
             filter: true,

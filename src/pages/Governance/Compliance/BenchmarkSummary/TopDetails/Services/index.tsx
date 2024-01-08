@@ -127,7 +127,7 @@ export default function Services({ id, connections, resourceId }: IFinder) {
 
     return (
         <Table
-            title="Services"
+            title="Resource types"
             downloadable
             id="compliance_services"
             columns={columns}

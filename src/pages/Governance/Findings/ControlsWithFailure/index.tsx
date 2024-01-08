@@ -25,16 +25,6 @@ const policyColumns: IColumn<any, any>[] = [
         ),
     },
     {
-        headerName: 'Control ID',
-        field: 'id',
-        width: 170,
-        type: 'string',
-        hide: true,
-        sortable: true,
-        filter: true,
-        resizable: true,
-    },
-    {
         headerName: 'Severity',
         field: 'severity',
         width: 120,
