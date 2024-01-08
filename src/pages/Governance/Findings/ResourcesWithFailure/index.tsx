@@ -276,6 +276,9 @@ export default function ResourcesWithFailure({ count }: ICount) {
                             })
                         }
                     }}
+                    onSortChange={() => {
+                        sortKey = ''
+                    }}
                     serverSideDatasource={serverSideRows}
                     options={{
                         rowModelType: 'serverSide',

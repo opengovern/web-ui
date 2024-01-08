@@ -289,6 +289,9 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                     }
                 }}
                 serverSideDatasource={serverSideRows}
+                onSortChange={() => {
+                    sortKey = ''
+                }}
                 options={{
                     rowModelType: 'serverSide',
                     serverSideDatasource: serverSideRows,

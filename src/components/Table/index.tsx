@@ -61,6 +61,7 @@ interface IProps<TData, TValue> {
     onGridReady?: (event: GridReadyEvent<TData>) => void
     onCellClicked?: (event: CellClickedEvent<TData>) => void
     onRowClicked?: (event: RowClickedEvent<TData>) => void
+    onSortChange?: () => void
     downloadable?: boolean
     title?: string
     children?: ReactNode
@@ -79,6 +80,7 @@ export default function Table<TData = any, TValue = any>({
     onGridReady,
     onCellClicked,
     onRowClicked,
+    onSortChange,
     downloadable = false,
     fullWidth = false,
     fullHeight = false,
@@ -264,6 +266,14 @@ export default function Table<TData = any, TValue = any>({
         onGridReady: (e) => {
             if (onGridReady) {
                 onGridReady(e)
+            }
+        },
+        onSortChanged: (e) => {
+            if (serverSideDatasource) {
+                e.api.paginationGoToPage(0)
+            }
+            if (onSortChange) {
+                onSortChange()
             }
         },
         onCellClicked,

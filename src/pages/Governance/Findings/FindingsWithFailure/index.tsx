@@ -213,9 +213,6 @@ export default function FindingsWithFailure({ count }: ICount) {
     const ssr = () => {
         return {
             getRows: (params: IServerSideGetRowsParams) => {
-                if (params.request.sortModel.length) {
-                    sortKey = ''
-                }
                 const api = new Api()
                 api.instance = AxiosAPI
                 api.compliance
@@ -326,6 +323,9 @@ export default function FindingsWithFailure({ count }: ICount) {
                                 type: 'warning',
                             })
                         }
+                    }}
+                    onSortChange={() => {
+                        sortKey = ''
                     }}
                     serverSideDatasource={serverSideRows}
                     options={{
