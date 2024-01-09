@@ -46,8 +46,8 @@ const navigation = [
         icon: ShieldCheckIcon,
         page: ['compliance', 'findings'],
         children: [
-            { name: 'Compliance', page: 'compliance' },
-            { name: 'Findings', page: 'findings' },
+            { name: 'Compliance', page: 'compliance', isPreview: false },
+            { name: 'Findings', page: 'findings', isPreview: false },
         ],
     },
     {
@@ -72,10 +72,9 @@ const navigation = [
         icon: LightBulbIcon,
         page: ['rules, alerts'],
         children: [
-            { name: 'Rules', page: 'rules' },
-            { name: 'Alerts', page: 'alerts' },
+            { name: 'Rules', page: 'rules', isPreview: true },
+            { name: 'Alerts', page: 'alerts', isPreview: true },
         ],
-        isPreview: true,
     },
     {
         name: 'Integrations',
@@ -146,7 +145,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         </Text>
                                     </Flex>
                                     {item.isPreview && (
-                                        <Badge className="w-fit absolute right-2">
+                                        <Badge className="w-fit absolute right-2 top-1.5">
                                             Preview
                                         </Badge>
                                     )}
@@ -155,7 +154,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                     {item.children.map((i) => (
                                         <Link
                                             to={`/${workspace}/${i.page}`}
-                                            className={`my-0.5 py-2 flex rounded-md text-sm  
+                                            className={`my-0.5 py-2 flex rounded-md relative 
                                                     ${
                                                         i.page === currentPage
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
@@ -165,6 +164,11 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             <Text className="ml-[54px] text-inherit">
                                                 {i.name}
                                             </Text>
+                                            {i.isPreview && (
+                                                <Badge className="w-fit absolute right-2 top-1.5">
+                                                    Preview
+                                                </Badge>
+                                            )}
                                         </Link>
                                     ))}
                                 </AccordionBody>
@@ -213,6 +217,11 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         </Text>
                                     )}
                                 </Flex>
+                                {item.isPreview && (
+                                    <Badge className="w-fit absolute right-2 top-1.5">
+                                        Preview
+                                    </Badge>
+                                )}
                             </Link>
                         )
                     )}
