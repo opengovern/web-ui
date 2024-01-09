@@ -206,10 +206,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         collapsed ? 'px-2' : 'px-6'
                                     } py-2 sidebar-accordion relative`}
                                 >
-                                    <ChevronRightIcon
-                                        className="w-3.5 absolute left-1 text-gray-400"
-                                        style={{ top: 'calc(50% - 7px)' }}
-                                    />
                                     <Flex
                                         justifyContent="start"
                                         className="h-full gap-2.5"

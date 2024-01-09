@@ -166,5 +166,7 @@ code {
 }
 
 .sidebar-accordion .tremor-AccordionHeader-arrowIcon {
-    opacity: 0;
+    position: absolute;
+    right: 95%;
+    top: 10px;
 }
