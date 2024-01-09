@@ -23,7 +23,6 @@ export default function TopHeader({
     children,
     breadCrumb,
 }: IHeader) {
-    const [theme, setTheme] = useState(localStorage.theme || 'light')
     const navigate = useNavigate()
     const url = window.location.pathname.split('/')
 
@@ -50,17 +49,6 @@ export default function TopHeader({
         return temp
     }
 
-    const toggleTheme = () => {
-        if (localStorage.theme === 'dark') {
-            setTheme('light')
-            localStorage.theme = 'light'
-            document.documentElement.classList.remove('dark')
-        } else {
-            setTheme('dark')
-            localStorage.theme = 'dark'
-            document.documentElement.classList.add('dark')
-        }
-    }
     return (
         <div className="px-12 z-10 absolute top-2 w-full flex h-16 items-center justify-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm rounded-tl-2xl">
             <Flex className="max-w-7xl">
@@ -119,17 +107,6 @@ export default function TopHeader({
                     {children}
                     {datePicker && <DateRangePicker />}
                     {filter && <Filter />}
-                    <button
-                        type="button"
-                        className="ml-3 text-gray-400 hover:text-gray-500"
-                        onClick={toggleTheme}
-                    >
-                        {theme === 'dark' ? (
-                            <SunIcon className="h-6 w-6" />
-                        ) : (
-                            <MoonIcon className="h-6 w-6" />
-                        )}
-                    </button>
                 </Flex>
             </Flex>
         </div>

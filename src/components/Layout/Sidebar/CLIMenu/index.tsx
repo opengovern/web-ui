@@ -137,7 +137,7 @@ export default function CLIMenu({ isCollapsed }: ICLIMenu) {
     return (
         <Popover className="relative z-50 border-0 w-full">
             <Popover.Button
-                className="w-full px-6 py-3 flex rounded-md gap-2 text-gray-50 hover:bg-kaytu-800"
+                className="w-full px-6 py-2 flex items-center rounded-md gap-2.5 text-gray-50 hover:bg-kaytu-800"
                 id="CLI"
             >
                 <CommandLineIcon className="h-5 w-5 stroke-2 text-gray-400" />

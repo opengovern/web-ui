@@ -20,11 +20,13 @@ import {
     ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
 import { useAtom } from 'jotai'
+import { useState } from 'react'
 import { sideBarCollapsedAtom } from '../../../store'
 import JobsMenu from './JobsMenu'
 import CLIMenu from './CLIMenu'
 import Profile from './Profile'
 import { KaytuIconBig } from '../../../icons/icons'
+import Utilities from './Utilities'
 
 const navigation = [
     {
@@ -97,6 +99,19 @@ interface ISidebar {
 
 export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
+    const [theme, setTheme] = useState(localStorage.theme || 'light')
+
+    const toggleTheme = () => {
+        if (localStorage.theme === 'dark') {
+            setTheme('light')
+            localStorage.theme = 'light'
+            document.documentElement.classList.remove('dark')
+        } else {
+            setTheme('dark')
+            localStorage.theme = 'dark'
+            document.documentElement.classList.add('dark')
+        }
+    }
 
     return (
         <Flex
@@ -112,27 +127,27 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="start"
-                    className="h-full p-2 gap-0.5"
+                    className="h-full p-2 gap-0.5 overflow-y-scroll"
                 >
                     <Text className="ml-3 mt-4 mb-2">OVERVIEW</Text>
                     {navigation.map((item) =>
                         item.children && !collapsed ? (
                             <Accordion
-                                className="bg-transparent border-0 w-full"
+                                className="!bg-transparent border-0 w-full min-h-fit"
                                 defaultOpen={
                                     item.children.filter(
                                         (c) => c.page === currentPage
                                     ).length > 0
                                 }
                             >
-                                <AccordionHeader className="text-gray-50 bg-transparent px-6 py-3 sidebar-accordion relative">
+                                <AccordionHeader className="text-gray-50 px-6 py-2 sidebar-accordion relative">
                                     <ChevronRightIcon
-                                        className="w-3.5 absolute left-1 text-gray-400 stroke-2"
+                                        className="w-3.5 absolute left-1 text-gray-400"
                                         style={{ top: 'calc(50% - 7px)' }}
                                     />
                                     <Flex
                                         justifyContent="start"
-                                        className="h-full gap-2"
+                                        className="h-full gap-2.5"
                                     >
                                         <item.icon
                                             className={`h-5 w-5 stroke-2 ${
@@ -151,14 +166,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                     {item.children.map((i) => (
                                         <Link
                                             to={`/${workspace}/${i.page}`}
-                                            className={`my-0.5 py-3 flex rounded-md text-sm  
+                                            className={`my-0.5 py-2 flex rounded-md text-sm  
                                                     ${
                                                         i.page === currentPage
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
                                                             : 'text-gray-50 hover:bg-kaytu-800'
                                                     }`}
                                         >
-                                            <Text className="ml-[52px] text-inherit !text-base">
+                                            <Text className="ml-[54px] text-inherit !text-base">
                                                 {i.name}
                                             </Text>
                                         </Link>
@@ -173,7 +188,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         ? '#'
                                         : `/${workspace}/${item.page}`
                                 }
-                                className={`w-full relative px-6 py-3 flex rounded-md
+                                className={`w-full relative px-6 py-2 flex rounded-md
                                                     ${
                                                         item.page ===
                                                             currentPage ||
@@ -190,7 +205,10 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             : 'gap-x-3'
                                                     }`}
                             >
-                                <Flex justifyContent="start" className="gap-2">
+                                <Flex
+                                    justifyContent="start"
+                                    className="gap-2.5"
+                                >
                                     <item.icon
                                         className={`h-5 w-5 stroke-2 ${
                                             item.page === currentPage ||
@@ -211,17 +229,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     )}
                 </Flex>
             </Flex>
-            <Flex
-                flexDirection="col"
-                alignItems="start"
-                justifyContent="start"
-                className="p-2 gap-0.5 border-t border-t-gray-700"
-            >
-                <Text className="ml-3 mt-2 mb-2">ACTIONS</Text>
-                <JobsMenu isCollapsed={collapsed} />
-                <CLIMenu isCollapsed={collapsed} />
-                <Profile isCollapsed={collapsed} />
-            </Flex>
+            <Utilities isCollapsed={collapsed} />
         </Flex>
     )
 }
