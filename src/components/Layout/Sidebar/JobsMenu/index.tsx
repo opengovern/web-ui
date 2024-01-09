@@ -225,8 +225,12 @@ export default function JobsMenu({ isCollapsed }: IJobsMenu) {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
             >
-                <Popover.Panel className="absolute left-[515px] bottom-0 z-10 flex w-screen max-w-max -translate-x-1/2 px-4">
-                    <Card className="w-fit">
+                <Popover.Panel
+                    className={`absolute ${
+                        isCollapsed ? 'left-[57px]' : 'left-[515px]'
+                    } bottom-0 z-10`}
+                >
+                    <Card className="w-fit !ring-gray-600">
                         <Flex justifyContent="between">
                             <Title className="font-bold text-gray-800">
                                 Jobs in last 24 hours

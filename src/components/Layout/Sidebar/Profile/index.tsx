@@ -95,7 +95,7 @@ export default function Profile({ isCollapsed }: IProfile) {
             {showInfo && (
                 <>
                     <Card
-                        className="absolute z-20 bg-kaytu-950 bottom-0 px-4 py-2 w-64 rounded-tl-xl"
+                        className="absolute z-20 bg-kaytu-950 bottom-0 px-4 py-2 w-64 !ring-gray-600"
                         style={{
                             left: 'calc(100% + 20px)',
                         }}

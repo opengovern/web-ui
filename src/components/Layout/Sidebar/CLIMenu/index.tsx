@@ -96,7 +96,7 @@ export function CLITabs() {
 
                 {getCurrentTab()?.commands && (
                     <Card
-                        className="w-2/3 text-gray-800 font-mono cursor-pointer p-2.5"
+                        className="w-3/4 text-gray-800 font-mono cursor-pointer p-2.5 !ring-gray-600"
                         onClick={() => {
                             setShowCopied(true)
                             setTimeout(() => {
@@ -154,10 +154,14 @@ export default function CLIMenu({ isCollapsed }: ICLIMenu) {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
             >
-                <Popover.Panel className="absolute left-[515px] bottom-0 z-10 flex w-screen max-w-max -translate-x-1/2 px-4">
-                    <div className="w-screen max-w-md flex-auto overflow-hidden rounded-lg bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
+                <Popover.Panel
+                    className={`absolute ${
+                        isCollapsed ? 'left-[57px]' : 'left-[515px]'
+                    } bottom-0 z-10`}
+                >
+                    <Card className="p-0 !ring-gray-600">
                         <CLITabs />
-                    </div>
+                    </Card>
                 </Popover.Panel>
             </Transition>
         </Popover>

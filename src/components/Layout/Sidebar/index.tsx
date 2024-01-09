@@ -218,27 +218,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     }
                                                     ${collapsed ? '!p-2' : ''}`}
                             >
-                                {/*  <div className="group relative">
-                                    <item.icon
-                                        className={`h-5 w-5 stroke-2 ${
-                                            collapsed &&
-                                            item.page.includes(currentPage)
-                                                ? 'text-gray-200'
-                                                : 'text-gray-400'
-                                        }`}
-                                    />
-                                    {collapsed && (
-                                        <div
-                                            className="absolute z-50 scale-0 transition-all rounded p-2 shadow-md bg-white dark:bg-kaytu-950 group-hover:scale-100"
-                                            style={{
-                                                left: '45px',
-                                                top: '-8px',
-                                            }}
-                                        >
-                                            <Text>{item.name}</Text>
-                                        </div>
-                                    )}
-                                </div> */}
                                 <Popover className="relative z-50 border-0 w-full h-[20px]">
                                     <div className="group relative">
                                         <Popover.Button id={item.name}>
@@ -273,7 +252,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         leaveTo="opacity-0 translate-y-1"
                                     >
                                         <Popover.Panel className="absolute left-[157px] top-[-8px] z-10 flex w-screen max-w-max -translate-x-1/2 px-4">
-                                            <div className="z-50 rounded p-2 shadow-md bg-kaytu-950 w-56">
+                                            <Card className="z-50 rounded p-2 shadow-md !ring-gray-600 w-56">
                                                 <Text className="mb-3">
                                                     {item.name}
                                                 </Text>
@@ -298,7 +277,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             )}
                                                     </Link>
                                                 ))}
-                                            </div>
+                                            </Card>
                                         </Popover.Panel>
                                     </Transition>
                                 </Popover>
