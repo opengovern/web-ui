@@ -96,7 +96,7 @@ export function CLITabs() {
 
                 {getCurrentTab()?.commands && (
                     <Card
-                        className="w-2/3 text-gray-800 font-mono cursor-pointer p-2.5"
+                        className="w-3/4 text-gray-800 font-mono cursor-pointer p-2.5 !ring-gray-600"
                         onClick={() => {
                             setShowCopied(true)
                             setTimeout(() => {
@@ -137,13 +137,13 @@ export default function CLIMenu({ isCollapsed }: ICLIMenu) {
     return (
         <Popover className="relative z-50 border-0 w-full">
             <Popover.Button
-                className="w-full px-6 py-3 flex rounded-md gap-2 text-gray-50 hover:bg-kaytu-800"
+                className={`w-full px-6 py-2 flex items-center rounded-md gap-2.5 text-gray-50 hover:bg-kaytu-800 ${
+                    isCollapsed ? '!p-2' : ''
+                }`}
                 id="CLI"
             >
                 <CommandLineIcon className="h-5 w-5 stroke-2 text-gray-400" />
-                {!isCollapsed && (
-                    <Text className="text-inherit !text-base">CLI</Text>
-                )}
+                {!isCollapsed && <Text className="text-inherit">CLI</Text>}
             </Popover.Button>
             <Transition
                 as={Fragment}
@@ -154,10 +154,14 @@ export default function CLIMenu({ isCollapsed }: ICLIMenu) {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
             >
-                <Popover.Panel className="absolute left-[515px] bottom-0 z-10 flex w-screen max-w-max -translate-x-1/2 px-4">
-                    <div className="w-screen max-w-md flex-auto overflow-hidden rounded-lg bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
+                <Popover.Panel
+                    className={`absolute ${
+                        isCollapsed ? 'left-[57px]' : 'left-[515px]'
+                    } bottom-0 z-10`}
+                >
+                    <Card className="p-0 !ring-gray-600">
                         <CLITabs />
-                    </div>
+                    </Card>
                 </Popover.Panel>
             </Transition>
         </Popover>

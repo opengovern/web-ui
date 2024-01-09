@@ -4,7 +4,7 @@ export { default as AWSIcon } from './AWSIcon.png'
 export { ReactComponent as CisIcon } from './cis.svg'
 export { ReactComponent as HipaaIcon } from './hipaa.svg'
 
-export { ReactComponent as KaytuIcon } from './logo-mini.svg'
+export { ReactComponent as KaytuIcon } from './kaytuIconSmall.svg'
 export { ReactComponent as KaytuIconBig } from './kaytuIcon.svg'
 
 export { ReactComponent as BarChartIcon } from './barChart.svg'

@@ -208,13 +208,13 @@ export default function JobsMenu({ isCollapsed }: IJobsMenu) {
     return (
         <Popover className="relative z-50 border-0 w-full">
             <Popover.Button
-                className="w-full px-6 py-3 flex rounded-md gap-2 text-gray-50 hover:bg-kaytu-800"
+                className={`w-full px-6 py-2 flex items-center rounded-md gap-2.5 text-gray-50 hover:bg-kaytu-800 ${
+                    isCollapsed ? '!p-2' : ''
+                }`}
                 id="Jobs"
             >
                 <ClipboardDocumentListIcon className="h-5 w-5 stroke-2 text-gray-400" />
-                {!isCollapsed && (
-                    <Text className="text-inherit !text-base">Jobs</Text>
-                )}
+                {!isCollapsed && <Text className="text-inherit">Jobs</Text>}
             </Popover.Button>
             <Transition
                 as={Fragment}
@@ -225,8 +225,12 @@ export default function JobsMenu({ isCollapsed }: IJobsMenu) {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
             >
-                <Popover.Panel className="absolute left-[515px] bottom-0 z-10 flex w-screen max-w-max -translate-x-1/2 px-4">
-                    <Card className="w-fit">
+                <Popover.Panel
+                    className={`absolute ${
+                        isCollapsed ? 'left-[57px]' : 'left-[515px]'
+                    } bottom-0 z-10`}
+                >
+                    <Card className="w-fit !ring-gray-600">
                         <Flex justifyContent="between">
                             <Title className="font-bold text-gray-800">
                                 Jobs in last 24 hours
