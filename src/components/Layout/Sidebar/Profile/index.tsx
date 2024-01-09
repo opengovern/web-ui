@@ -1,5 +1,13 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { Card, Divider, Flex, Text } from '@tremor/react'
+import {
+    Card,
+    Divider,
+    Flex,
+    Tab,
+    TabGroup,
+    TabList,
+    Text,
+} from '@tremor/react'
 import {
     ArrowTopRightOnSquareIcon,
     Bars2Icon,
@@ -9,6 +17,9 @@ import { useAtom } from 'jotai/index'
 import { useNavigate } from 'react-router-dom'
 import { workspaceAtom } from '../../../../store'
 import { useWorkspaceApiV1WorkspacesList } from '../../../../api/workspace.gen'
+import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from '../../../../api/api'
+import { applyTheme, currentTheme } from '../../../../utilities/theme'
+import { useAuthApiV1UserPreferencesUpdate } from '../../../../api/auth.gen'
 
 interface IProfile {
     isCollapsed: boolean
@@ -19,29 +30,61 @@ export default function Profile({ isCollapsed }: IProfile) {
     const [showInfo, setShowInfo] = useState(false)
     const [workspace, setWorkspace] = useAtom(workspaceAtom)
     const wsName = window.location.pathname.split('/')[1]
-    const [theme, setTheme] = useState(localStorage.theme || 'light')
 
-    const toggleTheme = () => {
-        if (localStorage.theme === 'dark') {
-            setTheme('light')
-            localStorage.theme = 'light'
-            document.documentElement.classList.remove('dark')
-        } else {
-            setTheme('dark')
-            localStorage.theme = 'dark'
-            document.documentElement.classList.add('dark')
+    const [index, setIndex] = useState(
+        // eslint-disable-next-line no-nested-ternary
+        currentTheme() === 'system' ? 2 : currentTheme() === 'dark' ? 1 : 0
+    )
+    const [theme, setTheme] =
+        useState<GithubComKaytuIoKaytuEnginePkgAuthApiTheme>(currentTheme())
+
+    const { response, isLoading, isExecuted, error, sendNow } =
+        useAuthApiV1UserPreferencesUpdate(
+            {
+                theme,
+            },
+            {},
+            false
+        )
+    useEffect(() => {
+        if (!isLoading && isExecuted) {
+            applyTheme(theme)
         }
-    }
+    }, [isLoading])
+    useEffect(() => {
+        switch (index) {
+            case 0:
+                setTheme(GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeLight)
+                sendNow()
+                break
+            case 1:
+                setTheme(GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeDark)
+                sendNow()
+                break
+            case 2:
+                setTheme(GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeSystem)
+                sendNow()
+                break
+            default:
+                setTheme(GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeLight)
+                break
+        }
+    }, [index])
+
     const {
         response: workspaceInfo,
-        isExecuted,
-        sendNow,
+        isExecuted: workspaceInfoExecuted,
+        sendNow: sendWorkspaceInfo,
     } = useWorkspaceApiV1WorkspacesList({}, false)
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (!workspace.current && workspace.list.length < 1 && !isExecuted) {
-            sendNow()
+        if (
+            !workspace.current &&
+            workspace.list.length < 1 &&
+            !workspaceInfoExecuted
+        ) {
+            sendWorkspaceInfo()
         }
         if (workspace && wsName) {
             if (
@@ -136,7 +179,11 @@ export default function Profile({ isCollapsed }: IProfile) {
                                 <ArrowTopRightOnSquareIcon className="w-5 text-gray-400" />
                             </Flex>
                         </Flex>
-                        <Flex flexDirection="col" alignItems="start">
+                        <Flex
+                            flexDirection="col"
+                            alignItems="start"
+                            className="pb-2 mb-1 border-b border-b-gray-700"
+                        >
                             <Text className="mt-2 mb-1">WORKSPACES</Text>
                             {workspace.list
                                 .filter((ws) => ws.status === 'PROVISIONED')
@@ -159,6 +206,25 @@ export default function Profile({ isCollapsed }: IProfile) {
                                 </Text>
                                 <ArrowTopRightOnSquareIcon className="w-5 text-gray-400" />
                             </Flex>
+                        </Flex>
+                        <Flex flexDirection="col" alignItems="start">
+                            <Text className="my-2">THEME</Text>
+                            <TabGroup index={index} onIndexChange={setIndex}>
+                                <TabList
+                                    variant="solid"
+                                    className="w-full bg-kaytu-800"
+                                >
+                                    <Tab className="w-1/3 flex justify-center text-white">
+                                        Light
+                                    </Tab>
+                                    <Tab className="w-1/3 flex justify-center text-white">
+                                        Dark
+                                    </Tab>
+                                    <Tab className="w-1/3 flex justify-center text-white">
+                                        System
+                                    </Tab>
+                                </TabList>
+                            </TabGroup>
                         </Flex>
                     </Card>
                     <Card
