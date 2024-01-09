@@ -26,7 +26,7 @@ export default function Utilities({ isCollapsed }: IUtilities) {
                 className="w-full px-6 py-2 flex items-center rounded-md gap-2.5 text-gray-50 hover:bg-kaytu-800"
             >
                 <ChatBubbleLeftEllipsisIcon className="h-5 w-5 stroke-2 text-gray-400" />
-                <Text className="text-inherit !text-base">Support</Text>
+                <Text className="text-inherit">Support</Text>
             </Link>
             <Profile isCollapsed={isCollapsed} />
         </Flex>

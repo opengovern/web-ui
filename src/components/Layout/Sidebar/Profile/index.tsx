@@ -76,9 +76,7 @@ export default function Profile({ isCollapsed }: IProfile) {
                         />
                     )}
                     <Flex flexDirection="col" alignItems="start">
-                        <Text className="text-gray-200 !text-base">
-                            {user?.name}
-                        </Text>
+                        <Text className="text-gray-200">{user?.name}</Text>
                         <Text className="text-gray-400">{user?.email}</Text>
                     </Flex>
                 </Flex>

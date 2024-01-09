@@ -141,9 +141,7 @@ export default function CLIMenu({ isCollapsed }: ICLIMenu) {
                 id="CLI"
             >
                 <CommandLineIcon className="h-5 w-5 stroke-2 text-gray-400" />
-                {!isCollapsed && (
-                    <Text className="text-inherit !text-base">CLI</Text>
-                )}
+                {!isCollapsed && <Text className="text-inherit">CLI</Text>}
             </Popover.Button>
             <Transition
                 as={Fragment}

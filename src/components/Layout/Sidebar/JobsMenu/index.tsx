@@ -212,9 +212,7 @@ export default function JobsMenu({ isCollapsed }: IJobsMenu) {
                 id="Jobs"
             >
                 <ClipboardDocumentListIcon className="h-5 w-5 stroke-2 text-gray-400" />
-                {!isCollapsed && (
-                    <Text className="text-inherit !text-base">Jobs</Text>
-                )}
+                {!isCollapsed && <Text className="text-inherit">Jobs</Text>}
             </Popover.Button>
             <Transition
                 as={Fragment}

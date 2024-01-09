@@ -2,6 +2,7 @@ import {
     Accordion,
     AccordionBody,
     AccordionHeader,
+    Badge,
     Flex,
     Text,
 } from '@tremor/react'
@@ -20,11 +21,7 @@ import {
     ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
 import { useAtom } from 'jotai'
-import { useState } from 'react'
 import { sideBarCollapsedAtom } from '../../../store'
-import JobsMenu from './JobsMenu'
-import CLIMenu from './CLIMenu'
-import Profile from './Profile'
 import { KaytuIconBig } from '../../../icons/icons'
 import Utilities from './Utilities'
 
@@ -57,11 +54,28 @@ const navigation = [
         name: 'Insights',
         page: 'insights',
         icon: DocumentChartBarIcon,
+        isPreview: true,
     },
     {
         name: 'Query',
         page: 'query',
         icon: MagnifyingGlassIcon,
+    },
+    {
+        name: 'Resource Collection',
+        page: 'resource-collection',
+        icon: RectangleStackIcon,
+        isPreview: true,
+    },
+    {
+        name: 'Automation',
+        icon: LightBulbIcon,
+        page: ['rules, alerts'],
+        children: [
+            { name: 'Rules', page: 'rules' },
+            { name: 'Alerts', page: 'alerts' },
+        ],
+        isPreview: true,
     },
     {
         name: 'Integrations',
@@ -72,23 +86,6 @@ const navigation = [
         name: 'Settings',
         page: 'settings',
         icon: Cog6ToothIcon,
-    },
-]
-
-const preview = [
-    {
-        name: 'Resource Collection',
-        page: 'resource-collection',
-        icon: RectangleStackIcon,
-    },
-    {
-        name: 'Automation',
-        icon: LightBulbIcon,
-        page: ['rules, alerts'],
-        children: [
-            { name: 'Rules', page: 'rules' },
-            { name: 'Alerts', page: 'alerts' },
-        ],
     },
 ]
 
@@ -144,10 +141,15 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     : 'text-gray-400'
                                             }`}
                                         />
-                                        <Text className="text-inherit !text-base">
+                                        <Text className="text-inherit">
                                             {item.name}
                                         </Text>
                                     </Flex>
+                                    {item.isPreview && (
+                                        <Badge className="w-fit absolute right-2">
+                                            Preview
+                                        </Badge>
+                                    )}
                                 </AccordionHeader>
                                 <AccordionBody className="p-0">
                                     {item.children.map((i) => (
@@ -160,7 +162,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             : 'text-gray-50 hover:bg-kaytu-800'
                                                     }`}
                                         >
-                                            <Text className="ml-[54px] text-inherit !text-base">
+                                            <Text className="ml-[54px] text-inherit">
                                                 {i.name}
                                             </Text>
                                         </Link>
@@ -206,7 +208,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         }`}
                                     />
                                     {!collapsed && (
-                                        <Text className="text-inherit !text-base">
+                                        <Text className="text-inherit">
                                             {item.name}
                                         </Text>
                                     )}
