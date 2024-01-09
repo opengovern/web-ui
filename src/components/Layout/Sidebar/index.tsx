@@ -99,19 +99,6 @@ interface ISidebar {
 
 export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
-    const [theme, setTheme] = useState(localStorage.theme || 'light')
-
-    const toggleTheme = () => {
-        if (localStorage.theme === 'dark') {
-            setTheme('light')
-            localStorage.theme = 'light'
-            document.documentElement.classList.remove('dark')
-        } else {
-            setTheme('dark')
-            localStorage.theme = 'dark'
-            document.documentElement.classList.add('dark')
-        }
-    }
 
     return (
         <Flex

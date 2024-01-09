@@ -19,6 +19,19 @@ export default function Profile({ isCollapsed }: IProfile) {
     const [showInfo, setShowInfo] = useState(false)
     const [workspace, setWorkspace] = useAtom(workspaceAtom)
     const wsName = window.location.pathname.split('/')[1]
+    const [theme, setTheme] = useState(localStorage.theme || 'light')
+
+    const toggleTheme = () => {
+        if (localStorage.theme === 'dark') {
+            setTheme('light')
+            localStorage.theme = 'light'
+            document.documentElement.classList.remove('dark')
+        } else {
+            setTheme('dark')
+            localStorage.theme = 'dark'
+            document.documentElement.classList.add('dark')
+        }
+    }
     const {
         response: workspaceInfo,
         isExecuted,
