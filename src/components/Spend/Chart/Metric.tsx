@@ -1,6 +1,5 @@
 import { BadgeDelta, Card, Color, Flex, Metric, Text } from '@tremor/react'
 import dayjs from 'dayjs'
-import Spinner from '../../Spinner'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import { badgeTypeByDelta } from '../../../utilities/deltaType'
 
