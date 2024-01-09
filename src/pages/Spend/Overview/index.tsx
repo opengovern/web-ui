@@ -91,7 +91,7 @@ export function SpendOverview() {
 
     const { response: composition, isLoading: compositionLoading } =
         useInventoryApiV2AnalyticsSpendCompositionList({
-            top: 4,
+            top: 5,
             ...(selectedConnections.provider && {
                 connector: [selectedConnections.provider],
             }),
