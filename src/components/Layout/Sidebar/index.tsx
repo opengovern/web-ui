@@ -51,7 +51,12 @@ const navigation = [
         page: ['compliance', 'findings'],
         children: [
             { name: 'Compliance', page: 'compliance', isPreview: false },
-            { name: 'Findings', page: 'findings', isPreview: false },
+            {
+                name: 'Findings',
+                page: 'findings',
+                isPreview: false,
+                count: '+1K',
+            },
         ],
     },
     {
@@ -91,6 +96,12 @@ const navigation = [
         icon: Cog6ToothIcon,
     },
 ]
+
+const badgeStyle = {
+    color: '#fff',
+    borderRadius: '8px',
+    backgroundColor: '#15395F80',
+}
 
 interface ISidebar {
     workspace: string | undefined
@@ -177,11 +188,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             {item.name}
                                         </Text>
                                     </Flex>
-                                    {item.isPreview && !collapsed && (
-                                        <Badge className="w-fit absolute right-2 top-1.5">
-                                            Preview
-                                        </Badge>
-                                    )}
                                 </AccordionHeader>
                                 <AccordionBody className="p-0">
                                     {item.children.map((i) => (
@@ -197,8 +203,19 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             <Text className="ml-[54px] text-inherit">
                                                 {i.name}
                                             </Text>
+                                            {i.count && !collapsed && (
+                                                <Badge
+                                                    className="absolute right-2 top-1.5"
+                                                    style={badgeStyle}
+                                                >
+                                                    {i.count}
+                                                </Badge>
+                                            )}
                                             {i.isPreview && !collapsed && (
-                                                <Badge className="w-fit absolute right-2 top-1.5">
+                                                <Badge
+                                                    className="absolute right-2 top-1.5"
+                                                    style={badgeStyle}
+                                                >
                                                     Preview
                                                 </Badge>
                                             )}
@@ -252,7 +269,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         leaveTo="opacity-0 translate-y-1"
                                     >
                                         <Popover.Panel className="absolute left-[157px] top-[-8px] z-10 flex w-screen max-w-max -translate-x-1/2 px-4">
-                                            <Card className="z-50 rounded p-2 shadow-md !ring-gray-600 w-56">
+                                            <Card className="z-50 rounded p-2 shadow-md !ring-gray-600 w-56 bg-kaytu-950">
                                                 <Text className="mb-3">
                                                     {item.name}
                                                 </Text>
@@ -269,9 +286,25 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         <Text className="text-inherit">
                                                             {i.name}
                                                         </Text>
+                                                        {i.count &&
+                                                            collapsed && (
+                                                                <Badge
+                                                                    className="absolute right-2 top-1.5"
+                                                                    style={
+                                                                        badgeStyle
+                                                                    }
+                                                                >
+                                                                    {i.count}
+                                                                </Badge>
+                                                            )}
                                                         {i.isPreview &&
-                                                            !collapsed && (
-                                                                <Badge className="w-fit absolute right-2 top-1.5">
+                                                            collapsed && (
+                                                                <Badge
+                                                                    className="absolute right-2 top-1.5"
+                                                                    style={
+                                                                        badgeStyle
+                                                                    }
+                                                                >
                                                                     Preview
                                                                 </Badge>
                                                             )}
@@ -331,7 +364,10 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                     </Text>
                                 )}
                                 {item.isPreview && !collapsed && (
-                                    <Badge className="w-fit absolute right-2 top-1.5">
+                                    <Badge
+                                        className="absolute right-2 top-1.5"
+                                        style={badgeStyle}
+                                    >
                                         Preview
                                     </Badge>
                                 )}
