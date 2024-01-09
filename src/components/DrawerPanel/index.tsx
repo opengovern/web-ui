@@ -47,12 +47,12 @@ export default function DrawerPanel({
                                     <Flex
                                         flexDirection="col"
                                         justifyContent="start"
-                                        className="h-full w-full bg-white dark:bg-gray-900 py-8 shadow-xl"
+                                        className="h-full w-full bg-white dark:bg-gray-900 py-8 shadow-xl border-l border-l-gray-700"
                                     >
-                                        <Dialog.Title className="absolute top-0 z-10 w-full bg-white dark:bg-gray-900 px-6 text-gray-900 border-b pt-5 pb-4">
+                                        <Dialog.Title className="absolute top-0 z-10 w-full bg-white dark:bg-gray-900 px-6 border-b border-b-gray-700 pt-4 pb-4">
                                             <Flex>
                                                 {typeof title === 'string' ? (
-                                                    <Title className="text-lg font-semibold my-1">
+                                                    <Title className="text-lg font-semibold">
                                                         {title}
                                                     </Title>
                                                 ) : (

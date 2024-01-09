@@ -241,9 +241,9 @@ export default function BenchmarkSummary() {
                                 <Text className="truncate">
                                     {benchmarkDetail?.description}
                                 </Text>
-                                <div className="absolute w-full z-40 top-0 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
+                                <Card className="absolute w-full z-40 top-0 scale-0 transition-all p-2 group-hover:scale-100">
                                     <Text>{benchmarkDetail?.description}</Text>
-                                </div>
+                                </Card>
                             </div>
                         </Flex>
                         {assignments > 0 && (

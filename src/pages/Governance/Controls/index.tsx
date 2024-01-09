@@ -219,7 +219,7 @@ export default function Controls({ id, assignments }: IPolicies) {
                                         <TableBody className="max-w-full">
                                             {value.map((v: any, i: number) => (
                                                 <TableRow
-                                                    className="max-w-full cursor-pointer hover:bg-kaytu-50"
+                                                    className="max-w-full cursor-pointer hover:bg-kaytu-50 dark:hover:bg-gray-900"
                                                     key={v?.id}
                                                     onClick={() =>
                                                         navigate(String(v?.id))

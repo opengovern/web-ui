@@ -89,11 +89,11 @@ export default function ControlDetail() {
                                 <Text className="truncate">
                                     {controlDetail?.control?.description}
                                 </Text>
-                                <div className="absolute w-full z-40 top-0 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
+                                <Card className="absolute w-full z-40 top-0 scale-0 transition-all p-2 group-hover:scale-100">
                                     <Text>
                                         {controlDetail?.control?.description}
                                     </Text>
-                                </div>
+                                </Card>
                             </div>
                         </Flex>
                     </Flex>
@@ -312,7 +312,9 @@ export default function ControlDetail() {
                                 open={doc.length > 0}
                                 onClose={() => setDoc('')}
                             >
-                                <Markdown>{doc}</Markdown>
+                                <Markdown className="dark:text-white">
+                                    {doc}
+                                </Markdown>
                             </DrawerPanel>
                             <Title className="font-semibold mt-2 mb-2">
                                 Remediation

@@ -69,7 +69,10 @@ export default function Detail({ control }: IDetail) {
                 className="pl-8 border-l border-l-gray-200"
                 style={{ width: 'calc(100% - 224px)' }}
             >
-                <Markdown remarkPlugins={[remarkGfm]}>
+                <Markdown
+                    remarkPlugins={[remarkGfm]}
+                    className="dark:text-white"
+                >
                     {control?.[selectedTab]}
                 </Markdown>
             </div>
