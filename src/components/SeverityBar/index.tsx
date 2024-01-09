@@ -1,4 +1,4 @@
-import { Flex, Text } from '@tremor/react'
+import { Card, Flex, Text } from '@tremor/react'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../api/api'
 import { benchmarkChecks } from '../Cards/ComplianceCard'
 import { numberDisplay } from '../../utilities/numericDisplay'
@@ -159,8 +159,8 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                                     backgroundColor: s.color,
                                                 }}
                                             />
-                                            <div
-                                                className="absolute w-72 z-10 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
+                                            <Card
+                                                className="absolute w-72 z-10 top-7 scale-0 transition-all p-2 group-hover:scale-100"
                                                 style={{
                                                     border: `1px solid ${s.color}`,
                                                 }}
@@ -215,7 +215,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                                         </Text>
                                                     </Flex>
                                                 </Flex>
-                                            </div>
+                                            </Card>
                                         </div>
                                     )
                             )}
@@ -249,8 +249,8 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                     backgroundColor: passed.color,
                                 }}
                             />
-                            <div
-                                className="absolute w-72 z-10 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
+                            <Card
+                                className="absolute w-72 z-10 top-7 scale-0 transition-all p-2 group-hover:scale-100"
                                 style={{
                                     border: `1px solid ${passed.color}`,
                                 }}
@@ -285,7 +285,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                         )}`}</Text>
                                     </Flex>
                                 </Flex>
-                            </div>
+                            </Card>
                         </div>
                     )}
                 </Flex>

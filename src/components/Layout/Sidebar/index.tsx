@@ -37,13 +37,51 @@ const navigation = [
     },
     {
         name: 'Assets',
-        page: 'assets',
+        page: [
+            'assets',
+            'assets/assets-details#cloud-accounts',
+            'assets/assets-details#metrics',
+        ],
         icon: CubeIcon,
+        children: [
+            { name: 'Summary', page: 'assets', isPreview: false, count: '+1K' },
+            {
+                name: 'Cloud Accounts',
+                page: 'assets/assets-details#cloud-accounts',
+                isPreview: false,
+                count: '+1K',
+            },
+            {
+                name: 'Metrics',
+                page: 'assets/assets-details#metrics',
+                isPreview: false,
+                count: '+1K',
+            },
+        ],
     },
     {
         name: 'Spend',
-        page: 'spend',
+        page: [
+            'spend',
+            'spend/spend-details#cloud-accounts',
+            'spend/spend-details#metrics',
+        ],
         icon: BanknotesIcon,
+        children: [
+            { name: 'Summary', page: 'spend', isPreview: false, count: '+1K' },
+            {
+                name: 'Cloud Accounts',
+                page: 'spend/spend-details#cloud-accounts',
+                isPreview: false,
+                count: '+1K',
+            },
+            {
+                name: 'Metrics',
+                page: 'spend/spend-details#metrics',
+                isPreview: false,
+                count: '+1K',
+            },
+        ],
     },
     {
         name: 'Governance',
@@ -115,7 +153,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         <Flex
             flexDirection="col"
             alignItems="start"
-            className="z-50 h-full w-fit py-4 bg-kaytu-950 relative"
+            className="z-50 h-full w-fit py-4 bg-kaytu-950 dark:bg-gray-950 relative border-r border-r-gray-700"
         >
             <Flex
                 flexDirection="col"
