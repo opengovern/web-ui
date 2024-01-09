@@ -3,6 +3,7 @@ import {
     AccordionBody,
     AccordionHeader,
     Badge,
+    Card,
     Flex,
     Text,
 } from '@tremor/react'
@@ -22,6 +23,8 @@ import {
     ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
 import { useAtom } from 'jotai'
+import { Popover, Transition } from '@headlessui/react'
+import { Fragment } from 'react'
 import { sideBarCollapsedAtom } from '../../../store'
 import { KaytuIcon, KaytuIconBig } from '../../../icons/icons'
 import Utilities from './Utilities'
@@ -101,7 +104,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         <Flex
             flexDirection="col"
             alignItems="start"
-            className="z-20 h-full w-fit py-4 bg-kaytu-950 relative"
+            className="z-50 h-full w-fit py-4 bg-kaytu-950 relative"
         >
             <Flex
                 flexDirection="col"
@@ -125,7 +128,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="start"
-                    className="h-full p-2 gap-0.5 overflow-y-scroll"
+                    className="h-full p-2 gap-0.5"
                 >
                     {!collapsed && (
                         <Text className="ml-3 mt-4 mb-2 !text-xs">
@@ -139,6 +142,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         />
                     )}
                     {navigation.map((item) =>
+                        // eslint-disable-next-line no-nested-ternary
                         item.children && !collapsed ? (
                             <Accordion
                                 className="!bg-transparent border-0 w-full min-h-fit"
@@ -202,12 +206,109 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                     ))}
                                 </AccordionBody>
                             </Accordion>
+                        ) : item.children && collapsed ? (
+                            <div
+                                className={`w-full relative px-6 py-2 flex items-center gap-2.5 rounded-md
+                                                    ${
+                                                        item.page.includes(
+                                                            currentPage
+                                                        )
+                                                            ? 'bg-kaytu-500 text-gray-200 font-semibold'
+                                                            : 'text-gray-50 hover:bg-kaytu-800'
+                                                    }
+                                                    ${collapsed ? '!p-2' : ''}`}
+                            >
+                                {/*  <div className="group relative">
+                                    <item.icon
+                                        className={`h-5 w-5 stroke-2 ${
+                                            collapsed &&
+                                            item.page.includes(currentPage)
+                                                ? 'text-gray-200'
+                                                : 'text-gray-400'
+                                        }`}
+                                    />
+                                    {collapsed && (
+                                        <div
+                                            className="absolute z-50 scale-0 transition-all rounded p-2 shadow-md bg-white dark:bg-kaytu-950 group-hover:scale-100"
+                                            style={{
+                                                left: '45px',
+                                                top: '-8px',
+                                            }}
+                                        >
+                                            <Text>{item.name}</Text>
+                                        </div>
+                                    )}
+                                </div> */}
+                                <Popover className="relative z-50 border-0 w-full h-[20px]">
+                                    <div className="group relative">
+                                        <Popover.Button id={item.name}>
+                                            <item.icon
+                                                className={`h-5 w-5 stroke-2 ${
+                                                    collapsed &&
+                                                    item.page.includes(
+                                                        currentPage
+                                                    )
+                                                        ? 'text-gray-200'
+                                                        : 'text-gray-400'
+                                                }`}
+                                            />
+                                        </Popover.Button>
+                                        <div
+                                            className="absolute z-50 scale-0 transition-all rounded p-2 shadow-md bg-kaytu-950 group-hover:scale-100"
+                                            style={{
+                                                left: '45px',
+                                                top: '-8px',
+                                            }}
+                                        >
+                                            <Text>{item.name}</Text>
+                                        </div>
+                                    </div>
+                                    <Transition
+                                        as={Fragment}
+                                        enter="transition ease-out duration-200"
+                                        enterFrom="opacity-0 translate-y-1"
+                                        enterTo="opacity-100 translate-y-0"
+                                        leave="transition ease-in duration-150"
+                                        leaveFrom="opacity-100 translate-y-0"
+                                        leaveTo="opacity-0 translate-y-1"
+                                    >
+                                        <Popover.Panel className="absolute left-[157px] top-[-8px] z-10 flex w-screen max-w-max -translate-x-1/2 px-4">
+                                            <div className="z-50 rounded p-2 shadow-md bg-kaytu-950 w-56">
+                                                <Text className="mb-3">
+                                                    {item.name}
+                                                </Text>
+                                                {item.children.map((i) => (
+                                                    <Link
+                                                        to={`/${workspace}/${i.page}`}
+                                                        className={`my-0.5 py-2 px-4 flex justify-start rounded-md relative 
+                                                    ${
+                                                        i.page === currentPage
+                                                            ? 'bg-kaytu-500 text-gray-200 font-semibold'
+                                                            : 'text-gray-50 hover:bg-kaytu-800'
+                                                    }`}
+                                                    >
+                                                        <Text className="text-inherit">
+                                                            {i.name}
+                                                        </Text>
+                                                        {i.isPreview &&
+                                                            !collapsed && (
+                                                                <Badge className="w-fit absolute right-2 top-1.5">
+                                                                    Preview
+                                                                </Badge>
+                                                            )}
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </Popover.Panel>
+                                    </Transition>
+                                </Popover>
+                            </div>
                         ) : (
                             // eslint-disable-next-line jsx-a11y/anchor-is-valid
                             <Link
                                 to={
                                     Array.isArray(item.page)
-                                        ? '#'
+                                        ? ''
                                         : `/${workspace}/${item.page}`
                                 }
                                 className={`w-full relative px-6 py-2 flex items-center gap-2.5 rounded-md
@@ -223,15 +324,28 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     }
                                                     ${collapsed ? '!p-2' : ''}`}
                             >
-                                <item.icon
-                                    className={`h-5 w-5 stroke-2 ${
-                                        item.page === currentPage ||
-                                        (collapsed &&
-                                            item.page.includes(currentPage))
-                                            ? 'text-gray-200'
-                                            : 'text-gray-400'
-                                    }`}
-                                />
+                                <div className="group relative">
+                                    <item.icon
+                                        className={`h-5 w-5 stroke-2 ${
+                                            item.page === currentPage ||
+                                            (collapsed &&
+                                                item.page.includes(currentPage))
+                                                ? 'text-gray-200'
+                                                : 'text-gray-400'
+                                        }`}
+                                    />
+                                    {collapsed && (
+                                        <div
+                                            className="absolute z-50 scale-0 transition-all rounded p-2 shadow-md bg-kaytu-950 group-hover:scale-100"
+                                            style={{
+                                                left: '45px',
+                                                top: '-8px',
+                                            }}
+                                        >
+                                            <Text>{item.name}</Text>
+                                        </div>
+                                    )}
+                                </div>
                                 {!collapsed && (
                                     <Text className="text-inherit">
                                         {item.name}
