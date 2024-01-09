@@ -112,23 +112,17 @@ function Metric({ title, metricId, min, max }: IMetric) {
 
 export default function SettingsCustomization() {
     const [preview, setPreview] = useAtom(previewAtom)
-    const [isDemo, setIsDemo] = useAtom(isDemoAtom)
-    const [selectedMode, setSelectedMode] = useState(isDemo ? 1 : 0)
+
     useEffect(() => {
-        switch (selectedMode) {
-            case 0:
-                localStorage.demoMode = 'false'
-                setIsDemo(false)
-                break
-            case 1:
-                localStorage.demoMode = 'true'
-                setIsDemo(true)
+        switch (preview) {
+            case 'true':
+                localStorage.preview = 'true'
                 break
             default:
-                localStorage.demoMode = 'false'
-                setIsDemo(false)
+                localStorage.preview = 'false'
+                break
         }
-    }, [selectedMode])
+    }, [preview])
 
     return (
         <Card key="summary" className="">
@@ -204,8 +198,10 @@ export default function SettingsCustomization() {
             >
                 <Text className="font-normal">Show preview features</Text>
                 <TabGroup
-                    index={preview ? 0 : 1}
-                    onIndexChange={(idx) => setPreview(idx === 0)}
+                    index={preview === 'true' ? 0 : 1}
+                    onIndexChange={(idx) =>
+                        setPreview(idx === 0 ? 'true' : 'false')
+                    }
                     className="w-fit"
                 >
                     <TabList className="border border-gray-200" variant="solid">

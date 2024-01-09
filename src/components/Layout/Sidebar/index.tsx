@@ -201,7 +201,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     )}
                     {navigation
                         .filter((item) =>
-                            preview ? item : item.isPreview === preview
+                            preview
+                                ? item
+                                : String(item.isPreview) === String(preview)
                         )
                         .map((item) =>
                             // eslint-disable-next-line no-nested-ternary
