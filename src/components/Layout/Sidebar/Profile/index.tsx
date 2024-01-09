@@ -65,7 +65,9 @@ export default function Profile({ isCollapsed }: IProfile) {
         <div className="relative w-full mt-4">
             <Flex
                 onClick={() => setShowInfo(!showInfo)}
-                className="p-3 rounded-lg border border-gray-700 cursor-pointer"
+                className={`p-3 rounded-lg cursor-pointer ${
+                    isCollapsed ? '' : 'border border-gray-700'
+                }`}
             >
                 <Flex className="w-fit gap-3">
                     {user?.picture && (
@@ -75,12 +77,16 @@ export default function Profile({ isCollapsed }: IProfile) {
                             alt=""
                         />
                     )}
-                    <Flex flexDirection="col" alignItems="start">
-                        <Text className="text-gray-200">{user?.name}</Text>
-                        <Text className="text-gray-400">{user?.email}</Text>
-                    </Flex>
+                    {!isCollapsed && (
+                        <Flex flexDirection="col" alignItems="start">
+                            <Text className="text-gray-200">{user?.name}</Text>
+                            <Text className="text-gray-400">{user?.email}</Text>
+                        </Flex>
+                    )}
                 </Flex>
-                <Bars2Icon className="h-6 w-6 stroke-2 text-gray-400" />
+                {!isCollapsed && (
+                    <Bars2Icon className="h-6 w-6 stroke-2 text-gray-400" />
+                )}
             </Flex>
             {showInfo && (
                 <>

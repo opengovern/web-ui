@@ -17,7 +17,9 @@ export default function Utilities({ isCollapsed }: IUtilities) {
             justifyContent="start"
             className="p-2 gap-0.5 border-t border-t-gray-700"
         >
-            <Text className="ml-3 mt-2 mb-2">UTILITIES</Text>
+            {!isCollapsed && (
+                <Text className="ml-3 mt-2 mb-2 !text-xs">UTILITIES</Text>
+            )}
             <JobsMenu isCollapsed={isCollapsed} />
             <CLIMenu isCollapsed={isCollapsed} />
             <Link
@@ -26,7 +28,7 @@ export default function Utilities({ isCollapsed }: IUtilities) {
                 className="w-full px-6 py-2 flex items-center rounded-md gap-2.5 text-gray-50 hover:bg-kaytu-800"
             >
                 <ChatBubbleLeftEllipsisIcon className="h-5 w-5 stroke-2 text-gray-400" />
-                <Text className="text-inherit">Support</Text>
+                {!isCollapsed && <Text className="text-inherit">Support</Text>}
             </Link>
             <Profile isCollapsed={isCollapsed} />
         </Flex>
