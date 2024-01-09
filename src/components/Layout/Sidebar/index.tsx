@@ -247,7 +247,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     )}
                 </Flex>
             </Flex>
-            {/*  <Utilities isCollapsed={collapsed} /> */}
+            <Utilities isCollapsed={collapsed} />
         </Flex>
     )
 }

@@ -66,13 +66,17 @@ export default function Profile({ isCollapsed }: IProfile) {
             <Flex
                 onClick={() => setShowInfo(!showInfo)}
                 className={`p-3 rounded-lg cursor-pointer ${
-                    isCollapsed ? '' : 'border border-gray-700'
+                    isCollapsed ? '!p-1' : 'border border-gray-700'
                 }`}
             >
                 <Flex className="w-fit gap-3">
                     {user?.picture && (
                         <img
-                            className="h-10 w-10 min-w-10 rounded-full bg-gray-50"
+                            className={`${
+                                isCollapsed
+                                    ? 'h-7 w-7 min-w-5'
+                                    : 'h-10 w-10 min-w-10'
+                            } rounded-full bg-gray-50`}
                             src={user.picture}
                             alt=""
                         />
