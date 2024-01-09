@@ -92,7 +92,7 @@ export default function ListCard({
                     {loading ? (
                         <List className="animate-pulse">
                             {[1, 2, 3, 4, 5].map((i) => (
-                                <ListItem className="max-w-full p-1 rounded-md py-3">
+                                <ListItem className="max-w-full p-1 py-3">
                                     <Flex
                                         flexDirection="row"
                                         justifyContent="between"
@@ -109,7 +109,7 @@ export default function ListCard({
                             {items?.data.map((item: Item) => (
                                 <ListItem
                                     key={item.name}
-                                    className={`max-w-full p-1  rounded-md ${
+                                    className={`max-w-full p-1 ${
                                         isClickable
                                             ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900'
                                             : ''

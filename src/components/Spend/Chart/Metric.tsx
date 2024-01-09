@@ -41,7 +41,10 @@ export function SpendChartMetric({
     ).toFixed(1)
 
     return (
-        <Card key={title} className="w-fit ring-0 shadow-transparent p-0">
+        <Card
+            key={title}
+            className="w-fit ring-0 shadow-none dark:shadow-none border-0 p-0"
+        >
             <Flex alignItems="baseline">
                 <Flex flexDirection="col" className="gap-3" alignItems="start">
                     <Flex justifyContent="start" alignItems="end">
