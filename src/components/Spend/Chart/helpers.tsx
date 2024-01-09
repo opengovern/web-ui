@@ -1,97 +1,9 @@
-import { dateDisplay, monthDisplay } from '../../utilities/dateDisplay'
 import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostStackedItem,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
-    SourceType,
-} from '../../api/api'
-import { StackItem } from '../../components/Chart/Stacked'
-import { SpendOverview } from './Overview'
-
-export const topServices = (
-    input:
-        | GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse
-        | undefined
-) => {
-    const top: {
-        data: {
-            name: string | undefined
-            value: number | undefined
-            connector: SourceType[] | undefined
-            kaytuId: string | undefined
-        }[]
-        total: number | undefined
-    } = { data: [], total: 0 }
-    if (input && input.metrics) {
-        for (let i = 0; i < input.metrics.length; i += 1) {
-            top.data.push({
-                name: input.metrics[i].cost_dimension_name,
-                value: input.metrics[i].total_cost,
-                connector: input.metrics[i].connector,
-                kaytuId: input.metrics[i].cost_dimension_id,
-            })
-        }
-        top.total = input.total_count
-    }
-    return top
-}
-
-export const topAccounts = (
-    input:
-        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse
-        | undefined
-) => {
-    const top: {
-        data: {
-            name: string | undefined
-            value: number | undefined
-            connector: SourceType | undefined
-            id: string | undefined
-            kaytuId: string | undefined
-        }[]
-        total: number | undefined
-    } = { data: [], total: 0 }
-    if (input && input.connections) {
-        for (let i = 0; i < input.connections.length; i += 1) {
-            top.data.push({
-                name: input.connections[i].providerConnectionName,
-                value: input.connections[i].cost,
-                connector: input.connections[i].connector,
-                id: input.connections[i].providerConnectionID,
-                kaytuId: input.connections[i].id,
-            })
-        }
-        top.total = input.connectionCount
-    }
-    return top
-}
-
-export const topCategories = (
-    input:
-        | GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse
-        | undefined
-) => {
-    const top: {
-        data: {
-            name: string | undefined
-            value: number | undefined
-        }[]
-        total: number | undefined
-    } = { data: [], total: 0 }
-    if (input && input.top_values) {
-        const arr = Object.entries(input.top_values)
-        for (let i = 0; i < arr.length; i += 1) {
-            top.data.push({
-                name: arr[i][0],
-                value: arr[i][1],
-            })
-        }
-        top.total = input.total_count
-    }
-    return top
-}
+} from '../../../api/api'
+import { dateDisplay, monthDisplay } from '../../../utilities/dateDisplay'
+import { StackItem } from '../../Chart/Stacked'
 
 const topFiveStackedMetrics = (
     data: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
@@ -274,32 +186,4 @@ export const costTrendChart = (
         data,
         flag,
     }
-}
-
-export const pieData = (
-    response:
-        | GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse
-        | undefined
-) => {
-    const data: any[] = []
-    if (response && response.top_values) {
-        Object.entries(response?.top_values).map(([key, value]) =>
-            data.push({
-                name: key,
-                value: Number(value).toFixed(0),
-            })
-        )
-        data.sort((a, b) => {
-            return b.value - a.value
-        })
-        data.push({
-            name: 'Others',
-            value: Number(response.others).toFixed(0),
-        })
-    }
-    return data
-}
-
-export default function Spend() {
-    return <SpendOverview />
 }

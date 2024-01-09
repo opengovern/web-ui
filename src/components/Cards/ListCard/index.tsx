@@ -82,10 +82,10 @@ export default function ListCard({
                         justifyContent="between"
                         className="space-x-0 mb-2"
                     >
-                        <Text className="font-medium text-gray-400">
+                        <Text className="font-medium px-1 text-gray-400 dark:text-gray-500">
                             {keyColumnTitle}
                         </Text>
-                        <Text className="font-medium text-gray-400">
+                        <Text className="font-medium px-1 text-gray-400 dark:text-gray-500">
                             {valueColumnTitle}
                         </Text>
                     </Flex>
@@ -98,28 +98,24 @@ export default function ListCard({
                             {items?.data.map((item: Item) => (
                                 <ListItem
                                     key={item.name}
-                                    className={`max-w-full py-1 ${
-                                        isClickable ? 'cursor-pointer' : ''
+                                    className={`max-w-full p-1  rounded-md ${
+                                        isClickable
+                                            ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900'
+                                            : ''
                                     } ${item.connector ? '' : 'py-3'}`}
+                                    onClick={() =>
+                                        isClickable
+                                            ? navigate(
+                                                  `${
+                                                      type === 'account'
+                                                          ? 'account_'
+                                                          : 'metric_'
+                                                  }${item.kaytuId}`
+                                              )
+                                            : undefined
+                                    }
                                 >
-                                    <Flex
-                                        className={`py-1 rounded-md ${
-                                            isClickable
-                                                ? 'hover:bg-gray-50'
-                                                : ''
-                                        }`}
-                                        onClick={() =>
-                                            isClickable
-                                                ? navigate(
-                                                      `${
-                                                          type === 'account'
-                                                              ? 'account_'
-                                                              : 'metric_'
-                                                      }${item.kaytuId}`
-                                                  )
-                                                : undefined
-                                        }
-                                    >
+                                    <Flex className="py-1">
                                         <Flex
                                             justifyContent="start"
                                             className="w-4/5"
