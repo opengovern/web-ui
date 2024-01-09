@@ -147,6 +147,12 @@ export default function StackedChart({
         )
     }
 
+    if (loading) {
+        return (
+            <div className="animate-pulse h-72 mb-2 w-full bg-slate-200 dark:bg-slate-700 rounded" />
+        )
+    }
+
     return (
         <ReactEcharts
             option={options()}

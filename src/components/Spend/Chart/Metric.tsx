@@ -52,24 +52,32 @@ export function SpendChartMetric({
                         </Text>
                     </Flex>
                     <Flex justifyContent="start" alignItems="end">
-                        <Metric> $ {numberDisplay(total, 0)}</Metric>
+                        {isLoading ? (
+                            <div className="animate-pulse h-2 mt-6 w-24 bg-slate-200 dark:bg-slate-700 rounded" />
+                        ) : (
+                            <Metric> $ {numberDisplay(total, 0)}</Metric>
+                        )}
                     </Flex>
                     <Flex
                         flexDirection="row"
                         alignItems="center"
                         className="cursor-default"
                     >
-                        <BadgeDelta
-                            deltaType={badgeTypeByDelta(totalPrev, total)}
-                        >
-                            <Text
-                                color={deltaColors.get(
-                                    badgeTypeByDelta(totalPrev, total)
-                                )}
+                        {isLoading ? (
+                            <div className="animate-pulse h-7 w-20 my-1 bg-slate-200 dark:bg-slate-700 rounded-full" />
+                        ) : (
+                            <BadgeDelta
+                                deltaType={badgeTypeByDelta(totalPrev, total)}
                             >
-                                {changeRate} %
-                            </Text>
-                        </BadgeDelta>
+                                <Text
+                                    color={deltaColors.get(
+                                        badgeTypeByDelta(totalPrev, total)
+                                    )}
+                                >
+                                    {changeRate} %
+                                </Text>
+                            </BadgeDelta>
+                        )}
 
                         <Text className="ml-1.5">
                             compared to{' '}

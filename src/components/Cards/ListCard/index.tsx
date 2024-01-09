@@ -73,7 +73,7 @@ export default function ListCard({
     }
 
     return (
-        <Card className="h-full">
+        <Card className={`h-full `}>
             <Flex flexDirection="col" alignItems="start" className="h-full">
                 <Flex flexDirection="col" alignItems="start">
                     <Title className="font-semibold mb-4">{title}</Title>
@@ -90,9 +90,20 @@ export default function ListCard({
                         </Text>
                     </Flex>
                     {loading ? (
-                        <Flex className="h-56">
-                            <Spinner />
-                        </Flex>
+                        <List className="animate-pulse">
+                            {[1, 2, 3, 4, 5].map((i) => (
+                                <ListItem className="max-w-full p-1 rounded-md py-3">
+                                    <Flex
+                                        flexDirection="row"
+                                        justifyContent="between"
+                                        className="py-1.5"
+                                    >
+                                        <div className="h-2 w-52 my-1 bg-slate-200 dark:bg-slate-700 rounded" />
+                                        <div className="h-2 w-16 my-1 bg-slate-200 dark:bg-slate-700 rounded" />
+                                    </Flex>
+                                </ListItem>
+                            ))}
+                        </List>
                     ) : (
                         <List>
                             {items?.data.map((item: Item) => (
