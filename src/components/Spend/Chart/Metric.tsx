@@ -67,7 +67,6 @@ export function SpendChartMetric({
                                 color={deltaColors.get(
                                     badgeTypeByDelta(totalPrev, total)
                                 )}
-                                className="ml-2"
                             >
                                 {changeRate} %
                             </Text>
