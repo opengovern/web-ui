@@ -201,7 +201,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     )}
                     {navigation
                         .filter((item) =>
-                            preview
+                            preview === 'true'
                                 ? item
                                 : String(item.isPreview) === String(preview)
                         )
