@@ -34,6 +34,7 @@ const navigation = [
         name: 'Home',
         page: 'home',
         icon: HomeIcon,
+        isPreview: false,
     },
     {
         name: 'Assets',
@@ -58,6 +59,7 @@ const navigation = [
                 count: '+1K',
             },
         ],
+        isPreview: false,
     },
     {
         name: 'Spend',
@@ -82,6 +84,7 @@ const navigation = [
                 count: '+1K',
             },
         ],
+        isPreview: false,
     },
     {
         name: 'Governance',
@@ -96,6 +99,7 @@ const navigation = [
                 count: '+1K',
             },
         ],
+        isPreview: false,
     },
     {
         name: 'Insights',
@@ -107,6 +111,7 @@ const navigation = [
         name: 'Query',
         page: 'query',
         icon: MagnifyingGlassIcon,
+        isPreview: false,
     },
     {
         name: 'Resource Collection',
@@ -119,19 +124,22 @@ const navigation = [
         icon: LightBulbIcon,
         page: ['rules, alerts'],
         children: [
-            { name: 'Rules', page: 'rules', isPreview: true },
-            { name: 'Alerts', page: 'alerts', isPreview: true },
+            { name: 'Rules', page: 'rules', isPreview: false },
+            { name: 'Alerts', page: 'alerts', isPreview: false },
         ],
+        isPreview: true,
     },
     {
         name: 'Integrations',
         page: 'integrations',
         icon: PuzzlePieceIcon,
+        isPreview: false,
     },
     {
         name: 'Settings',
         page: 'settings',
         icon: Cog6ToothIcon,
+        isPreview: false,
     },
 ]
 
@@ -222,6 +230,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             {item.name}
                                         </Text>
                                     </Flex>
+                                    {item.isPreview && !collapsed && (
+                                        <Badge
+                                            className="absolute right-2 top-1.5"
+                                            style={badgeStyle}
+                                        >
+                                            Preview
+                                        </Badge>
+                                    )}
                                 </AccordionHeader>
                                 <AccordionBody className="p-0">
                                     {item.children.map((i) => (

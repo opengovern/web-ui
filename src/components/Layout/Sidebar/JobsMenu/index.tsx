@@ -227,7 +227,7 @@ export default function JobsMenu({ isCollapsed }: IJobsMenu) {
             >
                 <Popover.Panel
                     className={`absolute ${
-                        isCollapsed ? 'left-[57px]' : 'left-[515px]'
+                        isCollapsed ? 'left-[57px]' : 'left-[292px]'
                     } bottom-0 z-10`}
                 >
                     <Card className="w-fit !ring-gray-600">

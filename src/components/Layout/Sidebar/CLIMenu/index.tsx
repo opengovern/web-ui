@@ -156,7 +156,7 @@ export default function CLIMenu({ isCollapsed }: ICLIMenu) {
             >
                 <Popover.Panel
                     className={`absolute ${
-                        isCollapsed ? 'left-[57px]' : 'left-[515px]'
+                        isCollapsed ? 'left-[57px]' : 'left-[292px]'
                     } bottom-0 z-10`}
                 >
                     <Card className="p-0 !ring-gray-600">
