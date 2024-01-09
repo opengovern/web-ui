@@ -73,7 +73,7 @@ export default function ListCard({
     }
 
     return (
-        <Card className="h-full">
+        <Card className={`h-full `}>
             <Flex flexDirection="col" alignItems="start" className="h-full">
                 <Flex flexDirection="col" alignItems="start">
                     <Title className="font-semibold mb-4">{title}</Title>
@@ -82,44 +82,51 @@ export default function ListCard({
                         justifyContent="between"
                         className="space-x-0 mb-2"
                     >
-                        <Text className="font-medium text-gray-400">
+                        <Text className="font-medium px-1 text-gray-400 dark:text-gray-500">
                             {keyColumnTitle}
                         </Text>
-                        <Text className="font-medium text-gray-400">
+                        <Text className="font-medium px-1 text-gray-400 dark:text-gray-500">
                             {valueColumnTitle}
                         </Text>
                     </Flex>
                     {loading ? (
-                        <Flex className="h-56">
-                            <Spinner />
-                        </Flex>
+                        <List className="animate-pulse">
+                            {[1, 2, 3, 4, 5].map((i) => (
+                                <ListItem className="max-w-full p-1 py-3">
+                                    <Flex
+                                        flexDirection="row"
+                                        justifyContent="between"
+                                        className="py-1.5"
+                                    >
+                                        <div className="h-2 w-52 my-1 bg-slate-200 dark:bg-slate-700 rounded" />
+                                        <div className="h-2 w-16 my-1 bg-slate-200 dark:bg-slate-700 rounded" />
+                                    </Flex>
+                                </ListItem>
+                            ))}
+                        </List>
                     ) : (
                         <List>
                             {items?.data.map((item: Item) => (
                                 <ListItem
                                     key={item.name}
-                                    className={`max-w-full py-1 ${
-                                        isClickable ? 'cursor-pointer' : ''
+                                    className={`max-w-full p-1 ${
+                                        isClickable
+                                            ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900'
+                                            : ''
                                     } ${item.connector ? '' : 'py-3'}`}
+                                    onClick={() =>
+                                        isClickable
+                                            ? navigate(
+                                                  `${
+                                                      type === 'account'
+                                                          ? 'account_'
+                                                          : 'metric_'
+                                                  }${item.kaytuId}`
+                                              )
+                                            : undefined
+                                    }
                                 >
-                                    <Flex
-                                        className={`py-1 rounded-md ${
-                                            isClickable
-                                                ? 'hover:bg-gray-50'
-                                                : ''
-                                        }`}
-                                        onClick={() =>
-                                            isClickable
-                                                ? navigate(
-                                                      `${
-                                                          type === 'account'
-                                                              ? 'account_'
-                                                              : 'metric_'
-                                                      }${item.kaytuId}`
-                                                  )
-                                                : undefined
-                                        }
-                                    >
+                                    <Flex className="py-1">
                                         <Flex
                                             justifyContent="start"
                                             className="w-4/5"
@@ -160,7 +167,7 @@ export default function ListCard({
                 >
                     {(items.total || 0) - items.data.length > 0 && (
                         <Button
-                            variant="light"
+                            variant="secondary"
                             icon={ChevronRightIcon}
                             iconPosition="right"
                         >

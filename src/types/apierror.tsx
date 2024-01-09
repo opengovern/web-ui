@@ -9,3 +9,17 @@ export const getErrorMessage = (err: any) => {
     }
     return ''
 }
+
+export const toErrorMessage = (...errs: any[]) => {
+    const msgs = errs
+        .map((err) => {
+            const msg = getErrorMessage(err)
+            if (msg.length > 0) {
+                return msg
+            }
+            return undefined
+        })
+        .filter((v) => v !== undefined)
+
+    return msgs.length > 0 ? msgs.join(',') : undefined
+}

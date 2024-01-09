@@ -152,7 +152,7 @@ export default function Profile({ isCollapsed }: IProfile) {
                             <Flex
                                 onClick={() =>
                                     navigate(
-                                        `/${workspace}/settings?sp=profile`
+                                        `/${workspace.current?.name}/settings?sp=profile`
                                     )
                                 }
                                 className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-kaytu-800"

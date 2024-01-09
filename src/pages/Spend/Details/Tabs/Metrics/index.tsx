@@ -22,6 +22,9 @@ export const rowGenerator = (
     input:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
         | undefined,
+    inputPrev:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
+        | undefined,
     loading: boolean
 ) => {
     let sum = 0
@@ -75,6 +78,7 @@ export const rowGenerator = (
             roww.push({
                 ...rows[i],
                 percent: (rows[i].totalCost / sum) * 100,
+                spendInPrev: 0,
             })
         }
     }
@@ -280,8 +284,8 @@ export default function Metrics({
             id={isSummary ? 'spend_summary_table' : 'spend_service_table'}
             loading={isLoading}
             columns={columns}
-            rowData={rowGenerator(response, isLoading).finalRow}
-            pinnedRow={rowGenerator(response, isLoading).pinnedRow}
+            rowData={rowGenerator(response, undefined, isLoading).finalRow}
+            pinnedRow={rowGenerator(response, undefined, isLoading).pinnedRow}
             options={gridOptions}
             onRowClicked={(event) => {
                 if (event.data.category.length) {

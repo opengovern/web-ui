@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import { ValueFormatterParams } from 'ag-grid-community'
 import { Select, SelectItem, Text } from '@tremor/react'
 import { Dispatch, SetStateAction } from 'react'
@@ -19,11 +19,11 @@ interface IConnections {
     onGranularityChange: Dispatch<SetStateAction<'monthly' | 'daily' | 'none'>>
 }
 
-const defaultColumns = (isDemo: boolean) => {
+const defaultColumns = (isDemo: boolean, start: Dayjs, end: Dayjs) => {
     const temp: IColumn<any, any>[] = [
         {
             field: 'connector',
-            headerName: 'Cloud provider',
+            headerName: 'Provider',
             type: 'string',
             width: 140,
             enableRowGroup: true,
@@ -60,7 +60,7 @@ const defaultColumns = (isDemo: boolean) => {
         },
         {
             field: 'dimensionId',
-            headerName: 'Connection ID',
+            headerName: 'Kaytu Connection ID',
             type: 'string',
             filter: true,
             sortable: true,
@@ -74,7 +74,9 @@ const defaultColumns = (isDemo: boolean) => {
         },
         {
             field: 'totalCost',
-            headerName: 'Total spend',
+            headerName: `Total spend ${start.format(
+                'MMM DD, YYYY'
+            )} - ${end.format('MMM DD, YYYY')}`,
             type: 'price',
             width: 110,
             sortable: true,
@@ -150,7 +152,7 @@ export default function CloudAccounts({
                 ...dynamicCols,
                 {
                     field: 'percent',
-                    headerName: '%',
+                    headerName: '% of Total',
                     type: 'string',
                     width: 90,
                     pinned: true,
@@ -160,12 +162,95 @@ export default function CloudAccounts({
                         return param.value ? `${param.value.toFixed(2)}%` : ''
                     },
                 },
+                {
+                    field: 'spendInPrev',
+                    headerName: `Spend in previous period ${activeTimeRange.start.format(
+                        'MMM DD, YYYY'
+                    )} - ${activeTimeRange.end.format('MMM DD, YYYY')}`,
+                    type: 'string',
+                    width: 90,
+                    pinned: true,
+                    aggFunc: 'sum',
+                    resizable: true,
+                    valueFormatter: (param: ValueFormatterParams) => {
+                        return param.value ? `${param.value.toFixed(2)}%` : ''
+                    },
+                },
+                {
+                    field: 'change',
+                    headerName: 'Change in Spend',
+                    type: 'string',
+                    width: 90,
+                    pinned: true,
+                    aggFunc: 'sum',
+                    resizable: true,
+                    valueFormatter: (
+                        param: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow>
+                    ) => {
+                        if (param.data?.costValue === undefined) {
+                            return ''
+                        }
+                        const arr = Object.entries(param.data.costValue)
+                            .map(([k, v]) => ({
+                                date: dayjs.utc(k),
+                                amount: v,
+                            }))
+                            .sort((a, b) => {
+                                if (a.date.isSame(b.date)) {
+                                    return 0
+                                }
+                                return a.date.isBefore(b.date) ? 1 : -1
+                            })
+
+                        const start = arr[0]
+                        const end = arr[arr.length - 1]
+
+                        return (end.amount - start.amount).toFixed(2)
+                    },
+                },
+                {
+                    field: 'changePercent',
+                    headerName: 'Change %',
+                    type: 'string',
+                    width: 90,
+                    pinned: true,
+                    aggFunc: 'sum',
+                    resizable: true,
+                    valueFormatter: (
+                        param: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow>
+                    ) => {
+                        if (param.data?.costValue === undefined) {
+                            return ''
+                        }
+                        const arr = Object.entries(param.data.costValue)
+                            .map(([k, v]) => ({
+                                date: dayjs.utc(k),
+                                amount: v,
+                            }))
+                            .sort((a, b) => {
+                                if (a.date.isSame(b.date)) {
+                                    return 0
+                                }
+                                return a.date.isBefore(b.date) ? 1 : -1
+                            })
+
+                        const start = arr[0]
+                        const end = arr[arr.length - 1]
+
+                        const percentage =
+                            ((end.amount - start.amount) / start.amount) * 100.0
+
+                        return `${percentage.toFixed(2)}%`
+                    },
+                },
             ]
         }
         return columns
     }
 
-    const query = (): {
+    const query = (
+        prev = false
+    ): {
         startTime?: number | undefined
         endTime?: number | undefined
         granularity?: 'daily' | 'monthly' | 'yearly' | undefined
@@ -193,16 +278,27 @@ export default function CloudAccounts({
     const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList(
         query()
     )
+    const { response: responsePrev, isLoading: prevIsLoading } =
+        useInventoryApiV2AnalyticsSpendTableList(query(true))
 
     return (
         <Table
             title="Cloud account list"
             downloadable
             id="spend_connection_table"
-            loading={isLoading}
-            columns={[...defaultColumns(isDemo), ...columnGenerator(response)]}
-            rowData={rowGenerator(response, isLoading).finalRow}
-            pinnedRow={rowGenerator(response, isLoading).pinnedRow}
+            loading={isLoading || prevIsLoading}
+            columns={[
+                ...defaultColumns(
+                    isDemo,
+                    activeTimeRange.start,
+                    activeTimeRange.end
+                ),
+                ...columnGenerator(response),
+            ]}
+            rowData={rowGenerator(response, responsePrev, isLoading).finalRow}
+            pinnedRow={
+                rowGenerator(response, responsePrev, isLoading).pinnedRow
+            }
             options={gridOptions}
             onRowClicked={(event) => {
                 if (event.data.id) {

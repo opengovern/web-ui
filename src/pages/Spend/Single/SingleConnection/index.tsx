@@ -534,9 +534,13 @@ export default function SingleSpendConnection({
                             id="single_spend_service_table"
                             loading={isLoading}
                             columns={columns}
-                            rowData={rowGenerator(response, isLoading).finalRow}
+                            rowData={
+                                rowGenerator(response, undefined, isLoading)
+                                    .finalRow
+                            }
                             pinnedRow={
-                                rowGenerator(response, isLoading).pinnedRow
+                                rowGenerator(response, undefined, isLoading)
+                                    .pinnedRow
                             }
                             options={gridOptions}
                             onRowClicked={(event) => {

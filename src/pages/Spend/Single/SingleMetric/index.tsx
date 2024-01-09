@@ -26,6 +26,7 @@ import Editor from 'react-simple-code-editor'
 import { highlight, languages } from 'prismjs'
 import clipboardCopy from 'clipboard-copy'
 import {
+    IFilter,
     filterAtom,
     isDemoAtom,
     notificationAtom,
@@ -53,11 +54,21 @@ import {
     LineChartIcon,
 } from '../../../../icons/icons'
 import Chart from '../../../../components/Chart'
-import { costTrendChart, getConnections } from '../../index'
+import { costTrendChart } from '../../index'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import { dateDisplay } from '../../../../utilities/dateDisplay'
 import Modal from '../../../../components/Modal'
 import { generateVisualMap } from '../../../Assets'
+
+export const getConnections = (con: IFilter) => {
+    if (con.provider.length) {
+        return `Spend across ${con.provider}`
+    }
+    if (con.connections.length) {
+        return `Spend across ${con.connections.length} accounts`
+    }
+    return 'Total Spend'
+}
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }

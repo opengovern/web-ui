@@ -39,7 +39,7 @@ export default function Selector({
                     className="w-fit"
                 >
                     <div className="relative">
-                        <Listbox.Button className="relative w-fit cursor-pointer hover:bg-slate-50 hover:ease-in rounded-lg bg-white px-4 p-1 text-left text-gray-900 focus:outline-none sm:text-sm sm:leading-6">
+                        <Listbox.Button className="relative w-fit cursor-pointer hover:bg-slate-50 dark:hover:bg-gray-900 hover:ease-in rounded-lg bg-white dark:bg-gray-800 px-4 p-1 text-left text-gray-900 dark:text-gray-50 focus:outline-none sm:text-sm sm:leading-6">
                             <text className="text-xs text-slate-500">
                                 {title}
                             </text>
@@ -75,15 +75,15 @@ export default function Selector({
                             leaveFrom="opacity-100"
                             leaveTo="opacity-0"
                         >
-                            <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                            <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white dark:bg-gray-800 py-1 text-base shadow-lg ring-1 ring-black dark:ring-white ring-opacity-5 focus:outline-none sm:text-sm">
                                 {values.map((item, idx) => (
                                     <Listbox.Option
                                         key={item}
                                         className={({ active }) =>
                                             classNames(
                                                 active
-                                                    ? 'bg-gray-50'
-                                                    : 'text-gray-900',
+                                                    ? 'bg-gray-50 dark:bg-gray-900'
+                                                    : 'text-gray-900 dark:text-gray-50',
                                                 'relative cursor-default select-none py-2 pl-4 pr-6'
                                             )
                                         }
@@ -97,7 +97,7 @@ export default function Selector({
                                                             selected
                                                                 ? 'font-semibold'
                                                                 : 'font-normal',
-                                                            ' block truncate'
+                                                            ' block truncate text-gray-800 dark:text-gray-100'
                                                         )}
                                                     >
                                                         {capitalizeFirstLetter(
@@ -110,8 +110,8 @@ export default function Selector({
                                                     <span
                                                         className={classNames(
                                                             active
-                                                                ? 'text-gray-900'
-                                                                : 'text-gray-900',
+                                                                ? 'text-gray-900 dark:text-gray-50'
+                                                                : 'text-gray-900 dark:text-gray-50',
                                                             'absolute inset-y-0 right-0 flex items-center pr-4'
                                                         )}
                                                     >
