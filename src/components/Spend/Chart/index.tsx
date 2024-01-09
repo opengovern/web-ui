@@ -1,4 +1,13 @@
-import { Callout, Card, Col, Grid } from '@tremor/react'
+import {
+    Button,
+    Callout,
+    Card,
+    Col,
+    Flex,
+    Grid,
+    Text,
+    Title,
+} from '@tremor/react'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import { numberDisplay } from '../../../utilities/numericDisplay'
@@ -16,6 +25,7 @@ import {
 import { costTrendChart } from './helpers'
 import { generateVisualMap } from '../../../pages/Assets'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../../api/api'
+import { toErrorMessage } from '../../../types/apierror'
 
 interface ISpendChart {
     title: string
@@ -32,19 +42,21 @@ interface ISpendChart {
     isLoading: boolean
     costTrend: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
     error: string | undefined
+    onRefresh: () => void
     onGranularityChanged: (v: Granularity) => void
 }
 
 export function SpendChart({
     title,
-    isLoading,
-    error,
     timeRange,
     timeRangePrev,
     total,
     totalPrev,
     costTrend,
     onGranularityChanged,
+    isLoading,
+    error,
+    onRefresh,
 }: ISpendChart) {
     const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
     const [chartType, setChartType] = useState<ChartType>('bar')
@@ -63,6 +75,7 @@ export function SpendChart({
                         timeRangePrev={timeRangePrev}
                         totalPrev={totalPrev}
                         isLoading={isLoading}
+                        error={error}
                     />
                 </Col>
                 <Col numColSpan={4}>
@@ -120,6 +133,7 @@ export function SpendChart({
                     isCost
                     chartType={chartType}
                     loading={isLoading}
+                    error={error}
                     onClick={
                         aggregation === 'cumulative'
                             ? undefined
@@ -149,6 +163,7 @@ export function SpendChart({
                     chartAggregation={aggregation}
                     isCost
                     loading={isLoading}
+                    error={error}
                     visualMap={
                         aggregation === 'cumulative'
                             ? undefined
@@ -191,6 +206,31 @@ export function SpendChart({
                             : (p) => setSelectedDatapoint(p)
                     }
                 />
+            )}
+
+            {error && (
+                <Flex
+                    flexDirection="col"
+                    justifyContent="between"
+                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
+                >
+                    <Flex
+                        flexDirection="col"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <Title className="mt-6">Failed to load component</Title>
+                        <Text className="mt-2">{error}</Text>
+                    </Flex>
+                    <Button
+                        variant="secondary"
+                        className="mb-6"
+                        color="slate"
+                        onClick={onRefresh}
+                    >
+                        Try Again
+                    </Button>
+                </Flex>
             )}
         </Card>
     )

@@ -70,6 +70,7 @@ export function SpendOverview() {
         response: costTrend,
         isLoading: costTrendLoading,
         error: costTrendError,
+        sendNow: costTrendRefresh,
     } = useInventoryApiV2AnalyticsSpendTrendList({
         ...query,
         granularity,
@@ -79,11 +80,13 @@ export function SpendOverview() {
         response: serviceCostResponse,
         isLoading: serviceCostLoading,
         error: serviceCostErr,
+        sendNow: serviceCostRefresh,
     } = useInventoryApiV2AnalyticsSpendMetricList(query)
     const {
         response: servicePrevCostResponse,
         isLoading: servicePrevCostLoading,
         error: servicePrevCostErr,
+        sendNow: serviceCostPrevRefresh,
     } = useInventoryApiV2AnalyticsSpendMetricList(prevQuery)
 
     const { response: accountCostResponse, isLoading: accountCostLoading } =
@@ -135,6 +138,11 @@ export function SpendOverview() {
                                 serviceCostErr,
                                 servicePrevCostErr
                             )}
+                            onRefresh={() => {
+                                costTrendRefresh()
+                                serviceCostPrevRefresh()
+                                serviceCostRefresh()
+                            }}
                             onGranularityChanged={setGranularity}
                         />
                     </Col>

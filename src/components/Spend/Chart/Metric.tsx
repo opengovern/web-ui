@@ -16,6 +16,7 @@ interface ISpendChartMetric {
     }
     totalPrev: number
     isLoading: boolean
+    error: string | undefined
 }
 
 export function SpendChartMetric({
@@ -25,6 +26,7 @@ export function SpendChartMetric({
     total,
     totalPrev,
     isLoading,
+    error,
 }: ISpendChartMetric) {
     const deltaColors = new Map<string, Color>()
     deltaColors.set('increase', 'emerald')
@@ -52,8 +54,14 @@ export function SpendChartMetric({
                         </Text>
                     </Flex>
                     <Flex justifyContent="start" alignItems="end">
-                        {isLoading ? (
-                            <div className="animate-pulse h-2 mt-6 w-24 bg-slate-200 dark:bg-slate-700 rounded" />
+                        {isLoading || (error !== undefined && error !== '') ? (
+                            <div
+                                className={`${
+                                    error !== undefined && error !== ''
+                                        ? ''
+                                        : 'animate-pulse'
+                                } h-2 mt-6 w-24 bg-slate-200 dark:bg-slate-700 rounded`}
+                            />
                         ) : (
                             <Metric> $ {numberDisplay(total, 0)}</Metric>
                         )}
@@ -63,8 +71,14 @@ export function SpendChartMetric({
                         alignItems="center"
                         className="cursor-default"
                     >
-                        {isLoading ? (
-                            <div className="animate-pulse h-7 w-20 my-1 bg-slate-200 dark:bg-slate-700 rounded-full" />
+                        {isLoading || (error !== undefined && error !== '') ? (
+                            <div
+                                className={`${
+                                    error !== undefined && error !== ''
+                                        ? ''
+                                        : 'animate-pulse'
+                                } h-7 w-20 my-1 bg-slate-200 dark:bg-slate-700 rounded-full`}
+                            />
                         ) : (
                             <BadgeDelta
                                 deltaType={badgeTypeByDelta(totalPrev, total)}

@@ -167,7 +167,7 @@ export default function ListCard({
                 >
                     {(items.total || 0) - items.data.length > 0 && (
                         <Button
-                            variant="light"
+                            variant="secondary"
                             icon={ChevronRightIcon}
                             iconPosition="right"
                         >

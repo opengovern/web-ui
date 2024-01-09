@@ -18,7 +18,6 @@ interface IChart {
     isCost: boolean
     loading?: boolean
     error?: string
-    onRefresh?: () => void
     onClick?: (param?: any) => void
 }
 
@@ -30,7 +29,6 @@ export default function StackedChart({
     isCost,
     loading,
     error,
-    onRefresh,
     onClick,
 }: IChart) {
     const colorBlindMode = useAtomValue(colorBlindModeAtom)
@@ -123,33 +121,13 @@ export default function StackedChart({
         click: (params: any) => (onClick ? onClick(params) : undefined),
     }
 
-    if (error !== undefined && error.length > 0) {
+    if (loading || (error !== undefined && error !== '')) {
         return (
-            <Flex
-                flexDirection="row"
-                justifyContent="center"
-                alignItems="center"
-                className="cursor-pointer w-full h-80"
-                onClick={onRefresh}
-            >
-                <Text className="text-gray-400 mr-2 w-auto">
-                    Error loading {error}
-                </Text>
-                <Flex
-                    flexDirection="row"
-                    justifyContent="end"
-                    className="w-auto"
-                >
-                    <ArrowPathIcon className="text-kaytu-500 w-4 h-4 mr-1" />
-                    <Text className="text-kaytu-500">Reload</Text>
-                </Flex>
-            </Flex>
-        )
-    }
-
-    if (loading) {
-        return (
-            <div className="animate-pulse h-72 mb-2 w-full bg-slate-200 dark:bg-slate-700 rounded" />
+            <div
+                className={`${
+                    error !== undefined && error !== '' ? '' : 'animate-pulse'
+                } h-72 mb-2 w-full bg-slate-200 dark:bg-slate-700 rounded`}
+            />
         )
     }
 
