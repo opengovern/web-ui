@@ -50,7 +50,7 @@ export default function TopHeader({
     }
 
     return (
-        <div className="px-12 z-10 absolute top-2 w-full flex h-16 items-center justify-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm rounded-tl-2xl">
+        <div className="px-12 z-10 absolute top-0 w-full flex h-16 items-center justify-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm">
             <Flex className="max-w-7xl">
                 {subPages().length > 0 ? (
                     <Flex justifyContent="start">

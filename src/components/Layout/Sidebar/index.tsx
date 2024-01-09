@@ -109,7 +109,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             >
                 <Flex
                     justifyContent={collapsed ? 'center' : 'between'}
-                    className={`pb-[18px] pt-[12px] border-b border-b-gray-700 ${
+                    className={`pb-[17px] pt-[6px] border-b border-b-gray-700 ${
                         collapsed ? '' : 'px-5'
                     }`}
                 >

@@ -51,7 +51,7 @@ export default function Layout({
                 <Sidebar workspace={workspace} currentPage={currentPage} />
             )}
 
-            <div className="z-10 w-full h-full relative bg-kaytu-950">
+            <div className="z-10 w-full h-full relative">
                 <TopHeader
                     filter={filter}
                     datePicker={datePicker}
