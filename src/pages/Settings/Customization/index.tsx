@@ -1,11 +1,8 @@
 import { useEffect, useState } from 'react'
 import {
-    Button,
     Card,
     Divider,
     Flex,
-    List,
-    ListItem,
     NumberInput,
     Tab,
     TabGroup,
@@ -207,10 +204,8 @@ export default function SettingsCustomization() {
             >
                 <Text className="font-normal">Show preview features</Text>
                 <TabGroup
-                    index={preview === 'true' ? 0 : 1}
-                    onIndexChange={(idx) =>
-                        setPreview(idx === 0 ? 'true' : 'false')
-                    }
+                    index={preview ? 0 : 1}
+                    onIndexChange={(idx) => setPreview(idx === 0)}
                     className="w-fit"
                 >
                     <TabList className="border border-gray-200" variant="solid">
