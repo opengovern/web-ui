@@ -9,7 +9,7 @@ import Spend from './Spend'
 export default function Home() {
     const element = document.getElementById('myDIV')?.offsetHeight
     return (
-        <Layout currentPage="home">
+        <Layout currentPage="home" datePicker>
             <Grid numItems={6} className="w-full gap-4 h-fit">
                 <Col numColSpan={4}>
                     <Title className="font-semibold mb-4">
