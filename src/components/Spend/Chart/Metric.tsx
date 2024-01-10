@@ -43,7 +43,7 @@ export function SpendChartMetric({
     return (
         <Card
             key={title}
-            className="w-fit ring-0 shadow-none dark:shadow-none border-0 p-0"
+            className="w-fit ring-0 shadow-transparent dark:shadow-none border-0 p-0"
         >
             <Flex alignItems="baseline">
                 <Flex flexDirection="col" className="gap-3" alignItems="start">

@@ -2,16 +2,16 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
     GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
     RequestParams,
 } from './api'
 

@@ -1,6 +1,6 @@
 import { withAuthenticationRequired } from '@auth0/auth0-react'
 import React from 'react'
-import { Card } from '@tremor/react'
+import { Card, Flex } from '@tremor/react'
 import Spinner from '../Spinner'
 
 interface IAuthenticationGuard {
@@ -14,9 +14,13 @@ export const AuthenticationGuard: React.FC<IAuthenticationGuard> = ({
         // eslint-disable-next-line react/no-unstable-nested-components
         onRedirecting: () => {
             return (
-                <div className="flex items-center justify-center mt-96 w-full">
+                <Flex
+                    alignItems="center"
+                    justifyContent="center"
+                    className="w-full h-screen dark:bg-gray-900"
+                >
                     <Spinner />
-                </div>
+                </Flex>
             )
         },
     })

@@ -36,11 +36,11 @@ code {
 }
 
 .ag-theme-alpine-dark {
-    --ag-background-color: #1F2937 !important;
+    --ag-background-color: #1f2937 !important;
     --ag-foreground-color: #6b7280 !important;
     --ag-icon-font-family: 'agGridMaterial' !important;
     --ag-border-color: #374151 !important;
-    --ag-header-background-color: #1F2937 !important;
+    --ag-header-background-color: #1f2937 !important;
     color-scheme: dark;
 }
 

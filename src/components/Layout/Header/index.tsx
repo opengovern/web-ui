@@ -49,6 +49,8 @@ export default function TopHeader({
         return temp
     }
 
+    document.title = `${mainPage()} | Kaytu`
+
     return (
         <div className="px-12 z-10 absolute top-0 w-full flex h-16 items-center justify-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm">
             <Flex className="max-w-7xl">

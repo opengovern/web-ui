@@ -3,6 +3,7 @@ import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import Layout from '../../../components/Layout'
 import SingleSpendConnection from '../Single/SingleConnection'
+import Breakdown from '../../../components/Breakdown'
 import ListCard from '../../../components/Cards/ListCard'
 import {
     useInventoryApiV2AnalyticsSpendCompositionList,
@@ -16,7 +17,7 @@ import { SpendChart } from '../../../components/Spend/Chart'
 import { toErrorMessage } from '../../../types/apierror'
 import { Granularity } from '../../../components/Spend/Chart/Selectors'
 
-export function SpendOverview() {
+export function SpendMetrics() {
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
     const [granularity, setGranularity] = useState<Granularity>('daily')
@@ -111,7 +112,7 @@ export function SpendOverview() {
             }),
         })
     return (
-        <Layout currentPage="spend" datePicker filter>
+        <Layout currentPage="spend/metrics" datePicker filter>
             {selectedConnections.connections.length === 1 ? (
                 <SingleSpendConnection
                     activeTimeRange={activeTimeRange}
@@ -122,7 +123,7 @@ export function SpendOverview() {
                     <Col numColSpan={3}>
                         <SpendChart
                             costTrend={costTrend || []}
-                            costField="category"
+                            costField="metric"
                             title="Total spend"
                             timeRange={activeTimeRange}
                             timeRangePrev={prevTimeRange}

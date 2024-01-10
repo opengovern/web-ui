@@ -1,6 +1,5 @@
-import { Flex, Icon, Tab, TabGroup, TabList } from '@tremor/react'
+import { Flex, Tab, TabGroup, TabList } from '@tremor/react'
 import dayjs from 'dayjs'
-import { useState } from 'react'
 import Selector from '../../Selector'
 import { checkGranularity } from '../../../utilities/dateComparator'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
@@ -97,11 +96,11 @@ export function SpendChartSelectors({
                 className="w-fit rounded-lg ml-2"
             >
                 <TabList variant="solid">
-                    <Tab value="line">
-                        <LineChartIcon className="h-4 w-4 m-0.5 my-1.5" />
-                    </Tab>
                     <Tab value="bar">
                         <BarChartIcon className="h-4 w-4 m-0.5 my-1.5" />
+                    </Tab>
+                    <Tab value="line">
+                        <LineChartIcon className="h-4 w-4 m-0.5 my-1.5" />
                     </Tab>
                 </TabList>
             </TabGroup>

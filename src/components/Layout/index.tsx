@@ -17,6 +17,8 @@ type IProps = {
         | 'insights'
         | 'assets'
         | 'spend'
+        | 'spend/accounts'
+        | 'spend/metrics'
         | 'integrations'
         | 'compliance'
         | 'service-advisor'

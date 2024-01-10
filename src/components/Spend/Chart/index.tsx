@@ -9,7 +9,7 @@ import {
     Title,
 } from '@tremor/react'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import StackedChart from '../../Chart/Stacked'
 import Chart from '../../Chart'
@@ -22,10 +22,9 @@ import {
     Granularity,
     SpendChartSelectors,
 } from './Selectors'
-import { costTrendChart } from './helpers'
+import { buildTrend, costTrendChart } from './helpers'
 import { generateVisualMap } from '../../../pages/Assets'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../../api/api'
-import { toErrorMessage } from '../../../types/apierror'
 
 interface ISpendChart {
     title: string
@@ -41,6 +40,7 @@ interface ISpendChart {
     totalPrev: number
     isLoading: boolean
     costTrend: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
+    costField: 'metric' | 'category' | 'account'
     error: string | undefined
     onRefresh: () => void
     onGranularityChanged: (v: Granularity) => void
@@ -53,6 +53,7 @@ export function SpendChart({
     total,
     totalPrev,
     costTrend,
+    costField,
     onGranularityChanged,
     isLoading,
     error,
@@ -63,6 +64,19 @@ export function SpendChart({
     const [granularity, setGranularity] = useState<Granularity>('daily')
     const [chartLayout, setChartLayout] = useState<ChartLayout>('stacked')
     const [aggregation, setAggregation] = useState<Aggregation>('trend')
+
+    const trend = costTrendChart(costTrend, aggregation, granularity)
+    const trendStacked = buildTrend(
+        costTrend,
+        aggregation,
+        granularity,
+        costField,
+        5
+    )
+    const visualMap = generateVisualMap(trend.flag, trend.label)
+    useEffect(() => {
+        setSelectedDatapoint(undefined)
+    }, [chartLayout, chartType, granularity, aggregation])
 
     return (
         <Card>
@@ -95,7 +109,7 @@ export function SpendChart({
                     />
                 </Col>
             </Grid>
-            {selectedDatapoint !== undefined && (
+            {chartLayout === 'basic' && selectedDatapoint !== undefined && (
                 <Callout
                     color="rose"
                     title="Incomplete data"
@@ -114,50 +128,17 @@ export function SpendChart({
 
             {chartLayout === 'stacked' ? (
                 <StackedChart
-                    labels={
-                        costTrendChart(
-                            costTrend,
-                            aggregation,
-                            chartLayout,
-                            granularity
-                        ).label
-                    }
-                    chartData={
-                        costTrendChart(
-                            costTrend,
-                            aggregation,
-                            chartLayout,
-                            granularity
-                        ).data
-                    }
+                    labels={trendStacked.label}
+                    chartData={trendStacked.data}
                     isCost
                     chartType={chartType}
                     loading={isLoading}
                     error={error}
-                    onClick={
-                        aggregation === 'cumulative'
-                            ? undefined
-                            : (p) => setSelectedDatapoint(p)
-                    }
                 />
             ) : (
                 <Chart
-                    labels={
-                        costTrendChart(
-                            costTrend,
-                            aggregation,
-                            chartLayout,
-                            granularity
-                        ).label
-                    }
-                    chartData={
-                        costTrendChart(
-                            costTrend,
-                            aggregation,
-                            chartLayout,
-                            granularity
-                        ).data
-                    }
+                    labels={trend.label}
+                    chartData={trend.data}
                     chartType={chartType}
                     chartLayout={chartLayout}
                     chartAggregation={aggregation}
@@ -167,44 +148,26 @@ export function SpendChart({
                     visualMap={
                         aggregation === 'cumulative'
                             ? undefined
-                            : generateVisualMap(
-                                  costTrendChart(
-                                      costTrend,
-                                      aggregation,
-                                      chartLayout,
-                                      granularity
-                                  ).flag,
-                                  costTrendChart(
-                                      costTrend,
-                                      aggregation,
-                                      chartLayout,
-                                      granularity
-                                  ).label
-                              ).visualMap
+                            : visualMap.visualMap
                     }
                     markArea={
                         aggregation === 'cumulative'
                             ? undefined
-                            : generateVisualMap(
-                                  costTrendChart(
-                                      costTrend,
-                                      aggregation,
-                                      chartLayout,
-                                      granularity
-                                  ).flag,
-                                  costTrendChart(
-                                      costTrend,
-                                      aggregation,
-                                      chartLayout,
-                                      granularity
-                                  ).label
-                              ).markArea
+                            : visualMap.markArea
                     }
-                    onClick={
-                        aggregation === 'cumulative'
-                            ? undefined
-                            : (p) => setSelectedDatapoint(p)
-                    }
+                    onClick={(p) => {
+                        if (aggregation !== 'cumulative') {
+                            const t1 = costTrend
+                                ?.filter(
+                                    (t) =>
+                                        p?.color === '#E01D48' &&
+                                        dateDisplay(t.date) === p?.name
+                                )
+                                .at(0)
+
+                            setSelectedDatapoint(t1)
+                        }
+                    }}
                 />
             )}
 

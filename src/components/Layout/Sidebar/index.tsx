@@ -50,10 +50,13 @@ interface ISidebar {
 export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
     const preview = useAtomValue(previewAtom)
-    const { response: spendCount } = useInventoryApiV2AnalyticsSpendCountList()
-    const { response: assetCount } = useInventoryApiV2AnalyticsCountList()
-    const { response: findingsCount } = useComplianceApiV1FindingsCountList()
-    const { response: connectionCount } =
+    const { response: spendCount, isLoading: spendCountIsLoading } =
+        useInventoryApiV2AnalyticsSpendCountList()
+    const { response: assetCount, isLoading: assetsIsLoading } =
+        useInventoryApiV2AnalyticsCountList()
+    const { response: findingsCount, isLoading: findingsIsLoading } =
+        useComplianceApiV1FindingsCountList()
+    const { response: connectionCount, isLoading: connectionsIsLoading } =
         useIntegrationApiV1ConnectionsCountList()
 
     const navigation = [
@@ -81,12 +84,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     name: 'Cloud Accounts',
                     page: 'assets/assets-details#cloud-accounts',
                     isPreview: false,
+                    isLoading: assetsIsLoading,
                     count: numericDisplay(assetCount?.connectionCount) || 0,
                 },
                 {
                     name: 'Metrics',
                     page: 'assets/assets-details#metrics',
                     isPreview: false,
+                    isLoading: assetsIsLoading,
                     count: numericDisplay(assetCount?.metricCount) || 0,
                 },
             ],
@@ -94,11 +99,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         },
         {
             name: 'Spend',
-            page: [
-                'spend',
-                'spend/spend-details#cloud-accounts',
-                'spend/spend-details#metrics',
-            ],
+            page: ['spend', 'spend/accounts', 'spend/metrics'],
             icon: BanknotesIcon,
             children: [
                 {
@@ -108,14 +109,16 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 },
                 {
                     name: 'Cloud Accounts',
-                    page: 'spend/spend-details#cloud-accounts',
+                    page: 'spend/accounts',
                     isPreview: false,
+                    isLoading: spendCountIsLoading,
                     count: numericDisplay(spendCount?.connectionCount) || 0,
                 },
                 {
                     name: 'Metrics',
-                    page: 'spend/spend-details#metrics',
+                    page: 'spend/metrics',
                     isPreview: false,
+                    isLoading: spendCountIsLoading,
                     count: numericDisplay(spendCount?.metricCount) || 0,
                 },
             ],
@@ -131,6 +134,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     name: 'Findings',
                     page: 'findings',
                     isPreview: false,
+                    isLoading: findingsIsLoading,
                     count: numericDisplay(findingsCount?.count) || 0,
                 },
             ],
@@ -168,6 +172,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             name: 'Integrations',
             page: 'integrations',
             icon: PuzzlePieceIcon,
+            isLoading: connectionsIsLoading,
             count: numericDisplay(connectionCount?.count) || 0,
             isPreview: false,
         },
@@ -288,7 +293,11 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         className="absolute right-2 top-1.5"
                                                         style={badgeStyle}
                                                     >
-                                                        {i.count}
+                                                        {i.isLoading ? (
+                                                            <div className="animate-pulse h-1 w-4 my-2 bg-gray-700 rounded-md" />
+                                                        ) : (
+                                                            i.count
+                                                        )}
                                                     </Badge>
                                                 )}
                                                 {i.isPreview && !collapsed && (
@@ -374,9 +383,11 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                                             badgeStyle
                                                                         }
                                                                     >
-                                                                        {
+                                                                        {i.isLoading ? (
+                                                                            <div className="animate-pulse h-1 w-4 my-2 bg-gray-700 rounded-md" />
+                                                                        ) : (
                                                                             i.count
-                                                                        }
+                                                                        )}
                                                                     </Badge>
                                                                 )}
                                                             {i.isPreview &&

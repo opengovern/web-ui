@@ -252,7 +252,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                 </Flex>
                 <Grid numItems={2} numItemsLg={4} className="gap-6 mb-6">
                     {Object.entries(details).map(([name, value]) => (
-                        <Card>
+                        <Card className="dark:shadow-gray-600">
                             <Text color="slate" className="font-semibold mb-3">
                                 {name}
                             </Text>
@@ -269,7 +269,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                 </Grid>
                 <Flex flexDirection="row">
                     <Flex flexDirection="row" className="w-fit">
-                        <Text className="pr-2 border-r-gray-600">
+                        <Text className="pr-2 border-r-gray-600 dark:border-r-gray-300">
                             {workspace.version}
                         </Text>
                         <Text className="pl-2">

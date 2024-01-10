@@ -2,6 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 import jwtDecode from 'jwt-decode'
+import { Flex } from '@tremor/react'
 import Router from './router'
 import Spinner from './components/Spinner'
 import { setAuthHeader } from './api/ApiConfig'
@@ -81,9 +82,14 @@ export default function App() {
 
     if (isLoading || accessTokenLoading) {
         return (
-            <div className="flex items-center justify-center mt-96 w-full">
+            <Flex
+                flexDirection="col"
+                justifyContent="center"
+                alignItems="center"
+                className="w-full h-screen dark:bg-gray-900"
+            >
                 <Spinner />
-            </div>
+            </Flex>
         )
     }
 

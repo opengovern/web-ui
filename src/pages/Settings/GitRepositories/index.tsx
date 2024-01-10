@@ -147,6 +147,7 @@ export default function SettingsGitRepositories() {
                         </Button>
                     </Flex>
                 </ListItem>
+                
             </List>
         </Card>
     )

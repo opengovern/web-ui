@@ -1,212 +1,185 @@
-import {
-    GithubComKaytuIoKaytuEnginePkgInventoryApiCostStackedItem,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-} from '../../../api/api'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../../api/api'
 import { dateDisplay, monthDisplay } from '../../../utilities/dateDisplay'
 import { StackItem } from '../../Chart/Stacked'
-
-export const topFiveStackedMetrics = (
-    data: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[],
-    count?: number
-) => {
-    const uniqueMetricID = data
-        .flatMap((v) => v.costStacked?.map((i) => i.metricID || '') || [])
-        .filter((l, idx, arr) => arr.indexOf(l) === idx)
-
-    const idCost = uniqueMetricID
-        .map((metricID) => {
-            const totalCost = data
-                .flatMap(
-                    (v) =>
-                        v.costStacked
-                            ?.filter((i) => i.metricID === metricID)
-                            .map((j) => j.cost || 0) || []
-                )
-                .reduce((prev, curr) => prev + curr, 0)
-
-            const metricName =
-                data
-                    .flatMap(
-                        (v) =>
-                            v.costStacked
-                                ?.filter((i) => i.metricID === metricID)
-                                .map((j) => j.metricName || '') || []
-                    )
-                    .at(0) || ''
-
-            return {
-                metricID,
-                metricName,
-                totalCost,
-            }
-        })
-        .sort((a, b) => {
-            if (a.totalCost === b.totalCost) {
-                return 0
-            }
-            return a.totalCost < b.totalCost ? 1 : -1
-        })
-
-    return idCost.slice(0, count || 5)
-}
-
-const takeMetricsAndOthers = (
-    metricIDs: {
-        metricID: string
-        metricName: string
-        totalCost: number
-    }[],
-    v: GithubComKaytuIoKaytuEnginePkgInventoryApiCostStackedItem[]
-) => {
-    const result: GithubComKaytuIoKaytuEnginePkgInventoryApiCostStackedItem[] =
-        []
-    let others = 0
-    v.forEach((item) => {
-        if (
-            metricIDs.map((i) => i.metricID).indexOf(item.metricID || '') === -1
-        ) {
-            others += item.cost || 0
-        }
-    })
-
-    metricIDs.forEach((item) => {
-        const p = v.filter((i) => i.metricID === item.metricID).at(0)
-        if (p === undefined) {
-            result.push({
-                metricID: item.metricID,
-                metricName: item.metricName,
-                cost: 0,
-            })
-        } else {
-            result.push(p)
-        }
-    })
-
-    result.push({
-        metricID: '___others___',
-        metricName: 'Others',
-        cost: others,
-    })
-
-    return result
-}
 
 export const costTrendChart = (
     trend:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
         | undefined,
     chart: 'trend' | 'cumulative',
-    layout: 'basic' | 'stacked',
-    granularity: 'monthly' | 'daily' | 'yearly',
-    lastResults?: number,
-    metricCount?: number
+    granularity: 'monthly' | 'daily' | 'yearly'
 ) => {
-    const top5 = topFiveStackedMetrics(trend || [], metricCount)
-    const label = []
-    const data: any = []
-    const flag = []
-    if (trend) {
-        if (chart === 'trend') {
-            for (
-                let i = lastResults
-                    ? (trend?.length || lastResults) - lastResults
-                    : 0;
-                i < trend?.length;
-                i += 1
-            ) {
-                const stacked = takeMetricsAndOthers(
-                    top5,
-                    trend[i].costStacked || []
-                )
-                label.push(
-                    granularity === 'monthly'
-                        ? monthDisplay(trend[i]?.date)
-                        : dateDisplay(trend[i]?.date)
-                )
-                if (layout === 'basic') {
-                    data.push(trend[i]?.cost)
-                } else {
-                    data.push(
-                        stacked
-                            .sort((a, b) => {
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                if (a.metricName < b.metricName) {
-                                    return -1
-                                }
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                if (a.metricName > b.metricName) {
-                                    return 1
-                                }
-                                return 0
-                            })
-                            .map((v) => {
-                                const j: StackItem = {
-                                    label: v.metricName || '',
-                                    value: v.cost || 0,
-                                }
-                                return j
-                            })
-                    )
-                }
-                if (
-                    trend[i].totalConnectionCount !==
-                    trend[i].totalSuccessfulDescribedConnectionCount
-                ) {
-                    flag.push(true)
-                } else flag.push(false)
-            }
-        }
-        if (chart === 'cumulative') {
-            for (let i = 0; i < trend?.length; i += 1) {
-                const stacked = takeMetricsAndOthers(
-                    top5,
-                    trend[i].costStacked || []
-                )
-                label.push(
-                    granularity === 'monthly'
-                        ? monthDisplay(trend[i]?.date)
-                        : dateDisplay(trend[i]?.date)
-                )
+    const label: string[] = []
+    const data: number[] = []
+    const flag: boolean[] = []
 
-                if (i === 0) {
-                    if (layout === 'basic') {
-                        data.push(trend[i]?.cost)
-                    } else {
-                        data.push(
-                            stacked.map((v) => {
-                                const j: StackItem = {
-                                    label: v.metricName || '',
-                                    value: v.cost || 0,
-                                }
-                                return j
-                            })
-                        )
-                    }
-                } else if (layout === 'basic') {
-                    data.push((trend[i]?.cost || 0) + data[i - 1])
-                } else {
-                    data.push(
-                        stacked.map((v) => {
-                            const prev = data[i - 1]
-                                ?.filter((p: any) => p.label === v.metricName)
-                                ?.at(0)
-
-                            const j: StackItem = {
-                                label: v.metricName || '',
-                                value: (v.cost || 0) + (prev?.value || 0),
-                            }
-                            return j
-                        })
-                    )
-                }
-            }
+    if (!trend) {
+        return {
+            label,
+            data,
+            flag,
         }
     }
+
+    for (let i = 0; i < trend?.length; i += 1) {
+        label.push(
+            granularity === 'monthly'
+                ? monthDisplay(trend[i]?.date)
+                : dateDisplay(trend[i]?.date)
+        )
+        if (chart === 'cumulative') {
+            data.push((trend[i]?.cost || 0) + (data?.at(i - 1) || 0))
+        } else {
+            data.push(trend[i]?.cost || 0)
+        }
+
+        if (
+            trend[i].totalConnectionCount !==
+            trend[i].totalSuccessfulDescribedConnectionCount
+        ) {
+            flag.push(true)
+        } else flag.push(false)
+    }
+
     return {
         label,
         data,
         flag,
+    }
+}
+
+interface ITrendItem {
+    date: string
+    totalValue: number
+    stackedValues: StackItem[]
+    flag: boolean
+}
+
+const makeUnique = (arr: StackItem[]) => {
+    return arr.reduce<StackItem[]>((prev, curr) => {
+        const exists = prev.filter((v) => v.label === curr.label).length > 0
+        if (exists) {
+            return prev.map((v) =>
+                v.label === curr.label
+                    ? {
+                          label: v.label,
+                          value: v.value + curr.value,
+                      }
+                    : v
+            )
+        }
+        return [...prev, curr]
+    }, [])
+}
+
+const extractTrend = (
+    trend: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[],
+    granularity: 'monthly' | 'daily' | 'yearly',
+    field: 'metric' | 'category' | 'account'
+) => {
+    return trend.map((item) => {
+        const label =
+            granularity === 'monthly'
+                ? monthDisplay(item?.date)
+                : dateDisplay(item?.date)
+
+        const dataItem: StackItem[] =
+            item.costStacked?.flatMap((v) => {
+                const labels =
+                    field === 'metric' ? [v.metricName || ''] : v.category || []
+                return labels.map((lbl) => {
+                    return {
+                        label: lbl,
+                        value: v.cost || 0,
+                    }
+                })
+            }) || []
+
+        const i: ITrendItem = {
+            date: label,
+            totalValue: item.cost || 0,
+            stackedValues: makeUnique(dataItem),
+            flag:
+                item.totalConnectionCount !==
+                item.totalSuccessfulDescribedConnectionCount,
+        }
+        return i
+    })
+}
+
+export const buildTrend = (
+    apiResp: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[],
+    chart: 'trend' | 'cumulative',
+    granularity: 'monthly' | 'daily' | 'yearly',
+    field: 'metric' | 'category' | 'account',
+    topN: number
+) => {
+    let trend = extractTrend(apiResp, granularity, field)
+
+    const order = makeUnique(trend.flatMap((v) => v.stackedValues)).sort(
+        (a, b) => {
+            if (a.value === b.value) {
+                return 0
+            }
+            return a.value < b.value ? 1 : -1
+        }
+    )
+    const topNLabels = order.slice(0, topN).map((v) => v.label)
+
+    const orderMap = new Map(order.map((obj) => [obj.label, obj.value]))
+
+    trend = trend.map((v) => {
+        return {
+            ...v,
+            stackedValues: makeUnique(
+                v.stackedValues.map((s) => ({
+                    label:
+                        topNLabels.filter((l) => l === s.label).length > 0
+                            ? s.label
+                            : 'Others',
+                    value: s.value,
+                }))
+            ),
+        }
+    })
+
+    if (chart === 'cumulative') {
+        trend = trend.reduce<ITrendItem[]>((prev, curr) => {
+            const p = prev.at(prev.length - 1)
+            const c = {
+                ...curr,
+                totalValue: (p?.totalValue || 0) + curr.totalValue,
+                stackedValues: curr.stackedValues.map((s) => {
+                    return {
+                        label: s.label,
+                        value:
+                            (p?.stackedValues
+                                .filter((i) => i.label === s.label)
+                                .at(0)?.value || 0) + s.value,
+                    }
+                }),
+            }
+            return [...prev, c]
+        }, [])
+    }
+
+    trend = trend.map((v) => {
+        return {
+            ...v,
+            stackedValues: v.stackedValues.sort((a, b) => {
+                const av = orderMap.get(a.label) || 0
+                const bv = orderMap.get(b.label) || 0
+                if (av === bv) {
+                    return 0
+                }
+                return av < bv ? 1 : -1
+            }),
+        }
+    })
+
+    return {
+        label: trend.map((v) => v.date),
+        data: trend.map((v) => v.stackedValues),
+        flag: trend.map((v) => v.flag),
     }
 }

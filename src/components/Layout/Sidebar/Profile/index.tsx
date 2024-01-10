@@ -35,6 +35,7 @@ export default function Profile({ isCollapsed }: IProfile) {
         // eslint-disable-next-line no-nested-ternary
         currentTheme() === 'system' ? 2 : currentTheme() === 'dark' ? 1 : 0
     )
+    const [isPageLoading, setIsPageLoading] = useState<boolean>(true)
     const [theme, setTheme] =
         useState<GithubComKaytuIoKaytuEnginePkgAuthApiTheme>(currentTheme())
 
@@ -46,24 +47,26 @@ export default function Profile({ isCollapsed }: IProfile) {
             {},
             false
         )
+
     useEffect(() => {
-        if (!isLoading && isExecuted) {
-            applyTheme(theme)
+        if (isPageLoading) {
+            setIsPageLoading(false)
+            return
         }
-    }, [isLoading])
+        sendNow()
+        applyTheme(theme)
+    }, [theme])
+
     useEffect(() => {
         switch (index) {
             case 0:
                 setTheme(GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeLight)
-                sendNow()
                 break
             case 1:
                 setTheme(GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeDark)
-                sendNow()
                 break
             case 2:
                 setTheme(GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeSystem)
-                sendNow()
                 break
             default:
                 setTheme(GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeLight)
