@@ -1,7 +1,7 @@
 import { Card, Col, Flex, Grid, Icon, Title } from '@tremor/react'
 import { ShieldCheckIcon } from '@heroicons/react/24/outline'
-import Compliance from '../Compliance'
-import Findings from '../Findings'
+import Compliance from './Compliance'
+import Findings from './Findings'
 
 export default function Governance() {
     return (

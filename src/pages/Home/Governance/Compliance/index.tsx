@@ -1,8 +1,8 @@
 import { Button, Card, Flex, ProgressCircle, Text, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
-import { getErrorMessage } from '../../../types/apierror'
+import { useComplianceApiV1BenchmarksSummaryList } from '../../../../api/compliance.gen'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../../api/api'
+import { getErrorMessage } from '../../../../types/apierror'
 
 const colors = [
     'fuchsia',
