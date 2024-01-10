@@ -3,7 +3,6 @@ import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import Layout from '../../../components/Layout'
 import SingleSpendConnection from '../Single/SingleConnection'
-import Breakdown from '../../../components/Breakdown'
 import ListCard from '../../../components/Cards/ListCard'
 import {
     useInventoryApiV2AnalyticsSpendCompositionList,
@@ -12,7 +11,7 @@ import {
 } from '../../../api/inventory.gen'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
 import { filterAtom, spendTimeAtom } from '../../../store'
-import { pieData, topAccounts, topCategories, topServices } from '..'
+import { topAccounts, topCategories, topServices } from '..'
 import { SpendChart } from '../../../components/Spend/Chart'
 import { toErrorMessage } from '../../../types/apierror'
 import { Granularity } from '../../../components/Spend/Chart/Selectors'
