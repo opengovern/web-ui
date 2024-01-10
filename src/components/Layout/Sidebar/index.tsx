@@ -28,120 +28,13 @@ import { Fragment } from 'react'
 import { previewAtom, sideBarCollapsedAtom } from '../../../store'
 import { KaytuIcon, KaytuIconBig } from '../../../icons/icons'
 import Utilities from './Utilities'
-
-const navigation = [
-    {
-        name: 'Home',
-        page: 'home',
-        icon: HomeIcon,
-        isPreview: false,
-    },
-    {
-        name: 'Assets',
-        page: [
-            'assets',
-            'assets/assets-details#cloud-accounts',
-            'assets/assets-details#metrics',
-        ],
-        icon: CubeIcon,
-        children: [
-            { name: 'Summary', page: 'assets', isPreview: false, count: '+1K' },
-            {
-                name: 'Cloud Accounts',
-                page: 'assets/assets-details#cloud-accounts',
-                isPreview: false,
-                count: '+1K',
-            },
-            {
-                name: 'Metrics',
-                page: 'assets/assets-details#metrics',
-                isPreview: false,
-                count: '+1K',
-            },
-        ],
-        isPreview: false,
-    },
-    {
-        name: 'Spend',
-        page: [
-            'spend',
-            'spend/spend-details#cloud-accounts',
-            'spend/spend-details#metrics',
-        ],
-        icon: BanknotesIcon,
-        children: [
-            { name: 'Summary', page: 'spend', isPreview: false, count: '+1K' },
-            {
-                name: 'Cloud Accounts',
-                page: 'spend/spend-details#cloud-accounts',
-                isPreview: false,
-                count: '+1K',
-            },
-            {
-                name: 'Metrics',
-                page: 'spend/spend-details#metrics',
-                isPreview: false,
-                count: '+1K',
-            },
-        ],
-        isPreview: false,
-    },
-    {
-        name: 'Governance',
-        icon: ShieldCheckIcon,
-        page: ['compliance', 'findings'],
-        children: [
-            { name: 'Compliance', page: 'compliance', isPreview: false },
-            {
-                name: 'Findings',
-                page: 'findings',
-                isPreview: false,
-                count: '+1K',
-            },
-        ],
-        isPreview: false,
-    },
-    {
-        name: 'Insights',
-        page: 'insights',
-        icon: DocumentChartBarIcon,
-        isPreview: true,
-    },
-    {
-        name: 'Query',
-        page: 'query',
-        icon: MagnifyingGlassIcon,
-        isPreview: false,
-    },
-    {
-        name: 'Resource Collection',
-        page: 'resource-collection',
-        icon: RectangleStackIcon,
-        isPreview: true,
-    },
-    {
-        name: 'Automation',
-        icon: LightBulbIcon,
-        page: ['rules, alerts'],
-        children: [
-            { name: 'Rules', page: 'rules', isPreview: false },
-            { name: 'Alerts', page: 'alerts', isPreview: false },
-        ],
-        isPreview: true,
-    },
-    {
-        name: 'Integrations',
-        page: 'integrations',
-        icon: PuzzlePieceIcon,
-        isPreview: false,
-    },
-    {
-        name: 'Settings',
-        page: 'settings',
-        icon: Cog6ToothIcon,
-        isPreview: false,
-    },
-]
+import {
+    useInventoryApiV2AnalyticsCountList,
+    useInventoryApiV2AnalyticsSpendCountList,
+} from '../../../api/inventory.gen'
+import { useComplianceApiV1FindingsCountList } from '../../../api/compliance.gen'
+import { useIntegrationApiV1ConnectionsCountList } from '../../../api/integration.gen'
+import { numericDisplay } from '../../../utilities/numericDisplay'
 
 const badgeStyle = {
     color: '#fff',
@@ -157,6 +50,134 @@ interface ISidebar {
 export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
     const preview = useAtomValue(previewAtom)
+    const { response: spendCount } = useInventoryApiV2AnalyticsSpendCountList()
+    const { response: assetCount } = useInventoryApiV2AnalyticsCountList()
+    const { response: findingsCount } = useComplianceApiV1FindingsCountList()
+    const { response: connectionCount } =
+        useIntegrationApiV1ConnectionsCountList()
+
+    const navigation = [
+        {
+            name: 'Home',
+            page: 'home',
+            icon: HomeIcon,
+            isPreview: false,
+        },
+        {
+            name: 'Assets',
+            page: [
+                'assets',
+                'assets/assets-details#cloud-accounts',
+                'assets/assets-details#metrics',
+            ],
+            icon: CubeIcon,
+            children: [
+                {
+                    name: 'Summary',
+                    page: 'assets',
+                    isPreview: false,
+                },
+                {
+                    name: 'Cloud Accounts',
+                    page: 'assets/assets-details#cloud-accounts',
+                    isPreview: false,
+                    count: numericDisplay(assetCount?.connectionCount) || 0,
+                },
+                {
+                    name: 'Metrics',
+                    page: 'assets/assets-details#metrics',
+                    isPreview: false,
+                    count: numericDisplay(assetCount?.metricCount) || 0,
+                },
+            ],
+            isPreview: false,
+        },
+        {
+            name: 'Spend',
+            page: [
+                'spend',
+                'spend/spend-details#cloud-accounts',
+                'spend/spend-details#metrics',
+            ],
+            icon: BanknotesIcon,
+            children: [
+                {
+                    name: 'Summary',
+                    page: 'spend',
+                    isPreview: false,
+                },
+                {
+                    name: 'Cloud Accounts',
+                    page: 'spend/spend-details#cloud-accounts',
+                    isPreview: false,
+                    count: numericDisplay(spendCount?.connectionCount) || 0,
+                },
+                {
+                    name: 'Metrics',
+                    page: 'spend/spend-details#metrics',
+                    isPreview: false,
+                    count: numericDisplay(spendCount?.metricCount) || 0,
+                },
+            ],
+            isPreview: false,
+        },
+        {
+            name: 'Governance',
+            icon: ShieldCheckIcon,
+            page: ['compliance', 'findings'],
+            children: [
+                { name: 'Compliance', page: 'compliance', isPreview: false },
+                {
+                    name: 'Findings',
+                    page: 'findings',
+                    isPreview: false,
+                    count: numericDisplay(findingsCount?.count) || 0,
+                },
+            ],
+            isPreview: false,
+        },
+        {
+            name: 'Insights',
+            page: 'insights',
+            icon: DocumentChartBarIcon,
+            isPreview: true,
+        },
+        {
+            name: 'Query',
+            page: 'query',
+            icon: MagnifyingGlassIcon,
+            isPreview: false,
+        },
+        {
+            name: 'Resource Collection',
+            page: 'resource-collection',
+            icon: RectangleStackIcon,
+            isPreview: true,
+        },
+        {
+            name: 'Automation',
+            icon: LightBulbIcon,
+            page: ['rules, alerts'],
+            children: [
+                { name: 'Rules', page: 'rules', isPreview: false },
+                { name: 'Alerts', page: 'alerts', isPreview: false },
+            ],
+            isPreview: true,
+        },
+        {
+            name: 'Integrations',
+            page: 'integrations',
+            icon: PuzzlePieceIcon,
+            count: numericDisplay(connectionCount?.count) || 0,
+            isPreview: false,
+        },
+        {
+            name: 'Settings',
+            page: 'settings',
+            icon: Cog6ToothIcon,
+            isPreview: false,
+        },
+    ]
 
     return (
         <Flex
