@@ -32,6 +32,9 @@ import ControlDetail from '../pages/Governance/Controls/ControlSummary'
 import ConnectorResourceTypes from '../pages/Integrations/ConnectorDetail/ResourceTypes'
 import Billing from '../pages/Billing'
 import Findings from '../pages/Governance/Findings'
+import { SpendOverview } from '../pages/Spend/Overview'
+import { SpendMetrics } from '../pages/Spend/Metric'
+import { SpendAccounts } from '../pages/Spend/Account'
 
 const routes = [
     {
@@ -105,7 +108,17 @@ const authRoutes = [
     {
         key: 'spend',
         path: '/:ws/spend',
-        component: Spend,
+        component: SpendOverview,
+    },
+    {
+        key: 'spend',
+        path: '/:ws/spend/metrics',
+        component: SpendMetrics,
+    },
+    {
+        key: 'spend',
+        path: '/:ws/spend/accounts',
+        component: SpendAccounts,
     },
     {
         key: 'spend single',

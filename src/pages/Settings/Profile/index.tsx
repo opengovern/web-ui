@@ -54,7 +54,6 @@ export default function SettingsProfile() {
 
     return (
         <Card>
-            <Title className="font-semibold">Profile</Title>
             {user?.picture && (
                 <img
                     className="my-3 rounded-lg"
@@ -62,6 +61,7 @@ export default function SettingsProfile() {
                     alt={user.name}
                 />
             )}
+            <Title className="font-semibold">Profile Information</Title>
             <Flex flexDirection="col">
                 <Divider className="my-1 py-1" />
                 <Flex flexDirection="row" justifyContent="between">
@@ -92,9 +92,12 @@ export default function SettingsProfile() {
                     <Text className="w-1/2">Last Online</Text>
                     <Text className="w-1/2 text-gray-800">{lastLogin}</Text>
                 </Flex>
+            </Flex>
+            <Title className="font-semibold mt-10">Personalization</Title>
+            <Flex flexDirection="col">
                 <Divider className="my-1 py-1" />
                 <Flex flexDirection="row" justifyContent="between">
-                    <Text className="w-1/2">Theme</Text>
+                    <Text className="w-1/2">Color Theme</Text>
                     <Select
                         disabled={isExecuted && isLoading}
                         value={theme}
@@ -110,7 +113,7 @@ export default function SettingsProfile() {
                 </Flex>
                 <Divider className="my-1 py-1" />
                 <Flex flexDirection="row" justifyContent="between">
-                    <Text className="w-1/2">Color Blind friendly mode</Text>
+                    <Text className="w-1/2">Accessibility Mode (WAI-ARIA)</Text>
                     <Select
                         disabled={isExecuted && isLoading}
                         value={String(enableColorBlindMode)}
@@ -123,8 +126,7 @@ export default function SettingsProfile() {
                         <SelectItem value="false">Disabled</SelectItem>
                     </Select>
                 </Flex>
-                <Divider className="my-1 py-1" />
-                <Flex flexDirection="row" justifyContent="end">
+                <Flex flexDirection="row" justifyContent="end" className="mt-2">
                     <Button
                         loading={isExecuted && isLoading}
                         variant="secondary"

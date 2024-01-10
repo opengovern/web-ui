@@ -31,8 +31,8 @@ const navigation = [
         role: ['admin', 'editor', 'viewer'],
         children: [
             {
-                name: 'Entitlement',
-                page: 'entitlement',
+                name: 'Summary',
+                page: 'summary',
                 role: ['admin', 'editor', 'viewer'],
             },
             {
@@ -46,24 +46,24 @@ const navigation = [
                 role: ['admin'],
             },
             {
-                name: 'Git Repositories',
-                page: 'gitrepositories',
+                name: 'Customization',
+                page: 'customization',
                 role: ['admin'],
             },
         ],
     },
-    {
-        name: 'Organization',
-        icon: BuildingOfficeIcon,
-        role: ['admin', 'editor', 'viewer'],
-        children: [
-            {
-                name: 'Organization Info',
-                page: 'org',
-                role: ['admin', 'editor', 'viewer'],
-            },
-        ],
-    },
+    // {
+    //     name: 'Organization',
+    //     icon: BuildingOfficeIcon,
+    //     role: ['admin', 'editor', 'viewer'],
+    //     children: [
+    //         {
+    //             name: 'Organization Info',
+    //             page: 'org',
+    //             role: ['admin', 'editor', 'viewer'],
+    //         },
+    //     ],
+    // },
     {
         name: 'Debug',
         icon: BugAntIcon,
@@ -73,11 +73,6 @@ const navigation = [
                 name: 'Jobs',
                 page: 'jobs',
                 role: ['admin', 'editor', 'viewer'],
-            },
-            {
-                name: 'Customization',
-                page: 'customization',
-                role: ['admin'],
             },
         ],
     },
@@ -112,7 +107,7 @@ export default function Settings() {
 
     useEffect(() => {
         switch (currentSubPage) {
-            case 'entitlement':
+            case 'summary':
                 setSelectedTab(<SettingsEntitlement />)
                 break
             case 'members':
@@ -120,9 +115,6 @@ export default function Settings() {
                 break
             case 'apikeys':
                 setSelectedTab(<SettingsWorkspaceAPIKeys />)
-                break
-            case 'gitrepositories':
-                setSelectedTab(<SettingsGitRepositories />)
                 break
             case 'org':
                 setSelectedTab(<SettingsOrganization />)
@@ -186,7 +178,7 @@ export default function Settings() {
                                                         currentSubPage ||
                                                     (!currentSubPage &&
                                                         child.page ===
-                                                            'entitlement')
+                                                            'summary')
                                                         ? 'bg-kaytu-100 rounded-lg text-gray-800'
                                                         : 'text-gray-600'
                                                 } group flex gap-x-3 py-2 px-8 font-medium`}

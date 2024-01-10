@@ -94,11 +94,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         },
         {
             name: 'Spend',
-            page: [
-                'spend',
-                'spend/spend-details#cloud-accounts',
-                'spend/spend-details#metrics',
-            ],
+            page: ['spend', 'spend/accounts', 'spend/metrics'],
             icon: BanknotesIcon,
             children: [
                 {
@@ -108,13 +104,13 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 },
                 {
                     name: 'Cloud Accounts',
-                    page: 'spend/spend-details#cloud-accounts',
+                    page: 'spend/accounts',
                     isPreview: false,
                     count: numericDisplay(spendCount?.connectionCount) || 0,
                 },
                 {
                     name: 'Metrics',
-                    page: 'spend/spend-details#metrics',
+                    page: 'spend/metrics',
                     isPreview: false,
                     count: numericDisplay(spendCount?.metricCount) || 0,
                 },

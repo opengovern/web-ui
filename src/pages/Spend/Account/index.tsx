@@ -12,12 +12,12 @@ import {
 } from '../../../api/inventory.gen'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
 import { filterAtom, spendTimeAtom } from '../../../store'
-import { pieData, topAccounts, topCategories, topServices } from '..'
+import { topAccounts, topCategories, topServices } from '..'
 import { SpendChart } from '../../../components/Spend/Chart'
 import { toErrorMessage } from '../../../types/apierror'
 import { Granularity } from '../../../components/Spend/Chart/Selectors'
 
-export function SpendOverview() {
+export function SpendAccounts() {
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
     const [granularity, setGranularity] = useState<Granularity>('daily')
@@ -112,7 +112,7 @@ export function SpendOverview() {
             }),
         })
     return (
-        <Layout currentPage="spend" datePicker filter>
+        <Layout currentPage="spend/accounts" datePicker filter>
             {selectedConnections.connections.length === 1 ? (
                 <SingleSpendConnection
                     activeTimeRange={activeTimeRange}
@@ -123,7 +123,7 @@ export function SpendOverview() {
                     <Col numColSpan={3}>
                         <SpendChart
                             costTrend={costTrend || []}
-                            costField="category"
+                            costField="account"
                             title="Total spend"
                             timeRange={activeTimeRange}
                             timeRangePrev={prevTimeRange}
