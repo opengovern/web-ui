@@ -1,118 +1,66 @@
 import {
     BanknotesIcon,
-    DocumentChartBarIcon,
-    ServerStackIcon,
+    ChevronRightIcon,
+    CubeIcon,
     ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
-import { Button, Card, Col, Flex, Grid, Icon, Text, Title } from '@tremor/react'
+import { Card, Flex, Grid, Icon, Text, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 const navList = [
     {
         title: 'Assets',
-        description: 'Gain visibility over your cloud assets',
-        icon: ServerStackIcon,
+        description: 'Discovery and Query Cloud assets across multiple clouds',
+        icon: CubeIcon,
         link: '/:ws/assets',
     },
     {
         title: 'Spend',
-        description: 'Dig down into your cloud spend',
+        description: 'Understand spend across multiple Cloud providers',
         icon: BanknotesIcon,
         link: '/:ws/spend',
     },
     {
-        title: 'Compliance',
-        description: 'Have control over your security',
+        title: 'Governance',
+        description: 'Identify Misconfigurations, Benchmark against',
         icon: ShieldCheckIcon,
         link: '/:ws/compliance',
     },
-    {
-        title: 'Insights',
-        description: 'Get actionable insights',
-        icon: DocumentChartBarIcon,
-        link: '/:ws/insights',
-    },
+    // {
+    //     title: 'Insights',
+    //     description: 'Get actionable insights',
+    //     icon: DocumentChartBarIcon,
+    //     link: '/:ws/insights',
+    // },
 ]
 
-interface INavItems {
-    title: string
-    items: {
-        title: string
-        description: string
-        icon: any
-        link: string
-    }[]
-}
-
-function NavItems({ title, items }: INavItems) {
+export default function QuickNav() {
     const workspace = useParams<{ ws: string }>().ws
     const navigate = useNavigate()
-    return (
-        <>
-            <Title>{title}</Title>
-            <Grid
-                numItemsLg={4}
-                numItemsMd={2}
-                numItemsSm={2}
-                className="w-full gap-2 mt-2"
-            >
-                {items.map((item) => {
-                    return (
-                        <Col>
-                            <Flex
-                                flexDirection="row"
-                                alignItems="center"
-                                justifyContent="center"
-                                className="w-full hover:border hover:shadow-md p-2 rounded-sm h-20 cursor-pointer"
-                                onClick={() =>
-                                    navigate(
-                                        item.link.replaceAll(
-                                            ':ws',
-                                            workspace || ''
-                                        )
-                                    )
-                                }
-                            >
-                                <Icon
-                                    variant="light"
-                                    icon={item.icon}
-                                    size="lg"
-                                    color="blue"
-                                    className="mr-2"
-                                />
 
-                                {/* <item.icon className="w-12" /> */}
-                                <Flex
-                                    flexDirection="col"
-                                    justifyContent="start"
-                                    alignItems="start"
-                                    className="ml-2"
-                                >
-                                    <Title className="w-fit truncate">
-                                        {item.title}
-                                    </Title>
-                                    <Text className="w-fit truncate">
-                                        {item.description}
-                                    </Text>
-                                </Flex>
-                            </Flex>
-                            {/* </Button> */}
-                        </Col>
-                    )
-                })}
+    return (
+        <Flex flexDirection="col" alignItems="start" className="mb-4">
+            <Title className="font-semibold mb-4">Quick navigation</Title>
+            <Grid numItems={3} className="w-full gap-4">
+                {navList.map((i) => (
+                    <Card
+                        key={i.title}
+                        className="cursor-pointer"
+                        onClick={() =>
+                            navigate(i.link.replaceAll(':ws', workspace || ''))
+                        }
+                    >
+                        <Flex justifyContent="start" className="mb-2">
+                            <Icon icon={i.icon} />
+                            <Title>{i.title}</Title>
+                        </Flex>
+                        <Text>{i.description}</Text>
+                        <Flex justifyContent="end">
+                            <ChevronRightIcon className="h-4 text-kaytu-500" />
+                        </Flex>
+                    </Card>
+                ))}
             </Grid>
-        </>
-    )
-}
-
-export default function QuickNav() {
-    return (
-        <Card className="h-full mb-2">
-            <Flex flexDirection="row" className="space-x-2">
-                <Flex flexDirection="col" alignItems="start">
-                    <NavItems title="Quick Navigation" items={navList} />
-                </Flex>
-            </Flex>
-        </Card>
+        </Flex>
     )
 }

@@ -1,6 +1,6 @@
-import { Button, Card, Divider, Flex, Icon, Text, Title } from '@tremor/react'
-import { CpuChipIcon } from '@heroicons/react/24/outline'
+import { Button, Card, Flex, Grid, Text, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
 import { useIntegrationApiV1ConnectorsList } from '../../../api/integration.gen'
 import { getErrorMessage } from '../../../types/apierror'
@@ -17,61 +17,68 @@ export default function Integration() {
     } = useIntegrationApiV1ConnectorsList()
 
     return (
-        <Card>
-            <Flex flexDirection="row" justifyContent="start">
-                <Icon
-                    variant="light"
-                    icon={CpuChipIcon}
-                    size="lg"
-                    color="blue"
-                    className="mr-2"
-                />
-                <Title>Integrations</Title>
-            </Flex>
-            <Flex
-                flexDirection="row"
-                className={`mt-2 ${connectorsLoading ? 'animate-pulse' : ''}`}
+        <>
+            <Grid
+                numItems={1}
+                className={`gap-4 ${connectorsLoading ? 'animate-pulse' : ''}`}
             >
                 {connectorsLoading || getErrorMessage(error).length > 0
                     ? [1, 2]?.map((i) => {
                           return (
-                              <Flex flexDirection="col" className=" rounded-md">
-                                  <div className="bg-slate-200 rounded-full w-24 h-24 border-none" />
-                                  <div className="h-2 w-24 my-3 bg-slate-200 rounded" />
-                                  <div className="h-2 w-24 my-1 bg-slate-200 rounded" />
-                              </Flex>
+                              <Card key={i} className="rounded-2xl">
+                                  <div className="bg-slate-200 rounded-full w-12 h-12 border-none mb-3" />
+                                  <div className="h-5 w-24 mb-1.5 bg-slate-200 rounded" />
+                                  <div className="h-5 w-32 bg-slate-200 rounded" />
+                              </Card>
                           )
                       })
-                    : responseConnectors?.map((connector) => {
-                          return (
-                              <Flex
-                                  flexDirection="col"
-                                  className="cursor-pointer hover:bg-gray-100 rounded-md"
-                                  onClick={() => {
-                                      navigate(
-                                          `/${workspace}/integrations/${connector.name}`
-                                      )
-                                  }}
-                              >
-                                  <img
-                                      id={`home-integration-${connector.name}`}
-                                      src={
+                    : responseConnectors
+                          ?.slice(0)
+                          .reverse()
+                          .map((connector) => {
+                              return (
+                                  <Card
+                                      key={connector.name}
+                                      onClick={() => {
+                                          navigate(
+                                              `/${workspace}/integrations/${connector.name}`
+                                          )
+                                      }}
+                                      className={`rounded-2xl cursor-pointer ${
                                           connector.name === 'AWS'
-                                              ? AWSIcon
-                                              : AzureIcon
-                                      }
-                                      className="w-24 rounded-full border shadow-sm"
-                                      alt="aws"
-                                  />
-                                  <Title>{connector.label}</Title>
-                                  <Text>
-                                      # of Accounts:{' '}
-                                      {connector.connection_count}
-                                  </Text>
-                              </Flex>
-                          )
-                      })}
-            </Flex>
+                                              ? ''
+                                              : 'bg-kaytu-800 text-white'
+                                      }`}
+                                  >
+                                      <img
+                                          id={`home-integration-${connector.name}`}
+                                          src={
+                                              connector.name === 'AWS'
+                                                  ? AWSIcon
+                                                  : AzureIcon
+                                          }
+                                          className="w-12 rounded-full mb-3"
+                                          alt="aws"
+                                      />
+                                      <Flex>
+                                          <Flex
+                                              flexDirection="col"
+                                              alignItems="start"
+                                          >
+                                              <Text className="font-semibold mb-1.5 text-inherit">
+                                                  {connector.label}
+                                              </Text>
+                                              <Text className=" text-inherit">
+                                                  # of Accounts:{' '}
+                                                  {connector.connection_count}
+                                              </Text>
+                                          </Flex>
+                                          <PlusCircleIcon className="w-5 text-amber-500" />
+                                      </Flex>
+                                  </Card>
+                              )
+                          })}
+            </Grid>
             {error && (
                 <Flex
                     flexDirection="col"
@@ -96,6 +103,6 @@ export default function Integration() {
                     </Button>
                 </Flex>
             )}
-        </Card>
+        </>
     )
 }

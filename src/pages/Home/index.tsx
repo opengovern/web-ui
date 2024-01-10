@@ -1,9 +1,7 @@
 import { Col, Grid } from '@tremor/react'
 import Layout from '../../components/Layout'
 import QuickNav from './QuickNav'
-import Query from './Query'
 import TopSpend from './TopSpend'
-import Insight from './Insights'
 import Integration from './Integration'
 import Compliance from './Compliance'
 import Findings from './Findings'
@@ -11,32 +9,24 @@ import Findings from './Findings'
 export default function Home() {
     return (
         <Layout currentPage="home">
-            <QuickNav />
-            <Grid
-                numItemsLg={3}
-                numItemsMd={2}
-                numItemsSm={1}
-                className="gap-2"
-            >
-                <Col numColSpan={1}>
-                    <div className="space-y-2">
+            <Grid numItems={6} className="w-full gap-4">
+                <Col numColSpan={4}>
+                    <QuickNav />
+                    <Grid numItems={3} className="w-full gap-4 mb-4">
                         <Integration />
-                        <Query id="server_workload" />
-                    </div>
+                    </Grid>
                 </Col>
-                <Col numColSpan={1}>
-                    <div className="space-y-2">
-                        <Compliance />
-                        <Findings />
-                    </div>
-                </Col>
-                <Col numColSpan={1}>
-                    <div className="space-y-2">
-                        <TopSpend />
-                        <Insight />
-                    </div>
-                </Col>
+                <Col numColSpan={2}>query</Col>
             </Grid>
+            <Col numColSpan={1}>
+                <div className="space-y-2">
+                    <Compliance />
+                    <Findings />
+                </div>
+            </Col>
+            <Col numColSpan={1}>
+                <TopSpend />
+            </Col>
         </Layout>
     )
 }
