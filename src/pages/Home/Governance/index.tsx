@@ -15,7 +15,7 @@ export default function Governance() {
             </Flex>
             <Grid numItems={3} className="w-full gap-4">
                 <Compliance />
-                <Col numColSpan={2}>
+                <Col numColSpan={2} className="pl-6">
                     <Findings />
                 </Col>
             </Grid>
