@@ -53,13 +53,13 @@ export default function SettingsProfile() {
         }
     }, [isLoading])
 
-    const dateFormat = (date: string) => {
+    const dateFormat = (date: string, showOnline: boolean) => {
         if (date.length === 0) {
             return ''
         }
 
-        const dt = dayjs(date)
-        const now = dayjs()
+        const dt = dayjs.utc(date)
+        const now = dayjs.utc()
         const d = now.diff(dt, 'day')
         const h = now.diff(dt, 'hour')
         const m = now.diff(dt, 'minute')
@@ -69,10 +69,13 @@ export default function SettingsProfile() {
         if (h > 48) {
             return `${d} days ago`
         }
-        if (m < 60) {
-            return `Online`
+        if (m > 60) {
+            return `${h} hours ago`
         }
-        return `${h} hours ago`
+        if (m > 15 || !showOnline) {
+            return `${m} minutes ago`
+        }
+        return `Online`
     }
 
     return (
@@ -109,14 +112,14 @@ export default function SettingsProfile() {
                 <Flex flexDirection="row" justifyContent="between">
                     <Text className="w-1/2">Member Since</Text>
                     <Text className="w-1/2 text-gray-800">
-                        {dateFormat(memberSince || '')}
+                        {dateFormat(memberSince || '', false)}
                     </Text>
                 </Flex>
                 <Divider className="my-1 py-1" />
                 <Flex flexDirection="row" justifyContent="between">
                     <Text className="w-1/2">Last Online</Text>
                     <Text className="w-1/2 text-gray-800">
-                        {dateFormat(lastLogin || '')}
+                        {dateFormat(lastLogin || '', true)}
                     </Text>
                 </Flex>
             </Flex>
