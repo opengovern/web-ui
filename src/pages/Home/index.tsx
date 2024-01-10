@@ -4,6 +4,7 @@ import QuickNav from './QuickNav'
 import Integration from './Integration'
 import Governance from './Governance'
 import Query from './Query'
+import Spend from './Spend'
 
 export default function Home() {
     const element = document.getElementById('myDIV')?.offsetHeight
@@ -18,6 +19,9 @@ export default function Home() {
                         <QuickNav />
                         <Grid numItems={3} className="w-full gap-4 mb-4">
                             <Integration />
+                            <Col numColSpan={2} className="h-full">
+                                <Spend />
+                            </Col>
                         </Grid>
                         <Governance />
                     </Flex>
