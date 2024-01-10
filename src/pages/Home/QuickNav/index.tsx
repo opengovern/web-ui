@@ -39,31 +39,28 @@ export default function QuickNav() {
     const navigate = useNavigate()
 
     return (
-        <Flex flexDirection="col" alignItems="start" className="mb-4">
-            <Title className="font-semibold mb-4">Quick navigation</Title>
-            <Grid numItems={3} className="w-full gap-4">
-                {navList.map((i) => (
-                    <Card
-                        key={i.title}
-                        className="cursor-pointer"
-                        onClick={() =>
-                            navigate(i.link.replaceAll(':ws', workspace || ''))
-                        }
-                    >
-                        <Flex justifyContent="start" className="mb-2">
-                            <Icon
-                                icon={i.icon}
-                                className="bg-gray-50 rounded mr-2"
-                            />
-                            <Title>{i.title}</Title>
-                        </Flex>
-                        <Text>{i.description}</Text>
-                        <Flex justifyContent="end">
-                            <ChevronRightIcon className="h-4 text-kaytu-500" />
-                        </Flex>
-                    </Card>
-                ))}
-            </Grid>
-        </Flex>
+        <Grid numItems={3} className="w-full gap-4 mb-4">
+            {navList.map((i) => (
+                <Card
+                    key={i.title}
+                    className="cursor-pointer"
+                    onClick={() =>
+                        navigate(i.link.replaceAll(':ws', workspace || ''))
+                    }
+                >
+                    <Flex justifyContent="start" className="mb-2">
+                        <Icon
+                            icon={i.icon}
+                            className="bg-gray-50 rounded mr-2"
+                        />
+                        <Title>{i.title}</Title>
+                    </Flex>
+                    <Text>{i.description}</Text>
+                    <Flex justifyContent="end">
+                        <ChevronRightIcon className="h-4 text-kaytu-500" />
+                    </Flex>
+                </Card>
+            ))}
+        </Grid>
     )
 }

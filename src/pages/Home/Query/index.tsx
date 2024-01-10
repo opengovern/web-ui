@@ -1,12 +1,16 @@
-import { Button, Card, Flex, Icon, Text, Title } from '@tremor/react'
 import {
-    ArrowRightIcon,
-    ArrowsPointingOutIcon,
-    MagnifyingGlassIcon,
-} from '@heroicons/react/24/outline'
+    Accordion,
+    AccordionBody,
+    AccordionHeader,
+    Button,
+    Card,
+    Flex,
+    Text,
+    Title,
+} from '@tremor/react'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import Editor from 'react-simple-code-editor'
 import { highlight, languages } from 'prismjs'
-import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAtom } from 'jotai'
 import { useInventoryApiV1QueryList } from '../../../api/inventory.gen'
@@ -14,131 +18,119 @@ import { runQueryAtom } from '../../../store'
 import { getErrorMessage } from '../../../types/apierror'
 
 interface IQuery {
-    id: string
+    height: any
 }
 
-export default function Query({ id }: IQuery) {
+export default function Query({ height }: IQuery) {
     const workspace = useParams<{ ws: string }>().ws
     const navigate = useNavigate()
     const [runQuery, setRunQuery] = useAtom(runQueryAtom)
 
-    const [code, setCode] = useState('')
-    const [open, setOpen] = useState(false)
     const {
         response: queries,
-        isExecuted,
-        isLoading: queryLoading,
         error,
         sendNow: refresh,
     } = useInventoryApiV1QueryList({})
-    const v = queries?.filter((m) => m.id === id).at(0)
-
-    useEffect(() => {
-        if (isExecuted && !queryLoading) {
-            setCode(v?.query || '')
-        }
-    }, [queryLoading])
 
     return (
-        <Card
-            key={v?.id}
-            className={`relative max-w-xl mx-auto ${
-                open ? 'h-fit' : 'h-80'
-            } overflow-hidden`}
-        >
-            <Flex
-                flexDirection="col"
-                justifyContent="between"
-                alignItems="start"
+        <Flex flexDirection="col" alignItems="start" className="h-full">
+            <Title className="font-semibold mb-4">Popular queries</Title>
+            <Card
+                className="max-h-full h-full pt-3 overflow-scroll"
+                style={{ maxHeight: `${height}px` }}
             >
-                <Flex flexDirection="row" justifyContent="start">
-                    <Icon
-                        variant="light"
-                        icon={MagnifyingGlassIcon}
-                        size="lg"
-                        color="blue"
-                        className="mr-2"
-                    />
-                    <Title>Query</Title>
-                </Flex>
-                {queryLoading || getErrorMessage(error).length > 0 ? (
-                    <>
-                        <div className="h-2 w-72 my-3 bg-slate-200 rounded" />
-                        <div className="h-2 w-72 my-3 bg-slate-200 rounded" />
-                    </>
-                ) : (
-                    <Title className="mt-2">{v?.title}</Title>
-                )}
-
-                <Card className="relative overflow-hidden mt-4">
-                    <Editor
-                        onValueChange={(text) => {
-                            setCode(text)
-                        }}
-                        highlight={(text) =>
-                            highlight(text, languages.sql, 'sql')
+                {queries
+                    ?.sort((a, b) => {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        if (a.title < b.title) {
+                            return -1
                         }
-                        value={code}
-                        className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm h-full"
-                        style={{
-                            minHeight: '60px',
-                            overflowY: 'scroll',
-                        }}
-                        placeholder="-- write your SQL query here"
-                    />
-                </Card>
-
-                <Flex flexDirection="row" justifyContent="end">
-                    <Button
-                        size="xs"
-                        variant="light"
-                        icon={ArrowRightIcon}
-                        iconPosition="right"
-                        className="mt-2"
-                        onClick={() => {
-                            setRunQuery(code)
-                            navigate(`/${workspace}/query`)
-                        }}
-                    >
-                        Run Query
-                    </Button>
-                </Flex>
-            </Flex>
-            {!open && (
-                <div className="inset-x-0 bottom-0 flex justify-center bg-gradient-to-t from-white pt-12 pb-8 absolute rounded-b-lg">
-                    <Button
-                        icon={ArrowsPointingOutIcon}
-                        className="bg-white shadow-md border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300"
-                        onClick={() => setOpen(true)}
-                    >
-                        Show query
-                    </Button>
-                </div>
-            )}
-            {error && (
-                <Flex
-                    flexDirection="col"
-                    justifyContent="between"
-                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
-                >
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        if (a.title > b.title) {
+                            return 1
+                        }
+                        return 0
+                    })
+                    .map(
+                        (q, i) =>
+                            i < 7 && (
+                                <Accordion
+                                    className="w-full border-0 border-b border-b-gray-200 !rounded-none bg-transparent"
+                                    defaultOpen={i === 0}
+                                >
+                                    <AccordionHeader className="pl-0 pr-0.5 py-4 bg-transparent flex justify-start">
+                                        <Text className="text-gray-800 !text-base line-clamp-1">
+                                            {q?.title}
+                                        </Text>
+                                    </AccordionHeader>
+                                    <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
+                                        <Editor
+                                            onValueChange={(text) => {
+                                                console.log('')
+                                            }}
+                                            highlight={(text) =>
+                                                highlight(
+                                                    text,
+                                                    languages.sql,
+                                                    'sql'
+                                                )
+                                            }
+                                            value={q?.query || ''}
+                                            className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm h-full"
+                                            style={{
+                                                minHeight: '60px',
+                                                overflowY: 'scroll',
+                                            }}
+                                            placeholder="-- write your SQL query here"
+                                        />
+                                        <Button
+                                            size="xs"
+                                            variant="light"
+                                            icon={ChevronRightIcon}
+                                            iconPosition="right"
+                                            className="my-3"
+                                            onClick={() => {
+                                                setRunQuery(q?.query || '')
+                                                navigate(`/${workspace}/query`)
+                                            }}
+                                        >
+                                            Run Query
+                                        </Button>
+                                    </AccordionBody>
+                                </Accordion>
+                            )
+                    )}
+                {error && (
                     <Flex
                         flexDirection="col"
-                        justifyContent="center"
-                        alignItems="center"
+                        justifyContent="between"
+                        className="absolute top-0 w-full left-0 h-full backdrop-blur"
                     >
-                        <Title className="mt-6">Failed to load component</Title>
-                        <Text className="mt-2">{getErrorMessage(error)}</Text>
+                        <Flex
+                            flexDirection="col"
+                            justifyContent="center"
+                            alignItems="center"
+                        >
+                            <Title className="mt-6">
+                                Failed to load component
+                            </Title>
+                            <Text className="mt-2">
+                                {getErrorMessage(error)}
+                            </Text>
+                        </Flex>
+                        <Button
+                            variant="secondary"
+                            className="mb-6"
+                            color="slate"
+                            onClick={refresh}
+                        >
+                            Try Again
+                        </Button>
                     </Flex>
-                    <Button
-                        variant="secondary"
-                        className="mb-6"
-                        color="slate"
-                        onClick={refresh}
-                    >
-                        Try Again
-                    </Button>
-                </Flex>
-            )}
-        </Card>
+                )}
+            </Card>
+        </Flex>
     )
 }
