@@ -5,8 +5,9 @@ import {
 import { dateDisplay, monthDisplay } from '../../../utilities/dateDisplay'
 import { StackItem } from '../../Chart/Stacked'
 
-const topFiveStackedMetrics = (
-    data: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
+export const topFiveStackedMetrics = (
+    data: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[],
+    count?: number
 ) => {
     const uniqueMetricID = data
         .flatMap((v) => v.costStacked?.map((i) => i.metricID || '') || [])
@@ -46,7 +47,7 @@ const topFiveStackedMetrics = (
             return a.totalCost < b.totalCost ? 1 : -1
         })
 
-    return idCost.slice(0, 5)
+    return idCost.slice(0, count || 5)
 }
 
 const takeMetricsAndOthers = (
@@ -96,15 +97,23 @@ export const costTrendChart = (
         | undefined,
     chart: 'trend' | 'cumulative',
     layout: 'basic' | 'stacked',
-    granularity: 'monthly' | 'daily' | 'yearly'
+    granularity: 'monthly' | 'daily' | 'yearly',
+    lastResults?: number,
+    metricCount?: number
 ) => {
-    const top5 = topFiveStackedMetrics(trend || [])
+    const top5 = topFiveStackedMetrics(trend || [], metricCount)
     const label = []
     const data: any = []
     const flag = []
     if (trend) {
         if (chart === 'trend') {
-            for (let i = 0; i < trend?.length; i += 1) {
+            for (
+                let i = lastResults
+                    ? (trend?.length || lastResults) - lastResults
+                    : 0;
+                i < trend?.length;
+                i += 1
+            ) {
                 const stacked = takeMetricsAndOthers(
                     top5,
                     trend[i].costStacked || []
@@ -118,13 +127,27 @@ export const costTrendChart = (
                     data.push(trend[i]?.cost)
                 } else {
                     data.push(
-                        stacked.map((v) => {
-                            const j: StackItem = {
-                                label: v.metricName || '',
-                                value: v.cost || 0,
-                            }
-                            return j
-                        })
+                        stacked
+                            .sort((a, b) => {
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                if (a.metricName < b.metricName) {
+                                    return -1
+                                }
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                if (a.metricName > b.metricName) {
+                                    return 1
+                                }
+                                return 0
+                            })
+                            .map((v) => {
+                                const j: StackItem = {
+                                    label: v.metricName || '',
+                                    value: v.cost || 0,
+                                }
+                                return j
+                            })
                     )
                 }
                 if (

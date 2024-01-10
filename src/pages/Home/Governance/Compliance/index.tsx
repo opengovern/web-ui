@@ -98,7 +98,6 @@ export default function Compliance() {
         error,
         sendNow: refresh,
     } = useComplianceApiV1BenchmarksSummaryList()
-    console.log(benchmarks)
 
     const benchmarkSummaries = benchmarks?.benchmarkSummary?.filter(
         (benchmark) => (benchmark.controlsSeverityStatus?.total?.total || 0) > 0
