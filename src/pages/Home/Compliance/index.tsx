@@ -1,19 +1,7 @@
-import {
-    Button,
-    Card,
-    Flex,
-    Icon,
-    Legend,
-    ProgressCircle,
-    Text,
-    Title,
-} from '@tremor/react'
-import { ShieldCheckIcon } from '@heroicons/react/24/outline'
-import { useState } from 'react'
+import { Button, Card, Flex, ProgressCircle, Text, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
-import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import { getErrorMessage } from '../../../types/apierror'
 
 const colors = [
@@ -42,6 +30,7 @@ const colors = [
 ]
 
 const radiuses = [25, 34, 43, 52, 61, 70, 79, 88, 97]
+
 interface IBenchmarkProgress {
     idx: number
     totalCount: number
@@ -49,6 +38,7 @@ interface IBenchmarkProgress {
     centerValue?: number
     isLoading: boolean
 }
+
 function BenchmarkProgress({
     idx,
     totalCount,
@@ -108,116 +98,99 @@ export default function Compliance() {
         error,
         sendNow: refresh,
     } = useComplianceApiV1BenchmarksSummaryList()
+    console.log(benchmarks)
 
     const benchmarkSummaries = benchmarks?.benchmarkSummary?.filter(
         (benchmark) => (benchmark.controlsSeverityStatus?.total?.total || 0) > 0
     )
 
     return (
-        <Card className="pb-8">
-            <Flex flexDirection="row" justifyContent="start">
-                <Icon
-                    variant="light"
-                    icon={ShieldCheckIcon}
-                    size="lg"
-                    color="blue"
-                    className="mr-2"
-                />
-                <Title>Benchmarks</Title>
-            </Flex>
-
-            <Flex
-                flexDirection="row"
-                className={`mt-6 ${isLoading ? 'animate-pulse' : ''}`}
-            >
-                <BenchmarkProgress
-                    idx={0}
-                    totalCount={benchmarkSummaries?.length || 0}
-                    summaries={benchmarkSummaries || []}
-                    isLoading={isLoading}
-                />
-                <Flex flexDirection="col" alignItems="start">
-                    {isLoading || getErrorMessage(error).length > 0 ? (
-                        [1, 2, 3].map((bs, idx) => {
-                            return (
+        <Flex flexDirection="col" alignItems="start" justifyContent="start">
+            <Title className="mb-4">Benchmarks</Title>
+            {isLoading || getErrorMessage(error).length > 0 ? (
+                <Flex flexDirection="col" className="gap-4">
+                    {[1, 2].map((i) => {
+                        return (
+                            <Card className="p-3">
                                 <Flex
-                                    flexDirection="row"
-                                    justifyContent="between"
-                                    className="ml-4 my-1 animate-pulse"
+                                    flexDirection="col"
+                                    alignItems="start"
+                                    justifyContent="start"
+                                    className="animate-pulse"
                                 >
-                                    <div className="h-2 w-24 my-2 bg-slate-200 rounded" />
-                                    <div className="h-2 w-24 my-2 bg-slate-200 rounded" />
+                                    <div className="h-5 w-24 mb-2 bg-slate-200 rounded" />
+                                    <div className="h-5 w-24 mb-1 bg-slate-200 rounded" />
+                                    <div className="h-6 w-24 bg-slate-200 rounded" />
                                 </Flex>
+                            </Card>
+                        )
+                    })}
+                </Flex>
+            ) : (
+                <Flex flexDirection="col" className="gap-4">
+                    {benchmarkSummaries?.map(
+                        (bs, i) =>
+                            i < 2 && (
+                                <Card
+                                    onClick={() =>
+                                        navigate(
+                                            `/${workspace}/compliance/${bs.id}`
+                                        )
+                                    }
+                                    className="p-3 cursor-pointer"
+                                >
+                                    <Flex
+                                        flexDirection="col"
+                                        alignItems="start"
+                                    >
+                                        <Text className="font-semibold text-gray-800 mb-2">
+                                            {bs.title}
+                                        </Text>
+                                        <Text>Security score</Text>
+                                        <Title>
+                                            {(
+                                                ((bs?.controlsSeverityStatus
+                                                    ?.total?.passed || 0) /
+                                                    (bs?.controlsSeverityStatus
+                                                        ?.total?.total || 1)) *
+                                                    100 || 0
+                                            ).toFixed(1)}
+                                            %
+                                        </Title>
+                                    </Flex>
+                                </Card>
                             )
-                        })
-                    ) : (
-                        <>
+                    )}
+                    {error && (
+                        <Flex
+                            flexDirection="col"
+                            justifyContent="between"
+                            className="absolute top-0 w-full left-0 h-full backdrop-blur"
+                        >
                             <Flex
-                                flexDirection="row"
-                                justifyContent="between"
-                                className="ml-6 my-1"
+                                flexDirection="col"
+                                justifyContent="center"
+                                alignItems="center"
                             >
-                                <Text className="font-bold">Benchmark</Text>
-                                <Text className="font-bold mr-2">
-                                    Security Score
+                                <Title className="mt-6">
+                                    Failed to load component
+                                </Title>
+                                <Text className="mt-2">
+                                    {getErrorMessage(error)}
                                 </Text>
                             </Flex>
-                            {benchmarkSummaries?.map((bs, idx) => {
-                                const securityScore =
-                                    ((bs?.controlsSeverityStatus?.total
-                                        ?.passed || 0) /
-                                        (bs?.controlsSeverityStatus?.total
-                                            ?.total || 1)) *
-                                        100 || 0
-
-                                return (
-                                    <Flex
-                                        flexDirection="row"
-                                        justifyContent="between"
-                                        className="ml-4 my-1"
-                                    >
-                                        <Legend
-                                            categories={[bs.title || '']}
-                                            colors={[colors[idx]]}
-                                            className=""
-                                            onClickLegendItem={(v) =>
-                                                navigate(
-                                                    `/${workspace}/compliance/${bs.id}`
-                                                )
-                                            }
-                                        />
-                                        <Text>{securityScore.toFixed(1)}%</Text>
-                                    </Flex>
-                                )
-                            })}
-                        </>
+                            <Button
+                                variant="secondary"
+                                className="mb-6"
+                                color="slate"
+                                onClick={refresh}
+                            >
+                                Try Again
+                            </Button>
+                        </Flex>
                     )}
                 </Flex>
-            </Flex>
-            {error && (
-                <Flex
-                    flexDirection="col"
-                    justifyContent="between"
-                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
-                >
-                    <Flex
-                        flexDirection="col"
-                        justifyContent="center"
-                        alignItems="center"
-                    >
-                        <Title className="mt-6">Failed to load component</Title>
-                        <Text className="mt-2">{getErrorMessage(error)}</Text>
-                    </Flex>
-                    <Button
-                        variant="secondary"
-                        className="mb-6"
-                        color="slate"
-                        onClick={refresh}
-                    >
-                        Try Again
-                    </Button>
-                </Flex>
             )}
-        </Card>
+        </Flex>
     )
 }

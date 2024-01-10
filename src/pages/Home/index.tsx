@@ -3,8 +3,7 @@ import Layout from '../../components/Layout'
 import QuickNav from './QuickNav'
 import TopSpend from './TopSpend'
 import Integration from './Integration'
-import Compliance from './Compliance'
-import Findings from './Findings'
+import Governance from './Governance'
 
 export default function Home() {
     return (
@@ -15,18 +14,10 @@ export default function Home() {
                     <Grid numItems={3} className="w-full gap-4 mb-4">
                         <Integration />
                     </Grid>
+                    <Governance />
                 </Col>
                 <Col numColSpan={2}>query</Col>
             </Grid>
-            <Col numColSpan={1}>
-                <div className="space-y-2">
-                    <Compliance />
-                    <Findings />
-                </div>
-            </Col>
-            <Col numColSpan={1}>
-                <TopSpend />
-            </Col>
         </Layout>
     )
 }
