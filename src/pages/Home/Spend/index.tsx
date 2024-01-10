@@ -8,6 +8,7 @@ import {
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../api/inventory.gen'
 import { toErrorMessage } from '../../../types/apierror'
+import SummaryCard from '../../../components/Cards/SummaryCard'
 
 export default function Spend() {
     const activeTimeRange = useAtomValue(spendTimeAtom)
@@ -87,13 +88,11 @@ export default function Spend() {
                 />
                 <Title>Spend</Title>
             </Flex>
-            <SpendChartMetric
+            <SummaryCard
                 title="Total spend"
-                timeRange={activeTimeRange}
-                total={serviceCostResponse?.total_cost || 0}
-                timeRangePrev={prevTimeRange}
-                totalPrev={servicePrevCostResponse?.total_cost || 0}
-                isLoading={
+                metric={serviceCostResponse?.total_cost || 0}
+                metricPrev={servicePrevCostResponse?.total_cost || 0}
+                loading={
                     costTrendLoading ||
                     serviceCostLoading ||
                     servicePrevCostLoading
@@ -103,6 +102,8 @@ export default function Spend() {
                     serviceCostErr,
                     servicePrevCostErr
                 )}
+                isPrice
+                border={false}
             />
         </Card>
     )
