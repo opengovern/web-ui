@@ -19,7 +19,7 @@ html {
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-        monospace;
+    monospace;
 }
 
 .ag-theme-alpine {
@@ -147,6 +147,7 @@ code {
     color: #c7254e;
     background-color: #f9f2f4;
     border-radius: 4px;
+    font-family: monospace;
 }
 
 code,
@@ -157,8 +158,8 @@ samp {
     /*font-size: 1em;*/
 }
 
-code {
-    font-family: monospace;
+.dark pre {
+    color: #cccccc;
 }
 
 .compliance-fix span {
@@ -169,4 +170,11 @@ code {
     position: absolute;
     right: 95%;
     top: 10px;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: whitesmoke !important;
 }

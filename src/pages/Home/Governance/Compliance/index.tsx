@@ -1,8 +1,8 @@
 import { Button, Card, Flex, ProgressCircle, Text, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
-import { getErrorMessage } from '../../../types/apierror'
+import { useComplianceApiV1BenchmarksSummaryList } from '../../../../api/compliance.gen'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../../api/api'
+import { getErrorMessage } from '../../../../types/apierror'
 
 const colors = [
     'fuchsia',
@@ -98,7 +98,6 @@ export default function Compliance() {
         error,
         sendNow: refresh,
     } = useComplianceApiV1BenchmarksSummaryList()
-    console.log(benchmarks)
 
     const benchmarkSummaries = benchmarks?.benchmarkSummary?.filter(
         (benchmark) => (benchmark.controlsSeverityStatus?.total?.total || 0) > 0
@@ -111,7 +110,7 @@ export default function Compliance() {
                 <Flex flexDirection="col" className="gap-4">
                     {[1, 2].map((i) => {
                         return (
-                            <Card className="p-3">
+                            <Card className="p-3 dark:ring-gray-500">
                                 <Flex
                                     flexDirection="col"
                                     alignItems="start"
@@ -137,7 +136,7 @@ export default function Compliance() {
                                             `/${workspace}/compliance/${bs.id}`
                                         )
                                     }
-                                    className="p-3 cursor-pointer"
+                                    className="p-3 cursor-pointer dark:ring-gray-500"
                                 >
                                     <Flex
                                         flexDirection="col"

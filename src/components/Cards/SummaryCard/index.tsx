@@ -121,7 +121,7 @@ export default function SummaryCard({
         <Card
             key={title}
             onClick={() => (url ? navigate(url) : null)}
-            className={`${border ? '' : 'ring-0 shadow-transparent p-0'} ${
+            className={`${border ? '' : 'ring-0 !shadow-transparent p-0'} ${
                 url ? 'cursor-pointer' : ''
             } ${blueBorder ? 'border-l-kaytu-500 border-l-2' : ''}`}
         >

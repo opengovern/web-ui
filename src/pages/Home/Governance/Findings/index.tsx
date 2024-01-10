@@ -14,10 +14,10 @@ import {
     ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useComplianceApiV1ControlsSummaryList } from '../../../api/compliance.gen'
-import { TypesFindingSeverity } from '../../../api/api'
-import { severityBadge } from '../../Governance/Controls'
-import { getErrorMessage } from '../../../types/apierror'
+import { useComplianceApiV1ControlsSummaryList } from '../../../../api/compliance.gen'
+import { TypesFindingSeverity } from '../../../../api/api'
+import { severityBadge } from '../../../Governance/Controls'
+import { getErrorMessage } from '../../../../types/apierror'
 
 export default function Findings() {
     const workspace = useParams<{ ws: string }>().ws
@@ -89,7 +89,7 @@ export default function Findings() {
                           return (
                               <>
                                   <Flex
-                                      className="py-4 hover:bg-gray-100 rounded-md cursor-pointer"
+                                      className="py-4 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-md cursor-pointer"
                                       onClick={() =>
                                           navigate(
                                               `/${workspace}/compliance/${

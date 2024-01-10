@@ -55,7 +55,7 @@ export default function QuickNav() {
                         />
                         <Title>{i.title}</Title>
                     </Flex>
-                    <Text>{i.description}</Text>
+                    <Text className="line-clamp-2">{i.description}</Text>
                     <Flex justifyContent="end">
                         <ChevronRightIcon className="h-4 text-kaytu-500" />
                     </Flex>
