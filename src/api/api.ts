@@ -849,6 +849,10 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoin
     totalResourcesCount?: number
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingsResponse {
+    count?: number
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     /** @example "azure_cis_v140" */
     benchmarkID?: string
@@ -1193,7 +1197,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindings
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
     /** @example "Azure" */
-    connector?: string
+    connector?: SourceType
     /** @example "2023-06-07T14:00:15.677558Z" */
     createdAt?: string
     /** @example "steampipe-v0.5" */
@@ -1515,6 +1519,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostMetric {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostStackedItem {
+    category?: string[]
     cost?: number
     metricID?: string
     metricName?: string
@@ -1528,6 +1533,16 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint {
     date?: string
     totalConnectionCount?: number
     totalSuccessfulDescribedConnectionCount?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCountAnalyticsMetricsResponse {
+    connectionCount?: number
+    metricCount?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCountAnalyticsSpendResponse {
+    connectionCount?: number
+    metricCount?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair {
@@ -2514,6 +2529,10 @@ export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnecto
     /** @example "enabled" */
     status?: SourceConnectorStatus
     tags?: Record<string, any>
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCountConnectionsResponse {
+    count?: number
 }
 
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest {
@@ -3985,6 +4004,35 @@ export class Api<
             }),
 
         /**
+         * @description Retrieving all compliance run findings count with respect to filters.
+         *
+         * @tags compliance
+         * @name ApiV1FindingsCountList
+         * @summary Get findings count
+         * @request GET:/compliance/api/v1/findings/count
+         * @secure
+         */
+        apiV1FindingsCountList: (
+            query?: {
+                /** ConformanceStatus to filter by defaults to all conformanceStatus except passed */
+                conformanceStatus?: ('failed' | 'passed')[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingsResponse,
+                any
+            >({
+                path: `/compliance/api/v1/findings/count`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Retrieving possible values for finding filters.
          *
          * @tags compliance
@@ -4089,13 +4137,7 @@ export class Api<
                 /** Severities to filter by defaults to all severities except passed */
                 severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
                 /** ConformanceStatus to filter by defaults to all conformanceStatus except passed */
-                conformanceStatus?: (
-                    | 'ok'
-                    | 'alarm'
-                    | 'info'
-                    | 'skip'
-                    | 'error'
-                )[]
+                conformanceStatus?: ('failed' | 'passed')[]
             },
             params: RequestParams = {}
         ) =>
@@ -4561,61 +4603,6 @@ export class Api<
                 ...params,
             }),
     }
-    costEstimator = {
-        /**
-         * @description Get AWS cost for each resource
-         *
-         * @tags cost-estimator
-         * @name ApiV1CostAwsList
-         * @summary Get AWS cost
-         * @request GET:/cost_estimator/api/v1/cost/aws
-         * @secure
-         */
-        apiV1CostAwsList: (
-            query: {
-                /** Connection ID */
-                resourceId: string
-                /** ResourceType */
-                resourceType: string
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<number, any>({
-                path: `/cost_estimator/api/v1/cost/aws`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Get Azure cost for each resource
-         *
-         * @tags cost-estimator
-         * @name ApiV1CostAzureList
-         * @summary Get Azure cost
-         * @request GET:/cost_estimator/api/v1/cost/azure
-         * @secure
-         */
-        apiV1CostAzureList: (
-            query: {
-                /** Connection ID */
-                resourceId: string
-                /** ResourceType */
-                resourceType: string
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<number, any>({
-                path: `/cost_estimator/api/v1/cost/azure`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-    }
     integration = {
         /**
          * @description Creating AWS source [standalone]
@@ -4639,6 +4626,34 @@ export class Api<
                 body: request,
                 secure: true,
                 type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Counting connections either for the given connection type or all types if not specified.
+         *
+         * @tags connections
+         * @name ApiV1ConnectionsCountList
+         * @summary Count connections
+         * @request GET:/integration/api/v1/connections/count
+         * @secure
+         */
+        apiV1ConnectionsCountList: (
+            query?: {
+                /** Connector */
+                connector?: string
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCountConnectionsResponse,
+                any
+            >({
+                path: `/integration/api/v1/connections/count`,
+                method: 'GET',
+                query: query,
+                secure: true,
                 format: 'json',
                 ...params,
             }),
@@ -5222,6 +5237,28 @@ export class Api<
             }),
 
         /**
+         * @description Retrieving the count of resources and connections with respect to specified filters.
+         *
+         * @tags analytics
+         * @name ApiV2AnalyticsCountList
+         * @summary Count analytics
+         * @request GET:/inventory/api/v2/analytics/count
+         * @secure
+         */
+        apiV2AnalyticsCountList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiCountAnalyticsMetricsResponse,
+                any
+            >({
+                path: `/inventory/api/v2/analytics/count`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Retrieving list of analytics with metrics of each type based on the given input filters.
          *
          * @tags analytics
@@ -5363,6 +5400,28 @@ export class Api<
                 path: `/inventory/api/v2/analytics/spend/composition`,
                 method: 'GET',
                 query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving the count of resources and connections with respect to specified filters.
+         *
+         * @tags analytics
+         * @name ApiV2AnalyticsSpendCountList
+         * @summary Count analytics spend
+         * @request GET:/inventory/api/v2/analytics/spend/count
+         * @secure
+         */
+        apiV2AnalyticsSpendCountList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiCountAnalyticsSpendResponse,
+                any
+            >({
+                path: `/inventory/api/v2/analytics/spend/count`,
+                method: 'GET',
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
