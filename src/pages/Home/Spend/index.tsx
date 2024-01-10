@@ -2,7 +2,7 @@ import { Card, Col, Flex, Grid, Icon, Text, Title } from '@tremor/react'
 import { BanknotesIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai/index'
 import { useState } from 'react'
-import { filterAtom, spendTimeAtom } from '../../../store'
+import { filterAtom, spendTimeAtom, timeAtom } from '../../../store'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTrendList,
@@ -15,9 +15,8 @@ import StackedChart from '../../../components/Chart/Stacked'
 const colors = ['#5470C6', '#91CC75', '#FAC858', '#EE6766', '#73C0DE']
 
 export default function Spend() {
-    const activeTimeRange = useAtomValue(spendTimeAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
-    const [topCategories, setTopCategories] = useState<any>([])
 
     const query: {
         pageSize: number
@@ -125,15 +124,19 @@ export default function Spend() {
                         justifyContent="start"
                         className="gap-1 mt-5"
                     >
-                        {trendStacked.data[0].map((t, i) => (
-                            <Flex justifyContent="start" className="gap-2">
-                                <div
-                                    className="h-2 w-2 min-w-[8px] rounded-full"
-                                    style={{ backgroundColor: colors[i] }}
-                                />
-                                <Text className="line-clamp-1">{t.label}</Text>
-                            </Flex>
-                        ))}
+                        {(trendStacked.data[0] ? trendStacked.data[0] : []).map(
+                            (t, i) => (
+                                <Flex justifyContent="start" className="gap-2">
+                                    <div
+                                        className="h-2 w-2 min-w-[8px] rounded-full"
+                                        style={{ backgroundColor: colors[i] }}
+                                    />
+                                    <Text className="line-clamp-1">
+                                        {t.label}
+                                    </Text>
+                                </Flex>
+                            )
+                        )}
                     </Flex>
                 </Col>
                 <Col numColSpan={2}>
