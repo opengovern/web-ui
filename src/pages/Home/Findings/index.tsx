@@ -89,7 +89,7 @@ export default function Findings() {
                           return (
                               <>
                                   <Flex
-                                      className="py-4 hover:bg-gray-100 rounded-md cursor-pointer"
+                                      className="py-4 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-md cursor-pointer"
                                       onClick={() =>
                                           navigate(
                                               `/${workspace}/compliance/${

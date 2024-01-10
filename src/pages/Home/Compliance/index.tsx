@@ -111,7 +111,7 @@ export default function Compliance() {
                 <Flex flexDirection="col" className="gap-4">
                     {[1, 2].map((i) => {
                         return (
-                            <Card className="p-3">
+                            <Card className="p-3 dark:ring-gray-500">
                                 <Flex
                                     flexDirection="col"
                                     alignItems="start"
@@ -137,7 +137,7 @@ export default function Compliance() {
                                             `/${workspace}/compliance/${bs.id}`
                                         )
                                     }
-                                    className="p-3 cursor-pointer"
+                                    className="p-3 cursor-pointer dark:ring-gray-500"
                                 >
                                     <Flex
                                         flexDirection="col"

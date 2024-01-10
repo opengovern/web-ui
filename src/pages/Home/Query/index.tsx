@@ -10,6 +10,7 @@ import {
 } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import Editor from 'react-simple-code-editor'
+import 'prismjs/themes/prism.css'
 import { highlight, languages } from 'prismjs'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAtom } from 'jotai'
@@ -37,7 +38,7 @@ export default function Query({ height }: IQuery) {
             <Title className="font-semibold mb-4">Popular queries</Title>
             <Card
                 className="max-h-full h-full pt-3 overflow-scroll"
-                style={{ maxHeight: `${height}px` }}
+                style={{ maxHeight: `${height}px`, height: `${height}px` }}
             >
                 {queries
                     ?.sort((a, b) => {
@@ -78,8 +79,9 @@ export default function Query({ height }: IQuery) {
                                                 )
                                             }
                                             value={q?.query || ''}
-                                            className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm h-full"
+                                            className="w-full bg-white dark:bg-gray-800 font-mono text-sm h-full"
                                             style={{
+                                                color: 'white !important',
                                                 minHeight: '60px',
                                                 overflowY: 'scroll',
                                             }}
