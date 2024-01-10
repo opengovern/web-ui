@@ -54,7 +54,9 @@ export const workspaceAtom = atom<{
         | GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse
         | undefined
 }>({ list: [], current: undefined })
-export const previewAtom = atom(localStorage.preview ? 'true' : 'false')
+export const previewAtom = atom(
+    localStorage.preview === 'true' ? 'true' : 'false'
+)
 export const runQueryAtom = atom('')
 
 export const tokenAtom = atom<string>('')
