@@ -7,7 +7,10 @@ export default function Governance() {
     return (
         <Card>
             <Flex justifyContent="start" className="mb-4">
-                <Icon icon={ShieldCheckIcon} />
+                <Icon
+                    icon={ShieldCheckIcon}
+                    className="bg-gray-50 rounded mr-2"
+                />
                 <Title>Governance</Title>
             </Flex>
             <Grid numItems={3} className="w-full gap-4">

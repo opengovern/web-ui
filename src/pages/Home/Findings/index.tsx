@@ -71,7 +71,7 @@ export default function Findings() {
                                       flexDirection="col"
                                       justifyContent="start"
                                       alignItems="start"
-                                      className="w-full pt-2 pb-3"
+                                      className="w-full py-4"
                                   >
                                       <div className="h-2 w-72 my-1 bg-slate-200 rounded" />
                                       <Flex flexDirection="row" className="">
@@ -89,7 +89,7 @@ export default function Findings() {
                           return (
                               <>
                                   <Flex
-                                      className="py-3 hover:bg-gray-100 rounded-md cursor-pointer"
+                                      className="py-4 hover:bg-gray-100 rounded-md cursor-pointer"
                                       onClick={() =>
                                           navigate(
                                               `/${workspace}/compliance/${
@@ -102,7 +102,7 @@ export default function Findings() {
                                           flexDirection="col"
                                           alignItems="start"
                                       >
-                                          <Text className="w-3/4 line-clamp-1 text-black">
+                                          <Text className="w-3/4 line-clamp-1 text-black mb-2">
                                               {item.control?.title}
                                           </Text>
                                           <Text>
@@ -124,7 +124,6 @@ export default function Findings() {
                 variant="light"
                 icon={ChevronRightIcon}
                 iconPosition="right"
-                className="mt-2"
                 onClick={() => navigate(`/${workspace}/findings`)}
             >
                 View details

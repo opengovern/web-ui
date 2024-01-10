@@ -51,7 +51,10 @@ export default function QuickNav() {
                         }
                     >
                         <Flex justifyContent="start" className="mb-2">
-                            <Icon icon={i.icon} />
+                            <Icon
+                                icon={i.icon}
+                                className="bg-gray-50 rounded mr-2"
+                            />
                             <Title>{i.title}</Title>
                         </Flex>
                         <Text>{i.description}</Text>
