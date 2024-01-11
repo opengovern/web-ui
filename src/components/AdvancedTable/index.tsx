@@ -305,7 +305,7 @@ export default function AdvancedTable<TData = any, TValue = any>({
             // maxConcurrentDatasourceRequests: -1,
         }),
         pagination: true,
-        paginationPageSize: 25,
+        paginationPageSize: 10,
         rowSelection: 'multiple',
         suppressExcelExport: true,
         animateRows: false,

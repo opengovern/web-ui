@@ -1,16 +1,15 @@
 import { Card, Col, Flex, Grid, Icon, Text, Title } from '@tremor/react'
 import { BanknotesIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai/index'
-import { useState } from 'react'
-import { filterAtom, spendTimeAtom, timeAtom } from '../../../store'
+import { filterAtom, timeAtom } from '../../../store'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../api/inventory.gen'
 import { toErrorMessage } from '../../../types/apierror'
-import SummaryCard from '../../../components/Cards/SummaryCard'
 import { buildTrend } from '../../../components/Spend/Chart/helpers'
 import StackedChart from '../../../components/Chart/Stacked'
+import { SpendChartMetric } from '../../../components/Spend/Chart/Metric'
 
 const colors = ['#5470C6', '#91CC75', '#FAC858', '#EE6766', '#73C0DE']
 
@@ -92,54 +91,15 @@ export default function Spend() {
 
     return (
         <Card className="h-full">
-            <Grid numItems={3}>
-                <Col>
+            <Grid numItems={2}>
+                <Col numColSpan={1}>
                     <Flex justifyContent="start" className="mb-2">
                         <Icon
                             icon={BanknotesIcon}
                             className="bg-gray-50 rounded mr-2"
                         />
-                        <Title>Spend</Title>
+                        <Title>Cloud Spend</Title>
                     </Flex>
-                    <SummaryCard
-                        title="Total spend"
-                        metric={serviceCostResponse?.total_cost || 0}
-                        metricPrev={servicePrevCostResponse?.total_cost || 0}
-                        loading={
-                            costTrendLoading ||
-                            serviceCostLoading ||
-                            servicePrevCostLoading
-                        }
-                        error={toErrorMessage(
-                            costTrendError,
-                            serviceCostErr,
-                            servicePrevCostErr
-                        )}
-                        isPrice
-                        border={false}
-                    />
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        justifyContent="start"
-                        className="gap-1 mt-5"
-                    >
-                        {(trendStacked.data[0] ? trendStacked.data[0] : []).map(
-                            (t, i) => (
-                                <Flex justifyContent="start" className="gap-2">
-                                    <div
-                                        className="h-2 w-2 min-w-[8px] rounded-full"
-                                        style={{ backgroundColor: colors[i] }}
-                                    />
-                                    <Text className="line-clamp-1">
-                                        {t.label}
-                                    </Text>
-                                </Flex>
-                            )
-                        )}
-                    </Flex>
-                </Col>
-                <Col numColSpan={2}>
                     <StackedChart
                         labels={trendStacked.label}
                         chartData={trendStacked.data}
@@ -156,6 +116,47 @@ export default function Spend() {
                             servicePrevCostErr
                         )}
                     />
+                </Col>
+                <Col>
+                    <Flex className="ml-1" flexDirection="col">
+                        <SpendChartMetric
+                            title="Total Spend"
+                            timeRange={activeTimeRange}
+                            total={serviceCostResponse?.total_cost || 0}
+                            timeRangePrev={prevTimeRange}
+                            totalPrev={servicePrevCostResponse?.total_cost || 0}
+                            isLoading={
+                                serviceCostLoading || servicePrevCostLoading
+                            }
+                            error={toErrorMessage(
+                                serviceCostErr,
+                                servicePrevCostErr
+                            )}
+                            comparedToNextLine
+                        />
+
+                        <Flex
+                            flexDirection="col"
+                            alignItems="start"
+                            justifyContent="start"
+                            className="gap-1 mt-5 ml-3"
+                        >
+                            {(trendStacked.data[0]
+                                ? trendStacked.data[0]
+                                : []
+                            ).map((t, i) => (
+                                <Flex justifyContent="start" className="gap-2">
+                                    <div
+                                        className="h-2 w-2 min-w-[8px] rounded-full"
+                                        style={{ backgroundColor: colors[i] }}
+                                    />
+                                    <Text className="line-clamp-1">
+                                        {t.label}
+                                    </Text>
+                                </Flex>
+                            ))}
+                        </Flex>
+                    </Flex>
                 </Col>
             </Grid>
         </Card>

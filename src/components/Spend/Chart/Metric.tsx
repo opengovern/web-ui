@@ -2,6 +2,7 @@ import { BadgeDelta, Card, Color, Flex, Metric, Text } from '@tremor/react'
 import dayjs from 'dayjs'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import { badgeTypeByDelta } from '../../../utilities/deltaType'
+import { renderText } from '../../DateRangePicker'
 
 interface ISpendChartMetric {
     title: string
@@ -17,6 +18,7 @@ interface ISpendChartMetric {
     totalPrev: number
     isLoading: boolean
     error: string | undefined
+    comparedToNextLine?: boolean
 }
 
 export function SpendChartMetric({
@@ -27,6 +29,7 @@ export function SpendChartMetric({
     totalPrev,
     isLoading,
     error,
+    comparedToNextLine,
 }: ISpendChartMetric) {
     const deltaColors = new Map<string, Color>()
     deltaColors.set('increase', 'emerald')
@@ -52,8 +55,7 @@ export function SpendChartMetric({
                             {title}
                         </Text>
                         <Text className="pl-2 ml-2 border-l border-gray-100 dark:border-gray-800">
-                            {timeRange.start.format('MMM DD, YYYY')} -{' '}
-                            {timeRange.end.format('MMM DD, YYYY')} UTC
+                            {renderText(timeRange.start, timeRange.end)}
                         </Text>
                     </Flex>
                     <Flex justifyContent="start" alignItems="end">
@@ -70,8 +72,8 @@ export function SpendChartMetric({
                         )}
                     </Flex>
                     <Flex
-                        flexDirection="row"
-                        alignItems="center"
+                        flexDirection={comparedToNextLine ? 'col' : 'row'}
+                        alignItems={comparedToNextLine ? 'start' : 'center'}
                         className="cursor-default"
                     >
                         {isLoading || (error !== undefined && error !== '') ? (
@@ -96,10 +98,9 @@ export function SpendChartMetric({
                             </BadgeDelta>
                         )}
 
-                        <Text className="ml-1.5">
+                        <Text className={comparedToNextLine ? '' : 'ml-1.5'}>
                             compared to{' '}
-                            {timeRangePrev.start.format('MMM DD, YYYY')} -{' '}
-                            {timeRangePrev.end.format('MMM DD, YYYY')} UTC
+                            {renderText(timeRangePrev.start, timeRangePrev.end)}
                         </Text>
                     </Flex>
                 </Flex>

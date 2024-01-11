@@ -14,6 +14,7 @@ import 'prismjs/themes/prism.css'
 import { highlight, languages } from 'prismjs'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAtom } from 'jotai'
+import { useState } from 'react'
 import { useInventoryApiV1QueryList } from '../../../api/inventory.gen'
 import { runQueryAtom } from '../../../store'
 import { getErrorMessage } from '../../../types/apierror'
@@ -26,6 +27,7 @@ export default function Query({ height }: IQuery) {
     const workspace = useParams<{ ws: string }>().ws
     const navigate = useNavigate()
     const [runQuery, setRunQuery] = useAtom(runQueryAtom)
+    const [open, setOpen] = useState(0)
 
     const {
         response: queries,
@@ -34,7 +36,7 @@ export default function Query({ height }: IQuery) {
     } = useInventoryApiV1QueryList({})
 
     return (
-        <Flex flexDirection="col" alignItems="start" className="h-full">
+        <Flex flexDirection="col" alignItems="start" className="h-full ml-2">
             <Title className="font-semibold mb-4">Popular queries</Title>
             <Card
                 className="max-h-full h-full pt-3 overflow-scroll"
@@ -58,8 +60,15 @@ export default function Query({ height }: IQuery) {
                         (q, i) =>
                             i < 7 && (
                                 <Accordion
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    key={`query-${i}-${open}`}
                                     className="w-full border-0 border-b border-b-gray-200 !rounded-none bg-transparent"
-                                    defaultOpen={i === 0}
+                                    defaultOpen={i === open}
+                                    onClick={() => {
+                                        if (i !== open) {
+                                            setOpen(i)
+                                        }
+                                    }}
                                 >
                                     <AccordionHeader className="pl-0 pr-0.5 py-4 bg-transparent flex justify-start">
                                         <Text className="text-gray-800 !text-base line-clamp-1">
