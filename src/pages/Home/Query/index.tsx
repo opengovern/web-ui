@@ -34,7 +34,7 @@ export default function Query({ height }: IQuery) {
     } = useInventoryApiV1QueryList({})
 
     return (
-        <Flex flexDirection="col" alignItems="start" className="h-full">
+        <Flex flexDirection="col" alignItems="start" className="h-full ml-2">
             <Title className="font-semibold mb-4">Popular queries</Title>
             <Card
                 className="max-h-full h-full pt-3 overflow-scroll"

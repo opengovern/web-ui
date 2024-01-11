@@ -188,7 +188,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         <Flex
             flexDirection="col"
             alignItems="start"
-            className="z-50 h-full w-fit py-4 bg-kaytu-950 dark:bg-gray-950 relative border-r border-r-gray-700"
+            className="z-50 h-full w-fit pt-4 bg-kaytu-950 dark:bg-gray-950 relative border-r border-r-gray-700"
         >
             <Flex
                 flexDirection="col"

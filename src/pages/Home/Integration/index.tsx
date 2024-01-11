@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Grid, Text, Title } from '@tremor/react'
+import { Button, Card, Flex, Grid, Subtitle, Text, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
@@ -44,7 +44,7 @@ export default function Integration() {
                                               `/${workspace}/integrations/${connector.name}`
                                           )
                                       }}
-                                      className={`rounded-2xl cursor-pointer ${
+                                      className={`rounded-3xl cursor-pointer ${
                                           connector.name === 'AWS'
                                               ? ''
                                               : 'bg-kaytu-800 text-white'
@@ -65,15 +65,15 @@ export default function Integration() {
                                               flexDirection="col"
                                               alignItems="start"
                                           >
-                                              <Text className="font-semibold mb-1.5 text-inherit">
+                                              <Subtitle className="font-semibold mb-1.5 text-inherit">
                                                   {connector.label}
-                                              </Text>
+                                              </Subtitle>
                                               <Text className=" text-inherit">
                                                   # of Accounts:{' '}
                                                   {connector.connection_count}
                                               </Text>
                                           </Flex>
-                                          <PlusCircleIcon className="w-5 text-amber-500" />
+                                          <PlusCircleIcon className="w-8 text-orange-500" />
                                       </Flex>
                                   </Card>
                               )

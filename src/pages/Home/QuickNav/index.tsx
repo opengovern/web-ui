@@ -43,7 +43,7 @@ export default function QuickNav() {
             {navList.map((i) => (
                 <Card
                     key={i.title}
-                    className="cursor-pointer"
+                    className="cursor-pointer hover:shadow-xl"
                     onClick={() =>
                         navigate(i.link.replaceAll(':ws', workspace || ''))
                     }
