@@ -153,6 +153,7 @@ function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
 
     return (
         <Card
+            decoration="left"
             decorationColor={color}
             key={title}
             className="h-fit w-96 m-2 p-3 px-3"
@@ -241,7 +242,7 @@ export default function JobsMenu({ isCollapsed }: IJobsMenu) {
                                 icon={ChevronRightIcon}
                                 iconPosition="right"
                                 onClick={() =>
-                                    navigate(`/${workspace}/settings#jobs`)
+                                    navigate(`/${workspace}/settings?sp=jobs`)
                                 }
                             >
                                 See all
