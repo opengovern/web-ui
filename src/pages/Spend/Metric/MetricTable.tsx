@@ -9,25 +9,23 @@ import {
     ArrowTrendingUpIcon,
     SwatchIcon,
 } from '@heroicons/react/24/outline'
-import { IFilter } from '../../../../../store'
-import { useInventoryApiV2AnalyticsSpendTableList } from '../../../../../api/inventory.gen'
-import Table, { IColumn } from '../../../../../components/Table'
-import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../../../api/api'
-import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
-import { capitalizeFirstLetter } from '../../../../../utilities/labelMaker'
-import AdvancedTable from '../../../../../components/AdvancedTable'
+import { IFilter } from '../../../store'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../api/api'
+import AdvancedTable, { IColumn } from '../../../components/AdvancedTable'
+import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 
 type MSort = {
     sortCol: string
     sortType: 'asc' | 'desc' | null
 }
 
-interface IServices {
-    activeTimeRange: { start: Dayjs; end: Dayjs }
-    connections: IFilter
+interface IMetricTable {
     selectedGranularity: 'monthly' | 'daily'
-    isSummary?: boolean
     onGranularityChange: Dispatch<SetStateAction<'monthly' | 'daily'>>
+    response:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
+        | undefined
+    isLoading: boolean
 }
 
 export const rowGenerator = (
@@ -169,13 +167,12 @@ export const gridOptions: GridOptions = {
     groupIncludeTotalFooter: true,
 }
 
-export default function Metrics({
-    activeTimeRange,
-    connections,
+export default function MetricTable({
+    response,
+    isLoading,
     selectedGranularity,
-    isSummary = false,
     onGranularityChange,
-}: IServices) {
+}: IMetricTable) {
     const navigate = useNavigate()
 
     const [granularityEnabled, setGranularityEnabled] = useState<boolean>(false)
@@ -232,41 +229,12 @@ export default function Metrics({
         return columns
     }
 
-    const query = (): {
-        connector: ('' | 'AWS' | 'Azure')[]
-        granularity: 'daily' | 'monthly'
-        connectionId: string[]
-        startTime: number
-        endTime: number
-        dimension: 'metric'
-        connectionGroup: string[]
-    } => {
-        let gra: 'monthly' | 'daily' = 'daily'
-        if (selectedGranularity === 'monthly') {
-            gra = 'monthly'
-        }
-
-        return {
-            startTime: activeTimeRange.start.unix(),
-            endTime: activeTimeRange.end.unix(),
-            dimension: 'metric',
-            granularity: gra,
-            connector: [connections.provider],
-            connectionId: connections.connections,
-            connectionGroup: connections.connectionGroup,
-        }
-    }
-    const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList(
-        query()
-    )
-
     const columns: IColumn<any, any>[] = [
         {
             field: 'category',
             headerName: 'Category',
             type: 'string',
             width: 130,
-            rowGroup: isSummary,
             hide: false,
             filter: true,
             enableRowGroup: true,
@@ -286,7 +254,6 @@ export default function Metrics({
             valueFormatter: (param: ValueFormatterParams) => {
                 return param.value ? `${param.value.toFixed(2)}%` : ''
             },
-            hide: isSummary,
         },
         ...columnGenerator(response),
     ]
@@ -353,7 +320,7 @@ export default function Metrics({
         <AdvancedTable
             title="Metric list"
             downloadable
-            id={isSummary ? 'spend_summary_table' : 'spend_service_table'}
+            id="spend_service_table"
             loading={isLoading}
             columns={columns}
             rowData={rowGenerator(response, undefined, isLoading).finalRow}

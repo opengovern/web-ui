@@ -1,5 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs'
-import { ValueFormatterParams } from 'ag-grid-community'
+import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
@@ -9,27 +9,31 @@ import {
     ArrowTrendingUpIcon,
     CloudIcon,
 } from '@heroicons/react/24/outline'
-import { IFilter, isDemoAtom } from '../../../../../store'
-import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../../../api/api'
-import AdvancedTable, { IColumn } from '../../../../../components/AdvancedTable'
-import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
-import { useInventoryApiV2AnalyticsSpendTableList } from '../../../../../api/inventory.gen'
-
-import { gridOptions, rowGenerator } from '../Metrics'
+import { IFilter } from '../../../store'
+import AdvancedTable, { IColumn } from '../../../components/AdvancedTable'
+import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../api/api'
+import { rowGenerator } from '../Metric/MetricTable'
 
 type MSort = {
     sortCol: string
     sortType: 'asc' | 'desc' | null
 }
 
-interface IConnections {
+interface IAccountTable {
     activeTimeRange: { start: Dayjs; end: Dayjs }
-    connections: IFilter
     selectedGranularity: 'monthly' | 'daily'
     onGranularityChange: Dispatch<SetStateAction<'monthly' | 'daily'>>
+    response:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
+        | undefined
+    responsePrev:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
+        | undefined
+    isLoading: boolean
 }
 
-const defaultColumns = (isDemo: boolean, start: Dayjs, end: Dayjs) => {
+const defaultColumns = (start: Dayjs, end: Dayjs) => {
     const temp: IColumn<any, any>[] = [
         {
             field: 'connector',
@@ -52,7 +56,7 @@ const defaultColumns = (isDemo: boolean, start: Dayjs, end: Dayjs) => {
             pivot: false,
             pinned: true,
             cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+                <span>{param.value}</span>
             ),
         },
         {
@@ -65,7 +69,7 @@ const defaultColumns = (isDemo: boolean, start: Dayjs, end: Dayjs) => {
             pivot: false,
             pinned: true,
             cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+                <span>{param.value}</span>
             ),
         },
         {
@@ -79,7 +83,7 @@ const defaultColumns = (isDemo: boolean, start: Dayjs, end: Dayjs) => {
             hide: true,
             pinned: true,
             cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+                <span>{param.value}</span>
             ),
         },
         {
@@ -102,14 +106,15 @@ const defaultColumns = (isDemo: boolean, start: Dayjs, end: Dayjs) => {
     return temp
 }
 
-export default function CloudAccounts({
+export default function AccountTable({
     activeTimeRange,
-    connections,
     selectedGranularity,
     onGranularityChange,
-}: IConnections) {
+    response,
+    responsePrev,
+    isLoading,
+}: IAccountTable) {
     const navigate = useNavigate()
-    const isDemo = useAtomValue(isDemoAtom)
 
     const [granularityEnabled, setGranularityEnabled] = useState<boolean>(false)
 
@@ -260,39 +265,6 @@ export default function CloudAccounts({
         return columns
     }
 
-    const query = (
-        prev = false
-    ): {
-        startTime?: number | undefined
-        endTime?: number | undefined
-        granularity?: 'daily' | 'monthly' | 'yearly' | undefined
-        dimension?: 'metric' | 'connection' | undefined
-        connectionId?: string[]
-        connector: ('' | 'AWS' | 'Azure')[]
-        metricIds?: string[]
-        connectionGroup?: string[]
-    } => {
-        let gra: 'monthly' | 'daily' = 'daily'
-        if (selectedGranularity === 'monthly') {
-            gra = 'monthly'
-        }
-
-        return {
-            startTime: activeTimeRange.start.unix(),
-            endTime: activeTimeRange.end.unix(),
-            dimension: 'connection',
-            granularity: gra,
-            connector: [connections.provider],
-            connectionId: connections.connections,
-            connectionGroup: connections.connectionGroup,
-        }
-    }
-    const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList(
-        query()
-    )
-    const { response: responsePrev, isLoading: prevIsLoading } =
-        useInventoryApiV2AnalyticsSpendTableList(query(true))
-
     const [manualTableSort, onManualSortChange] = useState<MSort>({
         sortCol: 'none',
         sortType: null,
@@ -351,6 +323,36 @@ export default function CloudAccounts({
         },
     ]
 
+    const gridOptions: GridOptions = {
+        columnTypes: {
+            dimension: {
+                enableRowGroup: true,
+                enablePivot: true,
+            },
+        },
+        rowGroupPanelShow: 'always',
+        groupAllowUnbalanced: true,
+        autoGroupColumnDef: {
+            pinned: true,
+            flex: 2,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            cellRendererParams: {
+                footerValueGetter: (params: any) => {
+                    const isRootLevel = params.node.level === -1
+                    if (isRootLevel) {
+                        return 'Grand Total'
+                    }
+                    return `Sub Total (${params.value})`
+                },
+            },
+        },
+        enableRangeSelection: true,
+        groupIncludeFooter: true,
+        groupIncludeTotalFooter: true,
+    }
+
     return (
         <AdvancedTable
             title="Cloud account list"
@@ -358,11 +360,7 @@ export default function CloudAccounts({
             id="spend_connection_table"
             loading={isLoading}
             columns={[
-                ...defaultColumns(
-                    isDemo,
-                    activeTimeRange.start,
-                    activeTimeRange.end
-                ),
+                ...defaultColumns(activeTimeRange.start, activeTimeRange.end),
                 ...columnGenerator(response),
             ]}
             rowData={rowGenerator(response, responsePrev, isLoading).finalRow}
