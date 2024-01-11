@@ -2,20 +2,32 @@ import { Dayjs } from 'dayjs'
 import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import { useNavigate } from 'react-router-dom'
 import { Select, SelectItem, Text } from '@tremor/react'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
+import {
+    CurrencyDollarIcon,
+    ListBulletIcon,
+    ArrowTrendingUpIcon,
+    SwatchIcon,
+} from '@heroicons/react/24/outline'
 import { IFilter } from '../../../../../store'
 import { useInventoryApiV2AnalyticsSpendTableList } from '../../../../../api/inventory.gen'
 import Table, { IColumn } from '../../../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../../../api/api'
 import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
 import { capitalizeFirstLetter } from '../../../../../utilities/labelMaker'
+import AdvancedTable from '../../../../../components/AdvancedTable'
+
+type MSort = {
+    sortCol: string
+    sortType: 'asc' | 'desc' | null
+}
 
 interface IServices {
     activeTimeRange: { start: Dayjs; end: Dayjs }
     connections: IFilter
-    selectedGranularity: 'none' | 'monthly' | 'daily'
+    selectedGranularity: 'monthly' | 'daily'
     isSummary?: boolean
-    onGranularityChange: Dispatch<SetStateAction<'monthly' | 'daily' | 'none'>>
+    onGranularityChange: Dispatch<SetStateAction<'monthly' | 'daily'>>
 }
 
 export const rowGenerator = (
@@ -166,6 +178,8 @@ export default function Metrics({
 }: IServices) {
     const navigate = useNavigate()
 
+    const [granularityEnabled, setGranularityEnabled] = useState<boolean>(false)
+
     const columnGenerator = (
         input:
             | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
@@ -185,7 +199,7 @@ export default function Metrics({
                     })
                     .flat() || []
             const dynamicCols: IColumn<any, any>[] =
-                selectedGranularity !== 'none'
+                granularityEnabled === true
                     ? columnNames
                           .filter(
                               (value, index, array) =>
@@ -277,8 +291,66 @@ export default function Metrics({
         ...columnGenerator(response),
     ]
 
+    const [manualTableSort, onManualSortChange] = useState<MSort>({
+        sortCol: 'none',
+        sortType: null,
+    })
+
+    const [manualGrouping, onManualGrouping] = useState<string>('none')
+
+    const filterTabs = [
+        {
+            type: 0,
+            icon: CurrencyDollarIcon,
+            name: 'Metrics by Total Spend',
+            function: () => {
+                onManualSortChange({
+                    sortCol: 'totalCost',
+                    sortType: 'desc',
+                })
+                onManualGrouping('none')
+            },
+        },
+        {
+            type: 1,
+            icon: ListBulletIcon,
+            name: 'Spend Merics by Name (A-z)',
+            function: () => {
+                onManualSortChange({
+                    sortCol: 'dimension',
+                    sortType: 'asc',
+                })
+                onManualGrouping('none')
+            },
+        },
+        {
+            type: 2,
+            icon: ArrowTrendingUpIcon,
+            name: 'Metrics by Growth',
+            function: () => {
+                onManualSortChange({
+                    sortCol: 'percent',
+                    sortType: 'desc',
+                })
+                onManualGrouping('none')
+            },
+        },
+        {
+            type: 3,
+            icon: SwatchIcon,
+            name: 'Spend Mertics by Category',
+            function: () => {
+                onManualGrouping('category')
+                onManualSortChange({
+                    sortCol: 'none',
+                    sortType: null,
+                })
+            },
+        },
+    ]
+
     return (
-        <Table
+        <AdvancedTable
             title="Metric list"
             downloadable
             id={isSummary ? 'spend_summary_table' : 'spend_service_table'}
@@ -297,32 +369,13 @@ export default function Metrics({
                     event.api.showLoadingOverlay()
                 }
             }}
-        >
-            <Select
-                enableClear={false}
-                value={selectedGranularity}
-                placeholder={
-                    selectedGranularity
-                        ? capitalizeFirstLetter(selectedGranularity)
-                        : ''
-                }
-                onValueChange={(v) => {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    onGranularityChange(v)
-                }}
-                className="w-10"
-            >
-                <SelectItem value="none">
-                    <Text>None</Text>
-                </SelectItem>
-                <SelectItem value="daily">
-                    <Text>Daily</Text>
-                </SelectItem>
-                <SelectItem value="monthly">
-                    <Text>Monthly</Text>
-                </SelectItem>
-            </Select>
-        </Table>
+            granularityEnabled={granularityEnabled}
+            setGranularityEnabled={setGranularityEnabled}
+            selectedGranularity={selectedGranularity}
+            onGranularityChange={onGranularityChange}
+            manualSort={manualTableSort}
+            manualGrouping={manualGrouping}
+            filterTabs={filterTabs}
+        />
     )
 }

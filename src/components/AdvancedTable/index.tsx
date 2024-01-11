@@ -15,7 +15,7 @@ import 'ag-grid-enterprise'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import 'ag-grid-community/styles/agGridMaterialFont.css'
-import { ReactNode, useEffect, useRef } from 'react'
+import { ReactNode, useEffect, useRef, Dispatch, SetStateAction } from 'react'
 import { Button, Flex, Title } from '@tremor/react'
 import { ArrowDownTrayIcon } from '@heroicons/react/20/solid'
 import {
@@ -26,6 +26,25 @@ import { agGridDateComparator } from '../../utilities/dateComparator'
 import { getConnectorIcon } from '../Cards/ConnectorCard'
 import { dateDisplay, dateTimeDisplay } from '../../utilities/dateDisplay'
 import Spinner from '../Spinner'
+import TableGranularityControl from './TableGranularityControl'
+import FilterTabs from './FilterTabs'
+
+type FilterTab = {
+    type: number
+    icon: React.ForwardRefExoticComponent<
+        Omit<React.SVGProps<SVGSVGElement>, 'ref'> & {
+            title?: string | undefined
+            titleId?: string | undefined
+        } & React.RefAttributes<SVGSVGElement>
+    >
+    name: string
+    function: () => void
+}[]
+
+type MSort = {
+    sortCol: string
+    sortType: 'asc' | 'desc' | null
+}
 
 export interface IColumn<TData, TValue> {
     type: 'string' | 'number' | 'price' | 'date' | 'datetime' | 'connector'
@@ -69,9 +88,16 @@ interface IProps<TData, TValue> {
     loading?: boolean
     fullWidth?: boolean
     fullHeight?: boolean
+    granularityEnabled: boolean
+    setGranularityEnabled: (v: boolean) => void
+    selectedGranularity: 'daily' | 'monthly'
+    onGranularityChange: Dispatch<SetStateAction<'monthly' | 'daily'>>
+    manualSort?: MSort
+    manualGrouping?: string
+    filterTabs?: FilterTab
 }
 
-export default function Table<TData = any, TValue = any>({
+export default function AdvancedTable<TData = any, TValue = any>({
     id,
     columns,
     rowData,
@@ -88,6 +114,13 @@ export default function Table<TData = any, TValue = any>({
     children,
     options,
     loading,
+    granularityEnabled,
+    setGranularityEnabled,
+    selectedGranularity,
+    onGranularityChange,
+    manualSort,
+    manualGrouping,
+    filterTabs,
 }: IProps<TData, TValue>) {
     const gridRef = useRef<AgGridReact>(null)
     const visibility = useRef<Map<string, boolean> | undefined>(undefined)
@@ -105,6 +138,15 @@ export default function Table<TData = any, TValue = any>({
                 })
             }
         }
+    }
+
+    if (manualSort !== undefined) {
+        gridRef.current?.api.applyColumnState({
+            defaultState: { sort: null },
+        })
+        gridRef.current?.api.applyColumnState({
+            state: [{ colId: manualSort.sortCol, sort: manualSort.sortType }],
+        })
     }
 
     useEffect(() => {
@@ -154,6 +196,11 @@ export default function Table<TData = any, TValue = any>({
                 visibility.current?.get(item.field || '') !== undefined
             ) {
                 v.hide = !visibility.current.get(item.field || '')
+            }
+
+            if (item.field === manualGrouping) {
+                v.enableRowGroup = true
+                v.rowGroup = true
             }
 
             if (item.type === 'price') {
@@ -317,14 +364,19 @@ export default function Table<TData = any, TValue = any>({
                 }
             >
                 {!!title?.length && (
-                    <Title className="font-semibold min-w-fit">{title}</Title>
+                    <Title className="font-bold min-w-fit">{title}</Title>
                 )}
                 <Flex
                     flexDirection={fullWidth ? 'row-reverse' : 'row'}
                     alignItems={fullWidth ? 'start' : 'center'}
                     className={`${fullWidth ? '' : 'w-fit'} gap-3`}
                 >
-                    {children}
+                    <TableGranularityControl
+                        granularityEnabled={granularityEnabled}
+                        setGranularityEnabled={setGranularityEnabled}
+                        selectedGranularity={selectedGranularity}
+                        onGranularityChange={onGranularityChange}
+                    />
                     {downloadable && (
                         <Button
                             variant="secondary"
@@ -338,6 +390,13 @@ export default function Table<TData = any, TValue = any>({
                     )}
                 </Flex>
             </Flex>
+
+            {filterTabs !== undefined && (
+                <Flex className="m-4">
+                    <FilterTabs tabs={filterTabs} />
+                </Flex>
+            )}
+
             <div
                 className={`w-full relative overflow-hidden ${
                     localStorage.theme === 'dark'

@@ -1,22 +1,32 @@
 import dayjs, { Dayjs } from 'dayjs'
 import { ValueFormatterParams } from 'ag-grid-community'
-import { Select, SelectItem, Text } from '@tremor/react'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
+import {
+    CurrencyDollarIcon,
+    ListBulletIcon,
+    ArrowTrendingUpIcon,
+    CloudIcon,
+} from '@heroicons/react/24/outline'
 import { IFilter, isDemoAtom } from '../../../../../store'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../../../api/api'
-import Table, { IColumn } from '../../../../../components/Table'
+import AdvancedTable, { IColumn } from '../../../../../components/AdvancedTable'
 import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
 import { useInventoryApiV2AnalyticsSpendTableList } from '../../../../../api/inventory.gen'
-import { capitalizeFirstLetter } from '../../../../../utilities/labelMaker'
+
 import { gridOptions, rowGenerator } from '../Metrics'
+
+type MSort = {
+    sortCol: string
+    sortType: 'asc' | 'desc' | null
+}
 
 interface IConnections {
     activeTimeRange: { start: Dayjs; end: Dayjs }
     connections: IFilter
-    selectedGranularity: 'none' | 'monthly' | 'daily'
-    onGranularityChange: Dispatch<SetStateAction<'monthly' | 'daily' | 'none'>>
+    selectedGranularity: 'monthly' | 'daily'
+    onGranularityChange: Dispatch<SetStateAction<'monthly' | 'daily'>>
 }
 
 const defaultColumns = (isDemo: boolean, start: Dayjs, end: Dayjs) => {
@@ -101,6 +111,8 @@ export default function CloudAccounts({
     const navigate = useNavigate()
     const isDemo = useAtomValue(isDemoAtom)
 
+    const [granularityEnabled, setGranularityEnabled] = useState<boolean>(false)
+
     const columnGenerator = (
         input:
             | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
@@ -120,7 +132,7 @@ export default function CloudAccounts({
                     })
                     .flat() || []
             const dynamicCols: IColumn<any, any>[] =
-                selectedGranularity !== 'none'
+                granularityEnabled === true
                     ? columnNames
                           .filter(
                               (value, index, array) =>
@@ -281,12 +293,70 @@ export default function CloudAccounts({
     const { response: responsePrev, isLoading: prevIsLoading } =
         useInventoryApiV2AnalyticsSpendTableList(query(true))
 
+    const [manualTableSort, onManualSortChange] = useState<MSort>({
+        sortCol: 'none',
+        sortType: null,
+    })
+
+    const [manualGrouping, onManualGrouping] = useState<string>('none')
+
+    const filterTabs = [
+        {
+            type: 0,
+            icon: CurrencyDollarIcon,
+            name: 'Highest Spend Accounts',
+            function: () => {
+                onManualSortChange({
+                    sortCol: 'totalCost',
+                    sortType: 'desc',
+                })
+                onManualGrouping('none')
+            },
+        },
+        {
+            type: 1,
+            icon: ListBulletIcon,
+            name: ' Accounts by Name (A-z)',
+            function: () => {
+                onManualSortChange({
+                    sortCol: 'dimension',
+                    sortType: 'asc',
+                })
+                onManualGrouping('none')
+            },
+        },
+        {
+            type: 2,
+            icon: ArrowTrendingUpIcon,
+            name: 'Fastest Growth Accounts',
+            function: () => {
+                onManualSortChange({
+                    sortCol: 'percent',
+                    sortType: 'desc',
+                })
+                onManualGrouping('none')
+            },
+        },
+        {
+            type: 3,
+            icon: CloudIcon,
+            name: 'Accounts by Provider',
+            function: () => {
+                onManualGrouping('connector')
+                onManualSortChange({
+                    sortCol: 'none',
+                    sortType: null,
+                })
+            },
+        },
+    ]
+
     return (
-        <Table
+        <AdvancedTable
             title="Cloud account list"
             downloadable
             id="spend_connection_table"
-            loading={isLoading || prevIsLoading}
+            loading={isLoading}
             columns={[
                 ...defaultColumns(
                     isDemo,
@@ -310,32 +380,13 @@ export default function CloudAccounts({
                     event.api.showLoadingOverlay()
                 }
             }}
-        >
-            <Select
-                enableClear={false}
-                value={selectedGranularity}
-                placeholder={
-                    selectedGranularity
-                        ? capitalizeFirstLetter(selectedGranularity)
-                        : ''
-                }
-                onValueChange={(v) => {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    onGranularityChange(v)
-                }}
-                className="w-10"
-            >
-                <SelectItem value="none">
-                    <Text>None</Text>
-                </SelectItem>
-                <SelectItem value="daily">
-                    <Text>Daily</Text>
-                </SelectItem>
-                <SelectItem value="monthly">
-                    <Text>Monthly</Text>
-                </SelectItem>
-            </Select>
-        </Table>
+            granularityEnabled={granularityEnabled}
+            setGranularityEnabled={setGranularityEnabled}
+            selectedGranularity={selectedGranularity}
+            onGranularityChange={onGranularityChange}
+            manualSort={manualTableSort}
+            manualGrouping={manualGrouping}
+            filterTabs={filterTabs}
+        />
     )
 }

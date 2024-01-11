@@ -29,7 +29,7 @@ export default function SpendDetails() {
         }
     }, [tabs])
     const [selectedGranularity, setSelectedGranularity] = useState<
-        'monthly' | 'daily' | 'none'
+        'monthly' | 'daily'
     >(
         checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
             ? 'monthly'
