@@ -18,6 +18,7 @@ interface ISpendChartMetric {
     totalPrev: number
     isLoading: boolean
     error: string | undefined
+    comparedToNextLine?: boolean
 }
 
 export function SpendChartMetric({
@@ -28,6 +29,7 @@ export function SpendChartMetric({
     totalPrev,
     isLoading,
     error,
+    comparedToNextLine,
 }: ISpendChartMetric) {
     const deltaColors = new Map<string, Color>()
     deltaColors.set('increase', 'emerald')
@@ -70,8 +72,8 @@ export function SpendChartMetric({
                         )}
                     </Flex>
                     <Flex
-                        flexDirection="row"
-                        alignItems="center"
+                        flexDirection={comparedToNextLine ? 'col' : 'row'}
+                        alignItems={comparedToNextLine ? 'start' : 'center'}
                         className="cursor-default"
                     >
                         {isLoading || (error !== undefined && error !== '') ? (
@@ -96,11 +98,9 @@ export function SpendChartMetric({
                             </BadgeDelta>
                         )}
 
-                        <Text className="ml-1.5">
+                        <Text className={comparedToNextLine ? '' : 'ml-1.5'}>
                             compared to{' '}
                             {renderText(timeRangePrev.start, timeRangePrev.end)}
-                            {/* {timeRangePrev.start.format('MMM DD, YYYY')} -{' '}
-                            {timeRangePrev.end.format('MMM DD, YYYY')} */}
                         </Text>
                     </Flex>
                 </Flex>

@@ -118,7 +118,7 @@ export default function Spend() {
                     />
                 </Col>
                 <Col>
-                    <Flex className="ml-4" flexDirection="col">
+                    <Flex className="ml-1" flexDirection="col">
                         <SpendChartMetric
                             title="Total Spend"
                             timeRange={activeTimeRange}
@@ -132,13 +132,14 @@ export default function Spend() {
                                 serviceCostErr,
                                 servicePrevCostErr
                             )}
+                            comparedToNextLine
                         />
 
                         <Flex
                             flexDirection="col"
                             alignItems="start"
                             justifyContent="start"
-                            className="gap-1 mt-5"
+                            className="gap-1 mt-5 ml-3"
                         >
                             {(trendStacked.data[0]
                                 ? trendStacked.data[0]
@@ -156,24 +157,6 @@ export default function Spend() {
                             ))}
                         </Flex>
                     </Flex>
-                    {/* 
-                    <SummaryCard
-                        title="Total spend"
-                        metric={serviceCostResponse?.total_cost || 0}
-                        metricPrev={servicePrevCostResponse?.total_cost || 0}
-                        loading={
-                            costTrendLoading ||
-                            serviceCostLoading ||
-                            servicePrevCostLoading
-                        }
-                        error={toErrorMessage(
-                            costTrendError,
-                            serviceCostErr,
-                            servicePrevCostErr
-                        )}
-                        isPrice
-                        border={false}
-                    /> */}
                 </Col>
             </Grid>
         </Card>
