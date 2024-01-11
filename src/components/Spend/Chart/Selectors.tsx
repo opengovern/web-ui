@@ -7,8 +7,8 @@ import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
 export type ChartType = 'bar' | 'line'
 const chartTypeValues: ChartType[] = ['bar', 'line']
 
-export type Granularity = 'daily' | 'monthly' | 'yearly'
-const granularityValues: Granularity[] = ['daily', 'monthly', 'yearly']
+export type Granularity = 'daily' | 'monthly'
+const granularityValues: Granularity[] = ['daily', 'monthly']
 
 export type ChartLayout = 'basic' | 'stacked'
 const chartLayoutValues: ChartLayout[] = ['basic', 'stacked']

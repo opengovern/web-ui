@@ -120,84 +120,77 @@ export function SpendOverview() {
     })
     return (
         <Layout currentPage="spend" datePicker filter>
-            {selectedConnections.connections.length === 1 ? (
-                <SingleSpendConnection
-                    activeTimeRange={activeTimeRange}
-                    id={selectedConnections.connections[0]}
-                />
-            ) : (
-                <Grid numItems={3} className="w-full gap-4">
-                    <Col numColSpan={3}>
-                        <SpendChart
-                            costTrend={costTrend || []}
-                            costField="category"
-                            title="Total spend"
-                            timeRange={activeTimeRange}
-                            timeRangePrev={prevTimeRange}
-                            total={serviceCostResponse?.total_cost || 0}
-                            totalPrev={servicePrevCostResponse?.total_cost || 0}
-                            isLoading={
-                                costTrendLoading ||
-                                serviceCostLoading ||
-                                servicePrevCostLoading
-                            }
-                            error={toErrorMessage(
-                                costTrendError,
-                                serviceCostErr,
-                                servicePrevCostErr
-                            )}
-                            onRefresh={() => {
-                                costTrendRefresh()
-                                serviceCostPrevRefresh()
-                                serviceCostRefresh()
-                            }}
-                            onGranularityChanged={setGranularity}
-                        />
-                    </Col>
-                    <Col numColSpan={1}>
-                        <ListCard
-                            title="Top Spend Categories"
-                            keyColumnTitle="Category"
-                            valueColumnTitle="Spend"
-                            loading={compositionLoading}
-                            items={topCategories(composition)}
-                            url="spend-details#category"
-                            type="service"
-                            isPrice
-                            error={getErrorMessage(compositionError)}
-                            onRefresh={refreshComposition}
-                        />
-                    </Col>
-                    <Col numColSpan={1} className="h-full">
-                        <ListCard
-                            title="Top Cloud Accounts"
-                            keyColumnTitle="Account Names"
-                            valueColumnTitle="Spend"
-                            loading={accountCostLoading}
-                            items={topAccounts(accountCostResponse)}
-                            url="spend-details#cloud-accounts"
-                            type="account"
-                            isPrice
-                            error={getErrorMessage(accountCostError)}
-                            onRefresh={refreshAccountCost}
-                        />
-                    </Col>
-                    <Col numColSpan={1} className="h-full">
-                        <ListCard
-                            title="Top Metrics"
-                            keyColumnTitle="Mertic Names"
-                            valueColumnTitle="Spend"
-                            loading={serviceCostLoading}
-                            items={topServices(serviceCostResponse)}
-                            url="spend-details#metrics"
-                            type="service"
-                            isPrice
-                            error={getErrorMessage(serviceCostErr)}
-                            onRefresh={serviceCostRefresh}
-                        />
-                    </Col>
-                </Grid>
-            )}
+            <Grid numItems={3} className="w-full gap-4">
+                <Col numColSpan={3}>
+                    <SpendChart
+                        costTrend={costTrend || []}
+                        costField="category"
+                        title="Total spend"
+                        timeRange={activeTimeRange}
+                        timeRangePrev={prevTimeRange}
+                        total={serviceCostResponse?.total_cost || 0}
+                        totalPrev={servicePrevCostResponse?.total_cost || 0}
+                        isLoading={
+                            costTrendLoading ||
+                            serviceCostLoading ||
+                            servicePrevCostLoading
+                        }
+                        error={toErrorMessage(
+                            costTrendError,
+                            serviceCostErr,
+                            servicePrevCostErr
+                        )}
+                        onRefresh={() => {
+                            costTrendRefresh()
+                            serviceCostPrevRefresh()
+                            serviceCostRefresh()
+                        }}
+                        onGranularityChanged={setGranularity}
+                    />
+                </Col>
+                <Col numColSpan={1}>
+                    <ListCard
+                        title="Top Spend Categories"
+                        keyColumnTitle="Category"
+                        valueColumnTitle="Spend"
+                        loading={compositionLoading}
+                        items={topCategories(composition)}
+                        url="spend-details#category"
+                        type="service"
+                        isPrice
+                        error={getErrorMessage(compositionError)}
+                        onRefresh={refreshComposition}
+                    />
+                </Col>
+                <Col numColSpan={1} className="h-full">
+                    <ListCard
+                        title="Top Cloud Accounts"
+                        keyColumnTitle="Account Names"
+                        valueColumnTitle="Spend"
+                        loading={accountCostLoading}
+                        items={topAccounts(accountCostResponse)}
+                        url="spend-details#cloud-accounts"
+                        type="account"
+                        isPrice
+                        error={getErrorMessage(accountCostError)}
+                        onRefresh={refreshAccountCost}
+                    />
+                </Col>
+                <Col numColSpan={1} className="h-full">
+                    <ListCard
+                        title="Top Metrics"
+                        keyColumnTitle="Mertic Names"
+                        valueColumnTitle="Spend"
+                        loading={serviceCostLoading}
+                        items={topServices(serviceCostResponse)}
+                        url="spend-details#metrics"
+                        type="service"
+                        isPrice
+                        error={getErrorMessage(serviceCostErr)}
+                        onRefresh={serviceCostRefresh}
+                    />
+                </Col>
+            </Grid>
         </Layout>
     )
 }

@@ -2,20 +2,24 @@ import { Col, Grid } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import Layout from '../../../components/Layout'
-import SingleSpendConnection from '../Single/SingleConnection'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
+    useInventoryApiV2AnalyticsSpendTableList,
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../api/inventory.gen'
 import { filterAtom, spendTimeAtom } from '../../../store'
 import { SpendChart } from '../../../components/Spend/Chart'
 import { toErrorMessage } from '../../../types/apierror'
 import { Granularity } from '../../../components/Spend/Chart/Selectors'
+import MetricTable from './MetricTable'
 
 export function SpendMetrics() {
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
-    const [granularity, setGranularity] = useState<Granularity>('daily')
+    const [chartGranularity, setChartGranularity] =
+        useState<Granularity>('daily')
+    const [tableGranularity, setTableGranularity] =
+        useState<Granularity>('daily')
 
     const query: {
         pageSize: number
@@ -68,7 +72,7 @@ export function SpendMetrics() {
         sendNow: costTrendRefresh,
     } = useInventoryApiV2AnalyticsSpendTrendList({
         ...query,
-        granularity,
+        granularity: chartGranularity,
     })
 
     const {
@@ -84,44 +88,55 @@ export function SpendMetrics() {
         sendNow: serviceCostPrevRefresh,
     } = useInventoryApiV2AnalyticsSpendMetricList(prevQuery)
 
+    const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList({
+        startTime: activeTimeRange.start.unix(),
+        endTime: activeTimeRange.end.unix(),
+        dimension: 'metric',
+        granularity: tableGranularity,
+        connector: [selectedConnections.provider],
+        connectionId: selectedConnections.connections,
+        connectionGroup: selectedConnections.connectionGroup,
+    })
+
     return (
         <Layout currentPage="spend/metrics" datePicker filter>
-            {selectedConnections.connections.length === 1 ? (
-                <SingleSpendConnection
-                    activeTimeRange={activeTimeRange}
-                    id={selectedConnections.connections[0]}
-                />
-            ) : (
-                <Grid numItems={3} className="w-full gap-4">
-                    <Col numColSpan={3}>
-                        <SpendChart
-                            costTrend={costTrend || []}
-                            costField="metric"
-                            title="Total spend"
-                            timeRange={activeTimeRange}
-                            timeRangePrev={prevTimeRange}
-                            total={serviceCostResponse?.total_cost || 0}
-                            totalPrev={servicePrevCostResponse?.total_cost || 0}
-                            isLoading={
-                                costTrendLoading ||
-                                serviceCostLoading ||
-                                servicePrevCostLoading
-                            }
-                            error={toErrorMessage(
-                                costTrendError,
-                                serviceCostErr,
-                                servicePrevCostErr
-                            )}
-                            onRefresh={() => {
-                                costTrendRefresh()
-                                serviceCostPrevRefresh()
-                                serviceCostRefresh()
-                            }}
-                            onGranularityChanged={setGranularity}
-                        />
-                    </Col>
-                </Grid>
-            )}
+            <Grid numItems={3} className="w-full gap-4">
+                <Col numColSpan={3}>
+                    <SpendChart
+                        costTrend={costTrend || []}
+                        costField="metric"
+                        title="Total spend"
+                        timeRange={activeTimeRange}
+                        timeRangePrev={prevTimeRange}
+                        total={serviceCostResponse?.total_cost || 0}
+                        totalPrev={servicePrevCostResponse?.total_cost || 0}
+                        isLoading={
+                            costTrendLoading ||
+                            serviceCostLoading ||
+                            servicePrevCostLoading
+                        }
+                        error={toErrorMessage(
+                            costTrendError,
+                            serviceCostErr,
+                            servicePrevCostErr
+                        )}
+                        onRefresh={() => {
+                            costTrendRefresh()
+                            serviceCostPrevRefresh()
+                            serviceCostRefresh()
+                        }}
+                        onGranularityChanged={setChartGranularity}
+                    />
+                </Col>
+                <Col numColSpan={3}>
+                    <MetricTable
+                        isLoading={isLoading}
+                        response={response}
+                        onGranularityChange={setTableGranularity}
+                        selectedGranularity={tableGranularity}
+                    />
+                </Col>
+            </Grid>
         </Layout>
     )
 }
