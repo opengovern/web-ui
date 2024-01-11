@@ -192,21 +192,15 @@ export default function Settings() {
                         </ul>
                     </nav>
                 </Flex>
-                {isLoading ? (
-                    <Flex justifyContent="center" className="mt-56">
-                        <Spinner />
+                <Flex
+                    flexDirection="col"
+                    justifyContent="center"
+                    className="w-full"
+                >
+                    <Flex className="w-full h-full pl-6 max-w-7xl">
+                        {selectedTab}
                     </Flex>
-                ) : (
-                    <Flex
-                        flexDirection="col"
-                        justifyContent="center"
-                        className="w-full"
-                    >
-                        <Flex className="w-full h-full pl-6 max-w-7xl">
-                            {selectedTab}
-                        </Flex>
-                    </Flex>
-                )}
+                </Flex>
             </Flex>
         </Layout>
     )

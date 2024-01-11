@@ -3,16 +3,11 @@ import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import Layout from '../../../components/Layout'
 import SingleSpendConnection from '../Single/SingleConnection'
-import Breakdown from '../../../components/Breakdown'
-import ListCard from '../../../components/Cards/ListCard'
 import {
-    useInventoryApiV2AnalyticsSpendCompositionList,
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../api/inventory.gen'
-import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
 import { filterAtom, spendTimeAtom } from '../../../store'
-import { topAccounts, topCategories, topServices } from '..'
 import { SpendChart } from '../../../components/Spend/Chart'
 import { toErrorMessage } from '../../../types/apierror'
 import { Granularity } from '../../../components/Spend/Chart/Selectors'
@@ -89,28 +84,6 @@ export function SpendMetrics() {
         sendNow: serviceCostPrevRefresh,
     } = useInventoryApiV2AnalyticsSpendMetricList(prevQuery)
 
-    const { response: accountCostResponse, isLoading: accountCostLoading } =
-        useIntegrationApiV1ConnectionsSummariesList(query)
-
-    const { response: composition, isLoading: compositionLoading } =
-        useInventoryApiV2AnalyticsSpendCompositionList({
-            top: 5,
-            ...(selectedConnections.provider && {
-                connector: [selectedConnections.provider],
-            }),
-            ...(selectedConnections.connections && {
-                connectionId: selectedConnections.connections,
-            }),
-            ...(selectedConnections.connectionGroup && {
-                connectionGroup: selectedConnections.connectionGroup,
-            }),
-            ...(activeTimeRange.start && {
-                endTime: activeTimeRange.end.unix(),
-            }),
-            ...(activeTimeRange.start && {
-                startTime: activeTimeRange.start.unix(),
-            }),
-        })
     return (
         <Layout currentPage="spend/metrics" datePicker filter>
             {selectedConnections.connections.length === 1 ? (
@@ -145,42 +118,6 @@ export function SpendMetrics() {
                                 serviceCostRefresh()
                             }}
                             onGranularityChanged={setGranularity}
-                        />
-                    </Col>
-                    <Col numColSpan={1}>
-                        <ListCard
-                            title="Top Spend Categories"
-                            keyColumnTitle="Category"
-                            valueColumnTitle="Spend"
-                            loading={compositionLoading}
-                            items={topCategories(composition)}
-                            url="spend-details#category"
-                            type="service"
-                            isPrice
-                        />
-                    </Col>
-                    <Col numColSpan={1} className="h-full">
-                        <ListCard
-                            title="Top Cloud Accounts"
-                            keyColumnTitle="Account Names"
-                            valueColumnTitle="Spend"
-                            loading={accountCostLoading}
-                            items={topAccounts(accountCostResponse)}
-                            url="spend-details#cloud-accounts"
-                            type="account"
-                            isPrice
-                        />
-                    </Col>
-                    <Col numColSpan={1} className="h-full">
-                        <ListCard
-                            title="Top Metrics"
-                            keyColumnTitle="Mertic Names"
-                            valueColumnTitle="Spend"
-                            loading={serviceCostLoading}
-                            items={topServices(serviceCostResponse)}
-                            url="spend-details#metrics"
-                            type="service"
-                            isPrice
                         />
                     </Col>
                 </Grid>

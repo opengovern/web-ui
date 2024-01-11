@@ -29,6 +29,7 @@ interface ISpendChartSelectors {
     setChartLayout: (v: ChartLayout) => void
     aggregation: Aggregation
     setAggregation: (v: Aggregation) => void
+    noStackedChart?: boolean
 }
 
 export function SpendChartSelectors({
@@ -41,6 +42,7 @@ export function SpendChartSelectors({
     setChartLayout,
     aggregation,
     setAggregation,
+    noStackedChart,
 }: ISpendChartSelectors) {
     const generateGranularityList = (
         s = timeRange.start,
@@ -70,14 +72,16 @@ export function SpendChartSelectors({
                 }}
             />
 
-            <Selector
-                values={chartLayoutValues.map((v) => String(v))}
-                value={chartLayout}
-                title="Categorization"
-                onValueChange={(v) => {
-                    setChartLayout(v as ChartLayout)
-                }}
-            />
+            {noStackedChart ? null : (
+                <Selector
+                    values={chartLayoutValues.map((v) => String(v))}
+                    value={chartLayout}
+                    title="Categorization"
+                    onValueChange={(v) => {
+                        setChartLayout(v as ChartLayout)
+                    }}
+                />
+            )}
 
             <Selector
                 values={aggregationValues.map((v) => String(v))}

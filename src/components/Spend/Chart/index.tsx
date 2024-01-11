@@ -25,6 +25,10 @@ import {
 import { buildTrend, costTrendChart } from './helpers'
 import { generateVisualMap } from '../../../pages/Assets'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../../api/api'
+import {
+    errorHandling,
+    errorHandlingWithErrorMessage,
+} from '../../../types/apierror'
 
 interface ISpendChart {
     title: string
@@ -44,6 +48,7 @@ interface ISpendChart {
     error: string | undefined
     onRefresh: () => void
     onGranularityChanged: (v: Granularity) => void
+    noStackedChart?: boolean
 }
 
 export function SpendChart({
@@ -54,6 +59,7 @@ export function SpendChart({
     totalPrev,
     costTrend,
     costField,
+    noStackedChart,
     onGranularityChanged,
     isLoading,
     error,
@@ -62,7 +68,9 @@ export function SpendChart({
     const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
     const [chartType, setChartType] = useState<ChartType>('bar')
     const [granularity, setGranularity] = useState<Granularity>('daily')
-    const [chartLayout, setChartLayout] = useState<ChartLayout>('stacked')
+    const [chartLayout, setChartLayout] = useState<ChartLayout>(
+        noStackedChart ? 'basic' : 'stacked'
+    )
     const [aggregation, setAggregation] = useState<Aggregation>('trend')
 
     const trend = costTrendChart(costTrend, aggregation, granularity)
@@ -106,6 +114,7 @@ export function SpendChart({
                         setChartLayout={setChartLayout}
                         aggregation={aggregation}
                         setAggregation={setAggregation}
+                        noStackedChart={noStackedChart}
                     />
                 </Col>
             </Grid>
@@ -171,30 +180,7 @@ export function SpendChart({
                 />
             )}
 
-            {error && (
-                <Flex
-                    flexDirection="col"
-                    justifyContent="between"
-                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
-                >
-                    <Flex
-                        flexDirection="col"
-                        justifyContent="center"
-                        alignItems="center"
-                    >
-                        <Title className="mt-6">Failed to load component</Title>
-                        <Text className="mt-2">{error}</Text>
-                    </Flex>
-                    <Button
-                        variant="secondary"
-                        className="mb-6"
-                        color="slate"
-                        onClick={onRefresh}
-                    >
-                        Try Again
-                    </Button>
-                </Flex>
-            )}
+            {errorHandlingWithErrorMessage(onRefresh, error)}
         </Card>
     )
 }

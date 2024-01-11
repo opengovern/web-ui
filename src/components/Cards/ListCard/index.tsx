@@ -17,6 +17,7 @@ import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 import { getConnectorIcon } from '../ConnectorCard'
 import { isDemoAtom } from '../../../store'
+import { errorHandlingWithErrorMessage } from '../../../types/apierror'
 
 interface ITopListCard {
     title: string
@@ -37,6 +38,8 @@ interface ITopListCard {
     url?: string
     type: 'service' | 'account'
     isClickable?: boolean
+    error?: string | undefined
+    onRefresh?: () => void
 }
 
 interface Item {
@@ -58,6 +61,8 @@ export default function ListCard({
     url,
     type,
     isClickable = true,
+    error,
+    onRefresh,
 }: ITopListCard) {
     const navigate = useNavigate()
     const isDemo = useAtomValue(isDemoAtom)
@@ -178,6 +183,7 @@ export default function ListCard({
                     )}
                 </Flex>
             </Flex>
+            {errorHandlingWithErrorMessage(onRefresh, error)}
         </Card>
     )
 }

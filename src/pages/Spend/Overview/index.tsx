@@ -13,7 +13,7 @@ import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integr
 import { filterAtom, spendTimeAtom } from '../../../store'
 import { topAccounts, topCategories, topServices } from '..'
 import { SpendChart } from '../../../components/Spend/Chart'
-import { toErrorMessage } from '../../../types/apierror'
+import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
 import { Granularity } from '../../../components/Spend/Chart/Selectors'
 
 export function SpendOverview() {
@@ -88,28 +88,36 @@ export function SpendOverview() {
         sendNow: serviceCostPrevRefresh,
     } = useInventoryApiV2AnalyticsSpendMetricList(prevQuery)
 
-    const { response: accountCostResponse, isLoading: accountCostLoading } =
-        useIntegrationApiV1ConnectionsSummariesList(query)
+    const {
+        response: accountCostResponse,
+        isLoading: accountCostLoading,
+        error: accountCostError,
+        sendNow: refreshAccountCost,
+    } = useIntegrationApiV1ConnectionsSummariesList(query)
 
-    const { response: composition, isLoading: compositionLoading } =
-        useInventoryApiV2AnalyticsSpendCompositionList({
-            top: 5,
-            ...(selectedConnections.provider && {
-                connector: [selectedConnections.provider],
-            }),
-            ...(selectedConnections.connections && {
-                connectionId: selectedConnections.connections,
-            }),
-            ...(selectedConnections.connectionGroup && {
-                connectionGroup: selectedConnections.connectionGroup,
-            }),
-            ...(activeTimeRange.start && {
-                endTime: activeTimeRange.end.unix(),
-            }),
-            ...(activeTimeRange.start && {
-                startTime: activeTimeRange.start.unix(),
-            }),
-        })
+    const {
+        response: composition,
+        isLoading: compositionLoading,
+        error: compositionError,
+        sendNow: refreshComposition,
+    } = useInventoryApiV2AnalyticsSpendCompositionList({
+        top: 5,
+        ...(selectedConnections.provider && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
+        }),
+        ...(activeTimeRange.start && {
+            endTime: activeTimeRange.end.unix(),
+        }),
+        ...(activeTimeRange.start && {
+            startTime: activeTimeRange.start.unix(),
+        }),
+    })
     return (
         <Layout currentPage="spend" datePicker filter>
             {selectedConnections.connections.length === 1 ? (
@@ -156,6 +164,8 @@ export function SpendOverview() {
                             url="spend-details#category"
                             type="service"
                             isPrice
+                            error={getErrorMessage(compositionError)}
+                            onRefresh={refreshComposition}
                         />
                     </Col>
                     <Col numColSpan={1} className="h-full">
@@ -168,6 +178,8 @@ export function SpendOverview() {
                             url="spend-details#cloud-accounts"
                             type="account"
                             isPrice
+                            error={getErrorMessage(accountCostError)}
+                            onRefresh={refreshAccountCost}
                         />
                     </Col>
                     <Col numColSpan={1} className="h-full">
@@ -180,6 +192,8 @@ export function SpendOverview() {
                             url="spend-details#metrics"
                             type="service"
                             isPrice
+                            error={getErrorMessage(serviceCostErr)}
+                            onRefresh={serviceCostRefresh}
                         />
                     </Col>
                 </Grid>

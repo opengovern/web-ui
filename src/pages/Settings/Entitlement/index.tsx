@@ -20,12 +20,9 @@ import Spinner from '../../../components/Spinner'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { useAuthApiV1UserDetail } from '../../../api/auth.gen'
 import { dateDisplay } from '../../../utilities/dateDisplay'
-import { previewAtom } from '../../../store'
 
 export default function SettingsEntitlement() {
     const workspace = useParams<{ ws: string }>().ws
-    const [preview, setPreview] = useAtom(previewAtom)
-
     const { response, isLoading } = useWorkspaceApiV1WorkspacesLimitsDetail(
         workspace || ''
     )
