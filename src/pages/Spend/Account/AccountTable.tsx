@@ -28,6 +28,7 @@ interface IAccountTable {
         | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
         | undefined
     isLoading: boolean
+    ref?: React.MutableRefObject<any>
 }
 
 const rowGenerator = (
@@ -181,6 +182,7 @@ export default function AccountTable({
     response,
     responsePrev,
     isLoading,
+    ref,
 }: IAccountTable) {
     const navigate = useNavigate()
 
@@ -450,6 +452,7 @@ export default function AccountTable({
             manualSort={manualTableSort}
             // manualGrouping={manualGrouping}
             filterTabs={filterTabs}
+            ref={ref}
         />
     )
 }
