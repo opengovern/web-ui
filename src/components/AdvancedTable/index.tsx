@@ -142,14 +142,14 @@ export default function AdvancedTable<TData = any, TValue = any>({
         }
     }
 
-    // if (manualSort !== undefined) {
-    //     gridRef.current?.api.applyColumnState({
-    //         defaultState: { sort: null },
-    //     })
-    //     gridRef.current?.api.applyColumnState({
-    //         state: [{ colId: manualSort.sortCol, sort: manualSort.sortType }],
-    //     })
-    // }
+    if (manualSort !== undefined) {
+        gridRef.current?.api.applyColumnState({
+            defaultState: { sort: null },
+        })
+        gridRef.current?.api.applyColumnState({
+            state: [{ colId: manualSort.sortCol, sort: manualSort.sortType }],
+        })
+    }
 
     useEffect(() => {
         if (loading) {
