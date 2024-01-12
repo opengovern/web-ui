@@ -18,7 +18,7 @@ import {
 import AxiosAPI from '../../../../api/ApiConfig'
 import FindingDetail from './Detail'
 import { severityBadge } from '../../Controls'
-import FindingFilters from './Filters'
+import FindingFilters from '../Filters'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
 export const columns = (isDemo: boolean) => {

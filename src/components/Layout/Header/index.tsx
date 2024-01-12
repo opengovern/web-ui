@@ -1,14 +1,13 @@
 import { Button, Flex, Title } from '@tremor/react'
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
-import { MoonIcon, SunIcon } from '@heroicons/react/24/outline'
 import {
     kebabCaseToLabel,
     snakeCaseToLabel,
 } from '../../../utilities/labelMaker'
 import DateRangePicker from '../../DateRangePicker'
-import Filter from '../../Filter'
+import Filter from './Filter'
 
 interface IHeader {
     filter?: boolean
@@ -105,10 +104,10 @@ export default function TopHeader({
                         {mainPage()}
                     </Title>
                 )}
-                <Flex justifyContent="end">
+                <Flex className="gap-4" justifyContent="end">
                     {children}
-                    {datePicker && <DateRangePicker />}
                     {filter && <Filter />}
+                    {datePicker && <DateRangePicker />}
                 </Flex>
             </Flex>
         </div>

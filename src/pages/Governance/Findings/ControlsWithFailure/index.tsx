@@ -10,7 +10,7 @@ import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.
 import { SourceType } from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
 import { topControls } from '../../Compliance/BenchmarkSummary/TopDetails/Controls'
-import FindingFilters from '../FindingsWithFailure/Filters'
+import FindingFilters from '../Filters'
 import { severityBadge } from '../../Controls'
 
 const policyColumns: IColumn<any, any>[] = [

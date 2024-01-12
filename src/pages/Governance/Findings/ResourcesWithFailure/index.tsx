@@ -14,7 +14,7 @@ import {
 } from '../../../../api/api'
 import AxiosAPI from '../../../../api/ApiConfig'
 import { isDemoAtom, notificationAtom } from '../../../../store'
-import FindingFilters from '../FindingsWithFailure/Filters'
+import FindingFilters from '../Filters'
 import Table, { IColumn } from '../../../../components/Table'
 import FindingDetail from '../FindingsWithFailure/Detail'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'

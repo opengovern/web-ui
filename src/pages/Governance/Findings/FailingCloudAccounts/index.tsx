@@ -5,7 +5,7 @@ import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.
 import { SourceType } from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
 import { topConnections } from '../../Controls/ControlSummary/Tabs/ImpactedAccounts'
-import FindingFilters from '../FindingsWithFailure/Filters'
+import FindingFilters from '../Filters'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
 const cloudAccountColumns = (isDemo: boolean) => {

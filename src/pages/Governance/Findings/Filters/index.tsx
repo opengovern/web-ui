@@ -16,19 +16,19 @@ import {
     MagnifyingGlassIcon,
     XCircleIcon,
 } from '@heroicons/react/24/outline'
-import { AWSIcon, AzureIcon } from '../../../../../icons/icons'
-import Spinner from '../../../../../components/Spinner'
-import { benchmarkList } from '../../../Compliance'
-import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../../api/integration.gen'
+import { AWSIcon, AzureIcon } from '../../../../icons/icons'
+import Spinner from '../../../../components/Spinner'
+import { benchmarkList } from '../../Compliance'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../api/integration.gen'
 import {
     useComplianceApiV1BenchmarksSummaryList,
     useComplianceApiV1FindingsFiltersCreate,
-} from '../../../../../api/compliance.gen'
+} from '../../../../api/compliance.gen'
 import {
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
     SourceType,
-} from '../../../../../api/api'
-import { compareArrays } from '../../../../../components/Filter'
+} from '../../../../api/api'
+import { compareArrays } from '../../../../components/Layout/Header/Filter'
 
 const severity = [
     { name: 'Critical', color: '#6E120B' },
@@ -38,7 +38,7 @@ const severity = [
     { name: 'None', color: '#9BA2AE' },
 ]
 
-const filteredConnectionsList = (
+export const filteredConnectionsList = (
     connection:
         | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
         | undefined,
