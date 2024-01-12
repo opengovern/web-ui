@@ -204,7 +204,10 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     {!collapsed && (
                         <ChevronLeftIcon
                             className="h-5 text-gray-400 cursor-pointer"
-                            onClick={() => setCollapsed(true)}
+                            onClick={() => {
+                                setCollapsed(true)
+                                localStorage.collapse = 'true'
+                            }}
                         />
                     )}
                 </Flex>
@@ -222,7 +225,10 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     {collapsed && (
                         <ChevronRightIcon
                             className="m-2 h-5 text-gray-400 cursor-pointer"
-                            onClick={() => setCollapsed(false)}
+                            onClick={() => {
+                                setCollapsed(false)
+                                localStorage.collapse = 'false'
+                            }}
                         />
                     )}
                     {navigation
@@ -345,7 +351,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     top: '-8px',
                                                 }}
                                             >
-                                                <Text>{item.name}</Text>
+                                                <Text className="text-white">
+                                                    {item.name}
+                                                </Text>
                                             </div>
                                         </div>
                                         <Transition
@@ -449,7 +457,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     top: '-8px',
                                                 }}
                                             >
-                                                <Text>{item.name}</Text>
+                                                <Text className="text-white">
+                                                    {item.name}
+                                                </Text>
                                             </div>
                                         )}
                                     </div>
