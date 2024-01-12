@@ -53,15 +53,15 @@ export function CLITabs() {
     return (
         <>
             <div>
-                <nav className="isolate flex divide-x divide-gray-200 rounded-lg shadow">
+                <nav className="isolate flex divide-x divide-gray-200 dark:divide-gray-700 rounded-lg shadow">
                     {tabs.map((tab, tabIdx) => (
                         <Flex
                             flexDirection="row"
                             justifyContent="center"
                             className={classNames(
                                 currentTab === tabIdx
-                                    ? 'bg-kaytu-50 text-kaytu-800 fill-blue-600'
-                                    : 'bg-gray-50 text-gray-600 fill-gray-600 hover:text-gray-700',
+                                    ? 'bg-kaytu-50 dark:bg-kaytu-950 text-kaytu-800 dark:text-white fill-blue-600'
+                                    : 'bg-gray-50 dark:bg-gray-950 text-gray-600 dark:text-white fill-gray-600 hover:text-gray-700',
                                 tabIdx === 0 ? 'rounded-l-lg' : '',
                                 tabIdx === tabs.length - 1
                                     ? 'rounded-r-lg'
@@ -159,7 +159,7 @@ export default function CLIMenu({ isCollapsed }: ICLIMenu) {
                         isCollapsed ? 'left-[57px]' : 'left-[292px]'
                     } bottom-0 z-10`}
                 >
-                    <Card className="p-0 !ring-gray-600">
+                    <Card className="p-0 !ring-gray-600 w-96">
                         <CLITabs />
                     </Card>
                 </Popover.Panel>

@@ -12,9 +12,10 @@ import {
     ArrowTopRightOnSquareIcon,
     Bars2Icon,
 } from '@heroicons/react/24/outline'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { useAtom } from 'jotai/index'
 import { useNavigate } from 'react-router-dom'
+import { Popover, Transition } from '@headlessui/react'
 import { workspaceAtom } from '../../../../store'
 import { useWorkspaceApiV1WorkspacesList } from '../../../../api/workspace.gen'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from '../../../../api/api'
@@ -108,44 +109,57 @@ export default function Profile({ isCollapsed }: IProfile) {
     }, [workspace, workspaceInfo, wsName])
 
     return (
-        <div className="relative w-full mt-4">
-            <Flex
-                onClick={() => setShowInfo(!showInfo)}
-                className={`p-3 rounded-lg cursor-pointer ${
+        <Popover className="relative z-50 border-0 w-full">
+            <Popover.Button
+                className={`p-3 w-full rounded-lg cursor-pointer ${
                     isCollapsed ? '!p-1' : 'border border-gray-700'
                 }`}
+                id="profile"
             >
-                <Flex className="w-fit gap-3">
-                    {user?.picture && (
-                        <img
-                            className={`${
-                                isCollapsed
-                                    ? 'h-7 w-7 min-w-5'
-                                    : 'h-10 w-10 min-w-10'
-                            } rounded-full bg-gray-50`}
-                            src={user.picture}
-                            alt=""
-                        />
-                    )}
+                <Flex>
+                    <Flex className="w-fit gap-3">
+                        {user?.picture && (
+                            <img
+                                className={`${
+                                    isCollapsed
+                                        ? 'h-7 w-7 min-w-5'
+                                        : 'h-10 w-10 min-w-10'
+                                } rounded-full bg-gray-50`}
+                                src={user.picture}
+                                alt=""
+                            />
+                        )}
+                        {!isCollapsed && (
+                            <Flex flexDirection="col" alignItems="start">
+                                <Text className="text-gray-200">
+                                    {user?.name}
+                                </Text>
+                                <Text className="text-gray-400">
+                                    {user?.email}
+                                </Text>
+                            </Flex>
+                        )}
+                    </Flex>
                     {!isCollapsed && (
-                        <Flex flexDirection="col" alignItems="start">
-                            <Text className="text-gray-200">{user?.name}</Text>
-                            <Text className="text-gray-400">{user?.email}</Text>
-                        </Flex>
+                        <Bars2Icon className="h-6 w-6 stroke-2 text-gray-400" />
                     )}
                 </Flex>
-                {!isCollapsed && (
-                    <Bars2Icon className="h-6 w-6 stroke-2 text-gray-400" />
-                )}
-            </Flex>
-            {showInfo && (
-                <>
-                    <Card
-                        className="absolute z-20 bg-kaytu-950 bottom-0 px-4 py-2 w-64 !ring-gray-600"
-                        style={{
-                            left: 'calc(100% + 20px)',
-                        }}
-                    >
+            </Popover.Button>
+            <Transition
+                as={Fragment}
+                enter="transition ease-out duration-200"
+                enterFrom="opacity-0 translate-y-1"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition ease-in duration-150"
+                leaveFrom="opacity-100 translate-y-0"
+                leaveTo="opacity-0 translate-y-1"
+            >
+                <Popover.Panel
+                    className={`absolute ${
+                        isCollapsed ? 'left-[57px]' : 'left-[292px]'
+                    } bottom-0 z-10`}
+                >
+                    <Card className="bg-kaytu-950 bottom-0 px-4 py-2 w-64 !ring-gray-600">
                         <Flex
                             flexDirection="col"
                             alignItems="start"
@@ -230,12 +244,8 @@ export default function Profile({ isCollapsed }: IProfile) {
                             </TabGroup>
                         </Flex>
                     </Card>
-                    <Card
-                        onClick={() => setShowInfo(false)}
-                        className="fixed z-10 w-screen h-screen top-0 left-0 opacity-0"
-                    />
-                </>
-            )}
-        </div>
+                </Popover.Panel>
+            </Transition>
+        </Popover>
     )
 }
