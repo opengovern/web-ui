@@ -49,7 +49,7 @@ export default function Compliance() {
                     variant="light"
                     icon={ChevronRightIcon}
                     iconPosition="right"
-                    onClick={() => navigate('compliance')}
+                    onClick={() => navigate(`/${workspace}/compliance`)}
                 >
                     View details
                 </Button>
