@@ -1,5 +1,5 @@
 import { Button, Card, Flex, Text, Title } from '@tremor/react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../../api/compliance.gen'
 import { getErrorMessage } from '../../../../types/apierror'
@@ -31,6 +31,7 @@ const colors = [
 ]
 
 export default function Compliance() {
+    const workspace = useParams<{ ws: string }>().ws
     const navigate = useNavigate()
 
     const {
@@ -79,7 +80,9 @@ export default function Compliance() {
                             i < 2 && (
                                 <Card
                                     onClick={() =>
-                                        navigate(`compliance/${bs.id}`)
+                                        navigate(
+                                            `/${workspace}/compliance/${bs.id}`
+                                        )
                                     }
                                     className="p-3 cursor-pointer dark:ring-gray-500"
                                 >
@@ -119,7 +122,9 @@ export default function Compliance() {
                                             2 && (
                                     <Card
                                         onClick={() =>
-                                            navigate(`compliance/${bs.id}`)
+                                            navigate(
+                                                `/${workspace}/compliance/${bs.id}`
+                                            )
                                         }
                                         className="p-3 cursor-pointer dark:ring-gray-500"
                                     >
