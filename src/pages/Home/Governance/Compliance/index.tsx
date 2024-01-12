@@ -1,8 +1,9 @@
-import { Button, Card, Flex, ProgressCircle, Text, Title } from '@tremor/react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Button, Card, Flex, Text, Title } from '@tremor/react'
+import { useNavigate } from 'react-router-dom'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../../api/compliance.gen'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../../api/api'
 import { getErrorMessage } from '../../../../types/apierror'
+import { benchmarkList } from '../../../Governance/Compliance'
 
 const colors = [
     'fuchsia',
@@ -29,67 +30,7 @@ const colors = [
     'rose',
 ]
 
-const radiuses = [25, 34, 43, 52, 61, 70, 79, 88, 97]
-
-interface IBenchmarkProgress {
-    idx: number
-    totalCount: number
-    summaries: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary[]
-    centerValue?: number
-    isLoading: boolean
-}
-
-function BenchmarkProgress({
-    idx,
-    totalCount,
-    summaries,
-    centerValue,
-    isLoading,
-}: IBenchmarkProgress) {
-    if (isLoading) {
-        return (
-            <ProgressCircle value={0} radius={radiuses[0]} color={colors[0]}>
-                <ProgressCircle
-                    value={0}
-                    radius={radiuses[1]}
-                    color={colors[1]}
-                />
-            </ProgressCircle>
-        )
-    }
-
-    if (summaries.length === 0) {
-        if (centerValue !== undefined) {
-            return <Text>{`${centerValue?.toFixed(1)}%`}</Text>
-        }
-        return null
-    }
-
-    const benchmark = summaries.at(0)
-    const securityScore =
-        ((benchmark?.controlsSeverityStatus?.total?.passed || 0) /
-            (benchmark?.controlsSeverityStatus?.total?.total || 1)) *
-            100 || 0
-
-    return (
-        <ProgressCircle
-            value={securityScore}
-            radius={radiuses[idx]}
-            color={colors[idx]}
-        >
-            <BenchmarkProgress
-                idx={idx + 1}
-                totalCount={totalCount}
-                summaries={summaries.slice(1)}
-                centerValue={centerValue}
-                isLoading={isLoading}
-            />
-        </ProgressCircle>
-    )
-}
-
 export default function Compliance() {
-    const workspace = useParams<{ ws: string }>().ws
     const navigate = useNavigate()
 
     const {
@@ -99,13 +40,19 @@ export default function Compliance() {
         sendNow: refresh,
     } = useComplianceApiV1BenchmarksSummaryList()
 
-    const benchmarkSummaries = benchmarks?.benchmarkSummary?.filter(
-        (benchmark) => (benchmark.controlsSeverityStatus?.total?.total || 0) > 0
-    )
-
     return (
         <Flex flexDirection="col" alignItems="start" justifyContent="start">
-            <Title className="mb-4">Benchmarks</Title>
+            <Flex className="mb-4">
+                <Title>Benchmarks</Title>
+                <Button
+                    variant="light"
+                    icon={ChevronRightIcon}
+                    iconPosition="right"
+                    onClick={() => navigate('compliance')}
+                >
+                    View details
+                </Button>
+            </Flex>
             {isLoading || getErrorMessage(error).length > 0 ? (
                 <Flex flexDirection="col" className="gap-4">
                     {[1, 2].map((i) => {
@@ -117,9 +64,9 @@ export default function Compliance() {
                                     justifyContent="start"
                                     className="animate-pulse"
                                 >
-                                    <div className="h-5 w-24 mb-2 bg-slate-200 rounded" />
-                                    <div className="h-5 w-24 mb-1 bg-slate-200 rounded" />
-                                    <div className="h-6 w-24 bg-slate-200 rounded" />
+                                    <div className="h-5 w-24 mb-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                    <div className="h-5 w-24 mb-1 bg-slate-200 dark:bg-slate-700 rounded" />
+                                    <div className="h-6 w-24 bg-slate-200 dark:bg-slate-700 rounded" />
                                 </Flex>
                             </Card>
                         )
@@ -127,14 +74,12 @@ export default function Compliance() {
                 </Flex>
             ) : (
                 <Flex flexDirection="col" className="gap-4">
-                    {benchmarkSummaries?.map(
+                    {benchmarkList(benchmarks?.benchmarkSummary).connected?.map(
                         (bs, i) =>
                             i < 2 && (
                                 <Card
                                     onClick={() =>
-                                        navigate(
-                                            `/${workspace}/compliance/${bs.id}`
-                                        )
+                                        navigate(`compliance/${bs.id}`)
                                     }
                                     className="p-3 cursor-pointer dark:ring-gray-500"
                                 >
@@ -160,6 +105,39 @@ export default function Compliance() {
                                 </Card>
                             )
                     )}
+                    {benchmarkList(benchmarks?.benchmarkSummary).connected
+                        .length < 2 &&
+                        benchmarkList(
+                            benchmarks?.benchmarkSummary
+                        ).notConnected.map(
+                            (bs, i) =>
+                                i <
+                                    4 -
+                                        benchmarkList(
+                                            benchmarks?.benchmarkSummary
+                                        ).connected.length *
+                                            2 && (
+                                    <Card
+                                        onClick={() =>
+                                            navigate(`compliance/${bs.id}`)
+                                        }
+                                        className="p-3 cursor-pointer dark:ring-gray-500"
+                                    >
+                                        <Flex>
+                                            <Text className="font-semibold line-clamp-1 text-gray-800">
+                                                {bs.title}
+                                            </Text>
+                                            <Button
+                                                variant="light"
+                                                icon={ChevronRightIcon}
+                                                iconPosition="right"
+                                            >
+                                                Assign
+                                            </Button>
+                                        </Flex>
+                                    </Card>
+                                )
+                        )}
                     {error && (
                         <Flex
                             flexDirection="col"

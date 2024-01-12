@@ -33,9 +33,9 @@ export default function AssetDetails() {
     return (
         <Layout
             currentPage={
-                url.includes('resource-collection')
-                    ? 'resource-collection'
-                    : 'assets'
+                tabs === '#metrics'
+                    ? 'assets-detail-metric'
+                    : 'assets-detail-account'
             }
             breadCrumb={['Assets detail']}
             filter={!url.includes('resource-collection')}

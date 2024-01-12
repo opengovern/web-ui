@@ -159,7 +159,7 @@ export default function CLIMenu({ isCollapsed }: ICLIMenu) {
                         isCollapsed ? 'left-[57px]' : 'left-[292px]'
                     } bottom-0 z-10`}
                 >
-                    <Card className="p-0 !ring-gray-600 w-96">
+                    <Card className="p-0 dark:!ring-gray-600 w-96">
                         <CLITabs />
                     </Card>
                 </Popover.Panel>

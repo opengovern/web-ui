@@ -58,7 +58,17 @@ export default function Findings() {
 
     return (
         <>
-            <Title>Findings</Title>
+            <Flex>
+                <Title>Findings</Title>
+                <Button
+                    variant="light"
+                    icon={ChevronRightIcon}
+                    iconPosition="right"
+                    onClick={() => navigate(`/${workspace}/findings`)}
+                >
+                    View details
+                </Button>
+            </Flex>
             <Flex
                 flexDirection="col"
                 className={`mt-1 ${isLoading ? 'animate-pulse' : ''}`}
@@ -73,10 +83,10 @@ export default function Findings() {
                                       alignItems="start"
                                       className="w-full py-4"
                                   >
-                                      <div className="h-2 w-72 my-1 bg-slate-200 rounded" />
-                                      <Flex flexDirection="row" className="">
-                                          <div className="h-6 w-16 my-1 bg-slate-200 rounded-md" />
-                                          <div className="h-6 w-36 my-1 bg-slate-200 rounded-md" />
+                                      <div className="h-2 w-72 my-1 bg-slate-20 dark:bg-slate-7000 rounded" />
+                                      <Flex flexDirection="row">
+                                          <div className="h-6 w-16 my-1 bg-slate-200 dark:bg-slate-700 rounded-md" />
+                                          <div className="h-6 w-36 my-1 bg-slate-200 dark:bg-slate-700 rounded-md" />
                                       </Flex>
                                   </Flex>
                                   {idx + 1 < arr.length && (
@@ -119,15 +129,6 @@ export default function Findings() {
                           )
                       })}
             </Flex>
-            <Button
-                size="xs"
-                variant="light"
-                icon={ChevronRightIcon}
-                iconPosition="right"
-                onClick={() => navigate(`/${workspace}/findings`)}
-            >
-                View details
-            </Button>
             {error && (
                 <Flex
                     flexDirection="col"

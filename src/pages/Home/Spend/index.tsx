@@ -120,11 +120,7 @@ export default function Spend() {
                     />
                 </Col>
                 <Col>
-                    <Flex
-                        className="h-full mt-3"
-                        flexDirection="col"
-                        justifyContent="between"
-                    >
+                    <Flex className="h-full" flexDirection="col">
                         <SpendChartMetric
                             title="Total Spend"
                             timeRange={activeTimeRange}
@@ -140,12 +136,11 @@ export default function Spend() {
                             )}
                             comparedToNextLine
                         />
-
                         <Flex
                             flexDirection="col"
                             alignItems="start"
                             justifyContent="start"
-                            className="gap-1 mt-5 mb-8 ml-3"
+                            className="gap-1"
                         >
                             {(trendStacked.data[0]
                                 ? trendStacked.data[0]
@@ -162,17 +157,19 @@ export default function Spend() {
                                 </Flex>
                             ))}
                         </Flex>
+                        <Flex justifyContent="end">
+                            <Button
+                                variant="light"
+                                icon={ChevronRightIcon}
+                                iconPosition="right"
+                                onClick={() => navigate('spend')}
+                            >
+                                View details
+                            </Button>
+                        </Flex>
                     </Flex>
                 </Col>
             </Grid>
-            <Button
-                variant="light"
-                icon={ChevronRightIcon}
-                iconPosition="right"
-                onClick={() => navigate('spend')}
-            >
-                View details
-            </Button>
         </Card>
     )
 }

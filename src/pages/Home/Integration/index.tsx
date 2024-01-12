@@ -31,9 +31,9 @@ export default function Integration() {
                                       i === 1 ? '!bg-kaytu-800' : ''
                                   }`}
                               >
-                                  <div className="bg-slate-200 rounded-full w-12 h-12 border-none mb-3" />
-                                  <div className="h-5 w-24 mb-1.5 bg-slate-200 rounded" />
-                                  <div className="h-5 w-32 bg-slate-200 rounded" />
+                                  <div className="bg-slate-200 dark:bg-slate-700 rounded-full w-12 h-12 border-none mb-3" />
+                                  <div className="h-5 w-24 mb-1.5 bg-slate-200 dark:bg-slate-700 rounded" />
+                                  <div className="h-5 w-32 bg-slate-200 dark:bg-slate-700 rounded" />
                               </Card>
                           )
                       })
