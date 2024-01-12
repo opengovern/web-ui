@@ -189,7 +189,8 @@ export function SpendAccounts() {
                             responsePrev={responsePrev}
                             onGranularityChange={setTableGranularity}
                             selectedGranularity={tableGranularity}
-                            activeTimeRange={activeTimeRange}
+                            timeRange={activeTimeRange}
+                            prevTimeRange={prevTimeRange}
                         />
                     </Col>
                 </Grid>

@@ -98,6 +98,17 @@ export function SpendMetrics() {
         connectionGroup: selectedConnections.connectionGroup,
     })
 
+    const { response: responsePrev, isLoading: isLoadingPrev } =
+        useInventoryApiV2AnalyticsSpendTableList({
+            startTime: prevTimeRange.start.unix(),
+            endTime: prevTimeRange.end.unix(),
+            dimension: 'metric',
+            granularity: tableGranularity,
+            connector: [selectedConnections.provider],
+            connectionId: selectedConnections.connections,
+            connectionGroup: selectedConnections.connectionGroup,
+        })
+
     const chartRef = useRef<any>(null)
     const ref = useRef<any>(null)
     // const [lastScrollTop, setLastScrollTop] = useState<number>(0)
@@ -175,8 +186,11 @@ export function SpendMetrics() {
                 </Col>
                 <Col numColSpan={3} className="mt-6">
                     <MetricTable
-                        isLoading={isLoading}
+                        timeRange={activeTimeRange}
+                        prevTimeRange={prevTimeRange}
+                        isLoading={isLoading || isLoadingPrev}
                         response={response}
+                        responsePrev={responsePrev}
                         onGranularityChange={setTableGranularity}
                         selectedGranularity={tableGranularity}
                     />

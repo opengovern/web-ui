@@ -7,9 +7,12 @@ import {
     ArrowTrendingUpIcon,
     SwatchIcon,
 } from '@heroicons/react/24/outline'
+import { Dayjs } from 'dayjs'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../api/api'
 import AdvancedTable, { IColumn } from '../../../components/AdvancedTable'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+import { renderText } from '../../../components/DateRangePicker'
+import { pickFromRecord } from '../Account/AccountTable'
 
 type MSort = {
     sortCol: string
@@ -17,15 +20,20 @@ type MSort = {
 }
 
 interface IMetricTable {
+    timeRange: { start: Dayjs; end: Dayjs }
+    prevTimeRange: { start: Dayjs; end: Dayjs }
     selectedGranularity: 'monthly' | 'daily'
     onGranularityChange: Dispatch<SetStateAction<'monthly' | 'daily'>>
     response:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
         | undefined
+    responsePrev:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
+        | undefined
     isLoading: boolean
 }
 
-export const rowGenerator = (
+const rowGenerator = (
     input:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
         | undefined,
@@ -52,6 +60,14 @@ export const rowGenerator = (
                     // eslint-disable-next-line no-return-assign
                     (v: number | unknown) => (totalCost += Number(v))
                 )
+                const totalSpendInPrev =
+                    inputPrev
+                        ?.filter((v) => v.dimensionId === row.dimensionId)
+                        .flatMap((v) => Object.entries(v.costValue || {}))
+                        .map((v) => v[1])
+                        .reduce((prev, curr) => prev + curr, 0) || 0
+                const oldest = pickFromRecord(row.costValue, 'oldest')
+                const latest = pickFromRecord(row.costValue, 'latest')
                 return {
                     dimension: row.dimensionName
                         ? row.dimensionName
@@ -62,6 +78,9 @@ export const rowGenerator = (
                     connector: row.connector,
                     id: row.dimensionId,
                     totalCost,
+                    prevTotalCost: totalSpendInPrev,
+                    changePercent: ((latest - oldest) / oldest) * 100.0,
+                    change: latest - oldest,
                     ...temp,
                 }
             }) || []
@@ -96,7 +115,7 @@ export const rowGenerator = (
     }
 }
 
-export const defaultColumns: IColumn<any, any>[] = [
+const defaultColumns: IColumn<any, any>[] = [
     {
         field: 'connector',
         headerName: 'Cloud provider',
@@ -117,20 +136,6 @@ export const defaultColumns: IColumn<any, any>[] = [
         resizable: true,
         pivot: false,
         pinned: true,
-    },
-    {
-        field: 'totalCost',
-        headerName: 'Total spend',
-        type: 'price',
-        width: 110,
-        sortable: true,
-        aggFunc: 'sum',
-        resizable: true,
-        pivot: false,
-        pinned: true,
-        valueFormatter: (param: ValueFormatterParams) => {
-            return param.value ? exactPriceDisplay(param.value) : ''
-        },
     },
 ]
 
@@ -165,7 +170,10 @@ export const gridOptions: GridOptions = {
 }
 
 export default function MetricTable({
+    timeRange,
+    prevTimeRange,
     response,
+    responsePrev,
     isLoading,
     selectedGranularity,
     onGranularityChange,
@@ -241,8 +249,25 @@ export default function MetricTable({
         },
         ...defaultColumns,
         {
+            field: 'totalCost',
+            headerName: `Total spend [${renderText(
+                timeRange.start,
+                timeRange.end
+            )}]`,
+            type: 'price',
+            width: 110,
+            sortable: true,
+            aggFunc: 'sum',
+            resizable: true,
+            pivot: false,
+            pinned: true,
+            valueFormatter: (param: ValueFormatterParams) => {
+                return param.value ? exactPriceDisplay(param.value) : ''
+            },
+        },
+        {
             field: 'percent',
-            headerName: '%',
+            headerName: '% of Total',
             type: 'string',
             width: 90,
             pinned: true,
@@ -252,6 +277,47 @@ export default function MetricTable({
                 return param.value ? `${param.value.toFixed(2)}%` : ''
             },
         },
+        {
+            field: 'prevTotalCost',
+            headerName: `Spend in previous period [${renderText(
+                prevTimeRange.start,
+                prevTimeRange.end
+            )}]`,
+            type: 'string',
+            width: 90,
+            pinned: true,
+            aggFunc: 'sum',
+            resizable: true,
+            valueFormatter: (param: ValueFormatterParams) => {
+                return param.value ? `$${param.value.toFixed(0)}` : ''
+            },
+        },
+        {
+            field: 'change',
+            headerName: 'Change in Spend',
+            type: 'string',
+            width: 90,
+            pinned: true,
+            hide: true,
+            aggFunc: 'sum',
+            resizable: true,
+            valueFormatter: (param: ValueFormatterParams) => {
+                return param.value ? `$${param.value.toFixed(0)}` : ''
+            },
+        },
+        {
+            field: 'changePercent',
+            headerName: 'Change %',
+            type: 'string',
+            width: 90,
+            pinned: true,
+            aggFunc: 'sum',
+            resizable: true,
+            valueFormatter: (param: ValueFormatterParams) => {
+                return param.value ? `${param.value.toFixed(0)}%` : ''
+            },
+        },
+
         ...columnGenerator(response),
     ]
 
@@ -320,8 +386,10 @@ export default function MetricTable({
             id="spend_service_table"
             loading={isLoading}
             columns={columns}
-            rowData={rowGenerator(response, undefined, isLoading).finalRow}
-            pinnedRow={rowGenerator(response, undefined, isLoading).pinnedRow}
+            rowData={rowGenerator(response, responsePrev, isLoading).finalRow}
+            pinnedRow={
+                rowGenerator(response, responsePrev, isLoading).pinnedRow
+            }
             options={gridOptions}
             onRowClicked={(event) => {
                 if (event.data.category.length) {
