@@ -11,6 +11,7 @@ import dayjs, { Dayjs } from 'dayjs'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../api/api'
 import AdvancedTable, { IColumn } from '../../../components/AdvancedTable'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+import { renderText } from '../../../components/DateRangePicker'
 
 type MSort = {
     sortCol: string
@@ -18,7 +19,8 @@ type MSort = {
 }
 
 interface IAccountTable {
-    activeTimeRange: { start: Dayjs; end: Dayjs }
+    timeRange: { start: Dayjs; end: Dayjs }
+    prevTimeRange: { start: Dayjs; end: Dayjs }
     selectedGranularity: 'monthly' | 'daily'
     onGranularityChange: Dispatch<SetStateAction<'monthly' | 'daily'>>
     response:
@@ -29,6 +31,32 @@ interface IAccountTable {
         | undefined
     isLoading: boolean
     ref?: React.MutableRefObject<any>
+}
+
+export const pickFromRecord = (
+    v: Record<string, number> | undefined,
+    item: 'oldest' | 'latest'
+) => {
+    if (v === undefined) {
+        return 0
+    }
+    const m = Object.entries(v)
+        .map((i) => {
+            return {
+                date: dayjs(i[0]),
+                value: i[1],
+            }
+        })
+        .sort((a, b) => {
+            if (a.date.isSame(b.date)) {
+                return 0
+            }
+            return a.date.isAfter(b.date) ? 1 : -1
+        })
+
+    const idx = item === 'oldest' ? 0 : m.length - 1
+    const res = m.at(idx)?.value || 0
+    return res
 }
 
 const rowGenerator = (
@@ -58,6 +86,14 @@ const rowGenerator = (
                     // eslint-disable-next-line no-return-assign
                     (v: number | unknown) => (totalCost += Number(v))
                 )
+                const totalSpendInPrev =
+                    inputPrev
+                        ?.filter((v) => v.accountID === row.accountID)
+                        .flatMap((v) => Object.entries(v.costValue || {}))
+                        .map((v) => v[1])
+                        .reduce((prev, curr) => prev + curr, 0) || 0
+                const oldest = pickFromRecord(row.costValue, 'oldest')
+                const latest = pickFromRecord(row.costValue, 'latest')
                 return {
                     dimension: row.dimensionName
                         ? row.dimensionName
@@ -68,6 +104,9 @@ const rowGenerator = (
                     connector: row.connector,
                     id: row.dimensionId,
                     totalCost,
+                    prevTotalCost: totalSpendInPrev,
+                    changePercent: ((latest - oldest) / oldest) * 100.0,
+                    change: latest - oldest,
                     ...temp,
                 }
             }) || []
@@ -173,10 +212,12 @@ const gridOptions: GridOptions = {
     enableRangeSelection: true,
     groupIncludeFooter: true,
     groupIncludeTotalFooter: true,
+    maintainColumnOrder: true,
 }
 
 export default function AccountTable({
-    activeTimeRange,
+    timeRange,
+    prevTimeRange,
     selectedGranularity,
     onGranularityChange,
     response,
@@ -196,16 +237,14 @@ export default function AccountTable({
         let columns: IColumn<any, any>[] = []
         if (input) {
             const columnNames =
-                input
-                    ?.map((row) => {
-                        if (row.costValue) {
-                            return Object.entries(row.costValue).map(
-                                (value) => value[0]
-                            )
-                        }
-                        return []
-                    })
-                    .flat() || []
+                input?.flatMap((row) => {
+                    if (row.costValue) {
+                        return Object.entries(row.costValue).map(
+                            (value) => value[0]
+                        )
+                    }
+                    return []
+                }) || []
             const dynamicCols: IColumn<any, any>[] =
                 granularityEnabled === true
                     ? columnNames
@@ -243,6 +282,7 @@ export default function AccountTable({
                     type: 'string',
                     width: 90,
                     pinned: true,
+                    hide: true,
                     aggFunc: 'sum',
                     resizable: true,
                     valueFormatter: (param: ValueFormatterParams) => {
@@ -250,17 +290,18 @@ export default function AccountTable({
                     },
                 },
                 {
-                    field: 'spendInPrev',
-                    headerName: `Spend in previous period ${activeTimeRange.start.format(
-                        'MMM DD, YYYY'
-                    )} - ${activeTimeRange.end.format('MMM DD, YYYY')}`,
+                    field: 'prevTotalCost',
+                    headerName: `Spend in previous period [${renderText(
+                        prevTimeRange.start,
+                        prevTimeRange.end
+                    )}]`,
                     type: 'string',
                     width: 90,
                     pinned: true,
                     aggFunc: 'sum',
                     resizable: true,
                     valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value ? `${param.value.toFixed(2)}%` : ''
+                        return param.value ? `$${param.value.toFixed(0)}` : ''
                     },
                 },
                 {
@@ -269,30 +310,11 @@ export default function AccountTable({
                     type: 'string',
                     width: 90,
                     pinned: true,
+                    hide: true,
                     aggFunc: 'sum',
                     resizable: true,
-                    valueFormatter: (
-                        param: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow>
-                    ) => {
-                        if (param.data?.costValue === undefined) {
-                            return ''
-                        }
-                        const arr = Object.entries(param.data.costValue)
-                            .map(([k, v]) => ({
-                                date: dayjs.utc(k),
-                                amount: v,
-                            }))
-                            .sort((a, b) => {
-                                if (a.date.isSame(b.date)) {
-                                    return 0
-                                }
-                                return a.date.isBefore(b.date) ? 1 : -1
-                            })
-
-                        const start = arr[0]
-                        const end = arr[arr.length - 1]
-
-                        return (end.amount - start.amount).toFixed(2)
+                    valueFormatter: (param: ValueFormatterParams) => {
+                        return param.value ? `$${param.value.toFixed(0)}` : ''
                     },
                 },
                 {
@@ -303,31 +325,8 @@ export default function AccountTable({
                     pinned: true,
                     aggFunc: 'sum',
                     resizable: true,
-                    valueFormatter: (
-                        param: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow>
-                    ) => {
-                        if (param.data?.costValue === undefined) {
-                            return ''
-                        }
-                        const arr = Object.entries(param.data.costValue)
-                            .map(([k, v]) => ({
-                                date: dayjs.utc(k),
-                                amount: v,
-                            }))
-                            .sort((a, b) => {
-                                if (a.date.isSame(b.date)) {
-                                    return 0
-                                }
-                                return a.date.isBefore(b.date) ? 1 : -1
-                            })
-
-                        const start = arr[0]
-                        const end = arr[arr.length - 1]
-
-                        const percentage =
-                            ((end.amount - start.amount) / start.amount) * 100.0
-
-                        return `${percentage.toFixed(2)}%`
+                    valueFormatter: (param: ValueFormatterParams) => {
+                        return param.value ? `${param.value.toFixed(0)}%` : ''
                     },
                 },
             ]
@@ -352,9 +351,10 @@ export default function AccountTable({
         ...defaultColumns,
         {
             field: 'totalCost',
-            headerName: `Total spend ${activeTimeRange.start.format(
-                'MMM DD, YYYY'
-            )} - ${activeTimeRange.end.format('MMM DD, YYYY')}`,
+            headerName: `Total spend [${renderText(
+                timeRange.start,
+                timeRange.end
+            )}]`,
             type: 'price',
             width: 110,
             sortable: true,
@@ -432,8 +432,10 @@ export default function AccountTable({
             id="spend_connection_table"
             loading={isLoading}
             columns={columns}
-            rowData={rowGenerator(response, undefined, isLoading).finalRow}
-            pinnedRow={rowGenerator(response, undefined, isLoading).pinnedRow}
+            rowData={rowGenerator(response, responsePrev, isLoading).finalRow}
+            pinnedRow={
+                rowGenerator(response, responsePrev, isLoading).pinnedRow
+            }
             options={gridOptions}
             onRowClicked={(event) => {
                 if (event.data.id) {
