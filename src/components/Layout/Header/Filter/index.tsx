@@ -178,7 +178,7 @@ export default function Filter() {
                                     <Flex className="gap-1">
                                         <img
                                             src={AWSIcon}
-                                            className="w-6"
+                                            className="w-6 rounded-full"
                                             alt="aws"
                                         />
                                         <Text className="text-gray-800">

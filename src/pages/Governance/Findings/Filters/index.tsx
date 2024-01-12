@@ -239,7 +239,11 @@ export default function FindingFilters({
                             checked={provider === 'AWS'}
                         >
                             <Flex className="gap-1">
-                                <img src={AWSIcon} className="w-6" alt="aws" />
+                                <img
+                                    src={AWSIcon}
+                                    className="w-6 rounded-full"
+                                    alt="aws"
+                                />
                                 <Text>AWS</Text>
                             </Flex>
                         </Radio>
