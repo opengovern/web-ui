@@ -13,6 +13,7 @@ import { SpendChart } from '../../../components/Spend/Chart'
 import { toErrorMessage } from '../../../types/apierror'
 import { Granularity } from '../../../components/Spend/Chart/Selectors'
 import AccountTable from './AccountTable'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../../api/api'
 
 export function SpendAccounts() {
     const activeTimeRange = useAtomValue(spendTimeAtom)
@@ -67,16 +68,6 @@ export function SpendAccounts() {
     }
 
     const {
-        response: costTrend,
-        isLoading: costTrendLoading,
-        error: costTrendError,
-        sendNow: costTrendRefresh,
-    } = useInventoryApiV2AnalyticsSpendTrendList({
-        ...query,
-        granularity: chartGranularity,
-    })
-
-    const {
         response: serviceCostResponse,
         isLoading: serviceCostLoading,
         error: serviceCostErr,
@@ -88,6 +79,17 @@ export function SpendAccounts() {
         error: servicePrevCostErr,
         sendNow: serviceCostPrevRefresh,
     } = useInventoryApiV2AnalyticsSpendMetricList(prevQuery)
+
+    const { response: responseChart, isLoading: isLoadingChart } =
+        useInventoryApiV2AnalyticsSpendTableList({
+            startTime: activeTimeRange.start.unix(),
+            endTime: activeTimeRange.end.unix(),
+            dimension: 'connection',
+            granularity: chartGranularity,
+            connector: [selectedConnections.provider],
+            connectionId: selectedConnections.connections,
+            connectionGroup: selectedConnections.connectionGroup,
+        })
 
     const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList({
         startTime: activeTimeRange.start.unix(),
@@ -108,6 +110,55 @@ export function SpendAccounts() {
             connectionId: selectedConnections.connections,
             connectionGroup: selectedConnections.connectionGroup,
         })
+
+    const accountTrend = () => {
+        return responseChart
+            ?.flatMap((item) =>
+                Object.entries(item.costValue || {}).map((entry) => {
+                    return {
+                        accountID: item.dimensionId || item.accountID || '',
+                        accountName: item.dimensionName,
+                        date: entry[0],
+                        cost: entry[1],
+                    }
+                })
+            )
+            .reduce<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
+            >((prev, curr) => {
+                const stacked = {
+                    cost: curr.cost,
+                    metricID: curr.accountID,
+                    metricName: curr.accountName,
+                }
+                const exists =
+                    prev.filter((p) => p.date === curr.date).length > 0
+                console.log(exists)
+                if (exists) {
+                    return prev.map((p) => {
+                        if (p.date === curr.date) {
+                            return {
+                                cost: (p.cost || 0) + curr.cost,
+                                costStacked: [
+                                    ...(p.costStacked || []),
+                                    stacked,
+                                ],
+                                date: curr.date,
+                            }
+                        }
+                        return p
+                    })
+                }
+                return [
+                    ...prev,
+                    {
+                        cost: curr.cost,
+                        costStacked: [stacked],
+                        date: curr.date,
+                    },
+                ]
+            }, [])
+    }
 
     const chartRef = useRef<any>(null)
     // const ref = useRef<any>(null)
@@ -156,26 +207,24 @@ export function SpendAccounts() {
                 <Grid numItems={3} className="w-full gap-4">
                     <Col numColSpan={3} ref={chartRef}>
                         <SpendChart
-                            costTrend={costTrend || []}
-                            costField="account"
+                            costTrend={accountTrend() || []}
+                            costField="metric"
                             title="Total spend"
                             timeRange={activeTimeRange}
                             timeRangePrev={prevTimeRange}
                             total={serviceCostResponse?.total_cost || 0}
                             totalPrev={servicePrevCostResponse?.total_cost || 0}
-                            noStackedChart
+                            // noStackedChart
                             isLoading={
-                                costTrendLoading ||
                                 serviceCostLoading ||
-                                servicePrevCostLoading
+                                servicePrevCostLoading ||
+                                isLoadingChart
                             }
                             error={toErrorMessage(
-                                costTrendError,
                                 serviceCostErr,
                                 servicePrevCostErr
                             )}
                             onRefresh={() => {
-                                costTrendRefresh()
                                 serviceCostPrevRefresh()
                                 serviceCostRefresh()
                             }}
