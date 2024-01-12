@@ -1,6 +1,6 @@
 import { Col, Grid } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Layout from '../../../components/Layout'
 import SingleSpendConnection from '../Single/SingleConnection'
 import {
@@ -108,9 +108,21 @@ export function SpendAccounts() {
             connectionId: selectedConnections.connections,
             connectionGroup: selectedConnections.connectionGroup,
         })
+    const ref = useRef<any>(null)
+    // const handleClick = () => {}
+
+    const onScroll = (v: any) => {
+        console.log('scrolled')
+        ref.current?.scrollIntoView({ behavior: 'smooth' })
+    }
 
     return (
-        <Layout currentPage="spend/accounts" datePicker filter>
+        <Layout
+            currentPage="spend/accounts"
+            datePicker
+            filter
+            onScroll={onScroll}
+        >
             {selectedConnections.connections.length === 1 ? (
                 <SingleSpendConnection
                     activeTimeRange={activeTimeRange}
