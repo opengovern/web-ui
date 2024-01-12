@@ -182,7 +182,7 @@ export function SpendAccounts() {
                             onGranularityChanged={setChartGranularity}
                         />
                     </Col>
-                    <Col numColSpan={3}>
+                    <Col numColSpan={3} className="mt-6">
                         <AccountTable
                             isLoading={isLoading || prevIsLoading}
                             response={response}

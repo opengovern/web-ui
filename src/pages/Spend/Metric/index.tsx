@@ -173,7 +173,7 @@ export function SpendMetrics() {
                         onGranularityChanged={setChartGranularity}
                     />
                 </Col>
-                <Col numColSpan={3}>
+                <Col numColSpan={3} className="mt-6">
                     <MetricTable
                         isLoading={isLoading}
                         response={response}
