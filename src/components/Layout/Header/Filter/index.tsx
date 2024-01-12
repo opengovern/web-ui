@@ -33,7 +33,7 @@ export default function Filter() {
         }
     )
     const connectionCheckbox = useCheckboxState({
-        state: selectedFilters.connections,
+        state: [...selectedFilters.connections],
     })
     const [provider, setProvider] = useState(selectedFilters.provider)
     const [search, setSearch] = useState('')
@@ -54,7 +54,7 @@ export default function Filter() {
 
     const restFilters = () => {
         setProvider(selectedFilters.provider)
-        connectionCheckbox.setState(selectedFilters.connections)
+        connectionCheckbox.setState([...selectedFilters.connections])
     }
 
     const btnDisable = () =>
