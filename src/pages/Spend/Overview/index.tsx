@@ -169,7 +169,7 @@ export function SpendOverview() {
                         valueColumnTitle="Spend"
                         loading={accountCostLoading}
                         items={topAccounts(accountCostResponse)}
-                        url="spend-details#cloud-accounts"
+                        url="accounts"
                         type="account"
                         isPrice
                         error={getErrorMessage(accountCostError)}
@@ -183,7 +183,7 @@ export function SpendOverview() {
                         valueColumnTitle="Spend"
                         loading={serviceCostLoading}
                         items={topServices(serviceCostResponse)}
-                        url="spend-details#metrics"
+                        url="metrics"
                         type="service"
                         isPrice
                         error={getErrorMessage(serviceCostErr)}
