@@ -231,7 +231,7 @@ export default function FindingFilters({
                             onClick={() => setProvider('')}
                             checked={provider === ''}
                         >
-                            All
+                            <Text>All</Text>
                         </Radio>
                         <Radio
                             name={`${type}-provider`}
