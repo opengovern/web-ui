@@ -33,6 +33,7 @@ type IProps = {
         | '404'
     showSidebar?: boolean
     hFull?: boolean
+    onScroll?: (e: any) => void
 }
 
 export default function Layout({
@@ -44,11 +45,20 @@ export default function Layout({
     filter = false,
     datePicker = false,
     breadCrumb,
+    onScroll,
 }: IProps) {
     const workspace = useParams<{ ws: string }>().ws
 
     return (
-        <Flex className="h-screen overflow-hidden">
+        <Flex
+            className="h-screen overflow-hidden"
+            onScroll={(e) => {
+                console.log(e)
+                if (onScroll) {
+                    onScroll(e)
+                }
+            }}
+        >
             {showSidebar && (
                 <Sidebar workspace={workspace} currentPage={currentPage} />
             )}

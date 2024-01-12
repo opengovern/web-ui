@@ -118,7 +118,11 @@ export default function Spend() {
                     />
                 </Col>
                 <Col>
-                    <Flex className="ml-1" flexDirection="col">
+                    <Flex
+                        className="ml-1 h-full"
+                        flexDirection="col"
+                        justifyContent="between"
+                    >
                         <SpendChartMetric
                             title="Total Spend"
                             timeRange={activeTimeRange}
@@ -139,7 +143,7 @@ export default function Spend() {
                             flexDirection="col"
                             alignItems="start"
                             justifyContent="start"
-                            className="gap-1 mt-5 ml-3"
+                            className="gap-1 mt-5 mb-8 ml-3"
                         >
                             {(trendStacked.data[0]
                                 ? trendStacked.data[0]

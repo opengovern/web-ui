@@ -25,7 +25,7 @@ export default function Integration() {
                 {connectorsLoading || getErrorMessage(error).length > 0
                     ? [1, 2]?.map((i) => {
                           return (
-                              <Card key={i} className="rounded-2xl">
+                              <Card key={i} className="rounded-3xl">
                                   <div className="bg-slate-200 rounded-full w-12 h-12 border-none mb-3" />
                                   <div className="h-5 w-24 mb-1.5 bg-slate-200 rounded" />
                                   <div className="h-5 w-32 bg-slate-200 rounded" />
@@ -44,7 +44,7 @@ export default function Integration() {
                                               `/${workspace}/integrations/${connector.name}`
                                           )
                                       }}
-                                      className={`rounded-3xl cursor-pointer ${
+                                      className={`!rounded-3xl cursor-pointer ${
                                           connector.name === 'AWS'
                                               ? ''
                                               : 'bg-kaytu-800 text-white'
