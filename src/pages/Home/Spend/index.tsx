@@ -1,7 +1,7 @@
 import { Button, Card, Col, Flex, Grid, Icon, Text, Title } from '@tremor/react'
 import { BanknotesIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai/index'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { filterAtom, timeAtom } from '../../../store'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
@@ -15,6 +15,7 @@ import { SpendChartMetric } from '../../../components/Spend/Chart/Metric'
 const colors = ['#5470C6', '#91CC75', '#FAC858', '#EE6766', '#73C0DE']
 
 export default function Spend() {
+    const workspace = useParams<{ ws: string }>().ws
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
     const navigate = useNavigate()
@@ -162,7 +163,7 @@ export default function Spend() {
                                 variant="light"
                                 icon={ChevronRightIcon}
                                 iconPosition="right"
-                                onClick={() => navigate('spend')}
+                                onClick={() => navigate(`/${workspace}/spend`)}
                             >
                                 View details
                             </Button>

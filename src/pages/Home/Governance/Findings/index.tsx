@@ -1,18 +1,5 @@
-import {
-    Badge,
-    Button,
-    Card,
-    Divider,
-    Flex,
-    Icon,
-    Text,
-    Title,
-} from '@tremor/react'
-import {
-    ArrowRightIcon,
-    ChevronRightIcon,
-    ShieldCheckIcon,
-} from '@heroicons/react/24/outline'
+import { Button, Divider, Flex, Text, Title } from '@tremor/react'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useComplianceApiV1ControlsSummaryList } from '../../../../api/compliance.gen'
 import { TypesFindingSeverity } from '../../../../api/api'
@@ -25,7 +12,6 @@ export default function Findings() {
     const {
         response,
         isLoading,
-        isExecuted,
         error,
         sendNow: refresh,
     } = useComplianceApiV1ControlsSummaryList()
