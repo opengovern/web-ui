@@ -1,6 +1,7 @@
-import { Card, Col, Flex, Grid, Icon, Text, Title } from '@tremor/react'
-import { BanknotesIcon } from '@heroicons/react/24/outline'
+import { Button, Card, Col, Flex, Grid, Icon, Text, Title } from '@tremor/react'
+import { BanknotesIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai/index'
+import { useNavigate } from 'react-router-dom'
 import { filterAtom, timeAtom } from '../../../store'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
@@ -16,6 +17,7 @@ const colors = ['#5470C6', '#91CC75', '#FAC858', '#EE6766', '#73C0DE']
 export default function Spend() {
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
+    const navigate = useNavigate()
 
     const query: {
         pageSize: number
@@ -91,7 +93,7 @@ export default function Spend() {
 
     return (
         <Card className="h-full">
-            <Grid numItems={2}>
+            <Grid numItems={2} className="gap-4">
                 <Col numColSpan={1}>
                     <Flex justifyContent="start" className="mb-2">
                         <Icon
@@ -119,7 +121,7 @@ export default function Spend() {
                 </Col>
                 <Col>
                     <Flex
-                        className="ml-1 h-full"
+                        className="h-full mt-3"
                         flexDirection="col"
                         justifyContent="between"
                     >
@@ -163,6 +165,14 @@ export default function Spend() {
                     </Flex>
                 </Col>
             </Grid>
+            <Button
+                variant="light"
+                icon={ChevronRightIcon}
+                iconPosition="right"
+                onClick={() => navigate('spend')}
+            >
+                View details
+            </Button>
         </Card>
     )
 }
