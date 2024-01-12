@@ -53,7 +53,7 @@ export default function Query({ height }: IQuery) {
                               }`}
                           >
                               <AccordionHeader className="pl-0 pr-0.5 py-4 bg-transparent flex justify-start">
-                                  <div className="h-5 w-32 bg-slate-200 rounded" />
+                                  <div className="h-5 w-32 bg-slate-200 dark:bg-slate-700 rounded" />
                               </AccordionHeader>
                           </Accordion>
                       ))
