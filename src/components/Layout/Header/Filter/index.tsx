@@ -206,7 +206,15 @@ export default function Filter() {
                                     </Flex>
                                 </Radio>
                             </Flex>
-                            <Text className="mt-4 mb-2">ACCOUNTS</Text>
+                            <Flex className="mt-4 mb-2">
+                                <Text>ACCOUNTS</Text>
+                                {selectedFilters.connections.length > 0 && (
+                                    <Text className="!text-xs">
+                                        ({selectedFilters.connections.length}{' '}
+                                        selected)
+                                    </Text>
+                                )}
+                            </Flex>
                             <TextInput
                                 icon={MagnifyingGlassIcon}
                                 placeholder="Search account by ID or name..."
