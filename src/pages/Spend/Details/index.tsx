@@ -45,7 +45,11 @@ export default function SpendDetails() {
 
     return (
         <Layout
-            currentPage="spend"
+            currentPage={
+                tabs === '#metrics'
+                    ? 'spend-detail-metric'
+                    : 'spend-detail-account'
+            }
             breadCrumb={['Spend detail']}
             filter
             datePicker

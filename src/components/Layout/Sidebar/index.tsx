@@ -68,11 +68,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         },
         {
             name: 'Assets',
-            page: [
-                'assets',
-                'assets/assets-details#cloud-accounts',
-                'assets/assets-details#metrics',
-            ],
+            page: ['assets', 'assets-detail-account', 'assets-detail-metric'],
             icon: CubeIcon,
             children: [
                 {
@@ -83,6 +79,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 {
                     name: 'Cloud Accounts',
                     page: 'assets/assets-details#cloud-accounts',
+                    selected: 'assets-detail-account',
                     isPreview: false,
                     isLoading: assetsIsLoading,
                     count: numericDisplay(assetCount?.connectionCount) || 0,
@@ -90,6 +87,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 {
                     name: 'Metrics',
                     page: 'assets/assets-details#metrics',
+                    selected: 'assets-detail-metric',
                     isPreview: false,
                     isLoading: assetsIsLoading,
                     count: numericDisplay(assetCount?.metricCount) || 0,
@@ -99,7 +97,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         },
         {
             name: 'Spend',
-            page: ['spend', 'spend/accounts', 'spend/metrics'],
+            page: ['spend', 'spend-detail-account', 'spend-detail-metric'],
             icon: BanknotesIcon,
             children: [
                 {
@@ -110,6 +108,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 {
                     name: 'Cloud Accounts',
                     page: 'spend/accounts',
+                    selected: 'spend-detail-account',
                     isPreview: false,
                     isLoading: spendCountIsLoading,
                     count: numericDisplay(spendCount?.connectionCount) || 0,
@@ -117,6 +116,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 {
                     name: 'Metrics',
                     page: 'spend/metrics',
+                    selected: 'spend-detail-metric',
                     isPreview: false,
                     isLoading: spendCountIsLoading,
                     count: numericDisplay(spendCount?.metricCount) || 0,
@@ -129,10 +129,16 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             icon: ShieldCheckIcon,
             page: ['compliance', 'findings'],
             children: [
-                { name: 'Compliance', page: 'compliance', isPreview: false },
+                {
+                    name: 'Compliance',
+                    page: 'compliance',
+                    selected: 'compliance',
+                    isPreview: false,
+                },
                 {
                     name: 'Findings',
                     page: 'findings',
+                    selected: 'findings',
                     isPreview: false,
                     isLoading: findingsIsLoading,
                     count: numericDisplay(findingsCount?.count) || 0,
@@ -163,8 +169,18 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             icon: LightBulbIcon,
             page: ['rules, alerts'],
             children: [
-                { name: 'Rules', page: 'rules', isPreview: false },
-                { name: 'Alerts', page: 'alerts', isPreview: false },
+                {
+                    name: 'Rules',
+                    page: 'rules',
+                    selected: 'rules',
+                    isPreview: false,
+                },
+                {
+                    name: 'Alerts',
+                    page: 'alerts',
+                    selected: 'alerts',
+                    isPreview: false,
+                },
             ],
             isPreview: true,
         },
@@ -243,8 +259,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                 <Accordion
                                     className="!bg-transparent border-0 w-full min-h-fit"
                                     defaultOpen={
+                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                        // @ts-ignore
                                         item.children.filter(
-                                            (c) => c.page === currentPage
+                                            (c: any) =>
+                                                c.page === currentPage ||
+                                                c.selected === currentPage
                                         ).length > 0
                                     }
                                 >
@@ -286,7 +306,10 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                 to={`/${workspace}/${i.page}`}
                                                 className={`my-0.5 py-2 flex rounded-md relative 
                                                     ${
-                                                        i.page === currentPage
+                                                        i.page ===
+                                                            currentPage ||
+                                                        i.selected ===
+                                                            currentPage
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
                                                             : 'text-gray-50 hover:bg-kaytu-800'
                                                     }`}
@@ -319,20 +342,19 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                     </AccordionBody>
                                 </Accordion>
                             ) : item.children && collapsed ? (
-                                <div
-                                    className={`w-full relative px-6 py-2 flex items-center gap-2.5 rounded-md
+                                <Popover className="relative z-50 border-0 w-full h-[36px]">
+                                    <div className="group relative">
+                                        <Popover.Button id={item.name}>
+                                            <div
+                                                className={`w-full rounded-md p-2
                                                     ${
                                                         item.page.includes(
                                                             currentPage
                                                         )
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
                                                             : 'text-gray-50 hover:bg-kaytu-800'
-                                                    }
-                                                    ${collapsed ? '!p-2' : ''}`}
-                                >
-                                    <Popover className="relative z-50 border-0 w-full h-[20px]">
-                                        <div className="group relative">
-                                            <Popover.Button id={item.name}>
+                                                    }`}
+                                            >
                                                 <item.icon
                                                     className={`h-5 w-5 stroke-2 ${
                                                         collapsed &&
@@ -343,79 +365,82 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             : 'text-gray-400'
                                                     }`}
                                                 />
-                                            </Popover.Button>
-                                            <div
-                                                className="absolute z-50 scale-0 transition-all rounded p-2 shadow-md bg-kaytu-950 group-hover:scale-100"
-                                                style={{
-                                                    left: '45px',
-                                                    top: '-8px',
-                                                }}
-                                            >
-                                                <Text className="text-white">
+                                            </div>
+                                        </Popover.Button>
+                                        <div
+                                            className="absolute z-50 scale-0 transition-all rounded p-2 shadow-md bg-kaytu-950 group-hover:scale-100"
+                                            style={{
+                                                left: '50px',
+                                                top: 0,
+                                            }}
+                                        >
+                                            <Text className="text-white">
+                                                {item.name}
+                                            </Text>
+                                        </div>
+                                    </div>
+                                    <Transition
+                                        as={Fragment}
+                                        enter="transition ease-out duration-200"
+                                        enterFrom="opacity-0 translate-y-1"
+                                        enterTo="opacity-100 translate-y-0"
+                                        leave="transition ease-in duration-150"
+                                        leaveFrom="opacity-100 translate-y-0"
+                                        leaveTo="opacity-0 translate-y-1"
+                                    >
+                                        <Popover.Panel className="absolute left-[164px] top-[1px] z-10 flex w-screen max-w-max -translate-x-1/2 px-4">
+                                            <Card className="z-50 rounded p-2 shadow-md !ring-gray-600 w-56 bg-kaytu-950">
+                                                <Text className="mb-3">
                                                     {item.name}
                                                 </Text>
-                                            </div>
-                                        </div>
-                                        <Transition
-                                            as={Fragment}
-                                            enter="transition ease-out duration-200"
-                                            enterFrom="opacity-0 translate-y-1"
-                                            enterTo="opacity-100 translate-y-0"
-                                            leave="transition ease-in duration-150"
-                                            leaveFrom="opacity-100 translate-y-0"
-                                            leaveTo="opacity-0 translate-y-1"
-                                        >
-                                            <Popover.Panel className="absolute left-[157px] top-[-8px] z-10 flex w-screen max-w-max -translate-x-1/2 px-4">
-                                                <Card className="z-50 rounded p-2 shadow-md !ring-gray-600 w-56 bg-kaytu-950">
-                                                    <Text className="mb-3">
-                                                        {item.name}
-                                                    </Text>
-                                                    {item.children.map((i) => (
-                                                        <Link
-                                                            to={`/${workspace}/${i.page}`}
-                                                            className={`my-0.5 py-2 px-4 flex justify-start rounded-md relative 
+                                                {item.children.map((i) => (
+                                                    <Link
+                                                        to={`/${workspace}/${i.page}`}
+                                                        className={`my-0.5 py-2 px-4 flex justify-start rounded-md relative 
                                                     ${
-                                                        i.page === currentPage
+                                                        i.page ===
+                                                            currentPage ||
+                                                        i.selected ===
+                                                            currentPage
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
                                                             : 'text-gray-50 hover:bg-kaytu-800'
                                                     }`}
-                                                        >
-                                                            <Text className="text-inherit">
-                                                                {i.name}
-                                                            </Text>
-                                                            {i.count &&
-                                                                collapsed && (
-                                                                    <Badge
-                                                                        className="absolute right-2 top-1.5"
-                                                                        style={
-                                                                            badgeStyle
-                                                                        }
-                                                                    >
-                                                                        {i.isLoading ? (
-                                                                            <div className="animate-pulse h-1 w-4 my-2 bg-gray-700 rounded-md" />
-                                                                        ) : (
-                                                                            i.count
-                                                                        )}
-                                                                    </Badge>
-                                                                )}
-                                                            {i.isPreview &&
-                                                                collapsed && (
-                                                                    <Badge
-                                                                        className="absolute right-2 top-1.5"
-                                                                        style={
-                                                                            badgeStyle
-                                                                        }
-                                                                    >
-                                                                        Preview
-                                                                    </Badge>
-                                                                )}
-                                                        </Link>
-                                                    ))}
-                                                </Card>
-                                            </Popover.Panel>
-                                        </Transition>
-                                    </Popover>
-                                </div>
+                                                    >
+                                                        <Text className="text-inherit">
+                                                            {i.name}
+                                                        </Text>
+                                                        {i.count &&
+                                                            collapsed && (
+                                                                <Badge
+                                                                    className="absolute right-2 top-1.5"
+                                                                    style={
+                                                                        badgeStyle
+                                                                    }
+                                                                >
+                                                                    {i.isLoading ? (
+                                                                        <div className="animate-pulse h-1 w-4 my-2 bg-gray-700 rounded-md" />
+                                                                    ) : (
+                                                                        i.count
+                                                                    )}
+                                                                </Badge>
+                                                            )}
+                                                        {i.isPreview &&
+                                                            collapsed && (
+                                                                <Badge
+                                                                    className="absolute right-2 top-1.5"
+                                                                    style={
+                                                                        badgeStyle
+                                                                    }
+                                                                >
+                                                                    Preview
+                                                                </Badge>
+                                                            )}
+                                                    </Link>
+                                                ))}
+                                            </Card>
+                                        </Popover.Panel>
+                                    </Transition>
+                                </Popover>
                             ) : (
                                 // eslint-disable-next-line jsx-a11y/anchor-is-valid
                                 <Link
@@ -453,7 +478,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             <div
                                                 className="absolute z-50 scale-0 transition-all rounded p-2 shadow-md bg-kaytu-950 group-hover:scale-100"
                                                 style={{
-                                                    left: '45px',
+                                                    left: '43px',
                                                     top: '-8px',
                                                 }}
                                             >
