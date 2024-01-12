@@ -1,14 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-    Button,
-    Card,
-    Flex,
-    List,
-    ListItem,
-    Text,
-    TextInput,
-    Title,
-} from '@tremor/react'
+import { Button, Card, Flex, Text, TextInput, Title } from '@tremor/react'
 import {
     ChevronUpDownIcon,
     MagnifyingGlassIcon,
@@ -20,21 +11,9 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { Checkbox, Radio, useCheckboxState } from 'pretty-checkbox-react'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../api/integration.gen'
 import { filterAtom } from '../../../../store'
-import { getConnectorIcon } from '../../../Cards/ConnectorCard'
-import Tag from '../../../Tag'
 import Spinner from '../../../Spinner'
 import { AWSIcon, AzureIcon } from '../../../../icons/icons'
 import { filteredConnectionsList } from '../../../../pages/Governance/Findings/Filters'
-
-const connectionID = (list: any) => {
-    const idList = []
-    if (list) {
-        for (let i = 0; i < list.length; i += 1) {
-            idList.push(list[i].id)
-        }
-    }
-    return idList
-}
 
 export const compareArrays = (a: any[], b: any[]) =>
     a.length === b.length &&
@@ -79,14 +58,13 @@ export default function Filter() {
     }
 
     const btnDisable = () =>
-        provider.length
-            ? provider === selectedFilters.provider
-            : compareArrays(
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  connectionCheckbox.state.sort(),
-                  selectedFilters.connections.sort()
-              )
+        provider === selectedFilters.provider &&
+        compareArrays(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            connectionCheckbox.state.sort(),
+            selectedFilters.connections.sort()
+        )
 
     const filterText = () => {
         if (selectedFilters.connections.length > 0) {
@@ -178,7 +156,7 @@ export default function Filter() {
                                     <Flex className="gap-1">
                                         <img
                                             src={AWSIcon}
-                                            className="w-6"
+                                            className="w-6 rounded-full"
                                             alt="aws"
                                         />
                                         <Text className="text-gray-800">
