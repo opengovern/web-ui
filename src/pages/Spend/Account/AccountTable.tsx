@@ -71,6 +71,21 @@ const rowGenerator = (
     let sum = 0
     const roww = []
     const granularity: any = {}
+    const sortedDate =
+        input
+            ?.flatMap((row) => Object.entries(row.costValue || {}))
+            .map((v) => dayjs(v[0]))
+            .sort((a, b) => {
+                if (a.isSame(b)) {
+                    return 0
+                }
+                return a.isBefore(b) ? -1 : 1
+            }) || []
+    const oldestDate = sortedDate.at(0)?.format('YYYY-MM-DD')
+    const latestDate = sortedDate
+        .at(sortedDate.length - 1)
+        ?.format('YYYY-MM-DD')
+
     let pinnedRow = [
         { totalCost: sum, dimension: 'Total spend', ...granularity },
     ]
@@ -92,8 +107,14 @@ const rowGenerator = (
                         .flatMap((v) => Object.entries(v.costValue || {}))
                         .map((v) => v[1])
                         .reduce((prev, curr) => prev + curr, 0) || 0
-                const oldest = pickFromRecord(row.costValue, 'oldest')
-                const latest = pickFromRecord(row.costValue, 'latest')
+                const oldest =
+                    Object.entries(row.costValue || {})
+                        .filter((v) => v[0] === oldestDate)
+                        .at(0)?.[1] || 0
+                const latest =
+                    Object.entries(row.costValue || {})
+                        .filter((v) => v[0] === latestDate)
+                        .at(0)?.[1] || 0
                 return {
                     dimension: row.dimensionName
                         ? row.dimensionName
@@ -301,7 +322,9 @@ export default function AccountTable({
                     aggFunc: 'sum',
                     resizable: true,
                     valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value ? `$${param.value.toFixed(0)}` : ''
+                        return param.value !== undefined
+                            ? `$${param.value.toFixed(0)}`
+                            : ''
                     },
                 },
                 {
@@ -314,7 +337,9 @@ export default function AccountTable({
                     aggFunc: 'sum',
                     resizable: true,
                     valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value ? `$${param.value.toFixed(0)}` : ''
+                        return param.value !== undefined
+                            ? `$${param.value.toFixed(0)}`
+                            : ''
                     },
                 },
                 {
@@ -326,7 +351,9 @@ export default function AccountTable({
                     aggFunc: 'sum',
                     resizable: true,
                     valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value ? `${param.value.toFixed(0)}%` : ''
+                        return param.value !== undefined
+                            ? `${param.value.toFixed(0)}%`
+                            : ''
                     },
                 },
             ]
