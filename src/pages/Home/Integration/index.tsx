@@ -52,7 +52,7 @@ export default function Integration() {
                                       className={`!rounded-3xl cursor-pointer ${
                                           connector.name === 'AWS'
                                               ? ''
-                                              : 'bg-kaytu-800 text-white'
+                                              : '!bg-kaytu-800 text-white'
                                       }`}
                                   >
                                       <img
