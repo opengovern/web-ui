@@ -1,6 +1,6 @@
 import { Col, Grid } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Layout from '../../../components/Layout'
 import SingleSpendConnection from '../Single/SingleConnection'
 import {
@@ -108,12 +108,35 @@ export function SpendAccounts() {
             connectionId: selectedConnections.connections,
             connectionGroup: selectedConnections.connectionGroup,
         })
-    const ref = useRef<any>(null)
-    // const handleClick = () => {}
 
-    const onScroll = (v: any) => {
-        console.log('scrolled')
-        ref.current?.scrollIntoView({ behavior: 'smooth' })
+    const chartRef = useRef<any>(null)
+    const ref = useRef<any>(null)
+    const [lastScrollTop, setLastScrollTop] = useState<number>(0)
+    const handleScroll = (event: any) => {
+        const scrollTop = event.target?.scrollTop || 0
+        const diff = scrollTop - lastScrollTop
+        if (diff > 40) {
+            ref.current?.scrollTo({
+                top: chartRef.current.scrollHeight + 30,
+                behavior: 'smooth',
+            })
+        } else if (diff < -40) {
+            ref.current?.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+            })
+        } else if (scrollTop < chartRef.current.scrollHeight / 2) {
+            ref.current?.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+            })
+        } else {
+            ref.current?.scrollTo({
+                top: chartRef.current.scrollHeight + 30,
+                behavior: 'smooth',
+            })
+        }
+        setLastScrollTop(event.target?.scrollTop || 0)
     }
 
     return (
@@ -121,7 +144,8 @@ export function SpendAccounts() {
             currentPage="spend/accounts"
             datePicker
             filter
-            onScroll={onScroll}
+            onScroll={handleScroll}
+            scrollRef={ref}
         >
             {selectedConnections.connections.length === 1 ? (
                 <SingleSpendConnection
@@ -130,7 +154,7 @@ export function SpendAccounts() {
                 />
             ) : (
                 <Grid numItems={3} className="w-full gap-4">
-                    <Col numColSpan={3}>
+                    <Col numColSpan={3} ref={chartRef}>
                         <SpendChart
                             costTrend={costTrend || []}
                             costField="account"

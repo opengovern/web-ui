@@ -1,6 +1,6 @@
 import { Flex } from '@tremor/react'
 import { useParams } from 'react-router-dom'
-import { ReactNode } from 'react'
+import { ReactNode, UIEvent } from 'react'
 import TopHeader from './Header'
 import Footer from './Footer'
 import Sidebar from './Sidebar'
@@ -33,7 +33,8 @@ type IProps = {
         | '404'
     showSidebar?: boolean
     hFull?: boolean
-    onScroll?: (e: any) => void
+    onScroll?: (e: UIEvent) => void
+    scrollRef?: any
 }
 
 export default function Layout({
@@ -46,19 +47,12 @@ export default function Layout({
     datePicker = false,
     breadCrumb,
     onScroll,
+    scrollRef,
 }: IProps) {
     const workspace = useParams<{ ws: string }>().ws
 
     return (
-        <Flex
-            className="h-screen overflow-hidden"
-            onScroll={(e) => {
-                console.log(e)
-                if (onScroll) {
-                    onScroll(e)
-                }
-            }}
-        >
+        <Flex className="h-screen overflow-hidden">
             {showSidebar && (
                 <Sidebar workspace={workspace} currentPage={currentPage} />
             )}
@@ -77,6 +71,12 @@ export default function Layout({
                     alignItems="center"
                     className="mt-16 bg-gray-100 dark:bg-gray-900 h-screen overflow-y-scroll overflow-x-hidden"
                     id="kaytu-container"
+                    onScroll={(e) => {
+                        if (onScroll) {
+                            onScroll(e)
+                        }
+                    }}
+                    ref={scrollRef}
                 >
                     <Flex
                         justifyContent="center"
