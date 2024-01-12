@@ -1,6 +1,6 @@
 import { Col, Grid } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Layout from '../../../components/Layout'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
@@ -101,29 +101,38 @@ export function SpendMetrics() {
     const chartRef = useRef<any>(null)
     const ref = useRef<any>(null)
     const [lastScrollTop, setLastScrollTop] = useState<number>(0)
+    const [scrollTarget, setScrollTarget] = useState<'top' | 'bottom'>('top')
+    const [timer, setTimer] = useState<any>(undefined)
+    useEffect(() => {
+        if (timer !== undefined) {
+            clearTimeout(timer)
+        }
+        const t = setTimeout(() => {
+            if (scrollTarget === 'bottom') {
+                ref.current?.scrollTo({
+                    top: chartRef.current.scrollHeight + 30,
+                    behavior: 'smooth',
+                })
+            } else {
+                ref.current?.scrollTo({
+                    top: 0,
+                    behavior: 'smooth',
+                })
+            }
+        }, 500)
+        setTimer(t)
+    }, [scrollTarget])
     const handleScroll = (event: any) => {
         const scrollTop = event.target?.scrollTop || 0
         const diff = scrollTop - lastScrollTop
         if (diff > 40) {
-            ref.current?.scrollTo({
-                top: chartRef.current.scrollHeight + 30,
-                behavior: 'smooth',
-            })
+            setScrollTarget('bottom')
         } else if (diff < -40) {
-            ref.current?.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-            })
-        } else if (scrollTop < chartRef.current.scrollHeight / 2) {
-            ref.current?.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-            })
+            setScrollTarget('top')
+        } else if (scrollTop < 50) {
+            setScrollTarget('top')
         } else {
-            ref.current?.scrollTo({
-                top: chartRef.current.scrollHeight + 30,
-                behavior: 'smooth',
-            })
+            setScrollTarget('bottom')
         }
         setLastScrollTop(event.target?.scrollTop || 0)
     }
