@@ -231,7 +231,7 @@ export default function JobsMenu({ isCollapsed }: IJobsMenu) {
                         isCollapsed ? 'left-[57px]' : 'left-[292px]'
                     } bottom-0 z-10`}
                 >
-                    <Card className="w-fit !ring-gray-600">
+                    <Card className="w-fit dark:!ring-gray-600">
                         <Flex justifyContent="between">
                             <Title className="font-bold text-gray-800">
                                 Jobs in last 24 hours
