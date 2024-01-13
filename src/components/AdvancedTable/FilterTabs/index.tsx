@@ -1,5 +1,4 @@
 import { Flex, Tab, TabGroup, TabList, Card, Text, Icon } from '@tremor/react'
-import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 
 type FilterTab = {
@@ -16,10 +15,11 @@ type FilterTab = {
 
 interface IProps {
     tabs: FilterTab
+    defaultTabIdx: number
 }
 
-export default function FilterTabs({ tabs }: IProps) {
-    const [tab, setTab] = useState(0)
+export default function FilterTabs({ tabs, defaultTabIdx }: IProps) {
+    const [tab, setTab] = useState(defaultTabIdx)
 
     return (
         <TabGroup index={tab} onIndexChange={setTab}>

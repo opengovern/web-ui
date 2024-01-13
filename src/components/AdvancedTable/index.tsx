@@ -95,6 +95,7 @@ interface IProps<TData, TValue> {
     manualSort?: MSort
     manualGrouping?: string
     filterTabs?: FilterTab
+    defaultTabIdx?: number
     ref?: React.MutableRefObject<any>
 }
 
@@ -122,6 +123,7 @@ export default function AdvancedTable<TData = any, TValue = any>({
     manualSort,
     manualGrouping,
     filterTabs,
+    defaultTabIdx,
     ref,
 }: IProps<TData, TValue>) {
     const gridRef = useRef<AgGridReact>(null)
@@ -397,7 +399,10 @@ export default function AdvancedTable<TData = any, TValue = any>({
 
             {filterTabs !== undefined && (
                 <Flex className="m-4">
-                    <FilterTabs tabs={filterTabs} />
+                    <FilterTabs
+                        tabs={filterTabs}
+                        defaultTabIdx={defaultTabIdx || 0}
+                    />
                 </Flex>
             )}
 

@@ -155,11 +155,12 @@ export function SpendOverview() {
                         valueColumnTitle="Spend"
                         loading={compositionLoading}
                         items={topCategories(composition)}
-                        url="spend-details#category"
+                        url="metrics?groupby=category"
                         type="service"
                         isPrice
                         error={getErrorMessage(compositionError)}
                         onRefresh={refreshComposition}
+                        isClickable={false}
                     />
                 </Col>
                 <Col numColSpan={1} className="h-full">
@@ -174,6 +175,7 @@ export function SpendOverview() {
                         isPrice
                         error={getErrorMessage(accountCostError)}
                         onRefresh={refreshAccountCost}
+                        isClickable={false}
                     />
                 </Col>
                 <Col numColSpan={1} className="h-full">
@@ -188,6 +190,7 @@ export function SpendOverview() {
                         isPrice
                         error={getErrorMessage(serviceCostErr)}
                         onRefresh={serviceCostRefresh}
+                        isClickable={false}
                     />
                 </Col>
             </Grid>
