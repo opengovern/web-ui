@@ -1,5 +1,5 @@
 import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Dispatch, SetStateAction, useState } from 'react'
 import {
     CurrencyDollarIcon,
@@ -200,6 +200,7 @@ export default function MetricTable({
     onGranularityChange,
 }: IMetricTable) {
     const navigate = useNavigate()
+    const [searchParams, setSearchParams] = useSearchParams()
 
     const [granularityEnabled, setGranularityEnabled] = useState<boolean>(false)
 
@@ -353,7 +354,9 @@ export default function MetricTable({
         sortType: null,
     })
 
-    const [manualGrouping, onManualGrouping] = useState<string>('none')
+    const [manualGrouping, onManualGrouping] = useState<string>(
+        searchParams.get('groupby') === 'category' ? 'category' : 'none'
+    )
 
     const filterTabs = [
         {
@@ -435,6 +438,7 @@ export default function MetricTable({
             manualSort={manualTableSort}
             manualGrouping={manualGrouping}
             filterTabs={filterTabs}
+            defaultTabIdx={searchParams.get('groupby') === 'category' ? 3 : 0}
         />
     )
 }
