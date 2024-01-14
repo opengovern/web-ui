@@ -2,7 +2,7 @@ import { BadgeDelta, Card, Color, Flex, Metric, Text } from '@tremor/react'
 import dayjs from 'dayjs'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import { badgeTypeByDelta } from '../../../utilities/deltaType'
-import { renderText } from '../../DateRangePicker'
+import { renderText } from '../../Layout/Header/DateRangePicker'
 
 interface ISpendChartMetric {
     title: string

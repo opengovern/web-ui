@@ -11,7 +11,7 @@ import dayjs, { Dayjs } from 'dayjs'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../api/api'
 import AdvancedTable, { IColumn } from '../../../components/AdvancedTable'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
-import { renderText } from '../../../components/DateRangePicker'
+import { renderText } from '../../../components/Layout/Header/DateRangePicker'
 import { pickFromRecord } from '../Account/AccountTable'
 
 type MSort = {

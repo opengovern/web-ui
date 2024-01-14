@@ -8,7 +8,7 @@ import { AriaDateRangePickerProps, DateValue } from '@react-aria/datepicker'
 import dayjs from 'dayjs'
 import quarterOfYear from 'dayjs/plugin/quarterOfYear'
 import { Flex, Text, Title } from '@tremor/react'
-import { spendTimeAtom, timeAtom, workspaceAtom } from '../../store'
+import { spendTimeAtom, timeAtom, workspaceAtom } from '../../../../store'
 import { FieldButton } from './Button'
 import { RangeCalendar } from './Calendar/RangeCalendar'
 import { Popover } from './Popover'
@@ -147,7 +147,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                 ref={ref}
                 className="flex group h-[38px] rounded-r-lg overflow-hidden"
             >
-                <div className="flex items-center bg-white dark:bg-gray-900 dark:text-gray-50 border border-gray-300 group-hover:border-gray-400 transition-colors rounded-l-lg px-5 group-focus-within:border-kaytu-600 group-focus-within:group-hover:border-kaytu-600 p-1 relative">
+                <div className="flex items-center bg-white dark:bg-gray-900 dark:text-gray-50 border border-gray-300 dark:border-gray-700 group-hover:border-gray-400 transition-colors rounded-l-lg px-5 group-focus-within:border-kaytu-600 group-focus-within:group-hover:border-kaytu-600 p-1 relative">
                     <Text className="text-gray-800">
                         {renderText(start(), end())}{' '}
                         <span className="text-orange-600 ml-2">UTC</span>
@@ -185,7 +185,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         <Title>Relative dates</Title>
                         <Flex
                             onClick={() => setActiveTimeRange(last7Days())}
-                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
                         >
                             <Text className="text-gray-800">Last 7 days</Text>
                             <Text>
@@ -194,7 +194,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         </Flex>
                         <Flex
                             onClick={() => setActiveTimeRange(last30Days())}
-                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
                         >
                             <Text className="text-gray-800">Last 30 days</Text>
                             <Text>
@@ -207,7 +207,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         <Title className="mt-3">Calender months</Title>
                         <Flex
                             onClick={() => setActiveTimeRange(thisMonth())}
-                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
                         >
                             <Text className="text-gray-800">This month</Text>
                             <Text>
@@ -216,7 +216,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         </Flex>
                         <Flex
                             onClick={() => setActiveTimeRange(lastMonth())}
-                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
                         >
                             <Text className="text-gray-800">Last month</Text>
                             <Text>
@@ -225,7 +225,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         </Flex>
                         <Flex
                             onClick={() => setActiveTimeRange(thisQuarter())}
-                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
                         >
                             <Text className="text-gray-800">This quarter</Text>
                             <Text>
@@ -237,7 +237,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         </Flex>
                         <Flex
                             onClick={() => setActiveTimeRange(lastQuarter())}
-                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
                         >
                             <Text className="text-gray-800">Last quarter</Text>
                             <Text>
@@ -249,7 +249,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         </Flex>
                         <Flex
                             onClick={() => setActiveTimeRange(thisYear())}
-                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
                         >
                             <Text className="text-gray-800">This year</Text>
                             <Text>
@@ -257,7 +257,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                             </Text>
                         </Flex>
                         <Flex
-                            className="mt-5 space-x-4 px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="mt-5 space-x-4 px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
                             onClick={() => {
                                 listState.close()
                                 state.setOpen(true)
