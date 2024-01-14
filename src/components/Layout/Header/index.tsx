@@ -6,7 +6,7 @@ import {
     kebabCaseToLabel,
     snakeCaseToLabel,
 } from '../../../utilities/labelMaker'
-import DateRangePicker from '../../DateRangePicker'
+import DateRangePicker from './DateRangePicker'
 import Filter from './Filter'
 
 interface IHeader {
