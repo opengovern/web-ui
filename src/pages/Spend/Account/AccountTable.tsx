@@ -319,6 +319,8 @@ export default function AccountTable({
                     type: 'string',
                     width: 90,
                     pinned: true,
+                    wrapText: true,
+                    autoHeight: true,
                     aggFunc: 'sum',
                     resizable: true,
                     valueFormatter: (param: ValueFormatterParams) => {
@@ -387,6 +389,8 @@ export default function AccountTable({
             sortable: true,
             aggFunc: 'sum',
             resizable: true,
+            wrapText: true,
+            autoHeight: true,
             pivot: false,
             pinned: true,
             valueFormatter: (param: ValueFormatterParams) => {

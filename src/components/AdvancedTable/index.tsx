@@ -69,6 +69,8 @@ export interface IColumn<TData, TValue> {
     sortable?: boolean
     resizable?: boolean
     flex?: number
+    wrapText?: boolean
+    autoHeight?: boolean
 }
 
 interface IProps<TData, TValue> {
@@ -193,6 +195,8 @@ export default function AdvancedTable<TData = any, TValue = any>({
                 pivot: item.pivot || false,
                 valueFormatter: item.valueFormatter,
                 comparator: item.comparator,
+                wrapText: item.wrapText,
+                autoHeight: item.autoHeight,
             }
 
             if (
