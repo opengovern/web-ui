@@ -71,6 +71,8 @@ export interface IColumn<TData, TValue> {
     flex?: number
     wrapText?: boolean
     autoHeight?: boolean
+    wrapHeaderText?: boolean
+    autoHeaderHeight?: boolean
 }
 
 interface IProps<TData, TValue> {
@@ -197,6 +199,8 @@ export default function AdvancedTable<TData = any, TValue = any>({
                 comparator: item.comparator,
                 wrapText: item.wrapText,
                 autoHeight: item.autoHeight,
+                wrapHeaderText: item.wrapHeaderText,
+                autoHeaderHeight: item.autoHeaderHeight,
             }
 
             if (
