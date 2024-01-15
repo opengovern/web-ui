@@ -136,30 +136,6 @@ const rowGenerator = (
     }
 }
 
-const defaultColumns: IColumn<any, any>[] = [
-    {
-        field: 'connector',
-        headerName: 'Cloud provider',
-        type: 'string',
-        width: 140,
-        enableRowGroup: true,
-        filter: true,
-        resizable: true,
-        sortable: true,
-        pinned: true,
-    },
-    {
-        field: 'dimension',
-        headerName: 'Metric',
-        type: 'string',
-        filter: true,
-        sortable: true,
-        resizable: true,
-        pivot: false,
-        pinned: true,
-    },
-]
-
 export const gridOptions: GridOptions = {
     columnTypes: {
         dimension: {
@@ -171,7 +147,8 @@ export const gridOptions: GridOptions = {
     groupAllowUnbalanced: true,
     autoGroupColumnDef: {
         pinned: true,
-        flex: 2,
+        width: 150,
+        suppressMenu: true,
         sortable: true,
         filter: true,
         resizable: true,
@@ -261,15 +238,39 @@ export default function MetricTable({
             field: 'category',
             headerName: 'Category',
             type: 'string',
-            width: 130,
+            width: 110,
             hide: false,
             filter: true,
             enableRowGroup: true,
+            suppressMenu: true,
             sortable: true,
             resizable: true,
             pinned: true,
         },
-        ...defaultColumns,
+        {
+            field: 'connector',
+            headerName: 'Provider',
+            type: 'string',
+            width: 80,
+            suppressMenu: true,
+            enableRowGroup: true,
+            filter: true,
+            resizable: true,
+            sortable: true,
+            pinned: true,
+        },
+        {
+            field: 'dimension',
+            headerName: 'Metric',
+            type: 'string',
+            width: 230,
+            suppressMenu: true,
+            filter: true,
+            sortable: true,
+            resizable: true,
+            pivot: false,
+            pinned: true,
+        },
         {
             field: 'totalCost',
             headerName: `Total spend [${renderText(
@@ -277,7 +278,10 @@ export default function MetricTable({
                 timeRange.end
             )}]`,
             type: 'price',
-            width: 110,
+            wrapHeaderText: true,
+            autoHeaderHeight: true,
+            suppressMenu: true,
+            width: 180,
             sortable: true,
             aggFunc: 'sum',
             resizable: true,
@@ -289,9 +293,10 @@ export default function MetricTable({
         },
         {
             field: 'percent',
-            headerName: '% of Total',
+            headerName: '% of Total Spend',
             type: 'string',
-            width: 90,
+            suppressMenu: true,
+            width: 100,
             pinned: true,
             aggFunc: 'sum',
             resizable: true,
@@ -306,7 +311,10 @@ export default function MetricTable({
                 prevTimeRange.end
             )}]`,
             type: 'string',
-            width: 90,
+            wrapHeaderText: true,
+            autoHeaderHeight: true,
+            suppressMenu: true,
+            width: 180,
             pinned: true,
             aggFunc: 'sum',
             resizable: true,
@@ -318,11 +326,11 @@ export default function MetricTable({
         },
         {
             field: 'change',
-            headerName: 'Change in Spend',
+            headerName: 'Change',
             type: 'string',
-            width: 90,
+            suppressMenu: true,
+            width: 150,
             pinned: true,
-            hide: true,
             aggFunc: 'sum',
             resizable: true,
             valueFormatter: (param: ValueFormatterParams) => {
@@ -335,8 +343,10 @@ export default function MetricTable({
             field: 'changePercent',
             headerName: 'Change %',
             type: 'string',
-            width: 90,
+            suppressMenu: true,
+            width: 100,
             pinned: true,
+            hide: true,
             aggFunc: 'sum',
             resizable: true,
             valueFormatter: (param: ValueFormatterParams) => {
