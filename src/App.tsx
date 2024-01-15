@@ -80,18 +80,15 @@ export default function App() {
         }
     }, [isAuthenticated])
 
-    if (isLoading || accessTokenLoading) {
-        return (
-            <Flex
-                flexDirection="col"
-                justifyContent="center"
-                alignItems="center"
-                className="w-full h-screen dark:bg-gray-900"
-            >
-                <Spinner />
-            </Flex>
-        )
-    }
-
-    return <Router />
+    return isLoading || accessTokenLoading ? (
+        <Flex
+            justifyContent="center"
+            alignItems="center"
+            className="w-screen h-screen dark:bg-gray-900"
+        >
+            <Spinner />
+        </Flex>
+    ) : (
+        <Router />
+    )
 }
