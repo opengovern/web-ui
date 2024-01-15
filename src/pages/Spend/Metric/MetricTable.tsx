@@ -136,46 +136,6 @@ const rowGenerator = (
     }
 }
 
-const defaultColumns: IColumn<any, any>[] = [
-    {
-        field: 'category',
-        headerName: 'Category',
-        type: 'string',
-        width: 110,
-        hide: false,
-        filter: true,
-        enableRowGroup: true,
-        suppressMenu: true,
-        sortable: true,
-        resizable: true,
-        pinned: true,
-    },
-    {
-        field: 'connector',
-        headerName: 'Provider',
-        type: 'string',
-        width: 80,
-        suppressMenu: true,
-        enableRowGroup: true,
-        filter: true,
-        resizable: true,
-        sortable: true,
-        pinned: true,
-    },
-    {
-        field: 'dimension',
-        headerName: 'Metric',
-        type: 'string',
-        width: 230,
-        suppressMenu: true,
-        filter: true,
-        sortable: true,
-        resizable: true,
-        pivot: false,
-        pinned: true,
-    },
-]
-
 export const gridOptions: GridOptions = {
     columnTypes: {
         dimension: {
@@ -274,7 +234,43 @@ export default function MetricTable({
     }
 
     const columns: IColumn<any, any>[] = [
-        ...defaultColumns,
+        {
+            field: 'category',
+            headerName: 'Category',
+            type: 'string',
+            width: 110,
+            hide: false,
+            filter: true,
+            enableRowGroup: true,
+            suppressMenu: true,
+            sortable: true,
+            resizable: true,
+            pinned: true,
+        },
+        {
+            field: 'connector',
+            headerName: 'Provider',
+            type: 'string',
+            width: 80,
+            suppressMenu: true,
+            enableRowGroup: true,
+            filter: true,
+            resizable: true,
+            sortable: true,
+            pinned: true,
+        },
+        {
+            field: 'dimension',
+            headerName: 'Metric',
+            type: 'string',
+            width: 230,
+            suppressMenu: true,
+            filter: true,
+            sortable: true,
+            resizable: true,
+            pivot: false,
+            pinned: true,
+        },
         {
             field: 'totalCost',
             headerName: `Total spend [${renderText(
@@ -297,7 +293,7 @@ export default function MetricTable({
         },
         {
             field: 'percent',
-            headerName: '% of Total',
+            headerName: '% of Total Spend',
             type: 'string',
             suppressMenu: true,
             width: 100,
@@ -330,12 +326,11 @@ export default function MetricTable({
         },
         {
             field: 'change',
-            headerName: 'Change in Spend',
+            headerName: 'Change',
             type: 'string',
             suppressMenu: true,
             width: 150,
             pinned: true,
-            hide: true,
             aggFunc: 'sum',
             resizable: true,
             valueFormatter: (param: ValueFormatterParams) => {
@@ -351,6 +346,7 @@ export default function MetricTable({
             suppressMenu: true,
             width: 100,
             pinned: true,
+            hide: true,
             aggFunc: 'sum',
             resizable: true,
             valueFormatter: (param: ValueFormatterParams) => {
