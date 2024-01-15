@@ -1,6 +1,6 @@
 import { withAuthenticationRequired } from '@auth0/auth0-react'
 import React from 'react'
-import { Card, Flex } from '@tremor/react'
+import { Flex } from '@tremor/react'
 import Spinner from '../Spinner'
 
 interface IAuthenticationGuard {
