@@ -142,12 +142,12 @@ function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
     const fullTitle = () => {
         const percentage = numberDisplay((count / totalJobs) * 100)
         if (status === 'Failed') {
-            return `${percentage}% of ${title} jobs failed`
+            return `${percentage}% of ${title} activities failed`
         }
         if (status === 'In Progress') {
-            return `${percentage}% of ${title} jobs are running`
+            return `${percentage}% of ${title} activities are running`
         }
-        return `${title} jobs finished successfully`
+        return `${title} activities finished successfully`
     }
     const [open, setOpen] = useState(false)
 
@@ -215,7 +215,9 @@ export default function JobsMenu({ isCollapsed }: IJobsMenu) {
                 id="Jobs"
             >
                 <ClipboardDocumentListIcon className="h-5 w-5 stroke-2 text-gray-400" />
-                {!isCollapsed && <Text className="text-inherit">Jobs</Text>}
+                {!isCollapsed && (
+                    <Text className="text-inherit">Activity Log</Text>
+                )}
             </Popover.Button>
             <Transition
                 as={Fragment}
