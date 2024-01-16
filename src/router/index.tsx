@@ -345,7 +345,7 @@ export default function Router() {
     }, [url])
 
     return (
-        <Layout currentPage="assets">
+        <Layout>
             <Routes>
                 {authRoutes.map((route) => (
                     <Route

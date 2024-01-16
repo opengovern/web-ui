@@ -1,5 +1,4 @@
 import { Flex } from '@tremor/react'
-import { useParams } from 'react-router-dom'
 import { ReactNode, UIEvent } from 'react'
 import TopHeader from './Header'
 import Footer from './Footer'
@@ -12,7 +11,7 @@ type IProps = {
     filter?: boolean
     datePicker?: boolean
     breadCrumb?: (string | undefined)[]
-    currentPage:
+    currentPage?:
         | 'home'
         | 'insights'
         | 'assets'
@@ -56,7 +55,6 @@ export default function Layout({
     const url = window.location.pathname.split('/')
     const current = url[url.length - 1]
     const workspace = url[1]
-    console.log(current)
 
     return (
         <Flex className="h-screen overflow-hidden">
@@ -65,13 +63,6 @@ export default function Layout({
             )}
 
             <div className="z-10 w-full h-full relative">
-                <TopHeader
-                    filter={filter}
-                    datePicker={datePicker}
-                    breadCrumb={breadCrumb}
-                >
-                    {headerChildren}
-                </TopHeader>
                 <Notification />
                 <Flex
                     flexDirection="col"

@@ -53,7 +53,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const preview = useAtomValue(previewAtom)
     const { response: spendCount, isLoading: spendCountIsLoading } =
         useInventoryApiV2AnalyticsSpendCountList({}, true, workspace)
-    console.log(workspace)
     const { response: assetCount, isLoading: assetsIsLoading } =
         useInventoryApiV2AnalyticsCountList({}, true, workspace)
     const { response: findingsCount, isLoading: findingsIsLoading } =
