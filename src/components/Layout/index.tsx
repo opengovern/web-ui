@@ -14,7 +14,7 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
     const url = window.location.pathname.split('/')
     const current = `${url[2]}${url[3] ? `/${url[3]}` : ''}`
     const workspace = url[1]
-    const showSidebar = true
+    const showSidebar = workspace !== 'workspaces' && workspace !== 'billing'
 
     return (
         <Flex className="h-screen overflow-hidden">
@@ -36,11 +36,7 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                     ref={scrollRef}
                 >
                     <Flex justifyContent="center" className="px-12">
-                        <div
-                            className={`${
-                                current === 'settings' ? '' : 'max-w-7xl'
-                            } w-full py-6 h-full`}
-                        >
+                        <div className="w-full max-w-7xl py-6 h-full">
                             {children}
                         </div>
                     </Flex>

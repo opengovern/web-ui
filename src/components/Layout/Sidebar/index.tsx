@@ -49,7 +49,6 @@ interface ISidebar {
 }
 
 export default function Sidebar({ workspace, currentPage }: ISidebar) {
-    console.log(currentPage)
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
     const preview = useAtomValue(previewAtom)
     const { response: spendCount, isLoading: spendCountIsLoading } =
@@ -524,7 +523,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                             )}
                     </Flex>
                 </Flex>
-                <Utilities isCollapsed={collapsed} />
+                <Utilities isCollapsed={collapsed} workspace={workspace} />
             </Flex>
         </AnimatePresence>
     )
