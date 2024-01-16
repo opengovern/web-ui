@@ -187,7 +187,7 @@ export default function MetricTable({
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
 
-    const [granularityEnabled, setGranularityEnabled] = useState<boolean>(false)
+    const [granularityEnabled, setGranularityEnabled] = useState<boolean>(true)
 
     const columnGenerator = (
         input:
@@ -214,7 +214,7 @@ export default function MetricTable({
                               (value, index, array) =>
                                   array.indexOf(value) === index
                           )
-                          .map((colName) => {
+                          .map((colName, idx) => {
                               const v: IColumn<any, any> = {
                                   field: colName,
                                   headerName: colName,
@@ -225,6 +225,7 @@ export default function MetricTable({
                                   sortable: true,
                                   resizable: true,
                                   suppressMenu: true,
+                                  columnGroupShow: 'open',
                                   valueFormatter: (
                                       param: ValueFormatterParams
                                   ) => {
@@ -236,7 +237,24 @@ export default function MetricTable({
                               return v
                           })
                     : []
-            columns = [...dynamicCols]
+
+            const total: IColumn<any, any> = {
+                field: 'totalCost',
+                headerName: 'Total',
+                type: 'price',
+                width: 130,
+                aggFunc: 'sum',
+                filter: true,
+                sortable: true,
+                resizable: true,
+                suppressMenu: true,
+                columnGroupShow: 'closed',
+                valueFormatter: (param: ValueFormatterParams) => {
+                    return param.value ? exactPriceDisplay(param.value) : ''
+                },
+            }
+
+            columns = [total, ...dynamicCols]
         }
         return columns
     }
@@ -478,7 +496,7 @@ export default function MetricTable({
 
     useEffect(() => {
         setTableKey(Math.random().toString(16).slice(2, 8))
-    }, [manualGrouping, timeRange, granularityEnabled])
+    }, [manualGrouping, timeRange, granularityEnabled, response])
 
     return (
         <AdvancedTable
