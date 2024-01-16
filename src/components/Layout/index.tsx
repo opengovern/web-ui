@@ -36,9 +36,7 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                     ref={scrollRef}
                 >
                     <Flex justifyContent="center" className="px-12">
-                        <div className="w-full max-w-7xl py-6 h-full">
-                            {children}
-                        </div>
+                        <div className="w-full max-w-7xl py-6">{children}</div>
                     </Flex>
                     <Footer />
                 </Flex>
