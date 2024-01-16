@@ -2,10 +2,8 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai/index'
 import { useEffect, useState } from 'react'
-import Metrics from './Tabs/Metrics'
 import { checkGranularity } from '../../../utilities/dateComparator'
 import { filterAtom, spendTimeAtom } from '../../../store'
-import CloudAccounts from './Tabs/CloudAccounts'
 import TopHeader from '../../../components/Layout/Header'
 
 export default function SpendDetails() {
@@ -53,7 +51,7 @@ export default function SpendDetails() {
                         Cloud accounts
                     </Tab>
                 </TabList>
-                <TabPanels>
+                {/* <TabPanels>
                     <TabPanel>
                         <Metrics
                             activeTimeRange={activeTimeRange}
@@ -71,7 +69,7 @@ export default function SpendDetails() {
                             onGranularityChange={setSelectedGranularity}
                         />
                     </TabPanel>
-                </TabPanels>
+                </TabPanels> */}
             </TabGroup>
         </>
     )

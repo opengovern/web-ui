@@ -132,7 +132,6 @@ export function SpendAccounts() {
                 }
                 const exists =
                     prev.filter((p) => p.date === curr.date).length > 0
-                console.log(exists)
                 if (exists) {
                     return prev.map((p) => {
                         if (p.date === curr.date) {

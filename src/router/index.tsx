@@ -7,7 +7,6 @@ import { CallbackPage } from '../pages/Callback'
 import Settings from '../pages/Settings'
 import Workspaces from '../pages/Workspaces'
 import Logout from '../pages/Logout'
-import Spend from '../pages/Spend'
 import Integrations from '../pages/Integrations'
 import ConnectorDetail from '../pages/Integrations/ConnectorDetail'
 import Compliance from '../pages/Governance/Compliance'
@@ -20,7 +19,6 @@ import SingleSpend from '../pages/Spend/Single'
 import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
 import InsightDetails from '../pages/Insights/Details'
 import InsightList from '../pages/Insights/InsightList'
-import SpendDetails from '../pages/Spend/Details'
 import AssetDetails from '../pages/Assets/Details'
 import Rules from '../pages/Automation/Rules'
 import Alerts from '../pages/Automation/Alerts'
@@ -148,11 +146,6 @@ const authRoutes = [
         key: 'spend single metric',
         path: '/:ws/spend/metrics/:id/:metric',
         component: SingleSpend,
-    },
-    {
-        key: 'spend metrics',
-        path: '/:ws/spend/spend-details',
-        component: SpendDetails,
     },
     {
         key: 'spend single 2',

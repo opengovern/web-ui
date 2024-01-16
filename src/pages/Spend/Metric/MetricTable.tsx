@@ -1,6 +1,6 @@
 import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import {
     CurrencyDollarIcon,
     ListBulletIcon,
@@ -12,7 +12,6 @@ import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../.
 import AdvancedTable, { IColumn } from '../../../components/AdvancedTable'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import { renderText } from '../../../components/Layout/Header/DateRangePicker'
-import { pickFromRecord } from '../Account/AccountTable'
 
 type MSort = {
     sortCol: string
@@ -75,6 +74,11 @@ const rowGenerator = (
                     // eslint-disable-next-line no-return-assign
                     (v: number | unknown) => (totalCost += Number(v))
                 )
+                const totalMetricSpendInPrev =
+                    inputPrev
+                        ?.flatMap((v) => Object.entries(v.costValue || {}))
+                        .map((v) => v[1])
+                        .reduce((prev, curr) => prev + curr, 0) || 0
                 const totalSpendInPrev =
                     inputPrev
                         ?.filter((v) => v.dimensionId === row.dimensionId)
@@ -100,8 +104,12 @@ const rowGenerator = (
                     id: row.dimensionId,
                     totalCost,
                     prevTotalCost: totalSpendInPrev,
-                    changePercent: ((latest - oldest) / oldest) * 100.0,
-                    change: latest - oldest,
+                    prevPercent:
+                        (totalSpendInPrev / totalMetricSpendInPrev) * 100.0,
+                    changePercent:
+                        ((totalCost - totalSpendInPrev) / totalSpendInPrev) *
+                        100.0,
+                    change: totalCost - totalSpendInPrev,
                     ...temp,
                 }
             }) || []
@@ -235,128 +243,180 @@ export default function MetricTable({
 
     const columns: IColumn<any, any>[] = [
         {
-            field: 'category',
-            headerName: 'Category',
-            type: 'string',
-            width: 110,
-            hide: false,
-            filter: true,
-            enableRowGroup: true,
-            suppressMenu: true,
-            sortable: true,
-            resizable: true,
+            headerName: 'Metric Metadata',
+            type: 'parent',
             pinned: true,
+            children: [
+                {
+                    field: 'category',
+                    headerName: 'Category',
+                    type: 'string',
+                    width: 110,
+                    hide: false,
+                    filter: true,
+                    enableRowGroup: true,
+                    suppressMenu: true,
+                    sortable: true,
+                    resizable: true,
+                    pinned: true,
+                },
+                {
+                    field: 'connector',
+                    headerName: 'Provider',
+                    type: 'string',
+                    width: 100,
+                    suppressMenu: true,
+                    enableRowGroup: true,
+                    filter: true,
+                    resizable: true,
+                    sortable: true,
+                    pinned: true,
+                },
+                {
+                    field: 'dimension',
+                    headerName: 'Name',
+                    type: 'string',
+                    width: 230,
+                    suppressMenu: true,
+                    filter: true,
+                    sortable: true,
+                    resizable: true,
+                    pivot: false,
+                    pinned: true,
+                },
+            ],
         },
         {
-            field: 'connector',
-            headerName: 'Provider',
-            type: 'string',
-            width: 80,
-            suppressMenu: true,
-            enableRowGroup: true,
-            filter: true,
-            resizable: true,
-            sortable: true,
-            pinned: true,
-        },
-        {
-            field: 'dimension',
-            headerName: 'Metric',
-            type: 'string',
-            width: 230,
-            suppressMenu: true,
-            filter: true,
-            sortable: true,
-            resizable: true,
-            pivot: false,
-            pinned: true,
-        },
-        {
-            field: 'totalCost',
-            headerName: `Total spend [${renderText(
+            headerName: `Current Period [${renderText(
                 timeRange.start,
                 timeRange.end
             )}]`,
-            type: 'price',
+            type: 'parent',
+            pinned: true,
             wrapHeaderText: true,
             autoHeaderHeight: true,
-            suppressMenu: true,
-            width: 180,
-            sortable: true,
-            aggFunc: 'sum',
-            resizable: true,
-            pivot: false,
-            pinned: true,
-            valueFormatter: (param: ValueFormatterParams) => {
-                return param.value ? exactPriceDisplay(param.value) : ''
-            },
+            children: [
+                {
+                    field: 'totalCost',
+                    headerName: 'Spend',
+                    type: 'price',
+                    wrapHeaderText: true,
+                    autoHeaderHeight: true,
+                    suppressMenu: true,
+                    width: 80,
+                    sortable: true,
+                    aggFunc: 'sum',
+                    resizable: true,
+                    pivot: false,
+                    pinned: true,
+                    valueFormatter: (param: ValueFormatterParams) => {
+                        return param.value ? exactPriceDisplay(param.value) : ''
+                    },
+                },
+                {
+                    field: 'percent',
+                    headerName: '% of Total',
+                    type: 'string',
+                    suppressMenu: true,
+                    width: 100,
+                    pinned: true,
+                    aggFunc: 'sum',
+                    resizable: true,
+                    valueFormatter: (param: ValueFormatterParams) => {
+                        return param.value ? `${param.value.toFixed(2)}%` : ''
+                    },
+                },
+            ],
         },
         {
-            field: 'percent',
-            headerName: '% of Total Spend',
-            type: 'string',
-            suppressMenu: true,
-            width: 100,
-            pinned: true,
-            aggFunc: 'sum',
-            resizable: true,
-            valueFormatter: (param: ValueFormatterParams) => {
-                return param.value ? `${param.value.toFixed(2)}%` : ''
-            },
-        },
-        {
-            field: 'prevTotalCost',
-            headerName: `Spend in previous period [${renderText(
+            headerName: `Previous Period [${renderText(
                 prevTimeRange.start,
                 prevTimeRange.end
             )}]`,
-            type: 'string',
+            type: 'parent',
+            pinned: true,
             wrapHeaderText: true,
             autoHeaderHeight: true,
-            suppressMenu: true,
-            width: 180,
-            pinned: true,
-            aggFunc: 'sum',
-            resizable: true,
-            valueFormatter: (param: ValueFormatterParams) => {
-                return param.value !== undefined
-                    ? `$${param.value.toFixed(0)}`
-                    : ''
-            },
+            children: [
+                {
+                    field: 'prevTotalCost',
+                    headerName: 'Spend',
+                    type: 'string',
+                    wrapHeaderText: true,
+                    autoHeaderHeight: true,
+                    suppressMenu: true,
+                    width: 80,
+                    pinned: true,
+                    aggFunc: 'sum',
+                    resizable: true,
+                    valueFormatter: (param: ValueFormatterParams) => {
+                        return param.value !== undefined
+                            ? `$${param.value.toFixed(0)}`
+                            : ''
+                    },
+                },
+                {
+                    field: 'prevPercent',
+                    headerName: '% of Total',
+                    type: 'string',
+                    suppressMenu: true,
+                    width: 100,
+                    pinned: true,
+                    aggFunc: 'sum',
+                    resizable: true,
+                    valueFormatter: (param: ValueFormatterParams) => {
+                        return param.value ? `${param.value.toFixed(2)}%` : ''
+                    },
+                },
+            ],
         },
         {
-            field: 'change',
             headerName: 'Change',
-            type: 'string',
-            suppressMenu: true,
-            width: 150,
+            type: 'parent',
+            wrapHeaderText: true,
+            autoHeaderHeight: true,
             pinned: true,
-            aggFunc: 'sum',
-            resizable: true,
-            valueFormatter: (param: ValueFormatterParams) => {
-                return param.value !== undefined
-                    ? `$${param.value.toFixed(0)}`
-                    : ''
-            },
+            children: [
+                {
+                    field: 'change',
+                    headerName: 'Delta',
+                    type: 'string',
+                    suppressMenu: true,
+                    width: 80,
+                    pinned: true,
+                    aggFunc: 'sum',
+                    resizable: true,
+                    valueFormatter: (param: ValueFormatterParams) => {
+                        return param.value !== undefined
+                            ? `$${param.value.toFixed(0)}`
+                            : ''
+                    },
+                },
+                {
+                    field: 'changePercent',
+                    headerName: '%',
+                    type: 'string',
+                    suppressMenu: true,
+                    width: 80,
+                    pinned: true,
+                    hide: true,
+                    aggFunc: 'sum',
+                    resizable: true,
+                    valueFormatter: (param: ValueFormatterParams) => {
+                        return param.value !== undefined
+                            ? `${param.value.toFixed(0)}%`
+                            : ''
+                    },
+                },
+            ],
         },
         {
-            field: 'changePercent',
-            headerName: 'Change %',
-            type: 'string',
-            suppressMenu: true,
-            width: 100,
-            pinned: true,
-            hide: true,
-            aggFunc: 'sum',
-            resizable: true,
-            valueFormatter: (param: ValueFormatterParams) => {
-                return param.value !== undefined
-                    ? `${param.value.toFixed(0)}%`
-                    : ''
-            },
+            headerName: 'Granular Details',
+            type: 'parent',
+            wrapHeaderText: true,
+            autoHeaderHeight: true,
+            children: [...columnGenerator(response)],
         },
-
-        ...columnGenerator(response),
     ]
 
     const [manualTableSort, onManualSortChange] = useState<MSort>({
@@ -372,7 +432,7 @@ export default function MetricTable({
         {
             type: 0,
             icon: CurrencyDollarIcon,
-            name: 'Metrics by Total Spend',
+            name: 'Sort by Spend',
             function: () => {
                 onManualSortChange({
                     sortCol: 'totalCost',
@@ -384,11 +444,11 @@ export default function MetricTable({
         {
             type: 1,
             icon: ListBulletIcon,
-            name: 'Spend Merics by Name (A-z)',
+            name: 'Sort by Change',
             function: () => {
                 onManualSortChange({
-                    sortCol: 'dimension',
-                    sortType: 'asc',
+                    sortCol: 'change',
+                    sortType: 'desc',
                 })
                 onManualGrouping('none')
             },
@@ -396,19 +456,7 @@ export default function MetricTable({
         {
             type: 2,
             icon: ArrowTrendingUpIcon,
-            name: 'Metrics by Growth',
-            function: () => {
-                onManualSortChange({
-                    sortCol: 'percent',
-                    sortType: 'desc',
-                })
-                onManualGrouping('none')
-            },
-        },
-        {
-            type: 3,
-            icon: SwatchIcon,
-            name: 'Spend Mertics by Category',
+            name: 'Group by Metric Category',
             function: () => {
                 onManualGrouping('category')
                 onManualSortChange({
@@ -417,10 +465,33 @@ export default function MetricTable({
                 })
             },
         },
+        {
+            type: 3,
+            icon: SwatchIcon,
+            name: 'Group by Provider',
+            function: () => {
+                onManualGrouping('connector')
+                onManualSortChange({
+                    sortCol: 'none',
+                    sortType: null,
+                })
+            },
+        },
     ]
+
+    const [tab, setTab] = useState(
+        searchParams.get('groupby') === 'category' ? 3 : 0
+    )
+
+    const [tableKey, setTableKey] = useState('')
+
+    useEffect(() => {
+        setTableKey(Math.random().toString(16).slice(2, 8))
+    }, [manualGrouping, timeRange, granularityEnabled])
 
     return (
         <AdvancedTable
+            key={`metric_${tableKey}`}
             title="Metric list"
             downloadable
             id="spend_service_table"
@@ -448,7 +519,8 @@ export default function MetricTable({
             manualSort={manualTableSort}
             manualGrouping={manualGrouping}
             filterTabs={filterTabs}
-            defaultTabIdx={searchParams.get('groupby') === 'category' ? 3 : 0}
+            tabIdx={tab}
+            setTabIdx={setTab}
         />
     )
 }

@@ -1,6 +1,6 @@
 import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import { useNavigate } from 'react-router-dom'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import {
     CurrencyDollarIcon,
     ListBulletIcon,
@@ -71,20 +71,6 @@ const rowGenerator = (
     let sum = 0
     const roww = []
     const granularity: any = {}
-    const sortedDate =
-        input
-            ?.flatMap((row) => Object.entries(row.costValue || {}))
-            .map((v) => dayjs(v[0]))
-            .sort((a, b) => {
-                if (a.isSame(b)) {
-                    return 0
-                }
-                return a.isBefore(b) ? -1 : 1
-            }) || []
-    const oldestDate = sortedDate.at(0)?.format('YYYY-MM-DD')
-    const latestDate = sortedDate
-        .at(sortedDate.length - 1)
-        ?.format('YYYY-MM-DD')
 
     let pinnedRow = [
         { totalCost: sum, dimension: 'Total spend', ...granularity },
@@ -101,20 +87,18 @@ const rowGenerator = (
                     // eslint-disable-next-line no-return-assign
                     (v: number | unknown) => (totalCost += Number(v))
                 )
+                const totalAccountsSpendInPrev =
+                    inputPrev
+                        ?.flatMap((v) => Object.entries(v.costValue || {}))
+                        .map((v) => v[1])
+                        .reduce((prev, curr) => prev + curr, 0) || 0
                 const totalSpendInPrev =
                     inputPrev
                         ?.filter((v) => v.accountID === row.accountID)
                         .flatMap((v) => Object.entries(v.costValue || {}))
                         .map((v) => v[1])
                         .reduce((prev, curr) => prev + curr, 0) || 0
-                const oldest =
-                    Object.entries(row.costValue || {})
-                        .filter((v) => v[0] === oldestDate)
-                        .at(0)?.[1] || 0
-                const latest =
-                    Object.entries(row.costValue || {})
-                        .filter((v) => v[0] === latestDate)
-                        .at(0)?.[1] || 0
+
                 return {
                     dimension: row.dimensionName
                         ? row.dimensionName
@@ -126,8 +110,12 @@ const rowGenerator = (
                     id: row.dimensionId,
                     totalCost,
                     prevTotalCost: totalSpendInPrev,
-                    changePercent: ((latest - oldest) / oldest) * 100.0,
-                    change: latest - oldest,
+                    prevPercent:
+                        (totalSpendInPrev / totalAccountsSpendInPrev) * 100.0,
+                    changePercent:
+                        ((totalCost - totalSpendInPrev) / totalSpendInPrev) *
+                        100.0,
+                    change: totalCost - totalSpendInPrev,
                     ...temp,
                 }
             }) || []
@@ -161,55 +149,6 @@ const rowGenerator = (
         pinnedRow,
     }
 }
-
-const defaultColumns: IColumn<any, any>[] = [
-    {
-        field: 'dimension',
-        headerName: 'Account name',
-        type: 'string',
-        width: 150,
-        filter: true,
-        sortable: true,
-        resizable: true,
-        suppressMenu: true,
-        pivot: false,
-        pinned: true,
-        cellRenderer: (param: ValueFormatterParams) => (
-            <span>{param.value}</span>
-        ),
-    },
-    {
-        field: 'accountId',
-        headerName: 'Account ID',
-        type: 'string',
-        width: 150,
-        filter: true,
-        sortable: true,
-        resizable: true,
-        suppressMenu: true,
-        pivot: false,
-        pinned: true,
-        cellRenderer: (param: ValueFormatterParams) => (
-            <span>{param.value}</span>
-        ),
-    },
-    {
-        field: 'dimensionId',
-        headerName: 'Kaytu Connection ID',
-        type: 'string',
-        width: 150,
-        filter: true,
-        suppressMenu: true,
-        sortable: true,
-        resizable: true,
-        pivot: false,
-        hide: true,
-        pinned: true,
-        cellRenderer: (param: ValueFormatterParams) => (
-            <span>{param.value}</span>
-        ),
-    },
-]
 
 const gridOptions: GridOptions = {
     columnTypes: {
@@ -301,30 +240,121 @@ export default function AccountTable({
                               return v
                           })
                     : []
-            columns = [
-                ...dynamicCols,
+            columns = [...dynamicCols]
+        }
+        return columns
+    }
+    const [manualGrouping, onManualGrouping] = useState<string>('none')
+
+    const columns: IColumn<any, any>[] = [
+        {
+            headerName: 'Account Information',
+            type: 'string',
+            children: [
+                {
+                    field: 'connector',
+                    headerName: 'Provider',
+                    type: 'string',
+                    width: 90,
+                    suppressMenu: true,
+                    enableRowGroup: true,
+                    rowGroup: manualGrouping === 'connector',
+                    filter: true,
+                    resizable: true,
+                    sortable: true,
+                    pinned: true,
+                },
+                {
+                    field: 'dimension',
+                    headerName: 'Discovered Name',
+                    type: 'string',
+                    width: 200,
+                    filter: true,
+                    sortable: true,
+                    resizable: true,
+                    suppressMenu: true,
+                    pivot: false,
+                    pinned: true,
+                },
+                {
+                    field: 'accountId',
+                    headerName: 'Discovered ID',
+                    type: 'string',
+                    width: 150,
+                    filter: true,
+                    sortable: true,
+                    resizable: true,
+                    suppressMenu: true,
+                    pivot: false,
+                    pinned: true,
+                },
+                {
+                    field: 'dimensionId',
+                    headerName: 'Kaytu Connection ID',
+                    type: 'string',
+                    width: 150,
+                    filter: true,
+                    suppressMenu: true,
+                    sortable: true,
+                    resizable: true,
+                    pivot: false,
+                    hide: true,
+                    pinned: true,
+                },
+            ],
+        },
+        {
+            headerName: `Current Period [${renderText(
+                timeRange.start,
+                timeRange.end
+            )}]`,
+            type: 'string',
+            children: [
+                {
+                    field: 'totalCost',
+                    headerName: 'Spend',
+                    type: 'price',
+                    width: 90,
+                    suppressMenu: true,
+                    sortable: true,
+                    aggFunc: 'sum',
+                    resizable: true,
+                    wrapHeaderText: true,
+                    autoHeaderHeight: true,
+                    pivot: false,
+                    pinned: true,
+                    valueFormatter: (param: ValueFormatterParams) => {
+                        return param.value ? exactPriceDisplay(param.value) : ''
+                    },
+                },
                 {
                     field: 'percent',
                     headerName: '% of Total',
                     type: 'string',
-                    width: 150,
+                    width: 100,
                     suppressMenu: true,
                     pinned: true,
-                    hide: true,
+                    hide: false,
                     aggFunc: 'sum',
                     resizable: true,
                     valueFormatter: (param: ValueFormatterParams) => {
                         return param.value ? `${param.value.toFixed(2)}%` : ''
                     },
                 },
+            ],
+        },
+        {
+            headerName: `Previous Period [${renderText(
+                prevTimeRange.start,
+                prevTimeRange.end
+            )}]`,
+            type: 'string',
+            children: [
                 {
                     field: 'prevTotalCost',
-                    headerName: `Spend in previous period [${renderText(
-                        prevTimeRange.start,
-                        prevTimeRange.end
-                    )}]`,
+                    headerName: 'Spend',
                     type: 'string',
-                    width: 150,
+                    width: 90,
                     suppressMenu: true,
                     pinned: true,
                     wrapHeaderText: true,
@@ -338,10 +368,30 @@ export default function AccountTable({
                     },
                 },
                 {
-                    field: 'change',
-                    headerName: 'Change in Spend',
+                    field: 'prevPercent',
+                    headerName: '% of Total',
                     type: 'string',
-                    width: 150,
+                    width: 100,
+                    suppressMenu: true,
+                    pinned: true,
+                    hide: false,
+                    aggFunc: 'sum',
+                    resizable: true,
+                    valueFormatter: (param: ValueFormatterParams) => {
+                        return param.value ? `${param.value.toFixed(2)}%` : ''
+                    },
+                },
+            ],
+        },
+        {
+            headerName: 'Change',
+            type: 'string',
+            children: [
+                {
+                    field: 'change',
+                    headerName: 'Delta',
+                    type: 'string',
+                    width: 90,
                     pinned: true,
                     suppressMenu: true,
                     hide: true,
@@ -355,10 +405,10 @@ export default function AccountTable({
                 },
                 {
                     field: 'changePercent',
-                    headerName: 'Change %',
+                    headerName: '%',
                     type: 'string',
                     suppressMenu: true,
-                    width: 150,
+                    width: 90,
                     pinned: true,
                     aggFunc: 'sum',
                     resizable: true,
@@ -368,48 +418,13 @@ export default function AccountTable({
                             : ''
                     },
                 },
-            ]
-        }
-        return columns
-    }
-    const [manualGrouping, onManualGrouping] = useState<string>('none')
-
-    const columns: IColumn<any, any>[] = [
+            ],
+        },
         {
-            field: 'connector',
-            headerName: 'Provider',
+            headerName: 'Granular Details',
             type: 'string',
-            width: 150,
-            suppressMenu: true,
-            enableRowGroup: true,
-            rowGroup: manualGrouping === 'connector',
-            filter: true,
-            resizable: true,
-            sortable: true,
-            pinned: true,
+            children: [...columnGenerator(response)],
         },
-        ...defaultColumns,
-        {
-            field: 'totalCost',
-            headerName: `Total spend [${renderText(
-                timeRange.start,
-                timeRange.end
-            )}]`,
-            type: 'price',
-            width: 180,
-            suppressMenu: true,
-            sortable: true,
-            aggFunc: 'sum',
-            resizable: true,
-            wrapHeaderText: true,
-            autoHeaderHeight: true,
-            pivot: false,
-            pinned: true,
-            valueFormatter: (param: ValueFormatterParams) => {
-                return param.value ? exactPriceDisplay(param.value) : ''
-            },
-        },
-        ...columnGenerator(response),
     ]
 
     const [manualTableSort, onManualSortChange] = useState<MSort>({
@@ -421,7 +436,7 @@ export default function AccountTable({
         {
             type: 0,
             icon: CurrencyDollarIcon,
-            name: 'Highest Spend Accounts',
+            name: 'Sort by Spend',
             function: () => {
                 onManualSortChange({
                     sortCol: 'totalCost',
@@ -433,11 +448,11 @@ export default function AccountTable({
         {
             type: 1,
             icon: ListBulletIcon,
-            name: 'Accounts by Name (A-z)',
+            name: 'Sort by Change',
             function: () => {
                 onManualSortChange({
-                    sortCol: 'dimension',
-                    sortType: 'asc',
+                    sortCol: 'change',
+                    sortType: 'desc',
                 })
                 onManualGrouping('none')
             },
@@ -445,10 +460,10 @@ export default function AccountTable({
         {
             type: 2,
             icon: ArrowTrendingUpIcon,
-            name: 'Fastest Growth Accounts',
+            name: 'Sort by Account Name',
             function: () => {
                 onManualSortChange({
-                    sortCol: 'percent',
+                    sortCol: 'dimension',
                     sortType: 'desc',
                 })
                 onManualGrouping('none')
@@ -457,7 +472,7 @@ export default function AccountTable({
         {
             type: 3,
             icon: CloudIcon,
-            name: 'Accounts by Provider',
+            name: 'Group by Provider',
             function: () => {
                 onManualGrouping('connector')
                 onManualSortChange({
@@ -467,9 +482,16 @@ export default function AccountTable({
             },
         },
     ]
+    const [tab, setTab] = useState(0)
+    const [tableKey, setTableKey] = useState('')
+
+    useEffect(() => {
+        setTableKey(Math.random().toString(16).slice(2, 8))
+    }, [manualGrouping, timeRange, granularityEnabled])
 
     return (
         <AdvancedTable
+            key={`account_${tableKey}`}
             title="Cloud account list"
             downloadable
             id="spend_connection_table"
@@ -495,8 +517,10 @@ export default function AccountTable({
             selectedGranularity={selectedGranularity}
             onGranularityChange={onGranularityChange}
             manualSort={manualTableSort}
-            // manualGrouping={manualGrouping}
+            manualGrouping={manualGrouping}
             filterTabs={filterTabs}
+            tabIdx={tab}
+            setTabIdx={setTab}
             ref={ref}
         />
     )

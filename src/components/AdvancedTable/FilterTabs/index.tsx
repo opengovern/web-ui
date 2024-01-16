@@ -15,12 +15,11 @@ type FilterTab = {
 
 interface IProps {
     tabs: FilterTab
-    defaultTabIdx: number
+    tab: number
+    setTab: (v: number) => void
 }
 
-export default function FilterTabs({ tabs, defaultTabIdx }: IProps) {
-    const [tab, setTab] = useState(defaultTabIdx)
-
+export default function FilterTabs({ tabs, tab, setTab }: IProps) {
     return (
         <TabGroup index={tab} onIndexChange={setTab}>
             <TabList className="border-0">
