@@ -193,7 +193,7 @@ export default function AccountTable({
 }: IAccountTable) {
     const navigate = useNavigate()
 
-    const [granularityEnabled, setGranularityEnabled] = useState<boolean>(false)
+    const [granularityEnabled, setGranularityEnabled] = useState<boolean>(true)
 
     const columnGenerator = (
         input:
@@ -229,6 +229,7 @@ export default function AccountTable({
                                   resizable: true,
                                   pivot: false,
                                   aggFunc: 'sum',
+                                  columnGroupShow: 'open',
                                   valueFormatter: (
                                       param: ValueFormatterParams
                                   ) => {
@@ -240,7 +241,24 @@ export default function AccountTable({
                               return v
                           })
                     : []
-            columns = [...dynamicCols]
+
+            const total: IColumn<any, any> = {
+                field: 'totalCost',
+                headerName: 'Total',
+                type: 'price',
+                width: 130,
+                aggFunc: 'sum',
+                filter: true,
+                sortable: true,
+                resizable: true,
+                suppressMenu: true,
+                columnGroupShow: 'closed',
+                valueFormatter: (param: ValueFormatterParams) => {
+                    return param.value ? exactPriceDisplay(param.value) : ''
+                },
+            }
+
+            columns = [total, ...dynamicCols]
         }
         return columns
     }
@@ -474,7 +492,7 @@ export default function AccountTable({
 
     useEffect(() => {
         setTableKey(Math.random().toString(16).slice(2, 8))
-    }, [manualGrouping, timeRange, granularityEnabled])
+    }, [manualGrouping, timeRange, granularityEnabled, response])
 
     return (
         <AdvancedTable

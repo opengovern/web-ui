@@ -3,6 +3,7 @@ import {
     ColDef,
     ColDefField,
     ColGroupDef,
+    ColumnGroupShowType,
     GridOptions,
     GridReadyEvent,
     ICellRendererParams,
@@ -89,6 +90,7 @@ export interface IColumn<TData, TValue> {
     autoHeight?: boolean
     wrapHeaderText?: boolean
     autoHeaderHeight?: boolean
+    columnGroupShow?: ColumnGroupShowType
 }
 
 interface IProps<TData, TValue> {
@@ -228,6 +230,7 @@ export default function AdvancedTable<TData = any, TValue = any>({
             autoHeight: item.autoHeight,
             wrapHeaderText: item.wrapHeaderText,
             autoHeaderHeight: item.autoHeaderHeight,
+            columnGroupShow: item.columnGroupShow,
         }
 
         if (
