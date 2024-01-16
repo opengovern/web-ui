@@ -1,6 +1,7 @@
 import {
     CellClickedEvent,
     ColDef,
+    ColDefField,
     ColGroupDef,
     GridOptions,
     GridReadyEvent,
@@ -15,7 +16,14 @@ import 'ag-grid-enterprise'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import 'ag-grid-community/styles/agGridMaterialFont.css'
-import { ReactNode, useEffect, useRef, Dispatch, SetStateAction } from 'react'
+import {
+    ReactNode,
+    useEffect,
+    useRef,
+    Dispatch,
+    SetStateAction,
+    useState,
+} from 'react'
 import { Button, Flex, Title } from '@tremor/react'
 import { ArrowDownTrayIcon } from '@heroicons/react/20/solid'
 import {
@@ -47,8 +55,16 @@ type MSort = {
 }
 
 export interface IColumn<TData, TValue> {
-    type: 'string' | 'number' | 'price' | 'date' | 'datetime' | 'connector'
-    field?: NestedFieldPaths<TData, any>
+    children?: IColumn<TData, TValue>[]
+    type:
+        | 'string'
+        | 'number'
+        | 'price'
+        | 'date'
+        | 'datetime'
+        | 'connector'
+        | 'parent'
+    field?: ColDefField<TData, TValue>
     width?: number
     cellStyle?: any
     headerName?: string
@@ -99,7 +115,8 @@ interface IProps<TData, TValue> {
     manualSort?: MSort
     manualGrouping?: string
     filterTabs?: FilterTab
-    defaultTabIdx?: number
+    tabIdx: number
+    setTabIdx: (v: number) => void
     ref?: React.MutableRefObject<any>
 }
 
@@ -127,7 +144,8 @@ export default function AdvancedTable<TData = any, TValue = any>({
     manualSort,
     manualGrouping,
     filterTabs,
-    defaultTabIdx,
+    tabIdx,
+    setTabIdx,
     ref,
 }: IProps<TData, TValue>) {
     const gridRef = useRef<AgGridReact>(null)
@@ -175,118 +193,118 @@ export default function AdvancedTable<TData = any, TValue = any>({
         }
     }
 
-    const buildColumnDef = () => {
-        return columns?.map((item) => {
-            const v: ColDef<TData> | ColGroupDef<TData> | any = {
-                field: item.field,
+    const convert = (item: IColumn<TData, TValue>) => {
+        if (item.children !== undefined) {
+            const v: ColGroupDef<TData> = {
                 headerName: item.headerName,
-                filter: item.filter,
-                filterParams: item.filterParams,
-                width: item.width,
-                sortable: item.sortable === undefined ? true : item.sortable,
-                resizable: item.resizable === undefined ? true : item.resizable,
-                rowGroup: item.rowGroup || false,
-                enableRowGroup: item.enableRowGroup || false,
-                hide: item.hide || false,
-                cellRenderer: item.cellRenderer,
-                flex: item.width ? 0 : item.flex || 1,
-                pinned: item.pinned || false,
-                aggFunc: item.aggFunc,
-                suppressMenu: item.suppressMenu || false,
-                floatingFilter: item.floatingFilter || false,
-                pivot: item.pivot || false,
-                valueFormatter: item.valueFormatter,
-                comparator: item.comparator,
-                wrapText: item.wrapText,
-                autoHeight: item.autoHeight,
-                wrapHeaderText: item.wrapHeaderText,
-                autoHeaderHeight: item.autoHeaderHeight,
-            }
-
-            if (
-                item.field &&
-                visibility.current?.get(item.field || '') !== undefined
-            ) {
-                v.hide = !visibility.current.get(item.field || '')
-            }
-
-            if (item.field === manualGrouping) {
-                v.enableRowGroup = true
-                v.rowGroup = true
-            }
-
-            if (item.type === 'price') {
-                v.filter = 'agNumberColumnFilter'
-                v.cellDataType = 'text'
-                v.valueFormatter = (param: any) => {
-                    return (
-                        exactPriceDisplay(String(param.value)) ||
-                        'Not available'
-                    )
-                }
-            } else if (item.type === 'number') {
-                v.filter = 'agNumberColumnFilter'
-                v.cellDataType = 'number'
-                v.valueFormatter = (param: any) => {
-                    return param.value || param.value === 0
-                        ? numberGroupedDisplay(param.value)
-                        : 'Not available'
-                }
-            } else if (item.type === 'date') {
-                v.filter = 'agDateColumnFilter'
-                v.filterParams = {
-                    comparator: agGridDateComparator,
-                }
-                v.valueFormatter = (param: any) => {
-                    if (param.value) {
-                        let value = ''
-                        if (!Number.isNaN(Number(param.value))) {
-                            value = dateDisplay(
-                                Number(param.value) > 16000000000
-                                    ? Number(param.value)
-                                    : Number(param.value) * 1000
-                            )
-                        } else {
-                            value = dateDisplay(param.value)
-                        }
-                        return value
-                    }
-                    return 'Not available'
-                }
-            } else if (item.type === 'datetime') {
-                v.filter = 'agDateColumnFilter'
-                v.filterParams = {
-                    comparator: agGridDateComparator,
-                }
-                v.valueFormatter = (param: any) => {
-                    if (param.value) {
-                        let value = ''
-                        if (!Number.isNaN(Number(param.value))) {
-                            value = dateTimeDisplay(
-                                Number(param.value) > 16000000000
-                                    ? Number(param.value)
-                                    : Number(param.value) * 1000
-                            )
-                        } else {
-                            value = dateTimeDisplay(param.value)
-                        }
-                        return value
-                    }
-                    return 'Not available'
-                }
-            } else if (item.type === 'connector') {
-                v.width = 50
-                v.cellStyle = { padding: 0 }
-                v.cellRenderer = (params: ICellRendererParams<TData>) =>
-                    getConnectorIcon(params.value)
+                marryChildren: true,
+                children: item.children.map((i) => convert(i)),
             }
             return v
-        })
-    }
+        }
 
-    useEffect(() => {
-        gridRef.current?.api?.setGridOption('columnDefs', buildColumnDef())
-    }, [columns])
+        const v: ColDef<TData> = {
+            field: item.field,
+            headerName: item.headerName,
+            filter: item.filter,
+            filterParams: item.filterParams,
+            width: item.width,
+            sortable: item.sortable === undefined ? true : item.sortable,
+            resizable: item.resizable === undefined ? true : item.resizable,
+            rowGroup: item.rowGroup || false,
+            enableRowGroup: item.enableRowGroup || false,
+            hide: item.hide || false,
+            cellRenderer: item.cellRenderer,
+            flex: item.width ? 0 : item.flex || 1,
+            pinned: item.pinned || false,
+            aggFunc: item.aggFunc,
+            suppressMenu: item.suppressMenu || false,
+            floatingFilter: item.floatingFilter || false,
+            pivot: item.pivot || false,
+            valueFormatter: item.valueFormatter,
+            comparator: item.comparator,
+            wrapText: item.wrapText,
+            autoHeight: item.autoHeight,
+            wrapHeaderText: item.wrapHeaderText,
+            autoHeaderHeight: item.autoHeaderHeight,
+        }
+
+        if (
+            item.field &&
+            visibility.current?.get(item.field || '') !== undefined
+        ) {
+            v.hide = !visibility.current.get(item.field || '')
+        }
+
+        if (item.field === manualGrouping) {
+            v.enableRowGroup = true
+            v.rowGroup = true
+        }
+
+        if (item.type === 'price') {
+            v.filter = 'agNumberColumnFilter'
+            v.cellDataType = 'text'
+            v.valueFormatter = (param: any) => {
+                return exactPriceDisplay(String(param.value)) || 'Not available'
+            }
+        } else if (item.type === 'number') {
+            v.filter = 'agNumberColumnFilter'
+            v.cellDataType = 'number'
+            v.valueFormatter = (param: any) => {
+                return param.value || param.value === 0
+                    ? numberGroupedDisplay(param.value)
+                    : 'Not available'
+            }
+        } else if (item.type === 'date') {
+            v.filter = 'agDateColumnFilter'
+            v.filterParams = {
+                comparator: agGridDateComparator,
+            }
+            v.valueFormatter = (param: any) => {
+                if (param.value) {
+                    let value = ''
+                    if (!Number.isNaN(Number(param.value))) {
+                        value = dateDisplay(
+                            Number(param.value) > 16000000000
+                                ? Number(param.value)
+                                : Number(param.value) * 1000
+                        )
+                    } else {
+                        value = dateDisplay(param.value)
+                    }
+                    return value
+                }
+                return 'Not available'
+            }
+        } else if (item.type === 'datetime') {
+            v.filter = 'agDateColumnFilter'
+            v.filterParams = {
+                comparator: agGridDateComparator,
+            }
+            v.valueFormatter = (param: any) => {
+                if (param.value) {
+                    let value = ''
+                    if (!Number.isNaN(Number(param.value))) {
+                        value = dateTimeDisplay(
+                            Number(param.value) > 16000000000
+                                ? Number(param.value)
+                                : Number(param.value) * 1000
+                        )
+                    } else {
+                        value = dateTimeDisplay(param.value)
+                    }
+                    return value
+                }
+                return 'Not available'
+            }
+        } else if (item.type === 'connector') {
+            v.width = 50
+            v.cellStyle = { padding: 0 }
+            v.cellRenderer = (params: ICellRendererParams<TData>) =>
+                getConnectorIcon(params.value)
+        }
+        return v
+    }
 
     useEffect(() => {
         if (pinnedRow) {
@@ -309,7 +327,7 @@ export default function AdvancedTable<TData = any, TValue = any>({
 
     const gridOptions: GridOptions = {
         rowModelType: serverSideDatasource ? 'serverSide' : 'clientSide',
-        columnDefs: buildColumnDef(),
+        columnDefs: columns?.map((item) => convert(item)),
         ...(rowData && { rowData: rowData || [] }),
         ...(serverSideDatasource && {
             // serverSideDatasource,
@@ -366,6 +384,10 @@ export default function AdvancedTable<TData = any, TValue = any>({
         ...options,
     }
 
+    // useEffect(() => {
+    //     gridRef.current?.api?.updateGridOptions(gridOptions)
+    // }, [columns])
+
     return (
         <Flex
             ref={ref}
@@ -409,7 +431,8 @@ export default function AdvancedTable<TData = any, TValue = any>({
                 <Flex className="m-4">
                     <FilterTabs
                         tabs={filterTabs}
-                        defaultTabIdx={defaultTabIdx || 0}
+                        tab={tabIdx}
+                        setTab={setTabIdx}
                     />
                 </Flex>
             )}
