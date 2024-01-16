@@ -55,11 +55,7 @@ import {
 import Chart from '../../../../components/Chart'
 import { generateVisualMap } from '../../../Assets'
 import Table, { IColumn } from '../../../../components/Table'
-import {
-    defaultColumns,
-    gridOptions,
-    rowGenerator,
-} from '../../Details/Tabs/Metrics'
+import { gridOptions, rowGenerator } from '../../Details/Tabs/Metrics'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../../api/api'
 
 interface ISingle {
@@ -215,7 +211,7 @@ export default function SingleSpendConnection({
     }
 
     const columns: IColumn<any, any>[] = [
-        ...defaultColumns,
+        // ...defaultColumns,
         {
             field: 'category',
             headerName: 'Category',
