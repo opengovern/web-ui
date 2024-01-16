@@ -7,9 +7,10 @@ import Profile from '../Profile'
 
 interface IUtilities {
     isCollapsed: boolean
+    workspace: string | undefined
 }
 
-export default function Utilities({ isCollapsed }: IUtilities) {
+export default function Utilities({ isCollapsed, workspace }: IUtilities) {
     return (
         <Flex
             flexDirection="col"
@@ -20,7 +21,7 @@ export default function Utilities({ isCollapsed }: IUtilities) {
             {!isCollapsed && (
                 <Text className="ml-3 mt-2 mb-2 !text-xs">UTILITIES</Text>
             )}
-            <JobsMenu isCollapsed={isCollapsed} />
+            <JobsMenu isCollapsed={isCollapsed} workspace={workspace} />
             <CLIMenu isCollapsed={isCollapsed} />
             <Link
                 to="https://kaytu.io/docs"

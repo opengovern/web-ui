@@ -192,20 +192,27 @@ function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
 
 interface IJobsMenu {
     isCollapsed: boolean
+    workspace: string | undefined
 }
 
-export default function JobsMenu({ isCollapsed }: IJobsMenu) {
+export default function JobsMenu({ isCollapsed, workspace }: IJobsMenu) {
     const navigate = useNavigate()
-    const workspace = useParams<{ ws: string }>().ws
-    const { response: jobs } = useScheduleApiV1JobsCreate({
-        pageStart: 0,
-        pageEnd: 1,
-        hours: 24,
-    })
+
+    const { response: jobs } = useScheduleApiV1JobsCreate(
+        {
+            pageStart: 0,
+            pageEnd: 1,
+            hours: 24,
+        },
+        {},
+        true,
+        workspace
+    )
 
     if (workspace === undefined || workspace === '') {
         return null
     }
+
     return (
         <Popover className="relative z-50 border-0 w-full">
             <Popover.Button
