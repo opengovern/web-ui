@@ -2,10 +2,10 @@ import { Button, Flex, Grid } from '@tremor/react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useEffect } from 'react'
-import Layout from '../../components/Layout'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
 import Spinner from '../../components/Spinner'
+import TopHeader from '../../components/Layout/Header'
 
 export default function Workspaces() {
     const navigate = useNavigate()
@@ -32,11 +32,9 @@ export default function Workspaces() {
     }, [isLoading])
 
     return (
-        <Layout
-            currentPage="assets"
-            showSidebar={false}
-            headerChildren={
-                !isLoading && (
+        <>
+            <TopHeader>
+                {!isLoading && (
                     <Flex className="w-fit gap-3">
                         <Button variant="secondary" onClick={refreshList}>
                             <ArrowPathIcon className="h-5 text-kaytu-500" />
@@ -48,9 +46,8 @@ export default function Workspaces() {
                             Add new Kaytu workspace
                         </Button>
                     </Flex>
-                )
-            }
-        >
+                )}
+            </TopHeader>
             {isLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
@@ -71,6 +68,6 @@ export default function Workspaces() {
                     </div>
                 </Flex>
             )}
-        </Layout>
+        </>
     )
 }

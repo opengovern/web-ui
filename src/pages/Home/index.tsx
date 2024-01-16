@@ -1,15 +1,16 @@
 import { Col, Flex, Grid, Title } from '@tremor/react'
-import Layout from '../../components/Layout'
 import QuickNav from './QuickNav'
 import Integration from './Integration'
 import Governance from './Governance'
 import Query from './Query'
 import Spend from './Spend'
+import TopHeader from '../../components/Layout/Header'
 
 export default function Home() {
     const element = document.getElementById('myDIV')?.offsetHeight
     return (
-        <Layout currentPage="home" datePicker>
+        <>
+            <TopHeader datePicker />
             <Grid numItems={6} className="w-full gap-4 h-fit">
                 <Col numColSpan={4}>
                     <Title className="font-semibold mb-4">
@@ -30,6 +31,6 @@ export default function Home() {
                     <Query height={element} />
                 </Col>
             </Grid>
-        </Layout>
+        </>
     )
 }

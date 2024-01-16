@@ -1,74 +1,27 @@
 import { Flex } from '@tremor/react'
-import { useParams } from 'react-router-dom'
 import { ReactNode, UIEvent } from 'react'
-import TopHeader from './Header'
 import Footer from './Footer'
 import Sidebar from './Sidebar'
 import Notification from '../Notification'
 
 type IProps = {
     children: ReactNode
-    headerChildren?: ReactNode | undefined
-    filter?: boolean
-    datePicker?: boolean
-    breadCrumb?: (string | undefined)[]
-    currentPage:
-        | 'home'
-        | 'insights'
-        | 'assets'
-        | 'assets-detail-account'
-        | 'assets-detail-metric'
-        | 'spend'
-        | 'spend-detail-account'
-        | 'spend-detail-metric'
-        | 'spend/accounts'
-        | 'spend/metrics'
-        | 'integrations'
-        | 'compliance'
-        | 'service-advisor'
-        | 'findings'
-        | 'resource-collection'
-        | 'settings'
-        | 'stack'
-        | 'rules'
-        | 'alerts'
-        | 'query'
-        | 'billing'
-        | '404'
-    showSidebar?: boolean
-    hFull?: boolean
     onScroll?: (e: UIEvent) => void
     scrollRef?: any
 }
 
-export default function Layout({
-    children,
-    currentPage,
-    showSidebar = true,
-    hFull = false,
-    headerChildren,
-    filter = false,
-    datePicker = false,
-    breadCrumb,
-    onScroll,
-    scrollRef,
-}: IProps) {
-    const workspace = useParams<{ ws: string }>().ws
+export default function Layout({ children, onScroll, scrollRef }: IProps) {
+    const url = window.location.pathname.split('/')
+    const current = `${url[2]}${url[3] ? `/${url[3]}` : ''}`
+    const workspace = url[1]
+    const showSidebar = true
 
     return (
         <Flex className="h-screen overflow-hidden">
             {showSidebar && (
-                <Sidebar workspace={workspace} currentPage={currentPage} />
+                <Sidebar workspace={workspace} currentPage={current} />
             )}
-
             <div className="z-10 w-full h-full relative">
-                <TopHeader
-                    filter={filter}
-                    datePicker={datePicker}
-                    breadCrumb={breadCrumb}
-                >
-                    {headerChildren}
-                </TopHeader>
                 <Notification />
                 <Flex
                     flexDirection="col"
@@ -82,14 +35,11 @@ export default function Layout({
                     }}
                     ref={scrollRef}
                 >
-                    <Flex
-                        justifyContent="center"
-                        className={`px-12 ${hFull ? 'h-full' : ''}`}
-                    >
+                    <Flex justifyContent="center" className="px-12">
                         <div
                             className={`${
-                                currentPage === 'settings' ? '' : 'max-w-7xl'
-                            } w-full py-6 ${hFull ? 'h-full' : ''}`}
+                                current === 'settings' ? '' : 'max-w-7xl'
+                            } w-full py-6 h-full`}
                         >
                             {children}
                         </div>

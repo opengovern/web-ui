@@ -8,6 +8,7 @@ import { useAlertingApiV1TriggerListList } from '../../../api/alerting.gen'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { RenderObject } from '../../../components/RenderObject'
 import DrawerPanel from '../../../components/DrawerPanel'
+import TopHeader from '../../../components/Layout/Header'
 
 const columns: IColumn<any, any>[] = [
     {
@@ -52,7 +53,8 @@ export default function Alerts() {
     const { response, isLoading } = useAlertingApiV1TriggerListList()
 
     return (
-        <Layout currentPage="alerts">
+        <>
+            <TopHeader />
             <Flex justifyContent="end" className="mb-4">
                 <TextInput
                     icon={MagnifyingGlassIcon}
@@ -80,6 +82,6 @@ export default function Alerts() {
             >
                 <RenderObject obj={selectedRow} />
             </DrawerPanel>
-        </Layout>
+        </>
     )
 }

@@ -14,11 +14,11 @@ import {
     useComplianceApiV1BenchmarksSummaryList,
     useComplianceApiV1MetadataTagComplianceList,
 } from '../../../api/compliance.gen'
-import Layout from '../../../components/Layout'
 import Spinner from '../../../components/Spinner'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
 import ComplianceCard from '../../../components/Cards/ComplianceCard'
 import { benchmarkList } from '../Compliance'
+import TopHeader from '../../../components/Layout/Header'
 
 export default function ServiceAdvisor() {
     const [selectedProvider, setSelectedProvider] = useState('')
@@ -34,7 +34,8 @@ export default function ServiceAdvisor() {
         useComplianceApiV1MetadataTagComplianceList()
 
     return (
-        <Layout currentPage="service-advisor">
+        <>
+            <TopHeader />
             <Grid numItems={3} className="w-full gap-4 mb-4">
                 <Col numColSpan={2}>
                     <TabGroup>
@@ -108,6 +109,6 @@ export default function ServiceAdvisor() {
             ) : (
                 <Button onClick={() => sendNow()}>Retry</Button>
             )}
-        </Layout>
+        </>
     )
 }

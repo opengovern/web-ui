@@ -20,7 +20,6 @@ import {
     RowClickedEvent,
 } from 'ag-grid-community'
 import { useNavigate } from 'react-router-dom'
-import Layout from '../../../components/Layout'
 import {
     useComplianceApiV1InsightList,
     useComplianceApiV1MetadataTagInsightList,
@@ -29,6 +28,7 @@ import { filterAtom, notificationAtom, timeAtom } from '../../../store'
 import Table, { IColumn } from '../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import { badgeDelta } from '../../../utilities/deltaType'
+import TopHeader from '../../../components/Layout/Header'
 
 const columns: IColumn<any, any>[] = [
     {
@@ -130,7 +130,8 @@ export default function InsightList() {
     }
 
     return (
-        <Layout currentPage="insights" datePicker filter>
+        <>
+            <TopHeader datePicker filter />
             <Flex alignItems="start" className="gap-4">
                 <Card className="sticky w-fit">
                     <TextInput
@@ -306,6 +307,6 @@ export default function InsightList() {
                     <Button onClick={() => insightSendNow()}>Retry</Button>
                 )}
             </Flex>
-        </Layout>
+        </>
     )
 }

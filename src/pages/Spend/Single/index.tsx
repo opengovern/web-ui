@@ -2,9 +2,9 @@ import { useAtomValue } from 'jotai'
 import { useParams } from 'react-router-dom'
 import { spendTimeAtom } from '../../../store'
 import NotFound from '../../Errors'
-import Layout from '../../../components/Layout'
 import SingleSpendConnection from './SingleConnection'
 import SingleSpendMetric from './SingleMetric'
+import TopHeader from '../../../components/Layout/Header'
 
 export default function SingleSpend() {
     const activeTimeRange = useAtomValue(spendTimeAtom)
@@ -36,31 +36,31 @@ export default function SingleSpend() {
     const renderPage = () => {
         if (urlParams[urlParams.length - 1].startsWith('account_')) {
             return (
-                <Layout
-                    currentPage="spend"
-                    breadCrumb={['Cloud account spend detail']}
-                    datePicker
-                >
+                <>
+                    <TopHeader
+                        breadCrumb={['Cloud account spend detail']}
+                        datePicker
+                    />
                     <SingleSpendConnection
                         activeTimeRange={activeTimeRange}
                         id={idGenerator()}
                     />
-                </Layout>
+                </>
             )
         }
         if (urlParams[urlParams.length - 1].startsWith('metric_')) {
             return (
-                <Layout
-                    currentPage="spend"
-                    breadCrumb={['Metric spend detail']}
-                    datePicker
-                    filter
-                >
+                <>
+                    <TopHeader
+                        breadCrumb={['Metric spend detail']}
+                        datePicker
+                        filter
+                    />
                     <SingleSpendMetric
                         activeTimeRange={activeTimeRange}
                         metricId={idGenerator()}
                     />
-                </Layout>
+                </>
             )
         }
         return <NotFound />

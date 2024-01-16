@@ -1,28 +1,21 @@
 import { useEffect, useState } from 'react'
 import { Flex } from '@tremor/react'
-import {
-    BugAntIcon,
-    BuildingOfficeIcon,
-    FolderIcon,
-    UserIcon,
-} from '@heroicons/react/24/outline'
+import { BugAntIcon, FolderIcon, UserIcon } from '@heroicons/react/24/outline'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
 import { useAtomValue } from 'jotai'
-import Layout from '../../components/Layout'
 import SettingsEntitlement from './Entitlement'
 import SettingsMembers from './Members'
 import SettingsWorkspaceAPIKeys from './APIKeys'
 import SettingsProfile from './Profile'
 import SettingsOrganization from './Organization'
-import SettingsGitRepositories from './GitRepositories'
 import { useWorkspaceApiV1WorkspaceCurrentList } from '../../api/workspace.gen'
-import Spinner from '../../components/Spinner'
 
 import { tokenAtom } from '../../store'
 import SettingsJobs from './Jobs'
 import SettingsCustomization from './Customization'
 import { Auth0AppMetadata } from '../../types/appMetadata'
+import TopHeader from '../../components/Layout/Header'
 
 const navigation = [
     {
@@ -147,7 +140,8 @@ export default function Settings() {
     }
 
     return (
-        <Layout currentPage="settings">
+        <>
+            <TopHeader />
             <Flex alignItems="start" justifyContent="start">
                 <Flex flexDirection="col" alignItems="start" className="w-fit">
                     <nav className="w-56 text-sm">
@@ -202,6 +196,6 @@ export default function Settings() {
                     </Flex>
                 </Flex>
             </Flex>
-        </Layout>
+        </>
     )
 }

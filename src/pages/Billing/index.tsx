@@ -12,12 +12,12 @@ import {
 } from '@tremor/react'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai'
-import Layout from '../../components/Layout'
 import Spinner from '../../components/Spinner'
 import { timeAtom } from '../../store'
 import { getErrorMessage } from '../../types/apierror'
 import { GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeter } from '../../api/api'
 import { useSubscriptionApiV1MeteringListCreate } from '../../api/subscription.gen'
+import TopHeader from '../../components/Layout/Header'
 
 function BillingItems() {
     const activeTimeRange = useAtomValue(timeAtom)
@@ -134,10 +134,11 @@ function BillingItems() {
 
 export default function Billing() {
     return (
-        <Layout currentPage="billing" datePicker showSidebar={false}>
+        <>
+            <TopHeader datePicker />
             <Grid numItems={4} className="gap-4">
                 <BillingItems />
             </Grid>
-        </Layout>
+        </>
     )
 }

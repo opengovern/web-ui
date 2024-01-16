@@ -23,6 +23,7 @@ import ListCard from '../../components/Cards/ListCard'
 import { checkGranularity } from '../../utilities/dateComparator'
 import SingleConnection from './Single/SingleConnection'
 import Trends from '../../components/Trends'
+import TopHeader from '../../components/Layout/Header'
 
 export const resourceTrendChart = (
     trend:
@@ -238,7 +239,8 @@ export default function Assets() {
         })
 
     return (
-        <Layout currentPage="assets" datePicker filter>
+        <>
+            <TopHeader datePicker filter />
             {selectedConnections.connections.length === 1 ? (
                 <SingleConnection
                     activeTimeRange={activeTimeRange}
@@ -305,7 +307,7 @@ export default function Assets() {
                                 oldChartData={pieData(composition).oldData}
                                 activeTime={activeTimeRange}
                                 loading={compositionLoading}
-                                seeMore="assets-details#category"
+                                seeMore="metrics#category"
                             />
                         </Col>
                         <Col numColSpan={1} numColSpanLg={3} className="h-full">
@@ -316,7 +318,7 @@ export default function Assets() {
                                     valueColumnTitle="Count"
                                     loading={accountsResponseLoading}
                                     items={topAccounts(accountsResponse)}
-                                    url="assets-details#cloud-accounts"
+                                    url="accounts"
                                     type="account"
                                 />
                                 <ListCard
@@ -325,7 +327,7 @@ export default function Assets() {
                                     valueColumnTitle="Count"
                                     loading={servicesResponseLoading}
                                     items={topServices(servicesResponse)}
-                                    url="assets-details#metrics"
+                                    url="metrics"
                                     type="service"
                                 />
                             </Grid>
@@ -333,6 +335,6 @@ export default function Assets() {
                     </Grid>
                 </>
             )}
-        </Layout>
+        </>
     )
 }

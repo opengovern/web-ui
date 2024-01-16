@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
     RequestParams,
 } from './api'
 
@@ -24,7 +24,8 @@ interface IuseWorkspaceApiV1BootstrapDetailState {
 export const useWorkspaceApiV1BootstrapDetail = (
     workspaceName: string,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -130,7 +131,8 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
     workspaceName: string,
     request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -245,7 +247,8 @@ interface IuseWorkspaceApiV1BootstrapFinishCreateState {
 export const useWorkspaceApiV1BootstrapFinishCreate = (
     workspaceName: string,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -351,7 +354,8 @@ interface IuseWorkspaceApiV1WorkspaceCreateState {
 export const useWorkspaceApiV1WorkspaceCreate = (
     request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -455,7 +459,8 @@ interface IuseWorkspaceApiV1WorkspaceCurrentListState {
 
 export const useWorkspaceApiV1WorkspaceCurrentList = (
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -484,7 +489,9 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -565,7 +572,8 @@ interface IuseWorkspaceApiV1WorkspaceDeleteState {
 export const useWorkspaceApiV1WorkspaceDelete = (
     workspaceId: string,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -669,7 +677,8 @@ interface IuseWorkspaceApiV1WorkspacesListState {
 
 export const useWorkspaceApiV1WorkspacesList = (
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -777,7 +786,8 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
         ignore_usage?: boolean
     },
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())

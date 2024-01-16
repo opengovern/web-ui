@@ -30,7 +30,6 @@ import { dateTimeDisplay } from '../../../../../utilities/dateDisplay'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../../components/RenderObject'
 import { isDemoAtom, notificationAtom } from '../../../../../store'
-import Layout from '../../../../../components/Layout'
 import {
     useComplianceApiV1AssignmentsConnectionDetail,
     useComplianceApiV1BenchmarksSummaryDetail,
@@ -42,6 +41,7 @@ import Breakdown from '../../../../../components/Breakdown'
 import FindingDetail from '../../../Findings/FindingsWithFailure/Detail'
 import { benchmarkChecks } from '../../../../../components/Cards/ComplianceCard'
 import { policyColumns } from '../TopDetails/Controls'
+import TopHeader from '../../../../../components/Layout/Header'
 
 export default function SingleComplianceConnection() {
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -145,12 +145,12 @@ export default function SingleComplianceConnection() {
     }
 
     return (
-        <Layout
-            currentPage="compliance"
-            breadCrumb={[
-                con ? con?.providerConnectionName : 'Single account detail',
-            ]}
-        >
+        <>
+            <TopHeader
+                breadCrumb={[
+                    con ? con?.providerConnectionName : 'Single account detail',
+                ]}
+            />
             <Grid numItems={2} className="w-full gap-4">
                 <Card className="w-full">
                     <Flex
@@ -350,6 +350,6 @@ export default function SingleComplianceConnection() {
                 open={openFinding}
                 onClose={() => setOpenFinding(false)}
             />
-        </Layout>
+        </>
     )
 }

@@ -1,13 +1,13 @@
 import { Button, Flex, Grid, Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useNavigate } from 'react-router-dom'
-import Layout from '../../components/Layout'
 import PersonaCard from '../../components/Cards/PersonaCard'
 import { filterAtom, timeAtom } from '../../store'
 import { useComplianceApiV1InsightList } from '../../api/compliance.gen'
 import Spinner from '../../components/Spinner'
 import InsightCard from '../../components/Cards/InsightCard'
 import GoalCard from '../../components/Cards/GoalCard'
+import TopHeader from '../../components/Layout/Header'
 
 export default function Insights() {
     const navigate = useNavigate()
@@ -40,7 +40,8 @@ export default function Insights() {
     } = useComplianceApiV1InsightList(query)
 
     return (
-        <Layout currentPage="insights" datePicker filter>
+        <>
+            <TopHeader datePicker filter />
             <Title className="font-semibold mb-4">Personas</Title>
             <Grid numItems={9} className="w-full gap-4 mb-12">
                 <PersonaCard type="Engineer" />
@@ -82,6 +83,6 @@ export default function Insights() {
             ) : (
                 <Button onClick={() => insightSendNow()}>Retry</Button>
             )}
-        </Layout>
+        </>
     )
 }

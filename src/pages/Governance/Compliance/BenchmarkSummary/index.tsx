@@ -20,7 +20,6 @@ import {
     XCircleIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
-import Layout from '../../../../components/Layout'
 import { filterAtom } from '../../../../store'
 import {
     useComplianceApiV1BenchmarksSummaryDetail,
@@ -37,6 +36,7 @@ import TopDetails from './TopDetails'
 import { numberDisplay } from '../../../../utilities/numericDisplay'
 import SeverityBar from '../../../../components/SeverityBar'
 import Modal from '../../../../components/Modal'
+import TopHeader from '../../../../components/Layout/Header'
 
 const topResources = (
     input:
@@ -206,23 +206,22 @@ export default function BenchmarkSummary() {
     }, [isExecuted, recall])
 
     return (
-        <Layout
-            currentPage="compliance"
-            breadCrumb={[
-                benchmarkDetail?.title
-                    ? benchmarkDetail?.title
-                    : 'Benchmark summary',
-            ]}
-            filter
-            headerChildren={
+        <>
+            <TopHeader
+                breadCrumb={[
+                    benchmarkDetail?.title
+                        ? benchmarkDetail?.title
+                        : 'Benchmark summary',
+                ]}
+                filter
+            >
                 <Settings
                     id={benchmarkDetail?.id}
                     response={(e) => setAssignments(e)}
                     autoAssign={benchmarkDetail?.autoAssign}
                     isAutoResponse={(x) => setRecall(true)}
                 />
-            }
-        >
+            </TopHeader>
             {isLoading ? (
                 <Spinner className="mt-56" />
             ) : (
@@ -440,6 +439,6 @@ export default function BenchmarkSummary() {
                     />
                 </>
             )}
-        </Layout>
+        </>
     )
 }

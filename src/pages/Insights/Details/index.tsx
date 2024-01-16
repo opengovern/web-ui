@@ -30,7 +30,6 @@ import {
     queryAtom,
     timeAtom,
 } from '../../../store'
-import Layout from '../../../components/Layout'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import Table, { IColumn } from '../../../components/Table'
 import { snakeCaseToLabel } from '../../../utilities/labelMaker'
@@ -44,6 +43,7 @@ import Modal from '../../../components/Modal'
 import SummaryCard from '../../../components/Cards/SummaryCard'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
 import Chart from '../../../components/Chart'
+import TopHeader from '../../../components/Layout/Header'
 
 export const chartData = (inputData: any) => {
     const label = []
@@ -225,14 +225,16 @@ export default function InsightDetails() {
     }
 
     return (
-        <Layout
-            currentPage="insights"
-            breadCrumb={[
-                insightDetail ? insightDetail?.shortTitle : 'Insight detail',
-            ]}
-            datePicker
-            filter
-        >
+        <>
+            <TopHeader
+                breadCrumb={[
+                    insightDetail
+                        ? insightDetail?.shortTitle
+                        : 'Insight detail',
+                ]}
+                datePicker
+                filter
+            />
             {trendLoading || detailLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
@@ -430,6 +432,6 @@ export default function InsightDetails() {
                     </Card>
                 </>
             )}
-        </Layout>
+        </>
     )
 }

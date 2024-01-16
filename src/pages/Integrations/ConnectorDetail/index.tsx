@@ -2,7 +2,6 @@ import { Button, Flex, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import { Cog8ToothIcon } from '@heroicons/react/24/outline'
-import Layout from '../../../components/Layout'
 import { timeAtom } from '../../../store'
 import AWSTabs from './AWS/Tabs'
 import AWSSummary from './AWS/Summary'
@@ -14,6 +13,7 @@ import {
     useIntegrationApiV1ConnectorsMetricsList,
     useIntegrationApiV1CredentialsList,
 } from '../../../api/integration.gen'
+import TopHeader from '../../../components/Layout/Header'
 
 export default function ConnectorDetail() {
     const navigate = useNavigate()
@@ -41,7 +41,8 @@ export default function ConnectorDetail() {
         })
 
     return (
-        <Layout currentPage="integrations" breadCrumb={[connector]}>
+        <>
+            <TopHeader breadCrumb={[connector]} />
             <Flex flexDirection="col" alignItems="start">
                 <Flex flexDirection="row">
                     <Title className="font-semibold">{connector}</Title>
@@ -84,6 +85,6 @@ export default function ConnectorDetail() {
                     </>
                 )}
             </Flex>
-        </Layout>
+        </>
     )
 }

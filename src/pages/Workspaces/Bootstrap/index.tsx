@@ -10,9 +10,9 @@ import {
     useWorkspaceApiV1BootstrapFinishCreate,
     useWorkspaceApiV1WorkspaceCreate,
 } from '../../../api/workspace.gen'
-import Layout from '../../../components/Layout'
 import { getErrorMessage } from '../../../types/apierror'
 import OnboardDrawer from '../../Integrations/Onboard/AWS'
+import TopHeader from '../../../components/Layout/Header'
 
 export default function Boostrap() {
     const currentWorkspace = useParams<{ ws: string }>().ws
@@ -79,7 +79,8 @@ export default function Boostrap() {
     }, [finishIsLoading])
 
     return (
-        <Layout currentPage="assets" showSidebar={false} hFull>
+        <>
+            <TopHeader />
             {newAWSOpen && (
                 <OnboardDrawer
                     open={newAWSOpen}
@@ -140,6 +141,6 @@ export default function Boostrap() {
                     <Status workspaceName={name} />
                 )}
             </Flex>
-        </Layout>
+        </>
     )
 }
