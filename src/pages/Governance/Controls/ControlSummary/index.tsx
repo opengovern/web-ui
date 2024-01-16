@@ -101,7 +101,7 @@ export default function ControlDetail() {
                         <TabGroup className="h-full">
                             <TabList
                                 variant="solid"
-                                className="border border-gray-200"
+                                className="border border-gray-200 dark:border-gray-700"
                             >
                                 <Tab icon={InformationCircleIcon}>
                                     Information
