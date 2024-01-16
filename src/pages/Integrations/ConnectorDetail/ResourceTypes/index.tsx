@@ -1,12 +1,12 @@
 import { Flex, Switch, Text, Title } from '@tremor/react'
 import { useParams } from 'react-router-dom'
 import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
-import Layout from '../../../../components/Layout'
 import Table, { IColumn } from '../../../../components/Table'
 import { useScheduleApiV1DiscoveryResourcetypesListList } from '../../../../api/schedule.gen'
 import AxiosAPI from '../../../../api/ApiConfig'
 import { useMetadataApiV1MetadataDetail } from '../../../../api/metadata.gen'
 import { Api } from '../../../../api/api'
+import TopHeader from '../../../../components/Layout/Header'
 
 const columns = () => {
     const temp: IColumn<any, any>[] = [
@@ -76,7 +76,8 @@ export default function ConnectorResourceTypes() {
     api.instance = AxiosAPI
 
     return (
-        <Layout currentPage="integrations" breadCrumb={['Resource Types']}>
+        <>
+            <TopHeader breadCrumb={['Resource Types']} />
             <Flex flexDirection="col" alignItems="start">
                 <Flex flexDirection="row">
                     <Title className="font-semibold">{connector}</Title>
@@ -118,6 +119,6 @@ export default function ConnectorResourceTypes() {
                     loading={isLoading}
                 />
             </Flex>
-        </Layout>
+        </>
     )
 }

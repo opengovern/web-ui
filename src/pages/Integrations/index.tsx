@@ -1,5 +1,4 @@
 import { Flex, Grid, Title } from '@tremor/react'
-import Layout from '../../components/Layout'
 import ConnectorCard from '../../components/Cards/ConnectorCard'
 import Spinner from '../../components/Spinner'
 import OnboardCard from '../../components/Cards/OnboardCard'
@@ -7,6 +6,7 @@ import {
     useIntegrationApiV1ConnectorsList,
     useIntegrationApiV1ConnectorsMetricsList,
 } from '../../api/integration.gen'
+import TopHeader from '../../components/Layout/Header'
 
 export default function Integrations() {
     const { response: topMetrics, isLoading: metricsLoading } =
@@ -15,7 +15,8 @@ export default function Integrations() {
         useIntegrationApiV1ConnectorsList()
 
     return (
-        <Layout currentPage="integrations">
+        <>
+            <TopHeader />
             <Grid numItems={3} className="gap-4 mb-10">
                 <OnboardCard
                     title="Active Accounts"
@@ -44,6 +45,6 @@ export default function Integrations() {
                     ))}
                 </Grid>
             )}
-        </Layout>
+        </>
     )
 }
