@@ -3,11 +3,11 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { ICellRendererParams } from 'ag-grid-community'
-import Layout from '../../components/Layout'
 import Table, { IColumn } from '../../components/Table'
 import { useInventoryApiV2ResourceCollectionList } from '../../api/inventory.gen'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../api/api'
 import Tag from '../../components/Tag'
+import TopHeader from '../../components/Layout/Header'
 
 const resourceCollectionColumns: IColumn<any, any>[] = [
     {
@@ -79,7 +79,8 @@ export default function ResourceCollection() {
     const { response, isLoading } = useInventoryApiV2ResourceCollectionList()
 
     return (
-        <Layout currentPage="resource-collection">
+        <>
+            <TopHeader />
             <Table
                 id="resource_collection"
                 columns={resourceCollectionColumns}
@@ -119,6 +120,6 @@ export default function ResourceCollection() {
                     </Button> */}
                 </Flex>
             </Table>
-        </Layout>
+        </>
     )
 }

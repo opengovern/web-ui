@@ -27,7 +27,6 @@ import {
     ChevronUpIcon,
 } from '@heroicons/react/24/outline'
 import { ICellRendererParams } from 'ag-grid-community'
-import Layout from '../../../components/Layout'
 import {
     useInventoryApiV2AnalyticsTrendList,
     useInventoryApiV2ResourceCollectionDetail,
@@ -67,6 +66,7 @@ import DrawerPanel from '../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
 import { options } from '../../Assets/Details/Tabs/Metrics'
 import { benchmarkChecks } from '../../../components/Cards/ComplianceCard'
+import TopHeader from '../../../components/Layout/Header'
 
 const pieData = (
     input:
@@ -284,11 +284,13 @@ export default function ResourceCollectionDetail() {
     const rows = useMemo(() => bmList(response, complianceKPI), [response])
 
     return (
-        <Layout
-            currentPage="resource-collection"
-            breadCrumb={[detail ? detail.name : 'Resource collection detail']}
-            datePicker
-        >
+        <>
+            <TopHeader
+                breadCrumb={[
+                    detail ? detail.name : 'Resource collection detail',
+                ]}
+                datePicker
+            />
             <Flex alignItems="end" className="mb-4">
                 <Flex flexDirection="col" alignItems="start">
                     <Title className="font-semibold">{detail?.name}</Title>
@@ -654,6 +656,6 @@ export default function ResourceCollectionDetail() {
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
-        </Layout>
+        </>
     )
 }

@@ -1,10 +1,11 @@
-import { Button, Flex, Grid, Metric, Subtitle, Title } from '@tremor/react'
-import Layout from '../../components/Layout'
+import { Button, Flex, Grid, Subtitle, Title } from '@tremor/react'
 import stackImg from '../../icons/stack.png'
+import TopHeader from '../../components/Layout/Header'
 
 export default function Stack() {
     return (
-        <Layout currentPage="stack">
+        <>
+            <TopHeader />
             <Flex justifyContent="center" className="md:mt-32">
                 <Grid numItems={1} numItemsMd={2}>
                     <img src={stackImg} alt="stack" loading="lazy" />
@@ -33,6 +34,6 @@ export default function Stack() {
                     </Flex>
                 </Grid>
             </Flex>
-        </Layout>
+        </>
     )
 }
