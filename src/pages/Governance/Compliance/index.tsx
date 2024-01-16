@@ -13,6 +13,7 @@ import ComplianceCard, {
 import { IColumn } from '../../../components/Table'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import ComplianceListCard from '../../../components/Cards/ComplianceListCard'
+import TopHeader from '../../../components/Layout/Header'
 
 export const benchmarkList = (ben: any) => {
     const connected: any[] = []
@@ -253,7 +254,8 @@ export default function Compliance() {
     // }, [selectedState])
 
     return (
-        <Layout currentPage="compliance">
+        <>
+            <TopHeader />
             <Flex className="mb-4">
                 <Flex className="gap-3 w-fit">
                     <Icon icon={ShieldCheckIcon} variant="shadow" />
@@ -396,6 +398,6 @@ export default function Compliance() {
                     )}
                 </>
             )}
-        </Layout>
+        </>
     )
 }

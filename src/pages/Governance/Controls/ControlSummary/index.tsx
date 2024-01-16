@@ -33,7 +33,6 @@ import { useState } from 'react'
 import Editor from 'react-simple-code-editor'
 import { highlight, languages } from 'prismjs'
 import Markdown from 'react-markdown'
-import Layout from '../../../../components/Layout'
 import { useComplianceApiV1ControlsSummaryDetail } from '../../../../api/compliance.gen'
 import { notificationAtom, queryAtom } from '../../../../store'
 import { severityBadge } from '../index'
@@ -44,6 +43,7 @@ import Benchmarks from './Tabs/Benchmarks'
 import ImpactedAccounts from './Tabs/ImpactedAccounts'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
+import TopHeader from '../../../../components/Layout/Header'
 
 export default function ControlDetail() {
     const { controlId, ws } = useParams()
@@ -58,14 +58,14 @@ export default function ControlDetail() {
         useComplianceApiV1ControlsSummaryDetail(String(controlId))
 
     return (
-        <Layout
-            currentPage="compliance"
-            breadCrumb={[
-                controlDetail
-                    ? controlDetail?.control?.title
-                    : 'Control detail',
-            ]}
-        >
+        <>
+            <TopHeader
+                breadCrumb={[
+                    controlDetail
+                        ? controlDetail?.control?.title
+                        : 'Control detail',
+                ]}
+            />
             {isLoading ? (
                 <Spinner className="mt-56" />
             ) : (
@@ -496,6 +496,6 @@ export default function ControlDetail() {
                     </TabGroup>
                 </>
             )}
-        </Layout>
+        </>
     )
 }

@@ -37,39 +37,6 @@ import { SpendMetrics } from '../pages/Spend/Metric'
 import { SpendAccounts } from '../pages/Spend/Account'
 import Layout from '../components/Layout'
 
-const routes = [
-    {
-        key: 'url',
-        path: '/',
-        element: <Navigate to="/workspaces?onLogin" replace />,
-        noAuth: true,
-    },
-    {
-        key: 'ws name',
-        path: '/:ws',
-        element: <Navigate to="home" />,
-        noAuth: true,
-    },
-    {
-        key: 'callback',
-        path: '/callback',
-        element: <CallbackPage />,
-        noAuth: true,
-    },
-    {
-        key: 'logout',
-        path: '/logout',
-        element: <Logout />,
-        noAuth: true,
-    },
-    {
-        key: '*',
-        path: '*',
-        element: <NotFound />,
-        noAuth: true,
-    },
-]
-
 const authRoutes = [
     {
         key: 'url',
@@ -128,8 +95,13 @@ const authRoutes = [
         component: Single,
     },
     {
-        key: 'assets metrics',
-        path: '/:ws/assets/assets-details',
+        key: 'assets account detail',
+        path: '/:ws/assets/accounts',
+        component: AssetDetails,
+    },
+    {
+        key: 'assets metric detail',
+        path: '/:ws/assets/metrics',
         component: AssetDetails,
     },
     {

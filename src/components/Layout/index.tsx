@@ -1,6 +1,5 @@
 import { Flex } from '@tremor/react'
 import { ReactNode, UIEvent } from 'react'
-import TopHeader from './Header'
 import Footer from './Footer'
 import Sidebar from './Sidebar'
 import Notification from '../Notification'
@@ -53,7 +52,7 @@ export default function Layout({
     scrollRef,
 }: IProps) {
     const url = window.location.pathname.split('/')
-    const current = url[url.length - 1]
+    const current = `${url[2]}${url[3] ? `/${url[3]}` : ''}`
     const workspace = url[1]
 
     return (

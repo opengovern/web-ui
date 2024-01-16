@@ -307,7 +307,7 @@ export default function Assets() {
                                 oldChartData={pieData(composition).oldData}
                                 activeTime={activeTimeRange}
                                 loading={compositionLoading}
-                                seeMore="assets-details#category"
+                                seeMore="metrics#category"
                             />
                         </Col>
                         <Col numColSpan={1} numColSpanLg={3} className="h-full">
@@ -318,7 +318,7 @@ export default function Assets() {
                                     valueColumnTitle="Count"
                                     loading={accountsResponseLoading}
                                     items={topAccounts(accountsResponse)}
-                                    url="assets-details#cloud-accounts"
+                                    url="accounts"
                                     type="account"
                                 />
                                 <ListCard
@@ -327,7 +327,7 @@ export default function Assets() {
                                     valueColumnTitle="Count"
                                     loading={servicesResponseLoading}
                                     items={topServices(servicesResponse)}
-                                    url="assets-details#metrics"
+                                    url="metrics"
                                     type="service"
                                 />
                             </Grid>

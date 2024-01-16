@@ -17,12 +17,12 @@ import {
     ServerStackIcon,
     ShieldExclamationIcon,
 } from '@heroicons/react/24/outline'
-import Layout from '../../../components/Layout'
 import FindingsWithFailure from './FindingsWithFailure'
 import ResourcesWithFailure from './ResourcesWithFailure'
 import ControlsWithFailure from './ControlsWithFailure'
 import FailingCloudAccounts from './FailingCloudAccounts'
 import { numberDisplay } from '../../../utilities/numericDisplay'
+import TopHeader from '../../../components/Layout/Header'
 
 export default function Findings() {
     const [tab, setTab] = useState(0)
@@ -67,7 +67,8 @@ export default function Findings() {
     ]
 
     return (
-        <Layout currentPage="findings">
+        <>
+            <TopHeader />
             <TabGroup index={tab} onIndexChange={setTab}>
                 <TabList className="border-0">
                     {tabs.map((t) => (
@@ -129,6 +130,6 @@ export default function Findings() {
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
-        </Layout>
+        </>
     )
 }

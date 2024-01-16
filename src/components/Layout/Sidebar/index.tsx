@@ -49,6 +49,7 @@ interface ISidebar {
 }
 
 export default function Sidebar({ workspace, currentPage }: ISidebar) {
+    console.log(currentPage)
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
     const preview = useAtomValue(previewAtom)
     const { response: spendCount, isLoading: spendCountIsLoading } =
@@ -79,7 +80,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 },
                 {
                     name: 'Cloud Accounts',
-                    page: 'assets/assets-details#cloud-accounts',
+                    page: 'assets/accounts',
                     selected: 'assets-detail-account',
                     isPreview: false,
                     isLoading: assetsIsLoading,
@@ -87,7 +88,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 },
                 {
                     name: 'Metrics',
-                    page: 'assets/assets-details#metrics',
+                    page: 'assets/metrics',
                     selected: 'assets-detail-metric',
                     isPreview: false,
                     isLoading: assetsIsLoading,
