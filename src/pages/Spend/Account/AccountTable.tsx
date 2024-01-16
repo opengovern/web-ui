@@ -248,22 +248,21 @@ export default function AccountTable({
 
     const columns: IColumn<any, any>[] = [
         {
+            field: 'connector',
+            headerName: 'Provider',
+            type: 'string',
+            width: 90,
+            suppressMenu: true,
+            enableRowGroup: true,
+            rowGroup: manualGrouping === 'connector',
+            filter: true,
+            resizable: true,
+            sortable: true,
+        },
+        {
             headerName: 'Account Information',
             type: 'string',
             children: [
-                {
-                    field: 'connector',
-                    headerName: 'Provider',
-                    type: 'string',
-                    width: 90,
-                    suppressMenu: true,
-                    enableRowGroup: true,
-                    rowGroup: manualGrouping === 'connector',
-                    filter: true,
-                    resizable: true,
-                    sortable: true,
-                    pinned: true,
-                },
                 {
                     field: 'dimension',
                     headerName: 'Discovered Name',
@@ -273,8 +272,6 @@ export default function AccountTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    pivot: false,
-                    pinned: true,
                 },
                 {
                     field: 'accountId',
@@ -285,8 +282,6 @@ export default function AccountTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    pivot: false,
-                    pinned: true,
                 },
                 {
                     field: 'dimensionId',
@@ -294,20 +289,15 @@ export default function AccountTable({
                     type: 'string',
                     width: 150,
                     filter: true,
-                    suppressMenu: true,
                     sortable: true,
                     resizable: true,
-                    pivot: false,
+                    suppressMenu: true,
                     hide: true,
-                    pinned: true,
                 },
             ],
         },
         {
-            headerName: `Current Period [${renderText(
-                timeRange.start,
-                timeRange.end
-            )}]`,
+            headerName: `Current Period`,
             type: 'string',
             children: [
                 {
@@ -315,14 +305,11 @@ export default function AccountTable({
                     headerName: 'Spend',
                     type: 'price',
                     width: 90,
-                    suppressMenu: true,
-                    sortable: true,
                     aggFunc: 'sum',
+                    filter: true,
+                    sortable: true,
                     resizable: true,
-                    wrapHeaderText: true,
-                    autoHeaderHeight: true,
-                    pivot: false,
-                    pinned: true,
+                    suppressMenu: true,
                     valueFormatter: (param: ValueFormatterParams) => {
                         return param.value ? exactPriceDisplay(param.value) : ''
                     },
@@ -332,11 +319,11 @@ export default function AccountTable({
                     headerName: '% of Total',
                     type: 'string',
                     width: 100,
-                    suppressMenu: true,
-                    pinned: true,
-                    hide: false,
                     aggFunc: 'sum',
+                    filter: true,
+                    sortable: true,
                     resizable: true,
+                    suppressMenu: true,
                     valueFormatter: (param: ValueFormatterParams) => {
                         return param.value ? `${param.value.toFixed(2)}%` : ''
                     },
@@ -354,13 +341,12 @@ export default function AccountTable({
                     field: 'prevTotalCost',
                     headerName: 'Spend',
                     type: 'string',
-                    width: 90,
-                    suppressMenu: true,
-                    pinned: true,
-                    wrapHeaderText: true,
-                    autoHeaderHeight: true,
+                    width: 200,
                     aggFunc: 'sum',
+                    filter: true,
+                    sortable: true,
                     resizable: true,
+                    suppressMenu: true,
                     valueFormatter: (param: ValueFormatterParams) => {
                         return param.value !== undefined
                             ? `$${param.value.toFixed(0)}`
@@ -371,12 +357,12 @@ export default function AccountTable({
                     field: 'prevPercent',
                     headerName: '% of Total',
                     type: 'string',
-                    width: 100,
-                    suppressMenu: true,
-                    pinned: true,
-                    hide: false,
+                    width: 120,
                     aggFunc: 'sum',
+                    filter: true,
+                    sortable: true,
                     resizable: true,
+                    suppressMenu: true,
                     valueFormatter: (param: ValueFormatterParams) => {
                         return param.value ? `${param.value.toFixed(2)}%` : ''
                     },
@@ -392,11 +378,11 @@ export default function AccountTable({
                     headerName: 'Delta',
                     type: 'string',
                     width: 90,
-                    pinned: true,
-                    suppressMenu: true,
-                    hide: true,
                     aggFunc: 'sum',
+                    filter: true,
+                    sortable: true,
                     resizable: true,
+                    suppressMenu: true,
                     valueFormatter: (param: ValueFormatterParams) => {
                         return param.value !== undefined
                             ? `$${param.value.toFixed(0)}`
@@ -407,11 +393,12 @@ export default function AccountTable({
                     field: 'changePercent',
                     headerName: '%',
                     type: 'string',
-                    suppressMenu: true,
                     width: 90,
-                    pinned: true,
                     aggFunc: 'sum',
+                    filter: true,
+                    sortable: true,
                     resizable: true,
+                    suppressMenu: true,
                     valueFormatter: (param: ValueFormatterParams) => {
                         return param.value !== undefined
                             ? `${param.value.toFixed(0)}%`

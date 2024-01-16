@@ -197,6 +197,7 @@ export default function AdvancedTable<TData = any, TValue = any>({
         if (item.children !== undefined) {
             const v: ColGroupDef<TData> = {
                 headerName: item.headerName,
+                headerClass: 'font-bold text-normal text-gray-900',
                 marryChildren: true,
                 children: item.children.map((i) => convert(i)),
             }

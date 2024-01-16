@@ -51,7 +51,8 @@ export function SpendAccounts() {
         sortBy: 'cost',
     }
 
-    const duration = activeTimeRange.end.diff(activeTimeRange.start, 'second')
+    const duration =
+        activeTimeRange.end.diff(activeTimeRange.start, 'second') + 1
     const prevTimeRange = {
         start: activeTimeRange.start.add(-duration, 'second'),
         end: activeTimeRange.end.add(-duration, 'second'),
