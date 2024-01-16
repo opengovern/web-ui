@@ -71,20 +71,6 @@ const rowGenerator = (
     let sum = 0
     const roww = []
     const granularity: any = {}
-    const sortedDate =
-        input
-            ?.flatMap((row) => Object.entries(row.costValue || {}))
-            .map((v) => dayjs(v[0]))
-            .sort((a, b) => {
-                if (a.isSame(b)) {
-                    return 0
-                }
-                return a.isBefore(b) ? -1 : 1
-            }) || []
-    const oldestDate = sortedDate.at(0)?.format('YYYY-MM-DD')
-    const latestDate = sortedDate
-        .at(sortedDate.length - 1)
-        ?.format('YYYY-MM-DD')
 
     let pinnedRow = [
         { totalCost: sum, dimension: 'Total spend', ...granularity },
@@ -101,20 +87,18 @@ const rowGenerator = (
                     // eslint-disable-next-line no-return-assign
                     (v: number | unknown) => (totalCost += Number(v))
                 )
+                const totalAccountsSpendInPrev =
+                    inputPrev
+                        ?.flatMap((v) => Object.entries(v.costValue || {}))
+                        .map((v) => v[1])
+                        .reduce((prev, curr) => prev + curr, 0) || 0
                 const totalSpendInPrev =
                     inputPrev
                         ?.filter((v) => v.accountID === row.accountID)
                         .flatMap((v) => Object.entries(v.costValue || {}))
                         .map((v) => v[1])
                         .reduce((prev, curr) => prev + curr, 0) || 0
-                const oldest =
-                    Object.entries(row.costValue || {})
-                        .filter((v) => v[0] === oldestDate)
-                        .at(0)?.[1] || 0
-                const latest =
-                    Object.entries(row.costValue || {})
-                        .filter((v) => v[0] === latestDate)
-                        .at(0)?.[1] || 0
+
                 return {
                     dimension: row.dimensionName
                         ? row.dimensionName
@@ -126,8 +110,12 @@ const rowGenerator = (
                     id: row.dimensionId,
                     totalCost,
                     prevTotalCost: totalSpendInPrev,
-                    changePercent: ((latest - oldest) / oldest) * 100.0,
-                    change: latest - oldest,
+                    prevPercent:
+                        (totalSpendInPrev / totalAccountsSpendInPrev) * 100.0,
+                    changePercent:
+                        ((totalCost - totalSpendInPrev) / totalSpendInPrev) *
+                        100.0,
+                    change: totalCost - totalSpendInPrev,
                     ...temp,
                 }
             }) || []

@@ -1,9 +1,4 @@
-import {
-    ColDef,
-    ColGroupDef,
-    GridOptions,
-    ValueFormatterParams,
-} from 'ag-grid-community'
+import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import {
@@ -79,6 +74,11 @@ const rowGenerator = (
                     // eslint-disable-next-line no-return-assign
                     (v: number | unknown) => (totalCost += Number(v))
                 )
+                const totalMetricSpendInPrev =
+                    inputPrev
+                        ?.flatMap((v) => Object.entries(v.costValue || {}))
+                        .map((v) => v[1])
+                        .reduce((prev, curr) => prev + curr, 0) || 0
                 const totalSpendInPrev =
                     inputPrev
                         ?.filter((v) => v.dimensionId === row.dimensionId)
@@ -104,8 +104,12 @@ const rowGenerator = (
                     id: row.dimensionId,
                     totalCost,
                     prevTotalCost: totalSpendInPrev,
-                    changePercent: ((latest - oldest) / oldest) * 100.0,
-                    change: latest - oldest,
+                    prevPercent:
+                        (totalSpendInPrev / totalMetricSpendInPrev) * 100.0,
+                    changePercent:
+                        ((totalCost - totalSpendInPrev) / totalSpendInPrev) *
+                        100.0,
+                    change: totalCost - totalSpendInPrev,
                     ...temp,
                 }
             }) || []
