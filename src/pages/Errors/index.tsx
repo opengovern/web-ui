@@ -1,10 +1,12 @@
 import { Flex, Grid, Metric, Text } from '@tremor/react'
 import notFoundImg from '../../icons/404.png'
 import Layout from '../../components/Layout'
+import TopHeader from '../../components/Layout/Header'
 
 export default function NotFound() {
     return (
-        <Layout currentPage="404">
+        <>
+            <TopHeader />
             <Flex justifyContent="center" className="md:mt-32">
                 <Grid numItems={1} numItemsMd={2}>
                     <img src={notFoundImg} alt="stack" />
@@ -19,6 +21,6 @@ export default function NotFound() {
                     </Flex>
                 </Grid>
             </Flex>
-        </Layout>
+        </>
     )
 }

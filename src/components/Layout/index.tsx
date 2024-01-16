@@ -6,33 +6,6 @@ import Notification from '../Notification'
 
 type IProps = {
     children: ReactNode
-    headerChildren?: ReactNode | undefined
-    filter?: boolean
-    datePicker?: boolean
-    breadCrumb?: (string | undefined)[]
-    currentPage?:
-        | 'home'
-        | 'insights'
-        | 'assets'
-        | 'assets-detail-account'
-        | 'assets-detail-metric'
-        | 'spend'
-        | 'spend-detail-account'
-        | 'spend-detail-metric'
-        | 'spend/accounts'
-        | 'spend/metrics'
-        | 'integrations'
-        | 'compliance'
-        | 'service-advisor'
-        | 'findings'
-        | 'resource-collection'
-        | 'settings'
-        | 'stack'
-        | 'rules'
-        | 'alerts'
-        | 'query'
-        | 'billing'
-        | '404'
     showSidebar?: boolean
     hFull?: boolean
     onScroll?: (e: UIEvent) => void
@@ -41,13 +14,8 @@ type IProps = {
 
 export default function Layout({
     children,
-    currentPage,
     showSidebar = true,
     hFull = false,
-    headerChildren,
-    filter = false,
-    datePicker = false,
-    breadCrumb,
     onScroll,
     scrollRef,
 }: IProps) {
@@ -80,7 +48,7 @@ export default function Layout({
                     >
                         <div
                             className={`${
-                                currentPage === 'settings' ? '' : 'max-w-7xl'
+                                current === 'settings' ? '' : 'max-w-7xl'
                             } w-full py-6 ${hFull ? 'h-full' : ''}`}
                         >
                             {children}
