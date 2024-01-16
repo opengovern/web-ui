@@ -11,13 +11,13 @@ export default function Governance() {
                     icon={ShieldCheckIcon}
                     className="bg-gray-50 rounded mr-2"
                 />
-                <Title>Governance</Title>
+                <Title className="font-semibold">Governance</Title>
             </Flex>
-            <Grid numItems={3} className="w-full gap-4">
-                <Compliance />
+            <Grid numItems={3} className="w-full gap-8">
                 <Col numColSpan={2} className="pl-6">
                     <Findings />
                 </Col>
+                <Compliance />
             </Grid>
         </Card>
     )

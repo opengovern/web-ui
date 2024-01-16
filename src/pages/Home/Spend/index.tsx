@@ -1,4 +1,14 @@
-import { Button, Card, Col, Flex, Grid, Icon, Text, Title } from '@tremor/react'
+import {
+    Button,
+    Card,
+    Col,
+    Flex,
+    Grid,
+    Icon,
+    Metric,
+    Text,
+    Title,
+} from '@tremor/react'
 import { BanknotesIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai/index'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -11,6 +21,9 @@ import { toErrorMessage } from '../../../types/apierror'
 import { buildTrend } from '../../../components/Spend/Chart/helpers'
 import StackedChart from '../../../components/Chart/Stacked'
 import { SpendChartMetric } from '../../../components/Spend/Chart/Metric'
+import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+import { renderText } from '../../../components/Layout/Header/DateRangePicker'
+import ChangeDelta from '../../../components/ChangeDelta'
 
 const colors = ['#5470C6', '#91CC75', '#FAC858', '#EE6766', '#73C0DE']
 
@@ -94,15 +107,22 @@ export default function Spend() {
 
     return (
         <Card className="h-full">
-            <Grid numItems={2} className="gap-4">
-                <Col numColSpan={1}>
-                    <Flex justifyContent="start" className="mb-2">
-                        <Icon
-                            icon={BanknotesIcon}
-                            className="bg-gray-50 rounded mr-2"
-                        />
-                        <Title>Cloud Spend</Title>
-                    </Flex>
+            <Flex className="mb-2">
+                <Flex justifyContent="start" className="gap-2">
+                    <Icon icon={BanknotesIcon} className="p-0" />
+                    <Title className="font-semibold">Cloud Spend</Title>
+                </Flex>
+                <Button
+                    variant="light"
+                    icon={ChevronRightIcon}
+                    iconPosition="right"
+                    onClick={() => navigate(`/${workspace}/spend`)}
+                >
+                    View details
+                </Button>
+            </Flex>
+            <Grid numItems={3} className="gap-8">
+                <Col numColSpan={2}>
                     <StackedChart
                         labels={trendStacked.label}
                         chartData={trendStacked.data}
@@ -121,56 +141,75 @@ export default function Spend() {
                     />
                 </Col>
                 <Col>
-                    <Flex className="h-full" flexDirection="col">
-                        <SpendChartMetric
-                            title="Total Spend"
-                            timeRange={activeTimeRange}
-                            total={serviceCostResponse?.total_cost || 0}
-                            timeRangePrev={prevTimeRange}
-                            totalPrev={servicePrevCostResponse?.total_cost || 0}
-                            isLoading={
-                                serviceCostLoading || servicePrevCostLoading
-                            }
-                            error={toErrorMessage(
-                                serviceCostErr,
-                                servicePrevCostErr
-                            )}
-                            comparedToNextLine
-                        />
-                        <Flex
-                            flexDirection="col"
-                            alignItems="start"
-                            justifyContent="start"
-                            className="gap-1"
-                        >
-                            {(trendStacked.data[0]
-                                ? trendStacked.data[0]
-                                : []
-                            ).map((t, i) => (
-                                <Flex justifyContent="start" className="gap-2">
-                                    <div
-                                        className="h-2 w-2 min-w-[8px] rounded-full"
-                                        style={{ backgroundColor: colors[i] }}
-                                    />
-                                    <Text className="line-clamp-1">
-                                        {t.label}
-                                    </Text>
-                                </Flex>
-                            ))}
-                        </Flex>
-                        <Flex justifyContent="end">
-                            <Button
-                                variant="light"
-                                icon={ChevronRightIcon}
-                                iconPosition="right"
-                                onClick={() => navigate(`/${workspace}/spend`)}
-                            >
-                                View details
-                            </Button>
-                        </Flex>
+                    <Flex
+                        flexDirection="col"
+                        justifyContent="start"
+                        alignItems="start"
+                        className="gap-4 mt-4"
+                    >
+                        <Card className="p-3">
+                            <Text className="font-semibold text-gray-800">
+                                Total spend
+                            </Text>
+                            <Metric className="my-2">
+                                {exactPriceDisplay(
+                                    serviceCostResponse?.total_cost || 0
+                                )}
+                            </Metric>
+                            <Text>
+                                {renderText(
+                                    activeTimeRange.start,
+                                    activeTimeRange.end
+                                )}
+                            </Text>
+                        </Card>
+                        <Card className="p-3">
+                            <Text className="font-semibold text-gray-800 mb-2">
+                                Spend trend
+                            </Text>
+                            <ChangeDelta
+                                change={
+                                    (((serviceCostResponse?.total_cost || 0) -
+                                        (servicePrevCostResponse?.total_cost ||
+                                            0)) /
+                                        (servicePrevCostResponse?.total_cost ||
+                                            1)) *
+                                    100
+                                }
+                                size="xl"
+                            />
+                            <Text className="mt-2">
+                                {`Compared to ${renderText(
+                                    prevTimeRange.start,
+                                    prevTimeRange.end
+                                )}`}
+                            </Text>
+                        </Card>
                     </Flex>
                 </Col>
             </Grid>
+            <Flex
+                flexDirection="row"
+                alignItems="start"
+                justifyContent="start"
+                className="gap-3 w-fit"
+            >
+                {trendStacked.data[0] ? (
+                    trendStacked.data[0].map((t, i) => (
+                        <Flex justifyContent="start" className="gap-2">
+                            <div
+                                className="h-2 w-2 min-w-[8px] rounded-full"
+                                style={{
+                                    backgroundColor: colors[i],
+                                }}
+                            />
+                            <Text className="line-clamp-1">{t.label}</Text>
+                        </Flex>
+                    ))
+                ) : (
+                    <div className="h-6" />
+                )}
+            </Flex>
         </Card>
     )
 }
