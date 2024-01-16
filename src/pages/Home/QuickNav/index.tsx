@@ -97,7 +97,7 @@ export default function QuickNav() {
                                         }
                                     >
                                         <ArrowTopRightOnSquareIcon className="h-5 text-kaytu-500" />
-                                        <Text className="text-inherit">
+                                        <Text className="text-inherit dark:hover:text-kaytu-400">
                                             {c.name}
                                         </Text>
                                     </Flex>
