@@ -1,7 +1,6 @@
 import { Col, Grid } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { useEffect, useRef, useState } from 'react'
-import Layout from '../../../components/Layout'
+import { useRef, useState } from 'react'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTableList,
@@ -12,6 +11,7 @@ import { SpendChart } from '../../../components/Spend/Chart'
 import { toErrorMessage } from '../../../types/apierror'
 import { Granularity } from '../../../components/Spend/Chart/Selectors'
 import MetricTable from './MetricTable'
+import TopHeader from '../../../components/Layout/Header'
 
 export function SpendMetrics() {
     const activeTimeRange = useAtomValue(spendTimeAtom)
@@ -149,13 +149,8 @@ export function SpendMetrics() {
     // }
 
     return (
-        <Layout
-            currentPage="spend/metrics"
-            datePicker
-            filter
-            // onScroll={handleScroll}
-            scrollRef={ref}
-        >
+        <>
+            <TopHeader datePicker filter />
             <Grid numItems={3} className="w-full gap-4">
                 <Col numColSpan={3} ref={chartRef}>
                     <SpendChart
@@ -196,6 +191,6 @@ export function SpendMetrics() {
                     />
                 </Col>
             </Grid>
-        </Layout>
+        </>
     )
 }

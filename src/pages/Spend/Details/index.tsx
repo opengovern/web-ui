@@ -2,11 +2,11 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai/index'
 import { useEffect, useState } from 'react'
-import Layout from '../../../components/Layout'
 import Metrics from './Tabs/Metrics'
 import { checkGranularity } from '../../../utilities/dateComparator'
 import { filterAtom, spendTimeAtom } from '../../../store'
 import CloudAccounts from './Tabs/CloudAccounts'
+import TopHeader from '../../../components/Layout/Header'
 
 export default function SpendDetails() {
     const navigate = useNavigate()
@@ -44,16 +44,8 @@ export default function SpendDetails() {
     }, [activeTimeRange])
 
     return (
-        <Layout
-            currentPage={
-                tabs === '#metrics'
-                    ? 'spend-detail-metric'
-                    : 'spend-detail-account'
-            }
-            breadCrumb={['Spend detail']}
-            filter
-            datePicker
-        >
+        <>
+            <TopHeader breadCrumb={['Spend detail']} filter datePicker />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
                     <Tab onClick={() => navigate('#metrics')}>Metrics</Tab>
@@ -81,6 +73,6 @@ export default function SpendDetails() {
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
-        </Layout>
+        </>
     )
 }

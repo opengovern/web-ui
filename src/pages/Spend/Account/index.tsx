@@ -1,12 +1,10 @@
 import { Col, Grid } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { useEffect, useRef, useState } from 'react'
-import Layout from '../../../components/Layout'
+import { useRef, useState } from 'react'
 import SingleSpendConnection from '../Single/SingleConnection'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTableList,
-    useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../api/inventory.gen'
 import { filterAtom, spendTimeAtom } from '../../../store'
 import { SpendChart } from '../../../components/Spend/Chart'
@@ -14,6 +12,7 @@ import { toErrorMessage } from '../../../types/apierror'
 import { Granularity } from '../../../components/Spend/Chart/Selectors'
 import AccountTable from './AccountTable'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../../api/api'
+import TopHeader from '../../../components/Layout/Header'
 
 export function SpendAccounts() {
     const activeTimeRange = useAtomValue(spendTimeAtom)
@@ -191,13 +190,8 @@ export function SpendAccounts() {
     // }
 
     return (
-        <Layout
-            currentPage="spend/accounts"
-            datePicker
-            filter
-            // onScroll={handleScroll}
-            // scrollRef={ref}
-        >
+        <>
+            <TopHeader datePicker filter />
             {selectedConnections.connections.length === 1 ? (
                 <SingleSpendConnection
                     activeTimeRange={activeTimeRange}
@@ -244,6 +238,6 @@ export function SpendAccounts() {
                     </Col>
                 </Grid>
             )}
-        </Layout>
+        </>
     )
 }
