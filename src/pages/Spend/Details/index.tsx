@@ -1,4 +1,4 @@
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
+import { Tab, TabGroup, TabList } from '@tremor/react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai/index'
 import { useEffect, useState } from 'react'
