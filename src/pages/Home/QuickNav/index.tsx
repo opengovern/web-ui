@@ -1,7 +1,8 @@
 import {
+    ArrowTopRightOnSquareIcon,
     BanknotesIcon,
-    ChevronRightIcon,
     CubeIcon,
+    CursorArrowRaysIcon,
     ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
 import { Card, Flex, Grid, Icon, Text, Title } from '@tremor/react'
@@ -12,19 +13,30 @@ const navList = [
         title: 'Assets',
         description: 'Discovery and Query Cloud assets across multiple clouds',
         icon: CubeIcon,
-        link: '/:ws/assets',
+        children: [
+            { name: 'Summary', link: '/:ws/assets' },
+            { name: 'Asset metrics', link: '/:ws/assets/metrics' },
+            { name: 'Account breakdown', link: '/:ws/assets/accounts' },
+        ],
     },
     {
         title: 'Spend',
         description: 'Understand spend across multiple Cloud providers',
         icon: BanknotesIcon,
-        link: '/:ws/spend',
+        children: [
+            { name: 'Summary', link: '/:ws/spend' },
+            { name: 'Spend metrics', link: '/:ws/spend/metrics' },
+            { name: 'Account breakdown', link: '/:ws/spend/accounts' },
+        ],
     },
     {
         title: 'Governance',
         description: 'Identify Misconfigurations, Benchmark against',
         icon: ShieldCheckIcon,
-        link: '/:ws/compliance',
+        children: [
+            { name: 'Compliance benchmarks', link: '/:ws/compliance' },
+            { name: 'Security findings', link: '/:ws/findings' },
+        ],
     },
     // {
     //     title: 'Insights',
@@ -39,28 +51,62 @@ export default function QuickNav() {
     const navigate = useNavigate()
 
     return (
-        <Grid numItems={3} className="w-full gap-4 mb-4">
-            {navList.map((i) => (
-                <Card
-                    key={i.title}
-                    className="cursor-pointer hover:shadow-xl"
-                    onClick={() =>
-                        navigate(i.link.replaceAll(':ws', workspace || ''))
-                    }
-                >
-                    <Flex justifyContent="start" className="mb-2">
-                        <Icon
-                            icon={i.icon}
-                            className="bg-gray-50 rounded mr-2"
-                        />
-                        <Title>{i.title}</Title>
-                    </Flex>
-                    <Text className="line-clamp-2">{i.description}</Text>
-                    <Flex justifyContent="end">
-                        <ChevronRightIcon className="h-5 text-kaytu-500" />
-                    </Flex>
-                </Card>
-            ))}
-        </Grid>
+        <Card>
+            <Flex justifyContent="start" className="gap-2 mb-4">
+                <Icon icon={CursorArrowRaysIcon} className="p-0" />
+                <Title className="font-semibold">Quick navigation</Title>
+            </Flex>
+            <Grid numItems={3} className="w-full mb-4">
+                {navList.map((nav, i) => (
+                    <div
+                        className={
+                            i < navList.length - 1
+                                ? 'border-r border-r-gray-200 dark:border-r-gray-700'
+                                : ''
+                        }
+                    >
+                        <Card
+                            key={nav.title}
+                            className="border-0 ring-0 !shadow-none py-0"
+                        >
+                            <Flex justifyContent="start" className="gap-2 mb-2">
+                                <Icon icon={nav.icon} className="p-0" />
+                                <Title className="text-gray-800">
+                                    {nav.title}
+                                </Title>
+                            </Flex>
+                            <Text className="line-clamp-2 mb-5">
+                                {nav.description}
+                            </Text>
+                            <Flex
+                                flexDirection="col"
+                                justifyContent="start"
+                                alignItems="start"
+                            >
+                                {nav.children.map((c) => (
+                                    <Flex
+                                        justifyContent="start"
+                                        className="gap-2 py-1.5 cursor-pointer hover:text-kaytu-500"
+                                        onClick={() =>
+                                            navigate(
+                                                c.link.replaceAll(
+                                                    ':ws',
+                                                    workspace || ''
+                                                )
+                                            )
+                                        }
+                                    >
+                                        <ArrowTopRightOnSquareIcon className="h-5 text-kaytu-500" />
+                                        <Text className="text-inherit">
+                                            {c.name}
+                                        </Text>
+                                    </Flex>
+                                ))}
+                            </Flex>
+                        </Card>
+                    </div>
+                ))}
+            </Grid>
+        </Card>
     )
 }

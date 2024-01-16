@@ -44,14 +44,14 @@ export default function Compliance() {
     return (
         <Flex flexDirection="col" alignItems="start" justifyContent="start">
             <Flex className="mb-4">
-                <Title>Benchmarks</Title>
+                <Title>Top benchmarks</Title>
                 <Button
                     variant="light"
                     icon={ChevronRightIcon}
                     iconPosition="right"
                     onClick={() => navigate(`/${workspace}/compliance`)}
                 >
-                    View details
+                    See all
                 </Button>
             </Flex>
             {isLoading || getErrorMessage(error).length > 0 ? (
@@ -86,25 +86,20 @@ export default function Compliance() {
                                     }
                                     className="p-3 cursor-pointer dark:ring-gray-500"
                                 >
-                                    <Flex
-                                        flexDirection="col"
-                                        alignItems="start"
-                                    >
-                                        <Text className="font-semibold text-gray-800 mb-2">
-                                            {bs.title}
-                                        </Text>
-                                        <Text>Security score</Text>
-                                        <Title>
-                                            {(
-                                                ((bs?.controlsSeverityStatus
-                                                    ?.total?.passed || 0) /
-                                                    (bs?.controlsSeverityStatus
-                                                        ?.total?.total || 1)) *
-                                                    100 || 0
-                                            ).toFixed(1)}
-                                            %
-                                        </Title>
-                                    </Flex>
+                                    <Text className="font-semibold text-gray-800 mb-2">
+                                        {bs.title}
+                                    </Text>
+                                    <Text>Security score</Text>
+                                    <Title>
+                                        {(
+                                            ((bs?.controlsSeverityStatus?.total
+                                                ?.passed || 0) /
+                                                (bs?.controlsSeverityStatus
+                                                    ?.total?.total || 1)) *
+                                                100 || 0
+                                        ).toFixed(1)}
+                                        %
+                                    </Title>
                                 </Card>
                             )
                     )}

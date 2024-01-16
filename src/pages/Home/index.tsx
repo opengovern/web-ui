@@ -13,17 +13,14 @@ export default function Home() {
             <TopHeader datePicker />
             <Grid numItems={6} className="w-full gap-4 h-fit">
                 <Col numColSpan={4}>
-                    <Title className="font-semibold mb-4">
-                        Quick navigation
-                    </Title>
-                    <Flex flexDirection="col" alignItems="start" id="myDIV">
+                    <Flex
+                        flexDirection="col"
+                        alignItems="start"
+                        className="gap-4"
+                        id="myDIV"
+                    >
                         <QuickNav />
-                        <Grid numItems={3} className="w-full gap-4 mb-4">
-                            <Integration />
-                            <Col numColSpan={2} className="h-full">
-                                <Spend />
-                            </Col>
-                        </Grid>
+                        <Spend />
                         <Governance />
                     </Flex>
                 </Col>

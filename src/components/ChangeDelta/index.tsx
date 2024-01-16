@@ -1,10 +1,11 @@
-import { BadgeDelta, Color, DeltaType, Flex, Text } from '@tremor/react'
+import { BadgeDelta, Color, DeltaType, Flex, Metric, Text } from '@tremor/react'
 import { numberDisplay } from '../../utilities/numericDisplay'
 
 interface IChangeDelta {
     change: string | number | undefined
     isDelta?: boolean
     valueInsideBadge?: boolean
+    size?: 'sm' | 'xl'
 }
 
 const properties = (
@@ -53,24 +54,36 @@ export default function ChangeDelta({
     change,
     isDelta,
     valueInsideBadge = false,
+    size = 'sm',
 }: IChangeDelta) {
     return (
         <Flex className="w-fit min-w-fit gap-1.5 h-full">
-            <BadgeDelta size="sm" deltaType={properties(change, isDelta).delta}>
+            <BadgeDelta
+                size={size}
+                deltaType={properties(change, isDelta).delta}
+            >
                 {valueInsideBadge &&
                     `${numberDisplay(
                         Math.abs(Number(change)),
                         isDelta ? 0 : 2
                     )} ${isDelta ? '' : '%'}`}
             </BadgeDelta>
-            {!valueInsideBadge && (
-                <Text
-                    color={properties(change, isDelta).color}
-                >{`${numberDisplay(
-                    Math.abs(Number(change)),
-                    isDelta ? 0 : 2
-                )} ${isDelta ? '' : '%'}`}</Text>
-            )}
+            {!valueInsideBadge &&
+                (size === 'sm' ? (
+                    <Text
+                        color={properties(change, isDelta).color}
+                    >{`${numberDisplay(
+                        Math.abs(Number(change)),
+                        isDelta ? 0 : 2
+                    )} ${isDelta ? '' : '%'}`}</Text>
+                ) : (
+                    <Metric color={properties(change, isDelta).color}>
+                        {`${numberDisplay(
+                            Math.abs(Number(change)),
+                            isDelta ? 0 : 2
+                        )} ${isDelta ? '' : '%'}`}
+                    </Metric>
+                ))}
         </Flex>
     )
 }
