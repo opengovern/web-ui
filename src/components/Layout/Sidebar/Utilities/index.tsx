@@ -16,7 +16,7 @@ export default function Utilities({ isCollapsed, workspace }: IUtilities) {
             flexDirection="col"
             alignItems="start"
             justifyContent="start"
-            className="p-2 gap-0.5 border-t border-t-gray-700"
+            className="p-2 gap-0.5 border-t border-t-gray-700 h-fit min-h-fit"
         >
             {!isCollapsed && (
                 <Text className="ml-3 mt-2 mb-2 !text-xs">UTILITIES</Text>
