@@ -5,6 +5,7 @@ import SingleConnection from './SingleConnection'
 import NotFound from '../../Errors'
 import SingleMetric from './SingleMetric'
 import Layout from '../../../components/Layout'
+import TopHeader from '../../../components/Layout/Header'
 
 export default function Single() {
     const activeTimeRange = useAtomValue(timeAtom)
@@ -36,33 +37,33 @@ export default function Single() {
     const renderPage = () => {
         if (urlParams[urlParams.length - 1].startsWith('account_')) {
             return (
-                <Layout
-                    currentPage="assets"
-                    datePicker
-                    breadCrumb={['Cloud account detail']}
-                >
+                <>
+                    <TopHeader
+                        datePicker
+                        breadCrumb={['Cloud account detail']}
+                    />
                     <SingleConnection
                         activeTimeRange={activeTimeRange}
                         id={idGenerator()}
                         resourceId={resourceId}
                     />
-                </Layout>
+                </>
             )
         }
         if (urlParams[urlParams.length - 1].startsWith('metric_')) {
             return (
-                <Layout
-                    currentPage="assets"
-                    datePicker
-                    filter
-                    breadCrumb={['Metric detail']}
-                >
+                <>
+                    <TopHeader
+                        datePicker
+                        filter
+                        breadCrumb={['Metric detail']}
+                    />
                     <SingleMetric
                         activeTimeRange={activeTimeRange}
                         metricId={idGenerator()}
                         resourceId={resourceId}
                     />
-                </Layout>
+                </>
             )
         }
         return <NotFound />

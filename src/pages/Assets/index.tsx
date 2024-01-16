@@ -23,6 +23,7 @@ import ListCard from '../../components/Cards/ListCard'
 import { checkGranularity } from '../../utilities/dateComparator'
 import SingleConnection from './Single/SingleConnection'
 import Trends from '../../components/Trends'
+import TopHeader from '../../components/Layout/Header'
 
 export const resourceTrendChart = (
     trend:
@@ -238,7 +239,8 @@ export default function Assets() {
         })
 
     return (
-        <Layout currentPage="assets" datePicker filter>
+        <>
+            <TopHeader datePicker filter />
             {selectedConnections.connections.length === 1 ? (
                 <SingleConnection
                     activeTimeRange={activeTimeRange}
@@ -333,6 +335,6 @@ export default function Assets() {
                     </Grid>
                 </>
             )}
-        </Layout>
+        </>
     )
 }

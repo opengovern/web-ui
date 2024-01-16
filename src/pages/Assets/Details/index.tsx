@@ -6,6 +6,7 @@ import { filterAtom, timeAtom } from '../../../store'
 import Layout from '../../../components/Layout'
 import Metrics from './Tabs/Metrics'
 import CloudAccounts from './Tabs/CloudAccounts'
+import TopHeader from '../../../components/Layout/Header'
 
 export default function AssetDetails() {
     const navigate = useNavigate()
@@ -31,16 +32,12 @@ export default function AssetDetails() {
     }, [tabs])
 
     return (
-        <Layout
-            currentPage={
-                tabs === '#metrics'
-                    ? 'assets-detail-metric'
-                    : 'assets-detail-account'
-            }
-            breadCrumb={['Assets detail']}
-            filter={!url.includes('resource-collection')}
-            datePicker
-        >
+        <>
+            <TopHeader
+                breadCrumb={['Assets detail']}
+                filter={!url.includes('resource-collection')}
+                datePicker
+            />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
                     <Tab onClick={() => navigate('#metrics')}>Metrics</Tab>
@@ -66,6 +63,6 @@ export default function AssetDetails() {
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
-        </Layout>
+        </>
     )
 }
