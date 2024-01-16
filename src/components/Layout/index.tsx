@@ -53,12 +53,15 @@ export default function Layout({
     onScroll,
     scrollRef,
 }: IProps) {
-    const workspace = useParams<{ ws: string }>().ws
+    const url = window.location.pathname.split('/')
+    const current = url[url.length - 1]
+    const workspace = url[1]
+    console.log(current)
 
     return (
         <Flex className="h-screen overflow-hidden">
             {showSidebar && (
-                <Sidebar workspace={workspace} currentPage={currentPage} />
+                <Sidebar workspace={workspace} currentPage={current} />
             )}
 
             <div className="z-10 w-full h-full relative">
