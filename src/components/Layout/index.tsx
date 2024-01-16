@@ -6,22 +6,15 @@ import Notification from '../Notification'
 
 type IProps = {
     children: ReactNode
-    showSidebar?: boolean
-    hFull?: boolean
     onScroll?: (e: UIEvent) => void
     scrollRef?: any
 }
 
-export default function Layout({
-    children,
-    showSidebar = true,
-    hFull = false,
-    onScroll,
-    scrollRef,
-}: IProps) {
+export default function Layout({ children, onScroll, scrollRef }: IProps) {
     const url = window.location.pathname.split('/')
     const current = `${url[2]}${url[3] ? `/${url[3]}` : ''}`
     const workspace = url[1]
+    const showSidebar = true
 
     return (
         <Flex className="h-screen overflow-hidden">
@@ -42,14 +35,11 @@ export default function Layout({
                     }}
                     ref={scrollRef}
                 >
-                    <Flex
-                        justifyContent="center"
-                        className={`px-12 ${hFull ? 'h-full' : ''}`}
-                    >
+                    <Flex justifyContent="center" className="px-12">
                         <div
                             className={`${
                                 current === 'settings' ? '' : 'max-w-7xl'
-                            } w-full py-6 ${hFull ? 'h-full' : ''}`}
+                            } w-full py-6 h-full`}
                         >
                             {children}
                         </div>
