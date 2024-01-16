@@ -15,7 +15,8 @@ interface IuseAiApiV1GptRunCreateState {
 export const useAiApiV1GptRunCreate = (
     query: string,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -43,7 +44,9 @@ export const useAiApiV1GptRunCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')

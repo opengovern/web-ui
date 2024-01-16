@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
     RequestParams,
 } from './api'
 
@@ -25,7 +25,8 @@ interface IuseScheduleApiV1ComplianceTriggerUpdateState {
 export const useScheduleApiV1ComplianceTriggerUpdate = (
     benchmarkId: string,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -54,7 +55,9 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -137,7 +140,8 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
         connection_id: string
     },
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -166,7 +170,9 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -250,7 +256,8 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
         resource_type?: string[]
     },
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -279,7 +286,9 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -361,7 +370,8 @@ interface IuseScheduleApiV1DiscoveryResourcetypesListListState {
 
 export const useScheduleApiV1DiscoveryResourcetypesListList = (
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -390,7 +400,9 @@ export const useScheduleApiV1DiscoveryResourcetypesListList = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -471,7 +483,8 @@ interface IuseScheduleApiV1InsightTriggerUpdateState {
 export const useScheduleApiV1InsightTriggerUpdate = (
     insightId: number,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -500,7 +513,9 @@ export const useScheduleApiV1InsightTriggerUpdate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -581,7 +596,8 @@ interface IuseScheduleApiV1JobsCreateState {
 export const useScheduleApiV1JobsCreate = (
     request: GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -609,7 +625,9 @@ export const useScheduleApiV1JobsCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -694,7 +712,8 @@ export const useScheduleApiV1StacksList = (
         accountIds?: string[]
     },
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -722,7 +741,9 @@ export const useScheduleApiV1StacksList = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -811,7 +832,8 @@ export const useScheduleApiV1StacksCreateCreate = (
         remoteStateConfig?: string
     },
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -840,7 +862,9 @@ export const useScheduleApiV1StacksCreateCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -923,7 +947,8 @@ export const useScheduleApiV1StacksResourceList = (
         resourceId: string
     },
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -952,7 +977,9 @@ export const useScheduleApiV1StacksResourceList = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1033,7 +1060,8 @@ interface IuseScheduleApiV1StacksDetailState {
 export const useScheduleApiV1StacksDetail = (
     stackId: string,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1061,7 +1089,9 @@ export const useScheduleApiV1StacksDetail = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1142,7 +1172,8 @@ interface IuseScheduleApiV1StacksDeleteState {
 export const useScheduleApiV1StacksDelete = (
     stackId: string,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1170,7 +1201,9 @@ export const useScheduleApiV1StacksDelete = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1252,7 +1285,8 @@ export const useScheduleApiV1StacksFindingsCreate = (
     stackId: string,
     request: GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1281,7 +1315,9 @@ export const useScheduleApiV1StacksFindingsCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1369,7 +1405,8 @@ export const useScheduleApiV1StacksInsightDetail = (
         endTime?: number
     },
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1398,7 +1435,9 @@ export const useScheduleApiV1StacksInsightDetail = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1486,7 +1525,8 @@ export const useScheduleApiV1StacksInsightsDetail = (
         endTime?: number
     },
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1515,7 +1555,9 @@ export const useScheduleApiV1StacksInsightsDetail = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')

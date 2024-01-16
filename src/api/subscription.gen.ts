@@ -20,7 +20,8 @@ interface IuseSubscriptionApiV1MeteringListCreateState {
 export const useSubscriptionApiV1MeteringListCreate = (
     request: GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersRequest,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -49,7 +50,9 @@ export const useSubscriptionApiV1MeteringListCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')

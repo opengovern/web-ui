@@ -52,13 +52,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
     const preview = useAtomValue(previewAtom)
     const { response: spendCount, isLoading: spendCountIsLoading } =
-        useInventoryApiV2AnalyticsSpendCountList()
+        useInventoryApiV2AnalyticsSpendCountList({}, true, workspace)
+    console.log(workspace)
     const { response: assetCount, isLoading: assetsIsLoading } =
-        useInventoryApiV2AnalyticsCountList()
+        useInventoryApiV2AnalyticsCountList({}, true, workspace)
     const { response: findingsCount, isLoading: findingsIsLoading } =
-        useComplianceApiV1FindingsCountList()
+        useComplianceApiV1FindingsCountList({}, {}, true, workspace)
     const { response: connectionCount, isLoading: connectionsIsLoading } =
-        useIntegrationApiV1ConnectionsCountList()
+        useIntegrationApiV1ConnectionsCountList({}, {}, true, workspace)
 
     const navigation = [
         {

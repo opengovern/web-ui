@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
     GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
     RequestParams,
 } from './api'
 
@@ -20,7 +20,8 @@ interface IuseMetadataApiV1FilterListState {
 
 export const useMetadataApiV1FilterList = (
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -48,7 +49,9 @@ export const useMetadataApiV1FilterList = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -129,7 +132,8 @@ interface IuseMetadataApiV1FilterCreateState {
 export const useMetadataApiV1FilterCreate = (
     req: GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -157,7 +161,9 @@ export const useMetadataApiV1FilterCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -238,7 +244,8 @@ interface IuseMetadataApiV1MetadataCreateState {
 export const useMetadataApiV1MetadataCreate = (
     req: GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -266,7 +273,9 @@ export const useMetadataApiV1MetadataCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -347,7 +356,8 @@ interface IuseMetadataApiV1MetadataDetailState {
 export const useMetadataApiV1MetadataDetail = (
     key: string,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -375,7 +385,9 @@ export const useMetadataApiV1MetadataDetail = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')

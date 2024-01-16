@@ -2,24 +2,24 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateAwsConnectionRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateConnectionResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateConnectionResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateAwsConnectionRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Request,
     GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Response,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
     RequestParams,
 } from './api'
 
@@ -38,7 +38,8 @@ export const useOnboardApiV1CatalogMetricsList = (
         connector?: ('' | 'AWS' | 'Azure')[]
     },
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -68,7 +69,9 @@ export const useOnboardApiV1CatalogMetricsList = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -151,7 +154,8 @@ export const useOnboardApiV1ConnectionGroupsList = (
         populateConnections?: boolean
     },
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -180,7 +184,9 @@ export const useOnboardApiV1ConnectionGroupsList = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -264,7 +270,8 @@ export const useOnboardApiV1ConnectionGroupsDetail = (
         populateConnections?: boolean
     },
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -293,7 +300,9 @@ export const useOnboardApiV1ConnectionGroupsDetail = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -383,7 +392,8 @@ interface IuseOnboardApiV1ConnectionsAwsCreateState {
 export const useOnboardApiV1ConnectionsAwsCreate = (
     request: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateAwsConnectionRequest,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -412,7 +422,9 @@ export const useOnboardApiV1ConnectionsAwsCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -533,7 +545,8 @@ export const useOnboardApiV1ConnectionsSummaryList = (
             | 'cost_growth_rate'
     },
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -562,7 +575,9 @@ export const useOnboardApiV1ConnectionsSummaryList = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -644,7 +659,8 @@ export const useOnboardApiV1ConnectionsStateCreate = (
     connectionId: string,
     request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -673,7 +689,9 @@ export const useOnboardApiV1ConnectionsStateCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -762,7 +780,8 @@ interface IuseOnboardApiV1ConnectorListState {
 
 export const useOnboardApiV1ConnectorList = (
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -790,7 +809,9 @@ export const useOnboardApiV1ConnectorList = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -886,7 +907,8 @@ export const useOnboardApiV1CredentialList = (
         pageNumber?: number
     },
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -914,7 +936,9 @@ export const useOnboardApiV1CredentialList = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -995,7 +1019,8 @@ interface IuseOnboardApiV1CredentialCreateState {
 export const useOnboardApiV1CredentialCreate = (
     config: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1023,7 +1048,9 @@ export const useOnboardApiV1CredentialCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1104,7 +1131,8 @@ interface IuseOnboardApiV1CredentialDetailState {
 export const useOnboardApiV1CredentialDetail = (
     credentialId: string,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1132,7 +1160,9 @@ export const useOnboardApiV1CredentialDetail = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1214,7 +1244,8 @@ export const useOnboardApiV1CredentialUpdate = (
     credentialId: string,
     config: GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1242,7 +1273,9 @@ export const useOnboardApiV1CredentialUpdate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1328,7 +1361,8 @@ interface IuseOnboardApiV1CredentialDeleteState {
 export const useOnboardApiV1CredentialDelete = (
     credentialId: string,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1356,7 +1390,9 @@ export const useOnboardApiV1CredentialDelete = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1437,7 +1473,8 @@ interface IuseOnboardApiV1CredentialAutoonboardCreateState {
 export const useOnboardApiV1CredentialAutoonboardCreate = (
     credentialId: string,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1466,7 +1503,9 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1547,7 +1586,8 @@ interface IuseOnboardApiV1SourceAwsCreateState {
 export const useOnboardApiV1SourceAwsCreate = (
     request: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1575,7 +1615,9 @@ export const useOnboardApiV1SourceAwsCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1656,7 +1698,8 @@ interface IuseOnboardApiV1SourceAzureCreateState {
 export const useOnboardApiV1SourceAzureCreate = (
     request: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1684,7 +1727,9 @@ export const useOnboardApiV1SourceAzureCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1765,7 +1810,8 @@ interface IuseOnboardApiV1SourceDeleteState {
 export const useOnboardApiV1SourceDelete = (
     sourceId: string,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1793,7 +1839,9 @@ export const useOnboardApiV1SourceDelete = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1877,7 +1925,8 @@ export const useOnboardApiV1SourceHealthcheckDetail = (
         updateMetadata?: boolean
     },
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1906,7 +1955,9 @@ export const useOnboardApiV1SourceHealthcheckDetail = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1987,7 +2038,8 @@ interface IuseOnboardApiV2CredentialCreateState {
 export const useOnboardApiV2CredentialCreate = (
     config: GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Request,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -2015,7 +2067,9 @@ export const useOnboardApiV2CredentialCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')

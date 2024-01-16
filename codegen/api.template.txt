@@ -17,7 +17,7 @@ interface I{{ .APIName }}State {
     error?: any
 }
 
-export const {{ .APIName }} = ({{ .Func.Params }}, autoExecute = true) => {
+export const {{ .APIName }} = ({{ .Func.Params }}, autoExecute = true, overwriteWorkspace: string | undefined = undefined) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -48,7 +48,10 @@ export const {{ .APIName }} = ({{ .Func.Params }}, autoExecute = true) => {
             {{ if and (eq .ModuleName "workspace") (ne .Func.Name "apiV1WorkspaceCurrentList") }}
             setWorkspace('kaytu')
             {{ else }}
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            }
+            else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')

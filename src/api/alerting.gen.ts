@@ -2,16 +2,16 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
     GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
     GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
     GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
     GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
     GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
     RequestParams,
 } from './api'
 
@@ -28,7 +28,8 @@ interface IuseAlertingApiV1ActionCreateCreateState {
 export const useAlertingApiV1ActionCreateCreate = (
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -57,7 +58,9 @@ export const useAlertingApiV1ActionCreateCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -138,7 +141,8 @@ interface IuseAlertingApiV1ActionDeleteDeleteState {
 export const useAlertingApiV1ActionDeleteDelete = (
     actionId: string,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -167,7 +171,9 @@ export const useAlertingApiV1ActionDeleteDelete = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -248,7 +254,8 @@ interface IuseAlertingApiV1ActionJiraCreateState {
 export const useAlertingApiV1ActionJiraCreate = (
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -276,7 +283,9 @@ export const useAlertingApiV1ActionJiraCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -356,7 +365,8 @@ interface IuseAlertingApiV1ActionListListState {
 
 export const useAlertingApiV1ActionListList = (
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -384,7 +394,9 @@ export const useAlertingApiV1ActionListList = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -465,7 +477,8 @@ interface IuseAlertingApiV1ActionSlackCreateState {
 export const useAlertingApiV1ActionSlackCreate = (
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -495,7 +508,9 @@ export const useAlertingApiV1ActionSlackCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -577,7 +592,8 @@ export const useAlertingApiV1ActionUpdateUpdate = (
     actionId: string,
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -606,7 +622,9 @@ export const useAlertingApiV1ActionUpdateUpdate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -689,7 +707,8 @@ interface IuseAlertingApiV1RuleCreateCreateState {
 export const useAlertingApiV1RuleCreateCreate = (
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -717,7 +736,9 @@ export const useAlertingApiV1RuleCreateCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -798,7 +819,8 @@ interface IuseAlertingApiV1RuleDeleteDeleteState {
 export const useAlertingApiV1RuleDeleteDelete = (
     ruleId: string,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -826,7 +848,9 @@ export const useAlertingApiV1RuleDeleteDelete = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -906,7 +930,8 @@ interface IuseAlertingApiV1RuleListListState {
 
 export const useAlertingApiV1RuleListList = (
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -934,7 +959,9 @@ export const useAlertingApiV1RuleListList = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1016,7 +1043,8 @@ export const useAlertingApiV1RuleUpdateUpdate = (
     ruleId: string,
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1044,7 +1072,9 @@ export const useAlertingApiV1RuleUpdateUpdate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1125,7 +1155,8 @@ interface IuseAlertingApiV1RuleTriggerDetailState {
 export const useAlertingApiV1RuleTriggerDetail = (
     ruleId: string,
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1155,7 +1186,9 @@ export const useAlertingApiV1RuleTriggerDetail = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
@@ -1235,7 +1268,8 @@ interface IuseAlertingApiV1TriggerListListState {
 
 export const useAlertingApiV1TriggerListList = (
     params: RequestParams = {},
-    autoExecute = true
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
 ) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
@@ -1263,7 +1297,9 @@ export const useAlertingApiV1TriggerListList = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
