@@ -55,7 +55,7 @@ export default function Spend() {
             startTime: activeTimeRange.start.unix(),
         }),
         ...(activeTimeRange.end && {
-            endTime: activeTimeRange.end.unix(),
+            endTime: activeTimeRange.end.subtract(1, 'day').unix(),
         }),
         pageSize: 5,
         pageNumber: 1,
@@ -159,7 +159,7 @@ export default function Spend() {
                             <Text>
                                 {renderText(
                                     activeTimeRange.start,
-                                    activeTimeRange.end
+                                    activeTimeRange.end.subtract(1, 'day')
                                 )}
                             </Text>
                         </Card>
