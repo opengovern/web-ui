@@ -60,7 +60,6 @@ export default function Layout({
             {showSidebar && (
                 <Sidebar workspace={workspace} currentPage={current} />
             )}
-
             <div className="z-10 w-full h-full relative">
                 <Notification />
                 <Flex
