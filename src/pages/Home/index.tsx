@@ -1,4 +1,4 @@
-import { Col, Flex, Grid, Title } from '@tremor/react'
+import { Col, Flex, Grid } from '@tremor/react'
 import QuickNav from './QuickNav'
 import Integration from './Integration'
 import Governance from './Governance'
@@ -11,6 +11,14 @@ export default function Home() {
     return (
         <>
             <TopHeader datePicker />
+            <Grid numItems={6} className="w-full gap-4 h-fit mb-4">
+                <Col numColSpan={4}>
+                    <QuickNav />
+                </Col>
+                <Col numColSpan={2}>
+                    <Integration />
+                </Col>
+            </Grid>
             <Grid numItems={6} className="w-full gap-4 h-fit">
                 <Col numColSpan={4}>
                     <Flex
@@ -19,7 +27,6 @@ export default function Home() {
                         className="gap-4"
                         id="myDIV"
                     >
-                        <QuickNav />
                         <Spend />
                         <Governance />
                     </Flex>

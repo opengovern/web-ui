@@ -104,10 +104,6 @@ export default function Spend() {
         'account',
         4
     )
-    console.log(
-        serviceCostResponse?.total_cost,
-        servicePrevCostResponse?.total_cost
-    )
 
     return (
         <Card className="h-full">
@@ -198,8 +194,8 @@ export default function Spend() {
                 justifyContent="start"
                 className="gap-3 w-fit"
             >
-                {(trendStacked.data[0] ? trendStacked.data[0] : []).map(
-                    (t, i) => (
+                {trendStacked.data[0] ? (
+                    trendStacked.data[0].map((t, i) => (
                         <Flex justifyContent="start" className="gap-2">
                             <div
                                 className="h-2 w-2 min-w-[8px] rounded-full"
@@ -209,7 +205,9 @@ export default function Spend() {
                             />
                             <Text className="line-clamp-1">{t.label}</Text>
                         </Flex>
-                    )
+                    ))
+                ) : (
+                    <div className="h-6" />
                 )}
             </Flex>
         </Card>

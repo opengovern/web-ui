@@ -19,21 +19,28 @@ export default function Integration() {
     return (
         <>
             <Grid
-                numItems={1}
-                className={`gap-4 ${connectorsLoading ? 'animate-pulse' : ''}`}
+                numItems={2}
+                className={`gap-4 h-full ${
+                    connectorsLoading ? 'animate-pulse' : ''
+                }`}
             >
                 {connectorsLoading || getErrorMessage(error).length > 0
                     ? [1, 2]?.map((i) => {
                           return (
                               <Card
                                   key={i}
-                                  className={`!rounded-3xl ${
+                                  className={`!rounded-3xl h-full pt-16 pb-12 ${
                                       i === 1 ? '!bg-kaytu-800' : ''
                                   }`}
                               >
-                                  <div className="bg-slate-200 dark:bg-slate-700 rounded-full w-12 h-12 border-none mb-3" />
-                                  <div className="h-5 w-24 mb-1.5 bg-slate-200 dark:bg-slate-700 rounded" />
-                                  <div className="h-5 w-32 bg-slate-200 dark:bg-slate-700 rounded" />
+                                  <Flex flexDirection="col" className="h-full">
+                                      <div className="bg-slate-200 dark:bg-slate-700 rounded-full w-16 h-16 border-none mb-3" />
+                                      <Flex flexDirection="col">
+                                          <div className="h-5 w-24 mb-1.5 bg-slate-200 dark:bg-slate-700 rounded" />
+                                          <div className="h-5 w-32 bg-slate-200 dark:bg-slate-700 rounded" />
+                                      </Flex>
+                                      <PlusCircleIcon className="w-8 text-orange-500 opacity-0" />
+                                  </Flex>
                               </Card>
                           )
                       })
@@ -49,28 +56,28 @@ export default function Integration() {
                                               `/${workspace}/integrations/${connector.name}`
                                           )
                                       }}
-                                      className={`!rounded-3xl cursor-pointer ${
+                                      className={`!rounded-3xl cursor-pointer pt-16 pb-12 ${
                                           connector.name === 'AWS'
                                               ? ''
                                               : '!bg-kaytu-800 text-white'
                                       }`}
                                   >
-                                      <img
-                                          id={`home-integration-${connector.name}`}
-                                          src={
-                                              connector.name === 'AWS'
-                                                  ? AWSIcon
-                                                  : AzureIcon
-                                          }
-                                          className="w-12 rounded-full mb-3"
-                                          alt="aws"
-                                      />
-                                      <Flex>
-                                          <Flex
-                                              flexDirection="col"
-                                              alignItems="start"
-                                          >
-                                              <Subtitle className="font-semibold mb-1.5 text-inherit dark:text-white">
+                                      <Flex
+                                          flexDirection="col"
+                                          className="h-full"
+                                      >
+                                          <img
+                                              id={`home-integration-${connector.name}`}
+                                              src={
+                                                  connector.name === 'AWS'
+                                                      ? AWSIcon
+                                                      : AzureIcon
+                                              }
+                                              className="w-16 rounded-full"
+                                              alt="aws"
+                                          />
+                                          <Flex flexDirection="col">
+                                              <Subtitle className="font-semibold text-inherit dark:text-white">
                                                   {connector.label}
                                               </Subtitle>
                                               <Text className=" text-inherit">
