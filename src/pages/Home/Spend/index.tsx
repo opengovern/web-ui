@@ -188,12 +188,7 @@ export default function Spend() {
                     </Flex>
                 </Col>
             </Grid>
-            <Flex
-                flexDirection="row"
-                alignItems="start"
-                justifyContent="start"
-                className="gap-3 w-fit"
-            >
+            <Flex justifyContent="start" className="gap-4 w-fit">
                 {trendStacked.data[0] ? (
                     trendStacked.data[0].map((t, i) => (
                         <Flex justifyContent="start" className="gap-2">
