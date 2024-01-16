@@ -37,7 +37,6 @@ import {
 } from '@heroicons/react/24/solid'
 import { Transition } from '@headlessui/react'
 import { useAtom, useAtomValue } from 'jotai'
-import Layout from '../../components/Layout'
 import {
     useInventoryApiV1QueryList,
     useInventoryApiV1QueryRunCreate,
@@ -52,6 +51,7 @@ import { GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem } from '../../
 import { isDemoAtom, queryAtom, runQueryAtom } from '../../store'
 import { snakeCaseToLabel } from '../../utilities/labelMaker'
 import { numberDisplay } from '../../utilities/numericDisplay'
+import TopHeader from '../../components/Layout/Header'
 
 export const getTable = (headers: any, details: any, isDemo: boolean) => {
     const columns: IColumn<any, any>[] = []
@@ -222,7 +222,8 @@ export default function Query() {
     )
 
     return (
-        <Layout currentPage="query">
+        <>
+            <TopHeader />
             {categoryLoading || queryLoading ? (
                 <Spinner className="mt-56" />
             ) : (
@@ -637,6 +638,6 @@ export default function Query() {
                     </Flex>
                 </Flex>
             )}
-        </Layout>
+        </>
     )
 }
