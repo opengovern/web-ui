@@ -72,165 +72,167 @@ export default function Chart({
 }: IChart) {
     const colorBlindMode = useAtomValue(colorBlindModeAtom)
     const options = () => {
-        if (chartAggregation === 'trend') {
-            return {
-                aria: {
-                    enable: colorBlindMode,
-                    decal: {
-                        show: colorBlindMode,
+        if (chartType === 'line' || chartType === 'bar') {
+            if (chartAggregation === 'trend') {
+                return {
+                    aria: {
+                        enable: colorBlindMode,
+                        decal: {
+                            show: colorBlindMode,
+                        },
                     },
-                },
-                xAxis: {
-                    type: labelType,
-                    data: labels,
-                },
-                yAxis: {
-                    type: 'value',
-                    axisLabel: {
-                        formatter: (value: string | number) => {
+                    xAxis: {
+                        type: labelType,
+                        data: labels,
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: (value: string | number) => {
+                                if (isCost) {
+                                    return `$${numericDisplay(value)}`
+                                }
+                                if (isPercent) {
+                                    return `${numericDisplay(value)} %`
+                                }
+                                return numericDisplay(value)
+                            },
+                        },
+                    },
+                    visualMap,
+                    animation: false,
+                    series: [
+                        chartType === 'bar' && {
+                            data: chartData,
+                            type: chartType,
+                            areaStyle: { opacity: 0 },
+                        },
+                        chartType === 'line' && {
+                            data: chartData,
+                            markArea,
+                            type: chartType,
+                            areaStyle: { opacity: 0 },
+                        },
+                    ],
+                    grid: {
+                        left: 45,
+                        right: 0,
+                        top: 20,
+                        bottom: 40,
+                    },
+                    tooltip: {
+                        show: true,
+                        trigger: 'axis',
+                        valueFormatter: (value: string | number) => {
                             if (isCost) {
-                                return `$${numericDisplay(value)}`
+                                return `$${numberDisplay(Number(value), 2)}`
                             }
                             if (isPercent) {
                                 return `${numericDisplay(value)} %`
                             }
-                            return numericDisplay(value)
+                            return numberDisplay(Number(value), 0)
                         },
                     },
-                },
-                visualMap,
-                animation: false,
-                series: [
-                    chartType === 'bar' && {
-                        data: chartData,
-                        type: chartType,
-                        areaStyle: { opacity: 0 },
-                    },
-                    chartType === 'line' && {
-                        data: chartData,
-                        markArea,
-                        type: chartType,
-                        areaStyle: { opacity: 0 },
-                    },
-                ],
-                grid: {
-                    left: 45,
-                    right: 0,
-                    top: 20,
-                    bottom: 40,
-                },
-                tooltip: {
-                    show: true,
-                    trigger: 'axis',
-                    valueFormatter: (value: string | number) => {
-                        if (isCost) {
-                            return `$${numberDisplay(Number(value), 2)}`
-                        }
-                        if (isPercent) {
-                            return `${numericDisplay(value)} %`
-                        }
-                        return numberDisplay(Number(value), 0)
-                    },
-                },
-                color: colorful
-                    ? [
-                          '#780000',
-                          '#DC0000',
-                          '#FD8C00',
-                          '#FDC500',
-                          '#10B880',
-                          '#D0D4DA',
-                      ]
-                    : [
-                          '#1D4F85',
-                          '#2970BC',
-                          '#6DA4DF',
-                          '#96BEE8',
-                          '#C0D8F1',
-                          '#D0D4DA',
-                      ],
+                    color: colorful
+                        ? [
+                              '#780000',
+                              '#DC0000',
+                              '#FD8C00',
+                              '#FDC500',
+                              '#10B880',
+                              '#D0D4DA',
+                          ]
+                        : [
+                              '#1D4F85',
+                              '#2970BC',
+                              '#6DA4DF',
+                              '#96BEE8',
+                              '#C0D8F1',
+                              '#D0D4DA',
+                          ],
+                }
             }
-        }
-        if (chartAggregation === 'cumulative') {
-            return {
-                aria: {
-                    enable: colorBlindMode,
-                    decal: {
-                        show: colorBlindMode,
+            if (chartAggregation === 'cumulative') {
+                return {
+                    aria: {
+                        enable: colorBlindMode,
+                        decal: {
+                            show: colorBlindMode,
+                        },
                     },
-                },
-                xAxis: {
-                    type: labelType,
-                    data: labels,
-                },
-                yAxis: {
-                    type: 'value',
-                    axisLabel: {
-                        formatter: (value: string | number) => {
+                    xAxis: {
+                        type: labelType,
+                        data: labels,
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: (value: string | number) => {
+                                if (isCost) {
+                                    return `$${numericDisplay(value)}`
+                                }
+                                if (isPercent) {
+                                    return `${numericDisplay(value)} %`
+                                }
+                                return numericDisplay(value)
+                            },
+                        },
+                    },
+                    visualMap,
+                    animation: false,
+                    series: [
+                        chartType === 'bar' && {
+                            data: chartData,
+                            type: chartType,
+                            areaStyle: { opacity: 0 },
+                        },
+                        chartType === 'line' && {
+                            data: chartData,
+                            markArea,
+                            type: chartType,
+                            areaStyle: { opacity: 0.7 },
+                        },
+                    ],
+                    grid: {
+                        left: 45,
+                        right: 0,
+                        top: 20,
+                        bottom: 40,
+                    },
+                    tooltip: {
+                        show: true,
+                        trigger: 'axis',
+                        valueFormatter: (value: string | number) => {
                             if (isCost) {
-                                return `$${numericDisplay(value)}`
+                                return `$${numberDisplay(Number(value), 2)}`
                             }
                             if (isPercent) {
                                 return `${numericDisplay(value)} %`
                             }
-                            return numericDisplay(value)
+                            return numberDisplay(Number(value), 0)
                         },
                     },
-                },
-                visualMap,
-                animation: false,
-                series: [
-                    chartType === 'bar' && {
-                        data: chartData,
-                        type: chartType,
-                        areaStyle: { opacity: 0 },
-                    },
-                    chartType === 'line' && {
-                        data: chartData,
-                        markArea,
-                        type: chartType,
-                        areaStyle: { opacity: 0.7 },
-                    },
-                ],
-                grid: {
-                    left: 45,
-                    right: 0,
-                    top: 20,
-                    bottom: 40,
-                },
-                tooltip: {
-                    show: true,
-                    trigger: 'axis',
-                    valueFormatter: (value: string | number) => {
-                        if (isCost) {
-                            return `$${numberDisplay(Number(value), 2)}`
-                        }
-                        if (isPercent) {
-                            return `${numericDisplay(value)} %`
-                        }
-                        return numberDisplay(Number(value), 0)
-                    },
-                },
-                color: colorful
-                    ? [
-                          '#780000',
-                          '#DC0000',
-                          '#FD8C00',
-                          '#FDC500',
-                          '#10B880',
-                          '#D0D4DA',
-                      ]
-                    : [
-                          '#1D4F85',
-                          '#2970BC',
-                          '#6DA4DF',
-                          '#96BEE8',
-                          '#C0D8F1',
-                          '#D0D4DA',
-                      ],
+                    color: colorful
+                        ? [
+                              '#780000',
+                              '#DC0000',
+                              '#FD8C00',
+                              '#FDC500',
+                              '#10B880',
+                              '#D0D4DA',
+                          ]
+                        : [
+                              '#1D4F85',
+                              '#2970BC',
+                              '#6DA4DF',
+                              '#96BEE8',
+                              '#C0D8F1',
+                              '#D0D4DA',
+                          ],
+                }
             }
         }
-        return {}
+
         if (chartType === 'doughnut') {
             return {
                 aria: {
