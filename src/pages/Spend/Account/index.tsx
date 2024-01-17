@@ -9,10 +9,75 @@ import {
 import { filterAtom, spendTimeAtom } from '../../../store'
 import { SpendChart } from '../../../components/Spend/Chart'
 import { toErrorMessage } from '../../../types/apierror'
-import { Granularity } from '../../../components/Spend/Chart/Selectors'
+import {
+    ChartLayout,
+    Granularity,
+} from '../../../components/Spend/Chart/Selectors'
 import AccountTable from './AccountTable'
-import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
+} from '../../../api/api'
 import TopHeader from '../../../components/Layout/Header'
+
+export const accountTrend = (
+    responseChart: GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[],
+    chartLayout: ChartLayout
+) => {
+    return responseChart
+        ?.flatMap((item) =>
+            Object.entries(item.costValue || {}).map((entry) => {
+                return {
+                    accountID: item.dimensionId || item.accountID || '',
+                    accountName: item.dimensionName,
+                    connector: item.connector,
+                    date: entry[0],
+                    cost: entry[1],
+                }
+            })
+        )
+        .reduce<GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]>(
+            (prev, curr) => {
+                const stacked = {
+                    cost: curr.cost,
+                    metricID:
+                        chartLayout === 'accounts'
+                            ? curr.accountID
+                            : curr.connector,
+                    metricName:
+                        chartLayout === 'accounts'
+                            ? curr.accountName
+                            : curr.connector,
+                }
+                const exists =
+                    prev.filter((p) => p.date === curr.date).length > 0
+                if (exists) {
+                    return prev.map((p) => {
+                        if (p.date === curr.date) {
+                            return {
+                                cost: (p.cost || 0) + curr.cost,
+                                costStacked: [
+                                    ...(p.costStacked || []),
+                                    stacked,
+                                ],
+                                date: curr.date,
+                            }
+                        }
+                        return p
+                    })
+                }
+                return [
+                    ...prev,
+                    {
+                        cost: curr.cost,
+                        costStacked: [stacked],
+                        date: curr.date,
+                    },
+                ]
+            },
+            []
+        )
+}
 
 export function SpendAccounts() {
     const activeTimeRange = useAtomValue(spendTimeAtom)
@@ -51,7 +116,8 @@ export function SpendAccounts() {
         sortBy: 'cost',
     }
 
-    const duration = activeTimeRange.end.diff(activeTimeRange.start, 'second')
+    const duration =
+        activeTimeRange.end.diff(activeTimeRange.start, 'second') + 1
     const prevTimeRange = {
         start: activeTimeRange.start.add(-duration, 'second'),
         end: activeTimeRange.end.add(-duration, 'second'),
@@ -110,84 +176,7 @@ export function SpendAccounts() {
             connectionGroup: selectedConnections.connectionGroup,
         })
 
-    const accountTrend = () => {
-        return responseChart
-            ?.flatMap((item) =>
-                Object.entries(item.costValue || {}).map((entry) => {
-                    return {
-                        accountID: item.dimensionId || item.accountID || '',
-                        accountName: item.dimensionName,
-                        date: entry[0],
-                        cost: entry[1],
-                    }
-                })
-            )
-            .reduce<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
-            >((prev, curr) => {
-                const stacked = {
-                    cost: curr.cost,
-                    metricID: curr.accountID,
-                    metricName: curr.accountName,
-                }
-                const exists =
-                    prev.filter((p) => p.date === curr.date).length > 0
-                if (exists) {
-                    return prev.map((p) => {
-                        if (p.date === curr.date) {
-                            return {
-                                cost: (p.cost || 0) + curr.cost,
-                                costStacked: [
-                                    ...(p.costStacked || []),
-                                    stacked,
-                                ],
-                                date: curr.date,
-                            }
-                        }
-                        return p
-                    })
-                }
-                return [
-                    ...prev,
-                    {
-                        cost: curr.cost,
-                        costStacked: [stacked],
-                        date: curr.date,
-                    },
-                ]
-            }, [])
-    }
-
-    const chartRef = useRef<any>(null)
-    // const ref = useRef<any>(null)
-    // const [lastScrollTop, setLastScrollTop] = useState<number>(0)
-    // const handleScroll = (event: any) => {
-    //     const scrollTop = event.target?.scrollTop || 0
-    //     const diff = scrollTop - lastScrollTop
-    //     if (diff > 40) {
-    //         ref.current?.scrollTo({
-    //             top: chartRef.current.scrollHeight + 30,
-    //             behavior: 'smooth',
-    //         })
-    //     } else if (diff < -40) {
-    //         ref.current?.scrollTo({
-    //             top: 0,
-    //             behavior: 'smooth',
-    //         })
-    //     } else if (scrollTop < chartRef.current.scrollHeight / 2) {
-    //         ref.current?.scrollTo({
-    //             top: 0,
-    //             behavior: 'smooth',
-    //         })
-    //     } else {
-    //         ref.current?.scrollTo({
-    //             top: chartRef.current.scrollHeight + 30,
-    //             behavior: 'smooth',
-    //         })
-    //     }
-    //     setLastScrollTop(event.target?.scrollTop || 0)
-    // }
-
+    const [chartLayout, setChartLayout] = useState<ChartLayout>('accounts')
     return (
         <>
             <TopHeader datePicker filter />
@@ -198,15 +187,26 @@ export function SpendAccounts() {
                 />
             ) : (
                 <Grid numItems={3} className="w-full gap-4">
-                    <Col numColSpan={3} ref={chartRef}>
+                    <Col numColSpan={3}>
                         <SpendChart
-                            costTrend={accountTrend() || []}
-                            costField="metric"
+                            costTrend={
+                                accountTrend(
+                                    responseChart || [],
+                                    chartLayout
+                                ) || []
+                            }
                             title="Total spend"
                             timeRange={activeTimeRange}
                             timeRangePrev={prevTimeRange}
                             total={serviceCostResponse?.total_cost || 0}
                             totalPrev={servicePrevCostResponse?.total_cost || 0}
+                            chartLayout={chartLayout}
+                            setChartLayout={setChartLayout}
+                            validChartLayouts={[
+                                'total',
+                                'provider',
+                                'accounts',
+                            ]}
                             // noStackedChart
                             isLoading={
                                 serviceCostLoading ||

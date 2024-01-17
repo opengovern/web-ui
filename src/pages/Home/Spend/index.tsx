@@ -61,7 +61,8 @@ export default function Spend() {
         pageNumber: 1,
         sortBy: 'cost',
     }
-    const duration = activeTimeRange.end.diff(activeTimeRange.start, 'second')
+    const duration =
+        activeTimeRange.end.diff(activeTimeRange.start, 'second') + 1
     const prevTimeRange = {
         start: activeTimeRange.start.add(-duration, 'second'),
         end: activeTimeRange.end.add(-duration, 'second'),
@@ -97,13 +98,7 @@ export default function Spend() {
         error: servicePrevCostErr,
         sendNow: serviceCostPrevRefresh,
     } = useInventoryApiV2AnalyticsSpendMetricList(prevQuery)
-    const trendStacked = buildTrend(
-        costTrend || [],
-        'trend',
-        'daily',
-        'account',
-        4
-    )
+    const trendStacked = buildTrend(costTrend || [], 'trending', 'daily', 4)
 
     return (
         <Card className="h-full">

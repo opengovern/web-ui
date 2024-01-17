@@ -187,7 +187,7 @@ export default function MetricTable({
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
 
-    const [granularityEnabled, setGranularityEnabled] = useState<boolean>(false)
+    const [granularityEnabled, setGranularityEnabled] = useState<boolean>(true)
 
     const columnGenerator = (
         input:
@@ -214,17 +214,18 @@ export default function MetricTable({
                               (value, index, array) =>
                                   array.indexOf(value) === index
                           )
-                          .map((colName) => {
+                          .map((colName, idx) => {
                               const v: IColumn<any, any> = {
                                   field: colName,
                                   headerName: colName,
                                   type: 'price',
                                   width: 130,
-                                  sortable: true,
-                                  suppressMenu: true,
-                                  resizable: true,
-                                  pivot: false,
                                   aggFunc: 'sum',
+                                  filter: true,
+                                  sortable: true,
+                                  resizable: true,
+                                  suppressMenu: true,
+                                  columnGroupShow: 'open',
                                   valueFormatter: (
                                       param: ValueFormatterParams
                                   ) => {
@@ -236,7 +237,24 @@ export default function MetricTable({
                               return v
                           })
                     : []
-            columns = [...dynamicCols]
+
+            const total: IColumn<any, any> = {
+                field: 'totalCost',
+                headerName: 'Total',
+                type: 'price',
+                width: 130,
+                aggFunc: 'sum',
+                filter: true,
+                sortable: true,
+                resizable: true,
+                suppressMenu: true,
+                columnGroupShow: 'closed',
+                valueFormatter: (param: ValueFormatterParams) => {
+                    return param.value ? exactPriceDisplay(param.value) : ''
+                },
+            }
+
+            columns = [total, ...dynamicCols]
         }
         return columns
     }
@@ -252,45 +270,37 @@ export default function MetricTable({
                     headerName: 'Category',
                     type: 'string',
                     width: 110,
-                    hide: false,
                     filter: true,
-                    enableRowGroup: true,
-                    suppressMenu: true,
                     sortable: true,
                     resizable: true,
-                    pinned: true,
+                    suppressMenu: true,
+                    enableRowGroup: true,
                 },
                 {
                     field: 'connector',
                     headerName: 'Provider',
                     type: 'string',
                     width: 100,
-                    suppressMenu: true,
                     enableRowGroup: true,
                     filter: true,
-                    resizable: true,
                     sortable: true,
-                    pinned: true,
+                    resizable: true,
+                    suppressMenu: true,
                 },
                 {
                     field: 'dimension',
                     headerName: 'Name',
                     type: 'string',
                     width: 230,
-                    suppressMenu: true,
                     filter: true,
                     sortable: true,
                     resizable: true,
-                    pivot: false,
-                    pinned: true,
+                    suppressMenu: true,
                 },
             ],
         },
         {
-            headerName: `Current Period [${renderText(
-                timeRange.start,
-                timeRange.end
-            )}]`,
+            headerName: `Current Period`,
             type: 'parent',
             pinned: true,
             wrapHeaderText: true,
@@ -300,15 +310,12 @@ export default function MetricTable({
                     field: 'totalCost',
                     headerName: 'Spend',
                     type: 'price',
-                    wrapHeaderText: true,
-                    autoHeaderHeight: true,
+                    aggFunc: 'sum',
+                    filter: true,
+                    sortable: true,
+                    resizable: true,
                     suppressMenu: true,
                     width: 80,
-                    sortable: true,
-                    aggFunc: 'sum',
-                    resizable: true,
-                    pivot: false,
-                    pinned: true,
                     valueFormatter: (param: ValueFormatterParams) => {
                         return param.value ? exactPriceDisplay(param.value) : ''
                     },
@@ -317,11 +324,12 @@ export default function MetricTable({
                     field: 'percent',
                     headerName: '% of Total',
                     type: 'string',
+                    aggFunc: 'sum',
+                    filter: true,
+                    sortable: true,
+                    resizable: true,
                     suppressMenu: true,
                     width: 100,
-                    pinned: true,
-                    aggFunc: 'sum',
-                    resizable: true,
                     valueFormatter: (param: ValueFormatterParams) => {
                         return param.value ? `${param.value.toFixed(2)}%` : ''
                     },
@@ -342,13 +350,12 @@ export default function MetricTable({
                     field: 'prevTotalCost',
                     headerName: 'Spend',
                     type: 'string',
-                    wrapHeaderText: true,
-                    autoHeaderHeight: true,
-                    suppressMenu: true,
-                    width: 80,
-                    pinned: true,
                     aggFunc: 'sum',
+                    filter: true,
+                    sortable: true,
                     resizable: true,
+                    suppressMenu: true,
+                    width: 200,
                     valueFormatter: (param: ValueFormatterParams) => {
                         return param.value !== undefined
                             ? `$${param.value.toFixed(0)}`
@@ -359,11 +366,12 @@ export default function MetricTable({
                     field: 'prevPercent',
                     headerName: '% of Total',
                     type: 'string',
-                    suppressMenu: true,
-                    width: 100,
-                    pinned: true,
                     aggFunc: 'sum',
+                    filter: true,
+                    sortable: true,
                     resizable: true,
+                    suppressMenu: true,
+                    width: 120,
                     valueFormatter: (param: ValueFormatterParams) => {
                         return param.value ? `${param.value.toFixed(2)}%` : ''
                     },
@@ -381,11 +389,12 @@ export default function MetricTable({
                     field: 'change',
                     headerName: 'Delta',
                     type: 'string',
-                    suppressMenu: true,
-                    width: 80,
-                    pinned: true,
+                    width: 100,
                     aggFunc: 'sum',
+                    filter: true,
+                    sortable: true,
                     resizable: true,
+                    suppressMenu: true,
                     valueFormatter: (param: ValueFormatterParams) => {
                         return param.value !== undefined
                             ? `$${param.value.toFixed(0)}`
@@ -396,12 +405,12 @@ export default function MetricTable({
                     field: 'changePercent',
                     headerName: '%',
                     type: 'string',
-                    suppressMenu: true,
                     width: 80,
-                    pinned: true,
-                    hide: true,
                     aggFunc: 'sum',
+                    filter: true,
+                    sortable: true,
                     resizable: true,
+                    suppressMenu: true,
                     valueFormatter: (param: ValueFormatterParams) => {
                         return param.value !== undefined
                             ? `${param.value.toFixed(0)}%`
@@ -487,7 +496,7 @@ export default function MetricTable({
 
     useEffect(() => {
         setTableKey(Math.random().toString(16).slice(2, 8))
-    }, [manualGrouping, timeRange, granularityEnabled])
+    }, [manualGrouping, timeRange, granularityEnabled, response])
 
     return (
         <AdvancedTable

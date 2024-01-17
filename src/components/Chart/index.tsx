@@ -44,7 +44,6 @@ interface IChart {
           )[]
         | undefined
     chartType: 'bar' | 'line' | 'doughnut' | 'half-doughnut'
-    chartLayout?: 'stacked' | 'basic'
     chartAggregation?: 'trend' | 'cumulative'
     visualMap?: any
     markArea?: any
@@ -61,7 +60,6 @@ export default function Chart({
     labelType = 'category',
     chartData,
     chartType,
-    chartLayout,
     chartAggregation,
     isCost = false,
     isPercent = false,
@@ -74,7 +72,7 @@ export default function Chart({
 }: IChart) {
     const colorBlindMode = useAtomValue(colorBlindModeAtom)
     const options = () => {
-        if (chartLayout === 'basic') {
+        if (chartType === 'line' || chartType === 'bar') {
             if (chartAggregation === 'trend') {
                 return {
                     aria: {
@@ -233,8 +231,8 @@ export default function Chart({
                           ],
                 }
             }
-            return {}
         }
+
         if (chartType === 'doughnut') {
             return {
                 aria: {

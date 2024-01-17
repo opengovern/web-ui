@@ -6,7 +6,7 @@ export const costTrendChart = (
     trend:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
         | undefined,
-    chart: 'trend' | 'cumulative',
+    chart: 'trending' | 'aggregated',
     granularity: 'monthly' | 'daily' | 'yearly'
 ) => {
     const label: string[] = []
@@ -27,7 +27,7 @@ export const costTrendChart = (
                 ? monthDisplay(trend[i]?.date)
                 : dateDisplay(trend[i]?.date)
         )
-        if (chart === 'cumulative') {
+        if (chart === 'aggregated') {
             data.push((trend[i]?.cost || 0) + (data?.at(i - 1) || 0))
         } else {
             data.push(trend[i]?.cost || 0)
@@ -74,8 +74,7 @@ const makeUnique = (arr: StackItem[]) => {
 
 const extractTrend = (
     trend: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[],
-    granularity: 'monthly' | 'daily' | 'yearly',
-    field: 'metric' | 'category' | 'account'
+    granularity: 'monthly' | 'daily' | 'yearly'
 ) => {
     return trend.map((item) => {
         const label =
@@ -85,8 +84,7 @@ const extractTrend = (
 
         const dataItem: StackItem[] =
             item.costStacked?.flatMap((v) => {
-                const labels =
-                    field === 'metric' ? [v.metricName || ''] : v.category || []
+                const labels = [v.metricName || '']
                 return labels.map((lbl) => {
                     return {
                         label: lbl,
@@ -109,12 +107,11 @@ const extractTrend = (
 
 export const buildTrend = (
     apiResp: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[],
-    chart: 'trend' | 'cumulative',
+    chart: 'trending' | 'aggregated',
     granularity: 'monthly' | 'daily' | 'yearly',
-    field: 'metric' | 'category' | 'account',
     topN: number
 ) => {
-    let trend = extractTrend(apiResp, granularity, field)
+    let trend = extractTrend(apiResp, granularity)
 
     const order = makeUnique(trend.flatMap((v) => v.stackedValues)).sort(
         (a, b) => {
@@ -143,7 +140,7 @@ export const buildTrend = (
         }
     })
 
-    if (chart === 'cumulative') {
+    if (chart === 'aggregated') {
         trend = trend.reduce<ITrendItem[]>((prev, curr) => {
             const p = prev.at(prev.length - 1)
             const c = {

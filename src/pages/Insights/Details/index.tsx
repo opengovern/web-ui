@@ -373,7 +373,6 @@ export default function InsightDetails() {
                             labels={chartData(insightTrend).label}
                             chartData={chartData(insightTrend).data}
                             chartType={selectedChart}
-                            chartLayout="basic"
                             chartAggregation="trend"
                         />
                     </Card>

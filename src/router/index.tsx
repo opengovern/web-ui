@@ -34,6 +34,7 @@ import { SpendOverview } from '../pages/Spend/Overview'
 import { SpendMetrics } from '../pages/Spend/Metric'
 import { SpendAccounts } from '../pages/Spend/Account'
 import Layout from '../components/Layout'
+import RequestDemo from '../pages/RequestDemo'
 
 const authRoutes = [
     {
@@ -93,6 +94,11 @@ const authRoutes = [
         component: Single,
     },
     {
+        key: 'assets single metric',
+        path: '/:ws/assets/accounts/:id/:metric',
+        component: Single,
+    },
+    {
         key: 'assets account detail',
         path: '/:ws/assets/accounts',
         component: AssetDetails,
@@ -104,12 +110,12 @@ const authRoutes = [
     },
     {
         key: 'assets single 2',
-        path: '/:ws/assets/assets-details/:id',
+        path: '/:ws/assets/metrics/:id',
         component: Single,
     },
     {
         key: 'assets single metric 2',
-        path: '/:ws/assets/assets-details/:id/:metric',
+        path: '/:ws/assets/metrics/:id/:metric',
         component: Single,
     },
     {
@@ -296,6 +302,11 @@ const authRoutes = [
         key: 'resource collection assets single metric 2',
         path: '/:ws/resource-collection/:resourceId/assets-details/:id/:metric',
         component: Single,
+    },
+    {
+        key: 'request a demo',
+        path: '/requestdemo',
+        component: RequestDemo,
     },
 ]
 
