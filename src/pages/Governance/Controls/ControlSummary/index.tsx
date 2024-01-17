@@ -319,6 +319,23 @@ export default function ControlDetail() {
                                     wrapperElement={{
                                         'data-color-mode': 'light',
                                     }}
+                                    rehypeRewrite={(node, index, parent) => {
+                                        if (
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            node.tagName === 'a' &&
+                                            parent &&
+                                            /^h(1|2|3|4|5|6)/.test(
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                parent.tagName
+                                            )
+                                        ) {
+                                            // eslint-disable-next-line no-param-reassign
+                                            parent.children =
+                                                parent.children.slice(1)
+                                        }
+                                    }}
                                 />
                             </DrawerPanel>
                             <Title className="font-semibold mt-2 mb-2">
