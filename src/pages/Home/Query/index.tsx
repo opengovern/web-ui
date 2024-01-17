@@ -39,6 +39,7 @@ export default function Query({ height }: IQuery) {
         error,
         sendNow: refresh,
     } = useInventoryApiV1QueryList({})
+    console.log(queries)
 
     return (
         <Card
@@ -47,7 +48,7 @@ export default function Query({ height }: IQuery) {
         >
             <Flex justifyContent="start" className="gap-2 mb-2">
                 <Icon icon={MagnifyingGlassIcon} className="p-0" />
-                <Title className="font-semibold">Popular queries</Title>
+                <Title className="font-semibold">Popular asset queries</Title>
             </Flex>
             {isLoading
                 ? [1, 2, 3, 4].map((i) => (
