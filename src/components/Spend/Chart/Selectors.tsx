@@ -8,13 +8,15 @@ export type ChartType = 'bar' | 'line'
 const chartTypeValues: ChartType[] = ['bar', 'line']
 
 export type Granularity = 'daily' | 'monthly'
-const granularityValues: Granularity[] = ['daily', 'monthly']
+export type ChartLayout =
+    | 'total'
+    | 'categories'
+    | 'metrics'
+    | 'provider'
+    | 'accounts'
 
-export type ChartLayout = 'basic' | 'stacked'
-const chartLayoutValues: ChartLayout[] = ['basic', 'stacked']
-
-export type Aggregation = 'trend' | 'cumulative'
-const aggregationValues: Aggregation[] = ['trend', 'cumulative']
+export type Aggregation = 'trending' | 'aggregated'
+const aggregationValues: Aggregation[] = ['trending', 'aggregated']
 
 interface ISpendChartSelectors {
     timeRange: {
@@ -27,6 +29,7 @@ interface ISpendChartSelectors {
     setGranularity: (v: Granularity) => void
     chartLayout: ChartLayout
     setChartLayout: (v: ChartLayout) => void
+    validChartLayouts: ChartLayout[]
     aggregation: Aggregation
     setAggregation: (v: Aggregation) => void
     noStackedChart?: boolean
@@ -40,6 +43,7 @@ export function SpendChartSelectors({
     setGranularity,
     chartLayout,
     setChartLayout,
+    validChartLayouts,
     aggregation,
     setAggregation,
     noStackedChart,
@@ -74,9 +78,9 @@ export function SpendChartSelectors({
 
             {noStackedChart ? null : (
                 <Selector
-                    values={chartLayoutValues.map((v) => String(v))}
+                    values={validChartLayouts.map((v) => String(v))}
                     value={chartLayout}
-                    title="Categorization"
+                    title="Show"
                     onValueChange={(v) => {
                         setChartLayout(v as ChartLayout)
                     }}
@@ -86,7 +90,7 @@ export function SpendChartSelectors({
             <Selector
                 values={aggregationValues.map((v) => String(v))}
                 value={aggregation}
-                title="Data Aggregation"
+                title="View"
                 onValueChange={(v) => {
                     setAggregation(v as Aggregation)
                 }}

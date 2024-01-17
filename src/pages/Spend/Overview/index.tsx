@@ -5,6 +5,7 @@ import ListCard from '../../../components/Cards/ListCard'
 import {
     useInventoryApiV2AnalyticsSpendCompositionList,
     useInventoryApiV2AnalyticsSpendMetricList,
+    useInventoryApiV2AnalyticsSpendTableList,
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../api/inventory.gen'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
@@ -12,8 +13,61 @@ import { filterAtom, spendTimeAtom } from '../../../store'
 import { topAccounts, topCategories, topServices } from '..'
 import { SpendChart } from '../../../components/Spend/Chart'
 import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
-import { Granularity } from '../../../components/Spend/Chart/Selectors'
+import {
+    ChartLayout,
+    Granularity,
+} from '../../../components/Spend/Chart/Selectors'
 import TopHeader from '../../../components/Layout/Header'
+import { accountTrend } from '../Account'
+import {
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostStackedItem,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+} from '../../../api/api'
+
+const categoryTrend = (
+    responseChart: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
+) => {
+    return responseChart?.map((item) => {
+        return {
+            ...item,
+            costStacked: item.costStacked
+                ?.flatMap((st) =>
+                    st.category?.map((cat) => {
+                        const v: GithubComKaytuIoKaytuEnginePkgInventoryApiCostStackedItem =
+                            {
+                                metricID: cat,
+                                metricName: cat,
+                                category: [cat],
+                                cost: st.cost,
+                            }
+                        return v
+                    })
+                )
+                .reduce<
+                    GithubComKaytuIoKaytuEnginePkgInventoryApiCostStackedItem[]
+                >((prev, curr) => {
+                    if (curr === undefined) {
+                        return prev
+                    }
+                    if (
+                        prev.filter((i) => i.metricID === curr?.metricID)
+                            .length > 0
+                    ) {
+                        return prev.map((i) => {
+                            if (i.metricID === curr.metricID) {
+                                return {
+                                    ...i,
+                                    cost: (i.cost || 0) + (curr.cost || 0),
+                                }
+                            }
+                            return i
+                        })
+                    }
+                    return [...prev, curr]
+                }, []),
+        }
+    })
+}
 
 export function SpendOverview() {
     const activeTimeRange = useAtomValue(spendTimeAtom)
@@ -118,19 +172,52 @@ export function SpendOverview() {
             startTime: activeTimeRange.start.unix(),
         }),
     })
+
+    const { response: responseChart, isLoading: isLoadingChart } =
+        useInventoryApiV2AnalyticsSpendTableList({
+            startTime: activeTimeRange.start.unix(),
+            endTime: activeTimeRange.end.unix(),
+            dimension: 'connection',
+            granularity,
+            connector: [selectedConnections.provider],
+            connectionId: selectedConnections.connections,
+            connectionGroup: selectedConnections.connectionGroup,
+        })
+
+    const [chartLayout, setChartLayout] = useState<ChartLayout>('categories')
+    const trend = () => {
+        if (chartLayout === 'total' || chartLayout === 'metrics') {
+            return costTrend || []
+        }
+        if (chartLayout === 'accounts' || chartLayout === 'provider') {
+            return accountTrend(responseChart || [], chartLayout) || []
+        }
+        if (chartLayout === 'categories') {
+            return categoryTrend(costTrend || [])
+        }
+        return []
+    }
     return (
         <>
             <TopHeader datePicker filter />
             <Grid numItems={3} className="w-full gap-4">
                 <Col numColSpan={3}>
                     <SpendChart
-                        costTrend={costTrend || []}
-                        costField="category"
+                        costTrend={trend()}
                         title="Total spend"
                         timeRange={activeTimeRange}
                         timeRangePrev={prevTimeRange}
                         total={serviceCostResponse?.total_cost || 0}
                         totalPrev={servicePrevCostResponse?.total_cost || 0}
+                        chartLayout={chartLayout}
+                        setChartLayout={setChartLayout}
+                        validChartLayouts={[
+                            'total',
+                            'categories',
+                            'provider',
+                            'metrics',
+                            'accounts',
+                        ]}
                         isLoading={
                             costTrendLoading ||
                             serviceCostLoading ||

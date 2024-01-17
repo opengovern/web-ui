@@ -571,7 +571,6 @@ export default function SingleSpendMetric({
                         ).data
                     }
                     chartType={selectedChart}
-                    chartLayout="basic"
                     chartAggregation={chartAggregation}
                     isCost
                     loading={costTrendLoading}

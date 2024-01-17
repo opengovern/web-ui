@@ -201,7 +201,6 @@ export default function Trends({
                 labels={labels}
                 chartData={chartData}
                 chartType={selectedChart}
-                chartLayout="basic"
                 chartAggregation="trend"
                 loading={loading}
                 isPercent={isPercent}

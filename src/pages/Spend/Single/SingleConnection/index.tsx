@@ -108,8 +108,6 @@ export default function SingleSpendConnection({
         }
     }, [selectedChartIndex])
 
-    const [chartLayout, setChartLayout] = useState<'basic' | 'stacked'>('basic')
-
     const { response: costTrend, isLoading: costTrendLoading } =
         useInventoryApiV2AnalyticsSpendTrendList({
             startTime: activeTimeRange.start.unix(),
@@ -462,7 +460,7 @@ export default function SingleSpendConnection({
                                     costTrendChart(
                                         costTrend,
                                         chartAggregation,
-                                        chartLayout,
+                                        'basic',
                                         selectedGranularity
                                     ).label
                                 }
@@ -470,12 +468,11 @@ export default function SingleSpendConnection({
                                     costTrendChart(
                                         costTrend,
                                         chartAggregation,
-                                        chartLayout,
+                                        'basic',
                                         selectedGranularity
                                     ).data
                                 }
                                 chartType={selectedChart}
-                                chartLayout={chartLayout}
                                 chartAggregation={chartAggregation}
                                 isCost
                                 loading={costTrendLoading}
@@ -486,13 +483,13 @@ export default function SingleSpendConnection({
                                               costTrendChart(
                                                   costTrend,
                                                   chartAggregation,
-                                                  chartLayout,
+                                                  'basic',
                                                   selectedGranularity
                                               ).flag,
                                               costTrendChart(
                                                   costTrend,
                                                   chartAggregation,
-                                                  chartLayout,
+                                                  'basic',
                                                   selectedGranularity
                                               ).label
                                           ).visualMap
@@ -504,13 +501,13 @@ export default function SingleSpendConnection({
                                               costTrendChart(
                                                   costTrend,
                                                   chartAggregation,
-                                                  chartLayout,
+                                                  'basic',
                                                   selectedGranularity
                                               ).flag,
                                               costTrendChart(
                                                   costTrend,
                                                   chartAggregation,
-                                                  chartLayout,
+                                                  'basic',
                                                   selectedGranularity
                                               ).label
                                           ).markArea

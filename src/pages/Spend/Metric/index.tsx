@@ -9,7 +9,10 @@ import {
 import { filterAtom, spendTimeAtom } from '../../../store'
 import { SpendChart } from '../../../components/Spend/Chart'
 import { toErrorMessage } from '../../../types/apierror'
-import { Granularity } from '../../../components/Spend/Chart/Selectors'
+import {
+    ChartLayout,
+    Granularity,
+} from '../../../components/Spend/Chart/Selectors'
 import MetricTable from './MetricTable'
 import TopHeader from '../../../components/Layout/Header'
 
@@ -110,58 +113,22 @@ export function SpendMetrics() {
             connectionGroup: selectedConnections.connectionGroup,
         })
 
-    const chartRef = useRef<any>(null)
-    const ref = useRef<any>(null)
-    // const [lastScrollTop, setLastScrollTop] = useState<number>(0)
-    // const [scrollTarget, setScrollTarget] = useState<'top' | 'bottom'>('top')
-    // const [timer, setTimer] = useState<any>(undefined)
-    // useEffect(() => {
-    //     if (timer !== undefined) {
-    //         clearTimeout(timer)
-    //     }
-    //     const t = setTimeout(() => {
-    //         if (scrollTarget === 'bottom') {
-    //             ref.current?.scrollTo({
-    //                 top: chartRef.current.scrollHeight + 30,
-    //                 behavior: 'smooth',
-    //             })
-    //         } else {
-    //             ref.current?.scrollTo({
-    //                 top: 0,
-    //                 behavior: 'smooth',
-    //             })
-    //         }
-    //     }, 500)
-    //     setTimer(t)
-    // }, [scrollTarget])
-    // const handleScroll = (event: any) => {
-    //     const scrollTop = event.target?.scrollTop || 0
-    //     const diff = scrollTop - lastScrollTop
-    //     if (diff > 40) {
-    //         setScrollTarget('bottom')
-    //     } else if (diff < -40) {
-    //         setScrollTarget('top')
-    //     } else if (scrollTop < 50) {
-    //         setScrollTarget('top')
-    //     } else {
-    //         setScrollTarget('bottom')
-    //     }
-    //     setLastScrollTop(event.target?.scrollTop || 0)
-    // }
-
+    const [chartLayout, setChartLayout] = useState<ChartLayout>('metrics')
     return (
         <>
             <TopHeader datePicker filter />
             <Grid numItems={3} className="w-full gap-4">
-                <Col numColSpan={3} ref={chartRef}>
+                <Col numColSpan={3}>
                     <SpendChart
                         costTrend={costTrend || []}
-                        costField="metric"
                         title="Total spend"
                         timeRange={activeTimeRange}
                         timeRangePrev={prevTimeRange}
                         total={serviceCostResponse?.total_cost || 0}
                         totalPrev={servicePrevCostResponse?.total_cost || 0}
+                        chartLayout={chartLayout}
+                        setChartLayout={setChartLayout}
+                        validChartLayouts={['total', 'metrics']}
                         isLoading={
                             costTrendLoading ||
                             serviceCostLoading ||
