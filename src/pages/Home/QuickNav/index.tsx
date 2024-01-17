@@ -85,7 +85,7 @@ export default function QuickNav() {
                                     {nav.title}
                                 </Title>
                             </Flex>
-                            <Text className="line-clamp-2 mb-5">
+                            <Text className="line-clamp-2 mb-5 h-10">
                                 {nav.description}
                             </Text>
                             <Flex
