@@ -314,8 +314,8 @@ export default function BenchmarkSummary() {
                                         <Text className="font-semibold">
                                             Security score
                                         </Text>
-                                        <InformationCircleIcon className="w-4" />
-                                        <div className="absolute w-60 z-40 top-0 left-full scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
+                                        <InformationCircleIcon className="w-4 dark:text-gray-400" />
+                                        <Card className="absolute w-60 z-40 top-0 left-full scale-0 transition-all p-2 group-hover:scale-100">
                                             <Text>
                                                 Security scores represents the
                                                 proportion of Passed controls to
@@ -324,7 +324,7 @@ export default function BenchmarkSummary() {
                                                 summary security score across
                                                 all enabled Benchmarks.
                                             </Text>
-                                        </div>
+                                        </Card>
                                     </Flex>
                                     <Title className="font-semibold">
                                         {`${(
