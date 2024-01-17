@@ -104,12 +104,12 @@ const authRoutes = [
     },
     {
         key: 'assets single 2',
-        path: '/:ws/assets/assets-details/:id',
+        path: '/:ws/assets/metrics/:id',
         component: Single,
     },
     {
         key: 'assets single metric 2',
-        path: '/:ws/assets/assets-details/:id/:metric',
+        path: '/:ws/assets/metrics/:id/:metric',
         component: Single,
     },
     {

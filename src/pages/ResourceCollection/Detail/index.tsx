@@ -470,7 +470,6 @@ export default function ResourceCollectionDetail() {
                                     <Chart
                                         labels={[]}
                                         chartType="doughnut"
-                                        chartLayout="basic"
                                         chartAggregation="trend"
                                         chartData={pieData(complianceKPI)}
                                         loading={complianceKPILoading}
@@ -623,7 +622,6 @@ export default function ResourceCollectionDetail() {
                                     ).data
                                 }
                                 chartType={selectedChart}
-                                chartLayout="basic"
                                 chartAggregation="trend"
                                 loading={resourceTrendLoading}
                                 visualMap={

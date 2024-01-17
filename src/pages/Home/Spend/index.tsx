@@ -98,13 +98,7 @@ export default function Spend() {
         error: servicePrevCostErr,
         sendNow: serviceCostPrevRefresh,
     } = useInventoryApiV2AnalyticsSpendMetricList(prevQuery)
-    const trendStacked = buildTrend(
-        costTrend || [],
-        'trend',
-        'daily',
-        'account',
-        4
-    )
+    const trendStacked = buildTrend(costTrend || [], 'trending', 'daily', 4)
 
     return (
         <Card className="h-full">
