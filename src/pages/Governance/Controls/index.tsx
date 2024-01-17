@@ -26,9 +26,12 @@ import {
     CommandLineIcon,
     XCircleIcon,
 } from '@heroicons/react/24/outline'
+import { useState } from 'react'
+import MarkdownPreview from '@uiw/react-markdown-preview'
 import { useComplianceApiV1BenchmarksControlsDetail } from '../../../api/compliance.gen'
 import Spinner from '../../../components/Spinner'
 import { numberDisplay } from '../../../utilities/numericDisplay'
+import DrawerPanel from '../../../components/DrawerPanel'
 
 interface IPolicies {
     id: string | undefined
@@ -143,9 +146,39 @@ export default function Controls({ id, assignments }: IPolicies) {
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
     const navigate = useNavigate()
+    const [doc, setDoc] = useState('')
+    const [docTitle, setDocTitle] = useState('')
 
     return (
         <Flex flexDirection="col" className="gap-4">
+            <DrawerPanel
+                title={docTitle}
+                open={doc.length > 0}
+                onClose={() => setDoc('')}
+            >
+                <MarkdownPreview
+                    source={doc}
+                    wrapperElement={{
+                        'data-color-mode': 'light',
+                    }}
+                    rehypeRewrite={(node, index, parent) => {
+                        if (
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            node.tagName === 'a' &&
+                            parent &&
+                            /^h(1|2|3|4|5|6)/.test(
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                parent.tagName
+                            )
+                        ) {
+                            // eslint-disable-next-line no-param-reassign
+                            parent.children = parent.children.slice(1)
+                        }
+                    }}
+                />
+            </DrawerPanel>
             {isLoading ? (
                 <Spinner className="mt-20" />
             ) : (
@@ -224,15 +257,25 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                 <TableRow
                                                     className="max-w-full cursor-pointer hover:bg-kaytu-50 dark:hover:bg-gray-900"
                                                     key={v?.id}
-                                                    onClick={() =>
-                                                        navigate(String(v?.id))
-                                                    }
                                                 >
-                                                    <TableCell className="w-24 min-w-[96px]">{`${name.substring(
+                                                    <TableCell
+                                                        className="w-24 min-w-[96px]"
+                                                        onClick={() =>
+                                                            navigate(
+                                                                String(v?.id)
+                                                            )
+                                                        }
+                                                    >{`${name.substring(
                                                         0,
                                                         name.indexOf(' ')
                                                     )}.${i + 1}`}</TableCell>
-                                                    <TableCell>
+                                                    <TableCell
+                                                        onClick={() =>
+                                                            navigate(
+                                                                String(v?.id)
+                                                            )
+                                                        }
+                                                    >
                                                         <Grid numItems={12}>
                                                             <Col numColSpan={2}>
                                                                 {severityBadge(
@@ -260,7 +303,17 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                                     .length >
                                                                     0 && (
                                                                     <div className="group relative flex justify-center">
-                                                                        <CommandLineIcon className="text-kaytu-500 w-5" />
+                                                                        <CommandLineIcon
+                                                                            className="text-kaytu-500 w-5"
+                                                                            onClick={() => {
+                                                                                setDoc(
+                                                                                    v?.cliRemediation
+                                                                                )
+                                                                                setDocTitle(
+                                                                                    `Command line (CLI) remediation for '${v?.title}'`
+                                                                                )
+                                                                            }}
+                                                                        />
                                                                         <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
                                                                             <Text>
                                                                                 Command
@@ -276,7 +329,17 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                                     .length >
                                                                     0 && (
                                                                     <div className="group relative flex justify-center">
-                                                                        <BookOpenIcon className="text-kaytu-500 w-5" />
+                                                                        <BookOpenIcon
+                                                                            className="text-kaytu-500 w-5"
+                                                                            onClick={() => {
+                                                                                setDoc(
+                                                                                    v?.manualRemediation
+                                                                                )
+                                                                                setDocTitle(
+                                                                                    `Manual remediation for '${v?.title}'`
+                                                                                )
+                                                                            }}
+                                                                        />
                                                                         <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
                                                                             <Text>
                                                                                 Manual
@@ -290,7 +353,17 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                                     .length >
                                                                     0 && (
                                                                     <div className="group relative flex justify-center">
-                                                                        <CodeBracketIcon className="text-kaytu-500 w-5" />
+                                                                        <CodeBracketIcon
+                                                                            className="text-kaytu-500 w-5"
+                                                                            onClick={() => {
+                                                                                setDoc(
+                                                                                    v?.programmaticRemediation
+                                                                                )
+                                                                                setDocTitle(
+                                                                                    `Programmatic remediation for '${v?.title}'`
+                                                                                )
+                                                                            }}
+                                                                        />
                                                                         <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
                                                                             <Text>
                                                                                 Programmatic
@@ -304,7 +377,17 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                                     .length >
                                                                     0 && (
                                                                     <div className="group relative flex justify-center">
-                                                                        <Cog8ToothIcon className="text-kaytu-500 w-5" />
+                                                                        <Cog8ToothIcon
+                                                                            className="text-kaytu-500 w-5"
+                                                                            onClick={() => {
+                                                                                setDoc(
+                                                                                    v?.guardrailRemediation
+                                                                                )
+                                                                                setDocTitle(
+                                                                                    `Guard rails remediation for '${v?.title}'`
+                                                                                )
+                                                                            }}
+                                                                        />
                                                                         <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
                                                                             <Text>
                                                                                 Guard
@@ -316,7 +399,15 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                         </Flex>
                                                     </TableCell>
                                                     {assignments > 0 && (
-                                                        <TableCell>
+                                                        <TableCell
+                                                            onClick={() =>
+                                                                navigate(
+                                                                    String(
+                                                                        v?.id
+                                                                    )
+                                                                )
+                                                            }
+                                                        >
                                                             <Flex
                                                                 justifyContent="start"
                                                                 className="gap-2"
@@ -353,7 +444,13 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                             </Flex>
                                                         </TableCell>
                                                     )}
-                                                    <TableCell>
+                                                    <TableCell
+                                                        onClick={() =>
+                                                            navigate(
+                                                                String(v?.id)
+                                                            )
+                                                        }
+                                                    >
                                                         <ChevronRightIcon className="h-5 text-kaytu-500" />
                                                     </TableCell>
                                                 </TableRow>
