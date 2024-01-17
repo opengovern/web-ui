@@ -261,9 +261,10 @@ export function SpendOverview() {
                         url="accounts"
                         type="account"
                         isPrice
+                        linkPrefix="accounts/"
                         error={getErrorMessage(accountCostError)}
                         onRefresh={refreshAccountCost}
-                        isClickable={false}
+                        // isClickable={false}
                     />
                 </Col>
                 <Col numColSpan={1} className="h-full">
@@ -275,10 +276,11 @@ export function SpendOverview() {
                         items={topServices(serviceCostResponse)}
                         url="metrics"
                         type="service"
+                        linkPrefix="metrics/"
                         isPrice
                         error={getErrorMessage(serviceCostErr)}
                         onRefresh={serviceCostRefresh}
-                        isClickable={false}
+                        // isClickable={false}
                     />
                 </Col>
             </Grid>

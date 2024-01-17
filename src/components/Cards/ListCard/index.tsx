@@ -38,6 +38,7 @@ interface ITopListCard {
     url?: string
     type: 'service' | 'account'
     isClickable?: boolean
+    linkPrefix?: string
     error?: string | undefined
     onRefresh?: () => void
 }
@@ -61,6 +62,7 @@ export default function ListCard({
     url,
     type,
     isClickable = true,
+    linkPrefix,
     error,
     onRefresh,
 }: ITopListCard) {
@@ -123,6 +125,10 @@ export default function ListCard({
                                         isClickable
                                             ? navigate(
                                                   `${
+                                                      linkPrefix !== undefined
+                                                          ? linkPrefix
+                                                          : ''
+                                                  }${
                                                       type === 'account'
                                                           ? 'account_'
                                                           : 'metric_'

@@ -34,6 +34,7 @@ import { SpendOverview } from '../pages/Spend/Overview'
 import { SpendMetrics } from '../pages/Spend/Metric'
 import { SpendAccounts } from '../pages/Spend/Account'
 import Layout from '../components/Layout'
+import RequestDemo from '../pages/RequestDemo'
 
 const authRoutes = [
     {
@@ -301,6 +302,11 @@ const authRoutes = [
         key: 'resource collection assets single metric 2',
         path: '/:ws/resource-collection/:resourceId/assets-details/:id/:metric',
         component: Single,
+    },
+    {
+        key: 'request a demo',
+        path: '/requestdemo',
+        component: RequestDemo,
     },
 ]
 
