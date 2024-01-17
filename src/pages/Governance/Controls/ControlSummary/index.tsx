@@ -314,7 +314,6 @@ export default function ControlDetail() {
                                 open={doc.length > 0}
                                 onClose={() => setDoc('')}
                             >
-                                <div className="wmde-markdown-var" />
                                 <MarkdownPreview
                                     source={doc}
                                     wrapperElement={{
