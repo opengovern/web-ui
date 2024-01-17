@@ -24,8 +24,9 @@ import {
 } from '@heroicons/react/24/outline'
 import { useAtom, useAtomValue } from 'jotai'
 import { Popover, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { Fragment, useEffect } from 'react'
+import { AnimatePresence } from 'framer-motion'
+import { useAuth0 } from '@auth0/auth0-react'
 import { previewAtom, sideBarCollapsedAtom } from '../../../store'
 import { KaytuIcon, KaytuIconBig } from '../../../icons/icons'
 import Utilities from './Utilities'
@@ -49,16 +50,40 @@ interface ISidebar {
 }
 
 export default function Sidebar({ workspace, currentPage }: ISidebar) {
+    const { isAuthenticated, getAccessTokenSilently } = useAuth0()
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
     const preview = useAtomValue(previewAtom)
-    const { response: spendCount, isLoading: spendCountIsLoading } =
-        useInventoryApiV2AnalyticsSpendCountList({}, true, workspace)
-    const { response: assetCount, isLoading: assetsIsLoading } =
-        useInventoryApiV2AnalyticsCountList({}, true, workspace)
-    const { response: findingsCount, isLoading: findingsIsLoading } =
-        useComplianceApiV1FindingsCountList({}, {}, true, workspace)
-    const { response: connectionCount, isLoading: connectionsIsLoading } =
-        useIntegrationApiV1ConnectionsCountList({}, {}, true, workspace)
+    const {
+        response: spendCount,
+        isLoading: spendCountIsLoading,
+        sendNow: sendSpend,
+    } = useInventoryApiV2AnalyticsSpendCountList({}, false, workspace)
+    const {
+        response: assetCount,
+        isLoading: assetsIsLoading,
+        sendNow: sendAssets,
+    } = useInventoryApiV2AnalyticsCountList({}, false, workspace)
+    const {
+        response: findingsCount,
+        isLoading: findingsIsLoading,
+        sendNow: sendFindings,
+    } = useComplianceApiV1FindingsCountList({}, {}, false, workspace)
+    const {
+        response: connectionCount,
+        isLoading: connectionsIsLoading,
+        sendNow: sendConnections,
+    } = useIntegrationApiV1ConnectionsCountList({}, {}, false, workspace)
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            getAccessTokenSilently().then((res) => {
+                sendSpend()
+                sendAssets()
+                sendFindings()
+                sendConnections()
+            })
+        }
+    }, [isAuthenticated])
 
     const navigation = [
         {
