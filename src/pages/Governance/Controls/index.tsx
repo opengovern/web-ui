@@ -6,6 +6,7 @@ import {
     Card,
     Col,
     Flex,
+    Grid,
     Table,
     TableBody,
     TableCell,
@@ -232,19 +233,21 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                         name.indexOf(' ')
                                                     )}.${i + 1}`}</TableCell>
                                                     <TableCell>
-                                                        <Flex
-                                                            justifyContent="start"
-                                                            className="gap-4"
-                                                        >
-                                                            {severityBadge(
-                                                                v?.severity
-                                                            )}
-                                                            <Col numColSpan={9}>
+                                                        <Grid numItems={12}>
+                                                            <Col numColSpan={2}>
+                                                                {severityBadge(
+                                                                    v?.severity
+                                                                )}
+                                                            </Col>
+                                                            <Col
+                                                                numColSpan={10}
+                                                                className="-ml-8"
+                                                            >
                                                                 <Text className="truncate">
                                                                     {v?.title}
                                                                 </Text>
                                                             </Col>
-                                                        </Flex>
+                                                        </Grid>
                                                     </TableCell>
                                                     <TableCell>
                                                         <Flex
