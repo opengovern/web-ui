@@ -73,7 +73,7 @@ export default function Query({ height }: IQuery) {
                 <Title className="font-semibold">Popular asset queries</Title>
             </Flex>
             {isLoading
-                ? [1, 2, 3, 4].map((i) => (
+                ? [1, 2, 3, 4, 5].map((i) => (
                       <Accordion
                           className={`w-full border-0 ${
                               i < 4 ? 'border-b border-b-gray-200' : ''
@@ -100,69 +100,58 @@ export default function Query({ height }: IQuery) {
                           }
                           return 0
                       })
-                      .map(
-                          (q, i) =>
-                              i < 4 && (
-                                  <Accordion
-                                      // eslint-disable-next-line react/no-array-index-key
-                                      key={`query-${i}-${open}`}
-                                      className={`w-full border-0 ${
-                                          i < 3
-                                              ? 'border-b border-b-gray-200'
-                                              : ''
-                                      } !rounded-none bg-transparent`}
-                                      defaultOpen={i === open}
+                      .map((q, i) => (
+                          <Accordion
+                              // eslint-disable-next-line react/no-array-index-key
+                              key={`query-${i}-${open}`}
+                              className={`w-full border-0 ${
+                                  i < 4 ? 'border-b border-b-gray-200' : ''
+                              } !rounded-none bg-transparent`}
+                              defaultOpen={i === open}
+                              onClick={() => {
+                                  if (i !== open) {
+                                      setOpen(i)
+                                  }
+                              }}
+                          >
+                              <AccordionHeader className="pl-0 pr-0.5 py-4 bg-transparent flex justify-start">
+                                  <Text className="text-gray-800 !text-base line-clamp-1">
+                                      {q?.title}
+                                  </Text>
+                              </AccordionHeader>
+                              <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
+                                  <Editor
+                                      onValueChange={(text) => {
+                                          console.log('')
+                                      }}
+                                      highlight={(text) =>
+                                          highlight(text, languages.sql, 'sql')
+                                      }
+                                      value={q?.query || ''}
+                                      className="w-full bg-white dark:bg-gray-800 font-mono text-sm h-full no-scrollbar"
+                                      style={{
+                                          color: 'white !important',
+                                          minHeight: '60px',
+                                          overflowY: 'scroll',
+                                      }}
+                                      placeholder="-- write your SQL query here"
+                                  />
+                                  <Button
+                                      size="xs"
+                                      variant="light"
+                                      icon={ChevronRightIcon}
+                                      iconPosition="right"
+                                      className="my-3"
                                       onClick={() => {
-                                          if (i !== open) {
-                                              setOpen(i)
-                                          }
+                                          setRunQuery(q?.query || '')
+                                          navigate(`/${workspace}/query`)
                                       }}
                                   >
-                                      <AccordionHeader className="pl-0 pr-0.5 py-4 bg-transparent flex justify-start">
-                                          <Text className="text-gray-800 !text-base line-clamp-1">
-                                              {q?.title}
-                                          </Text>
-                                      </AccordionHeader>
-                                      <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
-                                          <Editor
-                                              onValueChange={(text) => {
-                                                  console.log('')
-                                              }}
-                                              highlight={(text) =>
-                                                  highlight(
-                                                      text,
-                                                      languages.sql,
-                                                      'sql'
-                                                  )
-                                              }
-                                              value={q?.query || ''}
-                                              className="w-full bg-white dark:bg-gray-800 font-mono text-sm h-full no-scrollbar"
-                                              style={{
-                                                  color: 'white !important',
-                                                  minHeight: '60px',
-                                                  overflowY: 'scroll',
-                                              }}
-                                              placeholder="-- write your SQL query here"
-                                          />
-                                          <Button
-                                              size="xs"
-                                              variant="light"
-                                              icon={ChevronRightIcon}
-                                              iconPosition="right"
-                                              className="my-3"
-                                              onClick={() => {
-                                                  setRunQuery(q?.query || '')
-                                                  navigate(
-                                                      `/${workspace}/query`
-                                                  )
-                                              }}
-                                          >
-                                              Run Query
-                                          </Button>
-                                      </AccordionBody>
-                                  </Accordion>
-                              )
-                      )}
+                                      Run Query
+                                  </Button>
+                              </AccordionBody>
+                          </Accordion>
+                      ))}
             {error && (
                 <Flex
                     flexDirection="col"

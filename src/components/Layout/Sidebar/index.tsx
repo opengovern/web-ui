@@ -76,12 +76,16 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
 
     useEffect(() => {
         if (isAuthenticated) {
-            getAccessTokenSilently().then((res) => {
-                sendSpend()
-                sendAssets()
-                sendFindings()
-                sendConnections()
-            })
+            getAccessTokenSilently()
+                .then((res) => {
+                    console.log('')
+                })
+                .then((res) => {
+                    sendSpend()
+                    sendAssets()
+                    sendFindings()
+                    sendConnections()
+                })
         }
     }, [isAuthenticated])
 
@@ -151,7 +155,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             isPreview: false,
         },
         {
-            name: 'Governance',
+            name: 'Security',
             icon: ShieldCheckIcon,
             page: ['compliance', 'findings'],
             children: [

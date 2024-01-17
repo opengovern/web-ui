@@ -8,7 +8,7 @@ export default function Governance() {
         <Card>
             <Flex justifyContent="start" className="gap-2 mb-4">
                 <Icon icon={ShieldCheckIcon} className="p-0" />
-                <Title className="font-semibold">Governance</Title>
+                <Title className="font-semibold">Security</Title>
             </Flex>
             <Grid numItems={3} className="w-full gap-8">
                 <Col numColSpan={2}>

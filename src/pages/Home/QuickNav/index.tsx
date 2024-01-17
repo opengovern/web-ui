@@ -10,7 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 const navList = [
     {
-        title: 'Asset governance',
+        title: 'Assets',
         description: 'Discover and query cloud assets across multiple clouds.',
         icon: CubeIcon,
         children: [
@@ -30,12 +30,22 @@ const navList = [
         ],
     },
     {
-        title: 'Security governance',
+        title: 'Security',
         description: 'Audit cloud configurations against benchmarks.',
         icon: ShieldCheckIcon,
         children: [
             { name: 'Compliance benchmarks', link: '/:ws/compliance' },
             { name: 'Security findings', link: '/:ws/findings' },
+        ],
+    },
+    {
+        title: 'Integrations',
+        description:
+            'Connect your cloud environments and tools to Kaytu to gain insights.',
+        icon: ShieldCheckIcon,
+        children: [
+            { name: 'AWS accounts', link: '/:ws/compliance' },
+            { name: 'Azure subscriptions', link: '/:ws/findings' },
         ],
     },
     // {
@@ -56,7 +66,7 @@ export default function QuickNav() {
                 <Icon icon={CursorArrowRaysIcon} className="p-0" />
                 <Title className="font-semibold">Quick navigation</Title>
             </Flex>
-            <Grid numItems={3} className="w-full mb-4">
+            <Grid numItems={4} className="w-full mb-4">
                 {navList.map((nav, i) => (
                     <div
                         className={
@@ -75,7 +85,7 @@ export default function QuickNav() {
                                     {nav.title}
                                 </Title>
                             </Flex>
-                            <Text className="line-clamp-2 mb-5">
+                            <Text className="line-clamp-2 mb-5 h-10">
                                 {nav.description}
                             </Text>
                             <Flex

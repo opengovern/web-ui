@@ -12,12 +12,12 @@ export default function Home() {
         <>
             <TopHeader datePicker />
             <Grid numItems={6} className="w-full gap-4 h-fit mb-4">
-                <Col numColSpan={4}>
+                <Col numColSpan={6}>
                     <QuickNav />
                 </Col>
-                <Col numColSpan={2}>
-                    <Integration />
-                </Col>
+                {/* <Col numColSpan={2}> */}
+                {/*     <Integration /> */}
+                {/* </Col> */}
             </Grid>
             <Grid numItems={6} className="w-full gap-4 h-fit">
                 <Col numColSpan={4}>
