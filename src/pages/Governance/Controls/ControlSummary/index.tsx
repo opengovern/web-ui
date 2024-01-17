@@ -33,6 +33,7 @@ import { useState } from 'react'
 import Editor from 'react-simple-code-editor'
 import { highlight, languages } from 'prismjs'
 import Markdown from 'react-markdown'
+import MarkdownPreview from '@uiw/react-markdown-preview'
 import { useComplianceApiV1ControlsSummaryDetail } from '../../../../api/compliance.gen'
 import { notificationAtom, queryAtom } from '../../../../store'
 import { severityBadge } from '../index'
@@ -56,7 +57,6 @@ export default function ControlDetail() {
 
     const { response: controlDetail, isLoading } =
         useComplianceApiV1ControlsSummaryDetail(String(controlId))
-    console.log(controlDetail)
 
     return (
         <>
@@ -313,9 +313,29 @@ export default function ControlDetail() {
                                 open={doc.length > 0}
                                 onClose={() => setDoc('')}
                             >
-                                <Markdown className="dark:text-white">
-                                    {doc}
-                                </Markdown>
+                                <MarkdownPreview
+                                    source={doc}
+                                    wrapperElement={{
+                                        'data-color-mode': 'light',
+                                    }}
+                                    rehypeRewrite={(node, index, parent) => {
+                                        if (
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            node.tagName === 'a' &&
+                                            parent &&
+                                            /^h(1|2|3|4|5|6)/.test(
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                parent.tagName
+                                            )
+                                        ) {
+                                            // eslint-disable-next-line no-param-reassign
+                                            parent.children =
+                                                parent.children.slice(1)
+                                        }
+                                    }}
+                                />
                             </DrawerPanel>
                             <Title className="font-semibold mt-2 mb-2">
                                 Remediation
