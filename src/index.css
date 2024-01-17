@@ -127,49 +127,6 @@ button:focus {
     display: none;
 }
 
-pre {
-    display: block;
-    padding: 8px;
-    margin: 10px 0;
-    font-size: 13px;
-    line-height: 1.42857143;
-    color: #333;
-    word-break: break-all;
-    word-wrap: break-word;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-pre code {
-    padding: 0;
-    font-size: 90%;
-    color: inherit;
-    font-family: monospace;
-    white-space: normal !important;
-    overflow-wrap: break-word !important;
-    background-color: transparent;
-    border-radius: 0;
-}
-
-code {
-    text-wrap: normal;
-    padding: 2px 4px;
-    /*font-size: 90%;*/
-    color: #c7254e;
-    background-color: #f9f2f4;
-    border-radius: 4px;
-    font-family: monospace;
-}
-
-code,
-kbd,
-pre,
-samp {
-    font-family: monospace;
-    /*font-size: 1em;*/
-}
-
 .dark pre {
     color: #cccccc;
 }
@@ -186,11 +143,4 @@ samp {
     position: absolute;
     right: 95%;
     top: 10px;
-}
-
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
-    color: whitesmoke !important;
 }
