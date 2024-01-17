@@ -22,9 +22,32 @@ import { useState } from 'react'
 import { useInventoryApiV1QueryList } from '../../../api/inventory.gen'
 import { runQueryAtom } from '../../../store'
 import { getErrorMessage } from '../../../types/apierror'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem } from '../../../api/api'
 
 interface IQuery {
     height: any
+}
+
+const getQueries = (
+    response:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem[]
+        | undefined
+) => {
+    const data = []
+    const queryId = [
+        'ai_workload',
+        'container_workload',
+        'load_balancers',
+        'server_workload',
+        'cloud_networks',
+    ]
+    if (response) {
+        for (let i = 0; i < queryId.length; i += 1) {
+            const query = response.find((q) => q.id === queryId[i])
+            data.push(query)
+        }
+    }
+    return data
 }
 
 export default function Query({ height }: IQuery) {
@@ -42,18 +65,18 @@ export default function Query({ height }: IQuery) {
 
     return (
         <Card
-            className="h-full overflow-scroll"
+            className="h-full overflow-scroll no-scrollbar"
             style={{ maxHeight: `${height}px` }}
         >
             <Flex justifyContent="start" className="gap-2 mb-2">
                 <Icon icon={MagnifyingGlassIcon} className="p-0" />
-                <Title className="font-semibold">Popular queries</Title>
+                <Title className="font-semibold">Popular asset queries</Title>
             </Flex>
             {isLoading
                 ? [1, 2, 3, 4].map((i) => (
                       <Accordion
                           className={`w-full border-0 ${
-                              i < 6 ? 'border-b border-b-gray-200' : ''
+                              i < 4 ? 'border-b border-b-gray-200' : ''
                           } !rounded-none bg-transparent ${
                               isLoading ? 'animate-pulse' : ''
                           }`}
@@ -63,7 +86,7 @@ export default function Query({ height }: IQuery) {
                           </AccordionHeader>
                       </Accordion>
                   ))
-                : queries
+                : getQueries(queries)
                       ?.sort((a, b) => {
                           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                           // @ts-ignore
@@ -113,7 +136,7 @@ export default function Query({ height }: IQuery) {
                                                   )
                                               }
                                               value={q?.query || ''}
-                                              className="w-full bg-white dark:bg-gray-800 font-mono text-sm h-full"
+                                              className="w-full bg-white dark:bg-gray-800 font-mono text-sm h-full no-scrollbar"
                                               style={{
                                                   color: 'white !important',
                                                   minHeight: '60px',

@@ -10,28 +10,28 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 const navList = [
     {
-        title: 'Assets',
-        description: 'Discovery and Query Cloud assets across multiple clouds',
+        title: 'Asset governance',
+        description: 'Discover and query cloud assets across multiple clouds.',
         icon: CubeIcon,
         children: [
-            { name: 'Summary', link: '/:ws/assets' },
+            { name: 'Overview', link: '/:ws/assets' },
             { name: 'Asset metrics', link: '/:ws/assets/metrics' },
-            { name: 'Account breakdown', link: '/:ws/assets/accounts' },
+            { name: 'Cloud account details', link: '/:ws/assets/accounts' },
         ],
     },
     {
         title: 'Spend',
-        description: 'Understand spend across multiple Cloud providers',
+        description: 'Understand cloud spend, reduce wastage.',
         icon: BanknotesIcon,
         children: [
             { name: 'Summary', link: '/:ws/spend' },
             { name: 'Spend metrics', link: '/:ws/spend/metrics' },
-            { name: 'Account breakdown', link: '/:ws/spend/accounts' },
+            { name: 'Spend by accounts', link: '/:ws/spend/accounts' },
         ],
     },
     {
         title: 'Governance',
-        description: 'Identify Misconfigurations, Benchmark against',
+        description: 'Audit cloud configurations against benchmarks',
         icon: ShieldCheckIcon,
         children: [
             { name: 'Compliance benchmarks', link: '/:ws/compliance' },
