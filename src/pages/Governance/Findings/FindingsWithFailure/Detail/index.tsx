@@ -25,11 +25,29 @@ import SummaryCard from '../../../../../components/Cards/SummaryCard'
 import { useComplianceApiV1FindingsResourceCreate } from '../../../../../api/compliance.gen'
 import Spinner from '../../../../../components/Spinner'
 import { severityBadge } from '../../../Controls'
+import { dateTimeDisplay } from '../../../../../utilities/dateDisplay'
 
 interface IFindingDetail {
     finding: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
     open: boolean
     onClose: () => void
+}
+
+const renderStatus = (state: boolean | undefined) => {
+    if (state) {
+        return (
+            <Flex className="w-fit gap-2">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full" />
+                <Text className="text-gray-800">Active</Text>
+            </Flex>
+        )
+    }
+    return (
+        <Flex className="w-fit gap-2">
+            <div className="w-2 h-2 bg-rose-600 rounded-full" />
+            <Text className="text-gray-800">Not active</Text>
+        </Flex>
+    )
 }
 
 export default function FindingDetail({
@@ -89,10 +107,52 @@ export default function FindingDetail({
             </Flex> */}
             <TabGroup>
                 <TabList>
-                    <Tab>Controls</Tab>
-                    <Tab disabled={!response?.resource}>Resources</Tab>
+                    <Tab>Summary</Tab>
+                    <Tab>Applicable controls</Tab>
+                    <Tab disabled={!response?.resource}>Resource details</Tab>
                 </TabList>
                 <TabPanels>
+                    <TabPanel>
+                        <List>
+                            <ListItem className="py-6">
+                                <Text>Findings state</Text>
+                                {renderStatus(finding?.stateActive)}
+                            </ListItem>
+                            <ListItem className="py-6">
+                                <Text>Creation date</Text>
+                                <Text className="text-gray-800">
+                                    {dateTimeDisplay(finding?.evaluatedAt)}
+                                </Text>
+                            </ListItem>
+                            <ListItem className="py-6">
+                                <Text>Last evaluated</Text>
+                                <Text className="text-gray-800">
+                                    {dateTimeDisplay(finding?.evaluatedAt)}
+                                </Text>
+                            </ListItem>
+                            <ListItem className="py-6">
+                                <Flex alignItems="start">
+                                    <Text>Controls</Text>
+                                    <Flex
+                                        flexDirection="col"
+                                        alignItems="start"
+                                        className="w-fit gap-1"
+                                    >
+                                        {finding?.parentBenchmarks?.map(
+                                            (bm) => (
+                                                <Flex className="gap-1 w-fit">
+                                                    <div className="h-1 w-1 rounded-full bg-black" />
+                                                    <Text className="text-gray-800">
+                                                        {bm}
+                                                    </Text>
+                                                </Flex>
+                                            )
+                                        )}
+                                    </Flex>
+                                </Flex>
+                            </ListItem>
+                        </List>
+                    </TabPanel>
                     <TabPanel>
                         {isLoading ? (
                             <Spinner className="mt-12" />

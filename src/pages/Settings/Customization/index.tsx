@@ -79,7 +79,6 @@ function TextMetric({ title, metricId, disabled }: ITextMetric) {
 
         setTimer(t)
     }, [value])
-    console.log(disabled)
 
     return (
         <Flex flexDirection="row" className="mb-4">

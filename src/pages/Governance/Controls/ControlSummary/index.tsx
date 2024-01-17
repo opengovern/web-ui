@@ -57,7 +57,6 @@ export default function ControlDetail() {
 
     const { response: controlDetail, isLoading } =
         useComplianceApiV1ControlsSummaryDetail(String(controlId))
-    console.log(controlDetail)
 
     return (
         <>
