@@ -14,7 +14,10 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
     const url = window.location.pathname.split('/')
     const current = `${url[2]}${url[3] ? `/${url[3]}` : ''}`
     const workspace = url[1]
-    const showSidebar = workspace !== 'workspaces' && workspace !== 'billing'
+    const showSidebar =
+        workspace !== 'workspaces' &&
+        workspace !== 'billing' &&
+        workspace !== 'requestdemo'
 
     return (
         <Flex className="h-screen overflow-hidden">
