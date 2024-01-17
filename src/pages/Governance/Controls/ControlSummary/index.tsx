@@ -33,6 +33,7 @@ import { useState } from 'react'
 import Editor from 'react-simple-code-editor'
 import { highlight, languages } from 'prismjs'
 import Markdown from 'react-markdown'
+import MarkdownPreview from '@uiw/react-markdown-preview'
 import { useComplianceApiV1ControlsSummaryDetail } from '../../../../api/compliance.gen'
 import { notificationAtom, queryAtom } from '../../../../store'
 import { severityBadge } from '../index'
@@ -313,9 +314,13 @@ export default function ControlDetail() {
                                 open={doc.length > 0}
                                 onClose={() => setDoc('')}
                             >
-                                <Markdown className="dark:text-white">
-                                    {doc}
-                                </Markdown>
+                                <div className="wmde-markdown-var" />
+                                <MarkdownPreview
+                                    source={doc}
+                                    wrapperElement={{
+                                        'data-color-mode': 'light',
+                                    }}
+                                />
                             </DrawerPanel>
                             <Title className="font-semibold mt-2 mb-2">
                                 Remediation
