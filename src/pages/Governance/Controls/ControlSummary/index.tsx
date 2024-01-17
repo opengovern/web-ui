@@ -56,6 +56,7 @@ export default function ControlDetail() {
 
     const { response: controlDetail, isLoading } =
         useComplianceApiV1ControlsSummaryDetail(String(controlId))
+    console.log(controlDetail)
 
     return (
         <>
@@ -340,7 +341,7 @@ export default function ControlDetail() {
                                                 controlDetail?.control
                                                     ?.manualRemediation
                                             )
-                                            setDocTitle('Manual Remediation')
+                                            setDocTitle('Manual remediation')
                                         }
                                     }}
                                 >
@@ -385,7 +386,7 @@ export default function ControlDetail() {
                                                     ?.cliRemediation
                                             )
                                             setDocTitle(
-                                                'Command line (CLI) Remediation'
+                                                'Command line (CLI) remediation'
                                             )
                                         }
                                     }}
@@ -410,7 +411,32 @@ export default function ControlDetail() {
                                         utilizing CLI
                                     </Text>
                                 </Card>
-                                <Card className="grayscale opacity-70">
+                                <Card
+                                    className={
+                                        controlDetail?.control
+                                            ?.guardrailRemediation &&
+                                        controlDetail?.control
+                                            ?.guardrailRemediation.length
+                                            ? 'cursor-pointer'
+                                            : 'grayscale opacity-70'
+                                    }
+                                    onClick={() => {
+                                        if (
+                                            controlDetail?.control
+                                                ?.guardrailRemediation &&
+                                            controlDetail?.control
+                                                ?.guardrailRemediation.length
+                                        ) {
+                                            setDoc(
+                                                controlDetail?.control
+                                                    ?.guardrailRemediation
+                                            )
+                                            setDocTitle(
+                                                'Guard rails remediation'
+                                            )
+                                        }
+                                    }}
+                                >
                                     <Flex className="mb-2.5">
                                         <Flex
                                             justifyContent="start"
@@ -431,7 +457,32 @@ export default function ControlDetail() {
                                         utilizing solutions where possible
                                     </Text>
                                 </Card>
-                                <Card className="grayscale opacity-70">
+                                <Card
+                                    className={
+                                        controlDetail?.control
+                                            ?.programmaticRemediation &&
+                                        controlDetail?.control
+                                            ?.programmaticRemediation.length
+                                            ? 'cursor-pointer'
+                                            : 'grayscale opacity-70'
+                                    }
+                                    onClick={() => {
+                                        if (
+                                            controlDetail?.control
+                                                ?.programmaticRemediation &&
+                                            controlDetail?.control
+                                                ?.programmaticRemediation.length
+                                        ) {
+                                            setDoc(
+                                                controlDetail?.control
+                                                    ?.programmaticRemediation
+                                            )
+                                            setDocTitle(
+                                                'Programmatic remediation'
+                                            )
+                                        }
+                                    }}
+                                >
                                     <Flex className="mb-2.5">
                                         <Flex
                                             justifyContent="start"

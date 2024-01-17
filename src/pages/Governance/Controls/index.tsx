@@ -6,6 +6,7 @@ import {
     Card,
     Col,
     Flex,
+    Grid,
     Table,
     TableBody,
     TableCell,
@@ -20,6 +21,8 @@ import { useNavigate } from 'react-router-dom'
 import {
     BookOpenIcon,
     CheckCircleIcon,
+    CodeBracketIcon,
+    Cog8ToothIcon,
     CommandLineIcon,
     XCircleIcon,
 } from '@heroicons/react/24/outline'
@@ -230,19 +233,21 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                         name.indexOf(' ')
                                                     )}.${i + 1}`}</TableCell>
                                                     <TableCell>
-                                                        <Flex
-                                                            justifyContent="start"
-                                                            className="gap-4"
-                                                        >
-                                                            {severityBadge(
-                                                                v?.severity
-                                                            )}
-                                                            <Col numColSpan={9}>
+                                                        <Grid numItems={12}>
+                                                            <Col numColSpan={2}>
+                                                                {severityBadge(
+                                                                    v?.severity
+                                                                )}
+                                                            </Col>
+                                                            <Col
+                                                                numColSpan={10}
+                                                                className="-ml-8"
+                                                            >
                                                                 <Text className="truncate">
                                                                     {v?.title}
                                                                 </Text>
                                                             </Col>
-                                                        </Flex>
+                                                        </Grid>
                                                     </TableCell>
                                                     <TableCell>
                                                         <Flex
@@ -256,13 +261,13 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                                     0 && (
                                                                     <div className="group relative flex justify-center">
                                                                         <CommandLineIcon className="text-kaytu-500 w-5" />
-                                                                        <div className="absolute -top-2.5 left-6 border border-gray-200 w-fit z-40 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
+                                                                        <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
                                                                             <Text>
                                                                                 Command
                                                                                 line
                                                                                 (CLI)
                                                                             </Text>
-                                                                        </div>
+                                                                        </Card>
                                                                     </div>
                                                                 )}
                                                             {v?.manualRemediation &&
@@ -272,11 +277,40 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                                     0 && (
                                                                     <div className="group relative flex justify-center">
                                                                         <BookOpenIcon className="text-kaytu-500 w-5" />
-                                                                        <div className="absolute -top-2.5 left-6 border border-gray-200 w-fit z-40 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
+                                                                        <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
                                                                             <Text>
                                                                                 Manual
                                                                             </Text>
-                                                                        </div>
+                                                                        </Card>
+                                                                    </div>
+                                                                )}
+                                                            {v?.programmaticRemediation &&
+                                                                v
+                                                                    ?.programmaticRemediation
+                                                                    .length >
+                                                                    0 && (
+                                                                    <div className="group relative flex justify-center">
+                                                                        <CodeBracketIcon className="text-kaytu-500 w-5" />
+                                                                        <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                                                                            <Text>
+                                                                                Programmatic
+                                                                            </Text>
+                                                                        </Card>
+                                                                    </div>
+                                                                )}
+                                                            {v?.guardrailRemediation &&
+                                                                v
+                                                                    ?.guardrailRemediation
+                                                                    .length >
+                                                                    0 && (
+                                                                    <div className="group relative flex justify-center">
+                                                                        <Cog8ToothIcon className="text-kaytu-500 w-5" />
+                                                                        <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                                                                            <Text>
+                                                                                Guard
+                                                                                rail
+                                                                            </Text>
+                                                                        </Card>
                                                                     </div>
                                                                 )}
                                                         </Flex>

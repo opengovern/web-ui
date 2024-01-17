@@ -311,7 +311,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     )}
                                             </AccordionHeader>
                                             <AccordionBody className="p-0">
-                                                <motion.div
+                                                {/* <motion.div
                                                     key={item.name}
                                                     initial={{
                                                         translateX: -100,
@@ -322,11 +322,11 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     exit={{
                                                         translateX: -100,
                                                     }}
-                                                >
-                                                    {item.children.map((i) => (
-                                                        <Link
-                                                            to={`/${workspace}/${i.page}`}
-                                                            className={`my-0.5 py-2 flex rounded-md relative 
+                                                > */}
+                                                {item.children.map((i) => (
+                                                    <Link
+                                                        to={`/${workspace}/${i.page}`}
+                                                        className={`my-0.5 py-2 flex rounded-md relative 
                                                     ${
                                                         i.page ===
                                                             currentPage ||
@@ -335,39 +335,39 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
                                                             : 'text-gray-50 hover:bg-kaytu-800'
                                                     }`}
-                                                        >
-                                                            <Text className="ml-[54px] text-inherit">
-                                                                {i.name}
-                                                            </Text>
-                                                            {i.count &&
-                                                                !collapsed && (
-                                                                    <Badge
-                                                                        className="absolute right-2 top-1.5"
-                                                                        style={
-                                                                            badgeStyle
-                                                                        }
-                                                                    >
-                                                                        {i.isLoading ? (
-                                                                            <div className="animate-pulse h-1 w-4 my-2 bg-gray-700 rounded-md" />
-                                                                        ) : (
-                                                                            i.count
-                                                                        )}
-                                                                    </Badge>
-                                                                )}
-                                                            {i.isPreview &&
-                                                                !collapsed && (
-                                                                    <Badge
-                                                                        className="absolute right-2 top-1.5"
-                                                                        style={
-                                                                            badgeStyle
-                                                                        }
-                                                                    >
-                                                                        Preview
-                                                                    </Badge>
-                                                                )}
-                                                        </Link>
-                                                    ))}
-                                                </motion.div>
+                                                    >
+                                                        <Text className="ml-[54px] text-inherit">
+                                                            {i.name}
+                                                        </Text>
+                                                        {i.count &&
+                                                            !collapsed && (
+                                                                <Badge
+                                                                    className="absolute right-2 top-1.5"
+                                                                    style={
+                                                                        badgeStyle
+                                                                    }
+                                                                >
+                                                                    {i.isLoading ? (
+                                                                        <div className="animate-pulse h-1 w-4 my-2 bg-gray-700 rounded-md" />
+                                                                    ) : (
+                                                                        i.count
+                                                                    )}
+                                                                </Badge>
+                                                            )}
+                                                        {i.isPreview &&
+                                                            !collapsed && (
+                                                                <Badge
+                                                                    className="absolute right-2 top-1.5"
+                                                                    style={
+                                                                        badgeStyle
+                                                                    }
+                                                                >
+                                                                    Preview
+                                                                </Badge>
+                                                            )}
+                                                    </Link>
+                                                ))}
+                                                {/* </motion.div> */}
                                             </AccordionBody>
                                         </Accordion>
                                     ) : item.children && collapsed ? (

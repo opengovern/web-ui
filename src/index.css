@@ -9,8 +9,8 @@
     }
     /* Hide scrollbar for IE, Edge and Firefox */
     .no-scrollbar {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
     }
 }
 
@@ -172,6 +172,10 @@ samp {
 
 .dark pre {
     color: #cccccc;
+}
+
+.dark pre .operator {
+    color: #000;
 }
 
 .compliance-fix span {
