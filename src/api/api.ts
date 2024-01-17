@@ -802,6 +802,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControl {
     enabled?: boolean
     /** @example "Multi-factor authentication adds an additional layer of security by requiring users to enter a code from a mobile device or phone in addition to their username and password when signing into Azure." */
     explanation?: string
+    /** @example "To enable multi-factor authentication for a user, run the following command..." */
+    guardrailRemediation?: string
     /** @example "azure_cis_v140_1_1" */
     id?: string
     /** @example true */
@@ -812,6 +814,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControl {
     manualVerification?: boolean
     /** @example "Non-compliance to this control could result in several costs including..." */
     nonComplianceCost?: string
+    /** @example "To enable multi-factor authentication for a user, run the following command..." */
+    programmaticRemediation?: string
     query?: GithubComKaytuIoKaytuEnginePkgComplianceApiQuery
     /** @example "low" */
     severity?: TypesFindingSeverity
