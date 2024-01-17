@@ -136,11 +136,11 @@ export default function FindingDetail({
                                     <Flex
                                         flexDirection="col"
                                         alignItems="start"
-                                        className="w-fit gap-1"
+                                        className="w-fit min-w-[170px] gap-2"
                                     >
                                         {finding?.parentBenchmarks?.map(
                                             (bm) => (
-                                                <Flex className="gap-1 w-fit">
+                                                <Flex className="gap-2 w-fit">
                                                     <div className="h-1 w-1 rounded-full bg-black" />
                                                     <Text className="text-gray-800">
                                                         {bm}
