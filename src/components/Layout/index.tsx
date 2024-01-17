@@ -1,3 +1,4 @@
+import { withAuthenticationRequired } from '@auth0/auth0-react'
 import { Flex } from '@tremor/react'
 import { ReactNode, UIEvent } from 'react'
 import Footer from './Footer'
@@ -10,6 +11,14 @@ type IProps = {
     scrollRef?: any
 }
 
+function SideBar2() {
+    const url = window.location.pathname.split('/')
+    const current = `${url[2]}${url[3] ? `/${url[3]}` : ''}`
+    const workspace = url[1]
+
+    return <Sidebar workspace={workspace} currentPage={current} />
+}
+
 export default function Layout({ children, onScroll, scrollRef }: IProps) {
     const url = window.location.pathname.split('/')
     const current = `${url[2]}${url[3] ? `/${url[3]}` : ''}`
@@ -19,11 +28,16 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
         workspace !== 'billing' &&
         workspace !== 'requestdemo'
 
+    const Component = withAuthenticationRequired(SideBar2, {
+        // eslint-disable-next-line react/no-unstable-nested-components
+        onRedirecting: () => {
+            return <div />
+        },
+    })
+
     return (
         <Flex className="h-screen overflow-hidden">
-            {showSidebar && (
-                <Sidebar workspace={workspace} currentPage={current} />
-            )}
+            {showSidebar && <Component />}
             <div className="z-10 w-full h-full relative">
                 <Notification />
                 <Flex
