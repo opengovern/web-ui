@@ -30,8 +30,8 @@ const navList = [
         ],
     },
     {
-        title: 'Governance',
-        description: 'Audit cloud configurations against benchmarks',
+        title: 'Security governance',
+        description: 'Audit cloud configurations against benchmarks.',
         icon: ShieldCheckIcon,
         children: [
             { name: 'Compliance benchmarks', link: '/:ws/compliance' },
@@ -71,7 +71,7 @@ export default function QuickNav() {
                         >
                             <Flex justifyContent="start" className="gap-2 mb-2">
                                 <Icon icon={nav.icon} className="p-0" />
-                                <Title className="text-gray-800">
+                                <Title className="text-gray-800 line-clamp-1">
                                     {nav.title}
                                 </Title>
                             </Flex>
