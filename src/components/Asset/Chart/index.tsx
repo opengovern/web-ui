@@ -64,6 +64,7 @@ export function AssetChart({
 
     const theTrend = trendChart(trend, aggregation, granularity)
     const trendStacked = buildTrend(trend, aggregation, granularity, 5)
+
     const visualMap = generateVisualMap(theTrend.flag, theTrend.label)
     useEffect(() => {
         setSelectedDatapoint(undefined)

@@ -17,6 +17,7 @@ import {
 } from '../../../components/Spend/Chart/Selectors'
 import TopHeader from '../../../components/Layout/Header'
 import {
+    GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCountStackedItem,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
@@ -24,6 +25,62 @@ import {
 } from '../../../api/api'
 import { topAccounts, topServices } from '..'
 import { AssetChart } from '../../../components/Asset/Chart'
+
+export const accountTrend = (
+    responseChart: GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow[],
+    chartLayout: ChartLayout
+) => {
+    const o = responseChart
+        ?.flatMap((item) =>
+            Object.entries(item.resourceCount || {}).map((entry) => {
+                return {
+                    accountID: item.dimensionId || '',
+                    accountName: item.dimensionName,
+                    connector: item.connector,
+                    date: entry[0],
+                    count: entry[1],
+                }
+            })
+        )
+        .reduce<
+            GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[]
+        >((prev, curr) => {
+            const stacked = {
+                count: curr.count,
+                metricID:
+                    chartLayout === 'accounts'
+                        ? curr.accountID
+                        : curr.connector,
+                metricName:
+                    chartLayout === 'accounts'
+                        ? curr.accountName
+                        : curr.connector,
+            }
+            const exists = prev.filter((p) => p.date === curr.date).length > 0
+            if (exists) {
+                return prev.map((p) => {
+                    if (p.date === curr.date) {
+                        return {
+                            count: (p.count || 0) + curr.count,
+                            countStacked: [...(p.countStacked || []), stacked],
+                            date: curr.date,
+                        }
+                    }
+                    return p
+                })
+            }
+            return [
+                ...prev,
+                {
+                    count: curr.count,
+                    countStacked: [stacked],
+                    date: curr.date,
+                },
+            ]
+        }, [])
+
+    return o
+}
 
 export const topCategories = (
     input:
@@ -169,17 +226,17 @@ export function AssetOverview() {
     })
 
     const {
-        response: serviceCostResponse,
-        isLoading: serviceCostLoading,
-        error: serviceCostErr,
-        sendNow: serviceCostRefresh,
+        response: serviceResponse,
+        isLoading: serviceLoading,
+        error: serviceErr,
+        sendNow: serviceRefresh,
     } = useInventoryApiV2AnalyticsMetricList(query)
 
     const {
-        response: servicePrevCostResponse,
-        isLoading: servicePrevCostLoading,
-        error: servicePrevCostErr,
-        sendNow: serviceCostPrevRefresh,
+        response: servicePrevResponse,
+        isLoading: servicePrevLoading,
+        error: servicePrevErr,
+        sendNow: servicePrevRefresh,
     } = useInventoryApiV2AnalyticsMetricList(prevQuery)
 
     const {
@@ -223,7 +280,7 @@ export function AssetOverview() {
             return trendResponse || []
         }
         if (chartLayout === 'accounts' || chartLayout === 'provider') {
-            // return accountTrend(responseChart || [], chartLayout) || []
+            return accountTrend(responseChart || [], chartLayout) || []
         }
         if (chartLayout === 'categories') {
             return categoryTrend(trendResponse || [])
@@ -240,8 +297,8 @@ export function AssetOverview() {
                         title="Total resources"
                         timeRange={activeTimeRange}
                         timeRangePrev={prevTimeRange}
-                        total={serviceCostResponse?.total_count || 0}
-                        totalPrev={servicePrevCostResponse?.total_count || 0}
+                        total={serviceResponse?.total_count || 0}
+                        totalPrev={servicePrevResponse?.total_count || 0}
                         chartLayout={chartLayout}
                         setChartLayout={setChartLayout}
                         validChartLayouts={[
@@ -252,19 +309,17 @@ export function AssetOverview() {
                             'accounts',
                         ]}
                         isLoading={
-                            trendLoading ||
-                            serviceCostLoading ||
-                            servicePrevCostLoading
+                            trendLoading || serviceLoading || servicePrevLoading
                         }
                         error={toErrorMessage(
                             trendError,
-                            serviceCostErr,
-                            servicePrevCostErr
+                            serviceErr,
+                            servicePrevErr
                         )}
                         onRefresh={() => {
                             trendRefresh()
-                            serviceCostPrevRefresh()
-                            serviceCostRefresh()
+                            servicePrevRefresh()
+                            serviceRefresh()
                         }}
                         onGranularityChanged={setGranularity}
                     />
@@ -303,13 +358,13 @@ export function AssetOverview() {
                         title="Top Metrics"
                         keyColumnTitle="Mertic Names"
                         valueColumnTitle="Count"
-                        loading={serviceCostLoading}
-                        items={topServices(serviceCostResponse)}
+                        loading={serviceLoading}
+                        items={topServices(serviceResponse)}
                         url="metrics"
                         type="service"
                         linkPrefix="metrics/"
-                        error={getErrorMessage(serviceCostErr)}
-                        onRefresh={serviceCostRefresh}
+                        error={getErrorMessage(serviceErr)}
+                        onRefresh={serviceRefresh}
                         // isClickable={false}
                     />
                 </Col>
