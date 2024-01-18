@@ -19,7 +19,6 @@ import SingleSpend from '../pages/Spend/Single'
 import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
 import InsightDetails from '../pages/Insights/Details'
 import InsightList from '../pages/Insights/InsightList'
-import AssetDetails from '../pages/Assets/Details'
 import Rules from '../pages/Automation/Rules'
 import Alerts from '../pages/Automation/Alerts'
 import SingleComplianceConnection from '../pages/Governance/Compliance/BenchmarkSummary/SingleConnection'
@@ -36,6 +35,7 @@ import { SpendAccounts } from '../pages/Spend/Account'
 import Layout from '../components/Layout'
 import RequestDemo from '../pages/RequestDemo'
 import AssetAccounts from '../pages/Assets/Account'
+import AssetMetrics from '../pages/Assets/Metric'
 
 const authRoutes = [
     {
@@ -107,7 +107,7 @@ const authRoutes = [
     {
         key: 'assets metric detail',
         path: '/:ws/assets/metrics',
-        component: AssetDetails,
+        component: AssetMetrics,
     },
     {
         key: 'assets single 2',
@@ -289,11 +289,11 @@ const authRoutes = [
         path: '/:ws/resource-collection/:resourceId/:id/:connection',
         component: SingleComplianceConnection,
     },
-    {
-        key: 'resource collection assets metrics',
-        path: '/:ws/resource-collection/:resourceId/assets-details',
-        component: AssetDetails,
-    },
+    // {
+    //     key: 'resource collection assets metrics',
+    //     path: '/:ws/resource-collection/:resourceId/assets-details',
+    //     component: AssetDetails,
+    // },
     {
         key: 'resource collection assets single 2',
         path: '/:ws/resource-collection/:resourceId/assets-details/:id',

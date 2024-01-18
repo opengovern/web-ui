@@ -19,7 +19,7 @@ import { badgeDelta } from '../../../../utilities/deltaType'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../api/integration.gen'
 import { MSort } from '../../../Spend/Account/AccountTable'
 import AdvancedTable from '../../../../components/AdvancedTable'
-import { options } from '../../Details/Tabs/Metrics'
+import { options } from '../../Metric/Table'
 
 interface IAccountTable {
     timeRange: { start: Dayjs; end: Dayjs }

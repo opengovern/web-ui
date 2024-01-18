@@ -28,7 +28,6 @@ import {
 } from '../../../../api/inventory.gen'
 import { notificationAtom } from '../../../../store'
 import Table from '../../../../components/Table'
-import { defaultColumns, rowGenerator } from '../../Details/Tabs/Metrics'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../api/integration.gen'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Spinner from '../../../../components/Spinner'
@@ -38,6 +37,7 @@ import { pieData, resourceTrendChart } from '../../index'
 import { checkGranularity } from '../../../../utilities/dateComparator'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import Trends from '../../../../components/Trends'
+import { defaultColumns, rowGenerator } from '../../Metric/Table'
 
 const options: GridOptions = {
     enableGroupEdit: true,

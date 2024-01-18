@@ -1,18 +1,25 @@
-import { GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { Dayjs } from 'dayjs'
+import { GridOptions, ICellRendererParams } from 'ag-grid-community'
+import {
+    ArrowTrendingUpIcon,
+    CircleStackIcon,
+    CloudIcon,
+    ListBulletIcon,
+} from '@heroicons/react/24/outline'
+import { useEffect, useState } from 'react'
+import { useSetAtom } from 'jotai/index'
 import { useNavigate } from 'react-router-dom'
-import { useSetAtom } from 'jotai'
-import Table, { IColumn } from '../../../../../components/Table'
-import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../../api/api'
-import { badgeDelta } from '../../../../../utilities/deltaType'
-import { IFilter, notificationAtom } from '../../../../../store'
-import { useInventoryApiV2AnalyticsMetricList } from '../../../../../api/inventory.gen'
+import { IFilter, notificationAtom } from '../../../../store'
+import { IColumn } from '../../../../components/Table'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../api/api'
+import { badgeDelta } from '../../../../utilities/deltaType'
+import { useInventoryApiV2AnalyticsMetricList } from '../../../../api/inventory.gen'
+import { MSort } from '../../../Spend/Account/AccountTable'
+import AdvancedTable from '../../../../components/AdvancedTable'
 
-interface IResources {
-    activeTimeRange: { start: Dayjs; end: Dayjs }
+interface IMetricTable {
+    timeRange: { start: Dayjs; end: Dayjs }
     connections: IFilter
-    isSummary?: boolean
-    resourceId?: string | undefined
 }
 
 export const rowGenerator = (data: any) => {
@@ -106,7 +113,7 @@ export const defaultColumns: IColumn<any, any>[] = [
         aggFunc: 'sum',
         sortable: true,
         type: 'number',
-        hide: true,
+        hide: false,
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) =>
@@ -137,14 +144,68 @@ export const options: GridOptions = {
     },
 }
 
-export default function Metrics({
-    activeTimeRange,
-    connections,
-    isSummary = false,
-    resourceId,
-}: IResources) {
+export default function MetricTable({ timeRange, connections }: IMetricTable) {
     const navigate = useNavigate()
     const setNotification = useSetAtom(notificationAtom)
+
+    const [manualGrouping, onManualGrouping] = useState<string>('none')
+    const [manualTableSort, onManualSortChange] = useState<MSort>({
+        sortCol: 'none',
+        sortType: null,
+    })
+    const [tab, setTab] = useState(0)
+    const [tableKey, setTableKey] = useState('')
+
+    const filterTabs = [
+        {
+            type: 0,
+            icon: CircleStackIcon,
+            name: 'Sort by Resource Count',
+            function: () => {
+                onManualSortChange({
+                    sortCol: 'resourceCount',
+                    sortType: 'desc',
+                })
+                onManualGrouping('none')
+            },
+        },
+        {
+            type: 1,
+            icon: ListBulletIcon,
+            name: 'Sort by Change',
+            function: () => {
+                onManualSortChange({
+                    sortCol: 'change_delta',
+                    sortType: 'desc',
+                })
+                onManualGrouping('none')
+            },
+        },
+        {
+            type: 2,
+            icon: ArrowTrendingUpIcon,
+            name: 'Sort by Account Name',
+            function: () => {
+                onManualSortChange({
+                    sortCol: 'providerConnectionName',
+                    sortType: 'desc',
+                })
+                onManualGrouping('none')
+            },
+        },
+        {
+            type: 3,
+            icon: CloudIcon,
+            name: 'Group by Provider',
+            function: () => {
+                onManualGrouping('connector')
+                onManualSortChange({
+                    sortCol: 'none',
+                    sortType: null,
+                })
+            },
+        },
+    ]
 
     const query = {
         ...(connections.provider && {
@@ -156,14 +217,14 @@ export default function Metrics({
         ...(connections.connectionGroup && {
             connectionGroup: connections.connectionGroup,
         }),
-        ...(resourceId && {
-            resourceCollection: [resourceId],
+        // ...(resourceId && {
+        //     resourceCollection: [resourceId],
+        // }),
+        ...(timeRange.start && {
+            startTime: timeRange.start.unix(),
         }),
-        ...(activeTimeRange.start && {
-            startTime: activeTimeRange.start.unix(),
-        }),
-        ...(activeTimeRange.end && {
-            endTime: activeTimeRange.end.unix(),
+        ...(timeRange.end && {
+            endTime: timeRange.end.unix(),
         }),
         pageSize: 1000,
         needCost: false,
@@ -171,27 +232,17 @@ export default function Metrics({
     const { response: resources, isLoading: resourcesLoading } =
         useInventoryApiV2AnalyticsMetricList(query)
 
-    const columns: IColumn<any, any>[] = [
-        {
-            field: 'tags.category',
-            enableRowGroup: true,
-            headerName: 'Category',
-            resizable: true,
-            sortable: true,
-            filter: true,
-            type: 'string',
-            hide: false,
-            rowGroup: isSummary,
-        },
-        ...defaultColumns,
-    ]
+    useEffect(() => {
+        setTableKey(Math.random().toString(16).slice(2, 8))
+    }, [manualGrouping, timeRange, resources])
 
     return (
-        <Table
+        <AdvancedTable
+            key={`metric_${tableKey}`}
+            id="asset_metric_table"
             title="Metric list"
-            id={isSummary ? 'asset_summary_table' : 'asset_resource_table'}
-            columns={columns}
             downloadable
+            columns={defaultColumns}
             rowData={rowGenerator(resources?.metrics).sort((a, b) => {
                 if (a.category < b.category) {
                     return -1
@@ -201,6 +252,11 @@ export default function Metrics({
                 }
                 return 0
             })}
+            tabIdx={tab}
+            setTabIdx={setTab}
+            manualSort={manualTableSort}
+            manualGrouping={manualGrouping}
+            filterTabs={filterTabs}
             loading={resourcesLoading}
             onRowClicked={(event) => {
                 if (event.data) {
