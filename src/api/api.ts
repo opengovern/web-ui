@@ -1488,6 +1488,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow {
+    connector?: SourceType
     /** @example "compute" */
     dimensionId?: string
     /** @example "Compute" */
@@ -1704,6 +1705,13 @@ export enum GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionStatus {
     ResourceCollectionStatusInactive = 'inactive',
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCountStackedItem {
+    category?: string[]
+    count?: number
+    metricID?: string
+    metricName?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType {
     /** List supported steampipe Attributes (columns) for this resource type - Metadata (GET only) */
     attributes?: string[]
@@ -1771,6 +1779,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendData
      * @example 100
      */
     count?: number
+    countStacked?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCountStackedItem[]
     /** @format date-time */
     date?: string
     totalConnectionCount?: number
