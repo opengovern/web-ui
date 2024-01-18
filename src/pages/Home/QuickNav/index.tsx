@@ -15,8 +15,11 @@ const navList = [
         icon: CubeIcon,
         children: [
             { name: 'Overview', link: '/:ws/assets' },
-            { name: 'Asset metrics', link: '/:ws/assets/metrics' },
-            { name: 'Cloud account details', link: '/:ws/assets/accounts' },
+            { name: 'Asset metrics', link: '/:ws/asset-metrics' },
+            {
+                name: 'Cloud account details',
+                link: '/:ws/asset-cloud-accounts',
+            },
         ],
     },
     {

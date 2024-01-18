@@ -1,4 +1,3 @@
-import { withAuthenticationRequired } from '@auth0/auth0-react'
 import { Flex } from '@tremor/react'
 import { ReactNode, UIEvent } from 'react'
 import Footer from './Footer'
@@ -13,7 +12,7 @@ type IProps = {
 
 export default function Layout({ children, onScroll, scrollRef }: IProps) {
     const url = window.location.pathname.split('/')
-    const current = `${url[2]}${url[3] ? `/${url[3]}` : ''}`
+    const current = url[2]
     const workspace = url[1]
     const showSidebar =
         workspace !== 'workspaces' &&

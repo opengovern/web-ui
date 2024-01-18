@@ -1,21 +1,29 @@
-import { useNavigate } from 'react-router-dom'
-import { useAtomValue, useSetAtom } from 'jotai'
 import { Dayjs } from 'dayjs'
+import { useNavigate } from 'react-router-dom'
+import { useAtomValue, useSetAtom } from 'jotai/index'
+import { useEffect, useState } from 'react'
+import {
+    ArrowTrendingUpIcon,
+    CircleStackIcon,
+    CloudIcon,
+    ListBulletIcon,
+} from '@heroicons/react/24/outline'
 import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
-import Table, { IColumn } from '../../../../../components/Table'
-import { IFilter, isDemoAtom, notificationAtom } from '../../../../../store'
-import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../../api/integration.gen'
-import { options } from '../Metrics'
+import { IFilter, isDemoAtom, notificationAtom } from '../../../../store'
+import { IColumn } from '../../../../components/Table'
 import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
-} from '../../../../../api/api'
-import { badgeDelta } from '../../../../../utilities/deltaType'
+} from '../../../../api/api'
+import { badgeDelta } from '../../../../utilities/deltaType'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../api/integration.gen'
+import { MSort } from '../../../Spend/Account/AccountTable'
+import AdvancedTable from '../../../../components/AdvancedTable'
+import { options } from '../../Metric/Table'
 
-interface IConnections {
-    activeTimeRange: { start: Dayjs; end: Dayjs }
+interface IAccountTable {
+    timeRange: { start: Dayjs; end: Dayjs }
     connections: IFilter
-    resourceId?: string | undefined
 }
 
 export const cloudAccountColumns = (isDemo: boolean) => {
@@ -91,7 +99,7 @@ export const cloudAccountColumns = (isDemo: boolean) => {
             aggFunc: 'sum',
             sortable: true,
             type: 'number',
-            hide: true,
+            hide: false,
             cellRenderer: (
                 params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
             ) =>
@@ -147,15 +155,72 @@ const rowGenerator = (
     return rows
 }
 
-export default function CloudAccounts({
-    activeTimeRange,
+export default function AccountTable({
+    timeRange,
     connections,
-    resourceId,
-}: IConnections) {
+}: IAccountTable) {
     const navigate = useNavigate()
-
     const setNotification = useSetAtom(notificationAtom)
     const isDemo = useAtomValue(isDemoAtom)
+
+    const [manualGrouping, onManualGrouping] = useState<string>('none')
+    const [manualTableSort, onManualSortChange] = useState<MSort>({
+        sortCol: 'none',
+        sortType: null,
+    })
+    const [tab, setTab] = useState(0)
+    const [tableKey, setTableKey] = useState('')
+
+    const filterTabs = [
+        {
+            type: 0,
+            icon: CircleStackIcon,
+            name: 'Sort by Resource Count',
+            function: () => {
+                onManualSortChange({
+                    sortCol: 'resourceCount',
+                    sortType: 'desc',
+                })
+                onManualGrouping('none')
+            },
+        },
+        {
+            type: 1,
+            icon: ListBulletIcon,
+            name: 'Sort by Change',
+            function: () => {
+                onManualSortChange({
+                    sortCol: 'change_delta',
+                    sortType: 'desc',
+                })
+                onManualGrouping('none')
+            },
+        },
+        {
+            type: 2,
+            icon: ArrowTrendingUpIcon,
+            name: 'Sort by Account Name',
+            function: () => {
+                onManualSortChange({
+                    sortCol: 'providerConnectionName',
+                    sortType: 'desc',
+                })
+                onManualGrouping('none')
+            },
+        },
+        {
+            type: 3,
+            icon: CloudIcon,
+            name: 'Group by Provider',
+            function: () => {
+                onManualGrouping('connector')
+                onManualSortChange({
+                    sortCol: 'none',
+                    sortType: null,
+                })
+            },
+        },
+    ]
 
     const query = {
         ...(connections.provider && {
@@ -167,14 +232,14 @@ export default function CloudAccounts({
         ...(connections.connectionGroup && {
             connectionGroup: connections.connectionGroup,
         }),
-        ...(resourceId && {
-            resourceCollection: [resourceId],
+        // ...(resourceId && {
+        //     resourceCollection: [resourceId],
+        // }),
+        ...(timeRange.start && {
+            startTime: timeRange.start.unix(),
         }),
-        ...(activeTimeRange.start && {
-            startTime: activeTimeRange.start.unix(),
-        }),
-        ...(activeTimeRange.end && {
-            endTime: activeTimeRange.end.unix(),
+        ...(timeRange.end && {
+            endTime: timeRange.end.unix(),
         }),
         pageSize: 5000,
         needCost: false,
@@ -183,12 +248,17 @@ export default function CloudAccounts({
     const { response: accounts, isLoading: isAccountsLoading } =
         useIntegrationApiV1ConnectionsSummariesList(query)
 
+    useEffect(() => {
+        setTableKey(Math.random().toString(16).slice(2, 8))
+    }, [manualGrouping, timeRange, accounts])
+
     return (
-        <Table
-            title="Cloud account list"
+        <AdvancedTable
+            key={`account_${tableKey}`}
             id="asset_connection_table"
-            columns={cloudAccountColumns(isDemo)}
+            title="Cloud account list"
             downloadable
+            columns={cloudAccountColumns(isDemo)}
             rowData={rowGenerator(accounts)
                 ?.sort(
                     (a, b) => (b.resourceCount || 0) - (a.resourceCount || 0)
@@ -199,9 +269,13 @@ export default function CloudAccounts({
                         acc.lifecycleState === 'IN_PROGRESS'
                     )
                 })}
-            loading={isAccountsLoading}
+            tabIdx={tab}
+            setTabIdx={setTab}
+            manualSort={manualTableSort}
+            manualGrouping={manualGrouping}
+            filterTabs={filterTabs}
             onRowClicked={(event) => {
-                if (event.data) {
+                if (event.data.id) {
                     if (event.data.lifecycleState === 'ONBOARD') {
                         navigate(`account_${event.data.id}`)
                     } else {
@@ -212,6 +286,7 @@ export default function CloudAccounts({
                     }
                 }
             }}
+            loading={isAccountsLoading}
             onGridReady={(event) => {
                 if (isAccountsLoading) {
                     event.api.showLoadingOverlay()

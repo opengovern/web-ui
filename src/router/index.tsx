@@ -19,7 +19,6 @@ import SingleSpend from '../pages/Spend/Single'
 import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
 import InsightDetails from '../pages/Insights/Details'
 import InsightList from '../pages/Insights/InsightList'
-import AssetDetails from '../pages/Assets/Details'
 import Rules from '../pages/Automation/Rules'
 import Alerts from '../pages/Automation/Alerts'
 import SingleComplianceConnection from '../pages/Governance/Compliance/BenchmarkSummary/SingleConnection'
@@ -35,6 +34,8 @@ import { SpendMetrics } from '../pages/Spend/Metric'
 import { SpendAccounts } from '../pages/Spend/Account'
 import Layout from '../components/Layout'
 import RequestDemo from '../pages/RequestDemo'
+import AssetAccounts from '../pages/Assets/Account'
+import AssetMetrics from '../pages/Assets/Metric'
 
 const authRoutes = [
     {
@@ -95,27 +96,27 @@ const authRoutes = [
     },
     {
         key: 'assets single metric',
-        path: '/:ws/assets/accounts/:id/:metric',
+        path: '/:ws/asset-cloud-account/:id/:metric',
         component: Single,
     },
     {
         key: 'assets account detail',
-        path: '/:ws/assets/accounts',
-        component: AssetDetails,
+        path: '/:ws/asset-cloud-accounts',
+        component: AssetAccounts,
     },
     {
         key: 'assets metric detail',
-        path: '/:ws/assets/metrics',
-        component: AssetDetails,
+        path: '/:ws/asset-metrics',
+        component: AssetMetrics,
     },
     {
         key: 'assets single 2',
-        path: '/:ws/assets/metrics/:id',
+        path: '/:ws/asset-metrics/:id',
         component: Single,
     },
     {
         key: 'assets single metric 2',
-        path: '/:ws/assets/metrics/:id/:metric',
+        path: '/:ws/asset-metrics/:id/:metric',
         component: Single,
     },
     {
@@ -288,11 +289,11 @@ const authRoutes = [
         path: '/:ws/resource-collection/:resourceId/:id/:connection',
         component: SingleComplianceConnection,
     },
-    {
-        key: 'resource collection assets metrics',
-        path: '/:ws/resource-collection/:resourceId/assets-details',
-        component: AssetDetails,
-    },
+    // {
+    //     key: 'resource collection assets metrics',
+    //     path: '/:ws/resource-collection/:resourceId/assets-details',
+    //     component: AssetDetails,
+    // },
     {
         key: 'resource collection assets single 2',
         path: '/:ws/resource-collection/:resourceId/assets-details/:id',

@@ -13,7 +13,7 @@ import AdvancedTable, { IColumn } from '../../../components/AdvancedTable'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import { renderText } from '../../../components/Layout/Header/DateRangePicker'
 
-type MSort = {
+export type MSort = {
     sortCol: string
     sortType: 'asc' | 'desc' | null
 }
