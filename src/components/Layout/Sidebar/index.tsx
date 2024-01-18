@@ -25,7 +25,6 @@ import {
 import { useAtom, useAtomValue } from 'jotai'
 import { Popover, Transition } from '@headlessui/react'
 import { Fragment, useEffect } from 'react'
-import { AnimatePresence } from 'framer-motion'
 import { useAuth0 } from '@auth0/auth0-react'
 import { previewAtom, sideBarCollapsedAtom } from '../../../store'
 import { KaytuIcon, KaytuIconBig } from '../../../icons/icons'
@@ -98,7 +97,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         },
         {
             name: 'Assets',
-            page: ['assets', 'assets-detail-account', 'assets-detail-metric'],
+            page: ['assets', 'asset-cloud-accounts', 'asset-metrics'],
             icon: CubeIcon,
             children: [
                 {
@@ -108,16 +107,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 },
                 {
                     name: 'Cloud Accounts',
-                    page: 'assets/accounts',
-                    selected: 'assets-detail-account',
+                    page: 'asset-cloud-accounts',
                     isPreview: false,
                     isLoading: assetsIsLoading,
                     count: numericDisplay(assetCount?.connectionCount) || 0,
                 },
                 {
                     name: 'Metrics',
-                    page: 'assets/metrics',
-                    selected: 'assets-detail-metric',
+                    page: 'asset-metrics',
                     isPreview: false,
                     isLoading: assetsIsLoading,
                     count: numericDisplay(assetCount?.metricCount) || 0,
@@ -138,7 +135,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 {
                     name: 'Cloud Accounts',
                     page: 'spend/accounts',
-                    selected: 'spend-detail-account',
                     isPreview: false,
                     isLoading: spendCountIsLoading,
                     count: numericDisplay(spendCount?.connectionCount) || 0,
@@ -146,7 +142,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 {
                     name: 'Metrics',
                     page: 'spend/metrics',
-                    selected: 'spend-detail-metric',
                     isPreview: false,
                     isLoading: spendCountIsLoading,
                     count: numericDisplay(spendCount?.metricCount) || 0,
@@ -162,13 +157,13 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 {
                     name: 'Compliance',
                     page: 'compliance',
-                    selected: 'compliance',
                     isPreview: false,
+                    isLoading: false,
+                    count: undefined,
                 },
                 {
                     name: 'Findings',
                     page: 'findings',
-                    selected: 'findings',
                     isPreview: false,
                     isLoading: findingsIsLoading,
                     count: numericDisplay(findingsCount?.count) || 0,
@@ -204,12 +199,16 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     page: 'rules',
                     selected: 'rules',
                     isPreview: false,
+                    isLoading: false,
+                    count: undefined,
                 },
                 {
                     name: 'Alerts',
                     page: 'alerts',
                     selected: 'alerts',
                     isPreview: false,
+                    isLoading: false,
+                    count: undefined,
                 },
             ],
             isPreview: true,
@@ -354,10 +353,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     to={`/${workspace}/${i.page}`}
                                                     className={`my-0.5 py-2 flex rounded-md relative 
                                                     ${
-                                                        i.page ===
-                                                            currentPage ||
-                                                        i.selected ===
-                                                            currentPage
+                                                        i.page === currentPage
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
                                                             : 'text-gray-50 hover:bg-kaytu-800'
                                                     }`}
@@ -450,10 +446,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             to={`/${workspace}/${i.page}`}
                                                             className={`my-0.5 py-2 px-4 flex justify-start rounded-md relative 
                                                     ${
-                                                        i.page ===
-                                                            currentPage ||
-                                                        i.selected ===
-                                                            currentPage
+                                                        i.page === currentPage
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
                                                             : 'text-gray-50 hover:bg-kaytu-800'
                                                     }`}

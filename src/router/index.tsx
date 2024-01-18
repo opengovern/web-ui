@@ -96,27 +96,27 @@ const authRoutes = [
     },
     {
         key: 'assets single metric',
-        path: '/:ws/assets/accounts/:id/:metric',
+        path: '/:ws/asset-cloud-account/:id/:metric',
         component: Single,
     },
     {
         key: 'assets account detail',
-        path: '/:ws/assets/accounts',
+        path: '/:ws/asset-cloud-accounts',
         component: AssetAccounts,
     },
     {
         key: 'assets metric detail',
-        path: '/:ws/assets/metrics',
+        path: '/:ws/asset-metrics',
         component: AssetMetrics,
     },
     {
         key: 'assets single 2',
-        path: '/:ws/assets/metrics/:id',
+        path: '/:ws/asset-metrics/:id',
         component: Single,
     },
     {
         key: 'assets single metric 2',
-        path: '/:ws/assets/metrics/:id/:metric',
+        path: '/:ws/asset-metrics/:id/:metric',
         component: Single,
     },
     {
