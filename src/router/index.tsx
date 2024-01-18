@@ -35,6 +35,7 @@ import { SpendMetrics } from '../pages/Spend/Metric'
 import { SpendAccounts } from '../pages/Spend/Account'
 import Layout from '../components/Layout'
 import RequestDemo from '../pages/RequestDemo'
+import AssetAccounts from '../pages/Assets/Account'
 
 const authRoutes = [
     {
@@ -101,7 +102,7 @@ const authRoutes = [
     {
         key: 'assets account detail',
         path: '/:ws/assets/accounts',
-        component: AssetDetails,
+        component: AssetAccounts,
     },
     {
         key: 'assets metric detail',

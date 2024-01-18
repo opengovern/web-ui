@@ -110,10 +110,10 @@ interface IProps<TData, TValue> {
     loading?: boolean
     fullWidth?: boolean
     fullHeight?: boolean
-    granularityEnabled: boolean
-    setGranularityEnabled: (v: boolean) => void
-    selectedGranularity: 'daily' | 'monthly'
-    onGranularityChange: Dispatch<SetStateAction<'monthly' | 'daily'>>
+    granularityEnabled?: boolean
+    setGranularityEnabled?: (v: boolean) => void
+    selectedGranularity?: 'daily' | 'monthly'
+    onGranularityChange?: Dispatch<SetStateAction<'monthly' | 'daily'>>
     manualSort?: MSort
     manualGrouping?: string
     filterTabs?: FilterTab
@@ -411,12 +411,17 @@ export default function AdvancedTable<TData = any, TValue = any>({
                     alignItems={fullWidth ? 'start' : 'center'}
                     className={`${fullWidth ? '' : 'w-fit'} gap-3`}
                 >
-                    <TableGranularityControl
-                        granularityEnabled={granularityEnabled}
-                        setGranularityEnabled={setGranularityEnabled}
-                        selectedGranularity={selectedGranularity}
-                        onGranularityChange={onGranularityChange}
-                    />
+                    {granularityEnabled &&
+                        setGranularityEnabled &&
+                        selectedGranularity &&
+                        onGranularityChange && (
+                            <TableGranularityControl
+                                granularityEnabled={granularityEnabled}
+                                setGranularityEnabled={setGranularityEnabled}
+                                selectedGranularity={selectedGranularity}
+                                onGranularityChange={onGranularityChange}
+                            />
+                        )}
                     {downloadable && (
                         <Button
                             variant="secondary"

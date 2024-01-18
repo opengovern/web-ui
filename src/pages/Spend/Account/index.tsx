@@ -1,6 +1,6 @@
 import { Col, Grid } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import SingleSpendConnection from '../Single/SingleConnection'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,

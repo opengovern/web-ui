@@ -120,7 +120,7 @@ export const topCategories = (
     return top
 }
 
-const categoryTrend = (
+export const categoryTrend = (
     responseChart: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[]
 ) => {
     return responseChart?.map((item) => {
