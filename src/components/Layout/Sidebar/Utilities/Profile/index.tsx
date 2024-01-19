@@ -5,11 +5,10 @@ import {
     Bars2Icon,
 } from '@heroicons/react/24/outline'
 import { Fragment, useEffect, useState } from 'react'
-import { useAtom } from 'jotai/index'
 import { useNavigate } from 'react-router-dom'
 import { Popover, Transition } from '@headlessui/react'
+import { useAtomValue } from 'jotai'
 import { workspaceAtom } from '../../../../../store'
-import { useWorkspaceApiV1WorkspacesList } from '../../../../../api/workspace.gen'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from '../../../../../api/api'
 import { applyTheme, currentTheme } from '../../../../../utilities/theme'
 import { useAuthApiV1UserPreferencesUpdate } from '../../../../../api/auth.gen'
@@ -19,9 +18,10 @@ interface IProfile {
 }
 
 export default function Profile({ isCollapsed }: IProfile) {
+    const navigate = useNavigate()
     const { user, logout } = useAuth0()
-    const [workspace, setWorkspace] = useAtom(workspaceAtom)
-    const wsName = window.location.pathname.split('/')[1]
+
+    const workspace = useAtomValue(workspaceAtom)
 
     const [index, setIndex] = useState(
         // eslint-disable-next-line no-nested-ternary
@@ -64,39 +64,6 @@ export default function Profile({ isCollapsed }: IProfile) {
                 break
         }
     }, [index])
-
-    const {
-        response: workspaceInfo,
-        isExecuted: workspaceInfoExecuted,
-        sendNow: sendWorkspaceInfo,
-    } = useWorkspaceApiV1WorkspacesList({}, false)
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        if (
-            !workspace.current &&
-            workspace.list.length < 1 &&
-            !workspaceInfoExecuted
-        ) {
-            sendWorkspaceInfo()
-        }
-        if (workspace && wsName) {
-            if (
-                !workspace.current ||
-                workspace.list.length < 1 ||
-                workspace.current.name !== wsName
-            ) {
-                const current = workspaceInfo?.filter(
-                    (ws) => ws.name === wsName
-                )
-
-                setWorkspace({
-                    list: workspaceInfo || [],
-                    current: current ? current[0] : undefined,
-                })
-            }
-        }
-    }, [workspace, workspaceInfo, wsName])
 
     return (
         <Popover className="relative z-50 border-0 w-full">
@@ -182,34 +149,6 @@ export default function Profile({ isCollapsed }: IProfile) {
                             >
                                 <Text className="text-inherit font-semibold">
                                     Logout
-                                </Text>
-                                <ArrowTopRightOnSquareIcon className="w-5 text-gray-400" />
-                            </Flex>
-                        </Flex>
-                        <Flex
-                            flexDirection="col"
-                            alignItems="start"
-                            className="pb-2 mb-1 border-b border-b-gray-700"
-                        >
-                            <Text className="mt-2 mb-1">WORKSPACES</Text>
-                            {workspace.list
-                                .filter((ws) => ws.status === 'PROVISIONED')
-                                .map((ws) => (
-                                    <Flex
-                                        onClick={() => navigate(`/${ws.name}`)}
-                                        className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-kaytu-800"
-                                    >
-                                        <Text className="text-inherit font-semibold">
-                                            {ws.name}
-                                        </Text>
-                                    </Flex>
-                                ))}
-                            <Flex
-                                onClick={() => navigate('/workspaces')}
-                                className="py-2 px-5 text-gray-300 rounded-md cursor-pointer hover:text-gray-50 hover:bg-kaytu-800"
-                            >
-                                <Text className="text-inherit font-semibold">
-                                    Workspace list
                                 </Text>
                                 <ArrowTopRightOnSquareIcon className="w-5 text-gray-400" />
                             </Flex>
