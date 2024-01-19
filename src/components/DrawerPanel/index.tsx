@@ -43,13 +43,13 @@ export default function DrawerPanel({
                                 leaveFrom="translate-x-0"
                                 leaveTo="translate-x-full"
                             >
-                                <Dialog.Panel className="pointer-events-auto relative w-screen max-w-3xl">
+                                <Dialog.Panel className="pointer-events-auto relative w-screen max-w-2xl">
                                     <Flex
                                         flexDirection="col"
                                         justifyContent="start"
-                                        className="h-full w-full bg-white dark:bg-gray-900 py-8 shadow-xl border-l border-l-gray-700"
+                                        className="h-full w-full bg-gray-50 dark:bg-gray-900 py-8 shadow-xl dark:border-l dark:border-l-gray-700"
                                     >
-                                        <Dialog.Title className="absolute top-0 z-10 w-full bg-white dark:bg-gray-900 px-6 border-b dark:border-b-gray-700 pt-4 pb-4">
+                                        <Dialog.Title className="absolute top-0 z-10 w-full bg-gray-50 dark:bg-gray-900 px-6 border-b dark:border-b-gray-700 pt-4 pb-3">
                                             <Flex>
                                                 {typeof title === 'string' ? (
                                                     <Title className="text-lg font-semibold">
