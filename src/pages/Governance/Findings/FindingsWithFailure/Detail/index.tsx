@@ -113,6 +113,9 @@ export default function FindingDetail({
                 </TabList>
                 <TabPanels>
                     <TabPanel>
+                        <Flex className="py-4 border-b border-b-gray-200 dark:border-b-gray-700">
+                            <Title className="font-semibold">Overview</Title>
+                        </Flex>
                         <List>
                             <ListItem className="py-6">
                                 <Text>Findings state</Text>
@@ -130,28 +133,58 @@ export default function FindingDetail({
                                     {dateTimeDisplay(finding?.evaluatedAt)}
                                 </Text>
                             </ListItem>
-                            <ListItem className="py-6">
-                                <Flex alignItems="start">
-                                    <Text>Controls</Text>
-                                    <Flex
-                                        flexDirection="col"
-                                        alignItems="start"
-                                        className="w-fit min-w-[170px] gap-2"
-                                    >
-                                        {finding?.parentBenchmarks?.map(
-                                            (bm) => (
-                                                <Flex className="gap-2 w-fit">
-                                                    <div className="h-1 w-1 rounded-full bg-black" />
-                                                    <Text className="text-gray-800">
-                                                        {bm}
-                                                    </Text>
-                                                </Flex>
-                                            )
-                                        )}
-                                    </Flex>
-                                </Flex>
-                            </ListItem>
                         </List>
+                        <Flex className="py-4 my-4 border-b border-b-gray-200 dark:border-b-gray-700">
+                            <Title className="font-semibold">Control</Title>
+                        </Flex>
+                        {isLoading ? (
+                            <Spinner className="mt-12" />
+                        ) : (
+                            <List>
+                                {response?.controls?.map(
+                                    (control, i) =>
+                                        i < 1 && (
+                                            <ListItem>
+                                                <Flex
+                                                    flexDirection="col"
+                                                    alignItems="start"
+                                                    className="gap-1 w-fit max-w-[80%]"
+                                                >
+                                                    <Text className="text-gray-800 w-full truncate">
+                                                        {control.controlTitle}
+                                                    </Text>
+                                                    <Flex justifyContent="start">
+                                                        {control.conformanceStatus ===
+                                                        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed ? (
+                                                            <Flex className="w-fit gap-1.5">
+                                                                <CheckCircleIcon className="h-4 text-emerald-500" />
+                                                                <Text>
+                                                                    Passed
+                                                                </Text>
+                                                            </Flex>
+                                                        ) : (
+                                                            <Flex className="w-fit gap-1.5">
+                                                                <XCircleIcon className="h-4 text-rose-600" />
+                                                                <Text>
+                                                                    Failed
+                                                                </Text>
+                                                            </Flex>
+                                                        )}
+                                                        <Flex className="border-l border-gray-200 ml-3 pl-3 h-full">
+                                                            <Text className="text-xs">
+                                                                SECTION:
+                                                            </Text>
+                                                        </Flex>
+                                                    </Flex>
+                                                </Flex>
+                                                {severityBadge(
+                                                    control.severity
+                                                )}
+                                            </ListItem>
+                                        )
+                                )}
+                            </List>
+                        )}
                     </TabPanel>
                     <TabPanel>
                         {isLoading ? (
