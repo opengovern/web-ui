@@ -37,6 +37,7 @@ import { useComplianceApiV1FindingsCountList } from '../../../api/compliance.gen
 import { useIntegrationApiV1ConnectionsCountList } from '../../../api/integration.gen'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Workspaces from './Workspaces'
+import AnimatedAccordion from '../../AnimatedAccordion'
 
 const badgeStyle = {
     color: '#fff',
@@ -294,7 +295,91 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                             .map((item) =>
                                 // eslint-disable-next-line no-nested-ternary
                                 item.children && !collapsed ? (
-                                    <Accordion
+                                    <AnimatedAccordion
+                                        defaultOpen={
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            item.children.filter(
+                                                (c: any) =>
+                                                    c.page === currentPage ||
+                                                    c.selected === currentPage
+                                            ).length > 0
+                                        }
+                                        header={
+                                            <div
+                                                className={`w-full text-gray-50 ${
+                                                    collapsed ? 'px-2' : 'px-6'
+                                                } py-2`}
+                                            >
+                                                <Flex
+                                                    justifyContent="start"
+                                                    className="h-full gap-2.5"
+                                                >
+                                                    <item.icon
+                                                        className={`h-5 w-5 stroke-2 ${
+                                                            collapsed &&
+                                                            item.page.includes(
+                                                                currentPage
+                                                            )
+                                                                ? 'text-gray-200'
+                                                                : 'text-gray-400'
+                                                        }`}
+                                                    />
+                                                    <Text className="text-inherit">
+                                                        {item.name}
+                                                    </Text>
+                                                    {item.isPreview &&
+                                                        !collapsed && (
+                                                            <Badge
+                                                                className="absolute right-2 top-1.5"
+                                                                style={
+                                                                    badgeStyle
+                                                                }
+                                                            >
+                                                                Preview
+                                                            </Badge>
+                                                        )}
+                                                </Flex>
+                                            </div>
+                                        }
+                                    >
+                                        {item.children.map((i) => (
+                                            <Link
+                                                to={`/${workspace}/${i.page}`}
+                                                className={`my-0.5 py-2 flex rounded-md relative 
+                                                    ${
+                                                        i.page === currentPage
+                                                            ? 'bg-kaytu-500 text-gray-200 font-semibold'
+                                                            : 'text-gray-50 hover:bg-kaytu-800'
+                                                    }`}
+                                            >
+                                                <Text className="ml-[54px] text-inherit">
+                                                    {i.name}
+                                                </Text>
+                                                {i.count && !collapsed && (
+                                                    <Badge
+                                                        className="absolute right-2 top-1.5"
+                                                        style={badgeStyle}
+                                                    >
+                                                        {i.isLoading ? (
+                                                            <div className="animate-pulse h-1 w-4 my-2 bg-gray-700 rounded-md" />
+                                                        ) : (
+                                                            i.count
+                                                        )}
+                                                    </Badge>
+                                                )}
+                                                {i.isPreview && !collapsed && (
+                                                    <Badge
+                                                        className="absolute right-2 top-1.5"
+                                                        style={badgeStyle}
+                                                    >
+                                                        Preview
+                                                    </Badge>
+                                                )}
+                                            </Link>
+                                        ))}
+                                    </AnimatedAccordion>
+                                ) : /* <Accordion
                                         className="!bg-transparent border-0 w-full min-h-fit"
                                         defaultOpen={
                                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -339,7 +424,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             )}
                                         </AccordionHeader>
                                         <AccordionBody className="p-0">
-                                            {/* <motion.div
+                                            {/!* <motion.div
                                                     key={item.name}
                                                     initial={{
                                                         translateX: -100,
@@ -350,7 +435,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     exit={{
                                                         translateX: -100,
                                                     }}
-                                                > */}
+                                                > *!/}
                                             {item.children.map((i) => (
                                                 <Link
                                                     to={`/${workspace}/${i.page}`}
@@ -389,10 +474,10 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         )}
                                                 </Link>
                                             ))}
-                                            {/* </motion.div> */}
+                                            {/!* </motion.div> *!/}
                                         </AccordionBody>
-                                    </Accordion>
-                                ) : item.children && collapsed ? (
+                                    </Accordion> */
+                                item.children && collapsed ? (
                                     <Popover className="relative z-50 border-0 w-full h-[36px]">
                                         <div className="group relative">
                                             <Popover.Button id={item.name}>
