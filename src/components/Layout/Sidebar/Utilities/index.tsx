@@ -1,9 +1,9 @@
 import { Flex, Text } from '@tremor/react'
 import { Link } from 'react-router-dom'
 import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline'
-import JobsMenu from '../JobsMenu'
-import CLIMenu from '../CLIMenu'
-import Profile from '../Profile'
+import JobsMenu from './JobsMenu'
+import CLIMenu from './CLIMenu'
+import Profile from './Profile'
 
 interface IUtilities {
     isCollapsed: boolean

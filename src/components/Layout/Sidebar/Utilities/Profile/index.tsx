@@ -1,13 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import {
-    Card,
-    Divider,
-    Flex,
-    Tab,
-    TabGroup,
-    TabList,
-    Text,
-} from '@tremor/react'
+import { Card, Flex, Tab, TabGroup, TabList, Text } from '@tremor/react'
 import {
     ArrowTopRightOnSquareIcon,
     Bars2Icon,
@@ -16,11 +8,11 @@ import { Fragment, useEffect, useState } from 'react'
 import { useAtom } from 'jotai/index'
 import { useNavigate } from 'react-router-dom'
 import { Popover, Transition } from '@headlessui/react'
-import { workspaceAtom } from '../../../../store'
-import { useWorkspaceApiV1WorkspacesList } from '../../../../api/workspace.gen'
-import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from '../../../../api/api'
-import { applyTheme, currentTheme } from '../../../../utilities/theme'
-import { useAuthApiV1UserPreferencesUpdate } from '../../../../api/auth.gen'
+import { workspaceAtom } from '../../../../../store'
+import { useWorkspaceApiV1WorkspacesList } from '../../../../../api/workspace.gen'
+import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from '../../../../../api/api'
+import { applyTheme, currentTheme } from '../../../../../utilities/theme'
+import { useAuthApiV1UserPreferencesUpdate } from '../../../../../api/auth.gen'
 
 interface IProfile {
     isCollapsed: boolean
@@ -28,7 +20,6 @@ interface IProfile {
 
 export default function Profile({ isCollapsed }: IProfile) {
     const { user, logout } = useAuth0()
-    const [showInfo, setShowInfo] = useState(false)
     const [workspace, setWorkspace] = useAtom(workspaceAtom)
     const wsName = window.location.pathname.split('/')[1]
 
@@ -40,14 +31,13 @@ export default function Profile({ isCollapsed }: IProfile) {
     const [theme, setTheme] =
         useState<GithubComKaytuIoKaytuEnginePkgAuthApiTheme>(currentTheme())
 
-    const { response, isLoading, isExecuted, error, sendNow } =
-        useAuthApiV1UserPreferencesUpdate(
-            {
-                theme,
-            },
-            {},
-            false
-        )
+    const { sendNow } = useAuthApiV1UserPreferencesUpdate(
+        {
+            theme,
+        },
+        {},
+        false
+    )
 
     useEffect(() => {
         if (isPageLoading) {
@@ -159,7 +149,7 @@ export default function Profile({ isCollapsed }: IProfile) {
                         isCollapsed ? 'left-[57px]' : 'left-[292px]'
                     } bottom-0 z-10`}
                 >
-                    <Card className="bg-kaytu-950 bottom-0 px-4 py-2 w-64 !ring-gray-600">
+                    <Card className="bg-kaytu-950 px-4 py-2 w-64 !ring-gray-600">
                         <Flex
                             flexDirection="col"
                             alignItems="start"

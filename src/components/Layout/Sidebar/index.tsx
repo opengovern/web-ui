@@ -36,6 +36,7 @@ import {
 import { useComplianceApiV1FindingsCountList } from '../../../api/compliance.gen'
 import { useIntegrationApiV1ConnectionsCountList } from '../../../api/integration.gen'
 import { numericDisplay } from '../../../utilities/numericDisplay'
+import Workspaces from './Workspaces'
 
 const badgeStyle = {
     color: '#fff',
@@ -242,9 +243,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             >
                 <Flex
                     justifyContent={collapsed ? 'center' : 'between'}
-                    className={`pb-[17px] pt-[6px] border-b border-b-gray-700 h-fit min-h-fit ${
-                        collapsed ? '' : 'px-5'
-                    }`}
+                    className={`pb-[17px] pt-[6px] ${collapsed ? '' : 'px-5'}`}
                 >
                     {collapsed ? <KaytuIcon /> : <KaytuIconBig />}
                     {!collapsed && (
@@ -258,6 +257,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     )}
                 </Flex>
                 <Flex
+                    justifyContent="center"
+                    className={collapsed ? 'p-0' : 'p-2'}
+                >
+                    <Workspaces isCollapsed={collapsed} />
+                </Flex>
+                <Flex
                     flexDirection="col"
                     justifyContent="between"
                     className="h-full max-h-full"
@@ -269,9 +274,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         style={{ maxHeight: 'calc(100vh - 300px)' }}
                     >
                         {!collapsed && (
-                            <Text className="ml-3 mt-4 mb-2 !text-xs">
-                                OVERVIEW
-                            </Text>
+                            <Text className="ml-3 my-2 !text-xs">OVERVIEW</Text>
                         )}
                         {collapsed && (
                             <ChevronRightIcon

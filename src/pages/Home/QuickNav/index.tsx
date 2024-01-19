@@ -3,6 +3,7 @@ import {
     BanknotesIcon,
     CubeIcon,
     CursorArrowRaysIcon,
+    PuzzlePieceIcon,
     ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
 import { Card, Flex, Grid, Icon, Text, Title } from '@tremor/react'
@@ -45,10 +46,10 @@ const navList = [
         title: 'Integrations',
         description:
             'Connect your cloud environments and tools to Kaytu to gain insights.',
-        icon: ShieldCheckIcon,
+        icon: PuzzlePieceIcon,
         children: [
-            { name: 'AWS accounts', link: '/:ws/compliance' },
-            { name: 'Azure subscriptions', link: '/:ws/findings' },
+            { name: 'AWS accounts', link: '/:ws/integrations/AWS' },
+            { name: 'Azure subscriptions', link: '/:ws/integrations/Azure' },
         ],
     },
     // {
