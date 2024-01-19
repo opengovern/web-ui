@@ -9,7 +9,10 @@ import {
 } from '@heroicons/react/24/outline'
 import { workspaceAtom } from '../../../../store'
 import { useWorkspaceApiV1WorkspacesList } from '../../../../api/workspace.gen'
-import { kebabCaseToLabel } from '../../../../utilities/labelMaker'
+import {
+    capitalizeFirstLetter,
+    kebabCaseToLabel,
+} from '../../../../utilities/labelMaker'
 
 interface IWorkspaces {
     isCollapsed: boolean
@@ -102,8 +105,12 @@ export default function Workspaces({ isCollapsed }: IWorkspaces) {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
             >
-                <Popover.Panel className="absolute top-full z-10 w-full">
-                    <Card className="w-full bg-kaytu-950 p-2 mt-2 !ring-gray-600">
+                <Popover.Panel
+                    className={`absolute z-10 w-full ${
+                        isCollapsed ? 'left-[57px] -top-[4px]' : 'top-full'
+                    }`}
+                >
+                    <Card className="w-full min-w-[256px] bg-kaytu-950 p-2 mt-2 !ring-gray-600">
                         <div className="w-full pb-2 mb-2 border-b border-b-gray-700">
                             <Text className="mb-2 ml-2">WORKSPACES</Text>
                             {workspace.list
@@ -123,7 +130,11 @@ export default function Workspaces({ isCollapsed }: IWorkspaces) {
                                             className="w-6 rounded-md bg-kaytu-800"
                                         >
                                             <Text className="font-semibold !text-base text-orange-500">
-                                                D
+                                                {capitalizeFirstLetter(
+                                                    ws.name && ws.name[0]
+                                                        ? ws.name[0]
+                                                        : 'K'
+                                                )}
                                             </Text>
                                         </Flex>
                                         <Text className="text-inherit font-semibold">
