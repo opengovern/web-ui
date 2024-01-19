@@ -32,6 +32,7 @@ import { useComplianceApiV1BenchmarksControlsDetail } from '../../../api/complia
 import Spinner from '../../../components/Spinner'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import DrawerPanel from '../../../components/DrawerPanel'
+import AnimatedAccordion from '../../../components/AnimatedAccordion'
 
 interface IPolicies {
     id: string | undefined
@@ -185,7 +186,263 @@ export default function Controls({ id, assignments }: IPolicies) {
                 Object.entries(groupBy(treeRows(controls), 'parentName'))?.map(
                     ([name, value]: any[]) => (
                         <Card>
-                            <Accordion
+                            <AnimatedAccordion
+                                header={
+                                    <Flex className="pl-6">
+                                        <Flex>
+                                            <Title className="font-semibold">
+                                                {name}
+                                            </Title>
+                                            {assignments > 0 && (
+                                                <Flex
+                                                    justifyContent="start"
+                                                    className="gap-2"
+                                                    style={{ width: '200px' }}
+                                                >
+                                                    {value?.filter(
+                                                        (c: any) => c.passed
+                                                    ).length ===
+                                                    value?.length ? (
+                                                        <CheckCircleIcon className="w-5 text-emerald-500" />
+                                                    ) : (
+                                                        <XCircleIcon className="w-5 text-rose-600" />
+                                                    )}
+                                                    <Text className="font-semibold whitespace-nowrap">{`Passed controls: ${numberDisplay(
+                                                        value?.filter(
+                                                            (c: any) => c.passed
+                                                        ).length,
+                                                        0
+                                                    )}/${numberDisplay(
+                                                        value?.length,
+                                                        0
+                                                    )} (${Math.floor(
+                                                        // eslint-disable-next-line no-unsafe-optional-chaining
+                                                        (value?.filter(
+                                                            (c: any) => c.passed
+                                                        ).length /
+                                                            (value?.length ||
+                                                                0)) *
+                                                            100
+                                                    )}%)`}</Text>
+                                                </Flex>
+                                            )}
+                                        </Flex>
+                                    </Flex>
+                                }
+                            >
+                                <Table className="max-w-full">
+                                    <TableHead className="max-w-full">
+                                        <TableRow className="max-w-full">
+                                            <TableHeaderCell className="w-24">
+                                                Control
+                                            </TableHeaderCell>
+                                            <TableHeaderCell>
+                                                Title
+                                            </TableHeaderCell>
+                                            <TableHeaderCell className="w-40">
+                                                Remediation
+                                            </TableHeaderCell>
+                                            {assignments > 0 && (
+                                                <TableHeaderCell className="w-48">
+                                                    Passed resources
+                                                </TableHeaderCell>
+                                            )}
+                                            <TableHeaderCell className="w-5" />
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody className="max-w-full">
+                                        {value.map((v: any, i: number) => (
+                                            <TableRow
+                                                className="max-w-full cursor-pointer hover:bg-kaytu-50 dark:hover:bg-gray-900"
+                                                key={v?.id}
+                                            >
+                                                <TableCell
+                                                    className="w-24 min-w-[96px]"
+                                                    onClick={() =>
+                                                        navigate(String(v?.id))
+                                                    }
+                                                >{`${name.substring(
+                                                    0,
+                                                    name.indexOf(' ')
+                                                )}.${i + 1}`}</TableCell>
+                                                <TableCell
+                                                    onClick={() =>
+                                                        navigate(String(v?.id))
+                                                    }
+                                                >
+                                                    <Grid numItems={12}>
+                                                        <Col numColSpan={2}>
+                                                            {severityBadge(
+                                                                v?.severity
+                                                            )}
+                                                        </Col>
+                                                        <Col
+                                                            numColSpan={10}
+                                                            className="-ml-8"
+                                                        >
+                                                            <Text className="truncate">
+                                                                {v?.title}
+                                                            </Text>
+                                                        </Col>
+                                                    </Grid>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Flex
+                                                        justifyContent="start"
+                                                        className="gap-1.5"
+                                                    >
+                                                        {v?.cliRemediation &&
+                                                            v?.cliRemediation
+                                                                .length > 0 && (
+                                                                <div className="group relative flex justify-center">
+                                                                    <CommandLineIcon
+                                                                        className="text-kaytu-500 w-5"
+                                                                        onClick={() => {
+                                                                            setDoc(
+                                                                                v?.cliRemediation
+                                                                            )
+                                                                            setDocTitle(
+                                                                                `Command line (CLI) remediation for '${v?.title}'`
+                                                                            )
+                                                                        }}
+                                                                    />
+                                                                    <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                                                                        <Text>
+                                                                            Command
+                                                                            line
+                                                                            (CLI)
+                                                                        </Text>
+                                                                    </Card>
+                                                                </div>
+                                                            )}
+                                                        {v?.manualRemediation &&
+                                                            v?.manualRemediation
+                                                                .length > 0 && (
+                                                                <div className="group relative flex justify-center">
+                                                                    <BookOpenIcon
+                                                                        className="text-kaytu-500 w-5"
+                                                                        onClick={() => {
+                                                                            setDoc(
+                                                                                v?.manualRemediation
+                                                                            )
+                                                                            setDocTitle(
+                                                                                `Manual remediation for '${v?.title}'`
+                                                                            )
+                                                                        }}
+                                                                    />
+                                                                    <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                                                                        <Text>
+                                                                            Manual
+                                                                        </Text>
+                                                                    </Card>
+                                                                </div>
+                                                            )}
+                                                        {v?.programmaticRemediation &&
+                                                            v
+                                                                ?.programmaticRemediation
+                                                                .length > 0 && (
+                                                                <div className="group relative flex justify-center">
+                                                                    <CodeBracketIcon
+                                                                        className="text-kaytu-500 w-5"
+                                                                        onClick={() => {
+                                                                            setDoc(
+                                                                                v?.programmaticRemediation
+                                                                            )
+                                                                            setDocTitle(
+                                                                                `Programmatic remediation for '${v?.title}'`
+                                                                            )
+                                                                        }}
+                                                                    />
+                                                                    <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                                                                        <Text>
+                                                                            Programmatic
+                                                                        </Text>
+                                                                    </Card>
+                                                                </div>
+                                                            )}
+                                                        {v?.guardrailRemediation &&
+                                                            v
+                                                                ?.guardrailRemediation
+                                                                .length > 0 && (
+                                                                <div className="group relative flex justify-center">
+                                                                    <Cog8ToothIcon
+                                                                        className="text-kaytu-500 w-5"
+                                                                        onClick={() => {
+                                                                            setDoc(
+                                                                                v?.guardrailRemediation
+                                                                            )
+                                                                            setDocTitle(
+                                                                                `Guard rails remediation for '${v?.title}'`
+                                                                            )
+                                                                        }}
+                                                                    />
+                                                                    <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                                                                        <Text>
+                                                                            Guard
+                                                                            rail
+                                                                        </Text>
+                                                                    </Card>
+                                                                </div>
+                                                            )}
+                                                    </Flex>
+                                                </TableCell>
+                                                {assignments > 0 && (
+                                                    <TableCell
+                                                        onClick={() =>
+                                                            navigate(
+                                                                String(v?.id)
+                                                            )
+                                                        }
+                                                    >
+                                                        <Flex
+                                                            justifyContent="start"
+                                                            className="gap-2"
+                                                        >
+                                                            {(v?.totalResourcesCount ||
+                                                                0) -
+                                                                (v?.failedResourcesCount ||
+                                                                    0) ===
+                                                            (v?.totalResourcesCount ||
+                                                                0) ? (
+                                                                <CheckCircleIcon className="w-5 text-emerald-500" />
+                                                            ) : (
+                                                                <XCircleIcon className="w-5 text-rose-600" />
+                                                            )}
+                                                            {`${numberDisplay(
+                                                                (v?.totalResourcesCount ||
+                                                                    0) -
+                                                                    (v?.failedResourcesCount ||
+                                                                        0),
+                                                                0
+                                                            )}/${numberDisplay(
+                                                                v?.totalResourcesCount ||
+                                                                    0,
+                                                                0
+                                                            )} (${Math.floor(
+                                                                (((v?.totalResourcesCount ||
+                                                                    0) -
+                                                                    (v?.failedResourcesCount ||
+                                                                        0)) /
+                                                                    (v?.totalResourcesCount ||
+                                                                        1)) *
+                                                                    100
+                                                            )}%)`}
+                                                        </Flex>
+                                                    </TableCell>
+                                                )}
+                                                <TableCell
+                                                    onClick={() =>
+                                                        navigate(String(v?.id))
+                                                    }
+                                                >
+                                                    <ChevronRightIcon className="h-5 text-kaytu-500" />
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </AnimatedAccordion>
+                            {/* <Accordion
                                 defaultOpen
                                 className="bg-transparent border-0"
                             >
@@ -458,7 +715,7 @@ export default function Controls({ id, assignments }: IPolicies) {
                                         </TableBody>
                                     </Table>
                                 </AccordionBody>
-                            </Accordion>
+                            </Accordion> */}
                         </Card>
                     )
                 )
