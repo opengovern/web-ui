@@ -126,32 +126,32 @@ const authRoutes = [
     },
     {
         key: 'spend',
-        path: '/:ws/spend/metrics',
+        path: '/:ws/spend-metrics',
         component: SpendMetrics,
     },
     {
         key: 'spend',
-        path: '/:ws/spend/accounts',
+        path: '/:ws/spend-accounts',
         component: SpendAccounts,
     },
     {
         key: 'spend single',
-        path: '/:ws/spend/accounts/:id',
+        path: '/:ws/spend-accounts/:id',
         component: SingleSpend,
     },
     {
         key: 'spend single metric',
-        path: '/:ws/spend/accounts/:id/:metric',
+        path: '/:ws/spend-accounts/:id/:metric',
         component: SingleSpend,
     },
     {
         key: 'spend single',
-        path: '/:ws/spend/metrics/:id',
+        path: '/:ws/spend-metrics/:id',
         component: SingleSpend,
     },
     {
         key: 'spend single metric',
-        path: '/:ws/spend/metrics/:id/:metric',
+        path: '/:ws/spend-metrics/:id/:metric',
         component: SingleSpend,
     },
     {

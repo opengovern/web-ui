@@ -29,8 +29,8 @@ const navList = [
         icon: BanknotesIcon,
         children: [
             { name: 'Summary', link: '/:ws/spend' },
-            { name: 'Spend metrics', link: '/:ws/spend/metrics' },
-            { name: 'Spend by accounts', link: '/:ws/spend/accounts' },
+            { name: 'Spend metrics', link: '/:ws/spend-metrics' },
+            { name: 'Spend by accounts', link: '/:ws/spend-accounts' },
         ],
     },
     {
