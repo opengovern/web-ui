@@ -35,7 +35,7 @@ export default function AnimatedAccordion({
     const { height, opacity, y } = useSpring({
         from: { height: 0, opacity: 0, y: 0 },
         to: {
-            height: isOpen ? viewHeight : 0,
+            height: isOpen ? viewHeight + 4 : 0,
             opacity: isOpen ? 1 : 0,
             y: isOpen ? 0 : 20,
         },
