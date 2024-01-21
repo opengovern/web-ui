@@ -4,6 +4,7 @@ import { isDemo } from '../utilities/demo'
 const { hostname, origin } = window.location
 const BASE_URL = process.env.REACT_APP_BASE_URL as string
 const apiHostname = () => {
+    console.log('hostname ', hostname)
     switch (hostname) {
         case 'localhost':
         case '127.0.0.1':
