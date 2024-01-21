@@ -9,8 +9,10 @@ const apiHostname = () => {
         case 'localhost':
         case '127.0.0.1':
         case 'app.kaytu.dev':
+            console.log('api ', 'https://api.kaytu.dev')
             return 'https://api.kaytu.dev'
         default:
+            console.log('api ', BASE_URL)
             return BASE_URL
     }
 }
