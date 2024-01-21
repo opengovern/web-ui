@@ -1,19 +1,15 @@
 import axios from 'axios'
 import { isDemo } from '../utilities/demo'
 
-const { hostname, origin } = window.location
-const BASE_URL = process.env.REACT_APP_BASE_URL as string
+const { hostname } = window.location
 const apiHostname = () => {
-    console.log('hostname ', hostname)
     switch (hostname) {
         case 'localhost':
         case '127.0.0.1':
         case 'app.kaytu.dev':
-            console.log('api ', 'https://api.kaytu.dev')
             return 'https://api.kaytu.dev'
         default:
-            console.log('api ', BASE_URL)
-            return BASE_URL
+            return 'https://api.kaytu.io'
     }
 }
 const instance = axios.create({
