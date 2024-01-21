@@ -1,14 +1,18 @@
+import { useNavigate } from 'react-router-dom'
+import { ArrowPathIcon } from '@heroicons/react/24/outline'
+import dayjs from 'dayjs'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 import jwtDecode from 'jwt-decode'
-import { Flex } from '@tremor/react'
+import { Button, Card, Flex, Text, Title } from '@tremor/react'
 import Router from './router'
 import Spinner from './components/Spinner'
 import { setAuthHeader } from './api/ApiConfig'
 import { colorBlindModeAtom, tokenAtom } from './store'
 import { applyTheme, parseTheme } from './utilities/theme'
 import { Auth0AppMetadata } from './types/appMetadata'
+import { KaytuIcon } from './icons/icons'
 
 // Sentry.init({
 //     dsn: 'https://f1ec1f17fb784a12af5cd4f7ddf29d09@sen.kaytu.io/2',
@@ -41,15 +45,41 @@ import { Auth0AppMetadata } from './types/appMetadata'
 // })
 
 export default function App() {
-    const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0()
+    const {
+        isLoading,
+        isAuthenticated,
+        getAccessTokenSilently,
+        getIdTokenClaims,
+    } = useAuth0()
     const [token, setToken] = useAtom(tokenAtom)
     const [accessTokenLoading, setAccessTokenLoading] = useState<boolean>(false)
     const [colorBlindMode, setColorBlindMode] = useAtom(colorBlindModeAtom)
+    const [expire, setExpire] = useState<number>(0)
+    const [showExpired, setShowExpired] = useState<boolean>(false)
+
+    const checkExpire = () => {
+        if (expire !== 0) {
+            const diff = expire - dayjs.utc().unix()
+            if (diff < 0) {
+                setShowExpired(true)
+            }
+        }
+    }
+
+    useEffect(() => {
+        const t = setInterval(checkExpire, 5000)
+        return () => {
+            clearInterval(t)
+        }
+    }, [expire])
 
     useEffect(() => {
         if (isAuthenticated && token === '') {
             if (!accessTokenLoading) {
                 setAccessTokenLoading(true)
+                getIdTokenClaims().then((v) => {
+                    setExpire(v?.exp || 0)
+                })
                 getAccessTokenSilently()
                     .then((accessToken) => {
                         setToken(accessToken)
@@ -89,6 +119,40 @@ export default function App() {
             <Spinner />
         </Flex>
     ) : (
-        <Router />
+        <>
+            <Router />
+            {showExpired && (
+                <Flex
+                    flexDirection="col"
+                    className="fixed top-0 left-0 w-screen h-screen bg-gray-900/80 z-50"
+                >
+                    <Card className="w-1/3 mt-56">
+                        <Flex
+                            flexDirection="col"
+                            justifyContent="center"
+                            alignItems="center"
+                        >
+                            <KaytuIcon className="w-14 h-14 mb-6" />
+                            <Title className="mb-3 text-2xl font-bold">
+                                Your session has expired
+                            </Title>
+                            <Text className="mb-6 text-center">
+                                Your session has expired. Please log in again to
+                                continue accessing Kaytu platform
+                            </Text>
+                            <Button
+                                icon={ArrowPathIcon}
+                                onClick={() => {
+                                    window.location.href =
+                                        window.location.toString()
+                                }}
+                            >
+                                Re-Login
+                            </Button>
+                        </Flex>
+                    </Card>
+                </Flex>
+            )}
+        </>
     )
 }

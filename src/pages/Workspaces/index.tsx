@@ -1,4 +1,4 @@
-import { Button, Flex, Grid } from '@tremor/react'
+import { Button, Card, Flex, Grid, Text, Title } from '@tremor/react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useEffect } from 'react'
@@ -6,6 +6,7 @@ import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
 import Spinner from '../../components/Spinner'
 import TopHeader from '../../components/Layout/Header'
+import { KaytuIcon } from '../../icons/icons'
 
 export default function Workspaces() {
     const navigate = useNavigate()
@@ -20,16 +21,47 @@ export default function Workspaces() {
 
     useEffect(() => {
         if (isExecuted && !isLoading) {
-            if (workspaces?.length === 0) {
-                navigate(`/new-ws`)
-            } else if (
-                workspaces?.length === 1 &&
-                searchParams.has('onLogin')
-            ) {
+            if (workspaces?.length === 1 && searchParams.has('onLogin')) {
                 window.location.href = `/${workspaces.at(0)?.name}`
             }
         }
     }, [isLoading])
+
+    if (workspaces?.length === 0) {
+        return (
+            <Flex flexDirection="col">
+                <Card className="w-1/2 pt-12 pb-16 mt-40">
+                    <Flex
+                        flexDirection="col"
+                        justifyContent="start"
+                        alignItems="center"
+                    >
+                        <KaytuIcon className="w-14 h-14 mb-6" />
+                        <Title className="font-bold text-2xl mb-3">
+                            Welcome
+                        </Title>
+                        <Text>
+                            Your account doesn’t have access to any
+                            organizations or workspaces.
+                        </Text>
+                        <Text className="mb-6">
+                            If you wish to try our platform, please{' '}
+                            <b>Request a no-cost trial access.</b>
+                        </Text>
+                        <Button variant="secondary">Request Free Trial</Button>
+                    </Flex>
+                </Card>
+                <Text className="mt-8 text-gray-400">
+                    If you think this is an error or you’ve lost access to an
+                    Organization,
+                </Text>
+                <Text className="text-gray-400">
+                    please send an email to{' '}
+                    <b className="text-gray-600">support@kaytu.io</b>
+                </Text>
+            </Flex>
+        )
+    }
 
     return (
         <>
