@@ -27,7 +27,7 @@ export default function Workspaces() {
         }
     }, [isLoading])
 
-    if (workspaces?.length === 0) {
+    if (workspaces?.length === 2) {
         return (
             <Flex flexDirection="col">
                 <Card className="w-1/2 pt-12 pb-16 mt-40">
@@ -48,7 +48,17 @@ export default function Workspaces() {
                             If you wish to try our platform, please{' '}
                             <b>Request a no-cost trial access.</b>
                         </Text>
-                        <Button variant="secondary">Request Free Trial</Button>
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                window.open(
+                                    'https://kaytu.io/bookademo/',
+                                    '_blank'
+                                )
+                            }}
+                        >
+                            Request Free Trial
+                        </Button>
                     </Flex>
                 </Card>
                 <Text className="mt-8 text-gray-400">
