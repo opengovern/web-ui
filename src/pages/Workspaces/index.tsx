@@ -27,7 +27,7 @@ export default function Workspaces() {
         }
     }, [isLoading])
 
-    if (workspaces?.length === 2) {
+    if (workspaces?.length === 0) {
         return (
             <Flex flexDirection="col">
                 <Card className="w-1/2 pt-12 pb-16 mt-40">
