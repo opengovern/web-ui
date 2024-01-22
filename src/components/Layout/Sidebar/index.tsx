@@ -88,7 +88,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     sendConnections()
                 })
         }
-    }, [isAuthenticated])
+    }, [isAuthenticated, workspace])
 
     const navigation = [
         {
