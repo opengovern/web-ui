@@ -105,6 +105,11 @@ const authRoutes = [
         component: AssetAccounts,
     },
     {
+        key: 'assets account detail single',
+        path: '/:ws/asset-cloud-accounts/:id',
+        component: Single,
+    },
+    {
         key: 'assets metric detail',
         path: '/:ws/asset-metrics',
         component: AssetMetrics,
