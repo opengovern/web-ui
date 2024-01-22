@@ -1,6 +1,7 @@
 import { Col, Grid } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import ListCard from '../../../components/Cards/ListCard'
 import {
     useInventoryApiV2AnalyticsSpendCompositionList,
@@ -70,6 +71,7 @@ const categoryTrend = (
 }
 
 export function SpendOverview() {
+    const workspace = useParams<{ ws: string }>().ws
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
     const [granularity, setGranularity] = useState<Granularity>('daily')
@@ -243,7 +245,7 @@ export function SpendOverview() {
                         valueColumnTitle="Spend"
                         loading={compositionLoading}
                         items={topCategories(composition)}
-                        url="metrics?groupby=category"
+                        url={`/${workspace}/spend-metrics?groupby=category`}
                         type="service"
                         isPrice
                         error={getErrorMessage(compositionError)}
@@ -258,10 +260,10 @@ export function SpendOverview() {
                         valueColumnTitle="Spend"
                         loading={accountCostLoading}
                         items={topAccounts(accountCostResponse)}
-                        url="accounts"
+                        url={`/${workspace}/spend-cloud-accounts`}
                         type="account"
                         isPrice
-                        linkPrefix="accounts/"
+                        // linkPrefix="accounts/"
                         error={getErrorMessage(accountCostError)}
                         onRefresh={refreshAccountCost}
                         // isClickable={false}
@@ -274,9 +276,9 @@ export function SpendOverview() {
                         valueColumnTitle="Spend"
                         loading={serviceCostLoading}
                         items={topServices(serviceCostResponse)}
-                        url="metrics"
+                        url={`/${workspace}/spend-metrics`}
                         type="service"
-                        linkPrefix="metrics/"
+                        // linkPrefix="metrics/"
                         isPrice
                         error={getErrorMessage(serviceCostErr)}
                         onRefresh={serviceCostRefresh}
