@@ -1,8 +1,9 @@
 import ReactEcharts from 'echarts-for-react'
-import { Flex, Text } from '@tremor/react'
-import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai'
-import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numericDisplay,
+} from '../../../utilities/numericDisplay'
 import { colorBlindModeAtom } from '../../../store'
 
 export interface StackItem {
@@ -53,6 +54,11 @@ export default function StackedChart({
                         .map((i) => i.value)
                         .at(0) || 0
             ),
+            // itemStyle: {
+            //     borderWidth: 0.5,
+            //     borderType: 'solid',
+            //     borderColor: '#73c0de',
+            // },
         }
     })
 
@@ -90,28 +96,28 @@ export default function StackedChart({
                 type: labelType,
                 data: labels,
             },
-            yAxis: [
-                {
-                    type: 'value',
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: (value: number | string) => {
+                        if (isCost) {
+                            return `$${numericDisplay(value)}`
+                        }
+                        return numericDisplay(value)
+                    },
                 },
-            ],
-            // color: false
-            //     ? [
-            //           '#780000',
-            //           '#DC0000',
-            //           '#FD8C00',
-            //           '#FDC500',
-            //           '#10B880',
-            //           '#D0D4DA',
-            //       ]
-            //     : [
-            //           '#1E7CE0',
-            //           '#2ECC71',
-            //           '#FFA500',
-            //           '#9B59B6',
-            //           '#D0D4DA',
-            //           '#D0D4DA',
-            //       ],
+            },
+            barWidth: '40%',
+            color: false
+                ? [
+                      '#780000',
+                      '#DC0000',
+                      '#FD8C00',
+                      '#FDC500',
+                      '#10B880',
+                      '#D0D4DA',
+                  ]
+                : ['#1D4F85', '#91CC75', '#FAC858', '#EE6766', '#438AD6'],
 
             series,
         }

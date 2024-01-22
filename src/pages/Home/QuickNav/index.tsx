@@ -68,7 +68,7 @@ export default function QuickNav() {
         <Card>
             <Flex justifyContent="start" className="gap-2 mb-4">
                 <Icon icon={CursorArrowRaysIcon} className="p-0" />
-                <Title className="font-semibold">Quick navigation</Title>
+                <Title className="font-semibold">Quick Navigation</Title>
             </Flex>
             <Grid numItems={4} className="w-full mb-4">
                 {navList.map((nav, i) => (
