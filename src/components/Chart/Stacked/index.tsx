@@ -108,16 +108,23 @@ export default function StackedChart({
                 },
             },
             barWidth: '40%',
-            color: false
-                ? [
-                      '#780000',
-                      '#DC0000',
-                      '#FD8C00',
-                      '#FDC500',
-                      '#10B880',
-                      '#D0D4DA',
-                  ]
-                : ['#1D4F85', '#91CC75', '#FAC858', '#EE6766', '#438AD6'],
+            // color: false
+            //     ? [
+            //           '#780000',
+            //           '#DC0000',
+            //           '#FD8C00',
+            //           '#FDC500',
+            //           '#10B880',
+            //           '#D0D4DA',
+            //       ]
+            //     : [
+            //           '#1E7CE0',
+            //           '#2ECC71',
+            //           '#FFA500',
+            //           '#9B59B6',
+            //           '#D0D4DA',
+            //           '#D0D4DA',
+            //       ],
 
             series,
         }

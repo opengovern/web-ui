@@ -1,6 +1,5 @@
 import { Col, Flex, Grid } from '@tremor/react'
 import QuickNav from './QuickNav'
-import Integration from './Integration'
 import Governance from './Governance'
 import Query from './Query'
 import Spend from './Spend'
@@ -15,9 +14,6 @@ export default function Home() {
                 <Col numColSpan={6}>
                     <QuickNav />
                 </Col>
-                {/* <Col numColSpan={2}> */}
-                {/*     <Integration /> */}
-                {/* </Col> */}
             </Grid>
             <Grid numItems={6} className="w-full gap-4 h-fit">
                 <Col numColSpan={4}>

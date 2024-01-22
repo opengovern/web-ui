@@ -24,7 +24,7 @@ import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import { renderText } from '../../../components/Layout/Header/DateRangePicker'
 import ChangeDelta from '../../../components/ChangeDelta'
 
-const colors = ['#1D4F85', '#91CC75', '#FAC858', '#EE6766', '#438AD6']
+const colors = ['#1E7CE0', '#2ECC71', '#FFA500', '#9B59B6', '#D0D4DA']
 
 export default function Spend() {
     const workspace = useParams<{ ws: string }>().ws
