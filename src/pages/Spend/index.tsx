@@ -88,6 +88,12 @@ export const topCategories = (
                 value: arr[i][1],
             })
         }
+        top.data.sort((a, b) => {
+            if (a.value === b.value) {
+                return 0
+            }
+            return (a.value || 0) < (b.value || 0) ? 1 : -1
+        })
         top.total = input.total_count
     }
     return top
