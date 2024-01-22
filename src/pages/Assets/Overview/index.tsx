@@ -1,6 +1,7 @@
 import { Col, Grid } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import ListCard from '../../../components/Cards/ListCard'
 import {
     useInventoryApiV2AnalyticsCompositionDetail,
@@ -166,6 +167,7 @@ export const categoryTrend = (
 }
 
 export function AssetOverview() {
+    const workspace = useParams<{ ws: string }>().ws
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
     const [granularity, setGranularity] = useState<Granularity>('daily')
@@ -331,7 +333,7 @@ export function AssetOverview() {
                         valueColumnTitle="Resources"
                         loading={compositionLoading}
                         items={topCategories(composition)}
-                        url="metrics?groupby=category"
+                        url={`/${workspace}/asset-metrics?groupby=category`}
                         type="service"
                         error={getErrorMessage(compositionError)}
                         onRefresh={compositionRefresh}
@@ -345,9 +347,9 @@ export function AssetOverview() {
                         valueColumnTitle="Resources"
                         loading={accountsLoading}
                         items={topAccounts(accountsResponse)}
-                        url="accounts"
+                        url={`/${workspace}/asset-cloud-accounts`}
                         type="account"
-                        linkPrefix="accounts/"
+                        // linkPrefix="accounts/"
                         error={getErrorMessage(accountsError)}
                         onRefresh={accountsRefresh}
                         // isClickable={false}
@@ -360,9 +362,9 @@ export function AssetOverview() {
                         valueColumnTitle="Resources"
                         loading={serviceLoading}
                         items={topServices(serviceResponse)}
-                        url="metrics"
+                        url={`/${workspace}/asset-metrics`}
                         type="service"
-                        linkPrefix="metrics/"
+                        // linkPrefix="metrics/"
                         error={getErrorMessage(serviceErr)}
                         onRefresh={serviceRefresh}
                         // isClickable={false}

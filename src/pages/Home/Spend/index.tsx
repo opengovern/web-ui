@@ -20,12 +20,11 @@ import {
 import { toErrorMessage } from '../../../types/apierror'
 import { buildTrend } from '../../../components/Spend/Chart/helpers'
 import StackedChart from '../../../components/Chart/Stacked'
-import { SpendChartMetric } from '../../../components/Spend/Chart/Metric'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import { renderText } from '../../../components/Layout/Header/DateRangePicker'
 import ChangeDelta from '../../../components/ChangeDelta'
 
-const colors = ['#5470C6', '#91CC75', '#FAC858', '#EE6766', '#73C0DE']
+const colors = ['#1E7CE0', '#2ECC71', '#FFA500', '#9B59B6', '#D0D4DA']
 
 export default function Spend() {
     const workspace = useParams<{ ws: string }>().ws
@@ -101,7 +100,7 @@ export default function Spend() {
     const trendStacked = buildTrend(costTrend || [], 'trending', 'daily', 4)
 
     return (
-        <Card className="h-full">
+        <Card className="h-full pb-8">
             <Flex className="mb-2">
                 <Flex justifyContent="start" className="gap-2">
                     <Icon icon={BanknotesIcon} className="p-0" />
@@ -117,7 +116,7 @@ export default function Spend() {
                 </Button>
             </Flex>
             <Grid numItems={3} className="gap-8">
-                <Col numColSpan={2}>
+                <Col numColSpan={2} className="mt-2">
                     <StackedChart
                         labels={trendStacked.label}
                         chartData={trendStacked.data}
@@ -142,11 +141,11 @@ export default function Spend() {
                         alignItems="start"
                         className="gap-4 mt-4"
                     >
-                        <Card className="p-3">
+                        <Card className="p-3 border-0 ring-0 !shadow-none">
                             <Text className="font-semibold text-gray-800">
                                 Total spend
                             </Text>
-                            <Metric className="my-2">
+                            <Metric className="!text-2xl my-2">
                                 {exactPriceDisplay(
                                     serviceCostResponse?.total_cost || 0
                                 )}
@@ -158,7 +157,8 @@ export default function Spend() {
                                 )}
                             </Text>
                         </Card>
-                        <Card className="p-3">
+                        <div className="w-full h-[1px] bg-gray-200" />
+                        <Card className="p-3 border-0 ring-0 !shadow-none">
                             <Text className="font-semibold text-gray-800 mb-2">
                                 Spend trend
                             </Text>
@@ -186,7 +186,7 @@ export default function Spend() {
             <Flex justifyContent="start" className="gap-4 w-fit">
                 {trendStacked.data[0] ? (
                     trendStacked.data[0].map((t, i) => (
-                        <Flex justifyContent="start" className="gap-2">
+                        <Flex justifyContent="start" className="gap-2 w-fit">
                             <div
                                 className="h-2 w-2 min-w-[8px] rounded-full"
                                 style={{

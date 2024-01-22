@@ -1,8 +1,9 @@
 import ReactEcharts from 'echarts-for-react'
-import { Flex, Text } from '@tremor/react'
-import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai'
-import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numericDisplay,
+} from '../../../utilities/numericDisplay'
 import { colorBlindModeAtom } from '../../../store'
 
 export interface StackItem {
@@ -53,6 +54,11 @@ export default function StackedChart({
                         .map((i) => i.value)
                         .at(0) || 0
             ),
+            // itemStyle: {
+            //     borderWidth: 0.5,
+            //     borderType: 'solid',
+            //     borderColor: '#73c0de',
+            // },
         }
     })
 
@@ -90,11 +96,18 @@ export default function StackedChart({
                 type: labelType,
                 data: labels,
             },
-            yAxis: [
-                {
-                    type: 'value',
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: (value: number | string) => {
+                        if (isCost) {
+                            return `$${numericDisplay(value)}`
+                        }
+                        return numericDisplay(value)
+                    },
                 },
-            ],
+            },
+            barWidth: '40%',
             // color: false
             //     ? [
             //           '#780000',

@@ -59,7 +59,7 @@ export default function ChangeDelta({
     return (
         <Flex className="w-fit min-w-fit gap-1.5 h-full">
             <BadgeDelta
-                size={size}
+                size={size === 'sm' ? 'sm' : 'md'}
                 deltaType={properties(change, isDelta).delta}
             >
                 {valueInsideBadge &&
@@ -77,7 +77,10 @@ export default function ChangeDelta({
                         isDelta ? 0 : 2
                     )} ${isDelta ? '' : '%'}`}</Text>
                 ) : (
-                    <Metric color={properties(change, isDelta).color}>
+                    <Metric
+                        className="!text-2xl"
+                        color={properties(change, isDelta).color}
+                    >
                         {`${numberDisplay(
                             Math.abs(Number(change)),
                             isDelta ? 0 : 2
