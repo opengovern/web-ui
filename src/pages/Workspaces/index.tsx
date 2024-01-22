@@ -48,17 +48,15 @@ export default function Workspaces() {
                             If you wish to try our platform, please{' '}
                             <b>Request a no-cost trial access.</b>
                         </Text>
-                        <Button
-                            variant="secondary"
-                            onClick={() => {
-                                window.open(
-                                    'https://kaytu.io/bookademo/',
-                                    '_blank'
-                                )
-                            }}
+                        <a
+                            href="https://kaytu.io/bookademo/"
+                            target="_blank"
+                            rel="noreferrer"
                         >
-                            Request Free Trial
-                        </Button>
+                            <Button variant="secondary">
+                                Request Free Trial
+                            </Button>
+                        </a>
                     </Flex>
                 </Card>
                 <Text className="mt-8 text-gray-400">
