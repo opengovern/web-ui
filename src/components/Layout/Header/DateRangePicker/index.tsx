@@ -44,7 +44,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
     const state = useDateRangePickerState(props)
     const ref = useRef(null)
     const setActiveTimeRange = useSetAtom(
-        window.location.pathname.split('/')[2] === 'spend'
+        window.location.pathname.split('/')[2].includes('spend')
             ? spendTimeAtom
             : timeAtom
     )
@@ -276,7 +276,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
 }
 
 export default function DateRangePicker() {
-    const isSpend = window.location.pathname.split('/')[2] === 'spend'
+    const isSpend = window.location.pathname.split('/')[2].includes('spend')
     const currentWorkspace = useAtomValue(workspaceAtom)
     const [activeTimeRange, setActiveTimeRange] = useAtom(
         isSpend ? spendTimeAtom : timeAtom
