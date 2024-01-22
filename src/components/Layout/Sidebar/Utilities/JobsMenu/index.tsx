@@ -17,6 +17,7 @@ import {
 } from '../../../../../api/api'
 import { numberDisplay } from '../../../../../utilities/numericDisplay'
 import { useScheduleApiV1JobsCreate } from '../../../../../api/schedule.gen'
+import Spinner from '../../../../Spinner'
 
 interface IJobCategoryItem {
     title: string
@@ -198,7 +199,7 @@ interface IJobsMenu {
 export default function JobsMenu({ isCollapsed, workspace }: IJobsMenu) {
     const navigate = useNavigate()
 
-    const { response: jobs } = useScheduleApiV1JobsCreate(
+    const { response: jobs, isLoading } = useScheduleApiV1JobsCreate(
         {
             pageStart: 0,
             pageEnd: 1,
@@ -257,49 +258,55 @@ export default function JobsMenu({ isCollapsed, workspace }: IJobsMenu) {
                                 See all
                             </Button>
                         </Flex>
-                        <Flex
-                            flexDirection="col"
-                            justifyContent="between"
-                            alignItems="start"
-                            className="mt-6"
-                        >
-                            <JobCategoryItem
-                                title="Discovery"
-                                jobType="discovery"
-                                summaries={jobs?.summaries?.filter(
-                                    (v) =>
-                                        v.type ===
-                                        GithubComKaytuIoKaytuEnginePkgDescribeApiJobType.JobTypeDiscovery
-                                )}
-                            />
-                            <JobCategoryItem
-                                title="Metric"
-                                jobType="analytics"
-                                summaries={jobs?.summaries?.filter(
-                                    (v) =>
-                                        v.type ===
-                                        GithubComKaytuIoKaytuEnginePkgDescribeApiJobType.JobTypeAnalytics
-                                )}
-                            />
-                            <JobCategoryItem
-                                title="Insight"
-                                jobType="insight"
-                                summaries={jobs?.summaries?.filter(
-                                    (v) =>
-                                        v.type ===
-                                        GithubComKaytuIoKaytuEnginePkgDescribeApiJobType.JobTypeInsight
-                                )}
-                            />
-                            <JobCategoryItem
-                                title="Governance"
-                                jobType="compliance"
-                                summaries={jobs?.summaries?.filter(
-                                    (v) =>
-                                        v.type ===
-                                        GithubComKaytuIoKaytuEnginePkgDescribeApiJobType.JobTypeCompliance
-                                )}
-                            />
-                        </Flex>
+                        {isLoading ? (
+                            <Flex className="min-w-[400px] min-h-[256px]">
+                                <Spinner />
+                            </Flex>
+                        ) : (
+                            <Flex
+                                flexDirection="col"
+                                justifyContent="between"
+                                alignItems="start"
+                                className="mt-6"
+                            >
+                                <JobCategoryItem
+                                    title="Discovery"
+                                    jobType="discovery"
+                                    summaries={jobs?.summaries?.filter(
+                                        (v) =>
+                                            v.type ===
+                                            GithubComKaytuIoKaytuEnginePkgDescribeApiJobType.JobTypeDiscovery
+                                    )}
+                                />
+                                <JobCategoryItem
+                                    title="Metric"
+                                    jobType="analytics"
+                                    summaries={jobs?.summaries?.filter(
+                                        (v) =>
+                                            v.type ===
+                                            GithubComKaytuIoKaytuEnginePkgDescribeApiJobType.JobTypeAnalytics
+                                    )}
+                                />
+                                <JobCategoryItem
+                                    title="Insight"
+                                    jobType="insight"
+                                    summaries={jobs?.summaries?.filter(
+                                        (v) =>
+                                            v.type ===
+                                            GithubComKaytuIoKaytuEnginePkgDescribeApiJobType.JobTypeInsight
+                                    )}
+                                />
+                                <JobCategoryItem
+                                    title="Governance"
+                                    jobType="compliance"
+                                    summaries={jobs?.summaries?.filter(
+                                        (v) =>
+                                            v.type ===
+                                            GithubComKaytuIoKaytuEnginePkgDescribeApiJobType.JobTypeCompliance
+                                    )}
+                                />
+                            </Flex>
+                        )}
                     </Card>
                 </Popover.Panel>
             </Transition>
