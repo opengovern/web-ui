@@ -260,7 +260,7 @@ export function SpendOverview() {
                         valueColumnTitle="Spend"
                         loading={accountCostLoading}
                         items={topAccounts(accountCostResponse)}
-                        url={`/${workspace}/spend-cloud-accounts`}
+                        url={`/${workspace}/spend-accounts`}
                         type="account"
                         isPrice
                         // linkPrefix="accounts/"
