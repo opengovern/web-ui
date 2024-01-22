@@ -130,6 +130,11 @@ const authRoutes = [
         component: SpendOverview,
     },
     {
+        key: 'spend single 1',
+        path: '/:ws/spend/:id',
+        component: SingleSpend,
+    },
+    {
         key: 'spend',
         path: '/:ws/spend-metrics',
         component: SpendMetrics,
