@@ -328,7 +328,7 @@ export function AssetOverview() {
                     <ListCard
                         title="Top Categories"
                         keyColumnTitle="Category"
-                        valueColumnTitle="Count"
+                        valueColumnTitle="Resources"
                         loading={compositionLoading}
                         items={topCategories(composition)}
                         url="metrics?groupby=category"
@@ -341,8 +341,8 @@ export function AssetOverview() {
                 <Col numColSpan={1} className="h-full">
                     <ListCard
                         title="Top Cloud Accounts"
-                        keyColumnTitle="Account Names"
-                        valueColumnTitle="Count"
+                        keyColumnTitle="Account Name"
+                        valueColumnTitle="Resources"
                         loading={accountsLoading}
                         items={topAccounts(accountsResponse)}
                         url="accounts"
@@ -355,9 +355,9 @@ export function AssetOverview() {
                 </Col>
                 <Col numColSpan={1} className="h-full">
                     <ListCard
-                        title="Top Metrics"
-                        keyColumnTitle="Mertic Names"
-                        valueColumnTitle="Count"
+                        title="Top Metric"
+                        keyColumnTitle="Metric Name"
+                        valueColumnTitle="Resources"
                         loading={serviceLoading}
                         items={topServices(serviceResponse)}
                         url="metrics"

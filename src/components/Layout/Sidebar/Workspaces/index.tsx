@@ -76,7 +76,7 @@ export default function Workspaces({ isCollapsed }: IWorkspaces) {
                             } rounded-md bg-kaytu-800`}
                         >
                             <Text className="font-semibold !text-base text-orange-500">
-                                D
+                                {wsName ? wsName[0].toLocaleUpperCase() : 'K'}
                             </Text>
                         </Flex>
                         {!isCollapsed && (
