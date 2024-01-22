@@ -270,7 +270,7 @@ export function SpendOverview() {
                 <Col numColSpan={1} className="h-full">
                     <ListCard
                         title="Top Metrics"
-                        keyColumnTitle="Mertic Names"
+                        keyColumnTitle="Metric Name"
                         valueColumnTitle="Spend"
                         loading={serviceCostLoading}
                         items={topServices(serviceCostResponse)}
