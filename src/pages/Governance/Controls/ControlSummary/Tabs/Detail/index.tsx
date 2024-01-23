@@ -1,7 +1,6 @@
 import { Flex, Text } from '@tremor/react'
 import { useState } from 'react'
-import Markdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
+import MarkdownPreview from '@uiw/react-markdown-preview'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiControl } from '../../../../../../api/api'
 
 interface IDetail {
@@ -69,12 +68,29 @@ export default function Detail({ control }: IDetail) {
                 className="pl-8 border-l border-l-gray-200"
                 style={{ width: 'calc(100% - 224px)' }}
             >
-                <Markdown
-                    remarkPlugins={[remarkGfm]}
-                    className="dark:text-white"
-                >
-                    {control?.[selectedTab]}
-                </Markdown>
+                <MarkdownPreview
+                    source={control?.[selectedTab]}
+                    className="!bg-transparent"
+                    wrapperElement={{
+                        'data-color-mode': 'light',
+                    }}
+                    rehypeRewrite={(node, index, parent) => {
+                        if (
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            node.tagName === 'a' &&
+                            parent &&
+                            /^h(1|2|3|4|5|6)/.test(
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                parent.tagName
+                            )
+                        ) {
+                            // eslint-disable-next-line no-param-reassign
+                            parent.children = parent.children.slice(1)
+                        }
+                    }}
+                />
             </div>
         </Flex>
     )
