@@ -68,8 +68,8 @@ export default function Profile({ isCollapsed }: IProfile) {
     return (
         <Popover className="relative z-50 border-0 w-full">
             <Popover.Button
-                className={`p-3 w-full rounded-lg cursor-pointer ${
-                    isCollapsed ? '!p-1' : 'border border-gray-700'
+                className={`p-3 w-full cursor-pointer ${
+                    isCollapsed ? '!p-1' : 'border-t border-t-gray-700'
                 }`}
                 id="profile"
             >
@@ -131,7 +131,7 @@ export default function Profile({ isCollapsed }: IProfile) {
                                 }
                                 className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-kaytu-800"
                             >
-                                <Text className="text-inherit font-semibold">
+                                <Text className="text-inherit">
                                     Profile info
                                 </Text>
                             </Flex>
@@ -139,17 +139,13 @@ export default function Profile({ isCollapsed }: IProfile) {
                                 onClick={() => navigate(`/billing`)}
                                 className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-kaytu-800"
                             >
-                                <Text className="text-inherit font-semibold">
-                                    Billing
-                                </Text>
+                                <Text className="text-inherit">Billing</Text>
                             </Flex>
                             <Flex
                                 onClick={() => logout()}
                                 className="py-2 px-5 text-gray-300 rounded-md cursor-pointer hover:text-gray-50 hover:bg-kaytu-800"
                             >
-                                <Text className="text-inherit font-semibold">
-                                    Logout
-                                </Text>
+                                <Text className="text-inherit">Logout</Text>
                                 <ArrowTopRightOnSquareIcon className="w-5 text-gray-400" />
                             </Flex>
                         </Flex>
@@ -160,14 +156,18 @@ export default function Profile({ isCollapsed }: IProfile) {
                                     variant="solid"
                                     className="w-full bg-kaytu-800"
                                 >
-                                    <Tab className="w-1/3 flex justify-center text-white">
-                                        Light
+                                    <Tab className="w-1/3 flex justify-center ui-selected:!bg-kaytu-600 ui-selected:!border-0">
+                                        <Text className="text-white">
+                                            Light
+                                        </Text>
                                     </Tab>
-                                    <Tab className="w-1/3 flex justify-center text-white">
-                                        Dark
+                                    <Tab className="w-1/3 flex justify-center  ui-selected:!bg-kaytu-600 ui-selected:!border-0">
+                                        <Text className="text-white">Dark</Text>
                                     </Tab>
-                                    <Tab className="w-1/3 flex justify-center text-white">
-                                        System
+                                    <Tab className="w-1/3 flex justify-center ui-selected:!bg-kaytu-600 ui-selected:!border-0">
+                                        <Text className="text-white">
+                                            System
+                                        </Text>
                                     </Tab>
                                 </TabList>
                             </TabGroup>

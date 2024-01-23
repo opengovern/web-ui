@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import {
     ArrowPathRoundedSquareIcon,
@@ -11,6 +11,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { BarList, Button, Card, Color, Flex, Text, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useAuth0 } from '@auth0/auth0-react'
 import {
     GithubComKaytuIoKaytuEnginePkgDescribeApiJobSummary,
     GithubComKaytuIoKaytuEnginePkgDescribeApiJobType,
@@ -197,9 +198,14 @@ interface IJobsMenu {
 }
 
 export default function JobsMenu({ isCollapsed, workspace }: IJobsMenu) {
+    const { isAuthenticated, getAccessTokenSilently } = useAuth0()
     const navigate = useNavigate()
 
-    const { response: jobs, isLoading } = useScheduleApiV1JobsCreate(
+    const {
+        response: jobs,
+        isLoading,
+        sendNow,
+    } = useScheduleApiV1JobsCreate(
         {
             pageStart: 0,
             pageEnd: 1,
@@ -209,6 +215,17 @@ export default function JobsMenu({ isCollapsed, workspace }: IJobsMenu) {
         true,
         workspace
     )
+    useEffect(() => {
+        if (isAuthenticated) {
+            getAccessTokenSilently()
+                .then((res) => {
+                    console.log('')
+                })
+                .then((res) => {
+                    sendNow()
+                })
+        }
+    }, [isAuthenticated, workspace])
 
     if (workspace === undefined || workspace === '') {
         return null

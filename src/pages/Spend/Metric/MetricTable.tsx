@@ -6,6 +6,8 @@ import {
     ListBulletIcon,
     ArrowTrendingUpIcon,
     SwatchIcon,
+    CloudIcon,
+    Squares2X2Icon,
 } from '@heroicons/react/24/outline'
 import dayjs, { Dayjs } from 'dayjs'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../api/api'
@@ -464,7 +466,7 @@ export default function MetricTable({
         },
         {
             type: 2,
-            icon: ArrowTrendingUpIcon,
+            icon: Squares2X2Icon,
             name: 'Group by Metric Category',
             function: () => {
                 onManualGrouping('category')
@@ -476,7 +478,7 @@ export default function MetricTable({
         },
         {
             type: 3,
-            icon: SwatchIcon,
+            icon: CloudIcon,
             name: 'Group by Provider',
             function: () => {
                 onManualGrouping('connector')
@@ -489,7 +491,7 @@ export default function MetricTable({
     ]
 
     const [tab, setTab] = useState(
-        searchParams.get('groupby') === 'category' ? 3 : 0
+        searchParams.get('groupby') === 'category' ? 2 : 0
     )
 
     const [tableKey, setTableKey] = useState('')

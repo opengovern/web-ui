@@ -119,7 +119,7 @@ export default function Workspaces({ isCollapsed }: IWorkspaces) {
                                     <Flex
                                         onClick={() => navigate(`/${ws.name}`)}
                                         justifyContent="start"
-                                        className={`py-1 px-2 gap-2 rounded-md cursor-pointer ${
+                                        className={`py-1 px-2 gap-2 my-0.5 rounded-md cursor-pointer ${
                                             wsName === ws.name
                                                 ? 'bg-kaytu-500 text-gray-200 font-semibold'
                                                 : 'text-gray-50 hover:bg-kaytu-800'
@@ -137,7 +137,7 @@ export default function Workspaces({ isCollapsed }: IWorkspaces) {
                                                 )}
                                             </Text>
                                         </Flex>
-                                        <Text className="text-inherit font-semibold">
+                                        <Text className="text-inherit">
                                             {ws.name}
                                         </Text>
                                     </Flex>
