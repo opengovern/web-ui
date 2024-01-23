@@ -296,9 +296,8 @@ export default function SingleSpendMetric({
                     resizable: true,
                     pivot: false,
                     pinned: true,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value ? exactPriceDisplay(param.value) : ''
-                    },
+                    valueFormatter: (param: ValueFormatterParams) =>
+                        exactPriceDisplay(param.value),
                 },
             ]
 
@@ -325,11 +324,8 @@ export default function SingleSpendMetric({
                         resizable: true,
                         pivot: false,
                         aggFunc: 'sum',
-                        valueFormatter: (param) => {
-                            return param.value
-                                ? exactPriceDisplay(param.value)
-                                : ''
-                        },
+                        valueFormatter: (param) =>
+                            exactPriceDisplay(param.value),
                     }
                     return v
                 })

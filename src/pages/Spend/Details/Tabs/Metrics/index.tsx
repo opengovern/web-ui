@@ -1,21 +1,10 @@
 import { Dayjs } from 'dayjs'
 import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
-import { useNavigate } from 'react-router-dom'
-import { Select, SelectItem, Text } from '@tremor/react'
-import { Dispatch, SetStateAction, useState } from 'react'
-import {
-    CurrencyDollarIcon,
-    ListBulletIcon,
-    ArrowTrendingUpIcon,
-    SwatchIcon,
-} from '@heroicons/react/24/outline'
+import { Dispatch, SetStateAction } from 'react'
 import { IFilter } from '../../../../../store'
-import { useInventoryApiV2AnalyticsSpendTableList } from '../../../../../api/inventory.gen'
-import Table, { IColumn } from '../../../../../components/Table'
+import { IColumn } from '../../../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../../../api/api'
 import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
-import { capitalizeFirstLetter } from '../../../../../utilities/labelMaker'
-import AdvancedTable from '../../../../../components/AdvancedTable'
 
 type MSort = {
     sortCol: string
