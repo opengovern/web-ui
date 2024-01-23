@@ -5,10 +5,11 @@ import {
     CircleStackIcon,
     CloudIcon,
     ListBulletIcon,
+    Squares2X2Icon,
 } from '@heroicons/react/24/outline'
 import { useEffect, useState } from 'react'
 import { useSetAtom } from 'jotai/index'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { IFilter, notificationAtom } from '../../../../store'
 import { IColumn } from '../../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../api/api'
@@ -69,6 +70,14 @@ export const defaultColumns: IColumn<any, any>[] = [
     {
         field: 'name',
         headerName: 'Metric',
+        resizable: true,
+        filter: true,
+        sortable: true,
+        type: 'string',
+    },
+    {
+        field: 'category',
+        headerName: 'Category',
         resizable: true,
         filter: true,
         sortable: true,
@@ -147,13 +156,18 @@ export const options: GridOptions = {
 export default function MetricTable({ timeRange, connections }: IMetricTable) {
     const navigate = useNavigate()
     const setNotification = useSetAtom(notificationAtom)
+    const [searchParams, setSearchParams] = useSearchParams()
 
-    const [manualGrouping, onManualGrouping] = useState<string>('none')
+    const [manualGrouping, onManualGrouping] = useState<string>(
+        searchParams.get('groupby') === 'category' ? 'category' : 'none'
+    )
     const [manualTableSort, onManualSortChange] = useState<MSort>({
         sortCol: 'none',
         sortType: null,
     })
-    const [tab, setTab] = useState(0)
+    const [tab, setTab] = useState(
+        searchParams.get('groupby') === 'category' ? 2 : 0
+    )
     const [tableKey, setTableKey] = useState('')
 
     const filterTabs = [
@@ -163,7 +177,7 @@ export default function MetricTable({ timeRange, connections }: IMetricTable) {
             name: 'Sort by Resource Count',
             function: () => {
                 onManualSortChange({
-                    sortCol: 'resourceCount',
+                    sortCol: 'count',
                     sortType: 'desc',
                 })
                 onManualGrouping('none')
@@ -183,14 +197,14 @@ export default function MetricTable({ timeRange, connections }: IMetricTable) {
         },
         {
             type: 2,
-            icon: ArrowTrendingUpIcon,
-            name: 'Sort by Account Name',
+            icon: Squares2X2Icon,
+            name: 'Group by Category',
             function: () => {
+                onManualGrouping('category')
                 onManualSortChange({
-                    sortCol: 'providerConnectionName',
-                    sortType: 'desc',
+                    sortCol: 'none',
+                    sortType: null,
                 })
-                onManualGrouping('none')
             },
         },
         {
@@ -198,7 +212,7 @@ export default function MetricTable({ timeRange, connections }: IMetricTable) {
             icon: CloudIcon,
             name: 'Group by Provider',
             function: () => {
-                onManualGrouping('connector')
+                onManualGrouping('connectors')
                 onManualSortChange({
                     sortCol: 'none',
                     sortType: null,
@@ -235,6 +249,7 @@ export default function MetricTable({ timeRange, connections }: IMetricTable) {
     useEffect(() => {
         setTableKey(Math.random().toString(16).slice(2, 8))
     }, [manualGrouping, timeRange, resources])
+    console.log(rowGenerator(resources?.metrics))
 
     return (
         <AdvancedTable
