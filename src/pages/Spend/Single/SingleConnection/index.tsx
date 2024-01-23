@@ -195,11 +195,8 @@ export default function SingleSpendConnection({
                         resizable: true,
                         pivot: false,
                         aggFunc: 'sum',
-                        valueFormatter: (param: ValueFormatterParams) => {
-                            return param.value
-                                ? exactPriceDisplay(param.value)
-                                : ''
-                        },
+                        valueFormatter: (param: ValueFormatterParams) =>
+                            exactPriceDisplay(param.value),
                     }
                     return v
                 })

@@ -394,7 +394,7 @@ export default function AccountTable({
                     resizable: true,
                     suppressMenu: true,
                     valueFormatter: (param: ValueFormatterParams) =>
-                        exactPriceDisplay(param.value, 2),
+                        exactPriceDisplay(param.value),
                 },
                 {
                     field: 'changePercent',

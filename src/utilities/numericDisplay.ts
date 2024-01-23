@@ -24,7 +24,7 @@ export const numberGroupedDisplay = (value: string | number | undefined) => {
 
 export const exactPriceDisplay = (
     value: string | number | undefined,
-    decimals = 0
+    decimals = 2
 ) => {
     return Number(value) || Number(value) === 0
         ? `$${Number(value)
@@ -38,8 +38,12 @@ export const numberDisplay = (
     value: string | number | undefined,
     decPoint = 2
 ) => {
-    return `${parseFloat(value ? value.toString() : '0')
+    return parseFloat(value ? value.toString() : '0')
         .toFixed(decPoint)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+        .toString() === 'Infinity'
+        ? '0'
+        : `${parseFloat(value ? value.toString() : '0')
+              .toFixed(decPoint)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
 }
