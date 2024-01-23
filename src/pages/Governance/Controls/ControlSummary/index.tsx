@@ -315,6 +315,7 @@ export default function ControlDetail() {
                             >
                                 <MarkdownPreview
                                     source={doc}
+                                    className="!bg-transparent"
                                     wrapperElement={{
                                         'data-color-mode': 'light',
                                     }}
