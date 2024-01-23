@@ -4,7 +4,6 @@ import { timeAtom } from '../../../store'
 import SingleConnection from './SingleConnection'
 import NotFound from '../../Errors'
 import SingleMetric from './SingleMetric'
-import Layout from '../../../components/Layout'
 import TopHeader from '../../../components/Layout/Header'
 
 export default function Single() {

@@ -44,7 +44,7 @@ export const cloudAccountColumns = (isDemo: boolean) => {
         },
         {
             headerName: 'Resources',
-            field: 'totalCount',
+            field: 'count',
             type: 'number',
             sortable: true,
             filter: true,
@@ -52,8 +52,13 @@ export const cloudAccountColumns = (isDemo: boolean) => {
             width: 150,
             cellRenderer: (param: ICellRendererParams) => (
                 <Flex flexDirection="col" alignItems="start">
-                    <Text className="text-gray-800">{param.value} issues</Text>
-                    <Text>{param.value - param.data.count} passed</Text>
+                    <Text className="text-gray-800">
+                        {param.value || 0} issues
+                    </Text>
+                    <Text>
+                        {(param.data.totalCount || 0) - (param.value || 0)}{' '}
+                        passed
+                    </Text>
                 </Flex>
             ),
         },

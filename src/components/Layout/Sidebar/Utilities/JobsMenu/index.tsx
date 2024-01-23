@@ -49,7 +49,8 @@ const checkStatus = (v: string, arr: string[]) => {
 
 function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
     const navigate = useNavigate()
-    const workspace = useParams<{ ws: string }>().ws
+    const url = window.location.pathname.split('/')
+    const workspace = url[1]
 
     const result = () => {
         const inProgressJobs =

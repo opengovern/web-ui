@@ -10,7 +10,10 @@ import {
 import dayjs, { Dayjs } from 'dayjs'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../api/api'
 import AdvancedTable, { IColumn } from '../../../components/AdvancedTable'
-import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numberDisplay,
+} from '../../../utilities/numericDisplay'
 import { renderText } from '../../../components/Layout/Header/DateRangePicker'
 
 export type MSort = {
@@ -232,11 +235,7 @@ export default function AccountTable({
                                   columnGroupShow: 'open',
                                   valueFormatter: (
                                       param: ValueFormatterParams
-                                  ) => {
-                                      return param.value
-                                          ? exactPriceDisplay(param.value)
-                                          : ''
-                                  },
+                                  ) => exactPriceDisplay(param.value),
                               }
                               return v
                           })
@@ -253,9 +252,8 @@ export default function AccountTable({
                 resizable: true,
                 suppressMenu: true,
                 columnGroupShow: 'closed',
-                valueFormatter: (param: ValueFormatterParams) => {
-                    return param.value ? exactPriceDisplay(param.value) : ''
-                },
+                valueFormatter: (param: ValueFormatterParams) =>
+                    exactPriceDisplay(param.value),
             }
 
             columns = [total, ...dynamicCols]
@@ -328,9 +326,8 @@ export default function AccountTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value ? exactPriceDisplay(param.value) : ''
-                    },
+                    valueFormatter: (param: ValueFormatterParams) =>
+                        exactPriceDisplay(param.value),
                 },
                 {
                     field: 'percent',
@@ -342,9 +339,8 @@ export default function AccountTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value ? `${param.value.toFixed(2)}%` : ''
-                    },
+                    valueFormatter: (param: ValueFormatterParams) =>
+                        `${numberDisplay(param.value)}%`,
                 },
             ],
         },
@@ -365,11 +361,8 @@ export default function AccountTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value !== undefined
-                            ? `$${param.value.toFixed(0)}`
-                            : ''
-                    },
+                    valueFormatter: (param: ValueFormatterParams) =>
+                        exactPriceDisplay(param.value),
                 },
                 {
                     field: 'prevPercent',
@@ -381,9 +374,8 @@ export default function AccountTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value ? `${param.value.toFixed(2)}%` : ''
-                    },
+                    valueFormatter: (param: ValueFormatterParams) =>
+                        `${numberDisplay(param.value)}%`,
                 },
             ],
         },
@@ -401,11 +393,8 @@ export default function AccountTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value !== undefined
-                            ? `$${param.value.toFixed(0)}`
-                            : ''
-                    },
+                    valueFormatter: (param: ValueFormatterParams) =>
+                        exactPriceDisplay(param.value, 2),
                 },
                 {
                     field: 'changePercent',
@@ -417,11 +406,8 @@ export default function AccountTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value !== undefined
-                            ? `${param.value.toFixed(0)}%`
-                            : ''
-                    },
+                    valueFormatter: (param: ValueFormatterParams) =>
+                        `${numberDisplay(param.value)}%`,
                 },
             ],
         },
