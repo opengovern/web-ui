@@ -32,7 +32,7 @@ const cloudAccountColumns = (isDemo: boolean) => {
         },
         {
             headerName: 'Findings',
-            field: 'totalCount',
+            field: 'count',
             type: 'number',
             sortable: true,
             filter: true,
@@ -40,14 +40,19 @@ const cloudAccountColumns = (isDemo: boolean) => {
             width: 150,
             cellRenderer: (param: ICellRendererParams) => (
                 <Flex flexDirection="col" alignItems="start">
-                    <Text className="text-gray-800">{param.value} issues</Text>
-                    <Text>{param.value - (param.data.count || 0)} passed</Text>
+                    <Text className="text-gray-800">
+                        {param.value || 0} issues
+                    </Text>
+                    <Text>
+                        {(param.data.totalCount || 0) - (param.value || 0)}{' '}
+                        passed
+                    </Text>
                 </Flex>
             ),
         },
         {
             headerName: 'Resources',
-            field: 'resourceTotalCount',
+            field: 'resourceCount',
             type: 'number',
             sortable: true,
             filter: true,
@@ -55,16 +60,22 @@ const cloudAccountColumns = (isDemo: boolean) => {
             width: 150,
             cellRenderer: (param: ICellRendererParams) => (
                 <Flex flexDirection="col" alignItems="start">
-                    <Text className="text-gray-800">{param.value} issues</Text>
-                    <Text>
-                        {param.value - (param.data.resourceCount || 0)} passed
-                    </Text>
+                    <Flex flexDirection="col" alignItems="start">
+                        <Text className="text-gray-800">
+                            {param.value || 0} issues
+                        </Text>
+                        <Text>
+                            {(param.data.resourceTotalCount || 0) -
+                                (param.value || 0)}{' '}
+                            passed
+                        </Text>
+                    </Flex>
                 </Flex>
             ),
         },
         {
             headerName: 'Controls',
-            field: 'controlTotalCount',
+            field: 'controlCount',
             type: 'number',
             sortable: true,
             filter: true,
@@ -72,10 +83,16 @@ const cloudAccountColumns = (isDemo: boolean) => {
             width: 150,
             cellRenderer: (param: ICellRendererParams) => (
                 <Flex flexDirection="col" alignItems="start">
-                    <Text className="text-gray-800">{param.value} issues</Text>
-                    <Text>
-                        {param.value - (param.data.controlCount || 0)} passed
-                    </Text>
+                    <Flex flexDirection="col" alignItems="start">
+                        <Text className="text-gray-800">
+                            {param.value || 0} issues
+                        </Text>
+                        <Text>
+                            {(param.data.controlTotalCount || 0) -
+                                (param.value || 0)}{' '}
+                            passed
+                        </Text>
+                    </Flex>
                 </Flex>
             ),
         },
