@@ -2,17 +2,18 @@ import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import {
+    CloudIcon,
     CurrencyDollarIcon,
     ListBulletIcon,
-    ArrowTrendingUpIcon,
-    SwatchIcon,
-    CloudIcon,
     Squares2X2Icon,
 } from '@heroicons/react/24/outline'
 import dayjs, { Dayjs } from 'dayjs'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../api/api'
 import AdvancedTable, { IColumn } from '../../../components/AdvancedTable'
-import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numberDisplay,
+} from '../../../utilities/numericDisplay'
 import { renderText } from '../../../components/Layout/Header/DateRangePicker'
 
 type MSort = {
@@ -230,11 +231,7 @@ export default function MetricTable({
                                   columnGroupShow: 'open',
                                   valueFormatter: (
                                       param: ValueFormatterParams
-                                  ) => {
-                                      return param.value
-                                          ? exactPriceDisplay(param.value)
-                                          : ''
-                                  },
+                                  ) => exactPriceDisplay(param.value),
                               }
                               return v
                           })
@@ -251,9 +248,8 @@ export default function MetricTable({
                 resizable: true,
                 suppressMenu: true,
                 columnGroupShow: 'closed',
-                valueFormatter: (param: ValueFormatterParams) => {
-                    return param.value ? exactPriceDisplay(param.value) : ''
-                },
+                valueFormatter: (param: ValueFormatterParams) =>
+                    exactPriceDisplay(param.value),
             }
 
             columns = [total, ...dynamicCols]
@@ -318,9 +314,8 @@ export default function MetricTable({
                     resizable: true,
                     suppressMenu: true,
                     width: 80,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value ? exactPriceDisplay(param.value) : ''
-                    },
+                    valueFormatter: (param: ValueFormatterParams) =>
+                        exactPriceDisplay(param.value),
                 },
                 {
                     field: 'percent',
@@ -332,9 +327,8 @@ export default function MetricTable({
                     resizable: true,
                     suppressMenu: true,
                     width: 100,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value ? `${param.value.toFixed(2)}%` : ''
-                    },
+                    valueFormatter: (param: ValueFormatterParams) =>
+                        `${numberDisplay(param.value)}%`,
                 },
             ],
         },
@@ -358,11 +352,8 @@ export default function MetricTable({
                     resizable: true,
                     suppressMenu: true,
                     width: 200,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value !== undefined
-                            ? `$${param.value.toFixed(0)}`
-                            : ''
-                    },
+                    valueFormatter: (param: ValueFormatterParams) =>
+                        exactPriceDisplay(param.value),
                 },
                 {
                     field: 'prevPercent',
@@ -374,9 +365,8 @@ export default function MetricTable({
                     resizable: true,
                     suppressMenu: true,
                     width: 120,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value ? `${param.value.toFixed(2)}%` : ''
-                    },
+                    valueFormatter: (param: ValueFormatterParams) =>
+                        `${numberDisplay(param.value)}%`,
                 },
             ],
         },
@@ -397,11 +387,8 @@ export default function MetricTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value !== undefined
-                            ? `$${param.value.toFixed(0)}`
-                            : ''
-                    },
+                    valueFormatter: (param: ValueFormatterParams) =>
+                        exactPriceDisplay(param.value, 2),
                 },
                 {
                     field: 'changePercent',
@@ -413,11 +400,8 @@ export default function MetricTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value !== undefined
-                            ? `${param.value.toFixed(0)}%`
-                            : ''
-                    },
+                    valueFormatter: (param: ValueFormatterParams) =>
+                        `${numberDisplay(param.value)}%`,
                 },
             ],
         },
