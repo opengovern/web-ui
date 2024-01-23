@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai/index'
 import TopHeader from '../../../components/Layout/Header'
 import { toErrorMessage } from '../../../types/apierror'
 import { AssetChart } from '../../../components/Asset/Chart'
-import { filterAtom, spendTimeAtom } from '../../../store'
+import { filterAtom, timeAtom } from '../../../store'
 import {
     ChartLayout,
     Granularity,
@@ -17,7 +17,7 @@ import { categoryTrend } from '../Overview'
 import MetricTable from './Table'
 
 export default function AssetMetrics() {
-    const activeTimeRange = useAtomValue(spendTimeAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
     const [granularity, setGranularity] = useState<Granularity>('daily')
     const [chartLayout, setChartLayout] = useState<ChartLayout>('metrics')

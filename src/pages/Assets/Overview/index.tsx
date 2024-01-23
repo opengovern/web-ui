@@ -10,7 +10,7 @@ import {
     useInventoryApiV2AnalyticsTrendList,
 } from '../../../api/inventory.gen'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
-import { filterAtom, spendTimeAtom } from '../../../store'
+import { filterAtom, spendTimeAtom, timeAtom } from '../../../store'
 import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
 import {
     ChartLayout,
@@ -168,7 +168,7 @@ export const categoryTrend = (
 
 export function AssetOverview() {
     const workspace = useParams<{ ws: string }>().ws
-    const activeTimeRange = useAtomValue(spendTimeAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
     const [granularity, setGranularity] = useState<Granularity>('daily')
 
