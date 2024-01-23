@@ -106,6 +106,11 @@ const authRoutes = [
     },
     {
         key: 'assets account detail single',
+        path: '/:ws/asset-cloud-accounts/:id/:metric',
+        component: Single,
+    },
+    {
+        key: 'assets account detail single',
         path: '/:ws/asset-cloud-accounts/:id',
         component: Single,
     },
@@ -132,6 +137,11 @@ const authRoutes = [
     {
         key: 'spend single 1',
         path: '/:ws/spend/:id',
+        component: SingleSpend,
+    },
+    {
+        key: 'spend single metric 1',
+        path: '/:ws/spend/:id/:metric',
         component: SingleSpend,
     },
     {
