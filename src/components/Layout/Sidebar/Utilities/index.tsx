@@ -18,15 +18,13 @@ export default function Utilities({ isCollapsed, workspace }: IUtilities) {
             justifyContent="start"
             className="p-2 gap-0.5 border-t border-t-gray-700 h-fit min-h-fit"
         >
-            {!isCollapsed && (
-                <Text className="ml-3 mt-2 mb-2 !text-xs">UTILITIES</Text>
-            )}
+            {!isCollapsed && <Text className="my-2 !text-xs">UTILITIES</Text>}
             <JobsMenu isCollapsed={isCollapsed} workspace={workspace} />
             <CLIMenu isCollapsed={isCollapsed} />
             <Link
                 to="https://kaytu.io/docs"
                 target="_blank"
-                className={`w-full px-6 py-2 flex items-center rounded-md gap-2.5 text-gray-50 hover:bg-kaytu-800 ${
+                className={`w-full px-6 py-2 mb-3 flex items-center rounded-md gap-2.5 text-gray-50 hover:bg-kaytu-800 ${
                     isCollapsed ? '!p-2' : ''
                 }`}
             >

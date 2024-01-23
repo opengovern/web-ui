@@ -275,7 +275,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         style={{ maxHeight: 'calc(100vh - 366px)' }}
                     >
                         {!collapsed && (
-                            <Text className="ml-3 my-2 !text-xs">OVERVIEW</Text>
+                            <Text className="my-2 !text-xs">OVERVIEW</Text>
                         )}
                         {collapsed && (
                             <ChevronRightIcon
