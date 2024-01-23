@@ -272,7 +272,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         className={`w-full p-2 ${
                             collapsed ? '' : 'overflow-y-scroll'
                         } h-full no-scrollbar`}
-                        style={{ maxHeight: 'calc(100vh - 366px)' }}
+                        style={{ maxHeight: 'calc(100vh - 374px)' }}
                     >
                         {!collapsed && (
                             <Text className="my-2 !text-xs">OVERVIEW</Text>
