@@ -23,7 +23,7 @@ import { useEffect, useState } from 'react'
 import { useSetAtom } from 'jotai'
 import clipboardCopy from 'clipboard-copy'
 import { Dayjs } from 'dayjs'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import Breakdown from '../../../../components/Breakdown'
 import {
     useInventoryApiV2AnalyticsSpendCompositionList,
@@ -91,6 +91,7 @@ export default function SingleSpendConnection({
     }, [activeTimeRange])
 
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const setNotification = useSetAtom(notificationAtom)
 
     useEffect(() => {
@@ -535,7 +536,9 @@ export default function SingleSpendConnection({
                             options={gridOptions}
                             onRowClicked={(event) => {
                                 if (event.data.category.length) {
-                                    navigate(`metric_${event.data.id}`)
+                                    navigate(
+                                        `metric_${event.data.id}?${searchParams}`
+                                    )
                                 }
                             }}
                             onGridReady={(event) => {

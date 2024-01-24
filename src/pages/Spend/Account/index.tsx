@@ -1,12 +1,9 @@
 import { Col, Grid } from '@tremor/react'
-import { useAtomValue } from 'jotai'
 import { useState } from 'react'
-import SingleSpendConnection from '../Single/SingleConnection'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTableList,
 } from '../../../api/inventory.gen'
-import { filterAtom, spendTimeAtom } from '../../../store'
 import { SpendChart } from '../../../components/Spend/Chart'
 import { toErrorMessage } from '../../../types/apierror'
 import {
@@ -19,6 +16,11 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
 } from '../../../api/api'
 import TopHeader from '../../../components/Layout/Header'
+import {
+    defaultSpendTime,
+    useFilterState,
+    useUrlDateRangeState,
+} from '../../../utilities/urlstate'
 
 export const accountTrend = (
     responseChart: GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[],
@@ -80,8 +82,8 @@ export const accountTrend = (
 }
 
 export function SpendAccounts() {
-    const activeTimeRange = useAtomValue(spendTimeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultSpendTime)
+    const { value: selectedConnections } = useFilterState()
     const [chartGranularity, setChartGranularity] =
         useState<Granularity>('daily')
     const [tableGranularity, setTableGranularity] =
@@ -180,63 +182,49 @@ export function SpendAccounts() {
     return (
         <>
             <TopHeader datePicker filter />
-            {selectedConnections.connections.length === 1 ? (
-                <SingleSpendConnection
-                    activeTimeRange={activeTimeRange}
-                    id={selectedConnections.connections[0]}
-                />
-            ) : (
-                <Grid numItems={3} className="w-full gap-4">
-                    <Col numColSpan={3}>
-                        <SpendChart
-                            costTrend={
-                                accountTrend(
-                                    responseChart || [],
-                                    chartLayout
-                                ) || []
-                            }
-                            title="Total spend"
-                            timeRange={activeTimeRange}
-                            timeRangePrev={prevTimeRange}
-                            total={serviceCostResponse?.total_cost || 0}
-                            totalPrev={servicePrevCostResponse?.total_cost || 0}
-                            chartLayout={chartLayout}
-                            setChartLayout={setChartLayout}
-                            validChartLayouts={[
-                                'total',
-                                'provider',
-                                'accounts',
-                            ]}
-                            // noStackedChart
-                            isLoading={
-                                serviceCostLoading ||
-                                servicePrevCostLoading ||
-                                isLoadingChart
-                            }
-                            error={toErrorMessage(
-                                serviceCostErr,
-                                servicePrevCostErr
-                            )}
-                            onRefresh={() => {
-                                serviceCostPrevRefresh()
-                                serviceCostRefresh()
-                            }}
-                            onGranularityChanged={setChartGranularity}
-                        />
-                    </Col>
-                    <Col numColSpan={3} className="mt-6">
-                        <AccountTable
-                            isLoading={isLoading || prevIsLoading}
-                            response={response}
-                            responsePrev={responsePrev}
-                            onGranularityChange={setTableGranularity}
-                            selectedGranularity={tableGranularity}
-                            timeRange={activeTimeRange}
-                            prevTimeRange={prevTimeRange}
-                        />
-                    </Col>
-                </Grid>
-            )}
+            <Grid numItems={3} className="w-full gap-4">
+                <Col numColSpan={3}>
+                    <SpendChart
+                        costTrend={
+                            accountTrend(responseChart || [], chartLayout) || []
+                        }
+                        title="Total spend"
+                        timeRange={activeTimeRange}
+                        timeRangePrev={prevTimeRange}
+                        total={serviceCostResponse?.total_cost || 0}
+                        totalPrev={servicePrevCostResponse?.total_cost || 0}
+                        chartLayout={chartLayout}
+                        setChartLayout={setChartLayout}
+                        validChartLayouts={['total', 'provider', 'accounts']}
+                        // noStackedChart
+                        isLoading={
+                            serviceCostLoading ||
+                            servicePrevCostLoading ||
+                            isLoadingChart
+                        }
+                        error={toErrorMessage(
+                            serviceCostErr,
+                            servicePrevCostErr
+                        )}
+                        onRefresh={() => {
+                            serviceCostPrevRefresh()
+                            serviceCostRefresh()
+                        }}
+                        onGranularityChanged={setChartGranularity}
+                    />
+                </Col>
+                <Col numColSpan={3} className="mt-6">
+                    <AccountTable
+                        isLoading={isLoading || prevIsLoading}
+                        response={response}
+                        responsePrev={responsePrev}
+                        onGranularityChange={setTableGranularity}
+                        selectedGranularity={tableGranularity}
+                        timeRange={activeTimeRange}
+                        prevTimeRange={prevTimeRange}
+                    />
+                </Col>
+            </Grid>
         </>
     )
 }

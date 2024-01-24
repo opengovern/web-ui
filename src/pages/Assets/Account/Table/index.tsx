@@ -1,5 +1,5 @@
 import { Dayjs } from 'dayjs'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAtomValue, useSetAtom } from 'jotai/index'
 import { useEffect, useState } from 'react'
 import {
@@ -9,7 +9,7 @@ import {
     ListBulletIcon,
 } from '@heroicons/react/24/outline'
 import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
-import { IFilter, isDemoAtom, notificationAtom } from '../../../../store'
+import { isDemoAtom, notificationAtom } from '../../../../store'
 import { IColumn } from '../../../../components/Table'
 import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
@@ -20,6 +20,7 @@ import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../api/int
 import { MSort } from '../../../Spend/Account/AccountTable'
 import AdvancedTable from '../../../../components/AdvancedTable'
 import { options } from '../../Metric/Table'
+import { IFilter } from '../../../../utilities/urlstate'
 
 interface IAccountTable {
     timeRange: { start: Dayjs; end: Dayjs }
@@ -159,6 +160,7 @@ export default function AccountTable({
     timeRange,
     connections,
 }: IAccountTable) {
+    const [searchParams] = useSearchParams()
     const navigate = useNavigate()
     const setNotification = useSetAtom(notificationAtom)
     const isDemo = useAtomValue(isDemoAtom)
@@ -277,7 +279,7 @@ export default function AccountTable({
             onRowClicked={(event) => {
                 if (event.data.id) {
                     if (event.data.lifecycleState === 'ONBOARD') {
-                        navigate(`account_${event.data.id}`)
+                        navigate(`account_${event.data.id}?${searchParams}`)
                     } else {
                         setNotification({
                             text: 'Account is not onboarded',

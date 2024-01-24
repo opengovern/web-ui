@@ -1,15 +1,17 @@
 import { Tab, TabGroup, TabList } from '@tremor/react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useAtomValue } from 'jotai/index'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { checkGranularity } from '../../../utilities/dateComparator'
-import { filterAtom, spendTimeAtom } from '../../../store'
 import TopHeader from '../../../components/Layout/Header'
+import {
+    defaultSpendTime,
+    useUrlDateRangeState,
+} from '../../../utilities/urlstate'
 
 export default function SpendDetails() {
     const navigate = useNavigate()
-    const activeTimeRange = useAtomValue(spendTimeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+    const [searchParams] = useSearchParams()
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultSpendTime)
 
     const [selectedTab, setSelectedTab] = useState(0)
     const tabs = useLocation().hash
@@ -46,8 +48,14 @@ export default function SpendDetails() {
             <TopHeader breadCrumb={['Spend detail']} filter datePicker />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
-                    <Tab onClick={() => navigate('#metrics')}>Metrics</Tab>
-                    <Tab onClick={() => navigate('#cloud-accounts')}>
+                    <Tab onClick={() => navigate(`#metrics?${searchParams}`)}>
+                        Metrics
+                    </Tab>
+                    <Tab
+                        onClick={() =>
+                            navigate(`#cloud-accounts?${searchParams}`)
+                        }
+                    >
                         Cloud accounts
                     </Tab>
                 </TabList>

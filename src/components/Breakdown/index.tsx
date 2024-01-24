@@ -10,7 +10,7 @@ import {
     Title,
 } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useState } from 'react'
 import Chart from '../Chart'
 import { dateDisplay } from '../../utilities/dateDisplay'
@@ -37,6 +37,7 @@ export default function Breakdown({
     colorful = false,
 }: IBreakdown) {
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const [selectedIndex, setSelectedIndex] = useState(1)
 
     return (
@@ -82,7 +83,7 @@ export default function Breakdown({
                     icon={ChevronRightIcon}
                     iconPosition="right"
                     className="absolute bottom-6 right-6"
-                    onClick={() => navigate(`${seeMore}`)}
+                    onClick={() => navigate(`${seeMore}?${searchParams}`)}
                 >
                     See more
                 </Button>

@@ -1,5 +1,5 @@
 import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import {
     CurrencyDollarIcon,
@@ -195,6 +195,7 @@ export default function AccountTable({
     ref,
 }: IAccountTable) {
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
 
     const [granularityEnabled, setGranularityEnabled] = useState<boolean>(true)
 
@@ -495,7 +496,7 @@ export default function AccountTable({
             options={gridOptions}
             onRowClicked={(event) => {
                 if (event.data.id) {
-                    navigate(`account_${event.data.id}`)
+                    navigate(`account_${event.data.id}?${searchParams}`)
                 }
             }}
             onGridReady={(event) => {

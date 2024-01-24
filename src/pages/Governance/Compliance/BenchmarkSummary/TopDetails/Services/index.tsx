@@ -2,7 +2,7 @@ import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import { useComplianceApiV1FindingsServicesDetail } from '../../../../../../api/compliance.gen'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
-import { IFilter } from '../../../../../../store'
+import { IFilter } from '../../../../../../utilities/urlstate'
 
 interface IFinder {
     id: string | undefined

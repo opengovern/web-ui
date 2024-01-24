@@ -6,7 +6,7 @@ import {
     ServerStackIcon,
     ShieldExclamationIcon,
 } from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { badgeDelta } from '../../../utilities/deltaType'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 
@@ -38,12 +38,13 @@ export default function KeyInsightCard({
     id,
 }: IKeyInsightCard) {
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
 
     return (
         <Card
             key={title}
             className="cursor-pointer"
-            onClick={() => navigate(`key_insight_${id}`)}
+            onClick={() => navigate(`key_insight_${id}?${searchParams}`)}
         >
             <Flex flexDirection="col" alignItems="start" className="h-full">
                 <Flex flexDirection="col" alignItems="start" className="h-fit">

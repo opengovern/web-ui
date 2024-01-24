@@ -1,7 +1,5 @@
-import { useAtomValue } from 'jotai/index'
 import { useState } from 'react'
 import { Grid } from '@tremor/react'
-import { filterAtom, timeAtom } from '../../../store'
 import {
     ChartLayout,
     Granularity,
@@ -16,10 +14,16 @@ import {
     useInventoryApiV2AnalyticsTrendList,
 } from '../../../api/inventory.gen'
 import AccountTable from './Table'
+import {
+    defaultTime,
+    useFilterState,
+    useUrlDateRangeState,
+} from '../../../utilities/urlstate'
 
 export default function AssetAccounts() {
-    const activeTimeRange = useAtomValue(timeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { value: selectedConnections } = useFilterState()
+
     const [granularity, setGranularity] = useState<Granularity>('daily')
     const [chartLayout, setChartLayout] = useState<ChartLayout>('accounts')
 

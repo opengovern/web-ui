@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import {
     Badge,
     BarList,
@@ -50,7 +50,6 @@ import {
 } from '../../../utilities/labelMaker'
 import { dateDisplay, dateTimeDisplay } from '../../../utilities/dateDisplay'
 import Table, { IColumn } from '../../../components/Table'
-import { timeAtom } from '../../../store'
 import {
     checkGranularity,
     generateItems,
@@ -67,6 +66,7 @@ import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
 import { benchmarkChecks } from '../../../components/Cards/ComplianceCard'
 import TopHeader from '../../../components/Layout/Header'
 import { options } from '../../Assets/Metric/Table'
+import { defaultTime, useUrlDateRangeState } from '../../../utilities/urlstate'
 
 const pieData = (
     input:
@@ -220,8 +220,9 @@ const bmList = (
 
 export default function ResourceCollectionDetail() {
     const { resourceId } = useParams()
-    const activeTimeRange = useAtomValue(timeAtom)
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const [openDrawer, setOpenDrawer] = useState(false)
     const [showSummary, setShowSummary] = useState(false)
 
@@ -513,10 +514,12 @@ export default function ResourceCollectionDetail() {
                             onRowClicked={(event) => {
                                 if (event.data) {
                                     if (event.data.status === 'Assigned') {
-                                        navigate(`${event.data.id}`)
+                                        navigate(
+                                            `${event.data.id}?${searchParams}`
+                                        )
                                     } else {
                                         navigate(
-                                            `${event.data.id}/details#assignments`
+                                            `${event.data.id}/details#assignments?${searchParams}`
                                         )
                                     }
                                 }

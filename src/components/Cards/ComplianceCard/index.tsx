@@ -8,7 +8,7 @@ import {
     Title,
 } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
 import { getConnectorIcon } from '../ConnectorCard'
 import { numberDisplay } from '../../../utilities/numericDisplay'
@@ -52,6 +52,7 @@ export const benchmarkChecks = (
 
 export default function ComplianceCard({ benchmark }: IComplianceCard) {
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
 
     const connector = () => {
         if (benchmark?.tags?.plugin) {
@@ -73,7 +74,7 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                         benchmarkChecks(benchmark).total
                             ? ''
                             : '/details#assignments'
-                    }`
+                    }?${searchParams}`
                 )
             }
         >

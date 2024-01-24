@@ -1,6 +1,6 @@
 import { Flex, TextInput } from '@tremor/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useState } from 'react'
 import { ICellRendererParams } from 'ag-grid-community'
 import Table, { IColumn } from '../../components/Table'
@@ -74,6 +74,7 @@ const resourceCollectionColumns: IColumn<any, any>[] = [
 
 export default function ResourceCollection() {
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const [search, setSearch] = useState('')
 
     const { response, isLoading } = useInventoryApiV2ResourceCollectionList()
@@ -104,7 +105,7 @@ export default function ResourceCollection() {
                           )
                 }
                 loading={isLoading}
-                onRowClicked={(e) => navigate(e.data.id)}
+                onRowClicked={(e) => navigate(`${e.data.id}?${searchParams}`)}
                 fullWidth
             >
                 <Flex className="w-fit gap-3">

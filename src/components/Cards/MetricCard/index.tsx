@@ -9,7 +9,7 @@ import {
 } from '@tremor/react'
 import { ArrowPathIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { log } from 'console'
 import Spinner from '../../Spinner'
 import {
@@ -54,6 +54,7 @@ export default function MetricCard({
     isPercent = false,
 }: IProps) {
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
 
     const changeRate = (
         ((Number(metric) - Number(metricPrev)) / Number(metricPrev)) *
@@ -152,7 +153,7 @@ export default function MetricCard({
     return (
         <Card
             key={title}
-            onClick={() => (url ? navigate(url) : null)}
+            onClick={() => (url ? navigate(`${url}?${searchParams}`) : null)}
             className={`w-fit ${
                 border ? '' : 'ring-0 shadow-transparent p-0'
             } ${url ? 'cursor-pointer' : ''} ${

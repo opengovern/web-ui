@@ -7,7 +7,6 @@ interface IStep {
 }
 
 export default function FirstStep({ onNext, onPrevious }: IStep) {
-    const navigate = useNavigate()
     return (
         <Flex flexDirection="col" justifyContent="between" className="h-full">
             <Flex flexDirection="col" alignItems="start">

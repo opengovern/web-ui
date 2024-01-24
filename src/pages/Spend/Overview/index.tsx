@@ -10,7 +10,6 @@ import {
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../api/inventory.gen'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
-import { filterAtom, spendTimeAtom } from '../../../store'
 import { topAccounts, topCategories, topServices } from '..'
 import { SpendChart } from '../../../components/Spend/Chart'
 import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
@@ -24,6 +23,11 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostStackedItem,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
 } from '../../../api/api'
+import {
+    defaultSpendTime,
+    useFilterState,
+    useUrlDateRangeState,
+} from '../../../utilities/urlstate'
 
 const categoryTrend = (
     responseChart: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
@@ -72,8 +76,8 @@ const categoryTrend = (
 
 export function SpendOverview() {
     const workspace = useParams<{ ws: string }>().ws
-    const activeTimeRange = useAtomValue(spendTimeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultSpendTime)
+    const { value: selectedConnections } = useFilterState()
     const [granularity, setGranularity] = useState<Granularity>('daily')
 
     const query: {

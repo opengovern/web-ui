@@ -11,16 +11,15 @@ import {
     Text,
 } from '@tremor/react'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
-import { useAtomValue } from 'jotai'
 import Spinner from '../../components/Spinner'
-import { timeAtom } from '../../store'
 import { getErrorMessage } from '../../types/apierror'
 import { GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeter } from '../../api/api'
 import { useSubscriptionApiV1MeteringListCreate } from '../../api/subscription.gen'
 import TopHeader from '../../components/Layout/Header'
+import { defaultTime, useUrlDateRangeState } from '../../utilities/urlstate'
 
 function BillingItems() {
-    const activeTimeRange = useAtomValue(timeAtom)
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
 
     const { response, isLoading, error, sendNow } =
         useSubscriptionApiV1MeteringListCreate({

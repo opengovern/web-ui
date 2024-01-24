@@ -25,13 +25,7 @@ import { Link, useParams } from 'react-router-dom'
 import Editor from 'react-simple-code-editor'
 import { highlight, languages } from 'prismjs'
 import clipboardCopy from 'clipboard-copy'
-import {
-    IFilter,
-    filterAtom,
-    isDemoAtom,
-    notificationAtom,
-    queryAtom,
-} from '../../../../store'
+import { isDemoAtom, notificationAtom, queryAtom } from '../../../../store'
 import {
     useInventoryApiV2AnalyticsMetricsDetail,
     useInventoryApiV2AnalyticsSpendMetricList,
@@ -59,6 +53,7 @@ import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import { dateDisplay } from '../../../../utilities/dateDisplay'
 import Modal from '../../../../components/Modal'
 import { generateVisualMap } from '../../../Assets'
+import { IFilter, useFilterState } from '../../../../utilities/urlstate'
 
 export const getConnections = (con: IFilter) => {
     if (con.provider.length) {
@@ -79,7 +74,7 @@ export default function SingleSpendMetric({
     activeTimeRange,
     metricId,
 }: ISingle) {
-    const selectedConnections = useAtomValue(filterAtom)
+    const { value: selectedConnections } = useFilterState()
     const gridRef = useRef<AgGridReact>(null)
     const { id, metric, ws } = useParams()
     const setNotification = useSetAtom(notificationAtom)

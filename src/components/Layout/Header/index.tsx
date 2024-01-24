@@ -1,6 +1,6 @@
 import { Button, Flex, Title } from '@tremor/react'
 import { ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import {
     kebabCaseToLabel,
@@ -23,6 +23,7 @@ export default function TopHeader({
     breadCrumb,
 }: IHeader) {
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const url = window.location.pathname.split('/')
 
     const mainPage = () => {
@@ -58,11 +59,11 @@ export default function TopHeader({
                         <Button
                             onClick={() =>
                                 navigate(
-                                    goBack(
+                                    `${goBack(
                                         subPages().length > 1
                                             ? subPages().length
                                             : 1
-                                    )
+                                    )}?${searchParams}`
                                 )
                             }
                             variant="light"
@@ -80,7 +81,9 @@ export default function TopHeader({
                                 <Button
                                     onClick={() =>
                                         navigate(
-                                            goBack(subPages().length - i - 1)
+                                            `${goBack(
+                                                subPages().length - i - 1
+                                            )}?${searchParams}`
                                         )
                                     }
                                     variant="light"
