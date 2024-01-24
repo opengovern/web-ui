@@ -127,16 +127,16 @@ export const topControls = (
             let sev = ''
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            if (input[i].Control?.severity === 'critical') sev = 'e'
+            if (input[i].Control?.severity === 'critical') sev = '5. critical'
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            if (input[i].Control?.severity === 'high') sev = 'd'
+            if (input[i].Control?.severity === 'high') sev = '4. high'
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            if (input[i].Control?.severity === 'medium') sev = 'c'
+            if (input[i].Control?.severity === 'medium') sev = '3. medium'
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            if (input[i].Control?.severity === 'low') sev = 'b'
+            if (input[i].Control?.severity === 'low') sev = '2. low'
             if (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -145,7 +145,7 @@ export const topControls = (
                 // @ts-ignore
                 input[i].Control?.severity === ''
             )
-                sev = 'a'
+                sev = '1. none'
 
             data.push({
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
