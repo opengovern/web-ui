@@ -16,7 +16,7 @@ export default function Findings() {
         sendNow: refresh,
     } = useComplianceApiV1ControlsSummaryList()
 
-    const criticals =
+    const critical =
         response?.filter(
             (item) =>
                 item.control?.severity ===
@@ -40,7 +40,7 @@ export default function Findings() {
                 item.passed === false
         ) || []
 
-    const controls = criticals.concat(high).concat(medium).slice(0, 3)
+    const controls = critical.concat(high).concat(medium).slice(0, 3)
 
     return (
         <>
