@@ -60,7 +60,6 @@ export default function StackedChart({
             // },
         }
     })
-    console.log(series)
 
     const options = () => {
         return {

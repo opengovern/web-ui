@@ -249,7 +249,6 @@ export default function MetricTable({ timeRange, connections }: IMetricTable) {
     useEffect(() => {
         setTableKey(Math.random().toString(16).slice(2, 8))
     }, [manualGrouping, timeRange, resources])
-    console.log(rowGenerator(resources?.metrics))
 
     return (
         <AdvancedTable
