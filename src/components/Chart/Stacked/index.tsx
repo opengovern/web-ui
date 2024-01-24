@@ -37,16 +37,15 @@ export default function StackedChart({
     const uniqueStackLabels = chartData
         .flatMap((v) => v.map((i) => i.label))
         .filter((l, idx, arr) => arr.indexOf(l) === idx)
-
     const series = uniqueStackLabels.map((label) => {
         return {
             name: label,
             type: chartType === 'bar' ? 'bar' : 'line',
             stack: 'Total',
-            areaStyle: {},
-            emphasis: {
-                focus: 'series',
-            },
+            // areaStyle: {},
+            // emphasis: {
+            //     focus: 'series',
+            // },
             data: chartData.map(
                 (v) =>
                     v
@@ -61,6 +60,7 @@ export default function StackedChart({
             // },
         }
     })
+    console.log(series)
 
     const options = () => {
         return {
@@ -71,11 +71,28 @@ export default function StackedChart({
                 },
             },
             tooltip: {
+                confine: true,
                 trigger: 'axis',
                 axisPointer: {
-                    type: 'cross',
+                    type: 'line',
                     label: {
-                        backgroundColor: '#6a7985',
+                        formatter: (param: any) => {
+                            let total = 0
+                            if (param.seriesData && param.seriesData.length) {
+                                for (
+                                    let i = 0;
+                                    i < param.seriesData.length;
+                                    i += 1
+                                ) {
+                                    total += param.seriesData[i].data
+                                }
+                            }
+
+                            return `${param.value} (Total: ${
+                                isCost ? exactPriceDisplay(total) : total
+                            })`
+                        },
+                        // backgroundColor: '#6a7985',
                     },
                 },
                 valueFormatter: (value: number | string) => {
