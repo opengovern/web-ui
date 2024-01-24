@@ -303,9 +303,12 @@ export default function SingleMetric({
                             setSelectedRow(event.data)
                             setOpenDrawer(true)
                         }}
-                        fullWidth
                     >
-                        <Flex flexDirection="row-reverse" className="pl-3">
+                        <Flex
+                            flexDirection="row-reverse"
+                            justifyContent="between"
+                            className="pl-3 gap-4"
+                        >
                             <Flex
                                 className="w-fit"
                                 flexDirection="row"
