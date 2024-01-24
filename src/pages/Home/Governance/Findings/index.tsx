@@ -69,7 +69,7 @@ export default function Findings() {
                                       alignItems="start"
                                       className="w-full py-4"
                                   >
-                                      <div className="h-2 w-72 my-1 bg-slate-20 dark:bg-slate-7000 rounded" />
+                                      <div className="h-2 w-72 my-1 bg-slate-200 dark:bg-slate-700 rounded" />
                                       <Flex flexDirection="row">
                                           <div className="h-6 w-16 my-1 bg-slate-200 dark:bg-slate-700 rounded-md" />
                                           <div className="h-6 w-36 my-1 bg-slate-200 dark:bg-slate-700 rounded-md" />
