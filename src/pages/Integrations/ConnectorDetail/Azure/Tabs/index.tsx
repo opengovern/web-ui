@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
 import Subscriptions from './Subscriptions'
 import Principals from './Principals'
@@ -23,6 +23,7 @@ export default function AzureTabs({
 }: IAzure) {
     const [selectedTab, setSelectedTab] = useState(0)
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const tabs = useLocation().hash
     useEffect(() => {
         if (tabs === '#principals') {
@@ -34,10 +35,12 @@ export default function AzureTabs({
     return (
         <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
             <TabList className="mb-3">
-                <Tab onClick={() => navigate('#subscriptions')}>
+                <Tab onClick={() => navigate(`#subscriptions?${searchParams}`)}>
                     Azure Subscriptions
                 </Tab>
-                <Tab onClick={() => navigate('#principals')}>Principals</Tab>
+                <Tab onClick={() => navigate(`#principals${searchParams}`)}>
+                    Principals
+                </Tab>
             </TabList>
             <TabPanels>
                 <TabPanel key="sub">

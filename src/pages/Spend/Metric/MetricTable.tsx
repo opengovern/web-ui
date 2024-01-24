@@ -499,7 +499,7 @@ export default function MetricTable({
             options={gridOptions}
             onRowClicked={(event) => {
                 if (event.data.category.length) {
-                    navigate(`metric_${event.data.id}`)
+                    navigate(`metric_${event.data.id}?${searchParams}`)
                 }
             }}
             onGridReady={(event) => {

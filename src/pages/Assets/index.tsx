@@ -1,10 +1,5 @@
-import { Col, Grid } from '@tremor/react'
-import { useAtomValue } from 'jotai'
 import { useState } from 'react'
-import Layout from '../../components/Layout'
-import { filterAtom, timeAtom } from '../../store'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../api/integration.gen'
-import SummaryCard from '../../components/Cards/SummaryCard'
 import {
     useInventoryApiV2AnalyticsCompositionDetail,
     useInventoryApiV2AnalyticsMetricList,
@@ -18,13 +13,13 @@ import {
     SourceType,
 } from '../../api/api'
 import { dateDisplay, monthDisplay } from '../../utilities/dateDisplay'
-import Breakdown from '../../components/Breakdown'
-import ListCard from '../../components/Cards/ListCard'
 import { checkGranularity } from '../../utilities/dateComparator'
-import SingleConnection from './Single/SingleConnection'
-import Trends from '../../components/Trends'
-import TopHeader from '../../components/Layout/Header'
 import { AssetOverview } from './Overview'
+import {
+    defaultTime,
+    useFilterState,
+    useUrlDateRangeState,
+} from '../../utilities/urlstate'
 
 export const resourceTrendChart = (
     trend:
@@ -190,8 +185,8 @@ export const topServices = (
 }
 
 export default function Assets() {
-    const activeTimeRange = useAtomValue(timeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { value: selectedConnections } = useFilterState()
 
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'

@@ -1,13 +1,15 @@
-import { useAtomValue } from 'jotai'
 import { useParams } from 'react-router-dom'
-import { spendTimeAtom } from '../../../store'
 import NotFound from '../../Errors'
 import SingleSpendConnection from './SingleConnection'
 import SingleSpendMetric from './SingleMetric'
 import TopHeader from '../../../components/Layout/Header'
+import {
+    defaultSpendTime,
+    useUrlDateRangeState,
+} from '../../../utilities/urlstate'
 
 export default function SingleSpend() {
-    const activeTimeRange = useAtomValue(spendTimeAtom)
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultSpendTime)
     const { id, metric } = useParams()
     const urlParams = window.location.pathname.split('/')
 

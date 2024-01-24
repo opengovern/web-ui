@@ -1,18 +1,22 @@
 import { Button, Flex, Grid, Title } from '@tremor/react'
-import { useAtomValue } from 'jotai'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import PersonaCard from '../../components/Cards/PersonaCard'
-import { filterAtom, timeAtom } from '../../store'
 import { useComplianceApiV1InsightList } from '../../api/compliance.gen'
 import Spinner from '../../components/Spinner'
 import InsightCard from '../../components/Cards/InsightCard'
 import GoalCard from '../../components/Cards/GoalCard'
 import TopHeader from '../../components/Layout/Header'
+import {
+    defaultTime,
+    useFilterState,
+    useUrlDateRangeState,
+} from '../../utilities/urlstate'
 
 export default function Insights() {
     const navigate = useNavigate()
-    const activeTimeRange = useAtomValue(timeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+    const [searchParams] = useSearchParams()
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { value: selectedConnections } = useFilterState()
 
     const query = {
         ...(selectedConnections.provider && {
@@ -63,7 +67,7 @@ export default function Insights() {
                 <Title className="font-semibold">Popular insights</Title>
                 <Button
                     variant="light"
-                    onClick={() => navigate('insight-list')}
+                    onClick={() => navigate(`insight-list?${searchParams}`)}
                 >
                     View all insights
                 </Button>

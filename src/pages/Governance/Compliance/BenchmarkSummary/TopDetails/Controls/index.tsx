@@ -1,12 +1,11 @@
-import { useAtomValue } from 'jotai/index'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ICellRendererParams } from 'ag-grid-community'
 import { Flex } from '@tremor/react'
-import { filterAtom } from '../../../../../../store'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../../../api/compliance.gen'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord } from '../../../../../../api/api'
 import { severityBadge } from '../../../../Controls'
+import { useFilterState } from '../../../../../../utilities/urlstate'
 
 interface IFinder {
     id: string | undefined
@@ -163,8 +162,9 @@ export const topControls = (
 }
 
 export default function Controls({ id }: IFinder) {
-    const selectedConnections = useAtomValue(filterAtom)
+    const { value: selectedConnections } = useFilterState()
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
 
     const topQuery = {
         ...(id && { benchmarkId: [id] }),
@@ -189,7 +189,9 @@ export default function Controls({ id }: IFinder) {
             loading={isLoading}
             columns={policyColumns}
             rowData={topControls(controls?.records)}
-            onRowClicked={(event) => navigate(String(event.data.id))}
+            onRowClicked={(event) =>
+                navigate(`${String(event.data.id)}?${searchParams}`)
+            }
         />
     )
 }

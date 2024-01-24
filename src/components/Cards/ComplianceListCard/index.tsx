@@ -10,7 +10,7 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
 import { benchmarkChecks } from '../ComplianceCard'
@@ -26,6 +26,7 @@ interface IComplianceCard {
 
 export default function ComplianceListCard({ benchmark }: IComplianceCard) {
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
 
     const connector = () => {
         if (benchmark?.tags?.plugin) {
@@ -41,7 +42,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
         <Card
             key={benchmark?.id}
             className="cursor-pointer"
-            onClick={() => navigate(benchmark?.id || '')}
+            onClick={() => navigate(`${benchmark?.id || ''}?${searchParams}`)}
         >
             <Flex>
                 <Flex justifyContent="start" className="w-3/4 gap-3">

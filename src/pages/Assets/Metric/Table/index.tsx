@@ -10,13 +10,14 @@ import {
 import { useEffect, useState } from 'react'
 import { useSetAtom } from 'jotai/index'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { IFilter, notificationAtom } from '../../../../store'
+import { notificationAtom } from '../../../../store'
 import { IColumn } from '../../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../api/api'
 import { badgeDelta } from '../../../../utilities/deltaType'
 import { useInventoryApiV2AnalyticsMetricList } from '../../../../api/inventory.gen'
 import { MSort } from '../../../Spend/Account/AccountTable'
 import AdvancedTable from '../../../../components/AdvancedTable'
+import { IFilter } from '../../../../utilities/urlstate'
 
 interface IMetricTable {
     timeRange: { start: Dayjs; end: Dayjs }
@@ -282,7 +283,7 @@ export default function MetricTable({ timeRange, connections }: IMetricTable) {
             onRowClicked={(event) => {
                 if (event.data) {
                     if (event.data.category) {
-                        navigate(`metric_${event.data.id}`)
+                        navigate(`metric_${event.data.id}?${searchParams}`)
                     } else {
                         setNotification({
                             text: 'Account is not onboarded',

@@ -1,8 +1,6 @@
 import { Button, Flex, Title } from '@tremor/react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useAtomValue } from 'jotai'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Cog8ToothIcon } from '@heroicons/react/24/outline'
-import { timeAtom } from '../../../store'
 import AWSTabs from './AWS/Tabs'
 import AWSSummary from './AWS/Summary'
 import AzureSummary from './Azure/Summary'
@@ -14,12 +12,14 @@ import {
     useIntegrationApiV1CredentialsList,
 } from '../../../api/integration.gen'
 import TopHeader from '../../../components/Layout/Header'
+import { defaultTime, useUrlDateRangeState } from '../../../utilities/urlstate'
 
 export default function ConnectorDetail() {
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const { connector } = useParams()
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
 
-    const activeTimeRange = useAtomValue(timeAtom)
     const provider = StringToProvider(connector || '')
     const { response: accounts, isLoading: isAccountsLoading } =
         useIntegrationApiV1ConnectionsSummariesList({
@@ -48,7 +48,9 @@ export default function ConnectorDetail() {
                     <Title className="font-semibold">{connector}</Title>
                     <Button
                         variant="secondary"
-                        onClick={() => navigate('./resourcetypes')}
+                        onClick={() =>
+                            navigate(`./resourcetypes?${searchParams}`)
+                        }
                     >
                         <Cog8ToothIcon className="w-6" />
                     </Button>

@@ -3,7 +3,8 @@ import { useAtomValue } from 'jotai'
 import { useComplianceApiV1FindingsAccountsDetail } from '../../../../../../api/compliance.gen'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
-import { IFilter, isDemoAtom } from '../../../../../../store'
+import { isDemoAtom } from '../../../../../../store'
+import { IFilter } from '../../../../../../utilities/urlstate'
 
 interface IFinder {
     id: string | undefined

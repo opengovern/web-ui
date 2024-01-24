@@ -10,9 +10,7 @@ import {
     Title,
 } from '@tremor/react'
 import { BanknotesIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useAtomValue } from 'jotai/index'
-import { useNavigate, useParams } from 'react-router-dom'
-import { filterAtom, spendTimeAtom, timeAtom } from '../../../store'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTrendList,
@@ -23,14 +21,20 @@ import StackedChart from '../../../components/Chart/Stacked'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import { renderText } from '../../../components/Layout/Header/DateRangePicker'
 import ChangeDelta from '../../../components/ChangeDelta'
+import {
+    defaultSpendTime,
+    useFilterState,
+    useUrlDateRangeState,
+} from '../../../utilities/urlstate'
 
 const colors = ['#1E7CE0', '#2ECC71', '#FFA500', '#9B59B6', '#D0D4DA']
 
 export default function Spend() {
     const workspace = useParams<{ ws: string }>().ws
-    const activeTimeRange = useAtomValue(spendTimeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultSpendTime)
+    const { value: selectedConnections } = useFilterState()
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
 
     const query: {
         pageSize: number
@@ -110,7 +114,9 @@ export default function Spend() {
                     variant="light"
                     icon={ChevronRightIcon}
                     iconPosition="right"
-                    onClick={() => navigate(`/${workspace}/spend`)}
+                    onClick={() =>
+                        navigate(`/${workspace}/spend?${searchParams}`)
+                    }
                 >
                     View details
                 </Button>

@@ -5,15 +5,14 @@ import {
     MagnifyingGlassIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { useAtom } from 'jotai'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { Checkbox, Radio, useCheckboxState } from 'pretty-checkbox-react'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../api/integration.gen'
-import { filterAtom } from '../../../../store'
 import Spinner from '../../../Spinner'
 import { AWSIcon, AzureIcon } from '../../../../icons/icons'
 import { filteredConnectionsList } from '../../../../pages/Governance/Findings/Filters'
+import { useFilterState } from '../../../../utilities/urlstate'
 
 export const compareArrays = (a: any[], b: any[]) =>
     a.length === b.length &&
@@ -21,7 +20,8 @@ export const compareArrays = (a: any[], b: any[]) =>
 
 export default function Filter() {
     const [openDrawer, setOpenDrawer] = useState(false)
-    const [selectedFilters, setSelectedFilters] = useAtom(filterAtom)
+    const { value: selectedFilters, setValue: setSelectedFilters } =
+        useFilterState()
 
     const { response, isLoading } = useIntegrationApiV1ConnectionsSummariesList(
         {

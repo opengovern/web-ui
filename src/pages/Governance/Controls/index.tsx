@@ -14,7 +14,7 @@ import {
     Title,
 } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
     BookOpenIcon,
     CheckCircleIcon,
@@ -144,6 +144,7 @@ export default function Controls({ id, assignments }: IPolicies) {
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const [doc, setDoc] = useState('')
     const [docTitle, setDocTitle] = useState('')
 
@@ -257,7 +258,11 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                 <TableCell
                                                     className="w-24 min-w-[96px]"
                                                     onClick={() =>
-                                                        navigate(String(v?.id))
+                                                        navigate(
+                                                            `${String(
+                                                                v?.id
+                                                            )}?${searchParams}`
+                                                        )
                                                     }
                                                 >{`${name.substring(
                                                     0,
@@ -265,7 +270,11 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                 )}.${i + 1}`}</TableCell>
                                                 <TableCell
                                                     onClick={() =>
-                                                        navigate(String(v?.id))
+                                                        navigate(
+                                                            `${String(
+                                                                v?.id
+                                                            )}?${searchParams}`
+                                                        )
                                                     }
                                                 >
                                                     <Grid numItems={12}>
@@ -388,7 +397,9 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                     <TableCell
                                                         onClick={() =>
                                                             navigate(
-                                                                String(v?.id)
+                                                                `${String(
+                                                                    v?.id
+                                                                )}?${searchParams}`
                                                             )
                                                         }
                                                     >
@@ -430,7 +441,11 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                 )}
                                                 <TableCell
                                                     onClick={() =>
-                                                        navigate(String(v?.id))
+                                                        navigate(
+                                                            `${String(
+                                                                v?.id
+                                                            )}?${searchParams}`
+                                                        )
                                                     }
                                                 >
                                                     <ChevronRightIcon className="h-5 text-kaytu-500" />

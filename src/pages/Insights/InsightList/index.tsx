@@ -12,23 +12,28 @@ import {
     TextInput,
 } from '@tremor/react'
 import { useState } from 'react'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import {
     GridOptions,
     ICellRendererParams,
     RowClickedEvent,
 } from 'ag-grid-community'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
     useComplianceApiV1InsightList,
     useComplianceApiV1MetadataTagInsightList,
 } from '../../../api/compliance.gen'
-import { filterAtom, notificationAtom, timeAtom } from '../../../store'
+import { notificationAtom } from '../../../store'
 import Table, { IColumn } from '../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import { badgeDelta } from '../../../utilities/deltaType'
 import TopHeader from '../../../components/Layout/Header'
+import {
+    defaultTime,
+    useFilterState,
+    useUrlDateRangeState,
+} from '../../../utilities/urlstate'
 
 const columns: IColumn<any, any>[] = [
     {
@@ -91,12 +96,13 @@ const options: GridOptions = {
 
 export default function InsightList() {
     const navigate = useNavigate()
+    const searchParams = useSearchParams()
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedPersona, setSelectedPersona] = useState('')
     const [selectedCategory, setSelectedCategory] = useState('')
 
-    const activeTimeRange = useAtomValue(timeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { value: selectedConnections } = useFilterState()
     const setNotification = useSetAtom(notificationAtom)
 
     const query = {
@@ -126,7 +132,7 @@ export default function InsightList() {
     const { response: categories } = useComplianceApiV1MetadataTagInsightList()
 
     const navigateToInsightsDetails = (id: number | undefined) => {
-        navigate(`${id}`)
+        navigate(`${id}?${searchParams}`)
     }
 
     return (

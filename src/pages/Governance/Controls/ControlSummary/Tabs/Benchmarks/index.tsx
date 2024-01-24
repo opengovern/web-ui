@@ -1,6 +1,6 @@
 import { Badge, Card, Flex, Text, Title } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark } from '../../../../../../api/api'
 import { getConnectorIcon } from '../../../../../../components/Cards/ConnectorCard'
 
@@ -12,6 +12,7 @@ interface IBenchmarks {
 
 export default function Benchmarks({ benchmarks }: IBenchmarks) {
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const workspace = useParams<{ ws: string }>().ws
 
     return (
@@ -20,7 +21,9 @@ export default function Benchmarks({ benchmarks }: IBenchmarks) {
                 <Card
                     className="w-full py-4 cursor-pointer"
                     onClick={() =>
-                        navigate(`/${workspace}/compliance/${bm.id}`)
+                        navigate(
+                            `/${workspace}/compliance/${bm.id}?${searchParams}`
+                        )
                     }
                 >
                     <Flex>

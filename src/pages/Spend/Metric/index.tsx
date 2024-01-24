@@ -1,12 +1,10 @@
 import { Col, Grid } from '@tremor/react'
-import { useAtomValue } from 'jotai'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTableList,
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../api/inventory.gen'
-import { filterAtom, spendTimeAtom } from '../../../store'
 import { SpendChart } from '../../../components/Spend/Chart'
 import { toErrorMessage } from '../../../types/apierror'
 import {
@@ -15,10 +13,15 @@ import {
 } from '../../../components/Spend/Chart/Selectors'
 import MetricTable from './MetricTable'
 import TopHeader from '../../../components/Layout/Header'
+import {
+    defaultSpendTime,
+    useFilterState,
+    useUrlDateRangeState,
+} from '../../../utilities/urlstate'
 
 export function SpendMetrics() {
-    const activeTimeRange = useAtomValue(spendTimeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultSpendTime)
+    const { value: selectedConnections } = useFilterState()
     const [chartGranularity, setChartGranularity] =
         useState<Granularity>('daily')
     const [tableGranularity, setTableGranularity] =

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Flex, Text } from '@tremor/react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.gen'
 import { SourceType } from '../../../../api/api'
@@ -90,6 +90,7 @@ interface ICount {
 
 export default function ControlsWithFailure({ count }: ICount) {
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const [providerFilter, setProviderFilter] = useState<SourceType[]>([])
     const [connectionFilter, setConnectionFilter] = useState<string[]>([])
     const [benchmarkFilter, setBenchmarkFilter] = useState<string[]>([])
@@ -133,7 +134,7 @@ export default function ControlsWithFailure({ count }: ICount) {
                 rowData={topControls(controls?.records)}
                 onRowClicked={(event: RowClickedEvent) => {
                     if (event.data) {
-                        navigate(event.data.id)
+                        navigate(`${event.data.id}?${searchParams}`)
                     }
                 }}
             />

@@ -1,5 +1,4 @@
 import { Col, Grid } from '@tremor/react'
-import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import ListCard from '../../../components/Cards/ListCard'
@@ -10,7 +9,6 @@ import {
     useInventoryApiV2AnalyticsTrendList,
 } from '../../../api/inventory.gen'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
-import { filterAtom, spendTimeAtom, timeAtom } from '../../../store'
 import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
 import {
     ChartLayout,
@@ -26,6 +24,11 @@ import {
 } from '../../../api/api'
 import { topAccounts, topServices } from '..'
 import { AssetChart } from '../../../components/Asset/Chart'
+import {
+    defaultTime,
+    useFilterState,
+    useUrlDateRangeState,
+} from '../../../utilities/urlstate'
 
 export const accountTrend = (
     responseChart: GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow[],
@@ -168,8 +171,8 @@ export const categoryTrend = (
 
 export function AssetOverview() {
     const workspace = useParams<{ ws: string }>().ws
-    const activeTimeRange = useAtomValue(timeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { value: selectedConnections } = useFilterState()
     const [granularity, setGranularity] = useState<Granularity>('daily')
 
     const query: {

@@ -1,10 +1,10 @@
 import { Dayjs } from 'dayjs'
 import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import { Dispatch, SetStateAction } from 'react'
-import { IFilter } from '../../../../../store'
 import { IColumn } from '../../../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../../../api/api'
 import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
+import { IFilter } from '../../../../../utilities/urlstate'
 
 type MSort = {
     sortCol: string

@@ -11,7 +11,6 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import {
     ArrowPathRoundedSquareIcon,
@@ -20,7 +19,6 @@ import {
     XCircleIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
-import { filterAtom } from '../../../../store'
 import {
     useComplianceApiV1BenchmarksSummaryDetail,
     useComplianceApiV1FindingsTopDetail,
@@ -37,6 +35,7 @@ import { numberDisplay } from '../../../../utilities/numericDisplay'
 import SeverityBar from '../../../../components/SeverityBar'
 import Modal from '../../../../components/Modal'
 import TopHeader from '../../../../components/Layout/Header'
+import { useFilterState } from '../../../../utilities/urlstate'
 
 const topResources = (
     input:
@@ -112,7 +111,7 @@ const topControls = (
 
 export default function BenchmarkSummary() {
     const { benchmarkId, resourceId } = useParams()
-    const selectedConnections = useAtomValue(filterAtom)
+    const { value: selectedConnections } = useFilterState()
     const [stateIndex, setStateIndex] = useState(0)
     const [type, setType] = useState<'accounts' | 'services' | 'controls'>(
         'accounts'

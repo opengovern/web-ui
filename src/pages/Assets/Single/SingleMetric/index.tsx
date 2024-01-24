@@ -33,12 +33,7 @@ import {
     useInventoryApiV2AnalyticsMetricsDetail,
     useInventoryApiV2AnalyticsTrendList,
 } from '../../../../api/inventory.gen'
-import {
-    filterAtom,
-    isDemoAtom,
-    notificationAtom,
-    queryAtom,
-} from '../../../../store'
+import { isDemoAtom, notificationAtom, queryAtom } from '../../../../store'
 import { resourceTrendChart } from '../../index'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { numberDisplay } from '../../../../utilities/numericDisplay'
@@ -51,6 +46,7 @@ import DrawerPanel from '../../../../components/DrawerPanel'
 import { getErrorMessage } from '../../../../types/apierror'
 import Tag from '../../../../components/Tag'
 import Trends from '../../../../components/Trends'
+import { useFilterState } from '../../../../utilities/urlstate'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -63,7 +59,7 @@ export default function SingleMetric({
     metricId,
     resourceId,
 }: ISingle) {
-    const selectedConnections = useAtomValue(filterAtom)
+    const { value: selectedConnections } = useFilterState()
     const { ws, id, metric } = useParams()
     const isDemo = useAtomValue(isDemoAtom)
     const [modalData, setModalData] = useState('')

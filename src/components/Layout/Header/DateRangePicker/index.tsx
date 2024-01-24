@@ -8,11 +8,16 @@ import { AriaDateRangePickerProps, DateValue } from '@react-aria/datepicker'
 import dayjs from 'dayjs'
 import quarterOfYear from 'dayjs/plugin/quarterOfYear'
 import { Flex, Text, Title } from '@tremor/react'
-import { spendTimeAtom, timeAtom, workspaceAtom } from '../../../../store'
+import { workspaceAtom } from '../../../../store'
 import { FieldButton } from './Button'
 import { RangeCalendar } from './Calendar/RangeCalendar'
 import { Popover } from './Popover'
 import { Dialog } from './Dialog'
+import {
+    defaultSpendTime,
+    defaultTime,
+    useUrlDateRangeState,
+} from '../../../../utilities/urlstate'
 
 dayjs.extend(quarterOfYear)
 
@@ -46,7 +51,10 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
         url && url[2] ? url[2].includes('spend') || url[2] === 'home' : false
     const state = useDateRangePickerState(props)
     const ref = useRef(null)
-    const setActiveTimeRange = useSetAtom(isSpend ? spendTimeAtom : timeAtom)
+    const { setValue: setActiveTimeRange } = useUrlDateRangeState(
+        isSpend ? defaultSpendTime : defaultTime
+    )
+
     const [showList, setShowList] = useState(false)
     const listState = {
         isOpen: showList,
@@ -279,9 +287,8 @@ export default function DateRangePicker() {
     const isSpend =
         url && url[2] ? url[2].includes('spend') || url[2] === 'home' : false
     const currentWorkspace = useAtomValue(workspaceAtom)
-    const [activeTimeRange, setActiveTimeRange] = useAtom(
-        isSpend ? spendTimeAtom : timeAtom
-    )
+    const { value: activeTimeRange, setValue: setActiveTimeRange } =
+        useUrlDateRangeState(isSpend ? defaultSpendTime : defaultTime)
 
     useEffect(() => {
         if (

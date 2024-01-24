@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
     Button,
     Card,
@@ -67,6 +67,7 @@ export default function ListCard({
     onRefresh,
 }: ITopListCard) {
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const isDemo = useAtomValue(isDemoAtom)
 
     const value = (item: Item) => {
@@ -132,7 +133,9 @@ export default function ListCard({
                                                       type === 'account'
                                                           ? 'account_'
                                                           : 'metric_'
-                                                  }${item.kaytuId}`
+                                                  }${
+                                                      item.kaytuId
+                                                  }?${searchParams}`
                                               )
                                             : undefined
                                     }
@@ -174,7 +177,9 @@ export default function ListCard({
                 <Flex
                     justifyContent="end"
                     className="cursor-pointer"
-                    onClick={() => (url ? navigate(url) : null)}
+                    onClick={() =>
+                        url ? navigate(`${url}?${searchParams}`) : null
+                    }
                 >
                     {(items.total || 0) - items.data.length > 0 && (
                         <Button

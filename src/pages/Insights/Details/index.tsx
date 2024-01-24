@@ -23,13 +23,7 @@ import { highlight, languages } from 'prismjs'
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
 import clipboardCopy from 'clipboard-copy'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
-import {
-    filterAtom,
-    isDemoAtom,
-    notificationAtom,
-    queryAtom,
-    timeAtom,
-} from '../../../store'
+import { isDemoAtom, notificationAtom, queryAtom } from '../../../store'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import Table, { IColumn } from '../../../components/Table'
 import { snakeCaseToLabel } from '../../../utilities/labelMaker'
@@ -44,6 +38,11 @@ import SummaryCard from '../../../components/Cards/SummaryCard'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
 import Chart from '../../../components/Chart'
 import TopHeader from '../../../components/Layout/Header'
+import {
+    defaultTime,
+    useFilterState,
+    useUrlDateRangeState,
+} from '../../../utilities/urlstate'
 
 export const chartData = (inputData: any) => {
     const label = []
@@ -129,8 +128,8 @@ const gridOptions: GridOptions = {
 export default function InsightDetails() {
     const { id, ws } = useParams()
 
-    const activeTimeRange = useAtomValue(timeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { value: selectedConnections } = useFilterState()
     const [detailsDate, setDetailsDate] = useState<string>('')
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar'>('line')
     const [selectedIndex, setSelectedIndex] = useState(0)

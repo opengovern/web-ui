@@ -19,7 +19,7 @@ import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import clipboardCopy from 'clipboard-copy'
 import { Dayjs } from 'dayjs'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import Breakdown from '../../../../components/Breakdown'
 import {
     useInventoryApiV2AnalyticsCompositionDetail,
@@ -66,6 +66,7 @@ export default function SingleConnection({
     const [openDrawer, setOpenDrawer] = useState(false)
     const setNotification = useSetAtom(notificationAtom)
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
 
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
@@ -294,7 +295,9 @@ export default function SingleConnection({
                             loading={metricsLoading}
                             onRowClicked={(e) => {
                                 if (e.data) {
-                                    navigate(`metric_${e.data.id}`)
+                                    navigate(
+                                        `metric_${e.data.id}?${searchParams}`
+                                    )
                                 }
                             }}
                         />

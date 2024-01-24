@@ -1,10 +1,8 @@
 import { Grid } from '@tremor/react'
 import { useState } from 'react'
-import { useAtomValue } from 'jotai/index'
 import TopHeader from '../../../components/Layout/Header'
 import { toErrorMessage } from '../../../types/apierror'
 import { AssetChart } from '../../../components/Asset/Chart'
-import { filterAtom, timeAtom } from '../../../store'
 import {
     ChartLayout,
     Granularity,
@@ -15,10 +13,15 @@ import {
 } from '../../../api/inventory.gen'
 import { categoryTrend } from '../Overview'
 import MetricTable from './Table'
+import {
+    defaultTime,
+    useFilterState,
+    useUrlDateRangeState,
+} from '../../../utilities/urlstate'
 
 export default function AssetMetrics() {
-    const activeTimeRange = useAtomValue(timeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { value: selectedConnections } = useFilterState()
     const [granularity, setGranularity] = useState<Granularity>('daily')
     const [chartLayout, setChartLayout] = useState<ChartLayout>('metrics')
 
