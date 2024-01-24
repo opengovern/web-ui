@@ -165,8 +165,8 @@ export default function AccountTable({
 
     const [manualGrouping, onManualGrouping] = useState<string>('none')
     const [manualTableSort, onManualSortChange] = useState<MSort>({
-        sortCol: 'none',
-        sortType: null,
+        sortCol: 'resourceCount',
+        sortType: 'desc',
     })
     const [tab, setTab] = useState(0)
     const [tableKey, setTableKey] = useState('')
@@ -203,7 +203,7 @@ export default function AccountTable({
             function: () => {
                 onManualSortChange({
                     sortCol: 'providerConnectionName',
-                    sortType: 'desc',
+                    sortType: 'asc',
                 })
                 onManualGrouping('none')
             },

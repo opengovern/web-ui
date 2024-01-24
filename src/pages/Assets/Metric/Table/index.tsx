@@ -161,10 +161,17 @@ export default function MetricTable({ timeRange, connections }: IMetricTable) {
     const [manualGrouping, onManualGrouping] = useState<string>(
         searchParams.get('groupby') === 'category' ? 'category' : 'none'
     )
-    const [manualTableSort, onManualSortChange] = useState<MSort>({
-        sortCol: 'none',
-        sortType: null,
-    })
+    const [manualTableSort, onManualSortChange] = useState<MSort>(
+        searchParams.get('groupby')
+            ? {
+                  sortCol: 'none',
+                  sortType: null,
+              }
+            : {
+                  sortCol: 'count',
+                  sortType: 'desc',
+              }
+    )
     const [tab, setTab] = useState(
         searchParams.get('groupby') === 'category' ? 2 : 0
     )
