@@ -250,6 +250,7 @@ export default function Table<TData = any, TValue = any>({
     const gridOptions: GridOptions = {
         rowModelType: serverSideDatasource ? 'serverSide' : 'clientSide',
         columnDefs: buildColumnDef(),
+        suppressContextMenu: !!serverSideDatasource,
         ...(rowData && { rowData: rowData || [] }),
         ...(serverSideDatasource && {
             // serverSideDatasource,

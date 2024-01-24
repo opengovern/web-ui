@@ -12,7 +12,7 @@ import {
 import { BanknotesIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai/index'
 import { useNavigate, useParams } from 'react-router-dom'
-import { filterAtom, timeAtom } from '../../../store'
+import { filterAtom, spendTimeAtom, timeAtom } from '../../../store'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTrendList,
@@ -28,7 +28,7 @@ const colors = ['#1E7CE0', '#2ECC71', '#FFA500', '#9B59B6', '#D0D4DA']
 
 export default function Spend() {
     const workspace = useParams<{ ws: string }>().ws
-    const activeTimeRange = useAtomValue(timeAtom)
+    const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
     const navigate = useNavigate()
 
@@ -54,7 +54,7 @@ export default function Spend() {
             startTime: activeTimeRange.start.unix(),
         }),
         ...(activeTimeRange.end && {
-            endTime: activeTimeRange.end.subtract(1, 'day').unix(),
+            endTime: activeTimeRange.end.unix(),
         }),
         pageSize: 5,
         pageNumber: 1,
@@ -142,43 +142,71 @@ export default function Spend() {
                         className="gap-4 mt-4"
                     >
                         <Card className="p-3 border-0 ring-0 !shadow-none">
-                            <Text className="font-semibold text-gray-800">
-                                Total spend
-                            </Text>
-                            <Metric className="!text-2xl my-2">
-                                {exactPriceDisplay(
-                                    serviceCostResponse?.total_cost || 0
-                                )}
-                            </Metric>
-                            <Text>
-                                {renderText(
-                                    activeTimeRange.start,
-                                    activeTimeRange.end.subtract(1, 'day')
-                                )}
-                            </Text>
+                            {serviceCostLoading ? (
+                                <div className="animate-pulse">
+                                    <Text className="font-semibold text-gray-800">
+                                        Total spend
+                                    </Text>
+                                    <div className="h-8 w-28 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                    <div className="h-4 w-48 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                </div>
+                            ) : (
+                                <>
+                                    <Text className="font-semibold text-gray-800">
+                                        Total spend
+                                    </Text>
+                                    <Metric className="!text-2xl my-2">
+                                        {exactPriceDisplay(
+                                            serviceCostResponse?.total_cost || 0
+                                        )}
+                                    </Metric>
+                                    <Text>
+                                        {renderText(
+                                            activeTimeRange.start,
+                                            activeTimeRange.end.subtract(
+                                                1,
+                                                'day'
+                                            )
+                                        )}
+                                    </Text>
+                                </>
+                            )}
                         </Card>
                         <div className="w-full h-[1px] bg-gray-200" />
                         <Card className="p-3 border-0 ring-0 !shadow-none">
-                            <Text className="font-semibold text-gray-800 mb-2">
-                                Spend trend
-                            </Text>
-                            <ChangeDelta
-                                change={
-                                    (((serviceCostResponse?.total_cost || 0) -
-                                        (servicePrevCostResponse?.total_cost ||
-                                            0)) /
-                                        (servicePrevCostResponse?.total_cost ||
-                                            1)) *
-                                    100
-                                }
-                                size="xl"
-                            />
-                            <Text className="mt-2">
-                                {`Compared to ${renderText(
-                                    prevTimeRange.start,
-                                    prevTimeRange.end
-                                )}`}
-                            </Text>
+                            {servicePrevCostLoading || serviceCostLoading ? (
+                                <div className="animate-pulse">
+                                    <Text className="font-semibold text-gray-800">
+                                        Spend trend
+                                    </Text>
+                                    <div className="h-8 w-28 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                    <div className="h-4 w-48 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                </div>
+                            ) : (
+                                <>
+                                    <Text className="font-semibold text-gray-800 mb-2">
+                                        Spend trend
+                                    </Text>
+                                    <ChangeDelta
+                                        change={
+                                            (((serviceCostResponse?.total_cost ||
+                                                0) -
+                                                (servicePrevCostResponse?.total_cost ||
+                                                    0)) /
+                                                (servicePrevCostResponse?.total_cost ||
+                                                    1)) *
+                                            100
+                                        }
+                                        size="xl"
+                                    />
+                                    <Text className="mt-2">
+                                        {`Compared to ${renderText(
+                                            prevTimeRange.start,
+                                            prevTimeRange.end
+                                        )}`}
+                                    </Text>
+                                </>
+                            )}
                         </Card>
                     </Flex>
                 </Col>
@@ -186,7 +214,10 @@ export default function Spend() {
             <Flex justifyContent="start" className="gap-4 w-fit">
                 {trendStacked.data[0] ? (
                     trendStacked.data[0].map((t, i) => (
-                        <Flex justifyContent="start" className="gap-2 w-fit">
+                        <Flex
+                            justifyContent="start"
+                            className="gap-2 w-fit max-w-[180px]"
+                        >
                             <div
                                 className="h-2 w-2 min-w-[8px] rounded-full"
                                 style={{

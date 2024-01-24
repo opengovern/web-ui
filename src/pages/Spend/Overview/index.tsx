@@ -238,53 +238,47 @@ export function SpendOverview() {
                         onGranularityChanged={setGranularity}
                     />
                 </Col>
-                <Col numColSpan={1}>
-                    <ListCard
-                        title="Top Spend Categories"
-                        keyColumnTitle="Category"
-                        valueColumnTitle="Spend"
-                        loading={compositionLoading}
-                        items={topCategories(composition)}
-                        url={`/${workspace}/spend-metrics?groupby=category`}
-                        type="service"
-                        isPrice
-                        error={getErrorMessage(compositionError)}
-                        onRefresh={refreshComposition}
-                        isClickable={false}
-                    />
-                </Col>
-                <Col numColSpan={1} className="h-full">
-                    <ListCard
-                        title="Top Cloud Accounts"
-                        keyColumnTitle="Account Names"
-                        valueColumnTitle="Spend"
-                        loading={accountCostLoading}
-                        items={topAccounts(accountCostResponse)}
-                        url={`/${workspace}/spend-accounts`}
-                        type="account"
-                        isPrice
-                        // linkPrefix="accounts/"
-                        error={getErrorMessage(accountCostError)}
-                        onRefresh={refreshAccountCost}
-                        // isClickable={false}
-                    />
-                </Col>
-                <Col numColSpan={1} className="h-full">
-                    <ListCard
-                        title="Top Metrics"
-                        keyColumnTitle="Metric Name"
-                        valueColumnTitle="Spend"
-                        loading={serviceCostLoading}
-                        items={topServices(serviceCostResponse)}
-                        url={`/${workspace}/spend-metrics`}
-                        type="service"
-                        // linkPrefix="metrics/"
-                        isPrice
-                        error={getErrorMessage(serviceCostErr)}
-                        onRefresh={serviceCostRefresh}
-                        // isClickable={false}
-                    />
-                </Col>
+                <ListCard
+                    title="Top Spend Categories"
+                    keyColumnTitle="Category"
+                    valueColumnTitle="Spend"
+                    loading={compositionLoading}
+                    items={topCategories(composition)}
+                    url={`/${workspace}/spend-metrics?groupby=category`}
+                    type="service"
+                    isPrice
+                    error={getErrorMessage(compositionError)}
+                    onRefresh={refreshComposition}
+                    isClickable={false}
+                />
+                <ListCard
+                    title="Top Cloud Accounts"
+                    keyColumnTitle="Account Names"
+                    valueColumnTitle="Spend"
+                    loading={accountCostLoading}
+                    items={topAccounts(accountCostResponse)}
+                    url={`/${workspace}/spend-accounts`}
+                    type="account"
+                    isPrice
+                    // linkPrefix="accounts/"
+                    error={getErrorMessage(accountCostError)}
+                    onRefresh={refreshAccountCost}
+                    // isClickable={false}
+                />
+                <ListCard
+                    title="Top Metrics"
+                    keyColumnTitle="Metric Name"
+                    valueColumnTitle="Spend"
+                    loading={serviceCostLoading}
+                    items={topServices(serviceCostResponse)}
+                    url={`/${workspace}/spend-metrics`}
+                    type="service"
+                    // linkPrefix="metrics/"
+                    isPrice
+                    error={getErrorMessage(serviceCostErr)}
+                    onRefresh={serviceCostRefresh}
+                    // isClickable={false}
+                />
             </Grid>
         </>
     )
