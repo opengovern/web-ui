@@ -15,6 +15,7 @@ import {
     Cog6ToothIcon,
     CubeIcon,
     DocumentChartBarIcon,
+    ExclamationCircleIcon,
     HomeIcon,
     LightBulbIcon,
     MagnifyingGlassIcon,
@@ -57,21 +58,25 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const {
         response: spendCount,
         isLoading: spendCountIsLoading,
+        error: spendCountErr,
         sendNow: sendSpend,
     } = useInventoryApiV2AnalyticsSpendCountList({}, false, workspace)
     const {
         response: assetCount,
         isLoading: assetsIsLoading,
+        error: assetCountErr,
         sendNow: sendAssets,
     } = useInventoryApiV2AnalyticsCountList({}, false, workspace)
     const {
         response: findingsCount,
         isLoading: findingsIsLoading,
+        error: findingsErr,
         sendNow: sendFindings,
     } = useComplianceApiV1FindingsCountList({}, {}, false, workspace)
     const {
         response: connectionCount,
         isLoading: connectionsIsLoading,
+        error: connectionsErr,
         sendNow: sendConnections,
     } = useIntegrationApiV1ConnectionsCountList({}, {}, false, workspace)
 
@@ -106,6 +111,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     name: 'Summary',
                     page: 'assets',
                     isPreview: false,
+                    isLoading: false,
+                    count: undefined,
+                    error: false,
                 },
                 {
                     name: 'Cloud Accounts',
@@ -113,6 +121,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     isPreview: false,
                     isLoading: assetsIsLoading,
                     count: numericDisplay(assetCount?.connectionCount) || 0,
+                    error: assetCountErr,
                 },
                 {
                     name: 'Metrics',
@@ -120,6 +129,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     isPreview: false,
                     isLoading: assetsIsLoading,
                     count: numericDisplay(assetCount?.metricCount) || 0,
+                    error: assetCountErr,
                 },
             ],
             isPreview: false,
@@ -133,6 +143,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     name: 'Summary',
                     page: 'spend',
                     isPreview: false,
+                    isLoading: false,
+                    count: undefined,
+                    error: false,
                 },
                 {
                     name: 'Cloud Accounts',
@@ -140,6 +153,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     isPreview: false,
                     isLoading: spendCountIsLoading,
                     count: numericDisplay(spendCount?.connectionCount) || 0,
+                    error: spendCountErr,
                 },
                 {
                     name: 'Metrics',
@@ -147,6 +161,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     isPreview: false,
                     isLoading: spendCountIsLoading,
                     count: numericDisplay(spendCount?.metricCount) || 0,
+                    error: spendCountErr,
                 },
             ],
             isPreview: false,
@@ -162,6 +177,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     isPreview: false,
                     isLoading: false,
                     count: undefined,
+                    error: false,
                 },
                 {
                     name: 'Findings',
@@ -169,6 +185,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     isPreview: false,
                     isLoading: findingsIsLoading,
                     count: numericDisplay(findingsCount?.count) || 0,
+                    error: findingsErr,
                 },
             ],
             isPreview: false,
@@ -203,6 +220,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     isPreview: false,
                     isLoading: false,
                     count: undefined,
+                    error: false,
                 },
                 {
                     name: 'Alerts',
@@ -211,6 +229,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     isPreview: false,
                     isLoading: false,
                     count: undefined,
+                    error: false,
                 },
             ],
             isPreview: true,
@@ -221,6 +240,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             icon: PuzzlePieceIcon,
             isLoading: connectionsIsLoading,
             count: numericDisplay(connectionCount?.count) || 0,
+            error: connectionsErr,
             isPreview: false,
         },
         {
@@ -361,29 +381,29 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     <Text className="ml-[54px] text-inherit">
                                                         {i.name}
                                                     </Text>
-                                                    {i.count && !collapsed && (
+                                                    {i.count && (
                                                         <Badge
                                                             className="absolute right-2 top-1.5"
                                                             style={badgeStyle}
                                                         >
+                                                            {/* eslint-disable-next-line no-nested-ternary */}
                                                             {i.isLoading ? (
                                                                 <div className="animate-pulse h-1 w-4 my-2 bg-gray-700 rounded-md" />
+                                                            ) : i.error ? (
+                                                                <ExclamationCircleIcon className="h-5" />
                                                             ) : (
                                                                 i.count
                                                             )}
                                                         </Badge>
                                                     )}
-                                                    {i.isPreview &&
-                                                        !collapsed && (
-                                                            <Badge
-                                                                className="absolute right-2 top-1.5"
-                                                                style={
-                                                                    badgeStyle
-                                                                }
-                                                            >
-                                                                Preview
-                                                            </Badge>
-                                                        )}
+                                                    {i.isPreview && (
+                                                        <Badge
+                                                            className="absolute right-2 top-1.5"
+                                                            style={badgeStyle}
+                                                        >
+                                                            Preview
+                                                        </Badge>
+                                                    )}
                                                 </Link>
                                             ))}
                                         </AnimatedAccordion>
@@ -405,7 +425,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     >
                                                         <item.icon
                                                             className={`h-5 w-5 stroke-2 ${
-                                                                collapsed &&
                                                                 item.page.includes(
                                                                     currentPage
                                                                 )
@@ -455,32 +474,33 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                                     <Text className="text-inherit">
                                                                         {i.name}
                                                                     </Text>
-                                                                    {i.count &&
-                                                                        collapsed && (
-                                                                            <Badge
-                                                                                className="absolute right-2 top-1.5"
-                                                                                style={
-                                                                                    badgeStyle
-                                                                                }
-                                                                            >
-                                                                                {i.isLoading ? (
-                                                                                    <div className="animate-pulse h-1 w-4 my-2 bg-gray-700 rounded-md" />
-                                                                                ) : (
-                                                                                    i.count
-                                                                                )}
-                                                                            </Badge>
-                                                                        )}
-                                                                    {i.isPreview &&
-                                                                        collapsed && (
-                                                                            <Badge
-                                                                                className="absolute right-2 top-1.5"
-                                                                                style={
-                                                                                    badgeStyle
-                                                                                }
-                                                                            >
-                                                                                Preview
-                                                                            </Badge>
-                                                                        )}
+                                                                    {i.count && (
+                                                                        <Badge
+                                                                            className="absolute right-2 top-1.5"
+                                                                            style={
+                                                                                badgeStyle
+                                                                            }
+                                                                        >
+                                                                            {/* eslint-disable-next-line no-nested-ternary */}
+                                                                            {i.isLoading ? (
+                                                                                <div className="animate-pulse h-1 w-4 my-2 bg-gray-700 rounded-md" />
+                                                                            ) : i.error ? (
+                                                                                <ExclamationCircleIcon className="h-5" />
+                                                                            ) : (
+                                                                                i.count
+                                                                            )}
+                                                                        </Badge>
+                                                                    )}
+                                                                    {i.isPreview && (
+                                                                        <Badge
+                                                                            className="absolute right-2 top-1.5"
+                                                                            style={
+                                                                                badgeStyle
+                                                                            }
+                                                                        >
+                                                                            Preview
+                                                                        </Badge>
+                                                                    )}
                                                                 </Link>
                                                             )
                                                         )}
@@ -542,6 +562,21 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                 <Text className="text-inherit">
                                                     {item.name}
                                                 </Text>
+                                            )}
+                                            {item.count && !collapsed && (
+                                                <Badge
+                                                    className="absolute right-2 top-1.5"
+                                                    style={badgeStyle}
+                                                >
+                                                    {/* eslint-disable-next-line no-nested-ternary */}
+                                                    {item.isLoading ? (
+                                                        <div className="animate-pulse h-1 w-4 my-2 bg-gray-700 rounded-md" />
+                                                    ) : item.error ? (
+                                                        <ExclamationCircleIcon className="h-5" />
+                                                    ) : (
+                                                        item.count
+                                                    )}
+                                                </Badge>
                                             )}
                                             {item.isPreview && !collapsed && (
                                                 <Badge
