@@ -17,6 +17,8 @@ import { Dialog } from './Dialog'
 dayjs.extend(quarterOfYear)
 
 const url = window.location.pathname.split('/')
+const isSpend =
+    url && url[2] ? url[2].includes('spend') || url[2] === 'home' : false
 
 export const renderText = (st: dayjs.Dayjs, en: dayjs.Dayjs) => {
     const s = st
@@ -45,9 +47,7 @@ export const renderText = (st: dayjs.Dayjs, en: dayjs.Dayjs) => {
 function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
     const state = useDateRangePickerState(props)
     const ref = useRef(null)
-    const setActiveTimeRange = useSetAtom(
-        url[2].includes('spend') || url[2] === 'home' ? spendTimeAtom : timeAtom
-    )
+    const setActiveTimeRange = useSetAtom(isSpend ? spendTimeAtom : timeAtom)
     const [showList, setShowList] = useState(false)
     const listState = {
         isOpen: showList,
@@ -276,7 +276,6 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
 }
 
 export default function DateRangePicker() {
-    const isSpend = url[2].includes('spend') || url[2] === 'home'
     const currentWorkspace = useAtomValue(workspaceAtom)
     const [activeTimeRange, setActiveTimeRange] = useAtom(
         isSpend ? spendTimeAtom : timeAtom
