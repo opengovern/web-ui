@@ -17,7 +17,7 @@ import {
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../api/inventory.gen'
-import { toErrorMessage } from '../../../types/apierror'
+import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
 import { buildTrend } from '../../../components/Spend/Chart/helpers'
 import StackedChart from '../../../components/Chart/Stacked'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
@@ -100,7 +100,7 @@ export default function Spend() {
     const trendStacked = buildTrend(costTrend || [], 'trending', 'daily', 4)
 
     return (
-        <Card className="h-full pb-8">
+        <Card className="h-full pb-8 relative">
             <Flex className="mb-2">
                 <Flex justifyContent="start" className="gap-2">
                     <Icon icon={BanknotesIcon} className="p-0" />
@@ -231,6 +231,44 @@ export default function Spend() {
                     <div className="h-6" />
                 )}
             </Flex>
+            {toErrorMessage(
+                costTrendError,
+                serviceCostErr,
+                servicePrevCostErr
+            ) && (
+                <Flex
+                    flexDirection="col"
+                    justifyContent="between"
+                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
+                >
+                    <Flex
+                        flexDirection="col"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <Title className="mt-6">Failed to load component</Title>
+                        <Text className="mt-2">
+                            {toErrorMessage(
+                                costTrendError,
+                                serviceCostErr,
+                                servicePrevCostErr
+                            )}
+                        </Text>
+                    </Flex>
+                    <Button
+                        variant="secondary"
+                        className="mb-6"
+                        color="slate"
+                        onClick={() => {
+                            serviceCostRefresh()
+                            serviceCostPrevRefresh()
+                            costTrendRefresh()
+                        }}
+                    >
+                        Try Again
+                    </Button>
+                </Flex>
+            )}
         </Card>
     )
 }

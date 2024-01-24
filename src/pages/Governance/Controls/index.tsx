@@ -195,15 +195,15 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                 <Flex
                                                     justifyContent="start"
                                                     className="gap-2"
-                                                    style={{ width: '200px' }}
+                                                    style={{ width: '230px' }}
                                                 >
                                                     {value?.filter(
                                                         (c: any) => c.passed
                                                     ).length ===
                                                     value?.length ? (
-                                                        <CheckCircleIcon className="w-5 text-emerald-500" />
+                                                        <CheckCircleIcon className="w-5 min-w-[20px] text-emerald-500" />
                                                     ) : (
-                                                        <XCircleIcon className="w-5 text-rose-600" />
+                                                        <XCircleIcon className="w-5 min-w-[20px] text-rose-600" />
                                                     )}
                                                     <Text className="font-semibold whitespace-nowrap">{`Passed controls: ${numberDisplay(
                                                         value?.filter(

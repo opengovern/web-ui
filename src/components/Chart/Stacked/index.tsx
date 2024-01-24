@@ -123,6 +123,7 @@ export default function StackedChart({
                     },
                 },
             },
+            animation: false,
             barWidth: '40%',
             // color: false
             //     ? [
