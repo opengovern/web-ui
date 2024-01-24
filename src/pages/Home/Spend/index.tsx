@@ -224,7 +224,7 @@ export default function Spend() {
                                     backgroundColor: colors[i],
                                 }}
                             />
-                            <Text className="line-clamp-1">{t.label}</Text>
+                            <Text className="truncate">{t.label}</Text>
                         </Flex>
                     ))
                 ) : (
