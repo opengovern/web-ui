@@ -96,19 +96,23 @@ export function useURLState<T>(
 export function useURLParam<T>(
     urlParam: string,
     defaultValue: T,
-    serialize: (v: T) => string,
-    deserialize: (v: string) => T
+    serialize?: (v: T) => string,
+    deserialize?: (v: string) => T
 ) {
+    const serializeFn =
+        serialize !== undefined ? serialize : (v: T) => String(v)
+    const deserializeFn =
+        deserialize !== undefined ? deserialize : (v: string) => v as T
     return useURLState<T>(
         defaultValue,
         (v) => {
             const res = new Map<string, string[]>()
-            res.set(urlParam, [serialize(v)])
+            res.set(urlParam, [serializeFn(v)])
             return res
         },
         (v) => {
             const m = v.get(urlParam) || []
-            return deserialize(m[0])
+            return deserializeFn(m[0])
         }
     )
 }

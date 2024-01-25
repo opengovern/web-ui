@@ -59,23 +59,14 @@ export function AssetChart({
     validChartLayouts,
 }: ISpendChart) {
     const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
-    const [chartType, setChartType] = useURLParam<ChartType>(
-        'chartType',
-        'bar',
-        (v) => v as string,
-        (v) => v as ChartType
-    )
+    const [chartType, setChartType] = useURLParam<ChartType>('chartType', 'bar')
     const [granularity, setGranularity] = useURLParam<Granularity>(
         'granularity',
-        'daily',
-        (v) => v as string,
-        (v) => v as Granularity
+        'daily'
     )
     const [aggregation, setAggregation] = useURLParam<Aggregation>(
         'aggregation',
-        'trending',
-        (v) => v as string,
-        (v) => v as Aggregation
+        'trending'
     )
 
     const theTrend = trendChart(

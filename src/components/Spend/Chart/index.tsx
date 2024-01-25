@@ -17,6 +17,7 @@ import { buildTrend, costTrendChart } from './helpers'
 import { generateVisualMap } from '../../../pages/Assets'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../../api/api'
 import { errorHandlingWithErrorMessage } from '../../../types/apierror'
+import { useURLParam } from '../../../utilities/urlstate'
 
 interface ISpendChart {
     title: string
@@ -58,9 +59,15 @@ export function SpendChart({
     validChartLayouts,
 }: ISpendChart) {
     const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
-    const [chartType, setChartType] = useState<ChartType>('bar')
-    const [granularity, setGranularity] = useState<Granularity>('daily')
-    const [aggregation, setAggregation] = useState<Aggregation>('trending')
+    const [chartType, setChartType] = useURLParam<ChartType>('chartType', 'bar')
+    const [granularity, setGranularity] = useURLParam<Granularity>(
+        'granularity',
+        'daily'
+    )
+    const [aggregation, setAggregation] = useURLParam<Aggregation>(
+        'aggregation',
+        'trending'
+    )
 
     const trend = costTrendChart(costTrend, aggregation, granularity)
     const trendStacked = buildTrend(costTrend, aggregation, granularity, 5)

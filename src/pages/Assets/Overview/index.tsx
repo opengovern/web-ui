@@ -283,9 +283,7 @@ export function AssetOverview() {
 
     const [chartLayout, setChartLayout] = useURLParam<ChartLayout>(
         'show',
-        'categories',
-        (v) => v as string,
-        (v) => v as ChartLayout
+        'categories'
     )
     const trend = () => {
         if (chartLayout === 'total' || chartLayout === 'metrics') {

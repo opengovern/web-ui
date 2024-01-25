@@ -16,6 +16,7 @@ import MetricTable from './Table'
 import {
     defaultTime,
     useFilterState,
+    useURLParam,
     useUrlDateRangeState,
 } from '../../../utilities/urlstate'
 
@@ -23,7 +24,10 @@ export default function AssetMetrics() {
     const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
     const { value: selectedConnections } = useFilterState()
     const [granularity, setGranularity] = useState<Granularity>('daily')
-    const [chartLayout, setChartLayout] = useState<ChartLayout>('metrics')
+    const [chartLayout, setChartLayout] = useURLParam<ChartLayout>(
+        'show',
+        'metrics'
+    )
 
     const query: {
         pageSize: number
