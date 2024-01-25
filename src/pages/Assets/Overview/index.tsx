@@ -27,6 +27,8 @@ import { AssetChart } from '../../../components/Asset/Chart'
 import {
     defaultTime,
     useFilterState,
+    useURLParam,
+    useURLState,
     useUrlDateRangeState,
 } from '../../../utilities/urlstate'
 
@@ -279,7 +281,12 @@ export function AssetOverview() {
             granularity,
         })
 
-    const [chartLayout, setChartLayout] = useState<ChartLayout>('categories')
+    const [chartLayout, setChartLayout] = useURLParam<ChartLayout>(
+        'show',
+        'categories',
+        (v) => v as string,
+        (v) => v as ChartLayout
+    )
     const trend = () => {
         if (chartLayout === 'total' || chartLayout === 'metrics') {
             return trendResponse || []
@@ -304,7 +311,7 @@ export function AssetOverview() {
                         timeRangePrev={prevTimeRange}
                         total={serviceResponse?.total_count || 0}
                         totalPrev={servicePrevResponse?.total_count || 0}
-                        chartLayout={chartLayout}
+                        chartLayout={chartLayout as ChartLayout}
                         setChartLayout={setChartLayout}
                         validChartLayouts={[
                             'total',

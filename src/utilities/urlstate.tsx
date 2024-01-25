@@ -1,4 +1,6 @@
 import dayjs from 'dayjs'
+import { atom, useAtom } from 'jotai'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 export interface DateRange {
@@ -22,83 +24,140 @@ export interface IFilter {
     connectionGroup: string[]
 }
 
-export function useUrlArrayState(urlParam: string, defaultValue: string[]) {
-    const [searchParams, setSearchParams] = useSearchParams()
-    const value =
-        (searchParams.get(urlParam)?.length || 0) > 0
-            ? searchParams.getAll(urlParam) || []
-            : defaultValue
+const searchAtom = atom<string>(window.location.search)
+export function useURLState<T>(
+    defaultValue: T,
+    serialize: (v: T) => Map<string, string[]>,
+    deserialize: (v: Map<string, string[]>) => T
+): [T, (v: T) => void] {
+    const [searchParams] = useSearchParams()
+    const [search, setSearch] = useAtom(searchAtom)
+    useEffect(() => {
+        // keeping search in sync with url
+        if (search !== window.location.search) {
+            setSearch(window.location.search)
+        }
+    }, [searchParams])
 
-    const setValue = (v: string[]) => {
-        let current = window.location.search
+    const currentParams = useMemo(() => {
+        let current = search
         if (current.charAt(0) === '?') {
             current = current.slice(1)
         }
-        const arr = current.split('&').map((v2) => v2.split('='))
-        const newParams = new URLSearchParams()
+        const arr = current
+            .split('&')
+            .map((v2) => v2.split('=').map((v3) => decodeURIComponent(v3)))
+        const params = new URLSearchParams()
         arr.forEach((i) => {
             if (i[0] !== '') {
-                newParams.append(i[0], i[1])
+                params.append(i[0], i[1])
             }
+        })
+        return params
+    }, [search])
+
+    const [state, setState] = useState<T>(defaultValue)
+    const setValue = (v: T) => {
+        const serialized = serialize(v)
+        const newParams = new URLSearchParams()
+        currentParams.forEach((value, key) => newParams.append(key, value))
+
+        serialized.forEach((value, key) => {
+            newParams.delete(key)
+            value.forEach((item) => {
+                newParams.append(key, item)
+            })
         })
 
-        newParams.delete(urlParam)
-        v.forEach((v2, idx) => {
-            if (idx === 0) {
-                newParams.set(urlParam, v2)
-            } else {
-                newParams.append(urlParam, v2)
-            }
-        })
-        setSearchParams(newParams)
+        window.history.pushState({}, '', `?${newParams.toString()}`)
+        setSearch(window.location.search)
     }
 
-    return { value, setValue }
+    useEffect(() => {
+        const serialized = serialize(defaultValue)
+
+        const v: [string, string[]][] = []
+        serialized.forEach((defValue, key) => {
+            const value = currentParams.has(key)
+                ? currentParams.getAll(key)
+                : defValue
+
+            const res: [string, string[]] = [key, value]
+            v.push(res)
+        })
+
+        const m = new Map(v)
+        setState(deserialize(m))
+    }, [search])
+
+    return [state, setValue]
 }
 
-export function useUrlState(urlParam: string, defaultValue: string) {
-    const { value: arrayValue, setValue: setArrayValue } = useUrlArrayState(
-        urlParam,
-        defaultValue === '' ? [] : [defaultValue]
+export function useURLParam<T>(
+    urlParam: string,
+    defaultValue: T,
+    serialize: (v: T) => string,
+    deserialize: (v: string) => T
+) {
+    return useURLState<T>(
+        defaultValue,
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set(urlParam, [serialize(v)])
+            return res
+        },
+        (v) => {
+            const m = v.get(urlParam) || []
+            return deserialize(m[0])
+        }
     )
-    const value = arrayValue.at(0) || ''
-    const setValue = (v: string) => {
-        setArrayValue(v === '' ? [] : [v])
-    }
+}
 
-    return { value, setValue }
+export function useURLStringState(urlParam: string, defaultValue: string) {
+    const [state, setState] = useURLState<string>(
+        defaultValue,
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set(urlParam, [v])
+            return res
+        },
+        (v) => {
+            const m = v.get(urlParam) || []
+            return m[0]
+        }
+    )
+    return {
+        value: state,
+        setValue: setState,
+    }
 }
 
 export function useFilterState() {
-    const { value: provider, setValue: setProvider } = useUrlState(
-        'provider',
-        ''
+    const [state, setState] = useURLState<IFilter>(
+        {
+            provider: '',
+            connections: [],
+            connectionGroup: [],
+        },
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('provider', v.provider !== '' ? [v.provider] : [])
+            res.set('connections', v.connections)
+            return res
+        },
+        (v) => {
+            return {
+                provider:
+                    (v.get('provider')?.at(0) as 'AWS' | 'Azure' | '') || '',
+                connections: v.get('connections') || [],
+                connectionGroup: [],
+            }
+        }
     )
-    const { value: connections, setValue: setConnections } = useUrlArrayState(
-        'connection',
-        []
-    )
-    const { value: connectionGroup, setValue: setConnectionGroup } =
-        useUrlArrayState('connectionGroup', [])
-
-    const value: IFilter = {
-        provider: provider === 'AWS' || provider === 'Azure' ? provider : '',
-        connections,
-        connectionGroup,
+    return {
+        value: state,
+        setValue: setState,
     }
-    const setValue = (v: IFilter) => {
-        if (provider !== v.provider) {
-            setProvider(v.provider)
-        }
-        if (connections !== v.connections) {
-            setConnections(v.connections)
-        }
-        if (connectionGroup !== v.connectionGroup) {
-            setConnectionGroup(v.connectionGroup)
-        }
-    }
-
-    return { value, setValue }
 }
 
 export function useUrlDateRangeState(defaultValue: DateRange) {
@@ -108,29 +167,23 @@ export function useUrlDateRangeState(defaultValue: DateRange) {
     const toString = (v: dayjs.Dayjs) => {
         return v.format('YYYY-MM-DD')
     }
-
-    const { value: startValue, setValue: setStartValue } = useUrlState(
-        'startDate',
-        toString(defaultValue.start)
-    )
-    const { value: endValue, setValue: setEndValue } = useUrlState(
-        'endDate',
-        toString(defaultValue.end)
-    )
-
-    const value: DateRange = {
-        start: parseValue(startValue),
-        end: parseValue(endValue),
-    }
-
-    const setValue = (v: DateRange) => {
-        if (!v.start.isSame(value.start)) {
-            setStartValue(toString(v.start))
+    const [state, setState] = useURLState<DateRange>(
+        defaultValue,
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('startDate', [toString(v.start)])
+            res.set('endDate', [toString(v.end)])
+            return res
+        },
+        (v) => {
+            return {
+                start: parseValue((v.get('startDate') || [])[0]),
+                end: parseValue((v.get('endDate') || [])[0]),
+            }
         }
-        if (!v.end.isSame(value.end)) {
-            setEndValue(toString(v.end))
-        }
+    )
+    return {
+        value: state,
+        setValue: setState,
     }
-
-    return { value, setValue }
 }

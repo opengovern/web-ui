@@ -17,6 +17,7 @@ import { buildTrend, trendChart } from './helpers'
 import { generateVisualMap } from '../../../pages/Assets'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint } from '../../../api/api'
 import { errorHandlingWithErrorMessage } from '../../../types/apierror'
+import { useURLParam, useURLState } from '../../../utilities/urlstate'
 
 interface ISpendChart {
     title: string
@@ -58,12 +59,36 @@ export function AssetChart({
     validChartLayouts,
 }: ISpendChart) {
     const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
-    const [chartType, setChartType] = useState<ChartType>('bar')
-    const [granularity, setGranularity] = useState<Granularity>('daily')
-    const [aggregation, setAggregation] = useState<Aggregation>('trending')
+    const [chartType, setChartType] = useURLParam<ChartType>(
+        'chartType',
+        'bar',
+        (v) => v as string,
+        (v) => v as ChartType
+    )
+    const [granularity, setGranularity] = useURLParam<Granularity>(
+        'granularity',
+        'daily',
+        (v) => v as string,
+        (v) => v as Granularity
+    )
+    const [aggregation, setAggregation] = useURLParam<Aggregation>(
+        'aggregation',
+        'trending',
+        (v) => v as string,
+        (v) => v as Aggregation
+    )
 
-    const theTrend = trendChart(trend, aggregation, granularity)
-    const trendStacked = buildTrend(trend, aggregation, granularity, 5)
+    const theTrend = trendChart(
+        trend,
+        aggregation as Aggregation,
+        granularity as Granularity
+    )
+    const trendStacked = buildTrend(
+        trend,
+        aggregation as Aggregation,
+        granularity as Granularity,
+        5
+    )
 
     const visualMap = generateVisualMap(theTrend.flag, theTrend.label)
     useEffect(() => {
@@ -87,9 +112,9 @@ export function AssetChart({
                 <Col numColSpan={4}>
                     <AssetChartSelectors
                         timeRange={timeRange}
-                        chartType={chartType}
+                        chartType={chartType as ChartType}
                         setChartType={setChartType}
-                        granularity={granularity}
+                        granularity={granularity as Granularity}
                         setGranularity={(v) => {
                             setGranularity(v)
                             onGranularityChanged(v)
@@ -97,7 +122,7 @@ export function AssetChart({
                         chartLayout={chartLayout}
                         setChartLayout={setChartLayout}
                         validChartLayouts={validChartLayouts}
-                        aggregation={aggregation}
+                        aggregation={aggregation as Aggregation}
                         setAggregation={setAggregation}
                         noStackedChart={noStackedChart}
                     />
@@ -124,7 +149,7 @@ export function AssetChart({
                 <StackedChart
                     labels={trendStacked.label}
                     chartData={trendStacked.data}
-                    chartType={chartType}
+                    chartType={chartType as ChartType}
                     loading={isLoading}
                     error={error}
                     isCost={false}
@@ -133,7 +158,7 @@ export function AssetChart({
                 <Chart
                     labels={theTrend.label}
                     chartData={theTrend.data}
-                    chartType={chartType}
+                    chartType={chartType as ChartType}
                     chartAggregation={
                         aggregation === 'trending' ? 'trend' : 'cumulative'
                     }
