@@ -23,6 +23,7 @@ import ControlsWithFailure from './ControlsWithFailure'
 import FailingCloudAccounts from './FailingCloudAccounts'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import TopHeader from '../../../components/Layout/Header'
+import Filter from './F'
 
 export default function Findings() {
     const [tab, setTab] = useState(0)
@@ -107,6 +108,7 @@ export default function Findings() {
                         </Tab>
                     ))}
                 </TabList>
+                <Filter />
                 <TabPanels className="mt-4">
                     <TabPanel>
                         <FindingsWithFailure
