@@ -42,10 +42,10 @@ export default function StackedChart({
             name: label,
             type: chartType === 'bar' ? 'bar' : 'line',
             stack: 'Total',
-            // areaStyle: {},
-            // emphasis: {
-            //     focus: 'series',
-            // },
+            areaStyle: {},
+            emphasis: {
+                focus: 'series',
+            },
             data: chartData.map(
                 (v) =>
                     v
@@ -53,11 +53,11 @@ export default function StackedChart({
                         .map((i) => i.value)
                         .at(0) || 0
             ),
-            // itemStyle: {
-            //     borderWidth: 0.5,
-            //     borderType: 'solid',
-            //     borderColor: '#73c0de',
-            // },
+            itemStyle: {
+                borderWidth: 0.5,
+                borderType: 'solid',
+                borderColor: '#73c0de',
+            },
         }
     })
 
