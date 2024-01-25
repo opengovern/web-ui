@@ -3,7 +3,7 @@ import { Radio } from 'pretty-checkbox-react'
 import { SourceType } from '../../../../../api/api'
 
 interface IProvider {
-    value: string
+    value: SourceType
     onChange: (p: SourceType) => void
 }
 export default function Provider({ value, onChange }: IProvider) {

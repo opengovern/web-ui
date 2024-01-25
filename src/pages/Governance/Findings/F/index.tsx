@@ -1,25 +1,83 @@
-import { Card, Flex, Icon, Text } from '@tremor/react'
+import { Button, Card, Flex, Icon, Text } from '@tremor/react'
 import { Popover, Transition } from '@headlessui/react'
 import {
     ChevronDownIcon,
     CloudIcon,
     TrashIcon,
 } from '@heroicons/react/24/outline'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import Provider from './Provider'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
     SourceType,
+    TypesFindingSeverity,
 } from '../../../../api/api'
 import ConformanceStatus from './ConformanceStatus'
+import Severity from './Severity'
+import { useComplianceApiV1FindingsFiltersCreate } from '../../../../api/compliance.gen'
+import Others from './Others'
 
-export default function Filter() {
-    const [provider, setProvider] = useState<SourceType>(SourceType.Nil)
+interface IFilters {
+    onApply: (obj: {
+        connector: SourceType
+        conformanceStatus:
+            | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+            | undefined
+        severity: TypesFindingSeverity[] | undefined
+        connectionID: string[] | undefined
+        controlID: string[] | undefined
+        benchmarkID: string[] | undefined
+        resourceTypeID: string[] | undefined
+    }) => void
+}
+
+export default function Filter({ onApply }: IFilters) {
+    const [open, isOpen] = useState(false)
+    const [connector, setConnector] = useState<SourceType>(SourceType.Nil)
     const [conformanceStatus, setConformanceStatus] = useState<
-        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+        | undefined
     >([
         GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
     ])
+    const [severity, setSeverity] = useState<
+        TypesFindingSeverity[] | undefined
+    >([
+        TypesFindingSeverity.FindingSeverityCritical,
+        TypesFindingSeverity.FindingSeverityHigh,
+        TypesFindingSeverity.FindingSeverityMedium,
+        TypesFindingSeverity.FindingSeverityLow,
+        TypesFindingSeverity.FindingSeverityNone,
+    ])
+    const [connectionID, setConnectionID] = useState<string[] | undefined>([])
+    const [controlID, setControlID] = useState<string[] | undefined>([])
+    const [benchmarkID, setBenchmarkID] = useState<string[] | undefined>([])
+    const [resourceTypeID, setResourceTypeID] = useState<string[] | undefined>(
+        []
+    )
+
+    useEffect(() => {
+        onApply({
+            connector,
+            conformanceStatus,
+            severity,
+            connectionID,
+            controlID,
+            benchmarkID,
+            resourceTypeID,
+        })
+    }, [
+        connector,
+        conformanceStatus,
+        severity,
+        connectionID,
+        controlID,
+        benchmarkID,
+        resourceTypeID,
+    ])
+
+    const { response: filters, isLoading: filtersLoading } =
+        useComplianceApiV1FindingsFiltersCreate({})
 
     const options = [
         {
@@ -27,7 +85,7 @@ export default function Filter() {
             name: 'Provider',
             icon: CloudIcon,
             component: (
-                <Provider value={provider} onChange={(p) => setProvider(p)} />
+                <Provider value={connector} onChange={(p) => setConnector(p)} />
             ),
             removable: false,
         },
@@ -48,7 +106,59 @@ export default function Filter() {
             name: 'Severity',
             icon: CloudIcon,
             component: (
-                <Provider value={provider} onChange={(p) => setProvider(p)} />
+                <Severity data={filters} onChange={(s) => setSeverity(s)} />
+            ),
+            removable: false,
+        },
+        {
+            id: 'connection',
+            name: 'Connection',
+            icon: CloudIcon,
+            component: (
+                <Others
+                    data={filters}
+                    type="connectionID"
+                    onChange={(o) => setConnectionID(o)}
+                />
+            ),
+            removable: false,
+        },
+        {
+            id: 'control',
+            name: 'Control',
+            icon: CloudIcon,
+            component: (
+                <Others
+                    data={filters}
+                    type="controlID"
+                    onChange={(o) => setControlID(o)}
+                />
+            ),
+            removable: false,
+        },
+        {
+            id: 'benchmark',
+            name: 'Benchmark',
+            icon: CloudIcon,
+            component: (
+                <Others
+                    data={filters}
+                    type="benchmarkID"
+                    onChange={(o) => setBenchmarkID(o)}
+                />
+            ),
+            removable: false,
+        },
+        {
+            id: 'resource',
+            name: 'Resource Type',
+            icon: CloudIcon,
+            component: (
+                <Others
+                    data={filters}
+                    type="resourceTypeID"
+                    onChange={(o) => setResourceTypeID(o)}
+                />
             ),
             removable: false,
         },
@@ -64,7 +174,9 @@ export default function Filter() {
                                 icon={f.icon}
                                 className="w-3 p-0 mr-3 text-inherit"
                             />
-                            <Text className="text-inherit">{f.name}</Text>
+                            <Text className="text-inherit whitespace-nowrap">
+                                {f.name}
+                            </Text>
                             <ChevronDownIcon className="ml-1 w-3 text-inherit" />
                         </Flex>
                     </Popover.Button>
@@ -77,10 +189,12 @@ export default function Filter() {
                         leaveFrom="opacity-100 translate-y-0"
                         leaveTo="opacity-0 translate-y-1"
                     >
-                        <Popover.Panel className="absolute top-full left-0">
-                            <Card className="mt-2 p-4 w-56">
+                        <Popover.Panel className="absolute z-50 top-full left-0">
+                            <Card className="mt-2 p-4 w-64">
                                 <Flex className="mb-3">
-                                    <Text>{f.name}</Text>
+                                    <Text className="font-semibold">
+                                        {f.name}
+                                    </Text>
                                     {f.removable && (
                                         <div className="group relative">
                                             <TrashIcon className="w-4 cursor-pointer hover:text-kaytu-500" />

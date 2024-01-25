@@ -24,6 +24,11 @@ import FailingCloudAccounts from './FailingCloudAccounts'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import TopHeader from '../../../components/Layout/Header'
 import Filter from './F'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
+    SourceType,
+    TypesFindingSeverity,
+} from '../../../api/api'
 
 export default function Findings() {
     const [tab, setTab] = useState(0)
@@ -39,6 +44,33 @@ export default function Findings() {
     const [accountCount, setAccountCount] = useState<number | undefined>(
         undefined
     )
+    const [query, setQuery] = useState<{
+        connector: SourceType
+        conformanceStatus:
+            | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+            | undefined
+        severity: TypesFindingSeverity[] | undefined
+        connectionID: string[] | undefined
+        controlID: string[] | undefined
+        benchmarkID: string[] | undefined
+        resourceTypeID: string[] | undefined
+    }>({
+        connector: SourceType.Nil,
+        conformanceStatus: [
+            GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+        ],
+        severity: [
+            TypesFindingSeverity.FindingSeverityCritical,
+            TypesFindingSeverity.FindingSeverityHigh,
+            TypesFindingSeverity.FindingSeverityMedium,
+            TypesFindingSeverity.FindingSeverityLow,
+            TypesFindingSeverity.FindingSeverityNone,
+        ],
+        connectionID: [],
+        controlID: [],
+        benchmarkID: [],
+        resourceTypeID: [],
+    })
 
     const tabs = [
         {
@@ -72,7 +104,7 @@ export default function Findings() {
             <TopHeader />
             <TabGroup index={tab} onIndexChange={setTab}>
                 <TabList className="border-0">
-                    {tabs.map((t) => (
+                    {/* {tabs.map((t) => (
                         <Tab
                             key={t.name}
                             className="p-0 w-1/4 rounded-lg compliance-fix"
@@ -106,16 +138,18 @@ export default function Findings() {
                                 </Flex>
                             </Card>
                         </Tab>
-                    ))}
+                    ))} */}
+                    <Tab>Findings</Tab>
                 </TabList>
-                <Filter />
+                <Filter onApply={(e) => setQuery(e)} />
                 <TabPanels className="mt-4">
                     <TabPanel>
                         <FindingsWithFailure
+                            query={query}
                             count={(x) => setFindingCount(x)}
                         />
                     </TabPanel>
-                    <TabPanel>
+                    {/* <TabPanel>
                         <ResourcesWithFailure
                             count={(x) => setResourceCount(x)}
                         />
@@ -129,7 +163,7 @@ export default function Findings() {
                         <FailingCloudAccounts
                             count={(x) => setAccountCount(x)}
                         />
-                    </TabPanel>
+                    </TabPanel> */}
                 </TabPanels>
             </TabGroup>
         </>

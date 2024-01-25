@@ -4,9 +4,13 @@ import { GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus } from '..
 import { compareArrays } from '../../../../../components/Layout/Header/Filter'
 
 interface IConformanceStatus {
-    value: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+    value:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+        | undefined
     onChange: (
-        c: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+        c:
+            | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+            | undefined
     ) => void
 }
 
@@ -45,7 +49,7 @@ export default function ConformanceStatus({
                 <Radio
                     name="conformance_status"
                     key={`conformance_status-${o.name}`}
-                    checked={compareArrays(o.value.sort(), value.sort())}
+                    checked={compareArrays(o.value.sort(), value?.sort() || [])}
                     onClick={() => onChange(o.value)}
                 >
                     <Text>{o.name}</Text>

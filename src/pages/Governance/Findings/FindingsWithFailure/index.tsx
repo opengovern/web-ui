@@ -12,13 +12,14 @@ import Table, { IColumn } from '../../../../components/Table'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import {
     Api,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
     SourceType,
+    TypesFindingSeverity,
 } from '../../../../api/api'
 import AxiosAPI from '../../../../api/ApiConfig'
 import FindingDetail from './Detail'
 import { severityBadge } from '../../Controls'
-import FindingFilters from '../Filters'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
 export const columns = (isDemo: boolean) => {
@@ -185,9 +186,20 @@ let sortKey = ''
 
 interface ICount {
     count: (x: number | undefined) => void
+    query: {
+        connector: SourceType
+        conformanceStatus:
+            | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+            | undefined
+        severity: TypesFindingSeverity[] | undefined
+        connectionID: string[] | undefined
+        controlID: string[] | undefined
+        benchmarkID: string[] | undefined
+        resourceTypeID: string[] | undefined
+    }
 }
 
-export default function FindingsWithFailure({ count }: ICount) {
+export default function FindingsWithFailure({ count, query }: ICount) {
     const setNotification = useSetAtom(notificationAtom)
 
     const [open, setOpen] = useState(false)
@@ -197,19 +209,6 @@ export default function FindingsWithFailure({ count }: ICount) {
 
     const isDemo = useAtomValue(isDemoAtom)
 
-    const [providerFilter, setProviderFilter] = useState<SourceType[]>([])
-    const [connectionFilter, setConnectionFilter] = useState<string[]>([])
-    const [benchmarkFilter, setBenchmarkFilter] = useState<string[]>([])
-    const [resourceFilter, setResourceFilter] = useState<string[]>([])
-    const [severityFilter, setSeverityFilter] = useState([
-        'critical',
-        'high',
-        'medium',
-        'low',
-        'none',
-    ])
-    const [statusFilter, setStatusFilter] = useState(['failed'])
-
     const ssr = () => {
         return {
             getRows: (params: IServerSideGetRowsParams) => {
@@ -218,18 +217,14 @@ export default function FindingsWithFailure({ count }: ICount) {
                 api.compliance
                     .apiV1FindingsCreate({
                         filters: {
-                            connector: providerFilter,
-                            connectionID: connectionFilter,
-                            benchmarkID: benchmarkFilter,
-                            resourceTypeID: resourceFilter,
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            severity: severityFilter,
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            conformanceStatus: statusFilter,
+                            connector: query.connector.length
+                                ? [query.connector]
+                                : [],
+                            controlID: query.controlID,
+                            connectionID: query.connectionID,
+                            benchmarkID: query.benchmarkID,
+                            severity: query.severity,
                         },
-
                         sort: params.request.sortModel.length
                             ? [
                                   {
@@ -274,71 +269,42 @@ export default function FindingsWithFailure({ count }: ICount) {
         }
     }
 
-    const serverSideRows = useMemo(
-        () => ssr(),
-        [
-            providerFilter,
-            statusFilter,
-            connectionFilter,
-            benchmarkFilter,
-            resourceFilter,
-            severityFilter,
-        ]
-    )
+    const serverSideRows = useMemo(() => ssr(), [query])
 
     return (
-        <Flex alignItems="start">
-            <FindingFilters
-                type="findings"
-                providerFilter={providerFilter}
-                statusFilter={statusFilter}
-                connectionFilter={connectionFilter}
-                benchmarkFilter={benchmarkFilter}
-                resourceFilter={resourceFilter}
-                severityFilter={severityFilter}
-                onApply={(obj) => {
-                    setProviderFilter(obj.provider)
-                    setStatusFilter(obj.status)
-                    setConnectionFilter(obj.connection)
-                    setBenchmarkFilter(obj.benchmark)
-                    setResourceFilter(obj.resource)
-                    setSeverityFilter(obj.severity)
+        <>
+            <Table
+                fullWidth
+                id="compliance_findings"
+                columns={columns(isDemo)}
+                onCellClicked={(event: RowClickedEvent) => {
+                    if (
+                        event.data.kaytuResourceID &&
+                        event.data.kaytuResourceID.length > 0
+                    ) {
+                        setFinding(event.data)
+                        setOpen(true)
+                    } else {
+                        setNotification({
+                            text: 'Detail for this finding is currently not available',
+                            type: 'warning',
+                        })
+                    }
+                }}
+                onSortChange={() => {
+                    sortKey = ''
+                }}
+                serverSideDatasource={serverSideRows}
+                options={{
+                    rowModelType: 'serverSide',
+                    serverSideDatasource: serverSideRows,
                 }}
             />
-            <Flex className="pl-4">
-                <Table
-                    fullWidth
-                    id="compliance_findings"
-                    columns={columns(isDemo)}
-                    onCellClicked={(event: RowClickedEvent) => {
-                        if (
-                            event.data.kaytuResourceID &&
-                            event.data.kaytuResourceID.length > 0
-                        ) {
-                            setFinding(event.data)
-                            setOpen(true)
-                        } else {
-                            setNotification({
-                                text: 'Detail for this finding is currently not available',
-                                type: 'warning',
-                            })
-                        }
-                    }}
-                    onSortChange={() => {
-                        sortKey = ''
-                    }}
-                    serverSideDatasource={serverSideRows}
-                    options={{
-                        rowModelType: 'serverSide',
-                        serverSideDatasource: serverSideRows,
-                    }}
-                />
-                <FindingDetail
-                    finding={finding}
-                    open={open}
-                    onClose={() => setOpen(false)}
-                />
-            </Flex>
-        </Flex>
+            <FindingDetail
+                finding={finding}
+                open={open}
+                onClose={() => setOpen(false)}
+            />
+        </>
     )
 }
