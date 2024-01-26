@@ -1,4 +1,4 @@
-import { Flex, Text } from '@tremor/react'
+import { Card, Flex, Text } from '@tremor/react'
 import { useMemo, useState } from 'react'
 import {
     ICellRendererParams,
@@ -19,7 +19,7 @@ import {
 } from '../../../../api/api'
 import AxiosAPI from '../../../../api/ApiConfig'
 import FindingDetail from './Detail'
-import { severityBadge } from '../../Controls'
+import { severityBadge, statusBadge } from '../../Controls'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
 export const columns = (isDemo: boolean) => {
@@ -35,13 +35,18 @@ export const columns = (isDemo: boolean) => {
             cellRenderer: (param: ICellRendererParams) => (
                 <Flex
                     justifyContent="start"
-                    className={isDemo ? 'blur-md gap-3' : 'gap-3'}
+                    className={`h-full gap-3 group relative ${
+                        isDemo ? 'blur-md' : ''
+                    }`}
                 >
                     {getConnectorIcon(param.data.connector)}
                     <Flex flexDirection="col" alignItems="start">
                         <Text className="text-gray-800">{param.value}</Text>
                         <Text>{param.data.providerConnectionID}</Text>
                     </Flex>
+                    <Card className="cursor-pointer absolute w-fit h-fit z-40 right-1 scale-0 transition-all py-1 px-4 group-hover:scale-100">
+                        <Text color="blue">Open</Text>
+                    </Card>
                 </Flex>
             ),
         },
@@ -59,7 +64,8 @@ export const columns = (isDemo: boolean) => {
                 <Flex
                     flexDirection="col"
                     alignItems="start"
-                    className={isDemo ? 'blur-md' : ''}
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
                 >
                     <Text className="text-gray-800">{param.value}</Text>
                     <Text>{param.data.resourceTypeName}</Text>
@@ -72,7 +78,7 @@ export const columns = (isDemo: boolean) => {
             type: 'string',
             enableRowGroup: true,
             sortable: false,
-            hide: false,
+            hide: true,
             filter: true,
             resizable: true,
             flex: 1,
@@ -80,7 +86,8 @@ export const columns = (isDemo: boolean) => {
                 <Flex
                     flexDirection="col"
                     alignItems="start"
-                    className={isDemo ? 'blur-md' : ''}
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
                 >
                     <Text className="text-gray-800">{param.value}</Text>
                     <Text>{param.data.resourceID}</Text>
@@ -101,7 +108,8 @@ export const columns = (isDemo: boolean) => {
                 <Flex
                     flexDirection="col"
                     alignItems="start"
-                    className={isDemo ? 'blur-md' : ''}
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
                 >
                     <Text className="text-gray-800">
                         {param.data.parentBenchmarkNames[0]}
@@ -125,12 +133,13 @@ export const columns = (isDemo: boolean) => {
             hide: false,
             filter: true,
             resizable: true,
-            flex: 1,
+            width: 200,
             cellRenderer: (param: ICellRendererParams) => (
                 <Flex
                     flexDirection="col"
                     alignItems="start"
-                    className={isDemo ? 'blur-md' : ''}
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
                 >
                     <Text className="text-gray-800">
                         {param.data.parentBenchmarkNames[0]}
@@ -150,7 +159,27 @@ export const columns = (isDemo: boolean) => {
             resizable: true,
             flex: 1,
         },
-
+        {
+            field: 'conformanceStatus',
+            headerName: 'Status',
+            type: 'string',
+            hide: false,
+            enableRowGroup: true,
+            sortable: false,
+            filter: true,
+            resizable: true,
+            width: 100,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="center"
+                    className="h-full"
+                >
+                    {statusBadge(param.value)}
+                </Flex>
+            ),
+        },
         {
             field: 'severity',
             headerName: 'Severity',
@@ -248,6 +277,7 @@ export default function FindingsWithFailure({ count, query }: ICount) {
                             rowData: resp.data.findings || [],
                             rowCount: resp.data.totalCount || 0,
                         })
+                        console.log(resp.data)
                         count(resp.data.totalCount || 0)
                         // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
                         // @ts-ignore

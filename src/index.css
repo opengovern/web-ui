@@ -38,7 +38,7 @@ code {
     font-family: 'Lato', sans-serif !important;
     --ag-row-border-color: #e5e7eb !important;
     --ag-border-color: #e5e7eb !important;
-    --ag-header-background-color: #f9fafb !important;
+    --ag-header-background-color: #fff !important;
     --ag-checkbox-unchecked-color: #e5e7eb !important;
     --ag-odd-row-background-color: #f9fafb !important;
     --ag-control-panel-background-color: #f9fafb !important;

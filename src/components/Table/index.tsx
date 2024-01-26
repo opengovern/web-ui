@@ -263,7 +263,7 @@ export default function Table<TData = any, TValue = any>({
         rowSelection: 'multiple',
         suppressExcelExport: true,
         animateRows: false,
-        getRowHeight: () => 50,
+        getRowHeight: () => 64,
         onGridReady: (e) => {
             if (onGridReady) {
                 onGridReady(e)
