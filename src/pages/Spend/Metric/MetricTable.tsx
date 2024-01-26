@@ -190,8 +190,6 @@ export default function MetricTable({
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
 
-    const [granularityEnabled, setGranularityEnabled] = useState<boolean>(true)
-
     const columnGenerator = (
         input:
             | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
@@ -210,32 +208,25 @@ export default function MetricTable({
                         return []
                     })
                     .flat() || []
-            const dynamicCols: IColumn<any, any>[] =
-                granularityEnabled === true
-                    ? columnNames
-                          .filter(
-                              (value, index, array) =>
-                                  array.indexOf(value) === index
-                          )
-                          .map((colName, idx) => {
-                              const v: IColumn<any, any> = {
-                                  field: colName,
-                                  headerName: colName,
-                                  type: 'price',
-                                  width: 130,
-                                  aggFunc: 'sum',
-                                  filter: true,
-                                  sortable: true,
-                                  resizable: true,
-                                  suppressMenu: true,
-                                  columnGroupShow: 'open',
-                                  valueFormatter: (
-                                      param: ValueFormatterParams
-                                  ) => exactPriceDisplay(param.value),
-                              }
-                              return v
-                          })
-                    : []
+            const dynamicCols: IColumn<any, any>[] = columnNames
+                .filter((value, index, array) => array.indexOf(value) === index)
+                .map((colName, idx) => {
+                    const v: IColumn<any, any> = {
+                        field: colName,
+                        headerName: colName,
+                        type: 'price',
+                        width: 130,
+                        aggFunc: 'sum',
+                        filter: true,
+                        sortable: true,
+                        resizable: true,
+                        suppressMenu: true,
+                        columnGroupShow: 'open',
+                        valueFormatter: (param: ValueFormatterParams) =>
+                            exactPriceDisplay(param.value),
+                    }
+                    return v
+                })
 
             const total: IColumn<any, any> = {
                 field: 'totalCost',
@@ -482,7 +473,7 @@ export default function MetricTable({
 
     useEffect(() => {
         setTableKey(Math.random().toString(16).slice(2, 8))
-    }, [manualGrouping, timeRange, granularityEnabled, response])
+    }, [manualGrouping, timeRange, response])
 
     return (
         <AdvancedTable
@@ -507,8 +498,6 @@ export default function MetricTable({
                     event.api.showLoadingOverlay()
                 }
             }}
-            granularityEnabled={granularityEnabled}
-            setGranularityEnabled={setGranularityEnabled}
             selectedGranularity={selectedGranularity}
             onGranularityChange={onGranularityChange}
             manualSort={manualTableSort}

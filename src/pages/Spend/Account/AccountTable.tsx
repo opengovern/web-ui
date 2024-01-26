@@ -199,8 +199,6 @@ export default function AccountTable({
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
 
-    const [granularityEnabled, setGranularityEnabled] = useState<boolean>(true)
-
     const columnGenerator = (
         input:
             | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
@@ -217,32 +215,25 @@ export default function AccountTable({
                     }
                     return []
                 }) || []
-            const dynamicCols: IColumn<any, any>[] =
-                granularityEnabled === true
-                    ? columnNames
-                          .filter(
-                              (value, index, array) =>
-                                  array.indexOf(value) === index
-                          )
-                          .map((colName) => {
-                              const v: IColumn<any, any> = {
-                                  field: colName,
-                                  headerName: colName,
-                                  type: 'price',
-                                  width: 130,
-                                  sortable: true,
-                                  suppressMenu: true,
-                                  resizable: true,
-                                  pivot: false,
-                                  aggFunc: 'sum',
-                                  columnGroupShow: 'open',
-                                  valueFormatter: (
-                                      param: ValueFormatterParams
-                                  ) => exactPriceDisplay(param.value),
-                              }
-                              return v
-                          })
-                    : []
+            const dynamicCols: IColumn<any, any>[] = columnNames
+                .filter((value, index, array) => array.indexOf(value) === index)
+                .map((colName) => {
+                    const v: IColumn<any, any> = {
+                        field: colName,
+                        headerName: colName,
+                        type: 'price',
+                        width: 130,
+                        sortable: true,
+                        suppressMenu: true,
+                        resizable: true,
+                        pivot: false,
+                        aggFunc: 'sum',
+                        columnGroupShow: 'open',
+                        valueFormatter: (param: ValueFormatterParams) =>
+                            exactPriceDisplay(param.value),
+                    }
+                    return v
+                })
 
             const total: IColumn<any, any> = {
                 field: 'totalCost',
@@ -481,7 +472,7 @@ export default function AccountTable({
 
     useEffect(() => {
         setTableKey(Math.random().toString(16).slice(2, 8))
-    }, [manualGrouping, timeRange, granularityEnabled, response])
+    }, [manualGrouping, timeRange, response])
 
     return (
         <AdvancedTable
@@ -506,8 +497,6 @@ export default function AccountTable({
                     event.api.showLoadingOverlay()
                 }
             }}
-            granularityEnabled={granularityEnabled}
-            setGranularityEnabled={setGranularityEnabled}
             selectedGranularity={selectedGranularity}
             onGranularityChange={onGranularityChange}
             manualSort={manualTableSort}
