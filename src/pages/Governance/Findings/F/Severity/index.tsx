@@ -5,6 +5,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
     TypesFindingSeverity,
 } from '../../../../../api/api'
+import { compareArrays } from '../../../../../components/Layout/Header/Filter'
 
 interface ISeverity {
     value: TypesFindingSeverity[] | undefined
@@ -21,8 +22,11 @@ export default function Severity({ value, data, onChange }: ISeverity) {
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        onChange([...severityCheckbox.state])
-    }, [severityCheckbox])
+        if (!compareArrays(value?.sort() || [], severityCheckbox.state.sort()))
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            onChange([...severityCheckbox.state])
+    }, [severityCheckbox.state])
 
     const options = [
         {

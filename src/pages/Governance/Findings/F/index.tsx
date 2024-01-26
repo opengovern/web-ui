@@ -32,7 +32,6 @@ interface IFilters {
 }
 
 export default function Filter({ onApply }: IFilters) {
-    const [open, setOpen] = useState(false)
     const [connector, setConnector] = useState<SourceType>(SourceType.Nil)
     const [conformanceStatus, setConformanceStatus] = useState<
         | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
@@ -174,14 +173,7 @@ export default function Filter({ onApply }: IFilters) {
     return (
         <Flex justifyContent="start" className="mt-4 gap-3 flex-wrap">
             {options.map((f) => (
-                <Popover
-                    className="relative border-0 z-50"
-                    key={f.id}
-                    onClick={() => {
-                        setOpen(!open)
-                        console.log(open)
-                    }}
-                >
+                <Popover className="relative border-0 z-50" key={f.id}>
                     <Popover.Button className="border border-gray-400 py-1 px-2 rounded-3xl">
                         <Flex className="w-fit">
                             <Icon
@@ -222,6 +214,13 @@ export default function Filter({ onApply }: IFilters) {
                                 </Flex>
                                 {f.component}
                             </Card>
+                            {/* <button */}
+                            {/*     type="button" */}
+                            {/*     onClick={() => console.log('hi')} */}
+                            {/*     className="fixed bg-black w-screen h-screen right-0 top-0" */}
+                            {/* > */}
+                            {/*     hi */}
+                            {/* </button> */}
                         </Popover.Panel>
                     </Transition>
                 </Popover>

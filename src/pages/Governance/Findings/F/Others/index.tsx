@@ -4,6 +4,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { Checkbox, useCheckboxState } from 'pretty-checkbox-react'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata } from '../../../../../api/api'
 import Spinner from '../../../../../components/Spinner'
+import { compareArrays } from '../../../../../components/Layout/Header/Filter'
 
 interface IOthers {
     value: string[] | undefined
@@ -21,8 +22,11 @@ export default function Others({ value, data, type, onChange }: IOthers) {
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        onChange([...checkbox.state])
-    }, [checkbox])
+        if (!compareArrays(value?.sort() || [], checkbox.state.sort()))
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            onChange([...checkbox.state])
+    }, [checkbox.state])
 
     return (
         <Flex flexDirection="col" justifyContent="start" alignItems="start">
