@@ -1,6 +1,7 @@
 import { Flex, Text } from '@tremor/react'
 import { Radio } from 'pretty-checkbox-react'
 import { SourceType } from '../../../../../api/api'
+import { AWSIcon, AzureIcon } from '../../../../../icons/icons'
 
 interface IProvider {
     value: SourceType
@@ -9,8 +10,18 @@ interface IProvider {
 export default function Provider({ value, onChange }: IProvider) {
     const options = [
         { name: 'All', value: SourceType.Nil, icon: undefined },
-        { name: 'AWS', value: SourceType.CloudAWS, icon: undefined },
-        { name: 'Azure', value: SourceType.CloudAzure, icon: undefined },
+        {
+            name: 'AWS',
+            value: SourceType.CloudAWS,
+            icon: <img src={AWSIcon} className="w-5 rounded-full" alt="aws" />,
+        },
+        {
+            name: 'Azure',
+            value: SourceType.CloudAzure,
+            icon: (
+                <img src={AzureIcon} className="w-5 rounded-full" alt="azure" />
+            ),
+        },
     ]
 
     return (
@@ -22,7 +33,10 @@ export default function Provider({ value, onChange }: IProvider) {
                     checked={value === o.value}
                     onClick={() => onChange(o.value)}
                 >
-                    <Text>{o.name}</Text>
+                    <Flex className="gap-1 w-fit">
+                        {o.icon}
+                        <Text>{o.name}</Text>
+                    </Flex>
                 </Radio>
             ))}
         </Flex>

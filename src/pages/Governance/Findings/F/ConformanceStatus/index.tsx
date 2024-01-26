@@ -1,5 +1,6 @@
 import { Radio } from 'pretty-checkbox-react'
 import { Flex, Text } from '@tremor/react'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus } from '../../../../../api/api'
 import { compareArrays } from '../../../../../components/Layout/Header/Filter'
 
@@ -32,14 +33,14 @@ export default function ConformanceStatus({
             value: [
                 GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
             ],
-            icon: undefined,
+            icon: <XCircleIcon className="h-5 text-rose-600" />,
         },
         {
             name: 'Passed',
             value: [
                 GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
             ],
-            icon: undefined,
+            icon: <CheckCircleIcon className="h-5 text-emerald-500" />,
         },
     ]
 
@@ -52,7 +53,10 @@ export default function ConformanceStatus({
                     checked={compareArrays(o.value.sort(), value?.sort() || [])}
                     onClick={() => onChange(o.value)}
                 >
-                    <Text>{o.name}</Text>
+                    <Flex className="gap-1 w-fit">
+                        {o.icon}
+                        <Text>{o.name}</Text>
+                    </Flex>
                 </Radio>
             ))}
         </Flex>
