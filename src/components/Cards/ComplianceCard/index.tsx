@@ -1,3 +1,4 @@
+import { useAtomValue } from 'jotai'
 import {
     Badge,
     Card,
@@ -12,6 +13,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
 import { getConnectorIcon } from '../ConnectorCard'
 import { numberDisplay } from '../../../utilities/numericDisplay'
+import { searchAtom } from '../../../utilities/urlstate'
 
 interface IComplianceCard {
     benchmark:
@@ -52,7 +54,7 @@ export const benchmarkChecks = (
 
 export default function ComplianceCard({ benchmark }: IComplianceCard) {
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
 
     const connector = () => {
         if (benchmark?.tags?.plugin) {

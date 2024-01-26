@@ -20,7 +20,7 @@ import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../api/int
 import { MSort } from '../../../Spend/Account/AccountTable'
 import AdvancedTable from '../../../../components/AdvancedTable'
 import { options } from '../../Metric/Table'
-import { IFilter } from '../../../../utilities/urlstate'
+import { IFilter, searchAtom } from '../../../../utilities/urlstate'
 
 interface IAccountTable {
     timeRange: { start: Dayjs; end: Dayjs }
@@ -160,7 +160,7 @@ export default function AccountTable({
     timeRange,
     connections,
 }: IAccountTable) {
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
     const navigate = useNavigate()
     const setNotification = useSetAtom(notificationAtom)
     const isDemo = useAtomValue(isDemoAtom)

@@ -16,7 +16,7 @@ import {
 import { GridOptions } from 'ag-grid-community'
 import { ChevronRightIcon, Square2StackIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import clipboardCopy from 'clipboard-copy'
 import { Dayjs } from 'dayjs'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -38,6 +38,7 @@ import { checkGranularity } from '../../../../utilities/dateComparator'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import Trends from '../../../../components/Trends'
 import { defaultColumns, rowGenerator } from '../../Metric/Table'
+import { searchAtom } from '../../../../utilities/urlstate'
 
 const options: GridOptions = {
     enableGroupEdit: true,
@@ -66,7 +67,7 @@ export default function SingleConnection({
     const [openDrawer, setOpenDrawer] = useState(false)
     const setNotification = useSetAtom(notificationAtom)
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
 
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'

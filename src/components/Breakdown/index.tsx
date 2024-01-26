@@ -1,3 +1,4 @@
+import { useAtomValue } from 'jotai'
 import dayjs, { Dayjs } from 'dayjs'
 import {
     Button,
@@ -14,6 +15,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useState } from 'react'
 import Chart from '../Chart'
 import { dateDisplay } from '../../utilities/dateDisplay'
+import { searchAtom } from '../../utilities/urlstate'
 
 interface IBreakdown {
     activeTime?: { start: Dayjs; end: Dayjs }
@@ -37,7 +39,7 @@ export default function Breakdown({
     colorful = false,
 }: IBreakdown) {
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
     const [selectedIndex, setSelectedIndex] = useState(1)
 
     return (

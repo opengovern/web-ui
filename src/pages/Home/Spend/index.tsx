@@ -11,6 +11,7 @@ import {
 } from '@tremor/react'
 import { BanknotesIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTrendList,
@@ -23,6 +24,7 @@ import { renderText } from '../../../components/Layout/Header/DateRangePicker'
 import ChangeDelta from '../../../components/ChangeDelta'
 import {
     defaultSpendTime,
+    searchAtom,
     useFilterState,
     useUrlDateRangeState,
 } from '../../../utilities/urlstate'
@@ -34,7 +36,7 @@ export default function Spend() {
     const { value: activeTimeRange } = useUrlDateRangeState(defaultSpendTime)
     const { value: selectedConnections } = useFilterState()
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
 
     const query: {
         pageSize: number

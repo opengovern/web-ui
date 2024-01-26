@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
+import { useAtomValue } from 'jotai'
 import Subscriptions from './Subscriptions'
 import Principals from './Principals'
 import {
@@ -9,6 +10,7 @@ import {
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
 } from '../../../../../api/api'
+import { searchAtom } from '../../../../../utilities/urlstate'
 
 interface IAzure {
     principals: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
@@ -23,7 +25,7 @@ export default function AzureTabs({
 }: IAzure) {
     const [selectedTab, setSelectedTab] = useState(0)
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
     const tabs = useLocation().hash
     useEffect(() => {
         if (tabs === '#principals') {

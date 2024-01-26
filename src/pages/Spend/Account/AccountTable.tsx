@@ -8,6 +8,7 @@ import {
     CloudIcon,
 } from '@heroicons/react/24/outline'
 import dayjs, { Dayjs } from 'dayjs'
+import { useAtomValue } from 'jotai'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../api/api'
 import AdvancedTable, { IColumn } from '../../../components/AdvancedTable'
 import {
@@ -15,6 +16,7 @@ import {
     numberDisplay,
 } from '../../../utilities/numericDisplay'
 import { renderText } from '../../../components/Layout/Header/DateRangePicker'
+import { searchAtom } from '../../../utilities/urlstate'
 
 export type MSort = {
     sortCol: string
@@ -195,7 +197,7 @@ export default function AccountTable({
     ref,
 }: IAccountTable) {
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
 
     const [granularityEnabled, setGranularityEnabled] = useState<boolean>(true)
 

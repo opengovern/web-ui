@@ -24,7 +24,12 @@ export interface IFilter {
     connectionGroup: string[]
 }
 
-const searchAtom = atom<string>(window.location.search)
+const getLocationSearch = () =>
+    window.location.search.at(0) === '?'
+        ? window.location.search.slice(1, 100000)
+        : window.location.search
+
+export const searchAtom = atom<string>(getLocationSearch())
 export function useURLState<T>(
     defaultValue: T,
     serialize: (v: T) => Map<string, string[]>,
@@ -34,8 +39,9 @@ export function useURLState<T>(
     const [search, setSearch] = useAtom(searchAtom)
     useEffect(() => {
         // keeping search in sync with url
-        if (search !== window.location.search) {
-            setSearch(window.location.search)
+        const newSearch = getLocationSearch()
+        if (search !== newSearch) {
+            setSearch(newSearch)
         }
     }, [searchParams])
 
@@ -56,24 +62,7 @@ export function useURLState<T>(
         return params
     }, [search])
 
-    const [state, setState] = useState<T>(defaultValue)
-    const setValue = (v: T) => {
-        const serialized = serialize(v)
-        const newParams = new URLSearchParams()
-        currentParams.forEach((value, key) => newParams.append(key, value))
-
-        serialized.forEach((value, key) => {
-            newParams.delete(key)
-            value.forEach((item) => {
-                newParams.append(key, item)
-            })
-        })
-
-        window.history.pushState({}, '', `?${newParams.toString()}`)
-        setSearch(window.location.search)
-    }
-
-    useEffect(() => {
+    const currentValue = () => {
         const serialized = serialize(defaultValue)
 
         const v: [string, string[]][] = []
@@ -87,7 +76,28 @@ export function useURLState<T>(
         })
 
         const m = new Map(v)
-        setState(deserialize(m))
+        return deserialize(m)
+    }
+
+    const [state, setState] = useState<T>(currentValue())
+    const setValue = (v: T) => {
+        const serialized = serialize(v)
+        const newParams = new URLSearchParams()
+        currentParams.forEach((value, key) => newParams.append(key, value))
+
+        serialized.forEach((value, key) => {
+            newParams.delete(key)
+            value.forEach((item) => {
+                newParams.append(key, item)
+            })
+        })
+
+        window.history.pushState({}, '', `?${newParams.toString()}`)
+        setSearch(getLocationSearch())
+    }
+
+    useEffect(() => {
+        setState(currentValue())
     }, [search])
 
     return [state, setValue]

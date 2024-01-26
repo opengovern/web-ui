@@ -1,16 +1,18 @@
 import { Tab, TabGroup, TabList } from '@tremor/react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
 import { checkGranularity } from '../../../utilities/dateComparator'
 import TopHeader from '../../../components/Layout/Header'
 import {
     defaultSpendTime,
+    searchAtom,
     useUrlDateRangeState,
 } from '../../../utilities/urlstate'
 
 export default function SpendDetails() {
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
     const { value: activeTimeRange } = useUrlDateRangeState(defaultSpendTime)
 
     const [selectedTab, setSelectedTab] = useState(0)

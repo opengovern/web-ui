@@ -12,7 +12,7 @@ import {
     TextInput,
 } from '@tremor/react'
 import { useState } from 'react'
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import {
     GridOptions,
@@ -31,6 +31,7 @@ import { badgeDelta } from '../../../utilities/deltaType'
 import TopHeader from '../../../components/Layout/Header'
 import {
     defaultTime,
+    searchAtom,
     useFilterState,
     useUrlDateRangeState,
 } from '../../../utilities/urlstate'
@@ -96,7 +97,7 @@ const options: GridOptions = {
 
 export default function InsightList() {
     const navigate = useNavigate()
-    const searchParams = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedPersona, setSelectedPersona] = useState('')
     const [selectedCategory, setSelectedCategory] = useState('')
