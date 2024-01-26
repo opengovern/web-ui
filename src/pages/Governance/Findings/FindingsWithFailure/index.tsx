@@ -1,4 +1,4 @@
-import { Flex, Text } from '@tremor/react'
+import { Card, Flex, Text } from '@tremor/react'
 import { useMemo, useState } from 'react'
 import {
     ICellRendererParams,
@@ -12,13 +12,14 @@ import Table, { IColumn } from '../../../../components/Table'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import {
     Api,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
     SourceType,
+    TypesFindingSeverity,
 } from '../../../../api/api'
 import AxiosAPI from '../../../../api/ApiConfig'
 import FindingDetail from './Detail'
-import { severityBadge } from '../../Controls'
-import FindingFilters from '../Filters'
+import { severityBadge, statusBadge } from '../../Controls'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
 export const columns = (isDemo: boolean) => {
@@ -34,13 +35,18 @@ export const columns = (isDemo: boolean) => {
             cellRenderer: (param: ICellRendererParams) => (
                 <Flex
                     justifyContent="start"
-                    className={isDemo ? 'blur-md gap-3' : 'gap-3'}
+                    className={`h-full gap-3 group relative ${
+                        isDemo ? 'blur-md' : ''
+                    }`}
                 >
                     {getConnectorIcon(param.data.connector)}
                     <Flex flexDirection="col" alignItems="start">
                         <Text className="text-gray-800">{param.value}</Text>
                         <Text>{param.data.providerConnectionID}</Text>
                     </Flex>
+                    <Card className="cursor-pointer absolute w-fit h-fit z-40 right-1 scale-0 transition-all py-1 px-4 group-hover:scale-100">
+                        <Text color="blue">Open</Text>
+                    </Card>
                 </Flex>
             ),
         },
@@ -58,7 +64,8 @@ export const columns = (isDemo: boolean) => {
                 <Flex
                     flexDirection="col"
                     alignItems="start"
-                    className={isDemo ? 'blur-md' : ''}
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
                 >
                     <Text className="text-gray-800">{param.value}</Text>
                     <Text>{param.data.resourceTypeName}</Text>
@@ -71,7 +78,7 @@ export const columns = (isDemo: boolean) => {
             type: 'string',
             enableRowGroup: true,
             sortable: false,
-            hide: false,
+            hide: true,
             filter: true,
             resizable: true,
             flex: 1,
@@ -79,7 +86,8 @@ export const columns = (isDemo: boolean) => {
                 <Flex
                     flexDirection="col"
                     alignItems="start"
-                    className={isDemo ? 'blur-md' : ''}
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
                 >
                     <Text className="text-gray-800">{param.value}</Text>
                     <Text>{param.data.resourceID}</Text>
@@ -100,7 +108,8 @@ export const columns = (isDemo: boolean) => {
                 <Flex
                     flexDirection="col"
                     alignItems="start"
-                    className={isDemo ? 'blur-md' : ''}
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
                 >
                     <Text className="text-gray-800">
                         {param.data.parentBenchmarkNames[0]}
@@ -124,12 +133,13 @@ export const columns = (isDemo: boolean) => {
             hide: false,
             filter: true,
             resizable: true,
-            flex: 1,
+            width: 200,
             cellRenderer: (param: ICellRendererParams) => (
                 <Flex
                     flexDirection="col"
                     alignItems="start"
-                    className={isDemo ? 'blur-md' : ''}
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
                 >
                     <Text className="text-gray-800">
                         {param.data.parentBenchmarkNames[0]}
@@ -149,7 +159,27 @@ export const columns = (isDemo: boolean) => {
             resizable: true,
             flex: 1,
         },
-
+        {
+            field: 'conformanceStatus',
+            headerName: 'Status',
+            type: 'string',
+            hide: false,
+            enableRowGroup: true,
+            sortable: false,
+            filter: true,
+            resizable: true,
+            width: 100,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="center"
+                    className="h-full"
+                >
+                    {statusBadge(param.value)}
+                </Flex>
+            ),
+        },
         {
             field: 'severity',
             headerName: 'Severity',
@@ -185,9 +215,20 @@ let sortKey = ''
 
 interface ICount {
     count: (x: number | undefined) => void
+    query: {
+        connector: SourceType
+        conformanceStatus:
+            | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+            | undefined
+        severity: TypesFindingSeverity[] | undefined
+        connectionID: string[] | undefined
+        controlID: string[] | undefined
+        benchmarkID: string[] | undefined
+        resourceTypeID: string[] | undefined
+    }
 }
 
-export default function FindingsWithFailure({ count }: ICount) {
+export default function FindingsWithFailure({ count, query }: ICount) {
     const setNotification = useSetAtom(notificationAtom)
 
     const [open, setOpen] = useState(false)
@@ -197,19 +238,6 @@ export default function FindingsWithFailure({ count }: ICount) {
 
     const isDemo = useAtomValue(isDemoAtom)
 
-    const [providerFilter, setProviderFilter] = useState<SourceType[]>([])
-    const [connectionFilter, setConnectionFilter] = useState<string[]>([])
-    const [benchmarkFilter, setBenchmarkFilter] = useState<string[]>([])
-    const [resourceFilter, setResourceFilter] = useState<string[]>([])
-    const [severityFilter, setSeverityFilter] = useState([
-        'critical',
-        'high',
-        'medium',
-        'low',
-        'none',
-    ])
-    const [statusFilter, setStatusFilter] = useState(['failed'])
-
     const ssr = () => {
         return {
             getRows: (params: IServerSideGetRowsParams) => {
@@ -218,18 +246,14 @@ export default function FindingsWithFailure({ count }: ICount) {
                 api.compliance
                     .apiV1FindingsCreate({
                         filters: {
-                            connector: providerFilter,
-                            connectionID: connectionFilter,
-                            benchmarkID: benchmarkFilter,
-                            resourceTypeID: resourceFilter,
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            severity: severityFilter,
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            conformanceStatus: statusFilter,
+                            connector: query.connector.length
+                                ? [query.connector]
+                                : [],
+                            controlID: query.controlID,
+                            connectionID: query.connectionID,
+                            benchmarkID: query.benchmarkID,
+                            severity: query.severity,
                         },
-
                         sort: params.request.sortModel.length
                             ? [
                                   {
@@ -253,6 +277,7 @@ export default function FindingsWithFailure({ count }: ICount) {
                             rowData: resp.data.findings || [],
                             rowCount: resp.data.totalCount || 0,
                         })
+                        console.log(resp.data)
                         count(resp.data.totalCount || 0)
                         // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
                         // @ts-ignore
@@ -274,71 +299,42 @@ export default function FindingsWithFailure({ count }: ICount) {
         }
     }
 
-    const serverSideRows = useMemo(
-        () => ssr(),
-        [
-            providerFilter,
-            statusFilter,
-            connectionFilter,
-            benchmarkFilter,
-            resourceFilter,
-            severityFilter,
-        ]
-    )
+    const serverSideRows = useMemo(() => ssr(), [query])
 
     return (
-        <Flex alignItems="start">
-            <FindingFilters
-                type="findings"
-                providerFilter={providerFilter}
-                statusFilter={statusFilter}
-                connectionFilter={connectionFilter}
-                benchmarkFilter={benchmarkFilter}
-                resourceFilter={resourceFilter}
-                severityFilter={severityFilter}
-                onApply={(obj) => {
-                    setProviderFilter(obj.provider)
-                    setStatusFilter(obj.status)
-                    setConnectionFilter(obj.connection)
-                    setBenchmarkFilter(obj.benchmark)
-                    setResourceFilter(obj.resource)
-                    setSeverityFilter(obj.severity)
+        <>
+            <Table
+                fullWidth
+                id="compliance_findings"
+                columns={columns(isDemo)}
+                onCellClicked={(event: RowClickedEvent) => {
+                    if (
+                        event.data.kaytuResourceID &&
+                        event.data.kaytuResourceID.length > 0
+                    ) {
+                        setFinding(event.data)
+                        setOpen(true)
+                    } else {
+                        setNotification({
+                            text: 'Detail for this finding is currently not available',
+                            type: 'warning',
+                        })
+                    }
+                }}
+                onSortChange={() => {
+                    sortKey = ''
+                }}
+                serverSideDatasource={serverSideRows}
+                options={{
+                    rowModelType: 'serverSide',
+                    serverSideDatasource: serverSideRows,
                 }}
             />
-            <Flex className="pl-4">
-                <Table
-                    fullWidth
-                    id="compliance_findings"
-                    columns={columns(isDemo)}
-                    onCellClicked={(event: RowClickedEvent) => {
-                        if (
-                            event.data.kaytuResourceID &&
-                            event.data.kaytuResourceID.length > 0
-                        ) {
-                            setFinding(event.data)
-                            setOpen(true)
-                        } else {
-                            setNotification({
-                                text: 'Detail for this finding is currently not available',
-                                type: 'warning',
-                            })
-                        }
-                    }}
-                    onSortChange={() => {
-                        sortKey = ''
-                    }}
-                    serverSideDatasource={serverSideRows}
-                    options={{
-                        rowModelType: 'serverSide',
-                        serverSideDatasource: serverSideRows,
-                    }}
-                />
-                <FindingDetail
-                    finding={finding}
-                    open={open}
-                    onClose={() => setOpen(false)}
-                />
-            </Flex>
-        </Flex>
+            <FindingDetail
+                finding={finding}
+                open={open}
+                onClose={() => setOpen(false)}
+            />
+        </>
     )
 }
