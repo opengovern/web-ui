@@ -7,26 +7,21 @@ import {
 } from '../../../../../api/api'
 
 interface ISeverity {
+    value: TypesFindingSeverity[] | undefined
     data:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata
         | undefined
     onChange: (s: TypesFindingSeverity[]) => void
 }
 
-export default function Severity({ data, onChange }: ISeverity) {
+export default function Severity({ value, data, onChange }: ISeverity) {
     const severityCheckbox = useCheckboxState({
-        state: [
-            TypesFindingSeverity.FindingSeverityCritical,
-            TypesFindingSeverity.FindingSeverityHigh,
-            TypesFindingSeverity.FindingSeverityMedium,
-            TypesFindingSeverity.FindingSeverityLow,
-            TypesFindingSeverity.FindingSeverityNone,
-        ],
+        state: value,
     })
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        onChange(severityCheckbox.state)
+        onChange([...severityCheckbox.state])
     }, [severityCheckbox])
 
     const options = [

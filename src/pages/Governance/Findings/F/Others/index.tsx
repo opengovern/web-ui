@@ -6,6 +6,7 @@ import { GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata }
 import Spinner from '../../../../../components/Spinner'
 
 interface IOthers {
+    value: string[] | undefined
     data:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata
         | undefined
@@ -13,14 +14,14 @@ interface IOthers {
     onChange: (o: string[]) => void
 }
 
-export default function Others({ data, type, onChange }: IOthers) {
+export default function Others({ value, data, type, onChange }: IOthers) {
     const [search, setSearch] = useState('')
-    const checkbox = useCheckboxState({ state: [] })
+    const checkbox = useCheckboxState({ state: value })
 
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        onChange(checkbox.state)
+        onChange([...checkbox.state])
     }, [checkbox])
 
     return (

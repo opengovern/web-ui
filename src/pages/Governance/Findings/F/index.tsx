@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Icon, Text } from '@tremor/react'
+import { Card, Flex, Icon, Text } from '@tremor/react'
 import { Popover, Transition } from '@headlessui/react'
 import {
     ChevronDownIcon,
@@ -32,7 +32,7 @@ interface IFilters {
 }
 
 export default function Filter({ onApply }: IFilters) {
-    const [open, isOpen] = useState(false)
+    const [open, setOpen] = useState(false)
     const [connector, setConnector] = useState<SourceType>(SourceType.Nil)
     const [conformanceStatus, setConformanceStatus] = useState<
         | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
@@ -76,8 +76,7 @@ export default function Filter({ onApply }: IFilters) {
         resourceTypeID,
     ])
 
-    const { response: filters, isLoading: filtersLoading } =
-        useComplianceApiV1FindingsFiltersCreate({})
+    const { response: filters } = useComplianceApiV1FindingsFiltersCreate({})
 
     const options = [
         {
@@ -106,7 +105,11 @@ export default function Filter({ onApply }: IFilters) {
             name: 'Severity',
             icon: CloudIcon,
             component: (
-                <Severity data={filters} onChange={(s) => setSeverity(s)} />
+                <Severity
+                    value={severity}
+                    data={filters}
+                    onChange={(s) => setSeverity(s)}
+                />
             ),
             removable: false,
         },
@@ -116,6 +119,7 @@ export default function Filter({ onApply }: IFilters) {
             icon: CloudIcon,
             component: (
                 <Others
+                    value={connectionID}
                     data={filters}
                     type="connectionID"
                     onChange={(o) => setConnectionID(o)}
@@ -129,6 +133,7 @@ export default function Filter({ onApply }: IFilters) {
             icon: CloudIcon,
             component: (
                 <Others
+                    value={controlID}
                     data={filters}
                     type="controlID"
                     onChange={(o) => setControlID(o)}
@@ -142,6 +147,7 @@ export default function Filter({ onApply }: IFilters) {
             icon: CloudIcon,
             component: (
                 <Others
+                    value={benchmarkID}
                     data={filters}
                     type="benchmarkID"
                     onChange={(o) => setBenchmarkID(o)}
@@ -155,6 +161,7 @@ export default function Filter({ onApply }: IFilters) {
             icon: CloudIcon,
             component: (
                 <Others
+                    value={resourceTypeID}
                     data={filters}
                     type="resourceTypeID"
                     onChange={(o) => setResourceTypeID(o)}
@@ -165,9 +172,16 @@ export default function Filter({ onApply }: IFilters) {
     ]
 
     return (
-        <Flex justifyContent="start" className="mt-4 gap-3">
+        <Flex justifyContent="start" className="mt-4 gap-3 flex-wrap">
             {options.map((f) => (
-                <Popover className="relative border-0 z-50" key={f.id}>
+                <Popover
+                    className="relative border-0 z-50"
+                    key={f.id}
+                    onClick={() => {
+                        setOpen(!open)
+                        console.log(open)
+                    }}
+                >
                     <Popover.Button className="border border-gray-400 py-1 px-2 rounded-3xl">
                         <Flex className="w-fit">
                             <Icon
