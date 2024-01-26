@@ -11,12 +11,34 @@ import { Checkbox, Radio, useCheckboxState } from 'pretty-checkbox-react'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../api/integration.gen'
 import Spinner from '../../../Spinner'
 import { AWSIcon, AzureIcon } from '../../../../icons/icons'
-import { filteredConnectionsList } from '../../../../pages/Governance/Findings/Filters'
 import { useFilterState } from '../../../../utilities/urlstate'
+import { GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection } from '../../../../api/api'
 
 export const compareArrays = (a: any[], b: any[]) =>
     a.length === b.length &&
     a.every((element: any, index: number) => element === b[index])
+
+const filteredConnectionsList = (
+    connection:
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
+        | undefined,
+    filter: string
+) => {
+    const result = connection?.filter(
+        (c) =>
+            c?.providerConnectionName
+                ?.toLowerCase()
+                .includes(filter.toLowerCase()) ||
+            c?.providerConnectionID
+                ?.toLowerCase()
+                .includes(filter.toLowerCase())
+    )
+    const count = result?.length || 0
+    return {
+        result,
+        count,
+    }
+}
 
 export default function Filter() {
     const [openDrawer, setOpenDrawer] = useState(false)

@@ -23,7 +23,7 @@ import ControlsWithFailure from './ControlsWithFailure'
 import FailingCloudAccounts from './FailingCloudAccounts'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import TopHeader from '../../../components/Layout/Header'
-import Filter from './F'
+import Filter from './Filter'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
     SourceType,

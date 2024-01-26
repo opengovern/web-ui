@@ -5,7 +5,6 @@ import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.
 import { SourceType } from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
 import { topConnections } from '../../Controls/ControlSummary/Tabs/ImpactedAccounts'
-import FindingFilters from '../Filters'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
 const cloudAccountColumns = (isDemo: boolean) => {
@@ -126,17 +125,17 @@ export default function FailingCloudAccounts({ count }: ICount) {
 
     return (
         <Flex alignItems="start" className="gap-4">
-            <FindingFilters
-                type="accounts"
-                providerFilter={providerFilter}
-                connectionFilter={connectionFilter}
-                benchmarkFilter={benchmarkFilter}
-                onApply={(obj) => {
-                    setProviderFilter(obj.provider)
-                    setConnectionFilter(obj.connection)
-                    setBenchmarkFilter(obj.benchmark)
-                }}
-            />
+            {/* <FindingFilters */}
+            {/*     type="accounts" */}
+            {/*     providerFilter={providerFilter} */}
+            {/*     connectionFilter={connectionFilter} */}
+            {/*     benchmarkFilter={benchmarkFilter} */}
+            {/*     onApply={(obj) => { */}
+            {/*         setProviderFilter(obj.provider) */}
+            {/*         setConnectionFilter(obj.connection) */}
+            {/*         setBenchmarkFilter(obj.benchmark) */}
+            {/*     }} */}
+            {/* /> */}
             <Table
                 id="impacted_accounts"
                 columns={cloudAccountColumns(false)}
