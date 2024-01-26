@@ -6,7 +6,6 @@ import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.
 import { SourceType } from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
 import { topControls } from '../../Compliance/BenchmarkSummary/TopDetails/Controls'
-import FindingFilters from '../Filters'
 import { severityBadge } from '../../Controls'
 
 const policyColumns: IColumn<any, any>[] = [
@@ -111,17 +110,17 @@ export default function ControlsWithFailure({ count }: ICount) {
 
     return (
         <Flex alignItems="start" className="gap-4">
-            <FindingFilters
-                type="controls"
-                providerFilter={providerFilter}
-                connectionFilter={connectionFilter}
-                benchmarkFilter={benchmarkFilter}
-                onApply={(obj) => {
-                    setProviderFilter(obj.provider)
-                    setConnectionFilter(obj.connection)
-                    setBenchmarkFilter(obj.benchmark)
-                }}
-            />
+            {/* <FindingFilters */}
+            {/*     type="controls" */}
+            {/*     providerFilter={providerFilter} */}
+            {/*     connectionFilter={connectionFilter} */}
+            {/*     benchmarkFilter={benchmarkFilter} */}
+            {/*     onApply={(obj) => { */}
+            {/*         setProviderFilter(obj.provider) */}
+            {/*         setConnectionFilter(obj.connection) */}
+            {/*         setBenchmarkFilter(obj.benchmark) */}
+            {/*     }} */}
+            {/* /> */}
             <Table
                 id="compliance_policies"
                 loading={isLoading}
