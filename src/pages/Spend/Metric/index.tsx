@@ -16,6 +16,7 @@ import TopHeader from '../../../components/Layout/Header'
 import {
     defaultSpendTime,
     useFilterState,
+    useURLParam,
     useUrlDateRangeState,
 } from '../../../utilities/urlstate'
 
@@ -116,7 +117,10 @@ export function SpendMetrics() {
             connectionGroup: selectedConnections.connectionGroup,
         })
 
-    const [chartLayout, setChartLayout] = useState<ChartLayout>('metrics')
+    const [chartLayout, setChartLayout] = useURLParam<ChartLayout>(
+        'show',
+        'metrics'
+    )
     return (
         <>
             <TopHeader datePicker filter />

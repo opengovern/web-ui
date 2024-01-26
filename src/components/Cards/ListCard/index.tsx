@@ -18,6 +18,7 @@ import Spinner from '../../Spinner'
 import { getConnectorIcon } from '../ConnectorCard'
 import { isDemoAtom } from '../../../store'
 import { errorHandlingWithErrorMessage } from '../../../types/apierror'
+import { searchAtom } from '../../../utilities/urlstate'
 
 interface ITopListCard {
     title: string
@@ -67,7 +68,7 @@ export default function ListCard({
     onRefresh,
 }: ITopListCard) {
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
     const isDemo = useAtomValue(isDemoAtom)
 
     const value = (item: Item) => {
@@ -177,9 +178,15 @@ export default function ListCard({
                 <Flex
                     justifyContent="end"
                     className="cursor-pointer"
-                    onClick={() =>
-                        url ? navigate(`${url}?${searchParams}`) : null
-                    }
+                    onClick={() => {
+                        if (url) {
+                            navigate(
+                                url.indexOf('?') > 0
+                                    ? `${url}&${searchParams}`
+                                    : `${url}?${searchParams}`
+                            )
+                        }
+                    }}
                 >
                     {(items.total || 0) - items.data.length > 0 && (
                         <Button

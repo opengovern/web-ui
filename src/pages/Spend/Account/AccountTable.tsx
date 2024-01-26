@@ -8,6 +8,7 @@ import {
     CloudIcon,
 } from '@heroicons/react/24/outline'
 import dayjs, { Dayjs } from 'dayjs'
+import { useAtomValue } from 'jotai'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../api/api'
 import AdvancedTable, { IColumn } from '../../../components/AdvancedTable'
 import {
@@ -15,6 +16,7 @@ import {
     numberDisplay,
 } from '../../../utilities/numericDisplay'
 import { renderText } from '../../../components/Layout/Header/DateRangePicker'
+import { searchAtom } from '../../../utilities/urlstate'
 
 export type MSort = {
     sortCol: string
@@ -195,9 +197,7 @@ export default function AccountTable({
     ref,
 }: IAccountTable) {
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
-
-    const [granularityEnabled, setGranularityEnabled] = useState<boolean>(true)
+    const searchParams = useAtomValue(searchAtom)
 
     const columnGenerator = (
         input:
@@ -215,32 +215,25 @@ export default function AccountTable({
                     }
                     return []
                 }) || []
-            const dynamicCols: IColumn<any, any>[] =
-                granularityEnabled === true
-                    ? columnNames
-                          .filter(
-                              (value, index, array) =>
-                                  array.indexOf(value) === index
-                          )
-                          .map((colName) => {
-                              const v: IColumn<any, any> = {
-                                  field: colName,
-                                  headerName: colName,
-                                  type: 'price',
-                                  width: 130,
-                                  sortable: true,
-                                  suppressMenu: true,
-                                  resizable: true,
-                                  pivot: false,
-                                  aggFunc: 'sum',
-                                  columnGroupShow: 'open',
-                                  valueFormatter: (
-                                      param: ValueFormatterParams
-                                  ) => exactPriceDisplay(param.value),
-                              }
-                              return v
-                          })
-                    : []
+            const dynamicCols: IColumn<any, any>[] = columnNames
+                .filter((value, index, array) => array.indexOf(value) === index)
+                .map((colName) => {
+                    const v: IColumn<any, any> = {
+                        field: colName,
+                        headerName: colName,
+                        type: 'price',
+                        width: 130,
+                        sortable: true,
+                        suppressMenu: true,
+                        resizable: true,
+                        pivot: false,
+                        aggFunc: 'sum',
+                        columnGroupShow: 'open',
+                        valueFormatter: (param: ValueFormatterParams) =>
+                            exactPriceDisplay(param.value),
+                    }
+                    return v
+                })
 
             const total: IColumn<any, any> = {
                 field: 'totalCost',
@@ -479,7 +472,7 @@ export default function AccountTable({
 
     useEffect(() => {
         setTableKey(Math.random().toString(16).slice(2, 8))
-    }, [manualGrouping, timeRange, granularityEnabled, response])
+    }, [manualGrouping, timeRange, response])
 
     return (
         <AdvancedTable
@@ -504,8 +497,6 @@ export default function AccountTable({
                     event.api.showLoadingOverlay()
                 }
             }}
-            granularityEnabled={granularityEnabled}
-            setGranularityEnabled={setGranularityEnabled}
             selectedGranularity={selectedGranularity}
             onGranularityChange={onGranularityChange}
             manualSort={manualTableSort}

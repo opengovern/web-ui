@@ -7,8 +7,10 @@ import {
     ShieldExclamationIcon,
 } from '@heroicons/react/24/outline'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
 import { badgeDelta } from '../../../utilities/deltaType'
 import { numericDisplay } from '../../../utilities/numericDisplay'
+import { searchAtom } from '../../../utilities/urlstate'
 
 interface IKeyInsightCard {
     title: string | undefined
@@ -38,7 +40,7 @@ export default function KeyInsightCard({
     id,
 }: IKeyInsightCard) {
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
 
     return (
         <Card

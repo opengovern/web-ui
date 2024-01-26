@@ -17,6 +17,7 @@ import AccountTable from './Table'
 import {
     defaultTime,
     useFilterState,
+    useURLParam,
     useUrlDateRangeState,
 } from '../../../utilities/urlstate'
 
@@ -25,7 +26,10 @@ export default function AssetAccounts() {
     const { value: selectedConnections } = useFilterState()
 
     const [granularity, setGranularity] = useState<Granularity>('daily')
-    const [chartLayout, setChartLayout] = useState<ChartLayout>('accounts')
+    const [chartLayout, setChartLayout] = useURLParam<ChartLayout>(
+        'show',
+        'accounts'
+    )
 
     const query: {
         pageSize: number

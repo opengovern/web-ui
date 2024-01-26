@@ -1,3 +1,4 @@
+import { useAtomValue } from 'jotai'
 import { Button, Flex, Title } from '@tremor/react'
 import { ReactNode } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -8,6 +9,7 @@ import {
 } from '../../../utilities/labelMaker'
 import DateRangePicker from './DateRangePicker'
 import Filter from './Filter'
+import { searchAtom } from '../../../utilities/urlstate'
 
 interface IHeader {
     filter?: boolean
@@ -23,7 +25,7 @@ export default function TopHeader({
     breadCrumb,
 }: IHeader) {
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
     const url = window.location.pathname.split('/')
 
     const mainPage = () => {

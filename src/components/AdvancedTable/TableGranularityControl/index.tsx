@@ -3,40 +3,23 @@ import { Dispatch, SetStateAction } from 'react'
 import { capitalizeFirstLetter } from '../../../utilities/labelMaker'
 
 interface IProps {
-    granularityEnabled: boolean
-    setGranularityEnabled: (v: boolean) => void
     selectedGranularity: 'daily' | 'monthly'
     onGranularityChange: Dispatch<SetStateAction<'monthly' | 'daily'>>
 }
 
 export default function TableGranularityControl({
-    granularityEnabled,
-    setGranularityEnabled,
     selectedGranularity,
     onGranularityChange,
 }: IProps) {
     return (
         <>
-            <Switch
-                id="switch"
-                name="switch"
-                checked={granularityEnabled}
-                onChange={(v) => {
-                    setGranularityEnabled(v)
-                }}
-            />
             <label htmlFor="switch" className="text-sm">
-                Show Granular Spend{' '}
+                Spend Granularity{' '}
             </label>
             <Select
                 enableClear={false}
-                disabled={!granularityEnabled}
                 value={selectedGranularity}
-                placeholder={
-                    granularityEnabled
-                        ? capitalizeFirstLetter(selectedGranularity)
-                        : ''
-                }
+                placeholder={capitalizeFirstLetter(selectedGranularity)}
                 onValueChange={(v) => {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore

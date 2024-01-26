@@ -1,3 +1,4 @@
+import { useAtomValue } from 'jotai'
 import {
     Button,
     Card,
@@ -17,6 +18,7 @@ import { benchmarkChecks } from '../ComplianceCard'
 import SummaryCard from '../SummaryCard'
 import { getConnectorIcon } from '../ConnectorCard'
 import SeverityBar from '../../SeverityBar'
+import { searchAtom } from '../../../utilities/urlstate'
 
 interface IComplianceCard {
     benchmark:
@@ -26,7 +28,7 @@ interface IComplianceCard {
 
 export default function ComplianceListCard({ benchmark }: IComplianceCard) {
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
 
     const connector = () => {
         if (benchmark?.tags?.plugin) {

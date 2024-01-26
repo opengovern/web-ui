@@ -3,11 +3,13 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useState } from 'react'
 import { ICellRendererParams } from 'ag-grid-community'
+import { useAtomValue } from 'jotai'
 import Table, { IColumn } from '../../components/Table'
 import { useInventoryApiV2ResourceCollectionList } from '../../api/inventory.gen'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../api/api'
 import Tag from '../../components/Tag'
 import TopHeader from '../../components/Layout/Header'
+import { searchAtom } from '../../utilities/urlstate'
 
 const resourceCollectionColumns: IColumn<any, any>[] = [
     {
@@ -74,7 +76,7 @@ const resourceCollectionColumns: IColumn<any, any>[] = [
 
 export default function ResourceCollection() {
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
     const [search, setSearch] = useState('')
 
     const { response, isLoading } = useInventoryApiV2ResourceCollectionList()

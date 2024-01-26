@@ -25,11 +25,13 @@ import {
 } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import MarkdownPreview from '@uiw/react-markdown-preview'
+import { useAtomValue } from 'jotai'
 import { useComplianceApiV1BenchmarksControlsDetail } from '../../../api/compliance.gen'
 import Spinner from '../../../components/Spinner'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import DrawerPanel from '../../../components/DrawerPanel'
 import AnimatedAccordion from '../../../components/AnimatedAccordion'
+import { searchAtom } from '../../../utilities/urlstate'
 
 interface IPolicies {
     id: string | undefined
@@ -144,7 +146,7 @@ export default function Controls({ id, assignments }: IPolicies) {
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
     const [doc, setDoc] = useState('')
     const [docTitle, setDocTitle] = useState('')
 

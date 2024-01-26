@@ -1,3 +1,4 @@
+import { useAtomValue } from 'jotai'
 import { Button, Card, Flex, Metric, Text, Title } from '@tremor/react'
 import { ArrowPathIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -7,6 +8,7 @@ import {
     numericDisplay,
 } from '../../../utilities/numericDisplay'
 import ChangeDelta from '../../ChangeDelta'
+import { searchAtom } from '../../../utilities/urlstate'
 
 type IProps = {
     title: string
@@ -42,7 +44,7 @@ export default function SummaryCard({
     isPercent = false,
 }: IProps) {
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
 
     const value = () => {
         if (error !== undefined && error.length > 0) {

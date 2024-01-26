@@ -26,6 +26,7 @@ import {
 import {
     defaultSpendTime,
     useFilterState,
+    useURLParam,
     useUrlDateRangeState,
 } from '../../../utilities/urlstate'
 
@@ -190,7 +191,10 @@ export function SpendOverview() {
             connectionGroup: selectedConnections.connectionGroup,
         })
 
-    const [chartLayout, setChartLayout] = useState<ChartLayout>('categories')
+    const [chartLayout, setChartLayout] = useURLParam<ChartLayout>(
+        'show',
+        'categories'
+    )
     const trend = () => {
         if (chartLayout === 'total' || chartLayout === 'metrics') {
             return costTrend || []

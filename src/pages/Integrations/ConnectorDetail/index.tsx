@@ -1,6 +1,7 @@
 import { Button, Flex, Title } from '@tremor/react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Cog8ToothIcon } from '@heroicons/react/24/outline'
+import { useAtomValue } from 'jotai'
 import AWSTabs from './AWS/Tabs'
 import AWSSummary from './AWS/Summary'
 import AzureSummary from './Azure/Summary'
@@ -12,11 +13,15 @@ import {
     useIntegrationApiV1CredentialsList,
 } from '../../../api/integration.gen'
 import TopHeader from '../../../components/Layout/Header'
-import { defaultTime, useUrlDateRangeState } from '../../../utilities/urlstate'
+import {
+    defaultTime,
+    searchAtom,
+    useUrlDateRangeState,
+} from '../../../utilities/urlstate'
 
 export default function ConnectorDetail() {
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
     const { connector } = useParams()
     const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
 

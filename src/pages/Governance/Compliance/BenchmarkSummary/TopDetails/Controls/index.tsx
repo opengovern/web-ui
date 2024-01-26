@@ -1,3 +1,4 @@
+import { useAtomValue } from 'jotai'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ICellRendererParams } from 'ag-grid-community'
 import { Flex } from '@tremor/react'
@@ -5,7 +6,10 @@ import { useComplianceApiV1FindingsTopDetail } from '../../../../../../api/compl
 import Table, { IColumn } from '../../../../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord } from '../../../../../../api/api'
 import { severityBadge } from '../../../../Controls'
-import { useFilterState } from '../../../../../../utilities/urlstate'
+import {
+    searchAtom,
+    useFilterState,
+} from '../../../../../../utilities/urlstate'
 
 interface IFinder {
     id: string | undefined
@@ -164,7 +168,7 @@ export const topControls = (
 export default function Controls({ id }: IFinder) {
     const { value: selectedConnections } = useFilterState()
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
 
     const topQuery = {
         ...(id && { benchmarkId: [id] }),

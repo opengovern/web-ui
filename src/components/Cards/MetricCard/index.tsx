@@ -11,12 +11,14 @@ import { ArrowPathIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { log } from 'console'
+import { useAtomValue } from 'jotai'
 import Spinner from '../../Spinner'
 import {
     numberDisplay,
     numericDisplay,
 } from '../../../utilities/numericDisplay'
 import { badgeTypeByDelta } from '../../../utilities/deltaType'
+import { searchAtom } from '../../../utilities/urlstate'
 
 type IProps = {
     title: string
@@ -54,7 +56,7 @@ export default function MetricCard({
     isPercent = false,
 }: IProps) {
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
 
     const changeRate = (
         ((Number(metric) - Number(metricPrev)) / Number(metricPrev)) *

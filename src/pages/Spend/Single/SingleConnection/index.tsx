@@ -20,7 +20,7 @@ import {
 import { ValueFormatterParams } from 'ag-grid-community'
 import { ChevronRightIcon, Square2StackIcon } from '@heroicons/react/24/outline'
 import { useEffect, useState } from 'react'
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import clipboardCopy from 'clipboard-copy'
 import { Dayjs } from 'dayjs'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -57,6 +57,7 @@ import { generateVisualMap } from '../../../Assets'
 import Table, { IColumn } from '../../../../components/Table'
 import { gridOptions, rowGenerator } from '../../Details/Tabs/Metrics'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../../api/api'
+import { searchAtom } from '../../../../utilities/urlstate'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -91,7 +92,7 @@ export default function SingleSpendConnection({
     }, [activeTimeRange])
 
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
     const setNotification = useSetAtom(notificationAtom)
 
     useEffect(() => {

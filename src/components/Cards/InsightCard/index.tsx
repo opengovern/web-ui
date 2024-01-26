@@ -1,10 +1,12 @@
 import { Card, Flex, Text, Title } from '@tremor/react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import { badgeDelta } from '../../../utilities/deltaType'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import { getConnectorIcon } from '../ConnectorCard'
 import { numericDisplay } from '../../../utilities/numericDisplay'
+import { searchAtom } from '../../../utilities/urlstate'
 
 interface IInsightsCard {
     metric: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
@@ -50,7 +52,7 @@ const generateBadge = (
 
 export default function InsightCard({ metric }: IInsightsCard) {
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
     const navigateToAssetsInsightsDetails = (id: number | undefined) => {
         navigate(`${id}?${searchParams}`)
     }

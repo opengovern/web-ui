@@ -66,7 +66,11 @@ import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
 import { benchmarkChecks } from '../../../components/Cards/ComplianceCard'
 import TopHeader from '../../../components/Layout/Header'
 import { options } from '../../Assets/Metric/Table'
-import { defaultTime, useUrlDateRangeState } from '../../../utilities/urlstate'
+import {
+    defaultTime,
+    searchAtom,
+    useUrlDateRangeState,
+} from '../../../utilities/urlstate'
 
 const pieData = (
     input:
@@ -222,7 +226,7 @@ export default function ResourceCollectionDetail() {
     const { resourceId } = useParams()
     const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
     const navigate = useNavigate()
-    const [searchParams] = useSearchParams()
+    const searchParams = useAtomValue(searchAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
     const [showSummary, setShowSummary] = useState(false)
 
