@@ -278,7 +278,6 @@ export default function FindingsWithFailure({ count, query }: ICount) {
                             rowData: resp.data.findings || [],
                             rowCount: resp.data.totalCount || 0,
                         })
-                        console.log(resp.data)
                         count(resp.data.totalCount || 0)
                         // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
                         // @ts-ignore
@@ -332,6 +331,7 @@ export default function FindingsWithFailure({ count, query }: ICount) {
                 }}
             />
             <FindingDetail
+                type="finding"
                 finding={finding}
                 open={open}
                 onClose={() => setOpen(false)}

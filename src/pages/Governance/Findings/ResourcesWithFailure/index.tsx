@@ -1,5 +1,5 @@
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
-import { Flex, Text } from '@tremor/react'
+import { Card, Flex, Text } from '@tremor/react'
 import {
     ICellRendererParams,
     RowClickedEvent,
@@ -19,6 +19,7 @@ import { isDemoAtom, notificationAtom } from '../../../../store'
 import Table, { IColumn } from '../../../../components/Table'
 import FindingDetail from '../FindingsWithFailure/Detail'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
+import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
 const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -36,7 +37,8 @@ const columns = (isDemo: boolean) => {
                 <Flex
                     flexDirection="col"
                     alignItems="start"
-                    className={isDemo ? 'blur-md' : ''}
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
                 >
                     <Text className="text-gray-800">{param.value}</Text>
                     <Text>{param.data.kaytuResourceID}</Text>
@@ -57,7 +59,8 @@ const columns = (isDemo: boolean) => {
                 <Flex
                     flexDirection="col"
                     alignItems="start"
-                    className={isDemo ? 'blur-md' : ''}
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
                 >
                     <Text className="text-gray-800">{param.value}</Text>
                     <Text>{param.data.resourceTypeLabel}</Text>
@@ -77,22 +80,27 @@ const columns = (isDemo: boolean) => {
         },
         {
             field: 'providerConnectionName',
-            headerName: 'Account info',
-            type: 'string',
-            enableRowGroup: true,
+            headerName: 'Cloud account',
             sortable: false,
-            hide: false,
             filter: true,
-            resizable: true,
-            flex: 1,
+            hide: false,
+            enableRowGroup: true,
+            type: 'string',
             cellRenderer: (param: ICellRendererParams) => (
                 <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    className={isDemo ? 'blur-md' : ''}
+                    justifyContent="start"
+                    className={`h-full gap-3 group relative ${
+                        isDemo ? 'blur-md' : ''
+                    }`}
                 >
-                    <Text className="text-gray-800">{param.value}</Text>
-                    <Text>{param.data.providerConnectionID}</Text>
+                    {getConnectorIcon(param.data.connector)}
+                    <Flex flexDirection="col" alignItems="start">
+                        <Text className="text-gray-800">{param.value}</Text>
+                        <Text>{param.data.providerConnectionID}</Text>
+                    </Flex>
+                    <Card className="cursor-pointer absolute w-fit h-fit z-40 right-1 scale-0 transition-all py-1 px-4 group-hover:scale-100">
+                        <Text color="blue">Open</Text>
+                    </Card>
                 </Flex>
             ),
         },
@@ -107,7 +115,12 @@ const columns = (isDemo: boolean) => {
             resizable: true,
             width: 140,
             cellRenderer: (param: ICellRendererParams) => (
-                <Flex flexDirection="col" alignItems="start">
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="center"
+                    className="h-full"
+                >
                     <Text className="text-gray-800">{`${param.value} issues`}</Text>
                     <Text>{`${
                         param.value - param.data.failedCount
@@ -252,6 +265,7 @@ export default function ResourcesWithFailure({ count, query }: ICount) {
                 }}
             />
             <FindingDetail
+                type="resource"
                 finding={finding}
                 open={open}
                 onClose={() => setOpen(false)}

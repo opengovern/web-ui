@@ -346,6 +346,7 @@ export default function SingleComplianceConnection() {
                 </TabPanels>
             </TabGroup>
             <FindingDetail
+                type="finding"
                 finding={finding}
                 open={openFinding}
                 onClose={() => setOpenFinding(false)}
