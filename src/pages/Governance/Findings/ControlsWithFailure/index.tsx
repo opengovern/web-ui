@@ -19,7 +19,12 @@ const policyColumns: IColumn<any, any>[] = [
         filter: true,
         resizable: true,
         cellRenderer: (param: ICellRendererParams) => (
-            <Flex flexDirection="col" alignItems="start">
+            <Flex
+                flexDirection="col"
+                alignItems="start"
+                justifyContent="center"
+                className="h-full"
+            >
                 <Text className="text-gray-800">{param.value}</Text>
                 <Text>{param.data.id}</Text>
             </Flex>
@@ -52,7 +57,12 @@ const policyColumns: IColumn<any, any>[] = [
         resizable: true,
         width: 150,
         cellRenderer: (param: ICellRendererParams) => (
-            <Flex flexDirection="col" alignItems="start">
+            <Flex
+                flexDirection="col"
+                alignItems="start"
+                justifyContent="center"
+                className="h-full"
+            >
                 <Text className="text-gray-800">{param.value || 0} issues</Text>
                 <Text>
                     {(param.data.totalCount || 0) - (param.value || 0)} passed
@@ -69,17 +79,17 @@ const policyColumns: IColumn<any, any>[] = [
         resizable: true,
         width: 150,
         cellRenderer: (param: ICellRendererParams) => (
-            <Flex flexDirection="col" alignItems="start">
-                <Flex flexDirection="col" alignItems="start">
-                    <Text className="text-gray-800">
-                        {param.value || 0} issues
-                    </Text>
-                    <Text>
-                        {(param.data.resourceTotalCount || 0) -
-                            (param.value || 0)}{' '}
-                        passed
-                    </Text>
-                </Flex>
+            <Flex
+                flexDirection="col"
+                alignItems="start"
+                justifyContent="center"
+                className="h-full"
+            >
+                <Text className="text-gray-800">{param.value || 0} issues</Text>
+                <Text>
+                    {(param.data.resourceTotalCount || 0) - (param.value || 0)}{' '}
+                    passed
+                </Text>
             </Flex>
         ),
     },
