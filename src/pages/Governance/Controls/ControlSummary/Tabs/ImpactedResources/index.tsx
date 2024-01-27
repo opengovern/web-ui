@@ -295,6 +295,7 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                 }}
             />
             <FindingDetail
+                type="resource"
                 finding={finding}
                 open={open}
                 onClose={() => setOpen(false)}

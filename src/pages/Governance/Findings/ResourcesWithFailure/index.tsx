@@ -265,6 +265,7 @@ export default function ResourcesWithFailure({ count, query }: ICount) {
                 }}
             />
             <FindingDetail
+                type="resource"
                 finding={finding}
                 open={open}
                 onClose={() => setOpen(false)}
