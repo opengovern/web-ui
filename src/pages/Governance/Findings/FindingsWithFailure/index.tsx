@@ -254,6 +254,7 @@ export default function FindingsWithFailure({ count, query }: ICount) {
                             benchmarkID: query.benchmarkID,
                             severity: query.severity,
                             resourceTypeID: query.resourceTypeID,
+                            conformanceStatus: query.conformanceStatus,
                         },
                         sort: params.request.sortModel.length
                             ? [

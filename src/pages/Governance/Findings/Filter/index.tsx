@@ -171,9 +171,9 @@ export default function Filter({ onApply }: IFilters) {
     ]
 
     return (
-        <Flex justifyContent="start" className="mt-4 gap-3 flex-wrap">
+        <Flex justifyContent="start" className="mt-4 gap-3 flex-wrap z-10">
             {options.map((f) => (
-                <Popover className="relative border-0 z-50" key={f.id}>
+                <Popover className="relative border-0" key={f.id}>
                     <Popover.Button className="border border-gray-400 py-1 px-2 rounded-3xl">
                         <Flex className="w-fit">
                             <Icon
@@ -214,13 +214,6 @@ export default function Filter({ onApply }: IFilters) {
                                 </Flex>
                                 {f.component}
                             </Card>
-                            {/* <button */}
-                            {/*     type="button" */}
-                            {/*     onClick={() => console.log('hi')} */}
-                            {/*     className="fixed bg-black w-screen h-screen right-0 top-0" */}
-                            {/* > */}
-                            {/*     hi */}
-                            {/* </button> */}
                         </Popover.Panel>
                     </Transition>
                 </Popover>
