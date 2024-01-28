@@ -54,6 +54,7 @@ export default function Findings() {
         controlID: string[] | undefined
         benchmarkID: string[] | undefined
         resourceTypeID: string[] | undefined
+        lifecycle: string[] | undefined
     }>({
         connector: SourceType.Nil,
         conformanceStatus: [
@@ -70,6 +71,7 @@ export default function Findings() {
         controlID: [],
         benchmarkID: [],
         resourceTypeID: [],
+        lifecycle: ['true', 'false'],
     })
 
     const tabs = [
