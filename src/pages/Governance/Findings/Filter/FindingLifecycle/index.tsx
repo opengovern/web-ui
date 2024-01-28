@@ -3,20 +3,20 @@ import { Radio } from 'pretty-checkbox-react'
 import { compareArrays } from '../../../../../components/Layout/Header/Filter'
 
 interface ILifecycle {
-    value: string[]
-    onChange: (l: string[]) => void
+    value: boolean[]
+    onChange: (l: boolean[]) => void
 }
 
 export default function FindingLifecycle({ value, onChange }: ILifecycle) {
     const options = [
-        { name: 'All', value: ['true', 'false'] },
+        { name: 'All', value: [true, false] },
         {
             name: 'Active',
-            value: ['true'],
+            value: [true],
         },
         {
             name: 'Archived',
-            value: ['false'],
+            value: [false],
         },
     ]
 

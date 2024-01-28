@@ -29,7 +29,7 @@ interface IFilters {
         controlID: string[] | undefined
         benchmarkID: string[] | undefined
         resourceTypeID: string[] | undefined
-        lifecycle: string[] | undefined
+        lifecycle: boolean[] | undefined
     }) => void
 }
 
@@ -41,7 +41,7 @@ export default function Filter({ onApply }: IFilters) {
     >([
         GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
     ])
-    const [lifecycle, setLifecycle] = useState<string[]>(['true', 'false'])
+    const [lifecycle, setLifecycle] = useState<boolean[]>([true, false])
     const [severity, setSeverity] = useState<
         TypesFindingSeverity[] | undefined
     >([

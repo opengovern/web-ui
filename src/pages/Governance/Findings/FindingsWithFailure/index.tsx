@@ -225,6 +225,7 @@ interface ICount {
         controlID: string[] | undefined
         benchmarkID: string[] | undefined
         resourceTypeID: string[] | undefined
+        lifecycle: boolean[] | undefined
     }
 }
 
@@ -255,6 +256,7 @@ export default function FindingsWithFailure({ count, query }: ICount) {
                             severity: query.severity,
                             resourceTypeID: query.resourceTypeID,
                             conformanceStatus: query.conformanceStatus,
+                            stateActive: query.lifecycle,
                         },
                         sort: params.request.sortModel.length
                             ? [
