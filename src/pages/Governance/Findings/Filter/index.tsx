@@ -81,7 +81,6 @@ export default function Filter({ onApply }: IFilters) {
     ])
 
     const { response: filters } = useComplianceApiV1FindingsFiltersCreate({})
-    console.log(filters)
 
     const options = [
         {

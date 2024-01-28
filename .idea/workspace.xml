@@ -6,20 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/env-config.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/env-config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/alerting.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/alerting.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/auth.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/auth.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/compliance.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/compliance.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/integration.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/integration.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/inventory.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/inventory.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/onboard.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/onboard.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/schedule.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/schedule.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/workspace.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/workspace.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Findings/Filter/FindingLifecycle/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Findings/Filter/FindingLifecycle/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Governance/Findings/Filter/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Findings/Filter/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Findings/FindingsWithFailure/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Findings/FindingsWithFailure/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Findings/ResourcesWithFailure/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Findings/ResourcesWithFailure/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Governance/Findings/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Findings/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -328,7 +315,7 @@
       <workItem from="1705999040551" duration="20514000" />
       <workItem from="1706172520509" duration="20321000" />
       <workItem from="1706266340109" duration="5566000" />
-      <workItem from="1706274981069" duration="13815000" />
+      <workItem from="1706274981069" duration="14344000" />
     </task>
     <servers />
   </component>
