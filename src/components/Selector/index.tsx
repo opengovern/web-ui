@@ -75,7 +75,7 @@ export default function Selector({
                             leaveFrom="opacity-100"
                             leaveTo="opacity-0"
                         >
-                            <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white dark:bg-gray-800 py-1 text-base shadow-lg ring-1 ring-black dark:ring-white ring-opacity-5 focus:outline-none sm:text-sm">
+                            <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-fit overflow-auto rounded-md bg-white dark:bg-gray-800 py-1 text-base shadow-lg ring-1 ring-black dark:ring-white ring-opacity-5 focus:outline-none sm:text-sm">
                                 {values.map((item, idx) => (
                                     <Listbox.Option
                                         key={item}
@@ -84,27 +84,25 @@ export default function Selector({
                                                 active
                                                     ? 'bg-gray-50 dark:bg-gray-900'
                                                     : 'text-gray-900 dark:text-gray-50',
-                                                'relative cursor-default select-none py-2 pl-4 pr-6'
+                                                'relative w-full cursor-default select-none py-2 px-4'
                                             )
                                         }
                                         value={idx}
                                     >
                                         {({ selected, active }) => (
-                                            <>
-                                                <div className="flex items-center">
-                                                    <span
-                                                        className={classNames(
-                                                            selected
-                                                                ? 'font-semibold'
-                                                                : 'font-normal',
-                                                            ' block truncate text-gray-800 dark:text-gray-100'
-                                                        )}
-                                                    >
-                                                        {capitalizeFirstLetter(
-                                                            item
-                                                        )}
-                                                    </span>
-                                                </div>
+                                            <div className="flex flex-row justify-between items-center w-full">
+                                                <span
+                                                    className={classNames(
+                                                        selected
+                                                            ? 'font-semibold'
+                                                            : 'font-normal',
+                                                        ' block truncate text-gray-800 dark:text-gray-100 pr-2'
+                                                    )}
+                                                >
+                                                    {capitalizeFirstLetter(
+                                                        item
+                                                    )}
+                                                </span>
 
                                                 {selected ? (
                                                     <span
@@ -112,7 +110,7 @@ export default function Selector({
                                                             active
                                                                 ? 'text-gray-900 dark:text-gray-50'
                                                                 : 'text-gray-900 dark:text-gray-50',
-                                                            'absolute inset-y-0 right-0 flex items-center pr-4'
+                                                            'inset-y-0 right-0 flex items-center'
                                                         )}
                                                     >
                                                         <CheckIcon
@@ -121,7 +119,7 @@ export default function Selector({
                                                         />
                                                     </span>
                                                 ) : null}
-                                            </>
+                                            </div>
                                         )}
                                     </Listbox.Option>
                                 ))}
