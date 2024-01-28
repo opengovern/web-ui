@@ -16,6 +16,7 @@ import ConformanceStatus from './ConformanceStatus'
 import Severity from './Severity'
 import { useComplianceApiV1FindingsFiltersCreate } from '../../../../api/compliance.gen'
 import Others from './Others'
+import FindingLifecycle from './FindingLifecycle'
 
 interface IFilters {
     onApply: (obj: {
@@ -28,6 +29,7 @@ interface IFilters {
         controlID: string[] | undefined
         benchmarkID: string[] | undefined
         resourceTypeID: string[] | undefined
+        lifecycle: boolean[] | undefined
     }) => void
 }
 
@@ -39,6 +41,7 @@ export default function Filter({ onApply }: IFilters) {
     >([
         GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
     ])
+    const [lifecycle, setLifecycle] = useState<boolean[]>([true, false])
     const [severity, setSeverity] = useState<
         TypesFindingSeverity[] | undefined
     >([
@@ -64,6 +67,7 @@ export default function Filter({ onApply }: IFilters) {
             controlID,
             benchmarkID,
             resourceTypeID,
+            lifecycle,
         })
     }, [
         connector,
@@ -73,6 +77,7 @@ export default function Filter({ onApply }: IFilters) {
         controlID,
         benchmarkID,
         resourceTypeID,
+        lifecycle,
     ])
 
     const { response: filters } = useComplianceApiV1FindingsFiltersCreate({})
@@ -108,6 +113,18 @@ export default function Filter({ onApply }: IFilters) {
                     value={severity}
                     data={filters}
                     onChange={(s) => setSeverity(s)}
+                />
+            ),
+            removable: false,
+        },
+        {
+            id: 'lifecycle',
+            name: 'Lifecycle',
+            icon: CloudIcon,
+            component: (
+                <FindingLifecycle
+                    value={lifecycle}
+                    onChange={(l) => setLifecycle(l)}
                 />
             ),
             removable: false,

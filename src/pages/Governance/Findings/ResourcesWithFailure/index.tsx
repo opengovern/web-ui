@@ -159,6 +159,7 @@ interface ICount {
         controlID: string[] | undefined
         benchmarkID: string[] | undefined
         resourceTypeID: string[] | undefined
+        lifecycle: boolean[] | undefined
     }
 }
 
@@ -189,6 +190,9 @@ export default function ResourcesWithFailure({ count, query }: ICount) {
                             severity: query.severity,
                             resourceTypeID: query.resourceTypeID,
                             conformanceStatus: query.conformanceStatus,
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            stateActive: query.lifecycle,
                         },
                         sort: params.request.sortModel.length
                             ? [

@@ -54,6 +54,7 @@ export default function Findings() {
         controlID: string[] | undefined
         benchmarkID: string[] | undefined
         resourceTypeID: string[] | undefined
+        lifecycle: boolean[] | undefined
     }>({
         connector: SourceType.Nil,
         conformanceStatus: [
@@ -70,6 +71,7 @@ export default function Findings() {
         controlID: [],
         benchmarkID: [],
         resourceTypeID: [],
+        lifecycle: [true, false],
     })
 
     const tabs = [
@@ -110,21 +112,18 @@ export default function Findings() {
                                 count={(x) => setFindingCount(x)}
                             />
                         </TabPanel>
-                        {/* <TabPanel>
-                        <ResourcesWithFailure
-                            count={(x) => setResourceCount(x)}
-                        />
-                    </TabPanel>
-                    <TabPanel>
-                        <ControlsWithFailure
-                            count={(x) => setControlCount(x)}
-                        />
-                    </TabPanel>
-                    <TabPanel>
-                        <FailingCloudAccounts
-                            count={(x) => setAccountCount(x)}
-                        />
-                    </TabPanel> */}
+                        <TabPanel>
+                            <FindingsWithFailure
+                                query={{
+                                    ...query,
+                                    conformanceStatus: [
+                                        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+                                    ],
+                                    lifecycle: [true],
+                                }}
+                                count={(x) => setFindingCount(x)}
+                            />
+                        </TabPanel>
                     </TabPanels>
                 )
             case 'resources':
@@ -133,6 +132,18 @@ export default function Findings() {
                         <TabPanel>
                             <ResourcesWithFailure
                                 query={query}
+                                count={(x) => setResourceCount(x)}
+                            />
+                        </TabPanel>
+                        <TabPanel>
+                            <ResourcesWithFailure
+                                query={{
+                                    ...query,
+                                    conformanceStatus: [
+                                        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+                                    ],
+                                    lifecycle: [true],
+                                }}
                                 count={(x) => setResourceCount(x)}
                             />
                         </TabPanel>
@@ -147,11 +158,23 @@ export default function Findings() {
                                 count={(x) => setResourceCount(x)}
                             />
                         </TabPanel>
+                        <TabPanel>
+                            <ControlsWithFailure
+                                // query={query}
+                                count={(x) => setResourceCount(x)}
+                            />
+                        </TabPanel>
                     </TabPanels>
                 )
             case 'accounts':
                 return (
                     <TabPanels className="mt-4">
+                        <TabPanel>
+                            <FailingCloudAccounts
+                                // query={query}
+                                count={(x) => setResourceCount(x)}
+                            />
+                        </TabPanel>
                         <TabPanel>
                             <FailingCloudAccounts
                                 // query={query}

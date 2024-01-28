@@ -876,6 +876,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     evaluator?: string
     /** @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1" */
     kaytuResourceID?: string
+    /** @example "1589395200" */
+    lastTransition?: string
     /** @example 1 */
     noOfOccurrences?: number
     /** @example ["Azure CIS v1.4.0"] */
@@ -955,6 +957,12 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
      * @example ["azure_cis_v140_7_5"]
      */
     controlID?: string[]
+    lastTransition?: {
+        /** @example "2020-05-13T00:00:00Z" */
+        from?: string
+        /** @example "2020-05-13T00:00:00Z" */
+        to?: string
+    }
     /**
      * Resource unique identifier
      * @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"]
@@ -970,6 +978,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
      * @example ["low"]
      */
     severity?: TypesFindingSeverity[]
+    /** @example [true] */
+    stateActive?: boolean[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata {
@@ -981,6 +991,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMe
     resourceCollection?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     resourceTypeID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     severity?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
+    stateActive?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse {
@@ -1000,6 +1011,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingsSort {
     resourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
     resourceTypeID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
     severity?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    stateActive?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse {
@@ -4150,6 +4162,8 @@ export class Api<
                 severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
                 /** ConformanceStatus to filter by defaults to all conformanceStatus except passed */
                 conformanceStatus?: ('failed' | 'passed')[]
+                /** StateActive to filter by defaults to true */
+                stateActive?: boolean[]
             },
             params: RequestParams = {}
         ) =>
@@ -4253,6 +4267,8 @@ export class Api<
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Severities to filter by defaults to all severities except passed */
                 severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
+                /** ConformanceStatus to filter by defaults to failed */
+                conformanceStatus?: ('failed' | 'passed')[]
             },
             params: RequestParams = {}
         ) =>

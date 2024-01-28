@@ -2,32 +2,32 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
     RequestParams,
 } from './api'
 
@@ -2336,6 +2336,8 @@ export const useComplianceApiV1FindingsTopDetail = (
         severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
 
         conformanceStatus?: ('failed' | 'passed')[]
+
+        stateActive?: boolean[]
     },
     params: RequestParams = {},
     autoExecute = true,
@@ -2703,6 +2705,8 @@ export const useComplianceApiV1FindingsCountDetail = (
         connector?: ('' | 'AWS' | 'Azure')[]
 
         severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
+
+        conformanceStatus?: ('failed' | 'passed')[]
     },
     params: RequestParams = {},
     autoExecute = true,
