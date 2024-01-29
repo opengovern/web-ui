@@ -1,6 +1,6 @@
 import { Checkbox, useCheckboxState } from 'pretty-checkbox-react'
 import { Button, Flex, Text } from '@tremor/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
     TypesFindingSeverity,
@@ -10,6 +10,7 @@ import { compareArrays } from '../../../../../components/Layout/Header/Filter'
 interface ISeverity {
     value: TypesFindingSeverity[] | undefined
     defaultValue: TypesFindingSeverity[]
+    condition: string
     data:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata
         | undefined
@@ -19,20 +20,40 @@ interface ISeverity {
 export default function Severity({
     value,
     defaultValue,
+    condition,
     data,
     onChange,
 }: ISeverity) {
+    const [con, setCon] = useState(condition)
     const severityCheckbox = useCheckboxState({
         state: value,
     })
     useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        if (!compareArrays(value?.sort() || [], severityCheckbox.state.sort()))
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            onChange([...severityCheckbox.state])
-    }, [severityCheckbox.state])
+        if (
+            !compareArrays(
+                value?.sort() || [],
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                severityCheckbox.state.sort()
+            ) ||
+            con !== condition
+        ) {
+            if (condition === 'is') {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                onChange([...severityCheckbox.state])
+            }
+            if (condition === 'isNot') {
+                const arr = defaultValue.filter(
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    (x) => !severityCheckbox.state.includes(x)
+                )
+                onChange(arr)
+            }
+            setCon(condition)
+        }
+    }, [severityCheckbox.state, condition])
 
     const options = [
         {
