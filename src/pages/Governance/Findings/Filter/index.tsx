@@ -78,18 +78,23 @@ export default function Filter({ onApply }: IFilters) {
     const [severity, setSeverity] = useState<
         TypesFindingSeverity[] | undefined
     >(defSeverity)
+    const [severityCon, setSeverityCon] = useState('is')
 
     const defOthers: string[] = []
     const [connectionID, setConnectionID] = useState<string[] | undefined>(
         defOthers
     )
+    const [connectionCon, setConnectionCon] = useState('is')
     const [controlID, setControlID] = useState<string[] | undefined>(defOthers)
+    const [controlCon, setControlCon] = useState('is')
     const [benchmarkID, setBenchmarkID] = useState<string[] | undefined>(
         defOthers
     )
+    const [benchmarkCon, setBenchmarkCon] = useState('is')
     const [resourceTypeID, setResourceTypeID] = useState<string[] | undefined>(
         defOthers
     )
+    const [resourceCon, setResourceCon] = useState('is')
 
     useEffect(() => {
         onApply({
@@ -118,22 +123,6 @@ export default function Filter({ onApply }: IFilters) {
     const filterCheckbox = useCheckboxState({ state: ['conformance_status'] })
     const filterOptions = [
         {
-            id: 'provider',
-            name: 'Provider',
-            icon: CloudIcon,
-            component: (
-                <Provider
-                    value={connector}
-                    defaultValue={defConnector}
-                    onChange={(p) => setConnector(p)}
-                />
-            ),
-            value: [connector],
-            defaultValue: [defConnector],
-            conditions: ['is'],
-            removable: true,
-        },
-        {
             id: 'conformance_status',
             name: 'Conformance Status',
             icon: CloudIcon,
@@ -144,26 +133,27 @@ export default function Filter({ onApply }: IFilters) {
                     onChange={(c) => setConformanceStatus(c)}
                 />
             ),
+            conditions: ['is'],
+            setCondition: (c: string) => console.log(c),
             value: conformanceStatus,
             defaultValue: defConformanceStatus,
-            conditions: ['is'],
             removable: false,
         },
         {
-            id: 'severity',
-            name: 'Severity',
+            id: 'provider',
+            name: 'Provider',
             icon: CloudIcon,
             component: (
-                <Severity
-                    value={severity}
-                    defaultValue={defSeverity}
-                    data={filters}
-                    onChange={(s) => setSeverity(s)}
+                <Provider
+                    value={connector}
+                    defaultValue={defConnector}
+                    onChange={(p) => setConnector(p)}
                 />
             ),
-            conditions: ['is', 'isNot'],
-            value: severity,
-            defaultValue: defSeverity,
+            conditions: ['is'],
+            setCondition: (c: string) => console.log(c),
+            value: [connector],
+            defaultValue: [defConnector],
             removable: true,
         },
         {
@@ -178,8 +168,28 @@ export default function Filter({ onApply }: IFilters) {
                 />
             ),
             conditions: ['is'],
+            setCondition: (c: string) => console.log(c),
             value: lifecycle,
             defaultValue: defLifecycle,
+            removable: true,
+        },
+        {
+            id: 'severity',
+            name: 'Severity',
+            icon: CloudIcon,
+            component: (
+                <Severity
+                    value={severity}
+                    defaultValue={defSeverity}
+                    condition={severityCon}
+                    data={filters}
+                    onChange={(s) => setSeverity(s)}
+                />
+            ),
+            conditions: ['is', 'isNot'],
+            setCondition: (c: string) => setSeverityCon(c),
+            value: severity,
+            defaultValue: defSeverity,
             removable: true,
         },
         {
@@ -196,6 +206,7 @@ export default function Filter({ onApply }: IFilters) {
                 />
             ),
             conditions: ['is', 'isNot'],
+            setCondition: (c: string) => setConnectionCon(c),
             value: connectionID,
             defaultValue: defOthers,
             removable: true,
@@ -214,6 +225,7 @@ export default function Filter({ onApply }: IFilters) {
                 />
             ),
             conditions: ['is', 'isNot'],
+            setCondition: (c: string) => setControlCon(c),
             value: controlID,
             defaultValue: defOthers,
             removable: true,
@@ -232,6 +244,7 @@ export default function Filter({ onApply }: IFilters) {
                 />
             ),
             conditions: ['is', 'isNot'],
+            setCondition: (c: string) => setBenchmarkCon(c),
             value: benchmarkID,
             defaultValue: defOthers,
             removable: true,
@@ -250,6 +263,7 @@ export default function Filter({ onApply }: IFilters) {
                 />
             ),
             conditions: ['is', 'isNot'],
+            setCondition: (c: string) => setResourceCon(c),
             value: resourceTypeID,
             defaultValue: defOthers,
             removable: true,
@@ -317,7 +331,9 @@ export default function Filter({ onApply }: IFilters) {
                                                 {f.name}
                                             </Text>
                                             <ConditionDropdown
-                                                onChange={(c) => console.log(c)}
+                                                onChange={(c) =>
+                                                    f.setCondition(c)
+                                                }
                                                 conditions={f.conditions}
                                             />
                                         </Flex>
