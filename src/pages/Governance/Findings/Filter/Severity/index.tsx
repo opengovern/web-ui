@@ -28,6 +28,7 @@ export default function Severity({
     const severityCheckbox = useCheckboxState({
         state: value,
     })
+
     useEffect(() => {
         if (
             !compareArrays(
