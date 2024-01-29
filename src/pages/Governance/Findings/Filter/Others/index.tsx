@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Flex, Text, TextInput } from '@tremor/react'
+import { Button, Flex, Text, TextInput } from '@tremor/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { Checkbox, useCheckboxState } from 'pretty-checkbox-react'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata } from '../../../../../api/api'
@@ -8,6 +8,7 @@ import { compareArrays } from '../../../../../components/Layout/Header/Filter'
 
 interface IOthers {
     value: string[] | undefined
+    defaultValue: string[]
     data:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata
         | undefined
@@ -15,7 +16,13 @@ interface IOthers {
     onChange: (o: string[]) => void
 }
 
-export default function Others({ value, data, type, onChange }: IOthers) {
+export default function Others({
+    value,
+    defaultValue,
+    data,
+    type,
+    onChange,
+}: IOthers) {
     const [search, setSearch] = useState('')
     const checkbox = useCheckboxState({ state: value })
 
@@ -87,6 +94,21 @@ export default function Others({ value, data, type, onChange }: IOthers) {
                     <Spinner />
                 )}
             </Flex>
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
+            {!compareArrays(value?.sort(), defaultValue?.sort()) && (
+                <Flex className="pt-3 mt-3 border-t border-t-gray-200">
+                    <Button
+                        variant="light"
+                        onClick={() => {
+                            onChange(defaultValue)
+                            checkbox.setState(defaultValue)
+                        }}
+                    >
+                        Reset
+                    </Button>
+                </Flex>
+            )}
         </Flex>
     )
 }

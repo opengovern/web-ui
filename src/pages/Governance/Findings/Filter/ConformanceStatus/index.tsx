@@ -1,11 +1,14 @@
 import { Radio } from 'pretty-checkbox-react'
-import { Flex, Text } from '@tremor/react'
+import { Button, Flex, Text } from '@tremor/react'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus } from '../../../../../api/api'
 import { compareArrays } from '../../../../../components/Layout/Header/Filter'
 
 interface IConformanceStatus {
     value:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+        | undefined
+    defaultValue:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
         | undefined
     onChange: (
@@ -17,6 +20,7 @@ interface IConformanceStatus {
 
 export default function ConformanceStatus({
     value,
+    defaultValue,
     onChange,
 }: IConformanceStatus) {
     const options = [
@@ -59,6 +63,18 @@ export default function ConformanceStatus({
                     </Flex>
                 </Radio>
             ))}
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
+            {!compareArrays(value?.sort(), defaultValue?.sort()) && (
+                <Flex className="pt-3 mt-3 border-t border-t-gray-200">
+                    <Button
+                        variant="light"
+                        onClick={() => onChange(defaultValue)}
+                    >
+                        Reset
+                    </Button>
+                </Flex>
+            )}
         </Flex>
     )
 }

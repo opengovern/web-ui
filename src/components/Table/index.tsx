@@ -264,6 +264,8 @@ export default function Table<TData = any, TValue = any>({
         paginationPageSize: 25,
         rowSelection: 'multiple',
         suppressExcelExport: true,
+        suppressCellFocus: true,
+        suppressMenuHide: true,
         animateRows: false,
         getRowHeight: () => (rowHeight === 'md' ? 50 : 64),
         onGridReady: (e) => {

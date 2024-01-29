@@ -1,5 +1,5 @@
 import { Checkbox, useCheckboxState } from 'pretty-checkbox-react'
-import { Flex, Text } from '@tremor/react'
+import { Button, Flex, Text } from '@tremor/react'
 import { useEffect } from 'react'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
@@ -9,13 +9,19 @@ import { compareArrays } from '../../../../../components/Layout/Header/Filter'
 
 interface ISeverity {
     value: TypesFindingSeverity[] | undefined
+    defaultValue: TypesFindingSeverity[]
     data:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata
         | undefined
     onChange: (s: TypesFindingSeverity[]) => void
 }
 
-export default function Severity({ value, data, onChange }: ISeverity) {
+export default function Severity({
+    value,
+    defaultValue,
+    data,
+    onChange,
+}: ISeverity) {
     const severityCheckbox = useCheckboxState({
         state: value,
     })
@@ -89,6 +95,21 @@ export default function Severity({ value, data, onChange }: ISeverity) {
                     </Text>
                 </Flex>
             ))}
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
+            {!compareArrays(value?.sort(), defaultValue?.sort()) && (
+                <Flex className="pt-3 mt-3 border-t border-t-gray-200">
+                    <Button
+                        variant="light"
+                        onClick={() => {
+                            onChange(defaultValue)
+                            severityCheckbox.setState(defaultValue)
+                        }}
+                    >
+                        Reset
+                    </Button>
+                </Flex>
+            )}
         </Flex>
     )
 }
