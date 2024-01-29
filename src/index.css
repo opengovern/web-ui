@@ -47,6 +47,10 @@ code {
     --ag-icon-font-family: 'agGridMaterial' !important;
 }
 
+.ag-header-cell-menu-button {
+    display: none !important;
+}
+
 .ag-theme-alpine-dark {
     --ag-background-color: #1f2937 !important;
     --ag-foreground-color: #6b7280 !important;
