@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, Card, List, ListItem, Text } from '@tremor/react'
+import { Button, Card, List, ListItem } from '@tremor/react'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { camelCaseToLabel } from '../../../../../utilities/labelMaker'
 
