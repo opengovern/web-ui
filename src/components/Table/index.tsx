@@ -69,6 +69,7 @@ interface IProps<TData, TValue> {
     loading?: boolean
     fullWidth?: boolean
     fullHeight?: boolean
+    rowHeight?: 'md' | 'lg'
 }
 
 export default function Table<TData = any, TValue = any>({
@@ -88,6 +89,7 @@ export default function Table<TData = any, TValue = any>({
     children,
     options,
     loading,
+    rowHeight = 'md',
 }: IProps<TData, TValue>) {
     const gridRef = useRef<AgGridReact>(null)
     const visibility = useRef<Map<string, boolean> | undefined>(undefined)
@@ -263,7 +265,7 @@ export default function Table<TData = any, TValue = any>({
         rowSelection: 'multiple',
         suppressExcelExport: true,
         animateRows: false,
-        getRowHeight: () => 64,
+        getRowHeight: () => (rowHeight === 'md' ? 50 : 64),
         onGridReady: (e) => {
             if (onGridReady) {
                 onGridReady(e)

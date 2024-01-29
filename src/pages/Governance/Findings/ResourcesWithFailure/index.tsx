@@ -268,6 +268,7 @@ export default function ResourcesWithFailure({ count, query }: ICount) {
                     rowModelType: 'serverSide',
                     serverSideDatasource: serverSideRows,
                 }}
+                rowHeight="lg"
             />
             <FindingDetail
                 type="resource"
