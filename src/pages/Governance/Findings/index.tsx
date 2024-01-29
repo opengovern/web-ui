@@ -204,7 +204,7 @@ export default function Findings() {
                 <Flex>
                     <TabList>
                         <Tab>All Findings</Tab>
-                        <Tab>Active Issues</Tab>
+                        {/* <Tab>Active Issues</Tab> */}
                     </TabList>
                     <Select
                         value={selectedGroup}
