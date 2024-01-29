@@ -148,6 +148,7 @@ export default function ControlsWithFailure({ count }: ICount) {
                         navigate(`${event.data.id}?${searchParams}`)
                     }
                 }}
+                rowHeight="lg"
             />
         </Flex>
     )

@@ -332,6 +332,7 @@ export default function FindingsWithFailure({ count, query }: ICount) {
                     rowModelType: 'serverSide',
                     serverSideDatasource: serverSideRows,
                 }}
+                rowHeight="lg"
             />
             <FindingDetail
                 type="finding"

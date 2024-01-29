@@ -162,6 +162,7 @@ export default function FailingCloudAccounts({ count }: ICount) {
                         e.api.showLoadingOverlay()
                     }
                 }}
+                rowHeight="lg"
             />
         </Flex>
     )
