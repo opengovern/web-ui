@@ -17,6 +17,7 @@ import Severity from './Severity'
 import { useComplianceApiV1FindingsFiltersCreate } from '../../../../api/compliance.gen'
 import Others from './Others'
 import FindingLifecycle from './FindingLifecycle'
+import { compareArrays } from '../../../../components/Layout/Header/Filter'
 
 interface IFilters {
     onApply: (obj: {
@@ -34,28 +35,41 @@ interface IFilters {
 }
 
 export default function Filter({ onApply }: IFilters) {
-    const [connector, setConnector] = useState<SourceType>(SourceType.Nil)
+    const defConnector = SourceType.Nil
+    const [connector, setConnector] = useState<SourceType>(defConnector)
+
+    const defConformanceStatus = [
+        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+    ]
     const [conformanceStatus, setConformanceStatus] = useState<
         | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
         | undefined
-    >([
-        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
-    ])
-    const [lifecycle, setLifecycle] = useState<boolean[]>([true, false])
-    const [severity, setSeverity] = useState<
-        TypesFindingSeverity[] | undefined
-    >([
+    >(defConformanceStatus)
+
+    const defLifecycle = [true, false]
+    const [lifecycle, setLifecycle] = useState<boolean[]>(defLifecycle)
+
+    const defSeverity = [
         TypesFindingSeverity.FindingSeverityCritical,
         TypesFindingSeverity.FindingSeverityHigh,
         TypesFindingSeverity.FindingSeverityMedium,
         TypesFindingSeverity.FindingSeverityLow,
         TypesFindingSeverity.FindingSeverityNone,
-    ])
-    const [connectionID, setConnectionID] = useState<string[] | undefined>([])
-    const [controlID, setControlID] = useState<string[] | undefined>([])
-    const [benchmarkID, setBenchmarkID] = useState<string[] | undefined>([])
+    ]
+    const [severity, setSeverity] = useState<
+        TypesFindingSeverity[] | undefined
+    >(defSeverity)
+
+    const defOthers: string[] = []
+    const [connectionID, setConnectionID] = useState<string[] | undefined>(
+        defOthers
+    )
+    const [controlID, setControlID] = useState<string[] | undefined>(defOthers)
+    const [benchmarkID, setBenchmarkID] = useState<string[] | undefined>(
+        defOthers
+    )
     const [resourceTypeID, setResourceTypeID] = useState<string[] | undefined>(
-        []
+        defOthers
     )
 
     useEffect(() => {
@@ -88,8 +102,14 @@ export default function Filter({ onApply }: IFilters) {
             name: 'Provider',
             icon: CloudIcon,
             component: (
-                <Provider value={connector} onChange={(p) => setConnector(p)} />
+                <Provider
+                    value={connector}
+                    defaultValue={defConnector}
+                    onChange={(p) => setConnector(p)}
+                />
             ),
+            value: [connector],
+            defaultValue: [defConnector],
             removable: false,
         },
         {
@@ -99,9 +119,12 @@ export default function Filter({ onApply }: IFilters) {
             component: (
                 <ConformanceStatus
                     value={conformanceStatus}
+                    defaultValue={defConformanceStatus}
                     onChange={(c) => setConformanceStatus(c)}
                 />
             ),
+            value: conformanceStatus,
+            defaultValue: defConformanceStatus,
             removable: false,
         },
         {
@@ -111,10 +134,13 @@ export default function Filter({ onApply }: IFilters) {
             component: (
                 <Severity
                     value={severity}
+                    defaultValue={defSeverity}
                     data={filters}
                     onChange={(s) => setSeverity(s)}
                 />
             ),
+            value: severity,
+            defaultValue: defSeverity,
             removable: false,
         },
         {
@@ -124,9 +150,12 @@ export default function Filter({ onApply }: IFilters) {
             component: (
                 <FindingLifecycle
                     value={lifecycle}
+                    defaultValue={defLifecycle}
                     onChange={(l) => setLifecycle(l)}
                 />
             ),
+            value: lifecycle,
+            defaultValue: defLifecycle,
             removable: false,
         },
         {
@@ -136,11 +165,14 @@ export default function Filter({ onApply }: IFilters) {
             component: (
                 <Others
                     value={connectionID}
+                    defaultValue={defOthers}
                     data={filters}
                     type="connectionID"
                     onChange={(o) => setConnectionID(o)}
                 />
             ),
+            value: connectionID,
+            defaultValue: defOthers,
             removable: false,
         },
         {
@@ -150,11 +182,14 @@ export default function Filter({ onApply }: IFilters) {
             component: (
                 <Others
                     value={controlID}
+                    defaultValue={defOthers}
                     data={filters}
                     type="controlID"
                     onChange={(o) => setControlID(o)}
                 />
             ),
+            value: controlID,
+            defaultValue: defOthers,
             removable: false,
         },
         {
@@ -164,11 +199,14 @@ export default function Filter({ onApply }: IFilters) {
             component: (
                 <Others
                     value={benchmarkID}
+                    defaultValue={defOthers}
                     data={filters}
                     type="benchmarkID"
                     onChange={(o) => setBenchmarkID(o)}
                 />
             ),
+            value: benchmarkID,
+            defaultValue: defOthers,
             removable: false,
         },
         {
@@ -178,11 +216,14 @@ export default function Filter({ onApply }: IFilters) {
             component: (
                 <Others
                     value={resourceTypeID}
+                    defaultValue={defOthers}
                     data={filters}
                     type="resourceTypeID"
                     onChange={(o) => setResourceTypeID(o)}
                 />
             ),
+            value: resourceTypeID,
+            defaultValue: defOthers,
             removable: false,
         },
     ]
@@ -191,14 +232,38 @@ export default function Filter({ onApply }: IFilters) {
         <Flex justifyContent="start" className="mt-4 gap-3 flex-wrap z-10">
             {options.map((f) => (
                 <Popover className="relative border-0" key={f.id}>
-                    <Popover.Button className="border border-gray-400 py-1 px-2 rounded-3xl">
+                    <Popover.Button
+                        className={`border ${
+                            compareArrays(
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                f.value?.sort(),
+                                f.defaultValue?.sort()
+                            )
+                                ? 'border-gray-400'
+                                : 'border-kaytu-500 text-kaytu-500'
+                        } py-1 px-2 rounded-3xl`}
+                    >
                         <Flex className="w-fit">
                             <Icon
                                 icon={f.icon}
                                 className="w-3 p-0 mr-3 text-inherit"
                             />
                             <Text className="text-inherit whitespace-nowrap">
-                                {f.name}
+                                {`${f.name}${
+                                    compareArrays(
+                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                        // @ts-ignore
+                                        f.value?.sort(),
+                                        f.defaultValue?.sort()
+                                    )
+                                        ? ''
+                                        : `${
+                                              f.value && f.value.length < 2
+                                                  ? `: ${f.value}`
+                                                  : `(${f.value?.length})`
+                                          }`
+                                }`}
                             </Text>
                             <ChevronDownIcon className="ml-1 w-3 text-inherit" />
                         </Flex>

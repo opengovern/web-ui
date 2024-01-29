@@ -1,14 +1,14 @@
-import { Flex, Text } from '@tremor/react'
+import { Button, Flex, Text } from '@tremor/react'
 import { Radio } from 'pretty-checkbox-react'
 import { SourceType } from '../../../../../api/api'
 import { AWSIcon, AzureIcon } from '../../../../../icons/icons'
 
 interface IProvider {
     value: SourceType
+    defaultValue: SourceType
     onChange: (p: SourceType) => void
 }
-export default function Provider({ value, onChange }: IProvider) {
-    // const
+export default function Provider({ value, defaultValue, onChange }: IProvider) {
     const options = [
         { name: 'All', value: SourceType.Nil, icon: undefined },
         {
@@ -40,6 +40,16 @@ export default function Provider({ value, onChange }: IProvider) {
                     </Flex>
                 </Radio>
             ))}
+            {value !== defaultValue && (
+                <Flex className="pt-3 mt-3 border-t border-t-gray-200">
+                    <Button
+                        variant="light"
+                        onClick={() => onChange(defaultValue)}
+                    >
+                        Reset
+                    </Button>
+                </Flex>
+            )}
         </Flex>
     )
 }
