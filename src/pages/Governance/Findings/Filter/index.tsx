@@ -1,6 +1,7 @@
 import { Button, Card, Flex, Icon, Text } from '@tremor/react'
 import { Popover, Transition } from '@headlessui/react'
 import {
+    CheckCircleIcon,
     ChevronDownIcon,
     CloudIcon,
     PlusIcon,
@@ -14,12 +15,21 @@ import {
     TypesFindingSeverity,
 } from '../../../../api/api'
 import ConformanceStatus from './ConformanceStatus'
-import Severity from './Severity'
 import { useComplianceApiV1FindingsFiltersCreate } from '../../../../api/compliance.gen'
 import Others from './Others'
 import FindingLifecycle from './FindingLifecycle'
 import { compareArrays } from '../../../../components/Layout/Header/Filter'
 import ConditionDropdown from './ConditionDropdown'
+import {
+    CloudConnect,
+    Compliance,
+    Control,
+    Id,
+    Lifecycle,
+    Resources,
+    SeverityIcon,
+} from '../../../../icons/icons'
+import Severity from './Severity'
 
 const removeItem = (arr: any[], value: any) => {
     const index = arr.indexOf(value)
@@ -113,7 +123,7 @@ export default function Filter({ onApply }: IFilters) {
         {
             id: 'conformance_status',
             name: 'Conformance Status',
-            icon: CloudIcon,
+            icon: CheckCircleIcon,
             component: (
                 <ConformanceStatus
                     value={conformanceStatus}
@@ -130,7 +140,7 @@ export default function Filter({ onApply }: IFilters) {
         {
             id: 'provider',
             name: 'Provider',
-            icon: CloudIcon,
+            icon: CloudConnect,
             component: (
                 <Provider
                     value={connector}
@@ -147,7 +157,7 @@ export default function Filter({ onApply }: IFilters) {
         {
             id: 'lifecycle',
             name: 'Lifecycle',
-            icon: CloudIcon,
+            icon: Lifecycle,
             component: (
                 <FindingLifecycle
                     value={lifecycle}
@@ -164,7 +174,7 @@ export default function Filter({ onApply }: IFilters) {
         {
             id: 'severity',
             name: 'Severity',
-            icon: CloudIcon,
+            icon: SeverityIcon,
             component: (
                 <Severity
                     value={severity}
@@ -182,7 +192,7 @@ export default function Filter({ onApply }: IFilters) {
         {
             id: 'connection',
             name: 'Cloud Account',
-            icon: CloudIcon,
+            icon: Id,
             component: (
                 <Others
                     value={connectionID}
@@ -201,7 +211,7 @@ export default function Filter({ onApply }: IFilters) {
         {
             id: 'control',
             name: 'Control',
-            icon: CloudIcon,
+            icon: Control,
             component: (
                 <Others
                     value={controlID}
@@ -220,7 +230,7 @@ export default function Filter({ onApply }: IFilters) {
         {
             id: 'benchmark',
             name: 'Benchmark',
-            icon: CloudIcon,
+            icon: Compliance,
             component: (
                 <Others
                     value={benchmarkID}
@@ -239,7 +249,7 @@ export default function Filter({ onApply }: IFilters) {
         {
             id: 'resource',
             name: 'Resource Type',
-            icon: CloudIcon,
+            icon: Resources,
             component: (
                 <Others
                     value={resourceTypeID}
