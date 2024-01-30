@@ -198,6 +198,7 @@ export default function Filter({ onApply }: IFilters) {
                     value={connectionID}
                     defaultValue={[]}
                     data={filters}
+                    condition={connectionCon}
                     type="connectionID"
                     onChange={(o) => setConnectionID(o)}
                 />
@@ -217,6 +218,7 @@ export default function Filter({ onApply }: IFilters) {
                     value={controlID}
                     defaultValue={[]}
                     data={filters}
+                    condition={controlCon}
                     type="controlID"
                     onChange={(o) => setControlID(o)}
                 />
@@ -236,6 +238,7 @@ export default function Filter({ onApply }: IFilters) {
                     value={benchmarkID}
                     defaultValue={[]}
                     data={filters}
+                    condition={benchmarkCon}
                     type="benchmarkID"
                     onChange={(o) => setBenchmarkID(o)}
                 />
@@ -255,6 +258,7 @@ export default function Filter({ onApply }: IFilters) {
                     value={resourceTypeID}
                     defaultValue={[]}
                     data={filters}
+                    condition={resourceCon}
                     type="resourceTypeID"
                     onChange={(o) => setResourceTypeID(o)}
                 />
@@ -363,57 +367,66 @@ export default function Filter({ onApply }: IFilters) {
     return (
         <Flex justifyContent="start" className="mt-4 gap-3 flex-wrap z-10">
             {renderFilters}
-            <Flex className="w-fit pl-3 border-l border-l-gray-200">
-                <Popover className="relative border-0">
-                    <Popover.Button>
-                        <Button variant="light" icon={PlusIcon}>
-                            Add Filter
-                        </Button>
-                    </Popover.Button>
-                    <Transition
-                        as={Fragment}
-                        enter="transition ease-out duration-200"
-                        enterFrom="opacity-0 translate-y-1"
-                        enterTo="opacity-100 translate-y-0"
-                        leave="transition ease-in duration-150"
-                        leaveFrom="opacity-100 translate-y-0"
-                        leaveTo="opacity-0 translate-y-1"
-                    >
-                        <Popover.Panel className="absolute z-50 top-full left-0">
-                            <Card className="mt-2 p-4 w-64">
-                                <Flex
-                                    flexDirection="col"
-                                    justifyContent="start"
-                                    alignItems="start"
-                                    className="gap-1.5 max-h-[200px] overflow-y-scroll no-scroll max-w-full"
-                                >
-                                    {filterOptions
-                                        .filter(
-                                            (f) =>
-                                                !selectedFilters.includes(f.id)
-                                        )
-                                        .map((f) => (
-                                            <Button
-                                                icon={f.icon}
-                                                color="slate"
-                                                variant="light"
-                                                className="w-full pl-1 flex justify-start"
-                                                onClick={() => {
-                                                    setSelectedFilters([
-                                                        ...selectedFilters,
-                                                        f.id,
-                                                    ])
-                                                }}
-                                            >
-                                                {f.name}
-                                            </Button>
-                                        ))}
-                                </Flex>
-                            </Card>
-                        </Popover.Panel>
-                    </Transition>
-                </Popover>
-            </Flex>
+            {filterOptions.filter((f) => !selectedFilters.includes(f.id))
+                .length > 0 && (
+                <Flex className="w-fit pl-3 border-l border-l-gray-200 h-full">
+                    <Popover className="relative border-0">
+                        <Popover.Button>
+                            <Button
+                                variant="light"
+                                icon={PlusIcon}
+                                className="pt-1"
+                            >
+                                Add Filter
+                            </Button>
+                        </Popover.Button>
+                        <Transition
+                            as={Fragment}
+                            enter="transition ease-out duration-200"
+                            enterFrom="opacity-0 translate-y-1"
+                            enterTo="opacity-100 translate-y-0"
+                            leave="transition ease-in duration-150"
+                            leaveFrom="opacity-100 translate-y-0"
+                            leaveTo="opacity-0 translate-y-1"
+                        >
+                            <Popover.Panel className="absolute z-50 top-full left-0">
+                                <Card className="mt-2 p-4 w-64">
+                                    <Flex
+                                        flexDirection="col"
+                                        justifyContent="start"
+                                        alignItems="start"
+                                        className="gap-1.5 max-h-[200px] overflow-y-scroll no-scroll max-w-full"
+                                    >
+                                        {filterOptions
+                                            .filter(
+                                                (f) =>
+                                                    !selectedFilters.includes(
+                                                        f.id
+                                                    )
+                                            )
+                                            .map((f) => (
+                                                <Button
+                                                    icon={f.icon}
+                                                    color="slate"
+                                                    variant="light"
+                                                    className="w-full pl-1 flex justify-start"
+                                                    onClick={() => {
+                                                        setSelectedFilters([
+                                                            ...selectedFilters,
+                                                            f.id,
+                                                        ])
+                                                    }}
+                                                >
+                                                    {f.name}
+                                                </Button>
+                                            ))}
+                                    </Flex>
+                                </Card>
+                            </Popover.Panel>
+                        </Transition>
+                    </Popover>
+                </Flex>
+            )}
         </Flex>
     )
 }

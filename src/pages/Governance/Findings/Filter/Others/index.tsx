@@ -12,6 +12,7 @@ interface IOthers {
     data:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata
         | undefined
+    condition: string
     type: 'benchmarkID' | 'connectionID' | 'controlID' | 'resourceTypeID'
     onChange: (o: string[]) => void
 }
@@ -19,22 +20,39 @@ interface IOthers {
 export default function Others({
     value,
     defaultValue,
+    condition,
     data,
     type,
     onChange,
 }: IOthers) {
+    const [con, setCon] = useState(condition)
     const [search, setSearch] = useState('')
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const checkbox = useCheckboxState({ state: [...value] })
 
     useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        if (!compareArrays(value?.sort() || [], checkbox.state.sort()))
+        if (
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            onChange([...checkbox.state])
+            !compareArrays(value?.sort() || [], checkbox.state.sort()) ||
+            con !== condition
+        ) {
+            if (condition === 'is') {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                onChange([...checkbox.state])
+            }
+            if (condition === 'isNot') {
+                const arr = defaultValue.filter(
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    (x) => !checkbox.state.includes(x)
+                )
+                onChange(arr)
+            }
+            setCon(condition)
+        }
     }, [checkbox.state])
 
     return (

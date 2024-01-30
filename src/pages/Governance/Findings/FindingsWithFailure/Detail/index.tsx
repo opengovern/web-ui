@@ -64,6 +64,8 @@ export default function FindingDetail({
             {},
             false
         )
+
+    console.log(response)
     useEffect(() => {
         if (finding) {
             sendNow()
@@ -248,7 +250,7 @@ export default function FindingDetail({
                         </Card>
                     </TabPanel>
                     <TabPanel className="pt-8">
-                        <Timeline />
+                        <Timeline data={response} isLoading={isLoading} />
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
