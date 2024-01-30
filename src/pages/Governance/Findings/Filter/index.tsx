@@ -277,9 +277,9 @@ export default function Filter({ onApply }: IFilters) {
                                 f?.value?.sort(),
                                 f?.defaultValue?.sort()
                             )
-                                ? 'border-gray-400'
-                                : 'border-kaytu-500 text-kaytu-500'
-                        } py-1 px-2 rounded-3xl`}
+                                ? 'border-gray-200 bg-white'
+                                : 'border-kaytu-500 text-kaytu-500 bg-kaytu-50'
+                        } py-1.5 px-2 rounded-md`}
                     >
                         <Flex className="w-fit">
                             <Icon
