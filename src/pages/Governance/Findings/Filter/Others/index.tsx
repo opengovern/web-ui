@@ -68,21 +68,17 @@ export default function Others({
                                     // @ts-ignore
                                     <Checkbox
                                         shape="curve"
-                                        className="!items-start w-[224px]"
+                                        className="!items-start"
                                         value={d.key}
                                         {...checkbox}
                                     >
                                         <Flex
                                             flexDirection="col"
                                             alignItems="start"
-                                            className="w-[200px]"
                                         >
-                                            <Flex>
-                                                <Text className="text-gray-800 line-clamp-1 max-w-[75%]">
-                                                    {d.displayName}
-                                                </Text>
-                                                <Text>({d.count})</Text>
-                                            </Flex>
+                                            <Text className="text-gray-800 line-clamp-1 max-w-[75%]">
+                                                {d.displayName}
+                                            </Text>
                                             <Text className="text-xs truncate max-w-[200px]">
                                                 {d.key}
                                             </Text>
