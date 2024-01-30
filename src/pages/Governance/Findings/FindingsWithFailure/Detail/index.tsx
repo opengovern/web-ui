@@ -26,6 +26,7 @@ import { useComplianceApiV1FindingsResourceCreate } from '../../../../../api/com
 import Spinner from '../../../../../components/Spinner'
 import { severityBadge } from '../../../Controls'
 import { dateTimeDisplay } from '../../../../../utilities/dateDisplay'
+import Timeline from './Timeline'
 
 interface IFindingDetail {
     finding: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
@@ -115,6 +116,7 @@ export default function FindingDetail({
                         <Tab>Applicable controls</Tab>
                     )}
                     <Tab disabled={!response?.resource}>Resource details</Tab>
+                    <Tab>Timeline</Tab>
                 </TabList>
                 <TabPanels>
                     {type === 'finding' ? (
@@ -244,6 +246,9 @@ export default function FindingDetail({
                         <Card className="px-1.5 py-3 mb-2">
                             <ReactJson src={response?.resource || {}} />
                         </Card>
+                    </TabPanel>
+                    <TabPanel className="pt-4">
+                        <Timeline />
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
