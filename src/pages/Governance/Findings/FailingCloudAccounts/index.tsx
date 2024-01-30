@@ -119,7 +119,7 @@ interface ICount {
     count: (x: number | undefined) => void
 }
 
-export default function FailingCloudAccounts({ count }: ICount) {
+export default function FailingCloudAccounts() {
     const [providerFilter, setProviderFilter] = useState<SourceType[]>([])
     const [connectionFilter, setConnectionFilter] = useState<string[]>([])
     const [benchmarkFilter, setBenchmarkFilter] = useState<string[]>([])
@@ -133,37 +133,18 @@ export default function FailingCloudAccounts({ count }: ICount) {
     const { response: accounts, isLoading: accountsLoading } =
         useComplianceApiV1FindingsTopDetail('connectionID', 10000, topQuery)
 
-    useEffect(() => {
-        if (accounts) {
-            count(accounts.totalCount || 0)
-        }
-    }, [accounts])
-
     return (
-        <Flex alignItems="start" className="gap-4">
-            {/* <FindingFilters */}
-            {/*     type="accounts" */}
-            {/*     providerFilter={providerFilter} */}
-            {/*     connectionFilter={connectionFilter} */}
-            {/*     benchmarkFilter={benchmarkFilter} */}
-            {/*     onApply={(obj) => { */}
-            {/*         setProviderFilter(obj.provider) */}
-            {/*         setConnectionFilter(obj.connection) */}
-            {/*         setBenchmarkFilter(obj.benchmark) */}
-            {/*     }} */}
-            {/* /> */}
-            <Table
-                id="impacted_accounts"
-                columns={cloudAccountColumns(false)}
-                rowData={topConnections(accounts)}
-                loading={accountsLoading}
-                onGridReady={(e) => {
-                    if (accountsLoading) {
-                        e.api.showLoadingOverlay()
-                    }
-                }}
-                rowHeight="lg"
-            />
-        </Flex>
+        <Table
+            id="impacted_accounts"
+            columns={cloudAccountColumns(false)}
+            rowData={topConnections(accounts)}
+            loading={accountsLoading}
+            onGridReady={(e) => {
+                if (accountsLoading) {
+                    e.api.showLoadingOverlay()
+                }
+            }}
+            rowHeight="lg"
+        />
     )
 }

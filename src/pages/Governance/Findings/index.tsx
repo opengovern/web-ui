@@ -26,24 +26,14 @@ import {
 import ResourcesWithFailure from './ResourcesWithFailure'
 import ControlsWithFailure from './ControlsWithFailure'
 import FailingCloudAccounts from './FailingCloudAccounts'
+import { Popover } from '@headlessui/react'
 
 export default function Findings() {
     const [tab, setTab] = useState(0)
     const [selectedGroup, setSelectedGroup] = useState<
         'findings' | 'resources' | 'controls' | 'accounts'
     >('findings')
-    const [findingCount, setFindingCount] = useState<number | undefined>(
-        undefined
-    )
-    const [resourceCount, setResourceCount] = useState<number | undefined>(
-        undefined
-    )
-    const [controlCount, setControlCount] = useState<number | undefined>(
-        undefined
-    )
-    const [accountCount, setAccountCount] = useState<number | undefined>(
-        undefined
-    )
+
     const [query, setQuery] = useState<{
         connector: SourceType
         conformanceStatus:
@@ -74,43 +64,13 @@ export default function Findings() {
         lifecycle: [true, false],
     })
 
-    const tabs = [
-        {
-            type: 0,
-            icon: ShieldExclamationIcon,
-            name: 'Findings with failure',
-            count: findingCount,
-        },
-        {
-            type: 1,
-            icon: DocumentCheckIcon,
-            name: 'Resources with failure',
-            count: resourceCount,
-        },
-        {
-            type: 2,
-            icon: ServerStackIcon,
-            name: 'Controls with failure',
-            count: controlCount,
-        },
-        {
-            type: 3,
-            icon: CloudIcon,
-            name: 'Failing cloud accounts',
-            count: accountCount,
-        },
-    ]
-
     const renderPanels = () => {
         switch (selectedGroup) {
             case 'findings':
                 return (
                     <TabPanels className="mt-4">
                         <TabPanel>
-                            <FindingsWithFailure
-                                query={query}
-                                count={(x) => setFindingCount(x)}
-                            />
+                            <FindingsWithFailure query={query} />
                         </TabPanel>
                         <TabPanel>
                             <FindingsWithFailure
@@ -121,7 +81,6 @@ export default function Findings() {
                                     ],
                                     lifecycle: [true],
                                 }}
-                                count={(x) => setFindingCount(x)}
                             />
                         </TabPanel>
                     </TabPanels>
@@ -130,10 +89,7 @@ export default function Findings() {
                 return (
                     <TabPanels className="mt-4">
                         <TabPanel>
-                            <ResourcesWithFailure
-                                query={query}
-                                count={(x) => setResourceCount(x)}
-                            />
+                            <ResourcesWithFailure query={query} />
                         </TabPanel>
                         <TabPanel>
                             <ResourcesWithFailure
@@ -144,7 +100,6 @@ export default function Findings() {
                                     ],
                                     lifecycle: [true],
                                 }}
-                                count={(x) => setResourceCount(x)}
                             />
                         </TabPanel>
                     </TabPanels>
@@ -154,14 +109,12 @@ export default function Findings() {
                     <TabPanels className="mt-4">
                         <TabPanel>
                             <ControlsWithFailure
-                                // query={query}
-                                count={(x) => setResourceCount(x)}
+                            // query={query}
                             />
                         </TabPanel>
                         <TabPanel>
                             <ControlsWithFailure
-                                // query={query}
-                                count={(x) => setResourceCount(x)}
+                            // query={query}
                             />
                         </TabPanel>
                     </TabPanels>
@@ -171,14 +124,12 @@ export default function Findings() {
                     <TabPanels className="mt-4">
                         <TabPanel>
                             <FailingCloudAccounts
-                                // query={query}
-                                count={(x) => setResourceCount(x)}
+                            // query={query}
                             />
                         </TabPanel>
                         <TabPanel>
                             <FailingCloudAccounts
-                                // query={query}
-                                count={(x) => setResourceCount(x)}
+                            // query={query}
                             />
                         </TabPanel>
                     </TabPanels>
@@ -187,10 +138,7 @@ export default function Findings() {
                 return (
                     <TabPanels className="mt-4">
                         <TabPanel>
-                            <FindingsWithFailure
-                                query={query}
-                                count={(x) => setFindingCount(x)}
-                            />
+                            <FindingsWithFailure query={query} />
                         </TabPanel>
                     </TabPanels>
                 )
@@ -206,6 +154,7 @@ export default function Findings() {
                         <Tab>All Findings</Tab>
                         {/* <Tab>Active Issues</Tab> */}
                     </TabList>
+                    <Popover></Popover>
                     <Select
                         value={selectedGroup}
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
