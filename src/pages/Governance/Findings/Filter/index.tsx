@@ -1,12 +1,4 @@
-import {
-    Button,
-    Card,
-    Flex,
-    Icon,
-    Select,
-    SelectItem,
-    Text,
-} from '@tremor/react'
+import { Button, Card, Flex, Icon, Text } from '@tremor/react'
 import { Popover, Transition } from '@headlessui/react'
 import {
     ChevronDownIcon,
@@ -15,7 +7,6 @@ import {
     TrashIcon,
 } from '@heroicons/react/24/outline'
 import { Fragment, useEffect, useState } from 'react'
-import { Checkbox, useCheckboxState } from 'pretty-checkbox-react'
 import Provider from './Provider'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
@@ -30,7 +21,7 @@ import FindingLifecycle from './FindingLifecycle'
 import { compareArrays } from '../../../../components/Layout/Header/Filter'
 import ConditionDropdown from './ConditionDropdown'
 
-function removeItem<T>(arr: Array<T>, value: T): Array<T> {
+const removeItem = (arr: any[], value: any) => {
     const index = arr.indexOf(value)
     if (index > -1) {
         arr.splice(index, 1)
@@ -120,7 +111,9 @@ export default function Filter({ onApply }: IFilters) {
 
     const { response: filters } = useComplianceApiV1FindingsFiltersCreate({})
 
-    const filterCheckbox = useCheckboxState({ state: ['conformance_status'] })
+    const [selectedFilters, setSelectedFilters] = useState<string[]>([
+        'conformance_status',
+    ])
     const filterOptions = [
         {
             id: 'conformance_status',
@@ -269,112 +262,102 @@ export default function Filter({ onApply }: IFilters) {
             removable: true,
         },
     ]
+    console.log(selectedFilters)
+
+    const renderFilters = (allFilters: string[]) =>
+        allFilters.map((sf) => {
+            const f = filterOptions.find((o) => o.id === sf)
+            return (
+                <Popover className="relative border-0" key={f?.id}>
+                    <Popover.Button
+                        className={`border ${
+                            compareArrays(
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                f?.value?.sort(),
+                                f?.defaultValue?.sort()
+                            )
+                                ? 'border-gray-200 bg-white'
+                                : 'border-kaytu-500 text-kaytu-500 bg-kaytu-50'
+                        } py-1.5 px-2 rounded-md`}
+                    >
+                        <Flex className="w-fit">
+                            <Icon
+                                icon={f?.icon || CloudIcon}
+                                className="w-3 p-0 mr-3 text-inherit"
+                            />
+                            <Text className="text-inherit whitespace-nowrap">
+                                {`${f?.name}${
+                                    compareArrays(
+                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                        // @ts-ignore
+                                        f?.value?.sort(),
+                                        f?.defaultValue?.sort()
+                                    )
+                                        ? ''
+                                        : `${
+                                              f?.value && f.value.length < 2
+                                                  ? `: ${f.value}`
+                                                  : `(${f?.value?.length})`
+                                          }`
+                                }`}
+                            </Text>
+                            <ChevronDownIcon className="ml-1 w-3 text-inherit" />
+                        </Flex>
+                    </Popover.Button>
+                    <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-200"
+                        enterFrom="opacity-0 translate-y-1"
+                        enterTo="opacity-100 translate-y-0"
+                        leave="transition ease-in duration-150"
+                        leaveFrom="opacity-100 translate-y-0"
+                        leaveTo="opacity-0 translate-y-1"
+                    >
+                        <Popover.Panel className="absolute z-50 top-full left-0">
+                            <Card className="mt-2 p-4 w-64">
+                                <Flex className="mb-3">
+                                    <Flex className="w-fit gap-1.5">
+                                        <Text className="font-semibold">
+                                            {f?.name}
+                                        </Text>
+                                        <ConditionDropdown
+                                            onChange={(c) => f?.setCondition(c)}
+                                            conditions={f?.conditions}
+                                        />
+                                    </Flex>
+                                    {f?.removable && (
+                                        <div className="group relative">
+                                            <TrashIcon
+                                                onClick={() => {
+                                                    const newArr = removeItem(
+                                                        selectedFilters,
+                                                        f?.id
+                                                    )
+                                                    console.log(newArr)
+                                                    setSelectedFilters(newArr)
+                                                }}
+                                                className="w-4 cursor-pointer hover:text-kaytu-500"
+                                            />
+                                            <Card className="absolute w-fit z-40 -top-2 left-full ml-2 scale-0 transition-all p-2 group-hover:scale-100">
+                                                <Text className="whitespace-nowrap">
+                                                    Remove filter
+                                                </Text>
+                                            </Card>
+                                        </div>
+                                    )}
+                                </Flex>
+                                {f?.component}
+                            </Card>
+                        </Popover.Panel>
+                    </Transition>
+                </Popover>
+            )
+        })
 
     return (
         <Flex justifyContent="start" className="mt-4 gap-3 flex-wrap z-10">
-            {filterOptions
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                .filter((f) => filterCheckbox.state.includes(f.id))
-                .map((f) => (
-                    <Popover className="relative border-0" key={f.id}>
-                        <Popover.Button
-                            className={`border ${
-                                compareArrays(
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    f.value?.sort(),
-                                    f.defaultValue?.sort()
-                                )
-                                    ? 'border-gray-400'
-                                    : 'border-kaytu-500 text-kaytu-500'
-                            } py-1 px-2 rounded-3xl`}
-                        >
-                            <Flex className="w-fit">
-                                <Icon
-                                    icon={f.icon}
-                                    className="w-3 p-0 mr-3 text-inherit"
-                                />
-                                <Text className="text-inherit whitespace-nowrap">
-                                    {`${f.name}${
-                                        compareArrays(
-                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                            // @ts-ignore
-                                            f.value?.sort(),
-                                            f.defaultValue?.sort()
-                                        )
-                                            ? ''
-                                            : `${
-                                                  f.value && f.value.length < 2
-                                                      ? `: ${f.value}`
-                                                      : `(${f.value?.length})`
-                                              }`
-                                    }`}
-                                </Text>
-                                <ChevronDownIcon className="ml-1 w-3 text-inherit" />
-                            </Flex>
-                        </Popover.Button>
-                        <Transition
-                            as={Fragment}
-                            enter="transition ease-out duration-200"
-                            enterFrom="opacity-0 translate-y-1"
-                            enterTo="opacity-100 translate-y-0"
-                            leave="transition ease-in duration-150"
-                            leaveFrom="opacity-100 translate-y-0"
-                            leaveTo="opacity-0 translate-y-1"
-                        >
-                            <Popover.Panel className="absolute z-50 top-full left-0">
-                                <Card className="mt-2 p-4 w-64">
-                                    <Flex className="mb-3">
-                                        <Flex className="w-fit gap-1.5">
-                                            <Text className="font-semibold">
-                                                {f.name}
-                                            </Text>
-                                            <ConditionDropdown
-                                                onChange={(c) =>
-                                                    f.setCondition(c)
-                                                }
-                                                conditions={f.conditions}
-                                            />
-                                        </Flex>
-                                        {f.removable && (
-                                            <div className="group relative">
-                                                <TrashIcon
-                                                    onClick={() => {
-                                                        console.log(
-                                                            removeItem(
-                                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                                // @ts-ignore
-                                                                filterCheckbox.state,
-                                                                f.id
-                                                            )
-                                                        )
-                                                        filterCheckbox.setState(
-                                                            () =>
-                                                                removeItem(
-                                                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                                    // @ts-ignore
-                                                                    filterCheckbox.state,
-                                                                    f.id
-                                                                )
-                                                        )
-                                                    }}
-                                                    className="w-4 cursor-pointer hover:text-kaytu-500"
-                                                />
-                                                <Card className="absolute w-fit z-40 -top-2 left-full ml-2 scale-0 transition-all p-2 group-hover:scale-100">
-                                                    <Text className="whitespace-nowrap">
-                                                        Remove filter
-                                                    </Text>
-                                                </Card>
-                                            </div>
-                                        )}
-                                    </Flex>
-                                    {f.component}
-                                </Card>
-                            </Popover.Panel>
-                        </Transition>
-                    </Popover>
-                ))}
+            {renderFilters(selectedFilters)}
             <Flex className="w-fit pl-3 border-l border-l-gray-200">
                 <Popover className="relative border-0">
                     <Popover.Button>
@@ -401,29 +384,24 @@ export default function Filter({ onApply }: IFilters) {
                                 >
                                     {filterOptions
                                         .filter(
-                                            (f) => f.id !== 'conformance_status'
+                                            (f) =>
+                                                !selectedFilters.includes(f.id)
                                         )
                                         .map((f) => (
-                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                            // @ts-ignore
-                                            <Checkbox
-                                                shape="curve"
-                                                className="!items-start w-[224px]"
-                                                value={f.id}
-                                                disabled={
-                                                    f.id ===
-                                                    'conformance_status'
+                                            <Button
+                                                icon={f.icon}
+                                                color="slate"
+                                                variant="light"
+                                                className="w-full pl-1 flex justify-start"
+                                                onClick={() =>
+                                                    setSelectedFilters([
+                                                        ...selectedFilters,
+                                                        f.id,
+                                                    ])
                                                 }
-                                                {...filterCheckbox}
                                             >
-                                                <Flex className="gap-1">
-                                                    <Icon
-                                                        icon={f.icon}
-                                                        className="w-3 p-0 mr-3 text-inherit"
-                                                    />
-                                                    <Text>{f.name}</Text>
-                                                </Flex>
-                                            </Checkbox>
+                                                {f.name}
+                                            </Button>
                                         ))}
                                 </Flex>
                             </Card>

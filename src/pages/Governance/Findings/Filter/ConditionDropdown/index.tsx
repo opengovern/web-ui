@@ -4,7 +4,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { camelCaseToLabel } from '../../../../../utilities/labelMaker'
 
 interface IConditionDropdown {
-    conditions: string[]
+    conditions: string[] | undefined
     onChange: (c: string) => void
 }
 
@@ -23,7 +23,7 @@ export default function ConditionDropdown({
 }: IConditionDropdown) {
     const [open, setOpen] = useState(false)
     const [selectedCondition, setSelectedCondition] = useState<string>(
-        conditions[0]
+        conditions ? conditions[0] : 'is'
     )
     useEffect(() => {
         onChange(selectedCondition)
@@ -55,7 +55,7 @@ export default function ConditionDropdown({
                                         setSelectedCondition(o)
                                         setOpen(false)
                                     }}
-                                    disabled={!conditions.includes(o)}
+                                    disabled={!conditions?.includes(o)}
                                     className="w-full flex justify-start"
                                 >
                                     {camelCaseToLabel(o)}
