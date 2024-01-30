@@ -71,19 +71,14 @@ export default function Filter({ onApply }: IFilters) {
     >(defSeverity)
     const [severityCon, setSeverityCon] = useState('is')
 
-    const defOthers: string[] = []
-    const [connectionID, setConnectionID] = useState<string[] | undefined>(
-        defOthers
-    )
+    const [connectionID, setConnectionID] = useState<string[] | undefined>([])
     const [connectionCon, setConnectionCon] = useState('is')
-    const [controlID, setControlID] = useState<string[] | undefined>(defOthers)
+    const [controlID, setControlID] = useState<string[] | undefined>([])
     const [controlCon, setControlCon] = useState('is')
-    const [benchmarkID, setBenchmarkID] = useState<string[] | undefined>(
-        defOthers
-    )
+    const [benchmarkID, setBenchmarkID] = useState<string[] | undefined>([])
     const [benchmarkCon, setBenchmarkCon] = useState('is')
     const [resourceTypeID, setResourceTypeID] = useState<string[] | undefined>(
-        defOthers
+        []
     )
     const [resourceCon, setResourceCon] = useState('is')
 
@@ -130,7 +125,7 @@ export default function Filter({ onApply }: IFilters) {
             setCondition: (c: string) => console.log(c),
             value: conformanceStatus,
             defaultValue: defConformanceStatus,
-            removable: false,
+            onDelete: undefined,
         },
         {
             id: 'provider',
@@ -147,7 +142,7 @@ export default function Filter({ onApply }: IFilters) {
             setCondition: (c: string) => console.log(c),
             value: [connector],
             defaultValue: [defConnector],
-            removable: true,
+            onDelete: () => setConnector(defConnector),
         },
         {
             id: 'lifecycle',
@@ -164,7 +159,7 @@ export default function Filter({ onApply }: IFilters) {
             setCondition: (c: string) => console.log(c),
             value: lifecycle,
             defaultValue: defLifecycle,
-            removable: true,
+            onDelete: () => setLifecycle(defLifecycle),
         },
         {
             id: 'severity',
@@ -183,7 +178,7 @@ export default function Filter({ onApply }: IFilters) {
             setCondition: (c: string) => setSeverityCon(c),
             value: severity,
             defaultValue: defSeverity,
-            removable: true,
+            onDelete: () => setSeverity(defSeverity),
         },
         {
             id: 'connection',
@@ -192,7 +187,7 @@ export default function Filter({ onApply }: IFilters) {
             component: (
                 <Others
                     value={connectionID}
-                    defaultValue={defOthers}
+                    defaultValue={[]}
                     data={filters}
                     type="connectionID"
                     onChange={(o) => setConnectionID(o)}
@@ -201,8 +196,8 @@ export default function Filter({ onApply }: IFilters) {
             conditions: ['is', 'isNot'],
             setCondition: (c: string) => setConnectionCon(c),
             value: connectionID,
-            defaultValue: defOthers,
-            removable: true,
+            defaultValue: [],
+            onDelete: () => setConnectionID([]),
         },
         {
             id: 'control',
@@ -211,7 +206,7 @@ export default function Filter({ onApply }: IFilters) {
             component: (
                 <Others
                     value={controlID}
-                    defaultValue={defOthers}
+                    defaultValue={[]}
                     data={filters}
                     type="controlID"
                     onChange={(o) => setControlID(o)}
@@ -220,8 +215,8 @@ export default function Filter({ onApply }: IFilters) {
             conditions: ['is', 'isNot'],
             setCondition: (c: string) => setControlCon(c),
             value: controlID,
-            defaultValue: defOthers,
-            removable: true,
+            defaultValue: [],
+            onDelete: () => setControlID([]),
         },
         {
             id: 'benchmark',
@@ -230,7 +225,7 @@ export default function Filter({ onApply }: IFilters) {
             component: (
                 <Others
                     value={benchmarkID}
-                    defaultValue={defOthers}
+                    defaultValue={[]}
                     data={filters}
                     type="benchmarkID"
                     onChange={(o) => setBenchmarkID(o)}
@@ -239,8 +234,8 @@ export default function Filter({ onApply }: IFilters) {
             conditions: ['is', 'isNot'],
             setCondition: (c: string) => setBenchmarkCon(c),
             value: benchmarkID,
-            defaultValue: defOthers,
-            removable: true,
+            defaultValue: [],
+            onDelete: () => setBenchmarkID([]),
         },
         {
             id: 'resource',
@@ -249,7 +244,7 @@ export default function Filter({ onApply }: IFilters) {
             component: (
                 <Others
                     value={resourceTypeID}
-                    defaultValue={defOthers}
+                    defaultValue={[]}
                     data={filters}
                     type="resourceTypeID"
                     onChange={(o) => setResourceTypeID(o)}
@@ -258,11 +253,10 @@ export default function Filter({ onApply }: IFilters) {
             conditions: ['is', 'isNot'],
             setCondition: (c: string) => setResourceCon(c),
             value: resourceTypeID,
-            defaultValue: defOthers,
-            removable: true,
+            defaultValue: [],
+            onDelete: () => setResourceTypeID([]),
         },
     ]
-    // console.log(selectedFilters)
 
     const renderFilters = selectedFilters.map((sf) => {
         const f = filterOptions.find((o) => o.id === sf)
@@ -286,7 +280,7 @@ export default function Filter({ onApply }: IFilters) {
                             icon={f?.icon || CloudIcon}
                             className="w-3 p-0 mr-3 text-inherit"
                         />
-                        <Text className="text-inherit whitespace-nowrap">
+                        <Text className="text-inherit whitespace-nowrap max-w-[200px] truncate">
                             {`${f?.name}${
                                 compareArrays(
                                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -326,10 +320,11 @@ export default function Filter({ onApply }: IFilters) {
                                         conditions={f?.conditions}
                                     />
                                 </Flex>
-                                {f?.removable && (
+                                {f?.onDelete && (
                                     <div className="group relative">
                                         <TrashIcon
                                             onClick={() => {
+                                                f?.onDelete()
                                                 setSelectedFilters(
                                                     (prevState) => {
                                                         return prevState.filter(
@@ -356,7 +351,6 @@ export default function Filter({ onApply }: IFilters) {
         )
     })
 
-    console.log('render')
     return (
         <Flex justifyContent="start" className="mt-4 gap-3 flex-wrap z-10">
             {renderFilters}
