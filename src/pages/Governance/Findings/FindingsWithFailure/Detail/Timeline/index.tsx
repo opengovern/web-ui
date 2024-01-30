@@ -5,7 +5,10 @@ import dayjs from 'dayjs'
 import { severityBadge } from '../../../../Controls'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse } from '../../../../../../api/api'
 import Spinner from '../../../../../../components/Spinner'
-import { dateDisplay } from '../../../../../../utilities/dateDisplay'
+import {
+    dateDisplay,
+    dateTimeDisplay,
+} from '../../../../../../utilities/dateDisplay'
 
 dayjs.extend(relativeTime)
 
@@ -28,17 +31,19 @@ export default function Timeline({ data, isLoading }: ITimeline) {
         >
             <div
                 className="absolute w-0.5 h-full bg-gray-200 z-10 top-1"
-                style={{ left: 'calc(20% + 51px)' }}
+                style={{ left: 'calc(27% + 52px)' }}
             />
             {data?.findingEvents?.map((tl) => (
                 <Flex alignItems="start" className="gap-6 z-20">
                     <Flex
                         flexDirection="col"
                         alignItems="end"
-                        className="w-1/3"
+                        className="w-1/2"
                     >
-                        <Title>{dateDisplay(tl.evaluatedAt)}</Title>
-                        <Text>{dayjs(tl?.evaluatedAt).fromNow()}</Text>
+                        <Title className="text-end line-clamp-1">
+                            {dateTimeDisplay(tl.evaluatedAt)}
+                        </Title>
+                        <Text>about {dayjs(tl?.evaluatedAt).fromNow()}</Text>
                     </Flex>
                     <Icon
                         icon={
