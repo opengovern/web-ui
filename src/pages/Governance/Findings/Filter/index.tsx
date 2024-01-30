@@ -170,7 +170,6 @@ export default function Filter({ onApply }: IFilters) {
                     value={severity}
                     defaultValue={defSeverity}
                     condition={severityCon}
-                    data={filters}
                     onChange={(s) => setSeverity(s)}
                 />
             ),
@@ -231,7 +230,7 @@ export default function Filter({ onApply }: IFilters) {
                     onChange={(o) => setBenchmarkID(o)}
                 />
             ),
-            conditions: ['is', 'isNot'],
+            conditions: ['is'],
             setCondition: (c: string) => setBenchmarkCon(c),
             value: benchmarkID,
             defaultValue: [],

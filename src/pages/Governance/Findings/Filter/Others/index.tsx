@@ -24,7 +24,9 @@ export default function Others({
     onChange,
 }: IOthers) {
     const [search, setSearch] = useState('')
-    const checkbox = useCheckboxState({ state: value })
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const checkbox = useCheckboxState({ state: [...value] })
 
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -76,7 +78,7 @@ export default function Others({
                                             flexDirection="col"
                                             alignItems="start"
                                         >
-                                            <Text className="text-gray-800 line-clamp-1 max-w-[75%]">
+                                            <Text className="text-gray-800 truncate">
                                                 {d.displayName}
                                             </Text>
                                             <Text className="text-xs truncate max-w-[200px]">
