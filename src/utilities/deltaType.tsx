@@ -34,7 +34,9 @@ export const badgeDelta = (
     isDelta?: boolean,
     valueInsideBadge = false
 ) => {
-    return oldValue !== 0 ? (
+    return oldValue === 0 && newValue !== 0 ? (
+        ''
+    ) : (
         <ChangeDelta
             change={
                 isDelta
@@ -44,7 +46,5 @@ export const badgeDelta = (
             isDelta={isDelta}
             valueInsideBadge={valueInsideBadge}
         />
-    ) : (
-        ''
     )
 }

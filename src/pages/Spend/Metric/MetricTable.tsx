@@ -446,8 +446,8 @@ export default function MetricTable({
             function: () => {
                 onManualGrouping('category')
                 onManualSortChange({
-                    sortCol: 'none',
-                    sortType: null,
+                    sortCol: 'totalCost',
+                    sortType: 'desc',
                 })
             },
         },
@@ -458,8 +458,8 @@ export default function MetricTable({
             function: () => {
                 onManualGrouping('connector')
                 onManualSortChange({
-                    sortCol: 'none',
-                    sortType: null,
+                    sortCol: 'totalCost',
+                    sortType: 'desc',
                 })
             },
         },

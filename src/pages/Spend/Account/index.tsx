@@ -154,7 +154,10 @@ export function SpendAccounts() {
             endTime: activeTimeRange.end.unix(),
             dimension: 'connection',
             granularity: chartGranularity,
-            connector: [selectedConnections.provider],
+            connector:
+                selectedConnections.provider === ''
+                    ? []
+                    : [selectedConnections.provider],
             connectionId: selectedConnections.connections,
             connectionGroup: selectedConnections.connectionGroup,
         })
@@ -164,7 +167,10 @@ export function SpendAccounts() {
         endTime: activeTimeRange.end.unix(),
         dimension: 'connection',
         granularity: tableGranularity,
-        connector: [selectedConnections.provider],
+        connector:
+            selectedConnections.provider === ''
+                ? []
+                : [selectedConnections.provider],
         connectionId: selectedConnections.connections,
         connectionGroup: selectedConnections.connectionGroup,
     })
@@ -174,7 +180,10 @@ export function SpendAccounts() {
             endTime: prevTimeRange.end.unix(),
             dimension: 'connection',
             granularity: tableGranularity,
-            connector: [selectedConnections.provider],
+            connector:
+                selectedConnections.provider === ''
+                    ? []
+                    : [selectedConnections.provider],
             connectionId: selectedConnections.connections,
             connectionGroup: selectedConnections.connectionGroup,
         })

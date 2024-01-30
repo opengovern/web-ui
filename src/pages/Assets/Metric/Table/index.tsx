@@ -210,8 +210,8 @@ export default function MetricTable({ timeRange, connections }: IMetricTable) {
             function: () => {
                 onManualGrouping('category')
                 onManualSortChange({
-                    sortCol: 'none',
-                    sortType: null,
+                    sortCol: 'count',
+                    sortType: 'desc',
                 })
             },
         },
@@ -222,8 +222,8 @@ export default function MetricTable({ timeRange, connections }: IMetricTable) {
             function: () => {
                 onManualGrouping('connectors')
                 onManualSortChange({
-                    sortCol: 'none',
-                    sortType: null,
+                    sortCol: 'count',
+                    sortType: 'desc',
                 })
             },
         },

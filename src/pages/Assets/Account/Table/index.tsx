@@ -217,8 +217,8 @@ export default function AccountTable({
             function: () => {
                 onManualGrouping('connector')
                 onManualSortChange({
-                    sortCol: 'none',
-                    sortType: null,
+                    sortCol: 'resourceCount',
+                    sortType: 'desc',
                 })
             },
         },

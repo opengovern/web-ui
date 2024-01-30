@@ -1,10 +1,3 @@
-import { useState } from 'react'
-import { useIntegrationApiV1ConnectionsSummariesList } from '../../api/integration.gen'
-import {
-    useInventoryApiV2AnalyticsCompositionDetail,
-    useInventoryApiV2AnalyticsMetricList,
-    useInventoryApiV2AnalyticsTrendList,
-} from '../../api/inventory.gen'
 import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
@@ -13,13 +6,7 @@ import {
     SourceType,
 } from '../../api/api'
 import { dateDisplay, monthDisplay } from '../../utilities/dateDisplay'
-import { checkGranularity } from '../../utilities/dateComparator'
 import { AssetOverview } from './Overview'
-import {
-    defaultTime,
-    useFilterState,
-    useUrlDateRangeState,
-} from '../../utilities/urlstate'
 
 export const resourceTrendChart = (
     trend:
@@ -185,154 +172,5 @@ export const topServices = (
 }
 
 export default function Assets() {
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
-    const { value: selectedConnections } = useFilterState()
-
-    const [selectedGranularity, setSelectedGranularity] = useState<
-        'monthly' | 'daily' | 'yearly'
-    >(
-        checkGranularity(activeTimeRange.start, activeTimeRange.end).daily
-            ? 'daily'
-            : 'monthly'
-    )
-
-    const query = {
-        ...(selectedConnections.provider !== '' && {
-            connector: [selectedConnections.provider],
-        }),
-        connectionId: selectedConnections.connections,
-        connectionGroup: selectedConnections.connectionGroup,
-        startTime: activeTimeRange.start.unix(),
-        endTime: activeTimeRange.end.unix(),
-    }
-
-    const { response: resourceTrend, isLoading: resourceTrendLoading } =
-        useInventoryApiV2AnalyticsTrendList({
-            ...query,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            granularity: selectedGranularity,
-        })
-    const { response: composition, isLoading: compositionLoading } =
-        useInventoryApiV2AnalyticsCompositionDetail('category', {
-            ...query,
-            top: 4,
-        })
-    const { response: accountsResponse, isLoading: accountsResponseLoading } =
-        useIntegrationApiV1ConnectionsSummariesList({
-            ...query,
-            pageSize: 5,
-            pageNumber: 1,
-            needCost: false,
-            sortBy: 'resource_count',
-        })
-    const { response: servicesResponse, isLoading: servicesResponseLoading } =
-        useInventoryApiV2AnalyticsMetricList({
-            ...query,
-            pageSize: 5,
-            pageNumber: 1,
-            sortBy: 'count',
-        })
-
     return <AssetOverview />
-
-    // return (
-    //     <>
-    //         <TopHeader datePicker filter />
-    //         {selectedConnections.connections.length === 1 ? (
-    //             <SingleConnection
-    //                 activeTimeRange={activeTimeRange}
-    //                 id={selectedConnections.connections[0]}
-    //             />
-    //         ) : (
-    //             <>
-    //                 <Trends
-    //                     activeTimeRange={activeTimeRange}
-    //                     trend={resourceTrend}
-    //                     trendName="Resources"
-    //                     firstKPI={
-    //                         <SummaryCard
-    //                             title="Resources"
-    //                             metric={servicesResponse?.total_count}
-    //                             metricPrev={
-    //                                 servicesResponse?.total_old_count ||
-    //                                 (resourceTrend && resourceTrend[0].count)
-    //                             }
-    //                             url="assets-details#metrics"
-    //                             loading={servicesResponseLoading}
-    //                             border={false}
-    //                         />
-    //                     }
-    //                     secondKPI={
-    //                         <SummaryCard
-    //                             title="Cloud Accounts"
-    //                             metric={accountsResponse?.totalOnboardedCount}
-    //                             metricPrev={
-    //                                 accountsResponse?.totalDiscoveredCount ||
-    //                                 (resourceTrend &&
-    //                                     resourceTrend[0].totalConnectionCount)
-    //                             }
-    //                             url="assets-details#cloud-accounts"
-    //                             loading={accountsResponseLoading}
-    //                             border={false}
-    //                         />
-    //                     }
-    //                     labels={
-    //                         resourceTrendChart(
-    //                             resourceTrend,
-    //                             selectedGranularity
-    //                         ).label
-    //                     }
-    //                     chartData={
-    //                         resourceTrendChart(
-    //                             resourceTrend,
-    //                             selectedGranularity
-    //                         ).data
-    //                     }
-    //                     loading={resourceTrendLoading}
-    //                     onGranularityChange={(gra) =>
-    //                         setSelectedGranularity(gra)
-    //                     }
-    //                 />
-    //                 <Grid
-    //                     numItems={1}
-    //                     numItemsLg={5}
-    //                     className="w-full gap-4 mt-4"
-    //                 >
-    //                     <Col numColSpan={1} numColSpanLg={2}>
-    //                         <Breakdown
-    //                             chartData={pieData(composition).newData}
-    //                             oldChartData={pieData(composition).oldData}
-    //                             activeTime={activeTimeRange}
-    //                             loading={compositionLoading}
-    //                             seeMore="metrics#category"
-    //                         />
-    //                     </Col>
-    //                     <Col numColSpan={1} numColSpanLg={3} className="h-full">
-    //                         <Grid numItems={2} className="w-full h-full gap-4">
-    //                             <ListCard
-    //                                 title="Top Cloud Accounts"
-    //                                 keyColumnTitle="Account Names"
-    //                                 valueColumnTitle="Count"
-    //                                 loading={accountsResponseLoading}
-    //                                 items={topAccounts(accountsResponse)}
-    //                                 url="accounts"
-    //                                 type="account"
-    //                             />
-    //                             <ListCard
-    //                                 title="Top Metrics"
-    //                                 keyColumnTitle="Mertic Names"
-    //                                 valueColumnTitle="Count"
-    //                                 loading={servicesResponseLoading}
-    //                                 items={topServices(servicesResponse)}
-    //                                 url="metrics"
-    //                                 type="service"
-    //                             />
-    //                         </Grid>
-    //                     </Col>
-    //                 </Grid>
-    //             </>
-    //         )}
-    //     </>
-    // )
 }

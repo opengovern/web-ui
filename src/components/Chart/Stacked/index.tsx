@@ -20,6 +20,7 @@ interface IChart {
     loading?: boolean
     error?: string
     onClick?: (param?: any) => void
+    confine?: boolean
 }
 
 export default function StackedChart({
@@ -31,6 +32,7 @@ export default function StackedChart({
     loading,
     error,
     onClick,
+    confine = true,
 }: IChart) {
     const colorBlindMode = useAtomValue(colorBlindModeAtom)
 
@@ -70,7 +72,7 @@ export default function StackedChart({
                 },
             },
             tooltip: {
-                confine: true,
+                confine,
                 trigger: 'axis',
                 axisPointer: {
                     type: 'line',

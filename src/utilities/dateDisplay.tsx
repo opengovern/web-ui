@@ -42,6 +42,11 @@ export const dateTimeDisplay = (
     if ((typeof date).toString() === 'Dayjs') {
         return (date as Dayjs).format('MMM DD, YYYY kk:mm z')
     }
+    const v = parseInt(String(date), 10)
+    if (!Number.isNaN(v)) {
+        const value = v > 17066236800 ? v / 1000 : v
+        return dayjs.unix(value).format('MMM DD, YYYY kk:mm z')
+    }
     if (date) {
         return dayjs.utc(date).format('MMM DD, YYYY kk:mm z')
     }
