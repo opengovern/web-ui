@@ -148,7 +148,6 @@ const columns = (isDemo: boolean) => {
 let sortKey = ''
 
 interface ICount {
-    count: (x: number | undefined) => void
     query: {
         connector: SourceType
         conformanceStatus:
@@ -163,7 +162,7 @@ interface ICount {
     }
 }
 
-export default function ResourcesWithFailure({ count, query }: ICount) {
+export default function ResourcesWithFailure({ query }: ICount) {
     const setNotification = useSetAtom(notificationAtom)
 
     const [open, setOpen] = useState(false)
@@ -217,7 +216,6 @@ export default function ResourcesWithFailure({ count, query }: ICount) {
                             rowData: resp.data.resourceFindings || [],
                             rowCount: resp.data.totalCount || 0,
                         })
-                        count(resp.data.totalCount || 0)
                         // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         sortKey =

@@ -874,6 +874,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     evaluatedAt?: number
     /** @example "steampipe-v0.5" */
     evaluator?: string
+    /** @example "1" */
+    id?: string
     /** @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1" */
     kaytuResourceID?: string
     /** @example "1589395200" */
@@ -913,6 +915,33 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     severity?: TypesFindingSeverity
     sortKey?: any[]
     /** @example true */
+    stateActive?: boolean
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent {
+    /** @example "azure_cis_v140" */
+    benchmarkID?: string
+    complianceJobID?: number
+    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus
+    /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
+    connectionID?: string
+    /** @example "Azure" */
+    connector?: SourceType
+    /** @example "azure_cis_v140_7_5" */
+    controlID?: string
+    evaluatedAt?: number
+    findingEsID?: string
+    /** @example "8e0f8e7a1b1c4e6fb7e49c6af9d2b1c8" */
+    id?: string
+    /** @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1" */
+    kaytuResourceID?: string
+    reason?: string
+    /** @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1" */
+    resourceID?: string
+    /** @example "Microsoft.Compute/virtualMachines" */
+    resourceType?: string
+    /** @example "low" */
+    severity?: TypesFindingSeverity
     stateActive?: boolean
 }
 
@@ -957,12 +986,23 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
      * @example ["azure_cis_v140_7_5"]
      */
     controlID?: string[]
+    evaluatedAt?: {
+        /** @example "2020-05-13T00:00:00Z" */
+        from?: string
+        /** @example "2020-05-13T00:00:00Z" */
+        to?: string
+    }
     lastTransition?: {
         /** @example "2020-05-13T00:00:00Z" */
         from?: string
         /** @example "2020-05-13T00:00:00Z" */
         to?: string
     }
+    /**
+     * Not Connection ID
+     * @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"]
+     */
+    notConnectionID?: string[]
     /**
      * Resource unique identifier
      * @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"]
@@ -1024,6 +1064,10 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummary
     totalConformanceStatusSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatusSummary
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsByFindingIDResponse {
+    findingEvents?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent[]
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest {
     afterSortKey?: any[]
     filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters
@@ -1049,6 +1093,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFin
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse {
     controls?: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding[]
+    findingEvents?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent[]
     resource?: EsResource
 }
 
@@ -1276,6 +1321,14 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsFilt
     connector?: SourceType[]
     /** @example ["azure_cis_v140_7_5"] */
     controlID?: string[]
+    evaluatedAt?: {
+        /** @example "2020-05-13T00:00:00Z" */
+        from?: string
+        /** @example "2020-05-13T00:00:00Z" */
+        to?: string
+    }
+    /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
+    notConnectionID?: string[]
     /** @example ["example-rc"] */
     resourceCollection?: string[]
     /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"] */
@@ -4057,6 +4110,28 @@ export class Api<
             }),
 
         /**
+         * @description Retrieving all compliance run finding events with respect to filters.
+         *
+         * @tags compliance
+         * @name ApiV1FindingsEventsDetail
+         * @summary Get finding events by finding ID
+         * @request GET:/compliance/api/v1/findings/events/{id}
+         * @secure
+         */
+        apiV1FindingsEventsDetail: (id: string, params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsByFindingIDResponse,
+                any
+            >({
+                path: `/compliance/api/v1/findings/events/${id}`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Retrieving possible values for finding filters.
          *
          * @tags compliance
@@ -4148,8 +4223,10 @@ export class Api<
                 | 'controlID',
             count: number,
             query?: {
-                /** Connection IDs to filter by */
+                /** Connection IDs to filter by (inclusive) */
                 connectionId?: string[]
+                /** Connection IDs to filter by (exclusive) */
+                notConnectionId?: string[]
                 /** Connection groups to filter by  */
                 connectionGroup?: string[]
                 /** Connector type to filter by */

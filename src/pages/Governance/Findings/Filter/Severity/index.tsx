@@ -11,9 +11,6 @@ interface ISeverity {
     value: TypesFindingSeverity[] | undefined
     defaultValue: TypesFindingSeverity[]
     condition: string
-    data:
-        | GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata
-        | undefined
     onChange: (s: TypesFindingSeverity[]) => void
 }
 
@@ -21,12 +18,13 @@ export default function Severity({
     value,
     defaultValue,
     condition,
-    data,
     onChange,
 }: ISeverity) {
     const [con, setCon] = useState(condition)
     const severityCheckbox = useCheckboxState({
-        state: value,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        state: [...value],
     })
 
     useEffect(() => {

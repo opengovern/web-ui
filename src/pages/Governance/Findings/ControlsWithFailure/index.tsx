@@ -99,7 +99,7 @@ interface ICount {
     count: (x: number | undefined) => void
 }
 
-export default function ControlsWithFailure({ count }: ICount) {
+export default function ControlsWithFailure() {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const [providerFilter, setProviderFilter] = useState<SourceType[]>([])
@@ -114,42 +114,23 @@ export default function ControlsWithFailure({ count }: ICount) {
     const { response: controls, isLoading } =
         useComplianceApiV1FindingsTopDetail('controlID', 10000, topQuery)
 
-    useEffect(() => {
-        if (controls) {
-            count(controls.totalCount || 0)
-        }
-    }, [controls])
-
     return (
-        <Flex alignItems="start" className="gap-4">
-            {/* <FindingFilters */}
-            {/*     type="controls" */}
-            {/*     providerFilter={providerFilter} */}
-            {/*     connectionFilter={connectionFilter} */}
-            {/*     benchmarkFilter={benchmarkFilter} */}
-            {/*     onApply={(obj) => { */}
-            {/*         setProviderFilter(obj.provider) */}
-            {/*         setConnectionFilter(obj.connection) */}
-            {/*         setBenchmarkFilter(obj.benchmark) */}
-            {/*     }} */}
-            {/* /> */}
-            <Table
-                id="compliance_policies"
-                loading={isLoading}
-                onGridReady={(e) => {
-                    if (isLoading) {
-                        e.api.showLoadingOverlay()
-                    }
-                }}
-                columns={policyColumns}
-                rowData={topControls(controls?.records)}
-                onRowClicked={(event: RowClickedEvent) => {
-                    if (event.data) {
-                        navigate(`${event.data.id}?${searchParams}`)
-                    }
-                }}
-                rowHeight="lg"
-            />
-        </Flex>
+        <Table
+            id="compliance_policies"
+            loading={isLoading}
+            onGridReady={(e) => {
+                if (isLoading) {
+                    e.api.showLoadingOverlay()
+                }
+            }}
+            columns={policyColumns}
+            rowData={topControls(controls?.records)}
+            onRowClicked={(event: RowClickedEvent) => {
+                if (event.data) {
+                    navigate(`${event.data.id}?${searchParams}`)
+                }
+            }}
+            rowHeight="lg"
+        />
     )
 }

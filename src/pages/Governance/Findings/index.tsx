@@ -1,5 +1,8 @@
 import {
+    Button,
+    Card,
     Flex,
+    Icon,
     Select,
     SelectItem,
     Tab,
@@ -8,13 +11,15 @@ import {
     TabPanel,
     TabPanels,
 } from '@tremor/react'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import {
     CloudIcon,
     DocumentCheckIcon,
+    PlusIcon,
     ServerStackIcon,
     ShieldExclamationIcon,
 } from '@heroicons/react/24/outline'
+import { Popover, Transition } from '@headlessui/react'
 import FindingsWithFailure from './FindingsWithFailure'
 import TopHeader from '../../../components/Layout/Header'
 import Filter from './Filter'
@@ -32,18 +37,7 @@ export default function Findings() {
     const [selectedGroup, setSelectedGroup] = useState<
         'findings' | 'resources' | 'controls' | 'accounts'
     >('findings')
-    const [findingCount, setFindingCount] = useState<number | undefined>(
-        undefined
-    )
-    const [resourceCount, setResourceCount] = useState<number | undefined>(
-        undefined
-    )
-    const [controlCount, setControlCount] = useState<number | undefined>(
-        undefined
-    )
-    const [accountCount, setAccountCount] = useState<number | undefined>(
-        undefined
-    )
+
     const [query, setQuery] = useState<{
         connector: SourceType
         conformanceStatus:
@@ -74,43 +68,13 @@ export default function Findings() {
         lifecycle: [true, false],
     })
 
-    const tabs = [
-        {
-            type: 0,
-            icon: ShieldExclamationIcon,
-            name: 'Findings with failure',
-            count: findingCount,
-        },
-        {
-            type: 1,
-            icon: DocumentCheckIcon,
-            name: 'Resources with failure',
-            count: resourceCount,
-        },
-        {
-            type: 2,
-            icon: ServerStackIcon,
-            name: 'Controls with failure',
-            count: controlCount,
-        },
-        {
-            type: 3,
-            icon: CloudIcon,
-            name: 'Failing cloud accounts',
-            count: accountCount,
-        },
-    ]
-
     const renderPanels = () => {
         switch (selectedGroup) {
             case 'findings':
                 return (
                     <TabPanels className="mt-4">
                         <TabPanel>
-                            <FindingsWithFailure
-                                query={query}
-                                count={(x) => setFindingCount(x)}
-                            />
+                            <FindingsWithFailure query={query} />
                         </TabPanel>
                         <TabPanel>
                             <FindingsWithFailure
@@ -121,7 +85,6 @@ export default function Findings() {
                                     ],
                                     lifecycle: [true],
                                 }}
-                                count={(x) => setFindingCount(x)}
                             />
                         </TabPanel>
                     </TabPanels>
@@ -130,10 +93,7 @@ export default function Findings() {
                 return (
                     <TabPanels className="mt-4">
                         <TabPanel>
-                            <ResourcesWithFailure
-                                query={query}
-                                count={(x) => setResourceCount(x)}
-                            />
+                            <ResourcesWithFailure query={query} />
                         </TabPanel>
                         <TabPanel>
                             <ResourcesWithFailure
@@ -144,7 +104,6 @@ export default function Findings() {
                                     ],
                                     lifecycle: [true],
                                 }}
-                                count={(x) => setResourceCount(x)}
                             />
                         </TabPanel>
                     </TabPanels>
@@ -154,14 +113,12 @@ export default function Findings() {
                     <TabPanels className="mt-4">
                         <TabPanel>
                             <ControlsWithFailure
-                                // query={query}
-                                count={(x) => setResourceCount(x)}
+                            // query={query}
                             />
                         </TabPanel>
                         <TabPanel>
                             <ControlsWithFailure
-                                // query={query}
-                                count={(x) => setResourceCount(x)}
+                            // query={query}
                             />
                         </TabPanel>
                     </TabPanels>
@@ -171,14 +128,12 @@ export default function Findings() {
                     <TabPanels className="mt-4">
                         <TabPanel>
                             <FailingCloudAccounts
-                                // query={query}
-                                count={(x) => setResourceCount(x)}
+                            // query={query}
                             />
                         </TabPanel>
                         <TabPanel>
                             <FailingCloudAccounts
-                                // query={query}
-                                count={(x) => setResourceCount(x)}
+                            // query={query}
                             />
                         </TabPanel>
                     </TabPanels>
@@ -187,10 +142,7 @@ export default function Findings() {
                 return (
                     <TabPanels className="mt-4">
                         <TabPanel>
-                            <FindingsWithFailure
-                                query={query}
-                                count={(x) => setFindingCount(x)}
-                            />
+                            <FindingsWithFailure query={query} />
                         </TabPanel>
                     </TabPanels>
                 )
@@ -206,27 +158,50 @@ export default function Findings() {
                         <Tab>All Findings</Tab>
                         {/* <Tab>Active Issues</Tab> */}
                     </TabList>
-                    <Select
-                        value={selectedGroup}
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        onChange={(g) => setSelectedGroup(g)}
-                        enableClear={false}
-                        className="w-64"
-                    >
-                        <SelectItem value="findings">
-                            Findings With Failure
-                        </SelectItem>
-                        <SelectItem value="resources">
-                            Resources With Failure
-                        </SelectItem>
-                        <SelectItem value="controls">
-                            Controls With Failure
-                        </SelectItem>
-                        <SelectItem value="accounts">
-                            Cloud Accounts With Failure
-                        </SelectItem>
-                    </Select>
+                    <Popover className="relative border-0">
+                        <Popover.Button>
+                            <Icon
+                                icon={CloudIcon}
+                                variant="outlined"
+                                className="!ring-0 border border-gray-200 text-gray-800"
+                            />
+                        </Popover.Button>
+                        <Transition
+                            as={Fragment}
+                            enter="transition ease-out duration-200"
+                            enterFrom="opacity-0 translate-y-1"
+                            enterTo="opacity-100 translate-y-0"
+                            leave="transition ease-in duration-150"
+                            leaveFrom="opacity-100 translate-y-0"
+                            leaveTo="opacity-0 translate-y-1"
+                        >
+                            <Popover.Panel className="absolute z-50 top-full right-0">
+                                <Card className="mt-2 p-4 w-64">
+                                    <Select
+                                        value={selectedGroup}
+                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                        // @ts-ignore
+                                        onChange={(g) => setSelectedGroup(g)}
+                                        enableClear={false}
+                                        className="w-full"
+                                    >
+                                        <SelectItem value="findings">
+                                            Findings With Failure
+                                        </SelectItem>
+                                        <SelectItem value="resources">
+                                            Resources With Failure
+                                        </SelectItem>
+                                        <SelectItem value="controls">
+                                            Controls With Failure
+                                        </SelectItem>
+                                        <SelectItem value="accounts">
+                                            Cloud Accounts With Failure
+                                        </SelectItem>
+                                    </Select>
+                                </Card>
+                            </Popover.Panel>
+                        </Transition>
+                    </Popover>
                 </Flex>
                 <Filter onApply={(e) => setQuery(e)} />
                 {renderPanels()}
