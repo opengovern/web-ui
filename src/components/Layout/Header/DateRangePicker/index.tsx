@@ -1,5 +1,5 @@
 import { getLocalTimeZone, parseDate, today } from '@internationalized/date'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import { useDateRangePickerState } from 'react-stately'
 import { useDateRangePicker } from 'react-aria'
@@ -45,7 +45,7 @@ export const renderText = (st: dayjs.Dayjs, en: dayjs.Dayjs) => {
     )} ${endDay}, ${endYear}`
 }
 
-function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
+export function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
     const url = window.location.pathname.split('/')
     const isSpend =
         url && url[2] ? url[2].includes('spend') || url[2] === 'home' : false

@@ -270,6 +270,7 @@ export default function Filter({ onApply }: IFilters) {
             return (
                 <Popover className="relative border-0" key={f?.id}>
                     <Popover.Button
+                        id={f?.id}
                         className={`border ${
                             compareArrays(
                                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -393,12 +394,12 @@ export default function Filter({ onApply }: IFilters) {
                                                 color="slate"
                                                 variant="light"
                                                 className="w-full pl-1 flex justify-start"
-                                                onClick={() =>
+                                                onClick={() => {
                                                     setSelectedFilters([
                                                         ...selectedFilters,
                                                         f.id,
                                                     ])
-                                                }
+                                                }}
                                             >
                                                 {f.name}
                                             </Button>
