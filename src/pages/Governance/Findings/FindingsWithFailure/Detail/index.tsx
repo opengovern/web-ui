@@ -247,7 +247,7 @@ export default function FindingDetail({
                             <ReactJson src={response?.resource || {}} />
                         </Card>
                     </TabPanel>
-                    <TabPanel className="pt-4">
+                    <TabPanel className="pt-8">
                         <Timeline />
                     </TabPanel>
                 </TabPanels>
