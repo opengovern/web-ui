@@ -88,9 +88,7 @@ export default function Findings() {
                                       className="py-4 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-md cursor-pointer"
                                       onClick={() =>
                                           navigate(
-                                              `/${workspace}/compliance/${
-                                                  item.benchmarks?.at(0)?.id
-                                              }/${item.control?.id}`
+                                              `/${workspace}/findings/${item.control?.id}`
                                           )
                                       }
                                   >
