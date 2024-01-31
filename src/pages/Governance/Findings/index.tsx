@@ -3,22 +3,14 @@ import {
     Card,
     Flex,
     Icon,
-    Select,
-    SelectItem,
     Tab,
     TabGroup,
     TabList,
     TabPanel,
     TabPanels,
+    Text,
 } from '@tremor/react'
 import { Fragment, useState } from 'react'
-import {
-    CloudIcon,
-    DocumentCheckIcon,
-    PlusIcon,
-    ServerStackIcon,
-    ShieldExclamationIcon,
-} from '@heroicons/react/24/outline'
 import { Popover, Transition } from '@headlessui/react'
 import FindingsWithFailure from './FindingsWithFailure'
 import TopHeader from '../../../components/Layout/Header'
@@ -31,6 +23,8 @@ import {
 import ResourcesWithFailure from './ResourcesWithFailure'
 import ControlsWithFailure from './ControlsWithFailure'
 import FailingCloudAccounts from './FailingCloudAccounts'
+import { BulletList } from '../../../icons/icons'
+import { DateRange } from '../../../utilities/urlstate'
 
 export default function Findings() {
     const [tab, setTab] = useState(0)
@@ -49,6 +43,7 @@ export default function Findings() {
         benchmarkID: string[] | undefined
         resourceTypeID: string[] | undefined
         lifecycle: boolean[] | undefined
+        activeTimeRange: DateRange | undefined
     }>({
         connector: SourceType.Nil,
         conformanceStatus: [
@@ -66,86 +61,21 @@ export default function Findings() {
         benchmarkID: [],
         resourceTypeID: [],
         lifecycle: [true, false],
+        activeTimeRange: undefined,
     })
 
     const renderPanels = () => {
         switch (selectedGroup) {
             case 'findings':
-                return (
-                    <TabPanels className="mt-4">
-                        <TabPanel>
-                            <FindingsWithFailure query={query} />
-                        </TabPanel>
-                        <TabPanel>
-                            <FindingsWithFailure
-                                query={{
-                                    ...query,
-                                    conformanceStatus: [
-                                        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
-                                    ],
-                                    lifecycle: [true],
-                                }}
-                            />
-                        </TabPanel>
-                    </TabPanels>
-                )
+                return <FindingsWithFailure query={query} />
             case 'resources':
-                return (
-                    <TabPanels className="mt-4">
-                        <TabPanel>
-                            <ResourcesWithFailure query={query} />
-                        </TabPanel>
-                        <TabPanel>
-                            <ResourcesWithFailure
-                                query={{
-                                    ...query,
-                                    conformanceStatus: [
-                                        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
-                                    ],
-                                    lifecycle: [true],
-                                }}
-                            />
-                        </TabPanel>
-                    </TabPanels>
-                )
+                return <ResourcesWithFailure query={query} />
             case 'controls':
-                return (
-                    <TabPanels className="mt-4">
-                        <TabPanel>
-                            <ControlsWithFailure
-                            // query={query}
-                            />
-                        </TabPanel>
-                        <TabPanel>
-                            <ControlsWithFailure
-                            // query={query}
-                            />
-                        </TabPanel>
-                    </TabPanels>
-                )
+                return <ControlsWithFailure query={query} />
             case 'accounts':
-                return (
-                    <TabPanels className="mt-4">
-                        <TabPanel>
-                            <FailingCloudAccounts
-                            // query={query}
-                            />
-                        </TabPanel>
-                        <TabPanel>
-                            <FailingCloudAccounts
-                            // query={query}
-                            />
-                        </TabPanel>
-                    </TabPanels>
-                )
+                return <FailingCloudAccounts query={query} />
             default:
-                return (
-                    <TabPanels className="mt-4">
-                        <TabPanel>
-                            <FindingsWithFailure query={query} />
-                        </TabPanel>
-                    </TabPanels>
-                )
+                return <FindingsWithFailure query={query} />
         }
     }
 
@@ -156,12 +86,11 @@ export default function Findings() {
                 <Flex>
                     <TabList>
                         <Tab>All Findings</Tab>
-                        {/* <Tab>Active Issues</Tab> */}
                     </TabList>
                     <Popover className="relative border-0">
                         <Popover.Button>
                             <Icon
-                                icon={CloudIcon}
+                                icon={BulletList}
                                 variant="outlined"
                                 className="!ring-0 border border-gray-200 text-gray-800"
                             />
@@ -177,34 +106,79 @@ export default function Findings() {
                         >
                             <Popover.Panel className="absolute z-50 top-full right-0">
                                 <Card className="mt-2 p-4 w-64">
-                                    <Select
-                                        value={selectedGroup}
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        onChange={(g) => setSelectedGroup(g)}
-                                        enableClear={false}
-                                        className="w-full"
+                                    <Text className="mb-2 font-semibold">
+                                        View Options
+                                    </Text>
+                                    <Flex
+                                        flexDirection="col"
+                                        justifyContent="start"
+                                        alignItems="start"
+                                        className="gap-2"
                                     >
-                                        <SelectItem value="findings">
+                                        <Button
+                                            variant="light"
+                                            color="slate"
+                                            disabled={
+                                                selectedGroup === 'findings'
+                                            }
+                                            onClick={() =>
+                                                setSelectedGroup('findings')
+                                            }
+                                        >
                                             Findings With Failure
-                                        </SelectItem>
-                                        <SelectItem value="resources">
+                                        </Button>
+                                        <Button
+                                            variant="light"
+                                            color="slate"
+                                            disabled={
+                                                selectedGroup === 'resources'
+                                            }
+                                            onClick={() =>
+                                                setSelectedGroup('resources')
+                                            }
+                                        >
                                             Resources With Failure
-                                        </SelectItem>
-                                        <SelectItem value="controls">
+                                        </Button>
+                                        <Button
+                                            variant="light"
+                                            color="slate"
+                                            disabled={
+                                                selectedGroup === 'controls'
+                                            }
+                                            onClick={() =>
+                                                setSelectedGroup('controls')
+                                            }
+                                        >
                                             Controls With Failure
-                                        </SelectItem>
-                                        <SelectItem value="accounts">
+                                        </Button>
+                                        <Button
+                                            variant="light"
+                                            color="slate"
+                                            disabled={
+                                                selectedGroup === 'accounts'
+                                            }
+                                            onClick={() =>
+                                                setSelectedGroup('accounts')
+                                            }
+                                        >
                                             Cloud Accounts With Failure
-                                        </SelectItem>
-                                    </Select>
+                                        </Button>
+                                    </Flex>
                                 </Card>
                             </Popover.Panel>
                         </Transition>
                     </Popover>
                 </Flex>
-                <Filter onApply={(e) => setQuery(e)} />
-                {renderPanels()}
+                <Filter
+                    isFinding={
+                        selectedGroup === 'findings' ||
+                        selectedGroup === 'resources'
+                    }
+                    onApply={(e) => setQuery(e)}
+                />
+                <TabPanels className="mt-4">
+                    <TabPanel>{renderPanels()}</TabPanel>
+                </TabPanels>
             </TabGroup>
         </>
     )

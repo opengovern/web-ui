@@ -11,6 +11,7 @@ interface IConditionDropdown {
 const options = [
     'is',
     'isNot',
+    'isBetween',
     'contains',
     'doesNotContain',
     'isEmpty',
@@ -25,9 +26,11 @@ export default function ConditionDropdown({
     const [selectedCondition, setSelectedCondition] = useState<string>(
         conditions ? conditions[0] : 'is'
     )
+
     useEffect(() => {
         onChange(selectedCondition)
     }, [selectedCondition])
+
     return (
         <div className="relative z-10">
             <Button

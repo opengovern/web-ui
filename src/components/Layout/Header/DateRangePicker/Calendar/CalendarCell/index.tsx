@@ -71,13 +71,13 @@ export function CalendarCell({
                             ref={ref}
                             hidden={isOutsideVisibleRange}
                             className={`w-10 h-10 outline-none group ${
-                                isRoundedLeft ? 'rounded-l-full' : ''
-                            } ${isRoundedRight ? 'rounded-r-full' : ''} ${
+                                isRoundedLeft ? 'rounded-l-md' : ''
+                            } ${isRoundedRight ? 'rounded-r-md' : ''} ${
                                 isInvalid ? 'bg-red-300' : 'bg-kaytu-300'
                             } ${isDisabled ? 'disabled' : ''}`}
                         >
                             <div
-                                className={`w-full h-full rounded-full flex items-center justify-center ${
+                                className={`w-full h-full rounded-md flex items-center justify-center ${
                                     isDisabled && !isInvalid
                                         ? 'text-gray-400'
                                         : ''
@@ -121,13 +121,13 @@ export function CalendarCell({
                         ref={ref}
                         hidden={isOutsideVisibleRange}
                         className={`w-10 h-10 outline-none group ${
-                            isRoundedLeft ? 'rounded-l-full' : ''
-                        } ${isRoundedRight ? 'rounded-r-full' : ''} ${
+                            isRoundedLeft ? 'rounded-l-md' : ''
+                        } ${isRoundedRight ? 'rounded-r-md' : ''} ${
                             isInvalid ? 'bg-red-300' : 'bg-kaytu-300'
                         } ${isDisabled ? 'disabled' : ''}`}
                     >
                         <div
-                            className={`w-full h-full rounded-full flex items-center justify-center ${
+                            className={`w-full h-full rounded-md flex items-center justify-center ${
                                 isDisabled && !isInvalid ? 'text-gray-400' : ''
                             } ${
                                 // Focus ring, visible while the cell has keyboard focus.
@@ -172,13 +172,13 @@ export function CalendarCell({
                         ref={ref}
                         hidden={isOutsideVisibleRange}
                         className={`w-10 h-10 outline-none group ${
-                            isRoundedLeft ? 'rounded-l-full' : ''
-                        } ${isRoundedRight ? 'rounded-r-full' : ''} ${
+                            isRoundedLeft ? 'rounded-l-md' : ''
+                        } ${isRoundedRight ? 'rounded-r-md' : ''} ${
                             isInvalid ? 'bg-red-300' : 'bg-kaytu-300'
                         } ${isDisabled ? 'disabled' : ''}`}
                     >
                         <div
-                            className={`w-full h-full rounded-full flex items-center justify-center ${
+                            className={`w-full h-full rounded-md flex items-center justify-center ${
                                 isDisabled && !isInvalid ? 'text-gray-400' : ''
                             } ${
                                 // Focus ring, visible while the cell has keyboard focus.
@@ -216,13 +216,13 @@ export function CalendarCell({
                     ref={ref}
                     hidden={isOutsideVisibleRange}
                     className={`w-10 h-10 outline-none group ${
-                        isRoundedLeft ? 'rounded-l-full' : ''
-                    } ${isRoundedRight ? 'rounded-r-full' : ''} ${
+                        isRoundedLeft ? 'rounded-l-md' : ''
+                    } ${isRoundedRight ? 'rounded-r-md' : ''} ${
                         isInvalid ? 'bg-red-300' : 'bg-kaytu-300'
                     } ${isDisabled ? 'disabled' : ''}`}
                 >
                     <div
-                        className={`w-full h-full rounded-full flex items-center justify-center ${
+                        className={`w-full h-full rounded-md flex items-center justify-center ${
                             isDisabled && !isInvalid ? 'text-gray-400' : ''
                         } ${
                             // Focus ring, visible while the cell has keyboard focus.
@@ -266,13 +266,13 @@ export function CalendarCell({
                         ref={ref}
                         hidden={isOutsideVisibleRange}
                         className={`w-10 h-10 outline-none group ${
-                            isRoundedLeft ? 'rounded-l-full' : ''
-                        } ${isRoundedRight ? 'rounded-r-full' : ''} ${''} ${
+                            isRoundedLeft ? 'rounded-l-md' : ''
+                        } ${isRoundedRight ? 'rounded-r-md' : ''} ${''} ${
                             isDisabled ? 'disabled' : ''
                         }`}
                     >
                         <div
-                            className={`w-full h-full rounded-full flex items-center justify-center ${
+                            className={`w-full h-full rounded-md flex items-center justify-center ${
                                 isDisabled && !isInvalid ? 'text-gray-400' : ''
                             } ${
                                 // Focus ring, visible while the cell has keyboard focus.
@@ -312,13 +312,13 @@ export function CalendarCell({
                     ref={ref}
                     hidden={isOutsideVisibleRange}
                     className={`w-10 h-10 outline-none group ${
-                        isRoundedLeft ? 'rounded-l-full' : ''
-                    } ${isRoundedRight ? 'rounded-r-full' : ''} ${''} ${
+                        isRoundedLeft ? 'rounded-l-md' : ''
+                    } ${isRoundedRight ? 'rounded-r-md' : ''} ${''} ${
                         isDisabled ? 'disabled' : ''
                     }`}
                 >
                     <div
-                        className={`w-full h-full rounded-full flex items-center justify-center ${
+                        className={`w-full h-full rounded-md flex items-center justify-center ${
                             isDisabled && !isInvalid ? 'text-gray-400' : ''
                         } ${
                             // Focus ring, visible while the cell has keyboard focus.
@@ -357,13 +357,13 @@ export function CalendarCell({
                     ref={ref}
                     hidden={isOutsideVisibleRange}
                     className={`w-10 h-10 outline-none group ${
-                        isRoundedLeft ? 'rounded-l-full' : ''
-                    } ${isRoundedRight ? 'rounded-r-full' : ''} ${''} ${
+                        isRoundedLeft ? 'rounded-l-md' : ''
+                    } ${isRoundedRight ? 'rounded-r-md' : ''} ${''} ${
                         isDisabled ? 'disabled' : ''
                     }`}
                 >
                     <div
-                        className={`w-full h-full rounded-full flex items-center justify-center ${
+                        className={`w-full h-full rounded-md flex items-center justify-center ${
                             isDisabled && !isInvalid ? 'text-gray-400' : ''
                         } ${
                             // Focus ring, visible while the cell has keyboard focus.
@@ -401,13 +401,13 @@ export function CalendarCell({
                 ref={ref}
                 hidden={isOutsideVisibleRange}
                 className={`w-10 h-10 outline-none group ${
-                    isRoundedLeft ? 'rounded-l-full' : ''
-                } ${isRoundedRight ? 'rounded-r-full' : ''} ${''} ${
+                    isRoundedLeft ? 'rounded-l-md' : ''
+                } ${isRoundedRight ? 'rounded-r-md' : ''} ${''} ${
                     isDisabled ? 'disabled' : ''
                 }`}
             >
                 <div
-                    className={`w-full h-full rounded-full flex items-center justify-center ${
+                    className={`w-full h-full rounded-md flex items-center justify-center ${
                         isDisabled && !isInvalid ? 'text-gray-400' : ''
                     } ${
                         // Focus ring, visible while the cell has keyboard focus.

@@ -20,6 +20,7 @@ import Table, { IColumn } from '../../../../components/Table'
 import FindingDetail from '../FindingsWithFailure/Detail'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
+import { DateRange } from '../../../../utilities/urlstate'
 
 const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -189,9 +190,6 @@ export default function ResourcesWithFailure({ query }: ICount) {
                             severity: query.severity,
                             resourceTypeID: query.resourceTypeID,
                             conformanceStatus: query.conformanceStatus,
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            stateActive: query.lifecycle,
                         },
                         sort: params.request.sortModel.length
                             ? [

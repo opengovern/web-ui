@@ -1,11 +1,16 @@
 import { Card, Flex, Text } from '@tremor/react'
 import { useEffect, useState } from 'react'
-import { ICellRendererParams } from 'ag-grid-community'
+import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.gen'
-import { SourceType } from '../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
+    SourceType,
+    TypesFindingSeverity,
+} from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
 import { topConnections } from '../../Controls/ControlSummary/Tabs/ImpactedAccounts'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
+import CloudAccountDetail from './Detail'
 
 const cloudAccountColumns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -116,35 +121,56 @@ const cloudAccountColumns = (isDemo: boolean) => {
 }
 
 interface ICount {
-    count: (x: number | undefined) => void
+    query: {
+        connector: SourceType
+        conformanceStatus:
+            | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+            | undefined
+        severity: TypesFindingSeverity[] | undefined
+        connectionID: string[] | undefined
+        controlID: string[] | undefined
+        benchmarkID: string[] | undefined
+        resourceTypeID: string[] | undefined
+        lifecycle: boolean[] | undefined
+    }
 }
 
-export default function FailingCloudAccounts() {
-    const [providerFilter, setProviderFilter] = useState<SourceType[]>([])
-    const [connectionFilter, setConnectionFilter] = useState<string[]>([])
-    const [benchmarkFilter, setBenchmarkFilter] = useState<string[]>([])
+export default function FailingCloudAccounts({ query }: ICount) {
+    const [account, setAccount] = useState<any>(undefined)
+    const [open, setOpen] = useState(false)
 
     const topQuery = {
-        connector: providerFilter,
-        connectionId: connectionFilter,
-        benchmarkId: benchmarkFilter,
+        connector: query.connector.length ? [query.connector] : [],
+        connectionId: query.connectionID,
+        benchmarkId: query.benchmarkID,
     }
 
     const { response: accounts, isLoading: accountsLoading } =
         useComplianceApiV1FindingsTopDetail('connectionID', 10000, topQuery)
 
     return (
-        <Table
-            id="impacted_accounts"
-            columns={cloudAccountColumns(false)}
-            rowData={topConnections(accounts)}
-            loading={accountsLoading}
-            onGridReady={(e) => {
-                if (accountsLoading) {
-                    e.api.showLoadingOverlay()
-                }
-            }}
-            rowHeight="lg"
-        />
+        <>
+            <Table
+                id="impacted_accounts"
+                columns={cloudAccountColumns(false)}
+                rowData={topConnections(accounts)}
+                loading={accountsLoading}
+                onGridReady={(e) => {
+                    if (accountsLoading) {
+                        e.api.showLoadingOverlay()
+                    }
+                }}
+                onCellClicked={(event: RowClickedEvent) => {
+                    setAccount(event.data)
+                    setOpen(true)
+                }}
+                rowHeight="lg"
+            />
+            <CloudAccountDetail
+                account={account}
+                open={open}
+                onClose={() => setOpen(false)}
+            />
+        </>
     )
 }
