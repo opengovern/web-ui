@@ -71,81 +71,15 @@ export default function Findings() {
     const renderPanels = () => {
         switch (selectedGroup) {
             case 'findings':
-                return (
-                    <TabPanels className="mt-4">
-                        <TabPanel>
-                            <FindingsWithFailure query={query} />
-                        </TabPanel>
-                        <TabPanel>
-                            <FindingsWithFailure
-                                query={{
-                                    ...query,
-                                    conformanceStatus: [
-                                        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
-                                    ],
-                                    lifecycle: [true],
-                                }}
-                            />
-                        </TabPanel>
-                    </TabPanels>
-                )
+                return <FindingsWithFailure query={query} />
             case 'resources':
-                return (
-                    <TabPanels className="mt-4">
-                        <TabPanel>
-                            <ResourcesWithFailure query={query} />
-                        </TabPanel>
-                        <TabPanel>
-                            <ResourcesWithFailure
-                                query={{
-                                    ...query,
-                                    conformanceStatus: [
-                                        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
-                                    ],
-                                    lifecycle: [true],
-                                }}
-                            />
-                        </TabPanel>
-                    </TabPanels>
-                )
+                return <ResourcesWithFailure query={query} />
             case 'controls':
-                return (
-                    <TabPanels className="mt-4">
-                        <TabPanel>
-                            <ControlsWithFailure
-                            // query={query}
-                            />
-                        </TabPanel>
-                        <TabPanel>
-                            <ControlsWithFailure
-                            // query={query}
-                            />
-                        </TabPanel>
-                    </TabPanels>
-                )
+                return <ControlsWithFailure query={query} />
             case 'accounts':
-                return (
-                    <TabPanels className="mt-4">
-                        <TabPanel>
-                            <FailingCloudAccounts
-                            // query={query}
-                            />
-                        </TabPanel>
-                        <TabPanel>
-                            <FailingCloudAccounts
-                            // query={query}
-                            />
-                        </TabPanel>
-                    </TabPanels>
-                )
+                return <FailingCloudAccounts query={query} />
             default:
-                return (
-                    <TabPanels className="mt-4">
-                        <TabPanel>
-                            <FindingsWithFailure query={query} />
-                        </TabPanel>
-                    </TabPanels>
-                )
+                return <FindingsWithFailure query={query} />
         }
     }
 
@@ -203,8 +137,16 @@ export default function Findings() {
                         </Transition>
                     </Popover>
                 </Flex>
-                <Filter onApply={(e) => setQuery(e)} />
-                {renderPanels()}
+                <Filter
+                    isFinding={
+                        selectedGroup === 'findings' ||
+                        selectedGroup === 'resources'
+                    }
+                    onApply={(e) => setQuery(e)}
+                />
+                <TabPanels className="mt-4">
+                    <TabPanel>{renderPanels()}</TabPanel>
+                </TabPanels>
             </TabGroup>
         </>
     )

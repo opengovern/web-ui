@@ -4,7 +4,11 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { useAtomValue } from 'jotai'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.gen'
-import { SourceType } from '../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
+    SourceType,
+    TypesFindingSeverity,
+} from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
 import { topControls } from '../../Compliance/BenchmarkSummary/TopDetails/Controls'
 import { severityBadge } from '../../Controls'
@@ -96,21 +100,29 @@ const policyColumns: IColumn<any, any>[] = [
 ]
 
 interface ICount {
-    count: (x: number | undefined) => void
+    query: {
+        connector: SourceType
+        conformanceStatus:
+            | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+            | undefined
+        severity: TypesFindingSeverity[] | undefined
+        connectionID: string[] | undefined
+        controlID: string[] | undefined
+        benchmarkID: string[] | undefined
+        resourceTypeID: string[] | undefined
+        lifecycle: boolean[] | undefined
+    }
 }
 
-export default function ControlsWithFailure() {
+export default function ControlsWithFailure({ query }: ICount) {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
-    const [providerFilter, setProviderFilter] = useState<SourceType[]>([])
-    const [connectionFilter, setConnectionFilter] = useState<string[]>([])
-    const [benchmarkFilter, setBenchmarkFilter] = useState<string[]>([])
-
     const topQuery = {
-        connector: providerFilter,
-        connectionId: connectionFilter,
-        benchmarkId: benchmarkFilter,
+        connector: query.connector.length ? [query.connector] : [],
+        connectionId: query.connectionID,
+        benchmarkId: query.benchmarkID,
     }
+
     const { response: controls, isLoading } =
         useComplianceApiV1FindingsTopDetail('controlID', 10000, topQuery)
 

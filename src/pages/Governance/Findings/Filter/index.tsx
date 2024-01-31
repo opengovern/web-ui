@@ -54,9 +54,10 @@ interface IFilters {
         resourceTypeID: string[] | undefined
         lifecycle: boolean[] | undefined
     }) => void
+    isFinding: boolean
 }
 
-export default function Filter({ onApply }: IFilters) {
+export default function Filter({ onApply, isFinding }: IFilters) {
     const defConnector = SourceType.Nil
     const [connector, setConnector] = useState<SourceType>(defConnector)
 
@@ -138,6 +139,7 @@ export default function Filter({ onApply }: IFilters) {
             value: conformanceStatus,
             defaultValue: defConformanceStatus,
             onDelete: undefined,
+            findingOnly: true,
         },
         {
             id: 'provider',
@@ -155,6 +157,7 @@ export default function Filter({ onApply }: IFilters) {
             value: [connector],
             defaultValue: [defConnector],
             onDelete: () => setConnector(defConnector),
+            findingOnly: false,
         },
         {
             id: 'lifecycle',
@@ -172,6 +175,7 @@ export default function Filter({ onApply }: IFilters) {
             value: lifecycle,
             defaultValue: defLifecycle,
             onDelete: () => setLifecycle(defLifecycle),
+            findingOnly: true,
         },
         {
             id: 'severity',
@@ -190,6 +194,7 @@ export default function Filter({ onApply }: IFilters) {
             value: severity,
             defaultValue: defSeverity,
             onDelete: () => setSeverity(defSeverity),
+            findingOnly: true,
         },
         {
             id: 'connection',
@@ -210,6 +215,7 @@ export default function Filter({ onApply }: IFilters) {
             value: connectionID,
             defaultValue: [],
             onDelete: () => setConnectionID([]),
+            findingOnly: false,
         },
         {
             id: 'control',
@@ -230,6 +236,7 @@ export default function Filter({ onApply }: IFilters) {
             value: controlID,
             defaultValue: [],
             onDelete: () => setControlID([]),
+            findingOnly: true,
         },
         {
             id: 'benchmark',
@@ -250,6 +257,7 @@ export default function Filter({ onApply }: IFilters) {
             value: benchmarkID,
             defaultValue: [],
             onDelete: () => setBenchmarkID([]),
+            findingOnly: false,
         },
         {
             id: 'resource',
@@ -270,6 +278,7 @@ export default function Filter({ onApply }: IFilters) {
             value: resourceTypeID,
             defaultValue: [],
             onDelete: () => setResourceTypeID([]),
+            findingOnly: true,
         },
         {
             id: 'date',
@@ -281,99 +290,103 @@ export default function Filter({ onApply }: IFilters) {
             value: undefined,
             defaultValue: undefined,
             onDelete: () => undefined,
+            findingOnly: false,
         },
     ]
 
     const renderFilters = selectedFilters.map((sf) => {
         const f = filterOptions.find((o) => o.id === sf)
         return (
-            <Popover className="relative border-0">
-                <Popover.Button
-                    id={f?.id}
-                    className={`border ${
-                        compareArrays(
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            f?.value?.sort(),
-                            f?.defaultValue?.sort()
-                        )
-                            ? 'border-gray-200 bg-white'
-                            : 'border-kaytu-500 text-kaytu-500 bg-kaytu-50'
-                    } py-1.5 px-2 rounded-md`}
-                >
-                    <Flex className="w-fit">
-                        <Icon
-                            icon={f?.icon || CloudIcon}
-                            className="w-3 p-0 mr-3 text-inherit"
-                        />
-                        <Text className="text-inherit whitespace-nowrap max-w-[200px] truncate">
-                            {`${f?.name}${
-                                compareArrays(
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    f?.value?.sort(),
-                                    f?.defaultValue?.sort()
-                                )
-                                    ? ''
-                                    : `${
-                                          f?.value && f.value.length < 2
-                                              ? `: ${f.value}`
-                                              : `(${f?.value?.length})`
-                                      }`
-                            }`}
-                        </Text>
-                        <ChevronDownIcon className="ml-1 w-3 text-inherit" />
-                    </Flex>
-                </Popover.Button>
-                <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-200"
-                    enterFrom="opacity-0 translate-y-1"
-                    enterTo="opacity-100 translate-y-0"
-                    leave="transition ease-in duration-150"
-                    leaveFrom="opacity-100 translate-y-0"
-                    leaveTo="opacity-0 translate-y-1"
-                >
-                    <Popover.Panel className="absolute z-50 top-full left-0">
-                        <Card className="mt-2 p-4 w-64">
-                            <Flex className="mb-3">
-                                <Flex className="w-fit gap-1.5">
-                                    <Text className="font-semibold">
-                                        {f?.name}
-                                    </Text>
-                                    <ConditionDropdown
-                                        onChange={(c) => f?.setCondition(c)}
-                                        conditions={f?.conditions}
-                                    />
-                                </Flex>
-                                {f?.onDelete && (
-                                    <div className="group relative">
-                                        <TrashIcon
-                                            onClick={() => {
-                                                f?.onDelete()
-                                                setSelectedFilters(
-                                                    (prevState) => {
-                                                        return prevState.filter(
-                                                            (s) => s !== f?.id
-                                                        )
-                                                    }
-                                                )
-                                            }}
-                                            className="w-4 cursor-pointer hover:text-kaytu-500"
+            (isFinding || isFinding === f?.findingOnly) && (
+                <Popover className="relative border-0">
+                    <Popover.Button
+                        id={f?.id}
+                        className={`border ${
+                            compareArrays(
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                f?.value?.sort(),
+                                f?.defaultValue?.sort()
+                            )
+                                ? 'border-gray-200 bg-white'
+                                : 'border-kaytu-500 text-kaytu-500 bg-kaytu-50'
+                        } py-1.5 px-2 rounded-md`}
+                    >
+                        <Flex className="w-fit">
+                            <Icon
+                                icon={f?.icon || CloudIcon}
+                                className="w-3 p-0 mr-3 text-inherit"
+                            />
+                            <Text className="text-inherit whitespace-nowrap max-w-[200px] truncate">
+                                {`${f?.name}${
+                                    compareArrays(
+                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                        // @ts-ignore
+                                        f?.value?.sort(),
+                                        f?.defaultValue?.sort()
+                                    )
+                                        ? ''
+                                        : `${
+                                              f?.value && f.value.length < 2
+                                                  ? `: ${f.value}`
+                                                  : `(${f?.value?.length})`
+                                          }`
+                                }`}
+                            </Text>
+                            <ChevronDownIcon className="ml-1 w-3 text-inherit" />
+                        </Flex>
+                    </Popover.Button>
+                    <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-200"
+                        enterFrom="opacity-0 translate-y-1"
+                        enterTo="opacity-100 translate-y-0"
+                        leave="transition ease-in duration-150"
+                        leaveFrom="opacity-100 translate-y-0"
+                        leaveTo="opacity-0 translate-y-1"
+                    >
+                        <Popover.Panel className="absolute z-50 top-full left-0">
+                            <Card className="mt-2 p-4 w-64">
+                                <Flex className="mb-3">
+                                    <Flex className="w-fit gap-1.5">
+                                        <Text className="font-semibold">
+                                            {f?.name}
+                                        </Text>
+                                        <ConditionDropdown
+                                            onChange={(c) => f?.setCondition(c)}
+                                            conditions={f?.conditions}
                                         />
-                                        <Card className="absolute w-fit z-40 -top-2 left-full ml-2 scale-0 transition-all p-2 group-hover:scale-100">
-                                            <Text className="whitespace-nowrap">
-                                                Remove filter
-                                            </Text>
-                                        </Card>
-                                    </div>
-                                )}
-                            </Flex>
-                            {f?.component}
-                        </Card>
-                    </Popover.Panel>
-                </Transition>
-            </Popover>
+                                    </Flex>
+                                    {f?.onDelete && (
+                                        <div className="group relative">
+                                            <TrashIcon
+                                                onClick={() => {
+                                                    f?.onDelete()
+                                                    setSelectedFilters(
+                                                        (prevState) => {
+                                                            return prevState.filter(
+                                                                (s) =>
+                                                                    s !== f?.id
+                                                            )
+                                                        }
+                                                    )
+                                                }}
+                                                className="w-4 cursor-pointer hover:text-kaytu-500"
+                                            />
+                                            <Card className="absolute w-fit z-40 -top-2 left-full ml-2 scale-0 transition-all p-2 group-hover:scale-100">
+                                                <Text className="whitespace-nowrap">
+                                                    Remove filter
+                                                </Text>
+                                            </Card>
+                                        </div>
+                                    )}
+                                </Flex>
+                                {f?.component}
+                            </Card>
+                        </Popover.Panel>
+                    </Transition>
+                </Popover>
+            )
         )
     })
 
@@ -433,7 +446,10 @@ export default function Filter({ onApply }: IFilters) {
                                                 (f) =>
                                                     !selectedFilters.includes(
                                                         f.id
-                                                    )
+                                                    ) &&
+                                                    (isFinding ||
+                                                        isFinding ===
+                                                            f?.findingOnly)
                                             )
                                             .map((f) => (
                                                 <Button
