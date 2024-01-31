@@ -3,6 +3,7 @@ import { Popover, Transition } from '@headlessui/react'
 import {
     CheckCircleIcon,
     ChevronDownIcon,
+    ClockIcon,
     CloudIcon,
     PlusIcon,
     TrashIcon,
@@ -269,6 +270,17 @@ export default function Filter({ onApply }: IFilters) {
             value: resourceTypeID,
             defaultValue: [],
             onDelete: () => setResourceTypeID([]),
+        },
+        {
+            id: 'date',
+            name: 'Date',
+            icon: ClockIcon,
+            component: <Datepicker />,
+            conditions: ['isBetween'],
+            setCondition: (c: string) => undefined,
+            value: undefined,
+            defaultValue: undefined,
+            onDelete: () => undefined,
         },
     ]
 
