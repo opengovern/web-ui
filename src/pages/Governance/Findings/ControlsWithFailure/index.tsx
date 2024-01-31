@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
 import { Flex, Text } from '@tremor/react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { useAtomValue } from 'jotai'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.gen'
@@ -12,7 +11,7 @@ import {
 import Table, { IColumn } from '../../../../components/Table'
 import { topControls } from '../../Compliance/BenchmarkSummary/TopDetails/Controls'
 import { severityBadge } from '../../Controls'
-import { searchAtom } from '../../../../utilities/urlstate'
+import { DateRange, searchAtom } from '../../../../utilities/urlstate'
 
 const policyColumns: IColumn<any, any>[] = [
     {
@@ -111,6 +110,7 @@ interface ICount {
         benchmarkID: string[] | undefined
         resourceTypeID: string[] | undefined
         lifecycle: boolean[] | undefined
+        activeTimeRange: DateRange | undefined
     }
 }
 

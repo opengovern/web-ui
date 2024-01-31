@@ -258,6 +258,18 @@ export default function FindingsWithFailure({ query }: ICount) {
                             resourceTypeID: query.resourceTypeID,
                             conformanceStatus: query.conformanceStatus,
                             stateActive: query.lifecycle,
+                            lastEvent: {
+                                from: query.activeTimeRange
+                                    ? query.activeTimeRange.start
+                                          .unix()
+                                          .toString()
+                                    : undefined,
+                                to: query.activeTimeRange
+                                    ? query.activeTimeRange.end
+                                          .unix()
+                                          .toString()
+                                    : undefined,
+                            },
                         },
                         sort: params.request.sortModel.length
                             ? [
