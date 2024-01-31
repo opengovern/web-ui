@@ -1,6 +1,6 @@
 import { Card, Flex, Text } from '@tremor/react'
 import { useEffect, useState } from 'react'
-import { ICellRendererParams } from 'ag-grid-community'
+import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.gen'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
@@ -10,6 +10,7 @@ import {
 import Table, { IColumn } from '../../../../components/Table'
 import { topConnections } from '../../Controls/ControlSummary/Tabs/ImpactedAccounts'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
+import CloudAccountDetail from './Detail'
 
 const cloudAccountColumns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -135,6 +136,9 @@ interface ICount {
 }
 
 export default function FailingCloudAccounts({ query }: ICount) {
+    const [account, setAccount] = useState<any>(undefined)
+    const [open, setOpen] = useState(false)
+
     const topQuery = {
         connector: query.connector.length ? [query.connector] : [],
         connectionId: query.connectionID,
@@ -145,17 +149,28 @@ export default function FailingCloudAccounts({ query }: ICount) {
         useComplianceApiV1FindingsTopDetail('connectionID', 10000, topQuery)
 
     return (
-        <Table
-            id="impacted_accounts"
-            columns={cloudAccountColumns(false)}
-            rowData={topConnections(accounts)}
-            loading={accountsLoading}
-            onGridReady={(e) => {
-                if (accountsLoading) {
-                    e.api.showLoadingOverlay()
-                }
-            }}
-            rowHeight="lg"
-        />
+        <>
+            <Table
+                id="impacted_accounts"
+                columns={cloudAccountColumns(false)}
+                rowData={topConnections(accounts)}
+                loading={accountsLoading}
+                onGridReady={(e) => {
+                    if (accountsLoading) {
+                        e.api.showLoadingOverlay()
+                    }
+                }}
+                onCellClicked={(event: RowClickedEvent) => {
+                    setAccount(event.data)
+                    setOpen(true)
+                }}
+                rowHeight="lg"
+            />
+            <CloudAccountDetail
+                account={account}
+                open={open}
+                onClose={() => setOpen(false)}
+            />
+        </>
     )
 }
