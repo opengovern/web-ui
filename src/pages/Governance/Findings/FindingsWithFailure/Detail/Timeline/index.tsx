@@ -33,13 +33,13 @@ export default function Timeline({ data, isLoading }: ITimeline) {
             alignItems="start"
             className="gap-10 relative"
         >
-            <div className="absolute w-0.5 h-full bg-gray-200 z-10 top-1 left-[241px]" />
+            <div className="absolute w-0.5 h-full bg-gray-200 z-10 top-1 left-[237px]" />
             {data?.findingEvents?.map((tl) => (
                 <Flex alignItems="start" className="gap-6 z-20">
                     <Flex
                         flexDirection="col"
                         alignItems="end"
-                        className="w-[200px] min-w-[200px] mt-2 gap-1.5"
+                        className="w-[200px] min-w-[200px] mt-1 gap-2"
                     >
                         <Text className="text-gray-800 text-end truncate w-[200px] min-w-[200px]">
                             {dateTimeDisplay(tl.evaluatedAt)}
@@ -59,13 +59,13 @@ export default function Timeline({ data, isLoading }: ITimeline) {
                                 ? 'rose'
                                 : 'emerald'
                         }
-                        size="xl"
+                        size="lg"
                         className="p-0"
                     />
                     <Flex
                         flexDirection="col"
                         alignItems="start"
-                        className="gap-1 mt-2"
+                        className="gap-1 mt-1"
                     >
                         <Text className="text-gray-800 truncate max-w-[330px]">
                             {tl.controlID}
