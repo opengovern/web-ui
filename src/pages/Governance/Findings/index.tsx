@@ -10,6 +10,7 @@ import {
     TabList,
     TabPanel,
     TabPanels,
+    Text,
 } from '@tremor/react'
 import { Fragment, useState } from 'react'
 import {
@@ -31,6 +32,7 @@ import {
 import ResourcesWithFailure from './ResourcesWithFailure'
 import ControlsWithFailure from './ControlsWithFailure'
 import FailingCloudAccounts from './FailingCloudAccounts'
+import { BulletList } from '../../../icons/icons'
 
 export default function Findings() {
     const [tab, setTab] = useState(0)
@@ -95,7 +97,7 @@ export default function Findings() {
                     <Popover className="relative border-0">
                         <Popover.Button>
                             <Icon
-                                icon={CloudIcon}
+                                icon={BulletList}
                                 variant="outlined"
                                 className="!ring-0 border border-gray-200 text-gray-800"
                             />
@@ -111,27 +113,64 @@ export default function Findings() {
                         >
                             <Popover.Panel className="absolute z-50 top-full right-0">
                                 <Card className="mt-2 p-4 w-64">
-                                    <Select
-                                        value={selectedGroup}
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        onChange={(g) => setSelectedGroup(g)}
-                                        enableClear={false}
-                                        className="w-full"
+                                    <Text className="mb-2 font-semibold">
+                                        View Options
+                                    </Text>
+                                    <Flex
+                                        flexDirection="col"
+                                        justifyContent="start"
+                                        alignItems="start"
+                                        className="gap-2"
                                     >
-                                        <SelectItem value="findings">
+                                        <Button
+                                            variant="light"
+                                            color="slate"
+                                            disabled={
+                                                selectedGroup === 'findings'
+                                            }
+                                            onClick={() =>
+                                                setSelectedGroup('findings')
+                                            }
+                                        >
                                             Findings With Failure
-                                        </SelectItem>
-                                        <SelectItem value="resources">
+                                        </Button>
+                                        <Button
+                                            variant="light"
+                                            color="slate"
+                                            disabled={
+                                                selectedGroup === 'resources'
+                                            }
+                                            onClick={() =>
+                                                setSelectedGroup('resources')
+                                            }
+                                        >
                                             Resources With Failure
-                                        </SelectItem>
-                                        <SelectItem value="controls">
+                                        </Button>
+                                        <Button
+                                            variant="light"
+                                            color="slate"
+                                            disabled={
+                                                selectedGroup === 'controls'
+                                            }
+                                            onClick={() =>
+                                                setSelectedGroup('controls')
+                                            }
+                                        >
                                             Controls With Failure
-                                        </SelectItem>
-                                        <SelectItem value="accounts">
+                                        </Button>
+                                        <Button
+                                            variant="light"
+                                            color="slate"
+                                            disabled={
+                                                selectedGroup === 'accounts'
+                                            }
+                                            onClick={() =>
+                                                setSelectedGroup('accounts')
+                                            }
+                                        >
                                             Cloud Accounts With Failure
-                                        </SelectItem>
-                                    </Select>
+                                        </Button>
+                                    </Flex>
                                 </Card>
                             </Popover.Panel>
                         </Transition>
