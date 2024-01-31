@@ -3,8 +3,6 @@ import {
     Card,
     Flex,
     Icon,
-    Select,
-    SelectItem,
     Tab,
     TabGroup,
     TabList,
@@ -13,13 +11,6 @@ import {
     Text,
 } from '@tremor/react'
 import { Fragment, useState } from 'react'
-import {
-    CloudIcon,
-    DocumentCheckIcon,
-    PlusIcon,
-    ServerStackIcon,
-    ShieldExclamationIcon,
-} from '@heroicons/react/24/outline'
 import { Popover, Transition } from '@headlessui/react'
 import FindingsWithFailure from './FindingsWithFailure'
 import TopHeader from '../../../components/Layout/Header'
@@ -33,6 +24,7 @@ import ResourcesWithFailure from './ResourcesWithFailure'
 import ControlsWithFailure from './ControlsWithFailure'
 import FailingCloudAccounts from './FailingCloudAccounts'
 import { BulletList } from '../../../icons/icons'
+import { DateRange } from '../../../utilities/urlstate'
 
 export default function Findings() {
     const [tab, setTab] = useState(0)
@@ -51,6 +43,7 @@ export default function Findings() {
         benchmarkID: string[] | undefined
         resourceTypeID: string[] | undefined
         lifecycle: boolean[] | undefined
+        activeTimeRange: DateRange | undefined
     }>({
         connector: SourceType.Nil,
         conformanceStatus: [
@@ -68,6 +61,7 @@ export default function Findings() {
         benchmarkID: [],
         resourceTypeID: [],
         lifecycle: [true, false],
+        activeTimeRange: undefined,
     })
 
     const renderPanels = () => {

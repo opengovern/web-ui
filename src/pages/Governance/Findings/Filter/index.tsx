@@ -32,6 +32,11 @@ import {
 } from '../../../../icons/icons'
 import Severity from './Severity'
 import Datepicker from './Datepicker'
+import {
+    DateRange,
+    defaultFindingsTime,
+    useUrlDateRangeState,
+} from '../../../../utilities/urlstate'
 
 interface IFilters {
     onApply: (obj: {
@@ -45,6 +50,7 @@ interface IFilters {
         benchmarkID: string[] | undefined
         resourceTypeID: string[] | undefined
         lifecycle: boolean[] | undefined
+        activeTimeRange: DateRange | undefined
     }) => void
     isFinding: boolean
 }
@@ -86,6 +92,7 @@ export default function Filter({ onApply, isFinding }: IFilters) {
         []
     )
     const [resourceCon, setResourceCon] = useState('is')
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultFindingsTime)
 
     useEffect(() => {
         onApply({
@@ -97,6 +104,7 @@ export default function Filter({ onApply, isFinding }: IFilters) {
             benchmarkID,
             resourceTypeID,
             lifecycle,
+            activeTimeRange,
         })
     }, [
         connector,
@@ -107,6 +115,7 @@ export default function Filter({ onApply, isFinding }: IFilters) {
         benchmarkID,
         resourceTypeID,
         lifecycle,
+        activeTimeRange,
     ])
 
     const { response: filters } = useComplianceApiV1FindingsFiltersCreate({})

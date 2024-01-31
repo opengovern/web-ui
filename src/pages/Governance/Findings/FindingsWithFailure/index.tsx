@@ -21,6 +21,7 @@ import AxiosAPI from '../../../../api/ApiConfig'
 import FindingDetail from './Detail'
 import { severityBadge, statusBadge } from '../../Controls'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
+import { DateRange } from '../../../../utilities/urlstate'
 
 export const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -225,6 +226,7 @@ interface ICount {
         benchmarkID: string[] | undefined
         resourceTypeID: string[] | undefined
         lifecycle: boolean[] | undefined
+        activeTimeRange: DateRange | undefined
     }
 }
 
