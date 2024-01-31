@@ -13,6 +13,11 @@ export const defaultTime: DateRange = {
     end: dayjs.utc(),
 }
 
+export const defaultFindingsTime: DateRange = {
+    start: dayjs.utc(),
+    end: dayjs.utc(),
+}
+
 export const defaultSpendTime: DateRange = {
     start: dayjs.utc().add(-9, 'days'),
     end: dayjs.utc().add(-2, 'days'),

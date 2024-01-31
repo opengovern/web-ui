@@ -14,9 +14,15 @@ import { AWSIcon, AzureIcon } from '../../../../icons/icons'
 import { useFilterState } from '../../../../utilities/urlstate'
 import { GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection } from '../../../../api/api'
 
-export const compareArrays = (a: any[], b: any[]) =>
-    a.length === b.length &&
-    a.every((element: any, index: number) => element === b[index])
+export const compareArrays = (a: any[], b: any[]) => {
+    if (a && b) {
+        return (
+            a.length === b.length &&
+            a.every((element: any, index: number) => element === b[index])
+        )
+    }
+    return undefined
+}
 
 const filteredConnectionsList = (
     connection:

@@ -92,7 +92,6 @@ export default function Findings() {
                 <Flex>
                     <TabList>
                         <Tab>All Findings</Tab>
-                        {/* <Tab>Active Issues</Tab> */}
                     </TabList>
                     <Popover className="relative border-0">
                         <Popover.Button>

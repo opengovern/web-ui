@@ -33,14 +33,6 @@ import {
 import Severity from './Severity'
 import Datepicker from './Datepicker'
 
-const removeItem = (arr: any[], value: any) => {
-    const index = arr.indexOf(value)
-    if (index > -1) {
-        arr.splice(index, 1)
-    }
-    return arr
-}
-
 interface IFilters {
     onApply: (obj: {
         connector: SourceType
@@ -286,10 +278,10 @@ export default function Filter({ onApply, isFinding }: IFilters) {
             icon: ClockIcon,
             component: <Datepicker />,
             conditions: ['isBetween'],
-            setCondition: (c: string) => undefined,
+            setCondition: undefined,
             value: undefined,
             defaultValue: undefined,
-            onDelete: () => undefined,
+            onDelete: undefined,
             findingOnly: false,
         },
     ]
@@ -329,7 +321,7 @@ export default function Filter({ onApply, isFinding }: IFilters) {
                                         : `${
                                               f?.value && f.value.length < 2
                                                   ? `: ${f.value}`
-                                                  : `(${f?.value?.length})`
+                                                  : ` (${f?.value?.length})`
                                           }`
                                 }`}
                             </Text>
@@ -346,14 +338,18 @@ export default function Filter({ onApply, isFinding }: IFilters) {
                         leaveTo="opacity-0 translate-y-1"
                     >
                         <Popover.Panel className="absolute z-50 top-full left-0">
-                            <Card className="mt-2 p-4 w-64">
+                            <Card className="mt-2 p-4 min-w-[256px] w-fit">
                                 <Flex className="mb-3">
                                     <Flex className="w-fit gap-1.5">
                                         <Text className="font-semibold">
                                             {f?.name}
                                         </Text>
                                         <ConditionDropdown
-                                            onChange={(c) => f?.setCondition(c)}
+                                            onChange={(c) =>
+                                                f?.setCondition
+                                                    ? f?.setCondition(c)
+                                                    : undefined
+                                            }
                                             conditions={f?.conditions}
                                         />
                                     </Flex>
@@ -393,24 +389,6 @@ export default function Filter({ onApply, isFinding }: IFilters) {
     return (
         <Flex justifyContent="start" className="mt-4 gap-3 flex-wrap z-10">
             {renderFilters}
-            <Popover className="relative border-0">
-                <Popover.Button>date</Popover.Button>
-                <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-200"
-                    enterFrom="opacity-0 translate-y-1"
-                    enterTo="opacity-100 translate-y-0"
-                    leave="transition ease-in duration-150"
-                    leaveFrom="opacity-100 translate-y-0"
-                    leaveTo="opacity-0 translate-y-1"
-                >
-                    <Popover.Panel className="absolute z-50 top-full left-0">
-                        <Card className="mt-2 p-4 w-fit">
-                            <Datepicker />
-                        </Card>
-                    </Popover.Panel>
-                </Transition>
-            </Popover>
             {filterOptions.filter((f) => !selectedFilters.includes(f.id))
                 .length > 0 && (
                 <Flex className="w-fit pl-3 border-l border-l-gray-200 h-full">
