@@ -291,7 +291,7 @@ export default function Filter({ onApply, isFinding }: IFilters) {
             value: undefined,
             defaultValue: undefined,
             onDelete: undefined,
-            findingOnly: false,
+            findingOnly: true,
         },
     ]
 
