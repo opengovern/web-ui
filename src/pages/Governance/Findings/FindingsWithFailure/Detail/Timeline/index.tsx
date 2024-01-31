@@ -3,7 +3,10 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import dayjs from 'dayjs'
 import { severityBadge } from '../../../../Controls'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse } from '../../../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsByFindingIDResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
+} from '../../../../../../api/api'
 import Spinner from '../../../../../../components/Spinner'
 import {
     dateDisplay,
@@ -15,6 +18,7 @@ dayjs.extend(relativeTime)
 interface ITimeline {
     data:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsByFindingIDResponse
         | undefined
     isLoading: boolean
 }
@@ -29,21 +33,20 @@ export default function Timeline({ data, isLoading }: ITimeline) {
             alignItems="start"
             className="gap-10 relative"
         >
-            <div
-                className="absolute w-0.5 h-full bg-gray-200 z-10 top-1"
-                style={{ left: 'calc(27% + 52px)' }}
-            />
+            <div className="absolute w-0.5 h-full bg-gray-200 z-10 top-1 left-[241px]" />
             {data?.findingEvents?.map((tl) => (
                 <Flex alignItems="start" className="gap-6 z-20">
                     <Flex
                         flexDirection="col"
                         alignItems="end"
-                        className="w-1/2"
+                        className="w-[200px] min-w-[200px] mt-2 gap-1.5"
                     >
-                        <Title className="text-end line-clamp-1">
+                        <Text className="text-gray-800 text-end truncate w-[200px] min-w-[200px]">
                             {dateTimeDisplay(tl.evaluatedAt)}
-                        </Title>
-                        <Text>about {dayjs(tl?.evaluatedAt).fromNow()}</Text>
+                        </Text>
+                        <Text className="text-xs">
+                            about {dayjs(tl?.evaluatedAt).fromNow()}
+                        </Text>
                     </Flex>
                     <Icon
                         icon={
@@ -62,12 +65,14 @@ export default function Timeline({ data, isLoading }: ITimeline) {
                     <Flex
                         flexDirection="col"
                         alignItems="start"
-                        className="gap-1"
+                        className="gap-1 mt-2"
                     >
-                        <Title>{tl.controlID}</Title>
+                        <Text className="text-gray-800 truncate max-w-[330px]">
+                            {tl.controlID}
+                        </Text>
                         <Flex className="w-fit gap-4">
                             {severityBadge(tl.severity)}
-                            <Text className="pl-4 border-l border-l-gray-200">
+                            <Text className="pl-4 border-l border-l-gray-200 text-xs">
                                 Section:
                             </Text>
                         </Flex>

@@ -22,7 +22,10 @@ import {
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../../../components/Cards/ConnectorCard'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
-import { useComplianceApiV1FindingsResourceCreate } from '../../../../../api/compliance.gen'
+import {
+    useComplianceApiV1FindingsEventsDetail,
+    useComplianceApiV1FindingsResourceCreate,
+} from '../../../../../api/compliance.gen'
 import Spinner from '../../../../../components/Spinner'
 import { severityBadge } from '../../../Controls'
 import { dateTimeDisplay } from '../../../../../utilities/dateDisplay'
@@ -64,11 +67,18 @@ export default function FindingDetail({
             {},
             false
         )
+    const {
+        response: findingTimeline,
+        isLoading: findingTimelineLoading,
+        sendNow: findingTimelineSend,
+    } = useComplianceApiV1FindingsEventsDetail(finding?.id || '')
 
-    console.log(response)
     useEffect(() => {
         if (finding) {
             sendNow()
+            if (type === 'finding') {
+                findingTimelineSend()
+            }
         }
     }, [finding])
 
@@ -250,7 +260,16 @@ export default function FindingDetail({
                         </Card>
                     </TabPanel>
                     <TabPanel className="pt-8">
-                        <Timeline data={response} isLoading={isLoading} />
+                        <Timeline
+                            data={
+                                type === 'finding' ? findingTimeline : response
+                            }
+                            isLoading={
+                                type === 'finding'
+                                    ? findingTimelineLoading
+                                    : isLoading
+                            }
+                        />
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
