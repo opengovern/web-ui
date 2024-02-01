@@ -25,11 +25,12 @@ import ControlsWithFailure from './ControlsWithFailure'
 import FailingCloudAccounts from './FailingCloudAccounts'
 import { BulletList } from '../../../icons/icons'
 import { DateRange } from '../../../utilities/urlstate'
+import Events from './Events'
 
 export default function Findings() {
     const [tab, setTab] = useState(0)
     const [selectedGroup, setSelectedGroup] = useState<
-        'findings' | 'resources' | 'controls' | 'accounts'
+        'findings' | 'resources' | 'controls' | 'accounts' | 'events'
     >('findings')
 
     const [query, setQuery] = useState<{
@@ -74,6 +75,8 @@ export default function Findings() {
                 return <ControlsWithFailure query={query} />
             case 'accounts':
                 return <FailingCloudAccounts query={query} />
+            case 'events':
+                return <Events query={query} />
             default:
                 return <FindingsWithFailure query={query} />
         }
@@ -106,7 +109,7 @@ export default function Findings() {
                         >
                             <Popover.Panel className="absolute z-50 top-full right-0">
                                 <Card className="mt-2 p-4 w-64">
-                                    <Text className="mb-2 font-semibold">
+                                    <Text className="mb-3 font-semibold">
                                         View Options
                                     </Text>
                                     <Flex
@@ -125,7 +128,7 @@ export default function Findings() {
                                                 setSelectedGroup('findings')
                                             }
                                         >
-                                            Findings With Failure
+                                            Findings
                                         </Button>
                                         <Button
                                             variant="light"
@@ -137,7 +140,19 @@ export default function Findings() {
                                                 setSelectedGroup('resources')
                                             }
                                         >
-                                            Resources With Failure
+                                            Resources
+                                        </Button>
+                                        <Button
+                                            variant="light"
+                                            color="slate"
+                                            disabled={
+                                                selectedGroup === 'events'
+                                            }
+                                            onClick={() =>
+                                                setSelectedGroup('events')
+                                            }
+                                        >
+                                            Events
                                         </Button>
                                         <Button
                                             variant="light"
@@ -149,7 +164,7 @@ export default function Findings() {
                                                 setSelectedGroup('controls')
                                             }
                                         >
-                                            Controls With Failure
+                                            Controls
                                         </Button>
                                         <Button
                                             variant="light"
@@ -161,7 +176,7 @@ export default function Findings() {
                                                 setSelectedGroup('accounts')
                                             }
                                         >
-                                            Cloud Accounts With Failure
+                                            Cloud Accounts
                                         </Button>
                                     </Flex>
                                 </Card>
