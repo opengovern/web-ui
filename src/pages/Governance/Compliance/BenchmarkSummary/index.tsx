@@ -213,19 +213,12 @@ export default function BenchmarkSummary() {
                         : 'Benchmark summary',
                 ]}
                 filter
-            >
-                <Settings
-                    id={benchmarkDetail?.id}
-                    response={(e) => setAssignments(e)}
-                    autoAssign={benchmarkDetail?.autoAssign}
-                    isAutoResponse={(x) => setRecall(true)}
-                />
-            </TopHeader>
+            />
             {isLoading ? (
                 <Spinner className="mt-56" />
             ) : (
                 <>
-                    <Flex alignItems="end" className="mb-6">
+                    <Flex alignItems="start" className="mb-6">
                         <Flex
                             flexDirection="col"
                             alignItems="start"
@@ -244,16 +237,16 @@ export default function BenchmarkSummary() {
                                 </Card>
                             </div>
                         </Flex>
-                        {assignments > 0 && (
-                            <Flex
-                                flexDirection="col"
-                                alignItems="start"
-                                className="w-fit"
-                            >
+                        <Flex className="w-fit gap-4">
+                            <Settings
+                                id={benchmarkDetail?.id}
+                                response={(e) => setAssignments(e)}
+                                autoAssign={benchmarkDetail?.autoAssign}
+                                isAutoResponse={(x) => setRecall(true)}
+                            />
+                            {assignments > 0 && (
                                 <Button
-                                    variant="light"
                                     icon={ArrowPathRoundedSquareIcon}
-                                    className="mb-1"
                                     onClick={() => setOpenConfirm(true)}
                                     loading={
                                         !(
@@ -270,12 +263,12 @@ export default function BenchmarkSummary() {
                                         'SUCCEEDED'
                                         ? 'Evaluate now'
                                         : 'Evaluating'}
-                                </Button>
-                                <Text className="whitespace-nowrap">{`Last evaluation: ${dateTimeDisplay(
+                                    {/* <Text className="whitespace-nowrap">{`Last evaluation: ${dateTimeDisplay(
                                     benchmarkDetail?.evaluatedAt
-                                )}`}</Text>
-                            </Flex>
-                        )}
+                                )}`}</Text> */}
+                                </Button>
+                            )}
+                        </Flex>
                         <Modal
                             open={openConfirm}
                             onClose={() => setOpenConfirm(false)}

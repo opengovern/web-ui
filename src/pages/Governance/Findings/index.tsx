@@ -152,7 +152,7 @@ export default function Findings() {
                                                 setSelectedGroup('events')
                                             }
                                         >
-                                            Events
+                                            Security Events
                                         </Button>
                                         <Button
                                             variant="light"
@@ -187,8 +187,10 @@ export default function Findings() {
                 <Filter
                     isFinding={
                         selectedGroup === 'findings' ||
-                        selectedGroup === 'resources'
+                        selectedGroup === 'resources' ||
+                        selectedGroup === 'events'
                     }
+                    type={selectedGroup}
                     onApply={(e) => setQuery(e)}
                 />
                 <TabPanels className="mt-4">
