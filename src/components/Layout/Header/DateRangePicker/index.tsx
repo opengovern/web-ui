@@ -21,7 +21,7 @@ import {
 
 dayjs.extend(quarterOfYear)
 
-export const renderText = (st: dayjs.Dayjs, en: dayjs.Dayjs) => {
+export const renderDateText = (st: dayjs.Dayjs, en: dayjs.Dayjs) => {
     const s = st
     const e = en
     const startYear = s.year()
@@ -156,7 +156,7 @@ export function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
             >
                 <div className="flex items-center bg-white dark:bg-gray-900 dark:text-gray-50 border border-gray-300 dark:border-gray-700 group-hover:border-gray-400 transition-colors rounded-l-lg px-5 group-focus-within:border-kaytu-600 group-focus-within:group-hover:border-kaytu-600 p-1 relative">
                     <Text className="text-gray-800">
-                        {renderText(start(), end())}{' '}
+                        {renderDateText(start(), end())}{' '}
                         <span className="text-orange-600 ml-2">UTC</span>
                     </Text>
                     <button
@@ -196,7 +196,10 @@ export function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         >
                             <Text className="text-gray-800">Last 7 days</Text>
                             <Text>
-                                {renderText(last7Days().start, last7Days().end)}
+                                {renderDateText(
+                                    last7Days().start,
+                                    last7Days().end
+                                )}
                             </Text>
                         </Flex>
                         <Flex
@@ -205,7 +208,7 @@ export function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         >
                             <Text className="text-gray-800">Last 30 days</Text>
                             <Text>
-                                {renderText(
+                                {renderDateText(
                                     last30Days().start,
                                     last30Days().end
                                 )}
@@ -218,7 +221,10 @@ export function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         >
                             <Text className="text-gray-800">This month</Text>
                             <Text>
-                                {renderText(thisMonth().start, thisMonth().end)}
+                                {renderDateText(
+                                    thisMonth().start,
+                                    thisMonth().end
+                                )}
                             </Text>
                         </Flex>
                         <Flex
@@ -227,7 +233,10 @@ export function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         >
                             <Text className="text-gray-800">Last month</Text>
                             <Text>
-                                {renderText(lastMonth().start, lastMonth().end)}
+                                {renderDateText(
+                                    lastMonth().start,
+                                    lastMonth().end
+                                )}
                             </Text>
                         </Flex>
                         <Flex
@@ -236,7 +245,7 @@ export function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         >
                             <Text className="text-gray-800">This quarter</Text>
                             <Text>
-                                {renderText(
+                                {renderDateText(
                                     thisQuarter().start,
                                     thisQuarter().end
                                 )}
@@ -248,7 +257,7 @@ export function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         >
                             <Text className="text-gray-800">Last quarter</Text>
                             <Text>
-                                {renderText(
+                                {renderDateText(
                                     lastQuarter().start,
                                     lastQuarter().end
                                 )}
@@ -260,7 +269,10 @@ export function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         >
                             <Text className="text-gray-800">This year</Text>
                             <Text>
-                                {renderText(thisYear().start, thisYear().end)}
+                                {renderDateText(
+                                    thisYear().start,
+                                    thisYear().end
+                                )}
                             </Text>
                         </Flex>
                         <Flex

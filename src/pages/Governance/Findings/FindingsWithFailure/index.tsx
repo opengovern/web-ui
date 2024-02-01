@@ -260,12 +260,8 @@ export default function FindingsWithFailure({ query }: ICount) {
                             stateActive: query.lifecycle,
                             ...(query.activeTimeRange && {
                                 lastEvent: {
-                                    from: query.activeTimeRange.start
-                                        .unix()
-                                        .toString(),
-                                    to: query.activeTimeRange.end
-                                        .unix()
-                                        .toString(),
+                                    from: query.activeTimeRange.start.unix(),
+                                    to: query.activeTimeRange.end.unix(),
                                 },
                             }),
                         },

@@ -20,7 +20,7 @@ import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
 import { buildTrend } from '../../../components/Spend/Chart/helpers'
 import StackedChart from '../../../components/Chart/Stacked'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
-import { renderText } from '../../../components/Layout/Header/DateRangePicker'
+import { renderDateText } from '../../../components/Layout/Header/DateRangePicker'
 import ChangeDelta from '../../../components/ChangeDelta'
 import {
     defaultSpendTime,
@@ -169,7 +169,7 @@ export default function Spend() {
                                         )}
                                     </Metric>
                                     <Text>
-                                        {renderText(
+                                        {renderDateText(
                                             activeTimeRange.start,
                                             activeTimeRange.end.subtract(
                                                 1,
@@ -208,7 +208,7 @@ export default function Spend() {
                                         size="xl"
                                     />
                                     <Text className="mt-2">
-                                        {`Compared to ${renderText(
+                                        {`Compared to ${renderDateText(
                                             prevTimeRange.start,
                                             prevTimeRange.end
                                         )}`}

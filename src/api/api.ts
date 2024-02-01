@@ -955,36 +955,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent {
     stateActive?: boolean
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFilters {
-    /** @example ["azure_cis_v140"] */
-    benchmarkID?: string[]
-    /** @example ["alarm"] */
-    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
-    /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
-    connectionID?: string[]
-    /** @example ["Azure"] */
-    connector?: SourceType[]
-    /** @example ["azure_cis_v140_7_5"] */
-    controlID?: string[]
-    evaluatedAt?: {
-        /** @example "2020-05-13T00:00:00Z" */
-        from?: string
-        /** @example "2020-05-13T00:00:00Z" */
-        to?: string
-    }
-    /** @example ["8e0f8e7a1b1c4e6fb7e49c6af9d2b1c8"] */
-    findingID?: string[]
-    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"] */
-    kaytuResourceID?: string[]
-    /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
-    notConnectionID?: string[]
-    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines"] */
-    resourceType?: string[]
-    /** @example ["low"] */
-    severity?: TypesFindingSeverity[]
-    /** @example [true] */
-    stateActive?: boolean[]
-}
+export type GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFilters =
+    object
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFiltersWithMetadata {
     benchmarkID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFilterWithMetadata[]
@@ -998,52 +970,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFiltersW
     stateActive?: GithubComKaytuIoKaytuEnginePkgComplianceApiFilterWithMetadata[]
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventsSort {
-    benchmarkID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    connectionID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    connector?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    controlID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    kaytuResourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    resourceType?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    severity?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    stateActive?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
-    /** @example ["azure_cis_v140"] */
-    benchmarkID?: string[]
-    /** @example ["alarm"] */
-    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
-    /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
-    connectionID?: string[]
-    /** @example ["Azure"] */
-    connector?: SourceType[]
-    /** @example ["azure_cis_v140_7_5"] */
-    controlID?: string[]
-    evaluatedAt?: {
-        /** @example "2020-05-13T00:00:00Z" */
-        from?: string
-        /** @example "2020-05-13T00:00:00Z" */
-        to?: string
-    }
-    lastEvent?: {
-        /** @example "2020-05-13T00:00:00Z" */
-        from?: string
-        /** @example "2020-05-13T00:00:00Z" */
-        to?: string
-    }
-    /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
-    notConnectionID?: string[]
-    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"] */
-    resourceID?: string[]
-    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines"] */
-    resourceTypeID?: string[]
-    /** @example ["low"] */
-    severity?: TypesFindingSeverity[]
-    /** @example [true] */
-    stateActive?: boolean[]
-}
+export type GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters = object
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata {
     benchmarkID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFilterWithMetadata[]
@@ -1064,19 +991,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse {
     failedResourceCount?: number
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingsSort {
-    benchmarkID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    connectionID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    connector?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    controlID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    kaytuResourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    resourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    resourceTypeID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    severity?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    stateActive?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse {
     accounts?: GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSummary[]
 }
@@ -1091,13 +1005,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsByFi
     findingEvents?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent[]
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsRequest {
-    afterSortKey?: any[]
-    filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFilters
-    /** @example 100 */
-    limit?: number
-    sort?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventsSort[]
-}
+export type GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsRequest =
+    object
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsResponse {
     findingEvents?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent[]
@@ -1105,13 +1014,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsResp
     totalCount?: number
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest {
-    afterSortKey?: any[]
-    filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters
-    /** @example 100 */
-    limit?: number
-    sort?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingsSort[]
-}
+export type GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest =
+    object
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse {
     findings?: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding[]
@@ -1279,13 +1183,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoin
     value?: number
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest {
-    afterSortKey?: any[]
-    filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsFilters
-    /** @example 100 */
-    limit?: number
-    sort?: GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsSort[]
-}
+export type GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest =
+    object
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse {
     resourceFindings?: GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding[]
@@ -1347,43 +1246,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding {
     totalCount?: number
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsFilters {
-    /** @example ["azure_cis_v140"] */
-    benchmarkID?: string[]
-    /** @example ["alarm"] */
-    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
-    /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
-    connectionID?: string[]
-    /** @example ["Azure"] */
-    connector?: SourceType[]
-    /** @example ["azure_cis_v140_7_5"] */
-    controlID?: string[]
-    evaluatedAt?: {
-        /** @example "2020-05-13T00:00:00Z" */
-        from?: string
-        /** @example "2020-05-13T00:00:00Z" */
-        to?: string
-    }
-    /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
-    notConnectionID?: string[]
-    /** @example ["example-rc"] */
-    resourceCollection?: string[]
-    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"] */
-    resourceID?: string[]
-    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines"] */
-    resourceTypeID?: string[]
-    /** @example ["low"] */
-    severity?: TypesFindingSeverity[]
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsSort {
-    failedCount?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    kaytuResourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    resourceLocation?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    resourceName?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-    resourceType?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSummary {
     conformanceStatusesCount?: {
         failed?: number
@@ -1399,11 +1261,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSumma
         medium?: number
         none?: number
     }
-}
-
-export enum GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection {
-    SortDirectionAscending = 'asc',
-    SortDirectionDescending = 'desc',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {

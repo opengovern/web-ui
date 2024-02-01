@@ -2,14 +2,14 @@ import { getLocalTimeZone, parseDate, today } from '@internationalized/date'
 import dayjs from 'dayjs'
 import { AriaDateRangePickerProps, DateValue } from '@react-aria/datepicker'
 import { useDateRangePickerState } from 'react-stately'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDateRangePicker } from 'react-aria'
 import { Checkbox } from 'pretty-checkbox-react'
 import { ClockIcon } from '@heroicons/react/24/outline'
 import { Flex, Select, SelectItem, Text, Title } from '@tremor/react'
 import {
     defaultFindingsTime,
-    useUrlDateRangeState,
+    useURLParam,
 } from '../../../../../utilities/urlstate'
 import { RangeCalendar } from '../../../../../components/Layout/Header/DateRangePicker/Calendar/RangeCalendar'
 
@@ -22,30 +22,67 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
     return <RangeCalendar {...calendarProps} />
 }
 
+export interface IDate {
+    start: dayjs.Dayjs
+    end: dayjs.Dayjs
+}
+
 export default function Datepicker() {
     const [checked, setChecked] = useState(false)
     const [startH, setStartH] = useState(0)
     const [startM, setStartM] = useState(0)
-    const [endH, setEndH] = useState(0)
-    const [endM, setEndM] = useState(0)
-
-    const { value: activeTimeRange, setValue: setActiveTimeRange } =
-        useUrlDateRangeState(defaultFindingsTime)
+    const [endH, setEndH] = useState(23)
+    const [endM, setEndM] = useState(59)
+    const [activeTimeRange, setActiveTimeRange] = useURLParam<IDate>(
+        'dateRange',
+        defaultFindingsTime,
+        (v) => {
+            return `${v.start.format('YYYY-MM-DD HH:mm:ss')} - ${v.end.format(
+                'YYYY-MM-DD HH:mm:ss'
+            )}`
+        },
+        (v) => {
+            const arr = v
+                .replaceAll('+', ' ')
+                .split(' - ')
+                .map((m) => dayjs(m))
+            return {
+                start: arr[0],
+                end: arr[1],
+            }
+        }
+    )
 
     const currentValue = () => {
         return {
-            start: checked
-                ? parseDate(activeTimeRange.start.format('YYYY-MM-DD'))
-                : parseDate(
-                      activeTimeRange.start.startOf('day').format('YYYY-MM-DD')
-                  ),
-            end: checked
-                ? parseDate(activeTimeRange.end.format('YYYY-MM-DD'))
-                : parseDate(
-                      activeTimeRange.end.endOf('day').format('YYYY-MM-DD')
-                  ),
+            start: parseDate(activeTimeRange.start.format('YYYY-MM-DD')),
+            end: parseDate(activeTimeRange.end.format('YYYY-MM-DD')),
         }
     }
+    const [val, setVal] = useState({
+        start: activeTimeRange.start,
+        end: activeTimeRange.end,
+    })
+
+    useEffect(() => {
+        if (checked) {
+            setActiveTimeRange({
+                start: dayjs(val.start.toString())
+                    .startOf('day')
+                    .add(startH, 'hours')
+                    .add(startM, 'minutes'),
+                end: dayjs(val.end.toString())
+                    .startOf('day')
+                    .add(endH, 'hours')
+                    .add(endM, 'minutes'),
+            })
+        } else {
+            setActiveTimeRange({
+                start: dayjs.utc(val.start.toString()).startOf('day'),
+                end: dayjs.utc(val.end.toString()).endOf('day'),
+            })
+        }
+    }, [checked, startH, startM, endH, endM])
 
     const minValue = () => {
         return parseDate('2022-12-01')
@@ -59,18 +96,22 @@ export default function Datepicker() {
             <CustomDatePicker
                 value={currentValue()}
                 onChange={(value) => {
+                    setVal({
+                        start: dayjs(value.start.toString()),
+                        end: dayjs(value.end.toString()),
+                    })
                     setActiveTimeRange({
                         start: checked
-                            ? dayjs
-                                  .utc(value.start.toString())
-                                  .add(startH, 'hour')
-                                  .add(startM, 'minute')
+                            ? dayjs(value.start.toString())
+                                  .startOf('day')
+                                  .add(startH, 'hours')
+                                  .add(startM, 'minutes')
                             : dayjs.utc(value.start.toString()).startOf('day'),
                         end: checked
-                            ? dayjs
-                                  .utc(value.end.toString())
-                                  .add(endH, 'hour')
-                                  .add(endM, 'minute')
+                            ? dayjs(value.end.toString())
+                                  .startOf('day')
+                                  .add(endH, 'hours')
+                                  .add(endM, 'minutes')
                             : dayjs.utc(value.end.toString()).endOf('day'),
                     })
                 }}

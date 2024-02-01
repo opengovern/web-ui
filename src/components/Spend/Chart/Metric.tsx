@@ -2,7 +2,7 @@ import { BadgeDelta, Card, Color, Flex, Metric, Text } from '@tremor/react'
 import dayjs from 'dayjs'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import { badgeTypeByDelta } from '../../../utilities/deltaType'
-import { renderText } from '../../Layout/Header/DateRangePicker'
+import { renderDateText } from '../../Layout/Header/DateRangePicker'
 
 interface ISpendChartMetric {
     title: string
@@ -55,7 +55,7 @@ export function SpendChartMetric({
                             {title}
                         </Text>
                         <Text className="pl-2 ml-2 border-l border-gray-100 dark:border-gray-800">
-                            {renderText(timeRange.start, timeRange.end)}
+                            {renderDateText(timeRange.start, timeRange.end)}
                         </Text>
                     </Flex>
                     <Flex justifyContent="start" alignItems="end">
@@ -100,7 +100,10 @@ export function SpendChartMetric({
 
                         <Text className={comparedToNextLine ? '' : 'ml-1.5'}>
                             compared to{' '}
-                            {renderText(timeRangePrev.start, timeRangePrev.end)}
+                            {renderDateText(
+                                timeRangePrev.start,
+                                timeRangePrev.end
+                            )}
                         </Text>
                     </Flex>
                 </Flex>

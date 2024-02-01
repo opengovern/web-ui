@@ -9,6 +9,7 @@ import {
     TrashIcon,
 } from '@heroicons/react/24/outline'
 import { Fragment, useEffect, useState } from 'react'
+import dayjs from 'dayjs'
 import Provider from './Provider'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
@@ -31,12 +32,18 @@ import {
     SeverityIcon,
 } from '../../../../icons/icons'
 import Severity from './Severity'
-import Datepicker from './Datepicker'
+import Datepicker, { IDate } from './Datepicker'
 import {
     DateRange,
     defaultFindingsTime,
     useUrlDateRangeState,
+    useURLParam,
 } from '../../../../utilities/urlstate'
+import {
+    dateTimeDisplay,
+    shortDateTimeDisplay,
+} from '../../../../utilities/dateDisplay'
+import { renderDateText } from '../../../../components/Layout/Header/DateRangePicker'
 
 interface IFilters {
     onApply: (obj: {
@@ -92,7 +99,29 @@ export default function Filter({ onApply, isFinding }: IFilters) {
         []
     )
     const [resourceCon, setResourceCon] = useState('is')
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultFindingsTime)
+
+    const [activeTimeRange, setActiveTimeRange] = useURLParam<IDate>(
+        'dateRange',
+        defaultFindingsTime,
+        (v) => {
+            return `${v.start.format('YYYY-MM-DD HH:mm:ss')} - ${v.end.format(
+                'YYYY-MM-DD HH:mm:ss'
+            )}`
+        },
+        (v) => {
+            const arr = v
+                .replaceAll('+', ' ')
+                .split(' - ')
+                .map((m) => dayjs(m))
+            return {
+                start: arr[0],
+                end: arr[1],
+            }
+        }
+    )
+    const [selectedFilters, setSelectedFilters] = useState<string[]>([
+        'conformance_status',
+    ])
 
     useEffect(() => {
         onApply({
@@ -104,7 +133,9 @@ export default function Filter({ onApply, isFinding }: IFilters) {
             benchmarkID,
             resourceTypeID,
             lifecycle,
-            activeTimeRange,
+            activeTimeRange: selectedFilters.includes('date')
+                ? activeTimeRange
+                : undefined,
         })
     }, [
         connector,
@@ -120,9 +151,6 @@ export default function Filter({ onApply, isFinding }: IFilters) {
 
     const { response: filters } = useComplianceApiV1FindingsFiltersCreate({})
 
-    const [selectedFilters, setSelectedFilters] = useState<string[]>([
-        'conformance_status',
-    ])
     const filterOptions = [
         {
             id: 'conformance_status',
@@ -288,9 +316,10 @@ export default function Filter({ onApply, isFinding }: IFilters) {
             component: <Datepicker />,
             conditions: ['isBetween'],
             setCondition: undefined,
-            value: undefined,
-            defaultValue: undefined,
-            onDelete: undefined,
+            value: activeTimeRange,
+            defaultValue: { start: dayjs.utc(), end: dayjs.utc() },
+            onDelete: () =>
+                setActiveTimeRange({ start: dayjs.utc(), end: dayjs.utc() }),
             findingOnly: true,
         },
     ]
@@ -303,10 +332,13 @@ export default function Filter({ onApply, isFinding }: IFilters) {
                     <Popover.Button
                         id={f?.id}
                         className={`border ${
+                            f?.id !== 'date' &&
                             compareArrays(
                                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                 // @ts-ignore
                                 f?.value?.sort(),
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
                                 f?.defaultValue?.sort()
                             )
                                 ? 'border-gray-200 bg-white'
@@ -318,19 +350,31 @@ export default function Filter({ onApply, isFinding }: IFilters) {
                                 icon={f?.icon || CloudIcon}
                                 className="w-3 p-0 mr-3 text-inherit"
                             />
-                            <Text className="text-inherit whitespace-nowrap max-w-[200px] truncate">
+                            <Text className="text-inherit whitespace-nowrap">
                                 {`${f?.name}${
-                                    compareArrays(
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        f?.value?.sort(),
-                                        f?.defaultValue?.sort()
-                                    )
+                                    // eslint-disable-next-line no-nested-ternary
+                                    f?.id === 'date'
+                                        ? ` ${renderDateText(
+                                              activeTimeRange.start,
+                                              activeTimeRange.end
+                                          )}`
+                                        : compareArrays(
+                                              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                              // @ts-ignore
+                                              f?.value?.sort(),
+                                              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                              // @ts-ignore
+                                              f?.defaultValue?.sort()
+                                          )
                                         ? ''
                                         : `${
+                                              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                              // @ts-ignore
                                               f?.value && f.value.length < 2
                                                   ? `: ${f.value}`
-                                                  : ` (${f?.value?.length})`
+                                                  : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                    // @ts-ignore
+                                                    ` (${f?.value?.length})`
                                           }`
                                 }`}
                             </Text>

@@ -47,3 +47,16 @@ export const dateTimeDisplay = (
     }
     return 'Not available'
 }
+
+export const shortDateTimeDisplay = (
+    date: Dayjs | Date | number | string | undefined
+) => {
+    // tz(dayjs.tz.guess())
+    if ((typeof date).toString() === 'Dayjs') {
+        return (date as Dayjs).format('MM-DD-YYYY HH:mm')
+    }
+    if (date) {
+        return dayjs.utc(date).format('MM-DD-YYYY HH:mm')
+    }
+    return 'Not available'
+}

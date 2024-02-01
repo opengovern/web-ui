@@ -14,7 +14,7 @@ import {
     exactPriceDisplay,
     numberDisplay,
 } from '../../../utilities/numericDisplay'
-import { renderText } from '../../../components/Layout/Header/DateRangePicker'
+import { renderDateText } from '../../../components/Layout/Header/DateRangePicker'
 
 type MSort = {
     sortCol: string
@@ -324,7 +324,7 @@ export default function MetricTable({
             ],
         },
         {
-            headerName: `Previous Period [${renderText(
+            headerName: `Previous Period [${renderDateText(
                 prevTimeRange.start,
                 prevTimeRange.end
             )}]`,
