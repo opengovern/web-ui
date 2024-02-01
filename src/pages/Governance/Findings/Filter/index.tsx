@@ -95,7 +95,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
         []
     )
     const [resourceCon, setResourceCon] = useState('is')
-
+    const [dateCon, setDateCon] = useState('isBetween')
     const [activeTimeRange, setActiveTimeRange] = useURLParam<IDate>(
         'dateRange',
         defaultFindingsTime,
@@ -309,9 +309,9 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             id: 'date',
             name: type === 'events' ? 'Audit Period' : 'Last Evaluated',
             icon: CalendarIcon,
-            component: <Datepicker />,
-            conditions: ['isBetween'],
-            setCondition: undefined,
+            component: <Datepicker condition={dateCon} />,
+            conditions: ['isBetween', 'relative'],
+            setCondition: (c: string) => setDateCon(c),
             value: activeTimeRange,
             defaultValue: { start: dayjs.utc(), end: dayjs.utc() },
             onDelete: () =>
@@ -403,6 +403,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
                                                     : undefined
                                             }
                                             conditions={f?.conditions}
+                                            isDate={f?.id === 'date'}
                                         />
                                     </Flex>
                                     {f?.onDelete && (
