@@ -14,7 +14,7 @@ export const defaultTime: DateRange = {
 }
 
 export const defaultFindingsTime: DateRange = {
-    start: dayjs.utc(),
+    start: dayjs.utc().add(-7, 'days'),
     end: dayjs.utc(),
 }
 
