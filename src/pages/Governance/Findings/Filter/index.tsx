@@ -4,7 +4,6 @@ import {
     CalendarIcon,
     CheckCircleIcon,
     ChevronDownIcon,
-    ClockIcon,
     CloudIcon,
     PlusIcon,
     TrashIcon,
@@ -37,13 +36,8 @@ import Datepicker, { IDate } from './Datepicker'
 import {
     DateRange,
     defaultFindingsTime,
-    useUrlDateRangeState,
     useURLParam,
 } from '../../../../utilities/urlstate'
-import {
-    dateTimeDisplay,
-    shortDateTimeDisplay,
-} from '../../../../utilities/dateDisplay'
 import { renderDateText } from '../../../../components/Layout/Header/DateRangePicker'
 
 interface IFilters {
@@ -61,9 +55,10 @@ interface IFilters {
         activeTimeRange: DateRange | undefined
     }) => void
     isFinding: boolean
+    type: 'findings' | 'resources' | 'controls' | 'accounts' | 'events'
 }
 
-export default function Filter({ onApply, isFinding }: IFilters) {
+export default function Filter({ onApply, isFinding, type }: IFilters) {
     const defConnector = SourceType.Nil
     const [connector, setConnector] = useState<SourceType>(defConnector)
 
@@ -312,7 +307,7 @@ export default function Filter({ onApply, isFinding }: IFilters) {
         },
         {
             id: 'date',
-            name: 'Last Evaluated',
+            name: type === 'events' ? 'Audit Period' : 'Last Evaluated',
             icon: CalendarIcon,
             component: <Datepicker />,
             conditions: ['isBetween'],
