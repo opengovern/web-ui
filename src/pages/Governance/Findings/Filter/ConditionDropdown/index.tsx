@@ -6,6 +6,7 @@ import { camelCaseToLabel } from '../../../../../utilities/labelMaker'
 interface IConditionDropdown {
     conditions: string[] | undefined
     onChange: (c: string) => void
+    isDate?: boolean
 }
 
 const options = [
@@ -18,9 +19,12 @@ const options = [
     'isNotEmpty',
 ]
 
+const dateOptions = ['isBetween', 'relative', 'before', 'after']
+
 export default function ConditionDropdown({
     conditions,
     onChange,
+    isDate = false,
 }: IConditionDropdown) {
     const [open, setOpen] = useState(false)
     const [selectedCondition, setSelectedCondition] = useState<string>(
@@ -40,12 +44,12 @@ export default function ConditionDropdown({
                 size="sm"
                 onClick={() => setOpen(!open)}
             >
-                {camelCaseToLabel(selectedCondition)}
+                {camelCaseToLabel(selectedCondition).toLowerCase()}
             </Button>
             {open && (
                 <Card className="mt-2 px-2 py-1 absolute w-36">
                     <List>
-                        {options.map((o) => (
+                        {(isDate ? dateOptions : options).map((o) => (
                             <ListItem key={o}>
                                 <Button
                                     variant="light"

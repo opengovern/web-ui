@@ -12,6 +12,7 @@ import {
     useURLParam,
 } from '../../../../../utilities/urlstate'
 import { RangeCalendar } from '../../../../../components/Layout/Header/DateRangePicker/Calendar/RangeCalendar'
+import { renderDateText } from '../../../../../components/Layout/Header/DateRangePicker'
 
 function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
     const state = useDateRangePickerState(props)
@@ -27,7 +28,11 @@ export interface IDate {
     end: dayjs.Dayjs
 }
 
-export default function Datepicker() {
+interface IDatepicker {
+    condition: string
+}
+
+export default function Datepicker({ condition }: IDatepicker) {
     const [activeTimeRange, setActiveTimeRange] = useURLParam<IDate>(
         'dateRange',
         defaultFindingsTime,
@@ -86,98 +91,257 @@ export default function Datepicker() {
         return today(getLocalTimeZone())
     }
 
+    const last7Days = () => {
+        return {
+            start: dayjs().utc().subtract(1, 'week').startOf('day'),
+            end: dayjs().utc().endOf('day'),
+        }
+    }
+
+    const last30Days = () => {
+        return {
+            start: dayjs().utc().subtract(1, 'month').startOf('day'),
+            end: dayjs().utc().endOf('day'),
+        }
+    }
+
+    const thisMonth = () => {
+        return {
+            start: dayjs().utc().startOf('month').startOf('day'),
+            end: dayjs().utc().endOf('day'),
+        }
+    }
+
+    const lastMonth = () => {
+        return {
+            start: dayjs()
+                .utc()
+                .subtract(1, 'month')
+                .startOf('month')
+                .startOf('day'),
+            end: dayjs().utc().subtract(1, 'month').endOf('month').endOf('day'),
+        }
+    }
+
+    const thisQuarter = () => {
+        return {
+            start: dayjs().utc().startOf('quarter').startOf('day'),
+            end: dayjs().utc().endOf('day'),
+        }
+    }
+
+    const lastQuarter = () => {
+        return {
+            start: dayjs()
+                .utc()
+                .subtract(1, 'quarter')
+                .startOf('quarter')
+                .startOf('day'),
+            end: dayjs()
+                .utc()
+                .subtract(1, 'quarter')
+                .endOf('quarter')
+                .endOf('day'),
+        }
+    }
+
+    const thisYear = () => {
+        return {
+            start: dayjs().utc().startOf('year').startOf('day'),
+            end: dayjs().utc().endOf('day'),
+        }
+    }
+
     return (
-        <>
-            <CustomDatePicker
-                value={{
-                    start: parseDate(val.start.format('YYYY-MM-DD')),
-                    end: parseDate(val.end.format('YYYY-MM-DD')),
-                }}
-                onChange={(value) => {
-                    setVal({
-                        start: dayjs(value.start.toString()),
-                        end: dayjs(value.end.toString()),
-                    })
-                }}
-                minValue={minValue()}
-                maxValue={maxValue()}
-            />
-            <Checkbox
-                checked={checked}
-                onChange={(e) => {
-                    setChecked(e.target.checked)
-                }}
-                className="my-3"
-            >
-                <Flex className="gap-1">
-                    <ClockIcon className="w-4" />
-                    <Text>Time</Text>
-                </Flex>
-            </Checkbox>
-            {checked && (
-                <Flex flexDirection="col" className="gap-2">
-                    <Flex>
-                        <Text>Start time</Text>
-                        <Flex className="w-fit gap-2">
-                            <Select
-                                placeholder="HH"
-                                enableClear={false}
-                                className="w-20 min-w-[80px]"
-                                value={startH.toString()}
-                                onChange={(x) => setStartH(Number(x))}
-                            >
-                                {[...Array(24)].map((x, i) => (
-                                    <SelectItem value={`${i}`}>{i}</SelectItem>
-                                ))}
-                            </Select>
-                            <Title>:</Title>
-                            <Select
-                                placeholder="mm"
-                                enableClear={false}
-                                className="w-20 min-w-[80px]"
-                                value={startM.toString()}
-                                onChange={(x) => setStartM(Number(x))}
-                            >
-                                {[...Array(60)].map((x, i) => (
-                                    <SelectItem value={`${i}`}>{i}</SelectItem>
-                                ))}
-                            </Select>
-                        </Flex>
+        <Flex flexDirection="col" justifyContent="start" alignItems="start">
+            {condition === 'relative' ? (
+                <>
+                    <Flex
+                        onClick={() => setActiveTimeRange(last7Days())}
+                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
+                    >
+                        <Text className="text-gray-800 whitespace-nowrap">
+                            Last 7 days
+                        </Text>
+                        <Text className="whitespace-nowrap">
+                            {renderDateText(last7Days().start, last7Days().end)}
+                        </Text>
                     </Flex>
-                    <Flex>
-                        <Text>End time</Text>
-                        <Flex className="w-fit gap-2">
-                            <Select
-                                placeholder="HH"
-                                enableClear={false}
-                                className="w-20 min-w-[80px]"
-                                value={endH.toString()}
-                                onChange={(x) => setEndH(Number(x))}
-                            >
-                                {[...Array(23)].map((x, i) => (
-                                    <SelectItem value={`${i + 1}`}>
-                                        {i + 1}
-                                    </SelectItem>
-                                ))}
-                            </Select>
-                            <Title>:</Title>
-                            <Select
-                                placeholder="mm"
-                                enableClear={false}
-                                className="w-20 min-w-[80px]"
-                                value={endM.toString()}
-                                onChange={(x) => setEndM(Number(x))}
-                            >
-                                {[...Array(59)].map((x, i) => (
-                                    <SelectItem value={`${i + 1}`}>
-                                        {i + 1}
-                                    </SelectItem>
-                                ))}
-                            </Select>
-                        </Flex>
+                    <Flex
+                        onClick={() => setActiveTimeRange(last30Days())}
+                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
+                    >
+                        <Text className="text-gray-800 whitespace-nowrap">
+                            Last 30 days
+                        </Text>
+                        <Text className="whitespace-nowrap">
+                            {renderDateText(
+                                last30Days().start,
+                                last30Days().end
+                            )}
+                        </Text>
                     </Flex>
-                </Flex>
+                    <Title className="mt-3">Calender months</Title>
+                    <Flex
+                        onClick={() => setActiveTimeRange(thisMonth())}
+                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
+                    >
+                        <Text className="text-gray-800 whitespace-nowrap">
+                            This month
+                        </Text>
+                        <Text className="whitespace-nowrap">
+                            {renderDateText(thisMonth().start, thisMonth().end)}
+                        </Text>
+                    </Flex>
+                    <Flex
+                        onClick={() => setActiveTimeRange(lastMonth())}
+                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
+                    >
+                        <Text className="text-gray-800 whitespace-nowrap">
+                            Last month
+                        </Text>
+                        <Text className="whitespace-nowrap">
+                            {renderDateText(lastMonth().start, lastMonth().end)}
+                        </Text>
+                    </Flex>
+                    <Flex
+                        onClick={() => setActiveTimeRange(thisQuarter())}
+                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
+                    >
+                        <Text className="text-gray-800 whitespace-nowrap">
+                            This quarter
+                        </Text>
+                        <Text className="whitespace-nowrap">
+                            {renderDateText(
+                                thisQuarter().start,
+                                thisQuarter().end
+                            )}
+                        </Text>
+                    </Flex>
+                    <Flex
+                        onClick={() => setActiveTimeRange(lastQuarter())}
+                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
+                    >
+                        <Text className="text-gray-800 whitespace-nowrap">
+                            Last quarter
+                        </Text>
+                        <Text className="whitespace-nowrap">
+                            {renderDateText(
+                                lastQuarter().start,
+                                lastQuarter().end
+                            )}
+                        </Text>
+                    </Flex>
+                    <Flex
+                        onClick={() => setActiveTimeRange(thisYear())}
+                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
+                    >
+                        <Text className="text-gray-800 whitespace-nowrap">
+                            This year
+                        </Text>
+                        <Text className="whitespace-nowrap">
+                            {renderDateText(thisYear().start, thisYear().end)}
+                        </Text>
+                    </Flex>
+                </>
+            ) : (
+                <>
+                    <CustomDatePicker
+                        value={{
+                            start: parseDate(val.start.format('YYYY-MM-DD')),
+                            end: parseDate(val.end.format('YYYY-MM-DD')),
+                        }}
+                        onChange={(value) => {
+                            setVal({
+                                start: dayjs(value.start.toString()),
+                                end: dayjs(value.end.toString()),
+                            })
+                        }}
+                        minValue={minValue()}
+                        maxValue={maxValue()}
+                    />
+                    <Checkbox
+                        checked={checked}
+                        onChange={(e) => {
+                            setChecked(e.target.checked)
+                        }}
+                        className="my-3"
+                    >
+                        <Flex className="gap-1">
+                            <ClockIcon className="w-4" />
+                            <Text>Time</Text>
+                        </Flex>
+                    </Checkbox>
+                    {checked && (
+                        <Flex flexDirection="col" className="gap-2">
+                            <Flex>
+                                <Text>Start time</Text>
+                                <Flex className="w-fit gap-2">
+                                    <Select
+                                        placeholder="HH"
+                                        enableClear={false}
+                                        className="w-20 min-w-[80px]"
+                                        value={startH.toString()}
+                                        onChange={(x) => setStartH(Number(x))}
+                                    >
+                                        {[...Array(24)].map((x, i) => (
+                                            <SelectItem value={`${i}`}>
+                                                {i}
+                                            </SelectItem>
+                                        ))}
+                                    </Select>
+                                    <Title>:</Title>
+                                    <Select
+                                        placeholder="mm"
+                                        enableClear={false}
+                                        className="w-20 min-w-[80px]"
+                                        value={startM.toString()}
+                                        onChange={(x) => setStartM(Number(x))}
+                                    >
+                                        {[...Array(60)].map((x, i) => (
+                                            <SelectItem value={`${i}`}>
+                                                {i}
+                                            </SelectItem>
+                                        ))}
+                                    </Select>
+                                </Flex>
+                            </Flex>
+                            <Flex>
+                                <Text>End time</Text>
+                                <Flex className="w-fit gap-2">
+                                    <Select
+                                        placeholder="HH"
+                                        enableClear={false}
+                                        className="w-20 min-w-[80px]"
+                                        value={endH.toString()}
+                                        onChange={(x) => setEndH(Number(x))}
+                                    >
+                                        {[...Array(23)].map((x, i) => (
+                                            <SelectItem value={`${i + 1}`}>
+                                                {i + 1}
+                                            </SelectItem>
+                                        ))}
+                                    </Select>
+                                    <Title>:</Title>
+                                    <Select
+                                        placeholder="mm"
+                                        enableClear={false}
+                                        className="w-20 min-w-[80px]"
+                                        value={endM.toString()}
+                                        onChange={(x) => setEndM(Number(x))}
+                                    >
+                                        {[...Array(59)].map((x, i) => (
+                                            <SelectItem value={`${i + 1}`}>
+                                                {i + 1}
+                                            </SelectItem>
+                                        ))}
+                                    </Select>
+                                </Flex>
+                            </Flex>
+                        </Flex>
+                    )}
+                </>
             )}
-        </>
+        </Flex>
     )
 }
