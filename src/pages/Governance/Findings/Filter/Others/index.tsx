@@ -38,18 +38,23 @@ export default function Others({
             !compareArrays(value?.sort() || [], checkbox.state.sort()) ||
             con !== condition
         ) {
+            console.log(con)
             if (condition === 'is') {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 onChange([...checkbox.state])
             }
             if (condition === 'isNot') {
-                const arr = defaultValue.filter(
+                console.log('here')
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                const arr = data[type].filter(
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     (x) => !checkbox.state.includes(x)
                 )
-                onChange(arr)
+                console.log(arr)
+                // onChange(arr)
             }
             setCon(condition)
         }

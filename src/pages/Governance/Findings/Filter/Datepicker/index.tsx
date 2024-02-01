@@ -28,17 +28,12 @@ export interface IDate {
 }
 
 export default function Datepicker() {
-    const [checked, setChecked] = useState(false)
-    const [startH, setStartH] = useState(0)
-    const [startM, setStartM] = useState(0)
-    const [endH, setEndH] = useState(23)
-    const [endM, setEndM] = useState(59)
     const [activeTimeRange, setActiveTimeRange] = useURLParam<IDate>(
         'dateRange',
         defaultFindingsTime,
         (v) => {
-            return `${v.start.format('YYYY-MM-DD HH:mm:ss')} - ${v.end.format(
-                'YYYY-MM-DD HH:mm:ss'
+            return `${v.start.format('YYYY-MM-DD HH:mm')} - ${v.end.format(
+                'YYYY-MM-DD HH:mm'
             )}`
         },
         (v) => {
@@ -52,13 +47,13 @@ export default function Datepicker() {
             }
         }
     )
-
-    const currentValue = () => {
-        return {
-            start: parseDate(activeTimeRange.start.format('YYYY-MM-DD')),
-            end: parseDate(activeTimeRange.end.format('YYYY-MM-DD')),
-        }
-    }
+    const [startH, setStartH] = useState(activeTimeRange.start.hour())
+    const [startM, setStartM] = useState(activeTimeRange.start.minute())
+    const [endH, setEndH] = useState(activeTimeRange.end.hour())
+    const [endM, setEndM] = useState(activeTimeRange.end.minute())
+    const [checked, setChecked] = useState(
+        startH !== 0 || startM !== 0 || endH !== 23 || endM !== 59
+    )
     const [val, setVal] = useState({
         start: activeTimeRange.start,
         end: activeTimeRange.end,
@@ -67,22 +62,22 @@ export default function Datepicker() {
     useEffect(() => {
         if (checked) {
             setActiveTimeRange({
-                start: dayjs(val.start.toString())
+                start: dayjs(val.start)
                     .startOf('day')
                     .add(startH, 'hours')
                     .add(startM, 'minutes'),
-                end: dayjs(val.end.toString())
+                end: dayjs(val.end)
                     .startOf('day')
                     .add(endH, 'hours')
                     .add(endM, 'minutes'),
             })
         } else {
             setActiveTimeRange({
-                start: dayjs.utc(val.start.toString()).startOf('day'),
-                end: dayjs.utc(val.end.toString()).endOf('day'),
+                start: dayjs(val.start).startOf('day'),
+                end: dayjs(val.end).endOf('day'),
             })
         }
-    }, [checked, startH, startM, endH, endM])
+    }, [val, checked, startH, startM, endH, endM])
 
     const minValue = () => {
         return parseDate('2022-12-01')
@@ -94,25 +89,14 @@ export default function Datepicker() {
     return (
         <>
             <CustomDatePicker
-                value={currentValue()}
+                value={{
+                    start: parseDate(val.start.format('YYYY-MM-DD')),
+                    end: parseDate(val.end.format('YYYY-MM-DD')),
+                }}
                 onChange={(value) => {
                     setVal({
                         start: dayjs(value.start.toString()),
                         end: dayjs(value.end.toString()),
-                    })
-                    setActiveTimeRange({
-                        start: checked
-                            ? dayjs(value.start.toString())
-                                  .startOf('day')
-                                  .add(startH, 'hours')
-                                  .add(startM, 'minutes')
-                            : dayjs.utc(value.start.toString()).startOf('day'),
-                        end: checked
-                            ? dayjs(value.end.toString())
-                                  .startOf('day')
-                                  .add(endH, 'hours')
-                                  .add(endM, 'minutes')
-                            : dayjs.utc(value.end.toString()).endOf('day'),
                     })
                 }}
                 minValue={minValue()}
@@ -142,10 +126,8 @@ export default function Datepicker() {
                                 value={startH.toString()}
                                 onChange={(x) => setStartH(Number(x))}
                             >
-                                {[...Array(23)].map((x, i) => (
-                                    <SelectItem value={`${i + 1}`}>
-                                        {i + 1}
-                                    </SelectItem>
+                                {[...Array(24)].map((x, i) => (
+                                    <SelectItem value={`${i}`}>{i}</SelectItem>
                                 ))}
                             </Select>
                             <Title>:</Title>
@@ -156,10 +138,8 @@ export default function Datepicker() {
                                 value={startM.toString()}
                                 onChange={(x) => setStartM(Number(x))}
                             >
-                                {[...Array(59)].map((x, i) => (
-                                    <SelectItem value={`${i + 1}`}>
-                                        {i + 1}
-                                    </SelectItem>
+                                {[...Array(60)].map((x, i) => (
+                                    <SelectItem value={`${i}`}>{i}</SelectItem>
                                 ))}
                             </Select>
                         </Flex>
