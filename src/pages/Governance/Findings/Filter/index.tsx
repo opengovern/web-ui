@@ -1,6 +1,7 @@
 import { Button, Card, Flex, Icon, Text } from '@tremor/react'
 import { Popover, Transition } from '@headlessui/react'
 import {
+    CalendarIcon,
     CheckCircleIcon,
     ChevronDownIcon,
     ClockIcon,
@@ -311,8 +312,8 @@ export default function Filter({ onApply, isFinding }: IFilters) {
         },
         {
             id: 'date',
-            name: 'Date',
-            icon: ClockIcon,
+            name: 'Last Evaluated',
+            icon: CalendarIcon,
             component: <Datepicker />,
             conditions: ['isBetween'],
             setCondition: undefined,
