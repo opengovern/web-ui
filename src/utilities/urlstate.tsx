@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { atom, useAtom } from 'jotai'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 export interface DateRange {
@@ -14,8 +14,8 @@ export const defaultTime: DateRange = {
 }
 
 export const defaultFindingsTime: DateRange = {
-    start: dayjs.utc(),
-    end: dayjs.utc(),
+    start: dayjs.utc().startOf('day'),
+    end: dayjs.utc().endOf('day'),
 }
 
 export const defaultSpendTime: DateRange = {
@@ -35,6 +35,7 @@ const getLocationSearch = () =>
         : window.location.search
 
 export const searchAtom = atom<string>(getLocationSearch())
+
 export function useURLState<T>(
     defaultValue: T,
     serialize: (v: T) => Map<string, string[]>,
@@ -185,6 +186,8 @@ export function useUrlDateRangeState(defaultValue: DateRange) {
         return v.format('YYYY-MM-DD')
     }
     const [state, setState] = useURLState<DateRange>(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         defaultValue,
         (v) => {
             const res = new Map<string, string[]>()
