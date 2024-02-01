@@ -174,12 +174,7 @@ export default function Settings({
 
     return (
         <>
-            <Button
-                variant="secondary"
-                icon={Cog6ToothIcon}
-                onClick={() => setOpen(true)}
-                className="h-9"
-            >
+            <Button icon={Cog6ToothIcon} onClick={() => setOpen(true)}>
                 Settings
             </Button>
             <DrawerPanel
