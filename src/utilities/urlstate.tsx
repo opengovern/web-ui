@@ -14,8 +14,8 @@ export const defaultTime: DateRange = {
 }
 
 export const defaultFindingsTime: DateRange = {
-    start: dayjs.utc().startOf('day'),
-    end: dayjs.utc().endOf('day'),
+    start: dayjs.utc(),
+    end: dayjs.utc(),
 }
 
 export const defaultSpendTime: DateRange = {

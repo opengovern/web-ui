@@ -33,10 +33,10 @@ export default function Others({
 
     useEffect(() => {
         if (
+            condition !== con ||
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            !compareArrays(value?.sort() || [], checkbox.state.sort()) ||
-            con !== condition
+            !compareArrays(value?.sort() || [], checkbox.state.sort())
         ) {
             if (condition === 'is') {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -44,16 +44,22 @@ export default function Others({
                 onChange([...checkbox.state])
             }
             if (condition === 'isNot') {
-                const arr = defaultValue.filter(
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    (x) => !checkbox.state.includes(x)
-                )
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                const arr = data[type]
+                    .filter(
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        (x) => !checkbox.state.includes(x.key)
+                    )
+                    .map((x) => x.key)
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 onChange(arr)
             }
             setCon(condition)
         }
-    }, [checkbox.state])
+    }, [checkbox.state, condition])
 
     return (
         <Flex flexDirection="col" justifyContent="start" alignItems="start">

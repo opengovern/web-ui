@@ -1,6 +1,7 @@
 import { Button, Card, Flex, Icon, Text } from '@tremor/react'
 import { Popover, Transition } from '@headlessui/react'
 import {
+    CalendarIcon,
     CheckCircleIcon,
     ChevronDownIcon,
     ClockIcon,
@@ -311,8 +312,8 @@ export default function Filter({ onApply, isFinding }: IFilters) {
         },
         {
             id: 'date',
-            name: 'Date',
-            icon: ClockIcon,
+            name: 'Last Evaluated',
+            icon: CalendarIcon,
             component: <Datepicker />,
             conditions: ['isBetween'],
             setCondition: undefined,
@@ -390,7 +391,10 @@ export default function Filter({ onApply, isFinding }: IFilters) {
                         leaveFrom="opacity-100 translate-y-0"
                         leaveTo="opacity-0 translate-y-1"
                     >
-                        <Popover.Panel className="absolute z-50 top-full left-0">
+                        <Popover.Panel
+                            static
+                            className="absolute z-50 top-full left-0"
+                        >
                             <Card className="mt-2 p-4 min-w-[256px] w-fit">
                                 <Flex className="mb-3">
                                     <Flex className="w-fit gap-1.5">
