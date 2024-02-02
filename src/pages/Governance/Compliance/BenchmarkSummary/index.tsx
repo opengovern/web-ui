@@ -21,11 +21,15 @@ import {
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
 import {
     useComplianceApiV1BenchmarksSummaryDetail,
+    useComplianceApiV1BenchmarksTrendDetail,
     useComplianceApiV1FindingsTopDetail,
 } from '../../../../api/compliance.gen'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedule.gen'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse } from '../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+} from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
 import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
 import Controls from '../../Controls'
@@ -36,6 +40,7 @@ import SeverityBar from '../../../../components/SeverityBar'
 import Modal from '../../../../components/Modal'
 import TopHeader from '../../../../components/Layout/Header'
 import { useFilterState } from '../../../../utilities/urlstate'
+import { camelCaseToLabel } from '../../../../utilities/labelMaker'
 
 const topResources = (
     input:
@@ -109,6 +114,60 @@ const topControls = (
     return top
 }
 
+const benchmarkTrend = (
+    response:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint[]
+        | undefined,
+    view: 'count' | 'percent'
+) => {
+    return response?.map((item) => {
+        if (view === 'count') {
+            const data = {
+                ...item,
+                stack: Object.entries(item.checks || {}).map(([key, value]) => {
+                    return {
+                        name: camelCaseToLabel(key).split(' ')[0],
+                        count: value,
+                    }
+                }),
+            }
+            data.stack.push({
+                name: 'Passed',
+                count: item.conformanceStatusSummary?.passed,
+            })
+
+            return data
+        }
+
+        const data = {
+            ...item,
+            stack: Object.entries(item.checks || {}).map(([key, value]) => {
+                return {
+                    name: camelCaseToLabel(key).split(' ')[0],
+                    count: (
+                        ((value || 0) /
+                            ((item.conformanceStatusSummary?.total || 0) +
+                                (item.conformanceStatusSummary?.passed || 0) ||
+                                1)) *
+                        100
+                    ).toFixed(2),
+                }
+            }),
+        }
+        data.stack.push({
+            name: 'Passed',
+            count: (
+                ((item.conformanceStatusSummary?.passed || 0) /
+                    ((item.conformanceStatusSummary?.total || 0) +
+                        (item.conformanceStatusSummary?.passed || 0) || 1)) *
+                100
+            ).toFixed(2),
+        })
+
+        return data
+    })
+}
+
 export default function BenchmarkSummary() {
     const { benchmarkId, resourceId } = useParams()
     const { value: selectedConnections } = useFilterState()
@@ -156,6 +215,10 @@ export default function BenchmarkSummary() {
         3,
         topQuery
     )
+    const { response: trend } = useComplianceApiV1BenchmarksTrendDetail(
+        String(benchmarkId)
+    )
+    console.log(benchmarkTrend(trend, 'percent'))
 
     const renderBars = () => {
         switch (stateIndex) {

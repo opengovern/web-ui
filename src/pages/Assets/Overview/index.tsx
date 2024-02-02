@@ -27,9 +27,8 @@ import { AssetChart } from '../../../components/Asset/Chart'
 import {
     defaultTime,
     useFilterState,
-    useURLParam,
-    useURLState,
     useUrlDateRangeState,
+    useURLParam,
 } from '../../../utilities/urlstate'
 
 export const accountTrend = (
@@ -129,6 +128,7 @@ export const topCategories = (
 export const categoryTrend = (
     responseChart: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[]
 ) => {
+    console.log(responseChart)
     return responseChart?.map((item) => {
         return {
             ...item,
