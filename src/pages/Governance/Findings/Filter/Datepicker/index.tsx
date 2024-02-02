@@ -11,8 +11,8 @@ import {
     defaultFindingsTime,
     useURLParam,
 } from '../../../../../utilities/urlstate'
-import { RangeCalendar } from '../../../../../components/Layout/Header/DatePicker/Calendar/RangePicker/RangeCalendar'
 import { renderDateText } from '../../../../../components/Layout/Header/DatePicker'
+import { RangeCalendar } from '../../../../../components/Layout/Header/DatePicker/Calendar/RangePicker/RangeCalendar'
 
 function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
     const state = useDateRangePickerState(props)
