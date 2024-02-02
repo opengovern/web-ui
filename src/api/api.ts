@@ -534,11 +534,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark {
      */
     description?: string
     /**
-     * Benchmark display code
-     * @example "CIS 1.4.0"
-     */
-    displayCode?: string
-    /**
      * Benchmark document URI
      * @example "benchmarks/azure_cis_v140.md"
      */
@@ -560,6 +555,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark {
      * @example true
      */
     managed?: boolean
+    /**
+     * Benchmark display code
+     * @example "CIS 1.4.0"
+     */
+    referenceCode?: string
     /** Benchmark tags */
     tags?: Record<string, string[]>
     /**
@@ -601,19 +601,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedCon
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities {
     connections?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedConnection[]
-    resourceCollections?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedResourceCollection[]
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedResourceCollection {
-    /** Resource Collection ID */
-    resourceCollectionID?: string
-    /** Resource Collection Name */
-    resourceCollectionName?: string
-    /**
-     * Status
-     * @example true
-     */
-    status?: boolean
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment {
@@ -664,14 +651,12 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
     baseline?: boolean
     /** Benchmark category */
     category?: string
-    /** Checks summary */
     checks?: TypesSeverityResult
     /**
      * Benchmark children
      * @example ["[azure_cis_v140_1"," azure_cis_v140_2]"]
      */
     children?: string[]
-    /** Compliance result summary */
     conformanceStatusSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatusSummary
     /**
      * Benchmark connectors
@@ -683,7 +668,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      * @example ["[azure_cis_v140_1_1"," azure_cis_v140_1_2]"]
      */
     controls?: string[]
-    /** Controls severity status */
     controlsSeverityStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatus
     /**
      * Benchmark creation date
@@ -696,11 +680,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      */
     description?: string
     /**
-     * Benchmark display code
-     * @example "CIS 1.4.0"
-     */
-    displayCode?: string
-    /**
      * Benchmark document URI
      * @example "benchmarks/azure_cis_v140.md"
      */
@@ -710,20 +689,14 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      * @example true
      */
     enabled?: boolean
-    /**
-     * Evaluated at
-     * @example "2020-01-01T00:00:00Z"
-     */
+    /** @example "2020-01-01T00:00:00Z" */
     evaluatedAt?: string
     /**
      * Benchmark ID
      * @example "azure_cis_v140"
      */
     id?: string
-    /**
-     * Last job status
-     * @example "success"
-     */
+    /** @example "success" */
     lastJobStatus?: string
     /** Benchmark logo URI */
     logoURI?: string
@@ -732,7 +705,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      * @example true
      */
     managed?: boolean
-    /** Resource severity status */
+    /**
+     * Benchmark display code
+     * @example "CIS 1.4.0"
+     */
+    referenceCode?: string
     resourcesSeverityStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResourcesSeverityStatus
     /** Benchmark tags */
     tags?: Record<string, string[]>
@@ -741,7 +718,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      * @example "Azure CIS v1.4.0"
      */
     title?: string
-    /** Top connections */
     topConnections?: GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord[]
     /**
      * Benchmark last update date
@@ -769,12 +745,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeveritySta
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint {
-    securityScore?: number
-    /**
-     * Time
-     * @example 1686346668
-     */
-    timestamp?: number
+    checks?: TypesSeverityResult
+    conformanceStatusSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatusSummary
+    controlsSeverityStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatus
+    /** @example "1686346668" */
+    timestamp?: string
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus {
@@ -889,8 +864,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     kaytuResourceID?: string
     /** @example "1589395200" */
     lastEvent?: string
-    /** @example 1 */
-    noOfOccurrences?: number
     /** @example ["Azure CIS v1.4.0"] */
     parentBenchmarkNames?: string[]
     parentBenchmarkReferences?: string[]
@@ -944,11 +917,23 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent {
     /** @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1" */
     kaytuResourceID?: string
     parentBenchmarkReferences?: string[]
+    parentComplianceJobID?: number
+    previousConformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus
+    previousStateActive?: boolean
+    /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
+    providerConnectionID?: string
+    /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
+    providerConnectionName?: string
     reason?: string
     /** @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1" */
     resourceID?: string
     /** @example "Microsoft.Compute/virtualMachines" */
     resourceType?: string
+    /**
+     * Fake fields (won't be stored in ES)
+     * @example "Virtual Machine"
+     */
+    resourceTypeName?: string
     /** @example "low" */
     severity?: TypesFindingSeverity
     sortKey?: any[]
@@ -4002,6 +3987,32 @@ export class Api<
             }),
 
         /**
+         * @description Retrieving single finding event
+         *
+         * @tags compliance
+         * @name ApiV1FindingEventsSingleDetail
+         * @summary Get single finding event
+         * @request GET:/compliance/api/v1/finding_events/single/{id}
+         * @secure
+         */
+        apiV1FindingEventsSingleDetail: (
+            findingId: string,
+            id: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent,
+                any
+            >({
+                path: `/compliance/api/v1/finding_events/single/${id}`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Retrieving all compliance run findings with respect to filters.
          *
          * @tags compliance
@@ -4146,6 +4157,28 @@ export class Api<
                 path: `/compliance/api/v1/findings/resource`,
                 method: 'POST',
                 body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving a single finding by finding ID
+         *
+         * @tags compliance
+         * @name ApiV1FindingsSingleDetail
+         * @summary Get single finding by finding ID
+         * @request GET:/compliance/api/v1/findings/single/{id}
+         * @secure
+         */
+        apiV1FindingsSingleDetail: (id: string, params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+                any
+            >({
+                path: `/compliance/api/v1/findings/single/${id}`,
+                method: 'GET',
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',

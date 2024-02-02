@@ -18,7 +18,6 @@ import {
     TypesFindingSeverity,
 } from '../../../../api/api'
 import AxiosAPI from '../../../../api/ApiConfig'
-// import FindingDetail from './Detail'
 import { severityBadge, statusBadge } from '../../Controls'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import { DateRange } from '../../../../utilities/urlstate'
@@ -62,17 +61,6 @@ export const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
-        },
-        {
-            field: 'resourceName',
-            headerName: 'Resource name',
-            hide: false,
-            type: 'string',
-            enableRowGroup: true,
-            sortable: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
             cellRenderer: (param: ICellRendererParams) => (
                 <Flex
                     flexDirection="col"
@@ -81,7 +69,6 @@ export const columns = (isDemo: boolean) => {
                     className={isDemo ? 'h-full blur-md' : 'h-full'}
                 >
                     <Text className="text-gray-800">{param.value}</Text>
-                    <Text>{param.data.resourceTypeName}</Text>
                 </Flex>
             ),
         },
@@ -91,7 +78,7 @@ export const columns = (isDemo: boolean) => {
             type: 'string',
             enableRowGroup: true,
             sortable: false,
-            hide: true,
+            hide: false,
             filter: true,
             resizable: true,
             flex: 1,
@@ -107,60 +94,27 @@ export const columns = (isDemo: boolean) => {
                 </Flex>
             ),
         },
-        // {
-        //     field: 'benchmarkID',
-        //     headerName: 'Benchmark',
-        //     type: 'string',
-        //     enableRowGroup: false,
-        //     sortable: false,
-        //     hide: true,
-        //     filter: true,
-        //     resizable: true,
-        //     flex: 1,
-        //     cellRenderer: (param: ICellRendererParams) => (
-        //         <Flex
-        //             flexDirection="col"
-        //             alignItems="start"
-        //             justifyContent="center"
-        //             className={isDemo ? 'h-full blur-md' : 'h-full'}
-        //         >
-        //             <Text className="text-gray-800">
-        //                 {param.data.parentBenchmarkNames[0]}
-        //             </Text>
-        //             <Text>
-        //                 {
-        //                     param.data.parentBenchmarkNames[
-        //                         param.data.parentBenchmarkNames.length - 1
-        //                     ]
-        //                 }
-        //             </Text>
-        //         </Flex>
-        //     ),
-        // },
-        // {
-        //     field: 'controlID',
-        //     headerName: 'Control',
-        //     type: 'string',
-        //     enableRowGroup: true,
-        //     sortable: false,
-        //     hide: false,
-        //     filter: true,
-        //     resizable: true,
-        //     width: 200,
-        //     cellRenderer: (param: ICellRendererParams) => (
-        //         <Flex
-        //             flexDirection="col"
-        //             alignItems="start"
-        //             justifyContent="center"
-        //             className={isDemo ? 'h-full blur-md' : 'h-full'}
-        //         >
-        //             <Text className="text-gray-800">
-        //                 {param.data.parentBenchmarkNames[0]}
-        //             </Text>
-        //             <Text>{param.data.controlTitle}</Text>
-        //         </Flex>
-        //     ),
-        // },
+        {
+            field: 'benchmarkID',
+            headerName: 'Benchmark',
+            type: 'string',
+            enableRowGroup: false,
+            sortable: false,
+            hide: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                >
+                    <Text className="text-gray-800">{param.value}</Text>
+                </Flex>
+            ),
+        },
         {
             field: 'connectionID',
             headerName: 'Kaytu connection ID',
@@ -171,6 +125,16 @@ export const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                >
+                    <Text className="text-gray-800">{param.value}</Text>
+                </Flex>
+            ),
         },
         {
             field: 'conformanceStatus',
@@ -215,9 +179,18 @@ export const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
-            valueFormatter: (param: ValueFormatterParams) => {
-                return param.value ? dateTimeDisplay(param.value) : ''
-            },
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                >
+                    <Text className="text-gray-800">
+                        {param.value ? dateTimeDisplay(param.value) : ''}
+                    </Text>
+                </Flex>
+            ),
             hide: true,
         },
     ]
@@ -300,6 +273,7 @@ export default function Events({ query }: ICount) {
                             rowData: resp.data.findingEvents || [],
                             rowCount: resp.data.totalCount || 0,
                         })
+                        console.log(resp.data)
                         // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         sortKey =
@@ -353,16 +327,10 @@ export default function Events({ query }: ICount) {
                 rowHeight="lg"
             />
             <EventDetail
-                finding={finding}
+                event={finding}
                 open={open}
                 onClose={() => setOpen(false)}
             />
-            {/* <FindingDetail */}
-            {/*     type="finding" */}
-            {/*     finding={finding} */}
-            {/*     open={open} */}
-            {/*     onClose={() => setOpen(false)} */}
-            {/* /> */}
         </>
     )
 }
