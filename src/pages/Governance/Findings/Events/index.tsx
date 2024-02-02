@@ -273,7 +273,6 @@ export default function Events({ query }: ICount) {
                             rowData: resp.data.findingEvents || [],
                             rowCount: resp.data.totalCount || 0,
                         })
-                        console.log(resp.data)
                         // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         sortKey =
