@@ -2,7 +2,7 @@ import { BadgeDelta, Card, Color, Flex, Metric, Text } from '@tremor/react'
 import dayjs from 'dayjs'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import { badgeTypeByDelta } from '../../../utilities/deltaType'
-import { renderDateText } from '../../Layout/Header/DateRangePicker'
+import { renderDateText } from '../../Layout/Header/DatePicker'
 
 interface IAssetChartMetric {
     title: string

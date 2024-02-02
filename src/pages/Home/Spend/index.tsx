@@ -20,7 +20,7 @@ import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
 import { buildTrend } from '../../../components/Spend/Chart/helpers'
 import StackedChart from '../../../components/Chart/Stacked'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
-import { renderDateText } from '../../../components/Layout/Header/DateRangePicker'
+import { renderDateText } from '../../../components/Layout/Header/DatePicker'
 import ChangeDelta from '../../../components/ChangeDelta'
 import {
     defaultSpendTime,
