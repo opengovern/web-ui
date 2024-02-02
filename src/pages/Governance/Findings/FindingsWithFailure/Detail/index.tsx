@@ -102,7 +102,7 @@ export default function FindingDetail({
                     isString
                 />
                 <SummaryCard
-                    title="Account name"
+                    title="Account Name"
                     metric={finding?.providerConnectionName}
                     isString
                 />
@@ -112,22 +112,19 @@ export default function FindingDetail({
                     isString
                 />
                 <SummaryCard
-                    title="Resource type"
+                    title="Resource Type"
                     metric={finding?.resourceType}
                     isString
                 />
             </Grid>
-            {/* <Flex justifyContent="start" className="flex-wrap gap-3 mb-6">
-                <Tag text="hi" />
-            </Flex> */}
             <TabGroup>
                 <TabList>
                     {type === 'finding' ? (
                         <Tab>Summary</Tab>
                     ) : (
-                        <Tab>Applicable controls</Tab>
+                        <Tab>Applicable Controls</Tab>
                     )}
-                    <Tab disabled={!response?.resource}>Resource details</Tab>
+                    <Tab disabled={!response?.resource}>Resource Details</Tab>
                     <Tab>Timeline</Tab>
                 </TabList>
                 <TabPanels>

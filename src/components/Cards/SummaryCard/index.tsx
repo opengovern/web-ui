@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai'
-import { Button, Card, Flex, Metric, Text, Title } from '@tremor/react'
+import { Button, Card, Flex, Metric, Text } from '@tremor/react'
 import { ArrowPathIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Spinner from '../../Spinner'
 import {
     numberDisplay,
@@ -12,10 +12,11 @@ import { searchAtom } from '../../../utilities/urlstate'
 
 type IProps = {
     title: string
-    metric: string | number | undefined
+    metric: string | number | any | undefined
     metricPrev?: string | number | undefined
     unit?: string
     url?: string
+    onClick?: () => void
     loading?: boolean
     border?: boolean
     blueBorder?: boolean
@@ -42,6 +43,7 @@ export default function SummaryCard({
     isExact = false,
     isPrice = false,
     isPercent = false,
+    onClick,
 }: IProps) {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
@@ -77,7 +79,7 @@ export default function SummaryCard({
                     className="gap-1 mb-1"
                 >
                     {isString ? (
-                        <Text className="text-gray-800">{metric}</Text>
+                        <Text className="text-gray-800 truncate">{metric}</Text>
                     ) : (
                         <Metric>
                             {isExact
@@ -123,14 +125,21 @@ export default function SummaryCard({
     return (
         <Card
             key={title}
-            onClick={() => (url ? navigate(`${url}?${searchParams}`) : null)}
+            onClick={() =>
+                // eslint-disable-next-line no-nested-ternary
+                url
+                    ? navigate(`${url}?${searchParams}`)
+                    : onClick
+                    ? onClick()
+                    : null
+            }
             className={`${border ? '' : 'ring-0 !shadow-transparent p-0'} ${
                 url ? 'cursor-pointer' : ''
             } ${blueBorder ? 'border-l-kaytu-500 border-l-2' : ''}`}
         >
             <Flex justifyContent="start" className="mb-1.5">
                 <Text className="font-semibold">{title}</Text>
-                {!border && url && (
+                {!border && (url || onClick) && (
                     <ChevronRightIcon className="ml-1 h-4 text-kaytu-500" />
                 )}
             </Flex>
@@ -143,7 +152,7 @@ export default function SummaryCard({
                     <Flex>{value()}</Flex>
                     {border && (
                         <div className="justify-self-end">
-                            {url && (
+                            {(url || onClick) && (
                                 <Button
                                     size="xs"
                                     variant="light"
