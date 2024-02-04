@@ -1,42 +1,20 @@
 import { useParams } from 'react-router-dom'
-import {
-    BarList,
-    Button,
-    Card,
-    Flex,
-    Grid,
-    Tab,
-    TabGroup,
-    TabList,
-    Text,
-    Title,
-} from '@tremor/react'
+import { Button, Card, Flex, Text, Title } from '@tremor/react'
 import { useEffect, useState } from 'react'
-import {
-    ArrowPathRoundedSquareIcon,
-    CheckCircleIcon,
-    InformationCircleIcon,
-    XCircleIcon,
-} from '@heroicons/react/24/outline'
-import { ChevronRightIcon } from '@heroicons/react/24/solid'
+import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
 import {
     useComplianceApiV1BenchmarksSummaryDetail,
     useComplianceApiV1BenchmarksTrendDetail,
     useComplianceApiV1FindingsTopDetail,
 } from '../../../../api/compliance.gen'
-import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedule.gen'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
 } from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
-import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
 import Controls from '../../Controls'
 import Settings from './Settings'
-import TopDetails from './TopDetails'
-import { numberDisplay } from '../../../../utilities/numericDisplay'
-import SeverityBar from '../../../../components/SeverityBar'
 import Modal from '../../../../components/Modal'
 import TopHeader from '../../../../components/Layout/Header'
 import {
@@ -180,17 +158,13 @@ export default function BenchmarkSummary() {
     const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
     const { benchmarkId, resourceId } = useParams()
     const { value: selectedConnections } = useFilterState()
-    const [stateIndex, setStateIndex] = useState(0)
-    const [type, setType] = useState<'accounts' | 'services' | 'controls'>(
-        'accounts'
-    )
     const [openTop, setOpenTop] = useState(false)
     const [openConfirm, setOpenConfirm] = useState(false)
     const [assignments, setAssignments] = useState(0)
     const [recall, setRecall] = useState(false)
     const [chartLayout, setChartLayout] = useURLParam<'count' | 'percent'>(
         'show',
-        'count'
+        'percent'
     )
     const [chartType, setChartType] = useURLParam<ChartType>('chartType', 'bar')
 
@@ -234,48 +208,11 @@ export default function BenchmarkSummary() {
         isLoading: trendLoading,
         error: trendError,
         sendNow: sendTrend,
-    } = useComplianceApiV1BenchmarksTrendDetail(String(benchmarkId))
-
-    const renderBars = () => {
-        switch (stateIndex) {
-            case 0:
-                return (
-                    <BarList
-                        data={topConnections(connections, benchmarkDetail?.id)}
-                        valueFormatter={(param: any) =>
-                            `${numberDisplay(param, 0)} issues`
-                        }
-                    />
-                )
-            case 1:
-                return (
-                    <BarList
-                        data={topControls(controls, benchmarkDetail?.id)}
-                        valueFormatter={(param: any) =>
-                            `${numberDisplay(param, 0)} issues`
-                        }
-                    />
-                )
-            case 2:
-                return (
-                    <BarList
-                        data={topResources(resources)}
-                        valueFormatter={(param: any) =>
-                            `${numberDisplay(param, 0)} issues`
-                        }
-                    />
-                )
-            default:
-                return (
-                    <BarList
-                        data={topConnections(connections, benchmarkDetail?.id)}
-                        valueFormatter={(param: any) =>
-                            `${numberDisplay(param, 0)} issues`
-                        }
-                    />
-                )
-        }
-    }
+    } = useComplianceApiV1BenchmarksTrendDetail(String(benchmarkId), {
+        ...topQuery,
+        startTime: activeTimeRange.start.unix(),
+        endTime: activeTimeRange.end.unix(),
+    })
 
     useEffect(() => {
         if (isExecuted || recall) {
@@ -374,7 +311,7 @@ export default function BenchmarkSummary() {
                         </Modal>
                     </Flex>
                     <BenchmarkChart
-                        title="Sec"
+                        title="Security Score"
                         isLoading={trendLoading}
                         trend={benchmarkTrend(trend, chartLayout)}
                         error={toErrorMessage(trendError)}
@@ -385,137 +322,6 @@ export default function BenchmarkSummary() {
                         chartType={chartType as ChartType}
                         setChartType={setChartType}
                     />
-                    <Grid numItems={2} className="gap-4 mb-4">
-                        <Card>
-                            <Flex alignItems="start" className="mb-10">
-                                <Flex
-                                    flexDirection="col"
-                                    alignItems="start"
-                                    className="gap-1"
-                                >
-                                    <Flex className="w-fit gap-1 group relative">
-                                        <Text className="font-semibold">
-                                            Security score
-                                        </Text>
-                                        <InformationCircleIcon className="w-4 dark:text-gray-400" />
-                                        <Card className="absolute w-60 z-40 top-0 left-full scale-0 transition-all p-2 group-hover:scale-100">
-                                            <Text>
-                                                Security scores represents the
-                                                proportion of Passed controls to
-                                                enabled controls for a given
-                                                benchmark. Kaytu calculates a
-                                                summary security score across
-                                                all enabled Benchmarks.
-                                            </Text>
-                                        </Card>
-                                    </Flex>
-                                    <Title className="font-semibold">
-                                        {`${(
-                                            ((benchmarkDetail
-                                                ?.controlsSeverityStatus?.total
-                                                ?.passed || 0) /
-                                                (benchmarkDetail
-                                                    ?.controlsSeverityStatus
-                                                    ?.total?.total || 1)) *
-                                                100 || 0
-                                        ).toFixed(2)}%`}
-                                    </Title>
-                                </Flex>
-                                {assignments > 0 && (
-                                    <Flex
-                                        flexDirection="col"
-                                        alignItems="start"
-                                        className="w-80 gap-1"
-                                    >
-                                        <Flex className="w-fit gap-1.5">
-                                            <CheckCircleIcon className="h-4 text-emerald-500" />
-                                            <Text>
-                                                Passed resources:{' '}
-                                                {numberDisplay(
-                                                    benchmarkDetail
-                                                        ?.conformanceStatusSummary
-                                                        ?.passed || 0,
-                                                    0
-                                                )}
-                                            </Text>
-                                        </Flex>
-                                        <Flex className="w-fit gap-1.5">
-                                            <XCircleIcon className="h-4 text-rose-600" />
-                                            <Text>
-                                                Failed resources:{' '}
-                                                {numberDisplay(
-                                                    benchmarkChecks(
-                                                        benchmarkDetail
-                                                    ).total -
-                                                        (benchmarkDetail
-                                                            ?.conformanceStatusSummary
-                                                            ?.passed || 0),
-                                                    0
-                                                )}
-                                            </Text>
-                                        </Flex>
-                                    </Flex>
-                                )}
-                            </Flex>
-                            <SeverityBar benchmark={benchmarkDetail} />
-                        </Card>
-                        <Card>
-                            <Flex justifyContent="between" className="mb-3">
-                                <button
-                                    type="button"
-                                    onClick={() => setOpenTop(true)}
-                                >
-                                    <Flex className="gap-1.5">
-                                        <Title className="font-semibold">
-                                            Top
-                                        </Title>
-                                        <ChevronRightIcon className="h-4 text-kaytu-500" />
-                                    </Flex>
-                                </button>
-                                <TabGroup
-                                    className="w-fit"
-                                    index={stateIndex}
-                                    onIndexChange={setStateIndex}
-                                >
-                                    <TabList variant="solid">
-                                        <Tab
-                                            onClick={() => setType('accounts')}
-                                        >
-                                            Cloud accounts
-                                        </Tab>
-                                        <Tab
-                                            onClick={() => setType('controls')}
-                                        >
-                                            Controls
-                                        </Tab>
-                                        <Tab
-                                            onClick={() => setType('services')}
-                                        >
-                                            Resource types
-                                        </Tab>
-                                    </TabList>
-                                </TabGroup>
-                            </Flex>
-                            {assignments > 0 ? (
-                                renderBars()
-                            ) : (
-                                <Flex
-                                    justifyContent="center"
-                                    className="h-full"
-                                >
-                                    <Text>No data</Text>
-                                </Flex>
-                            )}
-                            <TopDetails
-                                open={openTop}
-                                onClose={() => setOpenTop(false)}
-                                id={benchmarkDetail?.id}
-                                type={type}
-                                connections={selectedConnections}
-                                resourceId={resourceId}
-                            />
-                        </Card>
-                    </Grid>
                     <Controls
                         id={String(benchmarkId)}
                         assignments={assignments}

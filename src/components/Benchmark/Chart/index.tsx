@@ -5,6 +5,7 @@ import StackedChart from '../../Chart/Stacked'
 import Selector from '../../Selector'
 import { ChartType, chartTypeValues } from '../../Asset/Chart/Selectors'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
+import { errorHandlingWithErrorMessage } from '../../../types/apierror'
 
 interface IBenchmarkChart {
     title: string
@@ -32,36 +33,37 @@ export default function BenchmarkChart({
     setChartType,
 }: IBenchmarkChart) {
     const theTrend = trendChart(trend)
-    console.log(theTrend)
 
     return (
-        <Card>
+        <Card className="mb-6">
             <Flex>
                 <Title>{title}</Title>
-                <Selector
-                    values={validChartLayouts.map((v) => String(v))}
-                    value={chartLayout}
-                    title="Show"
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    onValueChange={(v) => setChartLayout(v)}
-                />
-                <TabGroup
-                    index={chartTypeValues.indexOf(chartType)}
-                    onIndexChange={(i) =>
-                        setChartType(chartTypeValues.at(i) || 'bar')
-                    }
-                    className="w-fit rounded-lg ml-2"
-                >
-                    <TabList variant="solid">
-                        <Tab value="bar">
-                            <BarChartIcon className="h-4 w-4 m-0.5 my-1.5" />
-                        </Tab>
-                        <Tab value="line">
-                            <LineChartIcon className="h-4 w-4 m-0.5 my-1.5" />
-                        </Tab>
-                    </TabList>
-                </TabGroup>
+                <Flex className="w-fit gap-6">
+                    <Selector
+                        values={validChartLayouts.map((v) => String(v))}
+                        value={chartLayout}
+                        title="Show"
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        onValueChange={(v) => setChartLayout(v)}
+                    />
+                    <TabGroup
+                        index={chartTypeValues.indexOf(chartType)}
+                        onIndexChange={(i) =>
+                            setChartType(chartTypeValues.at(i) || 'bar')
+                        }
+                        className="w-fit rounded-lg ml-2"
+                    >
+                        <TabList variant="solid">
+                            <Tab value="bar">
+                                <BarChartIcon className="h-4 w-4 m-0.5 my-1.5" />
+                            </Tab>
+                            <Tab value="line">
+                                <LineChartIcon className="h-4 w-4 m-0.5 my-1.5" />
+                            </Tab>
+                        </TabList>
+                    </TabGroup>
+                </Flex>
             </Flex>
             <StackedChart
                 labels={theTrend.label}
@@ -71,6 +73,7 @@ export default function BenchmarkChart({
                 error={error}
                 isCost={false}
             />
+            {errorHandlingWithErrorMessage(onRefresh, error)}
         </Card>
     )
 }
