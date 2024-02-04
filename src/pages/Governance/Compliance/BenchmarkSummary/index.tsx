@@ -1,10 +1,11 @@
 import { useParams } from 'react-router-dom'
-import { Button, Card, Flex, Text, Title } from '@tremor/react'
+import { Button, Card, Flex, Grid, Text, Title } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
 import {
     useComplianceApiV1BenchmarksSummaryDetail,
     useComplianceApiV1BenchmarksTrendDetail,
+    useComplianceApiV1FindingEventsCountList,
     useComplianceApiV1FindingsTopDetail,
 } from '../../../../api/compliance.gen'
 import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedule.gen'
@@ -27,6 +28,7 @@ import { camelCaseToLabel } from '../../../../utilities/labelMaker'
 import BenchmarkChart from '../../../../components/Benchmark/Chart'
 import { toErrorMessage } from '../../../../types/apierror'
 import { ChartType } from '../../../../components/Asset/Chart/Selectors'
+import SummaryCard from '../../../../components/Cards/SummaryCard'
 
 const topResources = (
     input:
@@ -188,21 +190,21 @@ export default function BenchmarkSummary() {
     } = useComplianceApiV1BenchmarksSummaryDetail(String(benchmarkId))
     const { sendNow: triggerEvaluate, isExecuted } =
         useScheduleApiV1ComplianceTriggerUpdate(String(benchmarkId), {}, false)
-    const { response: connections } = useComplianceApiV1FindingsTopDetail(
-        'connectionID',
-        3,
-        topQuery
-    )
-    const { response: resources } = useComplianceApiV1FindingsTopDetail(
-        'resourceType',
-        3,
-        topQuery
-    )
-    const { response: controls } = useComplianceApiV1FindingsTopDetail(
-        'controlID',
-        3,
-        topQuery
-    )
+    const { response: benchmarkKPIStart, isLoading: benchmarkKPIStartLoading } =
+        useComplianceApiV1BenchmarksSummaryDetail(String(benchmarkId), {
+            ...topQuery,
+            timeAt: activeTimeRange.start.unix(),
+        })
+    const { response: benchmarkKPIEnd, isLoading: benchmarkKPIEndLoading } =
+        useComplianceApiV1BenchmarksSummaryDetail(String(benchmarkId), {
+            ...topQuery,
+            timeAt: activeTimeRange.end.unix(),
+        })
+    const { response: events, isLoading: eventsLoading } =
+        useComplianceApiV1FindingEventsCountList({
+            startTime: activeTimeRange.start.unix(),
+            endTime: activeTimeRange.end.unix(),
+        })
     const {
         response: trend,
         isLoading: trendLoading,
@@ -310,6 +312,53 @@ export default function BenchmarkSummary() {
                             </Flex>
                         </Modal>
                     </Flex>
+                    <Grid numItems={4} className="w-full gap-4 mb-4">
+                        <SummaryCard
+                            title="Issues"
+                            metric={
+                                benchmarkKPIEnd?.conformanceStatusSummary?.total
+                            }
+                            metricPrev={
+                                benchmarkKPIStart?.conformanceStatusSummary
+                                    ?.total
+                            }
+                            loading={
+                                benchmarkKPIEndLoading ||
+                                benchmarkKPIStartLoading
+                            }
+                        />
+                        <SummaryCard
+                            title="Passed"
+                            metric={
+                                benchmarkKPIEnd?.conformanceStatusSummary
+                                    ?.passed
+                            }
+                            metricPrev={
+                                benchmarkKPIStart?.conformanceStatusSummary
+                                    ?.passed
+                            }
+                            loading={
+                                benchmarkKPIEndLoading ||
+                                benchmarkKPIStartLoading
+                            }
+                        />
+                        <SummaryCard
+                            title="Accounts"
+                            metric={benchmarkKPIEnd?.connectionsStatus?.total}
+                            metricPrev={
+                                benchmarkKPIStart?.connectionsStatus?.total
+                            }
+                            loading={
+                                benchmarkKPIEndLoading ||
+                                benchmarkKPIStartLoading
+                            }
+                        />
+                        <SummaryCard
+                            title="Events"
+                            metric={events?.count}
+                            loading={eventsLoading}
+                        />
+                    </Grid>
                     <BenchmarkChart
                         title="Security Score"
                         isLoading={trendLoading}
