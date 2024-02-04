@@ -1,25 +1,23 @@
-import { useRef } from 'react'
-import { useRangeCalendarState } from 'react-stately'
-import { useRangeCalendar, useLocale } from 'react-aria'
+import { useCalendarState } from 'react-stately'
+import { useCalendar, useLocale } from 'react-aria'
 import { createCalendar } from '@internationalized/date'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid'
-import { CalendarButton } from '../../Button'
+import { CalendarButton } from '../../../Button'
 import { CalendarGrid } from '../CalendarGrid'
 
-export function RangeCalendar(props: any) {
+export function Calendar(props: any) {
     const { locale } = useLocale()
-    const state = useRangeCalendarState({
+    const state = useCalendarState({
         ...props,
         locale,
         createCalendar,
     })
 
-    const ref = useRef(null)
     const { calendarProps, prevButtonProps, nextButtonProps, title } =
-        useRangeCalendar(props, state, ref)
+        useCalendar(props, state)
 
     return (
-        <div {...calendarProps} ref={ref} className="inline-block">
+        <div {...calendarProps} className="inline-block">
             <div className="flex items-center pb-4">
                 <h2 className="flex-1 font-bold text-xl ml-2">{title}</h2>
                 <CalendarButton {...prevButtonProps}>

@@ -38,7 +38,7 @@ import {
     defaultFindingsTime,
     useURLParam,
 } from '../../../../utilities/urlstate'
-import { renderDateText } from '../../../../components/Layout/Header/DateRangePicker'
+import { renderDateText } from '../../../../components/Layout/Header/DatePicker'
 
 interface IFilters {
     onApply: (obj: {

@@ -14,7 +14,7 @@ import {
     exactPriceDisplay,
     numberDisplay,
 } from '../../../utilities/numericDisplay'
-import { renderDateText } from '../../../components/Layout/Header/DateRangePicker'
+import { renderDateText } from '../../../components/Layout/Header/DatePicker'
 
 type MSort = {
     sortCol: string

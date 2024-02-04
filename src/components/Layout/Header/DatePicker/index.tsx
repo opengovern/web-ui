@@ -10,7 +10,7 @@ import quarterOfYear from 'dayjs/plugin/quarterOfYear'
 import { Flex, Text, Title } from '@tremor/react'
 import { workspaceAtom } from '../../../../store'
 import { FieldButton } from './Button'
-import { RangeCalendar } from './Calendar/RangeCalendar'
+import { RangeCalendar } from './Calendar/RangePicker/RangeCalendar'
 import { Popover } from './Popover'
 import { Dialog } from './Dialog'
 import {

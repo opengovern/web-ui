@@ -15,7 +15,7 @@ import {
     exactPriceDisplay,
     numberDisplay,
 } from '../../../utilities/numericDisplay'
-import { renderDateText } from '../../../components/Layout/Header/DateRangePicker'
+import { renderDateText } from '../../../components/Layout/Header/DatePicker'
 import { searchAtom } from '../../../utilities/urlstate'
 
 export type MSort = {

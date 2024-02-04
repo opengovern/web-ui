@@ -7,7 +7,7 @@ import {
     kebabCaseToLabel,
     snakeCaseToLabel,
 } from '../../../utilities/labelMaker'
-import DateRangePicker from './DateRangePicker'
+import DateRangePicker from './DatePicker'
 import Filter from './Filter'
 import { searchAtom } from '../../../utilities/urlstate'
 
