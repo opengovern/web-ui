@@ -630,12 +630,12 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSumm
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatus {
-    critical?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
-    high?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
-    low?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
-    medium?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
-    none?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
-    total?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
+    critical?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
+    high?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
+    low?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
+    medium?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
+    none?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
+    total?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary {
@@ -658,6 +658,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      */
     children?: string[]
     conformanceStatusSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatusSummary
+    connectionsStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
     /**
      * Benchmark connectors
      * @example ["[azure]"]
@@ -731,15 +732,15 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResourcesSeverityStatus {
-    critical?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
-    high?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
-    low?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
-    medium?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
-    none?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
-    total?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
+    critical?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
+    high?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
+    low?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
+    medium?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
+    none?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
+    total?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult {
     passed?: number
     total?: number
 }
@@ -825,6 +826,10 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoin
     timestamp?: number
     totalConnectionCount?: number
     totalResourcesCount?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingEventsResponse {
+    count?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingsResponse {
@@ -3954,6 +3959,41 @@ export class Api<
                 path: `/compliance/api/v1/finding_events`,
                 method: 'POST',
                 body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving all compliance run finding events count with respect to filters.
+         *
+         * @tags compliance
+         * @name ApiV1FindingEventsCountList
+         * @summary Get finding events count
+         * @request GET:/compliance/api/v1/finding_events/count
+         * @secure
+         */
+        apiV1FindingEventsCountList: (
+            query?: {
+                /** ConformanceStatus to filter by defaults to all conformanceStatus except passed */
+                conformanceStatus?: ('failed' | 'passed')[]
+                /** StateActive to filter by defaults to all stateActives */
+                stateActive?: boolean[]
+                /** Start time to filter by */
+                startTime?: number
+                /** End time to filter by */
+                endTime?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingEventsResponse,
+                any
+            >({
+                path: `/compliance/api/v1/finding_events/count`,
+                method: 'GET',
+                query: query,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
