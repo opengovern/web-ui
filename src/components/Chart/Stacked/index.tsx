@@ -15,7 +15,7 @@ interface IChart {
     labels: string[]
     labelType?: 'category' | 'time' | 'value' | 'log'
     chartData: StackItem[][]
-    chartType: 'bar' | 'line'
+    chartType?: 'bar' | 'line'
     isCost: boolean
     loading?: boolean
     error?: string
@@ -26,7 +26,7 @@ export default function StackedChart({
     labels,
     labelType = 'category',
     chartData,
-    chartType,
+    chartType = 'bar',
     isCost,
     loading,
     error,

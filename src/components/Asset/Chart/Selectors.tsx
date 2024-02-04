@@ -5,7 +5,7 @@ import { checkGranularity } from '../../../utilities/dateComparator'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
 
 export type ChartType = 'bar' | 'line'
-const chartTypeValues: ChartType[] = ['bar', 'line']
+export const chartTypeValues: ChartType[] = ['bar', 'line']
 
 export type Granularity = 'daily' | 'monthly'
 export type ChartLayout =

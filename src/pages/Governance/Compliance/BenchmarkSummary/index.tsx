@@ -39,8 +39,16 @@ import { numberDisplay } from '../../../../utilities/numericDisplay'
 import SeverityBar from '../../../../components/SeverityBar'
 import Modal from '../../../../components/Modal'
 import TopHeader from '../../../../components/Layout/Header'
-import { useFilterState } from '../../../../utilities/urlstate'
+import {
+    defaultTime,
+    useFilterState,
+    useUrlDateRangeState,
+    useURLParam,
+} from '../../../../utilities/urlstate'
 import { camelCaseToLabel } from '../../../../utilities/labelMaker'
+import BenchmarkChart from '../../../../components/Benchmark/Chart'
+import { toErrorMessage } from '../../../../types/apierror'
+import { ChartType } from '../../../../components/Asset/Chart/Selectors'
 
 const topResources = (
     input:
@@ -169,6 +177,7 @@ const benchmarkTrend = (
 }
 
 export default function BenchmarkSummary() {
+    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
     const { benchmarkId, resourceId } = useParams()
     const { value: selectedConnections } = useFilterState()
     const [stateIndex, setStateIndex] = useState(0)
@@ -179,6 +188,11 @@ export default function BenchmarkSummary() {
     const [openConfirm, setOpenConfirm] = useState(false)
     const [assignments, setAssignments] = useState(0)
     const [recall, setRecall] = useState(false)
+    const [chartLayout, setChartLayout] = useURLParam<'count' | 'percent'>(
+        'show',
+        'count'
+    )
+    const [chartType, setChartType] = useURLParam<ChartType>('chartType', 'bar')
 
     const topQuery = {
         ...(benchmarkId && { benchmarkId: [benchmarkId] }),
@@ -215,10 +229,12 @@ export default function BenchmarkSummary() {
         3,
         topQuery
     )
-    const { response: trend } = useComplianceApiV1BenchmarksTrendDetail(
-        String(benchmarkId)
-    )
-    console.log(benchmarkTrend(trend, 'percent'))
+    const {
+        response: trend,
+        isLoading: trendLoading,
+        error: trendError,
+        sendNow: sendTrend,
+    } = useComplianceApiV1BenchmarksTrendDetail(String(benchmarkId))
 
     const renderBars = () => {
         switch (stateIndex) {
@@ -357,6 +373,18 @@ export default function BenchmarkSummary() {
                             </Flex>
                         </Modal>
                     </Flex>
+                    <BenchmarkChart
+                        title="Sec"
+                        isLoading={trendLoading}
+                        trend={benchmarkTrend(trend, chartLayout)}
+                        error={toErrorMessage(trendError)}
+                        onRefresh={() => sendTrend()}
+                        chartLayout={chartLayout}
+                        setChartLayout={setChartLayout}
+                        validChartLayouts={['count', 'percent']}
+                        chartType={chartType as ChartType}
+                        setChartType={setChartType}
+                    />
                     <Grid numItems={2} className="gap-4 mb-4">
                         <Card>
                             <Flex alignItems="start" className="mb-10">
