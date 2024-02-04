@@ -50,6 +50,10 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                 <Flex justifyContent="start" className="w-3/4 gap-3">
                     {getConnectorIcon(connector())}
                     <Title className="truncate">{benchmark?.title}</Title>
+                    {benchmark?.tags?.kaytu_logo &&
+                        benchmark?.tags?.kaytu_logo.map((logo) => (
+                            <img className="h-6" alt={logo} src={logo} />
+                        ))}
                 </Flex>
                 <Button
                     variant="light"
