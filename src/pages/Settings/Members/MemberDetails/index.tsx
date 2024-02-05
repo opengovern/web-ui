@@ -96,13 +96,11 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
     }
 
     const lastActivity = () => {
-        const d = dayjs.utc(user.lastActivity || Date.now().toString())
-        const unix = d.unix()
-        if (unix < 0) {
+        if (user.lastActivity === undefined) {
             return 'Never'
         }
 
-        return d.format('MMM DD, YYYY HH:mm')
+        return dateTimeDisplay(user.lastActivity)
     }
 
     const items = [
