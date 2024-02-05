@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { Popover, Transition } from '@headlessui/react'
 import { Card, Flex, Text } from '@tremor/react'
-import { CalendarIcon } from '@heroicons/react/24/outline'
+import { CalendarIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 import { defaultTime, useURLParam } from '../../../../utilities/urlstate'
 import { IDate } from '../../../../pages/Governance/Findings/Filter/Datepicker'
@@ -45,6 +45,7 @@ export default function NewDatePicker() {
                             activeTimeRange.end
                         )}
                     </Text>
+                    <ChevronDownIcon className="w-3 text-inherit" />
                 </Flex>
             </Popover.Button>
             <Transition
