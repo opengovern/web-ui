@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai'
 import { Button, Flex, Title } from '@tremor/react'
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import {
@@ -11,6 +11,7 @@ import DateRangePicker from './DatePicker'
 import Filter from './Filter'
 import { searchAtom } from '../../../utilities/urlstate'
 import NewDatePicker from './NewDatePicker'
+import NewFilter from './NewFilter'
 
 interface IHeader {
     filter?: boolean
@@ -28,6 +29,9 @@ export default function TopHeader({
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const url = window.location.pathname.split('/')
+    const [selectedFilters, setSelectedFilters] = useState<
+        ('connector' | 'cloud-account')[]
+    >([])
 
     const mainPage = () => {
         if (url[1] === 'billing') {
@@ -112,7 +116,12 @@ export default function TopHeader({
                 )}
                 <Flex className="gap-4" justifyContent="end">
                     {children}
-                    {filter && <Filter />}
+                    {filter && (
+                        <NewFilter
+                            selectedFilter={selectedFilters}
+                            setSelectedFilter={setSelectedFilters}
+                        />
+                    )}
                     {datePicker && <NewDatePicker />}
                 </Flex>
             </Flex>

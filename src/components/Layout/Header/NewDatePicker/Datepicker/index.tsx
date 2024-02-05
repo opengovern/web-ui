@@ -283,7 +283,7 @@ export default function Datepicker({ condition }: IDatepicker) {
                                     >
                                         {[...Array(24)].map((x, i) => (
                                             <SelectItem value={`${i}`}>
-                                                {i}
+                                                {`0${i}`.slice(-2)}
                                             </SelectItem>
                                         ))}
                                     </Select>
@@ -297,7 +297,7 @@ export default function Datepicker({ condition }: IDatepicker) {
                                     >
                                         {[...Array(60)].map((x, i) => (
                                             <SelectItem value={`${i}`}>
-                                                {i}
+                                                {`0${i}`.slice(-2)}
                                             </SelectItem>
                                         ))}
                                     </Select>
@@ -313,9 +313,9 @@ export default function Datepicker({ condition }: IDatepicker) {
                                         value={endH.toString()}
                                         onChange={(x) => setEndH(Number(x))}
                                     >
-                                        {[...Array(23)].map((x, i) => (
-                                            <SelectItem value={`${i + 1}`}>
-                                                {i + 1}
+                                        {[...Array(24)].map((x, i) => (
+                                            <SelectItem value={`${i}`}>
+                                                {`0${i}`.slice(-2)}
                                             </SelectItem>
                                         ))}
                                     </Select>
@@ -327,9 +327,9 @@ export default function Datepicker({ condition }: IDatepicker) {
                                         value={endM.toString()}
                                         onChange={(x) => setEndM(Number(x))}
                                     >
-                                        {[...Array(59)].map((x, i) => (
-                                            <SelectItem value={`${i + 1}`}>
-                                                {i + 1}
+                                        {[...Array(60)].map((x, i) => (
+                                            <SelectItem value={`${i}`}>
+                                                {`0${i}`.slice(-2)}
                                             </SelectItem>
                                         ))}
                                     </Select>
