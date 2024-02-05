@@ -13,6 +13,7 @@ import CloudAccounts from './Filters/CloudAccounts'
 import { compareArrays } from '../Filter'
 import ConditionDropdown from '../../../../pages/Governance/Findings/Filter/ConditionDropdown'
 import Connector from './Filters/Connector'
+import { useFilterState } from '../../../../utilities/urlstate'
 
 interface IFilters {
     selectedFilter: ('connector' | 'cloud-account')[]
@@ -23,20 +24,20 @@ export default function NewFilter({
     selectedFilter,
     setSelectedFilter,
 }: IFilters) {
-    const defConnector = SourceType.Nil
-    const [connector, setConnector] = useState<SourceType>(defConnector)
-    const [connectionID, setConnectionID] = useState<string[] | undefined>([])
+    const { value: selectedFilters, setValue: setSelectedFilters } =
+        useFilterState()
+
     const [connectionCon, setConnectionCon] = useState('is')
 
-    const { response, isLoading } = useIntegrationApiV1ConnectionsSummariesList(
-        {
-            connector: connector.length ? [connector] : [],
-            pageNumber: 1,
-            pageSize: 10000,
-            needCost: false,
-            needResourceCount: false,
-        }
-    )
+    const { response } = useIntegrationApiV1ConnectionsSummariesList({
+        connector: selectedFilters.provider.length
+            ? [selectedFilters.provider]
+            : [],
+        pageNumber: 1,
+        pageSize: 10000,
+        needCost: false,
+        needResourceCount: false,
+    })
 
     const filterOptions = [
         {
@@ -45,16 +46,47 @@ export default function NewFilter({
             icon: CloudConnect,
             component: (
                 <Connector
-                    value={connector}
-                    defaultValue={defConnector}
-                    onChange={(p) => setConnector(p)}
+                    value={selectedFilters.provider}
+                    defaultValue={selectedFilters.provider}
+                    onChange={(p) => {
+                        if (p !== selectedFilters.provider) {
+                            if (
+                                selectedFilters.provider === SourceType.Nil ||
+                                p === SourceType.Nil
+                            ) {
+                                setSelectedFilters({
+                                    ...selectedFilters,
+                                    provider: p,
+                                })
+                            } else {
+                                setSelectedFilters({
+                                    ...selectedFilters,
+                                    connections: [],
+                                    provider: p,
+                                })
+                            }
+                        }
+                    }}
                 />
             ),
             conditions: ['is'],
             setCondition: (c: string) => undefined,
-            value: [connector],
-            defaultValue: [defConnector],
-            onDelete: () => setConnector(defConnector),
+            value: [selectedFilters.provider],
+            defaultValue: [selectedFilters.provider],
+            onDelete: () => {
+                if (selectedFilters.provider === SourceType.Nil) {
+                    setSelectedFilters({
+                        ...selectedFilters,
+                        provider: SourceType.Nil,
+                    })
+                } else {
+                    setSelectedFilters({
+                        ...selectedFilters,
+                        connections: [],
+                        provider: SourceType.Nil,
+                    })
+                }
+            },
             findingOnly: false,
         },
         {
@@ -63,19 +95,34 @@ export default function NewFilter({
             icon: Id,
             component: (
                 <CloudAccounts
-                    value={connectionID}
+                    value={selectedFilters.connections}
                     defaultValue={[]}
                     data={response}
                     condition={connectionCon}
-                    onChange={(o) => setConnectionID(o)}
+                    onChange={(o) => {
+                        if (
+                            !compareArrays(
+                                o?.sort() || [],
+                                selectedFilters.connections.sort()
+                            )
+                        ) {
+                            setSelectedFilters({
+                                ...selectedFilters,
+                                connections: o || [],
+                            })
+                        }
+                    }}
                 />
             ),
             conditions: ['is', 'isNot'],
             setCondition: (c: string) => setConnectionCon(c),
-            value: connectionID,
+            value: selectedFilters.connections,
             defaultValue: [],
-            onDelete: () => setConnectionID([]),
-            findingOnly: false,
+            onDelete: () =>
+                setSelectedFilters({
+                    ...selectedFilters,
+                    connections: [],
+                }),
         },
     ]
 
@@ -115,15 +162,7 @@ export default function NewFilter({
                                     f?.defaultValue?.sort()
                                 )
                                     ? ''
-                                    : `${
-                                          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                          // @ts-ignore
-                                          f?.value && f.value.length < 2
-                                              ? `: ${f.value}`
-                                              : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                // @ts-ignore
-                                                ` (${f?.value?.length})`
-                                      }`
+                                    : `${f?.value}`
                             }`}
                         </Text>
                         <ChevronDownIcon className="ml-1 w-3 text-inherit" />
@@ -140,7 +179,7 @@ export default function NewFilter({
                 >
                     <Popover.Panel
                         static
-                        className="absolute z-50 top-full left-0"
+                        className="absolute z-50 top-full right-0"
                     >
                         <Card className="mt-2 p-4 min-w-[256px] w-fit">
                             <Flex className="mb-3">

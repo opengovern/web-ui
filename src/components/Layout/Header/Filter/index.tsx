@@ -12,7 +12,10 @@ import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../api/int
 import Spinner from '../../../Spinner'
 import { AWSIcon, AzureIcon } from '../../../../icons/icons'
 import { useFilterState } from '../../../../utilities/urlstate'
-import { GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection } from '../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+    SourceType,
+} from '../../../../api/api'
 
 export const compareArrays = (a: any[], b: any[]) => {
     if (a && b) {
@@ -111,7 +114,7 @@ export default function Filter() {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         if (connectionCheckbox.state.length > 0) {
-            setProvider('')
+            setProvider(SourceType.Nil)
         }
     }, [connectionCheckbox.state])
 
@@ -166,7 +169,7 @@ export default function Filter() {
                                 <Radio
                                     name="scope-providoe"
                                     onClick={() => {
-                                        setProvider('')
+                                        setProvider(SourceType.Nil)
                                         connectionCheckbox.setState([])
                                     }}
                                     checked={provider === ''}
@@ -176,7 +179,7 @@ export default function Filter() {
                                 <Radio
                                     name="scope-providoe"
                                     onClick={() => {
-                                        setProvider('AWS')
+                                        setProvider(SourceType.CloudAWS)
                                         connectionCheckbox.setState([])
                                     }}
                                     checked={provider === 'AWS'}
@@ -195,7 +198,7 @@ export default function Filter() {
                                 <Radio
                                     name="scope-providoe"
                                     onClick={() => {
-                                        setProvider('Azure')
+                                        setProvider(SourceType.CloudAzure)
                                         connectionCheckbox.setState([])
                                     }}
                                     checked={provider === 'Azure'}
@@ -280,10 +283,10 @@ export default function Filter() {
                                     variant="light"
                                     onClick={() => {
                                         setSearch('')
-                                        setProvider('')
+                                        setProvider(SourceType.Nil)
                                         connectionCheckbox.setState([])
                                         setSelectedFilters({
-                                            provider: '',
+                                            provider: SourceType.Nil,
                                             connections: [],
                                             connectionGroup: [],
                                         })

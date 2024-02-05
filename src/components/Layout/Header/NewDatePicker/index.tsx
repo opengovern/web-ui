@@ -39,7 +39,7 @@ export default function NewDatePicker() {
             >
                 <Flex className="w-fit gap-2">
                     <CalendarIcon className="w-4 text-inherit" />
-                    <Text className="text-inherit">
+                    <Text className="text-inherit w-fit whitespace-nowrap">
                         {renderDateText(
                             activeTimeRange.start,
                             activeTimeRange.end

@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import { atom, useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { SourceType } from '../api/api'
 
 export interface DateRange {
     start: dayjs.Dayjs
@@ -24,7 +25,7 @@ export const defaultSpendTime: DateRange = {
 }
 
 export interface IFilter {
-    provider: '' | 'AWS' | 'Azure'
+    provider: SourceType
     connections: string[]
     connectionGroup: string[]
 }
@@ -153,20 +154,24 @@ export function useURLStringState(urlParam: string, defaultValue: string) {
 export function useFilterState() {
     const [state, setState] = useURLState<IFilter>(
         {
-            provider: '',
+            provider: SourceType.Nil,
             connections: [],
             connectionGroup: [],
         },
         (v) => {
             const res = new Map<string, string[]>()
-            res.set('provider', v.provider !== '' ? [v.provider] : [])
+            res.set(
+                'provider',
+                v.provider !== SourceType.Nil ? [v.provider] : []
+            )
             res.set('connections', v.connections)
             return res
         },
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         (v) => {
             return {
-                provider:
-                    (v.get('provider')?.at(0) as 'AWS' | 'Azure' | '') || '',
+                provider: (v.get('provider')?.at(0) as SourceType) || '',
                 connections: v.get('connections') || [],
                 connectionGroup: [],
             }
