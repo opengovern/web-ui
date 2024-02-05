@@ -58,7 +58,7 @@ export default function NewFilter({
             findingOnly: false,
         },
         {
-            id: 'connection',
+            id: 'cloud-account',
             name: 'Cloud Account',
             icon: Id,
             component: (
@@ -196,5 +196,5 @@ export default function NewFilter({
         )
     })
 
-    return <Flex className="w-fit gap-4">{renderFilters}</Flex>
+    return <Flex className="w-fit gap-3">{renderFilters}</Flex>
 }
