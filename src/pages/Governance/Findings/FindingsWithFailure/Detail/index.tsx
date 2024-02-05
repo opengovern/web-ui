@@ -61,6 +61,7 @@ export default function FindingDetail({
     open,
     onClose,
 }: IFindingDetail) {
+    console.log(finding)
     const { response, isLoading, sendNow } =
         useComplianceApiV1FindingsResourceCreate(
             { kaytuResourceId: finding?.kaytuResourceID || '' },
@@ -107,8 +108,13 @@ export default function FindingDetail({
                     isString
                 />
                 <SummaryCard
-                    title="Region"
-                    metric={finding?.resourceLocation}
+                    title="Resource ID"
+                    metric={finding?.resourceID}
+                    isString
+                />
+                <SummaryCard
+                    title="Resource Name"
+                    metric={finding?.resourceTypeName}
                     isString
                 />
                 <SummaryCard
@@ -116,16 +122,30 @@ export default function FindingDetail({
                     metric={finding?.resourceType}
                     isString
                 />
+                <SummaryCard
+                    title="Severity"
+                    metric={severityBadge(finding?.severity)}
+                    isString
+                />
             </Grid>
             <TabGroup>
                 <TabList>
                     {type === 'finding' ? (
-                        <Tab>Summary</Tab>
+                        <>
+                            <Tab>Summary</Tab>
+                            <Tab disabled={!response?.resource}>
+                                Resource Details
+                            </Tab>
+                            <Tab>Timeline</Tab>
+                        </>
                     ) : (
-                        <Tab>Applicable Controls</Tab>
+                        <>
+                            <Tab>Applicable Controls</Tab>
+                            <Tab disabled={!response?.resource}>
+                                Resource Details
+                            </Tab>
+                        </>
                     )}
-                    <Tab disabled={!response?.resource}>Resource Details</Tab>
-                    <Tab>Timeline</Tab>
                 </TabList>
                 <TabPanels>
                     {type === 'finding' ? (
