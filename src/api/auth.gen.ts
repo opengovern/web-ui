@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
-    GithubComKaytuIoKaytuEnginePkgAuthApiChangeUserPreferencesRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
     GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
     GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
     GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiChangeUserPreferencesRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
     RequestParams,
 } from './api'
 
@@ -26,6 +26,9 @@ interface IuseAuthApiV1KeyCreateCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAuthApiV1KeyCreateCreate = (
     request: GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
     params: RequestParams = {},
@@ -138,6 +141,9 @@ interface IuseAuthApiV1KeyDeleteDeleteState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAuthApiV1KeyDeleteDelete = (
     id: string,
     params: RequestParams = {},
@@ -250,6 +256,9 @@ interface IuseAuthApiV1KeysListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAuthApiV1KeysList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -361,6 +370,9 @@ interface IuseAuthApiV1UserInviteCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAuthApiV1UserInviteCreate = (
     request: GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
     params: RequestParams = {},
@@ -473,6 +485,9 @@ interface IuseAuthApiV1UserPreferencesUpdateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAuthApiV1UserPreferencesUpdate = (
     request: GithubComKaytuIoKaytuEnginePkgAuthApiChangeUserPreferencesRequest,
     params: RequestParams = {},
@@ -587,6 +602,9 @@ interface IuseAuthApiV1UserRoleBindingUpdateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAuthApiV1UserRoleBindingUpdate = (
     request: GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
     params: RequestParams = {},
@@ -701,6 +719,9 @@ interface IuseAuthApiV1UserRoleBindingDeleteState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAuthApiV1UserRoleBindingDelete = (
     query: {
         userId: string
@@ -817,6 +838,9 @@ interface IuseAuthApiV1UserRoleBindingsListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAuthApiV1UserRoleBindingsList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -928,6 +952,9 @@ interface IuseAuthApiV1UserDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAuthApiV1UserDetail = (
     userId: string,
     params: RequestParams = {},
@@ -1040,6 +1067,9 @@ interface IuseAuthApiV1UsersListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAuthApiV1UsersList = (
     request: GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
     params: RequestParams = {},
@@ -1152,6 +1182,9 @@ interface IuseAuthApiV1WorkspaceRoleBindingsListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAuthApiV1WorkspaceRoleBindingsList = (
     params: RequestParams = {},
     autoExecute = true,

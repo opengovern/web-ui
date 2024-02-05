@@ -345,6 +345,8 @@ export enum GithubComKaytuIoKaytuEnginePkgAuthApiInviteStatus {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest {
+    /** Name of the role */
+    connectionIDs: string[]
     /**
      * Name of the role
      * @example "admin"
@@ -448,6 +450,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding {
      * @example "admin"
      */
     roleName?: 'admin' | 'editor' | 'viewer'
+    scopedConnectionIDs?: string[]
     /**
      * Invite status
      * @example "accepted"

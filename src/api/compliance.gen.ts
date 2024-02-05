@@ -2,40 +2,40 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingEventsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFiltersWithMetadata,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFilters,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingEventsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsByFindingIDResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFiltersWithMetadata,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
     RequestParams,
 } from './api'
 
@@ -49,6 +49,9 @@ interface IuseComplianceApiV1AiControlRemediationCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1AiControlRemediationCreate = (
     controlId: string,
     params: RequestParams = {},
@@ -162,6 +165,9 @@ interface IuseComplianceApiV1AssignmentsBenchmarkDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1AssignmentsBenchmarkDetail = (
     benchmarkId: string,
     params: RequestParams = {},
@@ -275,6 +281,9 @@ interface IuseComplianceApiV1AssignmentsConnectionDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1AssignmentsConnectionDetail = (
     connectionId: string,
     params: RequestParams = {},
@@ -388,6 +397,9 @@ interface IuseComplianceApiV1AssignmentsResourceCollectionDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1AssignmentsResourceCollectionDetail = (
     resourceCollectionId: string,
     params: RequestParams = {},
@@ -509,6 +521,9 @@ interface IuseComplianceApiV1AssignmentsConnectionCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1AssignmentsConnectionCreate = (
     benchmarkId: string,
     query?: {
@@ -637,6 +652,9 @@ interface IuseComplianceApiV1AssignmentsConnectionDeleteState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1AssignmentsConnectionDelete = (
     benchmarkId: string,
     query?: {
@@ -763,6 +781,9 @@ interface IuseComplianceApiV1BenchmarksSummaryListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1BenchmarksSummaryList = (
     query?: {
         connectionId?: string[]
@@ -890,6 +911,9 @@ interface IuseComplianceApiV1BenchmarksControlsDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1BenchmarksControlsDetail = (
     benchmarkId: string,
     query?: {
@@ -1010,6 +1034,9 @@ interface IuseComplianceApiV1BenchmarksControlsDetail2State {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1BenchmarksControlsDetail2 = (
     benchmarkId: string,
     controlId: string,
@@ -1139,6 +1166,9 @@ interface IuseComplianceApiV1BenchmarksSummaryDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1BenchmarksSummaryDetail = (
     benchmarkId: string,
     query?: {
@@ -1267,6 +1297,9 @@ interface IuseComplianceApiV1BenchmarksTrendDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1BenchmarksTrendDetail = (
     benchmarkId: string,
     query?: {
@@ -1395,6 +1428,9 @@ interface IuseComplianceApiV1ControlsSummaryListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1ControlsSummaryList = (
     query?: {
         controlId?: string[]
@@ -1514,6 +1550,9 @@ interface IuseComplianceApiV1ControlsSummaryDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1ControlsSummaryDetail = (
     controlId: string,
     query?: {
@@ -1632,6 +1671,9 @@ interface IuseComplianceApiV1ControlsTrendDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1ControlsTrendDetail = (
     controlId: string,
     query?: {
@@ -1756,6 +1798,9 @@ interface IuseComplianceApiV1FindingEventsCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1FindingEventsCreate = (
     request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsRequest,
     params: RequestParams = {},
@@ -1869,6 +1914,9 @@ interface IuseComplianceApiV1FindingEventsCountListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1FindingEventsCountList = (
     query?: {
         conformanceStatus?: ('failed' | 'passed')[]
@@ -1990,6 +2038,9 @@ interface IuseComplianceApiV1FindingEventsFiltersCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1FindingEventsFiltersCreate = (
     request: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFilters,
     params: RequestParams = {},
@@ -2103,6 +2154,9 @@ interface IuseComplianceApiV1FindingEventsSingleDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1FindingEventsSingleDetail = (
     findingId: string,
     id: string,
@@ -2217,6 +2271,9 @@ interface IuseComplianceApiV1FindingsCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1FindingsCreate = (
     request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
     params: RequestParams = {},
@@ -2329,6 +2386,9 @@ interface IuseComplianceApiV1FindingsCountListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1FindingsCountList = (
     query?: {
         conformanceStatus?: ('failed' | 'passed')[]
@@ -2444,6 +2504,9 @@ interface IuseComplianceApiV1FindingsEventsDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1FindingsEventsDetail = (
     id: string,
     params: RequestParams = {},
@@ -2557,6 +2620,9 @@ interface IuseComplianceApiV1FindingsFiltersCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1FindingsFiltersCreate = (
     request: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
     params: RequestParams = {},
@@ -2670,6 +2736,9 @@ interface IuseComplianceApiV1FindingsKpiListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1FindingsKpiList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -2783,6 +2852,9 @@ interface IuseComplianceApiV1FindingsResourceCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1FindingsResourceCreate = (
     request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
     params: RequestParams = {},
@@ -2896,6 +2968,9 @@ interface IuseComplianceApiV1FindingsSingleDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1FindingsSingleDetail = (
     id: string,
     params: RequestParams = {},
@@ -3009,6 +3084,9 @@ interface IuseComplianceApiV1FindingsTopDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1FindingsTopDetail = (
     field:
         | 'resourceType'
@@ -3149,6 +3227,9 @@ interface IuseComplianceApiV1FindingsAccountsDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1FindingsAccountsDetail = (
     benchmarkId: string,
     query?: {
@@ -3269,6 +3350,9 @@ interface IuseComplianceApiV1FindingsServicesDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1FindingsServicesDetail = (
     benchmarkId: string,
     query?: {
@@ -3389,6 +3473,9 @@ interface IuseComplianceApiV1FindingsCountDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1FindingsCountDetail = (
     benchmarkId: string,
     field: 'resourceType' | 'connectionID' | 'resourceID' | 'service',
@@ -3526,6 +3613,9 @@ interface IuseComplianceApiV1InsightListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1InsightList = (
     query?: {
         tag?: string[]
@@ -3652,6 +3742,9 @@ interface IuseComplianceApiV1InsightGroupListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1InsightGroupList = (
     query?: {
         tag?: string[]
@@ -3779,6 +3872,9 @@ interface IuseComplianceApiV1InsightGroupDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1InsightGroupDetail = (
     insightGroupId: string,
     query?: {
@@ -3908,6 +4004,9 @@ interface IuseComplianceApiV1InsightGroupTrendDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1InsightGroupTrendDetail = (
     insightGroupId: string,
     query?: {
@@ -4043,6 +4142,9 @@ interface IuseComplianceApiV1InsightDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1InsightDetail = (
     insightId: string,
     query?: {
@@ -4166,6 +4268,9 @@ interface IuseComplianceApiV1InsightTrendDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1InsightTrendDetail = (
     insightId: string,
     query?: {
@@ -4292,6 +4397,9 @@ interface IuseComplianceApiV1MetadataInsightDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1MetadataInsightDetail = (
     insightId: string,
     params: RequestParams = {},
@@ -4405,6 +4513,9 @@ interface IuseComplianceApiV1MetadataTagComplianceListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1MetadataTagComplianceList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -4517,6 +4628,9 @@ interface IuseComplianceApiV1MetadataTagInsightListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1MetadataTagInsightList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -4629,6 +4743,9 @@ interface IuseComplianceApiV1QueriesSyncListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1QueriesSyncList = (
     query?: {
         configzGitURL?: string
@@ -4745,6 +4862,9 @@ interface IuseComplianceApiV1ResourceFindingsCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useComplianceApiV1ResourceFindingsCreate = (
     request: GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
     params: RequestParams = {},

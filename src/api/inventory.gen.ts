@@ -2,25 +2,25 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscape,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscape,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCountAnalyticsMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCountAnalyticsSpendResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
     RequestParams,
 } from './api'
 
@@ -34,6 +34,9 @@ interface IuseInventoryApiV1QueryListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV1QueryList = (
     request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     params: RequestParams = {},
@@ -146,6 +149,9 @@ interface IuseInventoryApiV1QueryRunCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV1QueryRunCreate = (
     request: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
     params: RequestParams = {},
@@ -258,6 +264,9 @@ interface IuseInventoryApiV1QueryRunHistoryListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV1QueryRunHistoryList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -370,6 +379,9 @@ interface IuseInventoryApiV2AnalyticsCategoriesListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2AnalyticsCategoriesList = (
     query?: {
         metricType?: 'assets' | 'spend'
@@ -487,6 +499,9 @@ interface IuseInventoryApiV2AnalyticsCompositionDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2AnalyticsCompositionDetail = (
     key: string,
     query: {
@@ -617,6 +632,9 @@ interface IuseInventoryApiV2AnalyticsCountListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2AnalyticsCountList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -729,6 +747,9 @@ interface IuseInventoryApiV2AnalyticsMetricListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2AnalyticsMetricList = (
     query?: {
         tag?: string[]
@@ -868,6 +889,9 @@ interface IuseInventoryApiV2AnalyticsMetricsListListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2AnalyticsMetricsListList = (
     query?: {
         connector?: ('' | 'AWS' | 'Azure')[]
@@ -985,6 +1009,9 @@ interface IuseInventoryApiV2AnalyticsMetricsDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2AnalyticsMetricsDetail = (
     metricId: string,
     params: RequestParams = {},
@@ -1098,6 +1125,9 @@ interface IuseInventoryApiV2AnalyticsSpendCompositionListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2AnalyticsSpendCompositionList = (
     query?: {
         connector?: ('' | 'AWS' | 'Azure')[]
@@ -1223,6 +1253,9 @@ interface IuseInventoryApiV2AnalyticsSpendCountListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2AnalyticsSpendCountList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -1335,6 +1368,9 @@ interface IuseInventoryApiV2AnalyticsSpendMetricListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2AnalyticsSpendMetricList = (
     query?: {
         filter?: string
@@ -1468,6 +1504,9 @@ interface IuseInventoryApiV2AnalyticsSpendTableListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2AnalyticsSpendTableList = (
     query?: {
         startTime?: number
@@ -1597,6 +1636,9 @@ interface IuseInventoryApiV2AnalyticsSpendTrendListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2AnalyticsSpendTrendList = (
     query?: {
         connector?: ('' | 'AWS' | 'Azure')[]
@@ -1724,6 +1766,9 @@ interface IuseInventoryApiV2AnalyticsTableListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2AnalyticsTableList = (
     query?: {
         startTime?: number
@@ -1845,6 +1890,9 @@ interface IuseInventoryApiV2AnalyticsTagListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2AnalyticsTagList = (
     query?: {
         connector?: string[]
@@ -1975,6 +2023,9 @@ interface IuseInventoryApiV2AnalyticsTrendListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2AnalyticsTrendList = (
     query?: {
         tag?: string[]
@@ -2108,6 +2159,9 @@ interface IuseInventoryApiV2MetadataResourceCollectionListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2MetadataResourceCollectionList = (
     query?: {
         id?: string[]
@@ -2225,6 +2279,9 @@ interface IuseInventoryApiV2MetadataResourceCollectionDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2MetadataResourceCollectionDetail = (
     resourceCollectionId: string,
     params: RequestParams = {},
@@ -2346,6 +2403,9 @@ interface IuseInventoryApiV2ResourceCollectionListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2ResourceCollectionList = (
     query?: {
         id?: string[]
@@ -2463,6 +2523,9 @@ interface IuseInventoryApiV2ResourceCollectionDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2ResourceCollectionDetail = (
     resourceCollectionId: string,
     params: RequestParams = {},
@@ -2584,6 +2647,9 @@ interface IuseInventoryApiV2ResourceCollectionLandscapeDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useInventoryApiV2ResourceCollectionLandscapeDetail = (
     resourceCollectionId: string,
     params: RequestParams = {},
