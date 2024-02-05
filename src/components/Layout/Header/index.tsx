@@ -10,6 +10,7 @@ import {
 import DateRangePicker from './DatePicker'
 import Filter from './Filter'
 import { searchAtom } from '../../../utilities/urlstate'
+import NewDatePicker from './NewDatePicker'
 
 interface IHeader {
     filter?: boolean
@@ -112,7 +113,7 @@ export default function TopHeader({
                 <Flex className="gap-4" justifyContent="end">
                     {children}
                     {filter && <Filter />}
-                    {datePicker && <DateRangePicker />}
+                    {datePicker && <NewDatePicker />}
                 </Flex>
             </Flex>
         </div>

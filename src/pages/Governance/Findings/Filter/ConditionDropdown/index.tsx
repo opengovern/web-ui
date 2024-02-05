@@ -12,14 +12,13 @@ interface IConditionDropdown {
 const options = [
     'is',
     'isNot',
-    'isBetween',
     'contains',
     'doesNotContain',
     'isEmpty',
     'isNotEmpty',
 ]
 
-const dateOptions = ['isBetween', 'relative', 'before', 'after']
+const dateOptions = ['isBetween', 'isRelative', 'isBefore', 'isAfter']
 
 export default function ConditionDropdown({
     conditions,
@@ -65,7 +64,7 @@ export default function ConditionDropdown({
                                     disabled={!conditions?.includes(o)}
                                     className="w-full flex justify-start"
                                 >
-                                    {camelCaseToLabel(o)}
+                                    {camelCaseToLabel(o).toLowerCase()}
                                 </Button>
                             </ListItem>
                         ))}
