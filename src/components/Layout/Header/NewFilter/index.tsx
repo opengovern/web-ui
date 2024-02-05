@@ -26,7 +26,6 @@ export default function NewFilter({
 }: IFilters) {
     const { value: selectedFilters, setValue: setSelectedFilters } =
         useFilterState()
-
     const [connectionCon, setConnectionCon] = useState('is')
 
     const { response } = useIntegrationApiV1ConnectionsSummariesList({
@@ -72,7 +71,7 @@ export default function NewFilter({
             conditions: ['is'],
             setCondition: (c: string) => undefined,
             value: [selectedFilters.provider],
-            defaultValue: [selectedFilters.provider],
+            defaultValue: [SourceType.Nil],
             onDelete: () => {
                 if (selectedFilters.provider === SourceType.Nil) {
                     setSelectedFilters({
@@ -133,7 +132,6 @@ export default function NewFilter({
                 <Popover.Button
                     id={f?.id}
                     className={`border ${
-                        f?.id !== 'date' &&
                         compareArrays(
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
@@ -162,7 +160,15 @@ export default function NewFilter({
                                     f?.defaultValue?.sort()
                                 )
                                     ? ''
-                                    : `${f?.value}`
+                                    : `${
+                                          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                          // @ts-ignore
+                                          f?.value && f.value.length < 2
+                                              ? `: ${f.value}`
+                                              : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                ` (${f?.value?.length})`
+                                      }`
                             }`}
                         </Text>
                         <ChevronDownIcon className="ml-1 w-3 text-inherit" />
