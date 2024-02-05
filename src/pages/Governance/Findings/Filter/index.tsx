@@ -178,7 +178,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
                 />
             ),
             conditions: ['is'],
-            setCondition: (c: string) => console.log(c),
+            setCondition: (c: string) => undefined,
             value: [connector],
             defaultValue: [defConnector],
             onDelete: () => setConnector(defConnector),

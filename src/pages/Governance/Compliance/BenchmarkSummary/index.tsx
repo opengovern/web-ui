@@ -231,6 +231,7 @@ export default function BenchmarkSummary() {
                         : 'Benchmark summary',
                 ]}
                 filter
+                datePicker
             />
             {isLoading ? (
                 <Spinner className="mt-56" />
