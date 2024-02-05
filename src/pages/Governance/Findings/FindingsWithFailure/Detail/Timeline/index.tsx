@@ -1,4 +1,4 @@
-import { Flex, Icon, Text, Title } from '@tremor/react'
+import { Flex, Icon, Text } from '@tremor/react'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import dayjs from 'dayjs'
@@ -8,10 +8,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
 } from '../../../../../../api/api'
 import Spinner from '../../../../../../components/Spinner'
-import {
-    dateDisplay,
-    dateTimeDisplay,
-} from '../../../../../../utilities/dateDisplay'
+import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
 
 dayjs.extend(relativeTime)
 
@@ -33,7 +30,10 @@ export default function Timeline({ data, isLoading }: ITimeline) {
             alignItems="start"
             className="gap-10 relative"
         >
-            <div className="absolute w-0.5 h-full bg-gray-200 z-10 top-1 left-[237px]" />
+            <div
+                className="absolute w-0.5 bg-gray-200 z-10 top-1 left-[237px]"
+                style={{ height: 'calc(100% - 30px)' }}
+            />
             {data?.findingEvents?.map((tl) => (
                 <Flex alignItems="start" className="gap-6 z-20">
                     <Flex
@@ -67,9 +67,9 @@ export default function Timeline({ data, isLoading }: ITimeline) {
                         alignItems="start"
                         className="gap-1 mt-1"
                     >
-                        <Text className="text-gray-800 truncate max-w-[330px]">
-                            {tl.controlID}
-                        </Text>
+                        {/* <Text className="text-gray-800 truncate max-w-[330px]"> */}
+                        {/*     {tl.controlID} */}
+                        {/* </Text> */}
                         <Flex className="w-fit gap-4">
                             {severityBadge(tl.severity)}
                             <Text className="pl-4 border-l border-l-gray-200 text-xs">

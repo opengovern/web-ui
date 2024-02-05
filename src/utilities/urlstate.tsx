@@ -10,8 +10,8 @@ export interface DateRange {
 }
 
 export const defaultTime: DateRange = {
-    start: dayjs.utc().add(-7, 'days'),
-    end: dayjs.utc(),
+    start: dayjs.utc().add(-7, 'days').startOf('day'),
+    end: dayjs.utc().endOf('day'),
 }
 
 export const defaultFindingsTime: DateRange = {
