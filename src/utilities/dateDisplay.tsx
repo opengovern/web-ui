@@ -40,7 +40,7 @@ export const dateTimeDisplay = (
 ) => {
     // tz(dayjs.tz.guess())
     if ((typeof date).toString() === 'Dayjs') {
-        return (date as Dayjs).format('MMM DD, YYYY kk:mm z')
+        return (date as Dayjs).format('MMM DD, YYYY kk:mm UTC')
     }
 
     const regexp = /^\d+$/g
@@ -49,10 +49,10 @@ export const dateTimeDisplay = (
     if (isNumber) {
         const v = parseInt(String(date), 10)
         const value = v > 17066236800 ? v / 1000 : v
-        return dayjs.unix(value).format('MMM DD, YYYY kk:mm z')
+        return dayjs.unix(value).format('MMM DD, YYYY kk:mm UTC')
     }
     if (date) {
-        return dayjs.utc(date).format('MMM DD, YYYY kk:mm z')
+        return dayjs.utc(date).format('MMM DD, YYYY kk:mm UTC')
     }
     return 'Not available'
 }
