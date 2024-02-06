@@ -87,15 +87,7 @@ export default function Findings() {
                     <Tab>Accounts</Tab>
                     <Tab>Controls</Tab>
                 </TabList>
-                <Filter
-                    isFinding={
-                        selectedGroup === 'findings' ||
-                        selectedGroup === 'resources' ||
-                        selectedGroup === 'events'
-                    }
-                    type={selectedGroup}
-                    onApply={(e) => setQuery(e)}
-                />
+                <Filter type={selectedGroup} onApply={(e) => setQuery(e)} />
                 <TabPanels className="mt-4">
                     <TabPanel>
                         <FindingsWithFailure query={query} />

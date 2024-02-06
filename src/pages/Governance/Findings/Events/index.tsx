@@ -138,6 +138,27 @@ export const columns = (isDemo: boolean) => {
             ),
         },
         {
+            field: 'resourceLocation',
+            headerName: 'Region',
+            type: 'string',
+            hide: true,
+            enableRowGroup: true,
+            sortable: false,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                >
+                    <Text className="text-gray-800">{param.value}</Text>
+                </Flex>
+            ),
+        },
+        {
             field: 'conformanceStatus',
             headerName: 'State Change',
             type: 'string',
@@ -272,6 +293,7 @@ export default function Events({ query }: ICount) {
                             rowData: resp.data.findingEvents || [],
                             rowCount: resp.data.totalCount || 0,
                         })
+                        console.log(resp.data.findingEvents)
                         // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         sortKey =

@@ -56,11 +56,10 @@ interface IFilters {
         activeTimeRange: DateRange | undefined
         eventTimeRange: DateRange | undefined
     }) => void
-    isFinding: boolean
     type: 'findings' | 'resources' | 'controls' | 'accounts' | 'events'
 }
 
-export default function Filter({ onApply, isFinding, type }: IFilters) {
+export default function Filter({ onApply, type }: IFilters) {
     const defConnector = SourceType.Nil
     const [connector, setConnector] = useState<SourceType>(defConnector)
 
@@ -189,7 +188,6 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             value: conformanceStatus,
             defaultValue: defConformanceStatus,
             onDelete: undefined,
-            findingOnly: true,
             types: ['findings', 'resources', 'events'],
         },
         {
@@ -208,14 +206,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             value: [connector],
             defaultValue: [defConnector],
             onDelete: () => setConnector(defConnector),
-            findingOnly: false,
-            types: [
-                'findings',
-                'resources',
-                'events',
-                'controls',
-                'connections',
-            ],
+            types: ['findings', 'resources', 'events', 'controls', 'accounts'],
         },
         {
             id: 'lifecycle',
@@ -233,7 +224,6 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             value: lifecycle,
             defaultValue: defLifecycle,
             onDelete: () => setLifecycle(defLifecycle),
-            findingOnly: true,
             types: ['findings', 'resources', 'events'],
         },
         {
@@ -253,7 +243,6 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             value: severity,
             defaultValue: defSeverity,
             onDelete: () => setSeverity(defSeverity),
-            findingOnly: true,
             types: ['findings', 'resources', 'events'],
         },
         {
@@ -275,14 +264,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             value: connectionID,
             defaultValue: [],
             onDelete: () => setConnectionID([]),
-            findingOnly: false,
-            types: [
-                'findings',
-                'resources',
-                'events',
-                'controls',
-                'connections',
-            ],
+            types: ['findings', 'resources', 'events', 'controls', 'accounts'],
         },
         {
             id: 'control',
@@ -303,7 +285,6 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             value: controlID,
             defaultValue: [],
             onDelete: () => setControlID([]),
-            findingOnly: true,
             types: ['findings', 'resources', 'events'],
         },
         {
@@ -325,14 +306,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             value: benchmarkID,
             defaultValue: [],
             onDelete: () => setBenchmarkID([]),
-            findingOnly: false,
-            types: [
-                'findings',
-                'resources',
-                'events',
-                'controls',
-                'connections',
-            ],
+            types: ['findings', 'resources', 'events', 'controls', 'accounts'],
         },
         {
             id: 'resource',
@@ -353,7 +327,6 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             value: resourceTypeID,
             defaultValue: [],
             onDelete: () => setResourceTypeID([]),
-            findingOnly: true,
             types: ['findings', 'resources', 'events'],
         },
         {
@@ -373,7 +346,6 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             defaultValue: { start: dayjs.utc(), end: dayjs.utc() },
             onDelete: () =>
                 setActiveTimeRange({ start: dayjs.utc(), end: dayjs.utc() }),
-            findingOnly: true,
             types: ['findings'],
         },
         {
@@ -393,7 +365,6 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             defaultValue: { start: dayjs.utc(), end: dayjs.utc() },
             onDelete: () =>
                 setEventTimeRange({ start: dayjs.utc(), end: dayjs.utc() }),
-            findingOnly: true,
             types: ['findings', 'events'],
         },
     ]
@@ -401,7 +372,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
     const renderFilters = selectedFilters.map((sf) => {
         const f = filterOptions.find((o) => o.id === sf)
         return (
-            (isFinding || isFinding === f?.findingOnly) && (
+            f?.types.includes(type) && (
                 <Popover className="relative border-0">
                     <Popover.Button
                         id={f?.id}
@@ -556,10 +527,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
                                                 (f) =>
                                                     !selectedFilters.includes(
                                                         f.id
-                                                    ) &&
-                                                    (isFinding ||
-                                                        isFinding ===
-                                                            f?.findingOnly)
+                                                    ) && f.types.includes(type)
                                             )
                                             .map((f) => (
                                                 <Button
