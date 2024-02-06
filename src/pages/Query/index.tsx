@@ -47,13 +47,20 @@ import { getErrorMessage } from '../../types/apierror'
 import DrawerPanel from '../../components/DrawerPanel'
 import { RenderObject } from '../../components/RenderObject'
 import Table, { IColumn } from '../../components/Table'
-import { GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem } from '../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+} from '../../api/api'
 import { isDemoAtom, queryAtom, runQueryAtom } from '../../store'
 import { snakeCaseToLabel } from '../../utilities/labelMaker'
 import { numberDisplay } from '../../utilities/numericDisplay'
 import TopHeader from '../../components/Layout/Header'
 
-export const getTable = (headers: any, details: any, isDemo: boolean) => {
+export const getTable = (
+    headers: string[] | undefined,
+    details: any,
+    isDemo: boolean
+) => {
     const columns: IColumn<any, any>[] = []
     const rows: any[] = []
     if (headers && headers.length) {
@@ -80,7 +87,7 @@ export const getTable = (headers: any, details: any, isDemo: boolean) => {
         for (let i = 0; i < details.length; i += 1) {
             const row: any = {}
             for (let j = 0; j < columns.length; j += 1) {
-                row[headers[j]] =
+                row[headers?.at(j) || ''] =
                     typeof details[i][j] === 'string'
                         ? details[i][j]
                         : JSON.stringify(details[i][j])

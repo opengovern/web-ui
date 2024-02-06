@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+<<<<<<< HEAD
     GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
     GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
@@ -20,6 +21,26 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Request,
+=======
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateConnectionResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Response,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Request,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateAwsConnectionRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+>>>>>>> 2736ee5026aae66efb9609df9a2f033d14f022cc
     RequestParams,
 } from './api'
 
@@ -33,6 +54,9 @@ interface IuseOnboardApiV1CatalogMetricsListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1CatalogMetricsList = (
     query?: {
         connector?: ('' | 'AWS' | 'Azure')[]
@@ -149,6 +173,9 @@ interface IuseOnboardApiV1ConnectionGroupsListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1ConnectionGroupsList = (
     query?: {
         populateConnections?: boolean
@@ -264,6 +291,9 @@ interface IuseOnboardApiV1ConnectionGroupsDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1ConnectionGroupsDetail = (
     connectionGroupName: string,
     query?: {
@@ -389,6 +419,9 @@ interface IuseOnboardApiV1ConnectionsAwsCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1ConnectionsAwsCreate = (
     request: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateAwsConnectionRequest,
     params: RequestParams = {},
@@ -502,6 +535,9 @@ interface IuseOnboardApiV1ConnectionsSummaryListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1ConnectionsSummaryList = (
     query?: {
         filter?: string
@@ -655,6 +691,9 @@ interface IuseOnboardApiV1ConnectionsStateCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1ConnectionsStateCreate = (
     connectionId: string,
     request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
@@ -778,6 +817,9 @@ interface IuseOnboardApiV1ConnectorListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1ConnectorList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -889,6 +931,9 @@ interface IuseOnboardApiV1CredentialListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1CredentialList = (
     query?: {
         connector?: '' | 'AWS' | 'Azure'
@@ -1016,6 +1061,9 @@ interface IuseOnboardApiV1CredentialCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1CredentialCreate = (
     config: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
     params: RequestParams = {},
@@ -1128,6 +1176,9 @@ interface IuseOnboardApiV1CredentialDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1CredentialDetail = (
     credentialId: string,
     params: RequestParams = {},
@@ -1240,6 +1291,9 @@ interface IuseOnboardApiV1CredentialUpdateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1CredentialUpdate = (
     credentialId: string,
     config: GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
@@ -1358,6 +1412,9 @@ interface IuseOnboardApiV1CredentialDeleteState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1CredentialDelete = (
     credentialId: string,
     params: RequestParams = {},
@@ -1470,6 +1527,9 @@ interface IuseOnboardApiV1CredentialAutoonboardCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1CredentialAutoonboardCreate = (
     credentialId: string,
     params: RequestParams = {},
@@ -1583,6 +1643,9 @@ interface IuseOnboardApiV1SourceAwsCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1SourceAwsCreate = (
     request: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
     params: RequestParams = {},
@@ -1695,6 +1758,9 @@ interface IuseOnboardApiV1SourceAzureCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1SourceAzureCreate = (
     request: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
     params: RequestParams = {},
@@ -1807,6 +1873,9 @@ interface IuseOnboardApiV1SourceDeleteState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1SourceDelete = (
     sourceId: string,
     params: RequestParams = {},
@@ -1919,6 +1988,9 @@ interface IuseOnboardApiV1SourceHealthcheckDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV1SourceHealthcheckDetail = (
     sourceId: string,
     query?: {
@@ -2035,6 +2107,9 @@ interface IuseOnboardApiV2CredentialCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useOnboardApiV2CredentialCreate = (
     config: GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Request,
     params: RequestParams = {},

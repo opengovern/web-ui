@@ -17,6 +17,10 @@ interface I{{ .APIName }}State {
     error?: any
 }
 
+
+/**
+ * URL: 
+ */
 export const {{ .APIName }} = ({{ .Func.Params }}, autoExecute = true, overwriteWorkspace: string | undefined = undefined) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())

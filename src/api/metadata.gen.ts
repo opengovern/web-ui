@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
     GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
     RequestParams,
 } from './api'
 
@@ -18,6 +18,9 @@ interface IuseMetadataApiV1FilterListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useMetadataApiV1FilterList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -129,6 +132,9 @@ interface IuseMetadataApiV1FilterCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useMetadataApiV1FilterCreate = (
     req: GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
     params: RequestParams = {},
@@ -241,6 +247,9 @@ interface IuseMetadataApiV1MetadataCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useMetadataApiV1MetadataCreate = (
     req: GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     params: RequestParams = {},
@@ -353,6 +362,9 @@ interface IuseMetadataApiV1MetadataDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useMetadataApiV1MetadataDetail = (
     key: string,
     params: RequestParams = {},

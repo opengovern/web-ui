@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+<<<<<<< HEAD
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
@@ -14,6 +15,20 @@ import {
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse,
+=======
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCountConnectionsResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
+>>>>>>> 2736ee5026aae66efb9609df9a2f033d14f022cc
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
     RequestParams,
@@ -29,6 +44,9 @@ interface IuseIntegrationApiV1ConnectionsAwsCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1ConnectionsAwsCreate = (
     request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
     params: RequestParams = {},
@@ -142,6 +160,9 @@ interface IuseIntegrationApiV1ConnectionsCountListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1ConnectionsCountList = (
     query?: {
         connector?: string
@@ -257,6 +278,9 @@ interface IuseIntegrationApiV1ConnectionsSummariesListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1ConnectionsSummariesList = (
     query?: {
         filter?: string
@@ -410,6 +434,9 @@ interface IuseIntegrationApiV1ConnectionsDeleteState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1ConnectionsDelete = (
     connectionId: string,
     params: RequestParams = {},
@@ -523,6 +550,9 @@ interface IuseIntegrationApiV1ConnectionsAwsHealthcheckDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1ConnectionsAwsHealthcheckDetail = (
     connectionId: string,
     params: RequestParams = {},
@@ -639,6 +669,9 @@ interface IuseIntegrationApiV1ConnectionsAzureHealthcheckDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1ConnectionsAzureHealthcheckDetail = (
     connectionId: string,
     query?: {
@@ -761,6 +794,9 @@ interface IuseIntegrationApiV1ConnectorsListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1ConnectorsList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -874,6 +910,9 @@ interface IuseIntegrationApiV1ConnectorsMetricsListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1ConnectorsMetricsList = (
     query?: {
         connector?: ('' | 'AWS' | 'Azure')[]
@@ -989,6 +1028,9 @@ interface IuseIntegrationApiV1CredentialDeleteState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1CredentialDelete = (
     credentialId: string,
     params: RequestParams = {},
@@ -1102,6 +1144,9 @@ interface IuseIntegrationApiV1CredentialsListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1CredentialsList = (
     query?: {
         connector?: '' | 'AWS' | 'Azure'
@@ -1230,6 +1275,9 @@ interface IuseIntegrationApiV1CredentialsAwsCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1CredentialsAwsCreate = (
     request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
     params: RequestParams = {},
@@ -1343,6 +1391,9 @@ interface IuseIntegrationApiV1CredentialsAwsUpdateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1CredentialsAwsUpdate = (
     credentialId: string,
     config: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
@@ -1462,6 +1513,9 @@ interface IuseIntegrationApiV1CredentialsAwsAutoonboardCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1CredentialsAwsAutoonboardCreate = (
     credentialId: string,
     params: RequestParams = {},
@@ -1578,6 +1632,9 @@ interface IuseIntegrationApiV1CredentialsAzureCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1CredentialsAzureCreate = (
     request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
     params: RequestParams = {},
@@ -1691,6 +1748,9 @@ interface IuseIntegrationApiV1CredentialsAzureUpdateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1CredentialsAzureUpdate = (
     credentialId: string,
     config: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
@@ -1810,6 +1870,9 @@ interface IuseIntegrationApiV1CredentialsAzureAutoonboardCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1CredentialsAzureAutoonboardCreate = (
     credentialId: string,
     params: RequestParams = {},
@@ -1926,6 +1989,9 @@ interface IuseIntegrationApiV1CredentialsDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useIntegrationApiV1CredentialsDetail = (
     credentialId: string,
     params: RequestParams = {},

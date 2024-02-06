@@ -2,12 +2,21 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+<<<<<<< HEAD
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+=======
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+>>>>>>> 2736ee5026aae66efb9609df9a2f033d14f022cc
     RequestParams,
 } from './api'
 
@@ -21,6 +30,9 @@ interface IuseWorkspaceApiV1BootstrapDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useWorkspaceApiV1BootstrapDetail = (
     workspaceName: string,
     params: RequestParams = {},
@@ -127,6 +139,9 @@ interface IuseWorkspaceApiV1BootstrapCredentialCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useWorkspaceApiV1BootstrapCredentialCreate = (
     workspaceName: string,
     request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
@@ -244,6 +259,9 @@ interface IuseWorkspaceApiV1BootstrapFinishCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useWorkspaceApiV1BootstrapFinishCreate = (
     workspaceName: string,
     params: RequestParams = {},
@@ -351,6 +369,9 @@ interface IuseWorkspaceApiV1WorkspaceCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useWorkspaceApiV1WorkspaceCreate = (
     request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
     params: RequestParams = {},
@@ -457,6 +478,9 @@ interface IuseWorkspaceApiV1WorkspaceCurrentListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useWorkspaceApiV1WorkspaceCurrentList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -569,6 +593,9 @@ interface IuseWorkspaceApiV1WorkspaceDeleteState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useWorkspaceApiV1WorkspaceDelete = (
     workspaceId: string,
     params: RequestParams = {},
@@ -675,6 +702,9 @@ interface IuseWorkspaceApiV1WorkspacesListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useWorkspaceApiV1WorkspacesList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -780,6 +810,9 @@ interface IuseWorkspaceApiV1WorkspacesLimitsDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useWorkspaceApiV1WorkspacesLimitsDetail = (
     workspaceName: string,
     query?: {

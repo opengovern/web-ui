@@ -264,6 +264,7 @@ export default function MetricTable({
                     resizable: true,
                     suppressMenu: true,
                     enableRowGroup: true,
+                    pinned: true,
                 },
                 {
                     field: 'connector',
@@ -275,6 +276,7 @@ export default function MetricTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
+                    pinned: true,
                 },
                 {
                     field: 'dimension',
@@ -285,6 +287,7 @@ export default function MetricTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
+                    pinned: true,
                 },
             ],
         },
@@ -446,8 +449,8 @@ export default function MetricTable({
             function: () => {
                 onManualGrouping('category')
                 onManualSortChange({
-                    sortCol: 'none',
-                    sortType: null,
+                    sortCol: 'totalCost',
+                    sortType: 'desc',
                 })
             },
         },
@@ -458,8 +461,8 @@ export default function MetricTable({
             function: () => {
                 onManualGrouping('connector')
                 onManualSortChange({
-                    sortCol: 'none',
-                    sortType: null,
+                    sortCol: 'totalCost',
+                    sortType: 'desc',
                 })
             },
         },

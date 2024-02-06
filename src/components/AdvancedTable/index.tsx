@@ -344,6 +344,20 @@ export default function AdvancedTable<TData = any, TValue = any>({
         onGridReady: (e) => {
             if (onGridReady) {
                 onGridReady(e)
+
+                if (manualSort !== undefined) {
+                    e.api.applyColumnState({
+                        defaultState: { sort: null },
+                    })
+                    e.api.applyColumnState({
+                        state: [
+                            {
+                                colId: manualSort.sortCol,
+                                sort: manualSort.sortType,
+                            },
+                        ],
+                    })
+                }
             }
         },
         onSortChanged: (e) => {

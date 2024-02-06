@@ -2,13 +2,20 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+<<<<<<< HEAD
+=======
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+>>>>>>> 2736ee5026aae66efb9609df9a2f033d14f022cc
     GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,
     GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
     GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+<<<<<<< HEAD
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+=======
+>>>>>>> 2736ee5026aae66efb9609df9a2f033d14f022cc
     RequestParams,
 } from './api'
 
@@ -22,6 +29,9 @@ interface IuseScheduleApiV1ComplianceTriggerUpdateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useScheduleApiV1ComplianceTriggerUpdate = (
     benchmarkId: string,
     query?: {
@@ -140,6 +150,9 @@ interface IuseScheduleApiV1DescribeConnectionStatusUpdateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useScheduleApiV1DescribeConnectionStatusUpdate = (
     query: {
         connection_id: string
@@ -255,6 +268,9 @@ interface IuseScheduleApiV1DescribeTriggerUpdateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useScheduleApiV1DescribeTriggerUpdate = (
     connectionId: string,
     query?: {
@@ -373,6 +389,9 @@ interface IuseScheduleApiV1DiscoveryResourcetypesListListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useScheduleApiV1DiscoveryResourcetypesListList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -485,6 +504,9 @@ interface IuseScheduleApiV1InsightTriggerUpdateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useScheduleApiV1InsightTriggerUpdate = (
     insightId: number,
     params: RequestParams = {},
@@ -598,6 +620,9 @@ interface IuseScheduleApiV1JobsCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useScheduleApiV1JobsCreate = (
     request: GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
     params: RequestParams = {},
@@ -710,6 +735,9 @@ interface IuseScheduleApiV1StacksListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useScheduleApiV1StacksList = (
     query?: {
         tag?: string[]
@@ -826,6 +854,9 @@ interface IuseScheduleApiV1StacksCreateCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useScheduleApiV1StacksCreateCreate = (
     data: {
         stateFile?: File
@@ -947,6 +978,9 @@ interface IuseScheduleApiV1StacksResourceListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useScheduleApiV1StacksResourceList = (
     query: {
         resourceId: string
@@ -1062,6 +1096,9 @@ interface IuseScheduleApiV1StacksDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useScheduleApiV1StacksDetail = (
     stackId: string,
     params: RequestParams = {},
@@ -1174,6 +1211,9 @@ interface IuseScheduleApiV1StacksDeleteState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useScheduleApiV1StacksDelete = (
     stackId: string,
     params: RequestParams = {},
@@ -1286,6 +1326,9 @@ interface IuseScheduleApiV1StacksFindingsCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useScheduleApiV1StacksFindingsCreate = (
     stackId: string,
     request: GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
@@ -1400,6 +1443,9 @@ interface IuseScheduleApiV1StacksInsightDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useScheduleApiV1StacksInsightDetail = (
     stackId: string,
     query: {
@@ -1520,6 +1566,9 @@ interface IuseScheduleApiV1StacksInsightsDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useScheduleApiV1StacksInsightsDetail = (
     stackId: string,
     query?: {

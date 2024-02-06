@@ -7,6 +7,10 @@ import DrawerPanel from '../../../components/DrawerPanel'
 import MemberDetails from './MemberDetails'
 import MemberInvite from './MemberInvite'
 import Notification from '../../../components/Notification'
+import {
+    dateTimeDisplay,
+    shortDateTimeDisplay,
+} from '../../../utilities/dateDisplay'
 
 const fixRole = (role: string) => {
     switch (role) {
@@ -92,6 +96,11 @@ export default function SettingsMembers() {
                     </Button>
                 </Flex>
                 <List className="mt-4">
+                    <ListItem>
+                        <Text className="w-1/3 text-start">Member</Text>
+                        <Text className="w-1/3 text-center">Last Activity</Text>
+                        <Text className="w-1/3 text-end mr-5">Permissions</Text>
+                    </ListItem>
                     {response?.map((item) => (
                         <ListItem
                             key={item.userName}
@@ -103,8 +112,8 @@ export default function SettingsMembers() {
                             className="cursor-pointer"
                         >
                             <Flex
-                                justifyContent="start"
-                                className="truncate space-x-4"
+                                justifyContent="between"
+                                className="truncate space-x-4 w-1/3"
                             >
                                 <div className="truncate p-1">
                                     <Text className="truncate font-medium text-gray-800">
@@ -115,8 +124,35 @@ export default function SettingsMembers() {
                                     </Text>
                                 </div>
                             </Flex>
-                            <Text>{fixRole(item.roleName || '')}</Text>
-                            <ChevronRightIcon className="h-6 w-6 shrink-0" />
+                            <Text className="w-1/3 text-center">
+                                {item.lastActivity
+                                    ? dateTimeDisplay(item.lastActivity)
+                                    : 'Never'}
+                            </Text>
+                            <Flex
+                                flexDirection="row"
+                                className="w-1/3"
+                                alignItems="center"
+                                justifyContent="end"
+                            >
+                                <Flex
+                                    justifyContent="end"
+                                    className="truncate w-full"
+                                >
+                                    <div className="truncate p-1">
+                                        <Text className="truncate font-medium text-gray-800">
+                                            {fixRole(item.roleName || '')}
+                                        </Text>
+                                        <Text className="truncate text-xs text-gray-400">
+                                            {(item.scopedConnectionIDs
+                                                ?.length || 0) === 0
+                                                ? 'All accounts'
+                                                : `${item.scopedConnectionIDs?.length} accounts`}
+                                        </Text>
+                                    </div>
+                                </Flex>
+                                <ChevronRightIcon className="h-6 w-6 shrink-0" />
+                            </Flex>
                         </ListItem>
                     ))}
                 </List>

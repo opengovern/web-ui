@@ -43,7 +43,12 @@ export function RenderObject({ obj }: IRenderObjectProps) {
                 })}
         </List> */
         <Card className="px-1.5 py-3 mb-2">
-            <ReactJson src={obj} />
+            <ReactJson
+                src={obj}
+                style={{
+                    lineBreak: 'anywhere',
+                }}
+            />
         </Card>
     )
 }

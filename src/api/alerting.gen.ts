@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+<<<<<<< HEAD
     GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
     GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
     GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
@@ -12,6 +13,18 @@ import {
     GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
     GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
     GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
+=======
+    GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers,
+>>>>>>> 2736ee5026aae66efb9609df9a2f033d14f022cc
     RequestParams,
 } from './api'
 
@@ -25,6 +38,9 @@ interface IuseAlertingApiV1ActionCreateCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAlertingApiV1ActionCreateCreate = (
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
     params: RequestParams = {},
@@ -138,6 +154,9 @@ interface IuseAlertingApiV1ActionDeleteDeleteState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAlertingApiV1ActionDeleteDelete = (
     actionId: string,
     params: RequestParams = {},
@@ -251,6 +270,9 @@ interface IuseAlertingApiV1ActionJiraCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAlertingApiV1ActionJiraCreate = (
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
     params: RequestParams = {},
@@ -363,6 +385,9 @@ interface IuseAlertingApiV1ActionListListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAlertingApiV1ActionListList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -474,6 +499,9 @@ interface IuseAlertingApiV1ActionSlackCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAlertingApiV1ActionSlackCreate = (
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
     params: RequestParams = {},
@@ -588,6 +616,9 @@ interface IuseAlertingApiV1ActionUpdateUpdateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAlertingApiV1ActionUpdateUpdate = (
     actionId: string,
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
@@ -704,6 +735,9 @@ interface IuseAlertingApiV1RuleCreateCreateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAlertingApiV1RuleCreateCreate = (
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
     params: RequestParams = {},
@@ -816,6 +850,9 @@ interface IuseAlertingApiV1RuleDeleteDeleteState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAlertingApiV1RuleDeleteDelete = (
     ruleId: string,
     params: RequestParams = {},
@@ -928,6 +965,9 @@ interface IuseAlertingApiV1RuleListListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAlertingApiV1RuleListList = (
     params: RequestParams = {},
     autoExecute = true,
@@ -1039,6 +1079,9 @@ interface IuseAlertingApiV1RuleUpdateUpdateState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAlertingApiV1RuleUpdateUpdate = (
     ruleId: string,
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
@@ -1152,6 +1195,9 @@ interface IuseAlertingApiV1RuleTriggerDetailState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAlertingApiV1RuleTriggerDetail = (
     ruleId: string,
     params: RequestParams = {},
@@ -1266,6 +1312,9 @@ interface IuseAlertingApiV1TriggerListListState {
     error?: any
 }
 
+/**
+ * URL:
+ */
 export const useAlertingApiV1TriggerListList = (
     params: RequestParams = {},
     autoExecute = true,

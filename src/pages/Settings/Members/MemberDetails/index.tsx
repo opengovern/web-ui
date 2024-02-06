@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react'
-import { Badge, Button, Flex, List, ListItem, Text } from '@tremor/react'
-import { TrashIcon } from '@heroicons/react/24/outline'
+import {
+    Badge,
+    Button,
+    Flex,
+    List,
+    ListItem,
+    MultiSelect,
+    MultiSelectItem,
+    Text,
+} from '@tremor/react'
+import { ChevronDoubleDownIcon, TrashIcon } from '@heroicons/react/24/outline'
 import dayjs from 'dayjs'
 import { useSetAtom } from 'jotai'
 import {
@@ -11,6 +20,10 @@ import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding } from '../..
 import ConfirmModal from '../../../../components/Modal/ConfirmModal'
 import { notificationAtom } from '../../../../store'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
+import {
+    useIntegrationApiV1ConnectionsDelete,
+    useIntegrationApiV1ConnectionsSummariesList,
+} from '../../../../api/integration.gen'
 
 interface IMemberDetails {
     user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
@@ -23,6 +36,9 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
     const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
         'viewer'
     )
+    const [scopedConnectionIDs, setScopedConnectionIDs] = useState<string[]>(
+        user?.scopedConnectionIDs || []
+    )
     const setNotification = useSetAtom(notificationAtom)
 
     const {
@@ -30,7 +46,11 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
         isLoading,
         sendNow: updateRole,
     } = useAuthApiV1UserRoleBindingUpdate(
-        { userId: user?.userId || '', roleName: roleValue },
+        {
+            userId: user?.userId || '',
+            roleName: roleValue,
+            connectionIDs: scopedConnectionIDs,
+        },
         {},
         false
     )
@@ -44,6 +64,9 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
         {},
         false
     )
+
+    const { response: connectionList, isLoading: isConnectionListLoading } =
+        useIntegrationApiV1ConnectionsSummariesList()
 
     useEffect(() => {
         if (role === 'viewer' || role === 'editor' || role === 'admin') {
@@ -73,13 +96,11 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
     }
 
     const lastActivity = () => {
-        const d = dayjs.utc(user.lastActivity || Date.now().toString())
-        const unix = d.unix()
-        if (unix < 0) {
+        if (user.lastActivity === undefined) {
             return 'Never'
         }
 
-        return d.format('MMM DD, YYYY HH:mm')
+        return dateTimeDisplay(user.lastActivity)
     }
 
     const items = [
@@ -119,6 +140,14 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
         },
     ]
 
+    const multiSelectCount = () => {
+        return (
+            <div className="bg-gray-200 w-9 h-9 text-center pt-2 -ml-3 rounded-l-lg">
+                {scopedConnectionIDs.length}
+            </div>
+        )
+    }
+
     return (
         <>
             <ConfirmModal
@@ -151,7 +180,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                             <ListItem key={item.title} className="py-4">
                                 <Flex
                                     justifyContent="start"
-                                    className="truncate space-x-4"
+                                    className="truncate space-x-4 w-fit"
                                 >
                                     <Text className="font-medium text-gray-500">
                                         {item.title}
@@ -202,6 +231,61 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                                     )
                                 })}
                             </div>
+                        </Flex>
+                    </ListItem>
+                    <ListItem key="item" className="py-4">
+                        <Flex
+                            justifyContent="between"
+                            alignItems="start"
+                            className="truncate space-x-4"
+                        >
+                            <Text className="font-medium text-gray-500">
+                                Scoped account access
+                            </Text>
+
+                            <Flex
+                                flexDirection="col"
+                                className="w-2/3"
+                                justifyContent="start"
+                                alignItems="end"
+                            >
+                                <MultiSelect
+                                    disabled={isConnectionListLoading}
+                                    className="w-96 absolute"
+                                    value={scopedConnectionIDs}
+                                    onValueChange={(value) =>
+                                        setScopedConnectionIDs(value)
+                                    }
+                                    placeholder="All connections"
+                                    icon={multiSelectCount}
+                                >
+                                    {connectionList?.connections?.map(
+                                        (connection) => (
+                                            <MultiSelectItem
+                                                value={connection.id || ''}
+                                            >
+                                                <Flex
+                                                    justifyContent="end"
+                                                    className="truncate w-full"
+                                                >
+                                                    <div className="truncate p-1">
+                                                        <Text className="truncate font-medium text-gray-800">
+                                                            {
+                                                                connection.providerConnectionID
+                                                            }
+                                                        </Text>
+                                                        <Text className="truncate text-xs text-gray-400">
+                                                            {
+                                                                connection.providerConnectionName
+                                                            }
+                                                        </Text>
+                                                    </div>
+                                                </Flex>
+                                            </MultiSelectItem>
+                                        )
+                                    )}
+                                </MultiSelect>
+                            </Flex>
                         </Flex>
                     </ListItem>
                 </List>
