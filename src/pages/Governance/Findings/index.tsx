@@ -54,6 +54,7 @@ export default function Findings() {
         resourceTypeID: string[] | undefined
         lifecycle: boolean[] | undefined
         activeTimeRange: DateRange | undefined
+        eventTimeRange: DateRange | undefined
     }>({
         connector: SourceType.Nil,
         conformanceStatus: [
@@ -72,6 +73,7 @@ export default function Findings() {
         resourceTypeID: [],
         lifecycle: [true, false],
         activeTimeRange: undefined,
+        eventTimeRange: undefined,
     })
 
     return (

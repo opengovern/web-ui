@@ -210,6 +210,7 @@ interface ICount {
         resourceTypeID: string[] | undefined
         lifecycle: boolean[] | undefined
         activeTimeRange: DateRange | undefined
+        eventTimeRange: DateRange | undefined
     }
 }
 
@@ -242,7 +243,7 @@ export default function Events({ query }: ICount) {
                             conformanceStatus: query.conformanceStatus,
                             stateActive: query.lifecycle,
                             ...(query.activeTimeRange && {
-                                lastEvent: {
+                                evaluatedAt: {
                                     from: query.activeTimeRange.start.unix(),
                                     to: query.activeTimeRange.end.unix(),
                                 },
@@ -271,7 +272,6 @@ export default function Events({ query }: ICount) {
                             rowData: resp.data.findingEvents || [],
                             rowCount: resp.data.totalCount || 0,
                         })
-                        console.log(resp.data)
                         // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         sortKey =

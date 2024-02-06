@@ -35,6 +35,7 @@ import Severity from './Severity'
 import Datepicker, { IDate } from './Datepicker'
 import {
     DateRange,
+    defaultEventTime,
     defaultFindingsTime,
     useURLParam,
 } from '../../../../utilities/urlstate'
@@ -53,6 +54,7 @@ interface IFilters {
         resourceTypeID: string[] | undefined
         lifecycle: boolean[] | undefined
         activeTimeRange: DateRange | undefined
+        eventTimeRange: DateRange | undefined
     }) => void
     isFinding: boolean
     type: 'findings' | 'resources' | 'controls' | 'accounts' | 'events'
@@ -115,6 +117,25 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             }
         }
     )
+    const [eventTimeRange, setEventTimeRange] = useURLParam<IDate>(
+        'eventDateRange',
+        defaultEventTime,
+        (v) => {
+            return `${v.start.format('YYYY-MM-DD HH:mm:ss')} - ${v.end.format(
+                'YYYY-MM-DD HH:mm:ss'
+            )}`
+        },
+        (v) => {
+            const arr = v
+                .replaceAll('+', ' ')
+                .split(' - ')
+                .map((m) => dayjs(m))
+            return {
+                start: arr[0],
+                end: arr[1],
+            }
+        }
+    )
     const [selectedFilters, setSelectedFilters] = useState<string[]>([
         'conformance_status',
     ])
@@ -132,6 +153,9 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             activeTimeRange: selectedFilters.includes('date')
                 ? activeTimeRange
                 : undefined,
+            eventTimeRange: selectedFilters.includes('eventDate')
+                ? activeTimeRange
+                : undefined,
         })
     }, [
         connector,
@@ -143,6 +167,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
         resourceTypeID,
         lifecycle,
         activeTimeRange,
+        eventTimeRange,
     ])
 
     const { response: filters } = useComplianceApiV1FindingsFiltersCreate({})
@@ -309,13 +334,38 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             id: 'date',
             name: type === 'events' ? 'Audit Period' : 'Last Evaluated',
             icon: CalendarIcon,
-            component: <Datepicker condition={dateCon} />,
-            conditions: ['isBetween', 'relative'],
+            component: (
+                <Datepicker
+                    condition={dateCon}
+                    activeTimeRange={activeTimeRange}
+                    setActiveTimeRange={(v) => setActiveTimeRange(v)}
+                />
+            ),
+            conditions: ['isBetween', 'isRelative'],
             setCondition: (c: string) => setDateCon(c),
             value: activeTimeRange,
             defaultValue: { start: dayjs.utc(), end: dayjs.utc() },
             onDelete: () =>
                 setActiveTimeRange({ start: dayjs.utc(), end: dayjs.utc() }),
+            findingOnly: true,
+        },
+        {
+            id: 'eventDate',
+            name: 'Event Time',
+            icon: CalendarIcon,
+            component: (
+                <Datepicker
+                    condition={dateCon}
+                    activeTimeRange={eventTimeRange}
+                    setActiveTimeRange={(v) => setEventTimeRange(v)}
+                />
+            ),
+            conditions: ['isBetween', 'isRelative'],
+            setCondition: (c: string) => setDateCon(c),
+            value: eventTimeRange,
+            defaultValue: { start: dayjs.utc(), end: dayjs.utc() },
+            onDelete: () =>
+                setEventTimeRange({ start: dayjs.utc(), end: dayjs.utc() }),
             findingOnly: true,
         },
     ]
@@ -329,6 +379,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
                         id={f?.id}
                         className={`border ${
                             f?.id !== 'date' &&
+                            f?.id !== 'eventDate' &&
                             compareArrays(
                                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                 // @ts-ignore
@@ -470,7 +521,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
                                         flexDirection="col"
                                         justifyContent="start"
                                         alignItems="start"
-                                        className="gap-1.5 max-h-[200px] overflow-y-scroll no-scroll max-w-full"
+                                        className="gap-1.5 max-w-full"
                                     >
                                         {filterOptions
                                             .filter(
