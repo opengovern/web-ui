@@ -347,11 +347,11 @@ export default function Filter({ onApply, type }: IFilters) {
             defaultValue: { start: dayjs.utc(), end: dayjs.utc() },
             onDelete: () =>
                 setActiveTimeRange({ start: dayjs.utc(), end: dayjs.utc() }),
-            types: ['findings'],
+            types: ['findings', 'events'],
         },
         {
             id: 'eventDate',
-            name: 'Event Time',
+            name: 'Last Event',
             icon: CalendarIcon,
             component: (
                 <Datepicker
@@ -366,7 +366,7 @@ export default function Filter({ onApply, type }: IFilters) {
             defaultValue: { start: dayjs.utc(), end: dayjs.utc() },
             onDelete: () =>
                 setEventTimeRange({ start: dayjs.utc(), end: dayjs.utc() }),
-            types: ['findings', 'events'],
+            types: ['findings'],
         },
     ]
 
