@@ -27,6 +27,9 @@ interface IuseScheduleApiV1ComplianceTriggerUpdateState {
  */
 export const useScheduleApiV1ComplianceTriggerUpdate = (
     benchmarkId: string,
+    query?: {
+        connection_id?: string[]
+    },
     params: RequestParams = {},
     autoExecute = true,
     overwriteWorkspace: string | undefined = undefined
@@ -43,7 +46,7 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, params, autoExecute])
+        JSON.stringify([benchmarkId, query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -68,7 +71,7 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.schedule
-                .apiV1ComplianceTriggerUpdate(benchmarkId, paramsSignal)
+                .apiV1ComplianceTriggerUpdate(benchmarkId, query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -104,8 +107,10 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
         }
     }
 
-    if (JSON.stringify([benchmarkId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId, params, autoExecute]))
+    if (
+        JSON.stringify([benchmarkId, query, params, autoExecute]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([benchmarkId, query, params, autoExecute]))
     }
 
     useEffect(() => {

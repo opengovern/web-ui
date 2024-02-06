@@ -30,28 +30,15 @@ export interface IDate {
 
 interface IDatepicker {
     condition: string
+    activeTimeRange: IDate
+    setActiveTimeRange: (v: IDate) => void
 }
 
-export default function Datepicker({ condition }: IDatepicker) {
-    const [activeTimeRange, setActiveTimeRange] = useURLParam<IDate>(
-        'dateRange',
-        defaultFindingsTime,
-        (v) => {
-            return `${v.start.format('YYYY-MM-DD HH:mm')} - ${v.end.format(
-                'YYYY-MM-DD HH:mm'
-            )}`
-        },
-        (v) => {
-            const arr = v
-                .replaceAll('+', ' ')
-                .split(' - ')
-                .map((m) => dayjs(m))
-            return {
-                start: arr[0],
-                end: arr[1],
-            }
-        }
-    )
+export default function Datepicker({
+    condition,
+    activeTimeRange,
+    setActiveTimeRange,
+}: IDatepicker) {
     const [startH, setStartH] = useState(activeTimeRange.start.hour())
     const [startM, setStartM] = useState(activeTimeRange.start.minute())
     const [endH, setEndH] = useState(activeTimeRange.end.hour())

@@ -54,6 +54,7 @@ export default function Findings() {
         resourceTypeID: string[] | undefined
         lifecycle: boolean[] | undefined
         activeTimeRange: DateRange | undefined
+        eventTimeRange: DateRange | undefined
     }>({
         connector: SourceType.Nil,
         conformanceStatus: [
@@ -72,6 +73,7 @@ export default function Findings() {
         resourceTypeID: [],
         lifecycle: [true, false],
         activeTimeRange: undefined,
+        eventTimeRange: undefined,
     })
 
     return (
@@ -85,15 +87,7 @@ export default function Findings() {
                     <Tab>Accounts</Tab>
                     <Tab>Controls</Tab>
                 </TabList>
-                <Filter
-                    isFinding={
-                        selectedGroup === 'findings' ||
-                        selectedGroup === 'resources' ||
-                        selectedGroup === 'events'
-                    }
-                    type={selectedGroup}
-                    onApply={(e) => setQuery(e)}
-                />
+                <Filter type={selectedGroup} onApply={(e) => setQuery(e)} />
                 <TabPanels className="mt-4">
                     <TabPanel>
                         <FindingsWithFailure query={query} />

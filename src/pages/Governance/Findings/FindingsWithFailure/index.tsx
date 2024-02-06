@@ -27,7 +27,7 @@ export const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
             field: 'providerConnectionName',
-            headerName: 'Cloud account',
+            headerName: 'Cloud Account',
             sortable: false,
             filter: true,
             hide: true,
@@ -53,7 +53,7 @@ export const columns = (isDemo: boolean) => {
         },
         {
             field: 'resourceName',
-            headerName: 'Resource name',
+            headerName: 'Resource Name',
             hide: false,
             type: 'string',
             enableRowGroup: true,
@@ -75,7 +75,7 @@ export const columns = (isDemo: boolean) => {
         },
         {
             field: 'resourceType',
-            headerName: 'Resource info',
+            headerName: 'Resource Info',
             type: 'string',
             enableRowGroup: true,
             sortable: false,
@@ -150,17 +150,6 @@ export const columns = (isDemo: boolean) => {
             ),
         },
         {
-            field: 'connectionID',
-            headerName: 'Kaytu connection ID',
-            type: 'string',
-            hide: true,
-            enableRowGroup: true,
-            sortable: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-        },
-        {
             field: 'conformanceStatus',
             headerName: 'Status',
             type: 'string',
@@ -197,7 +186,7 @@ export const columns = (isDemo: boolean) => {
         },
         {
             field: 'evaluatedAt',
-            headerName: 'Last checked',
+            headerName: 'Last Evaluation',
             type: 'datetime',
             sortable: false,
             filter: true,
@@ -206,6 +195,39 @@ export const columns = (isDemo: boolean) => {
             valueFormatter: (param: ValueFormatterParams) => {
                 return param.value ? dateTimeDisplay(param.value) : ''
             },
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="center"
+                    className="h-full"
+                >
+                    {dateTimeDisplay(param.value)}
+                </Flex>
+            ),
+            hide: true,
+        },
+        {
+            field: 'lastEvent',
+            headerName: 'Last Event',
+            type: 'datetime',
+            sortable: false,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            valueFormatter: (param: ValueFormatterParams) => {
+                return param.value ? dateTimeDisplay(param.value) : ''
+            },
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="center"
+                    className="h-full"
+                >
+                    {dateTimeDisplay(param.value)}
+                </Flex>
+            ),
             hide: true,
         },
     ]
@@ -227,6 +249,7 @@ interface ICount {
         resourceTypeID: string[] | undefined
         lifecycle: boolean[] | undefined
         activeTimeRange: DateRange | undefined
+        eventTimeRange: DateRange | undefined
     }
 }
 
@@ -258,8 +281,14 @@ export default function FindingsWithFailure({ query }: ICount) {
                             resourceTypeID: query.resourceTypeID,
                             conformanceStatus: query.conformanceStatus,
                             stateActive: query.lifecycle,
-                            ...(query.activeTimeRange && {
+                            ...(query.eventTimeRange && {
                                 lastEvent: {
+                                    from: query.eventTimeRange.start.unix(),
+                                    to: query.eventTimeRange.end.unix(),
+                                },
+                            }),
+                            ...(query.activeTimeRange && {
+                                evaluatedAt: {
                                     from: query.activeTimeRange.start.unix(),
                                     to: query.activeTimeRange.end.unix(),
                                 },
@@ -288,6 +317,7 @@ export default function FindingsWithFailure({ query }: ICount) {
                             rowData: resp.data.findings || [],
                             rowCount: resp.data.totalCount || 0,
                         })
+                        console.log(resp.data)
                         // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         sortKey =
