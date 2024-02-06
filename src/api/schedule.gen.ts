@@ -2,20 +2,13 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-<<<<<<< HEAD
-=======
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
->>>>>>> 2736ee5026aae66efb9609df9a2f033d14f022cc
     GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,
     GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
     GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
-<<<<<<< HEAD
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-=======
->>>>>>> 2736ee5026aae66efb9609df9a2f033d14f022cc
     RequestParams,
 } from './api'
 

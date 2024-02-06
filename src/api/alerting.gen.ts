@@ -2,29 +2,16 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-<<<<<<< HEAD
     GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
     GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
-=======
-    GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
     GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
     GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
     GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
     GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
     GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers,
->>>>>>> 2736ee5026aae66efb9609df9a2f033d14f022cc
     RequestParams,
 } from './api'
 

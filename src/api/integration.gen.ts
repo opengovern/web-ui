@@ -2,35 +2,20 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-<<<<<<< HEAD
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCountConnectionsResponse,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCountConnectionsResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse,
-=======
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCountConnectionsResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
->>>>>>> 2736ee5026aae66efb9609df9a2f033d14f022cc
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
     RequestParams,
 } from './api'
 

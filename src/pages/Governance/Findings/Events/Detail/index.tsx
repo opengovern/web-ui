@@ -69,13 +69,13 @@ export default function EventDetail({ event, open, onClose }: IFindingDetail) {
                     isString
                 />
                 <SummaryCard
-                    title="Resource ID"
-                    metric={event?.resourceID}
+                    title="Region"
+                    metric={event?.resourceLocation}
                     isString
                 />
                 <SummaryCard
                     title="Resource Type"
-                    metric={event?.resourceType}
+                    metric={event?.resourceTypeName}
                     isString
                 />
             </Grid>

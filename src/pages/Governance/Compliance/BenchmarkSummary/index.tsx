@@ -6,7 +6,6 @@ import {
     useComplianceApiV1BenchmarksSummaryDetail,
     useComplianceApiV1BenchmarksTrendDetail,
     useComplianceApiV1FindingEventsCountList,
-    useComplianceApiV1FindingsTopDetail,
 } from '../../../../api/compliance.gen'
 import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedule.gen'
 import {
@@ -189,7 +188,12 @@ export default function BenchmarkSummary() {
         sendNow: updateDetail,
     } = useComplianceApiV1BenchmarksSummaryDetail(String(benchmarkId))
     const { sendNow: triggerEvaluate, isExecuted } =
-        useScheduleApiV1ComplianceTriggerUpdate(String(benchmarkId), {}, false)
+        useScheduleApiV1ComplianceTriggerUpdate(
+            String(benchmarkId),
+            {},
+            {},
+            false
+        )
     const { response: benchmarkKPIStart, isLoading: benchmarkKPIStartLoading } =
         useComplianceApiV1BenchmarksSummaryDetail(String(benchmarkId), {
             ...topQuery,
