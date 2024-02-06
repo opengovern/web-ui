@@ -141,7 +141,7 @@ export default function Datepicker({
 
     return (
         <Flex flexDirection="col" justifyContent="start" alignItems="start">
-            {condition === 'relative' ? (
+            {condition === 'isRelative' ? (
                 <>
                     <Flex
                         onClick={() => setActiveTimeRange(last7Days())}
