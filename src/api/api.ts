@@ -345,6 +345,8 @@ export enum GithubComKaytuIoKaytuEnginePkgAuthApiInviteStatus {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest {
+    /** Name of the role */
+    connectionIDs: string[]
     /**
      * Name of the role
      * @example "admin"
@@ -448,6 +450,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding {
      * @example "admin"
      */
     roleName?: 'admin' | 'editor' | 'viewer'
+    scopedConnectionIDs?: string[]
     /**
      * Invite status
      * @example "accepted"
@@ -932,6 +935,10 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent {
     reason?: string
     /** @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1" */
     resourceID?: string
+    /** @example "eastus" */
+    resourceLocation?: string
+    /** @example "vm-1" */
+    resourceName?: string
     /** @example "Microsoft.Compute/virtualMachines" */
     resourceType?: string
     /**
@@ -6559,11 +6566,16 @@ export class Api<
          */
         apiV1ComplianceTriggerUpdate: (
             benchmarkId: string,
+            query?: {
+                /** Connection ID */
+                connection_id?: string[]
+            },
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
                 path: `/schedule/api/v1/compliance/trigger/${benchmarkId}`,
                 method: 'PUT',
+                query: query,
                 secure: true,
                 ...params,
             }),
