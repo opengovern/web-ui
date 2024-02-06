@@ -27,6 +27,131 @@ import EventDetail from './Detail'
 export const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
+            field: 'id',
+            headerName: 'Event ID',
+            type: 'string',
+            hide: false,
+            enableRowGroup: true,
+            sortable: false,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                >
+                    <Text className="text-gray-800">{param.value}</Text>
+                </Flex>
+            ),
+        },
+        {
+            field: 'evaluatedAt',
+            headerName: 'Event Time',
+            type: 'datetime',
+            sortable: false,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                >
+                    <Text className="text-gray-800">
+                        {param.value ? dateTimeDisplay(param.value) : ''}
+                    </Text>
+                </Flex>
+            ),
+            hide: true,
+        },
+        {
+            field: 'resourceType',
+            headerName: 'Resource info',
+            type: 'string',
+            enableRowGroup: true,
+            sortable: false,
+            hide: false,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                >
+                    <Text className="text-gray-800">{param.value}</Text>
+                    <Text>{param.data.resourceID}</Text>
+                </Flex>
+            ),
+        },
+        {
+            field: 'conformanceStatus',
+            headerName: 'State Change',
+            type: 'string',
+            hide: false,
+            enableRowGroup: true,
+            sortable: false,
+            filter: true,
+            resizable: true,
+            width: 200,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex flexDirection="row" className="h-full w-fit gap-2">
+                    {statusBadge(param.data.previousConformanceStatus)}
+                    <ArrowRightIcon className="w-5" />
+                    {statusBadge(param.value)}
+                </Flex>
+            ),
+        },
+        {
+            field: 'controlID',
+            headerName: 'Control ID',
+            type: 'string',
+            hide: true,
+            enableRowGroup: true,
+            sortable: false,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                >
+                    <Text className="text-gray-800">{param.value}</Text>
+                </Flex>
+            ),
+        },
+        {
+            field: 'benchmarkID',
+            headerName: 'Benchmark',
+            type: 'string',
+            enableRowGroup: false,
+            sortable: false,
+            hide: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="center"
+                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                >
+                    <Text className="text-gray-800">{param.value}</Text>
+                </Flex>
+            ),
+        },
+        {
             field: 'providerConnectionName',
             headerName: 'Cloud account',
             sortable: false,
@@ -53,91 +178,6 @@ export const columns = (isDemo: boolean) => {
             ),
         },
         {
-            field: 'id',
-            headerName: 'Event ID',
-            type: 'string',
-            hide: false,
-            enableRowGroup: true,
-            sortable: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-            cellRenderer: (param: ICellRendererParams) => (
-                <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
-                >
-                    <Text className="text-gray-800">{param.value}</Text>
-                </Flex>
-            ),
-        },
-        {
-            field: 'resourceType',
-            headerName: 'Resource info',
-            type: 'string',
-            enableRowGroup: true,
-            sortable: false,
-            hide: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-            cellRenderer: (param: ICellRendererParams) => (
-                <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
-                >
-                    <Text className="text-gray-800">{param.value}</Text>
-                    <Text>{param.data.resourceID}</Text>
-                </Flex>
-            ),
-        },
-        {
-            field: 'benchmarkID',
-            headerName: 'Benchmark',
-            type: 'string',
-            enableRowGroup: false,
-            sortable: false,
-            hide: true,
-            filter: true,
-            resizable: true,
-            flex: 1,
-            cellRenderer: (param: ICellRendererParams) => (
-                <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
-                >
-                    <Text className="text-gray-800">{param.value}</Text>
-                </Flex>
-            ),
-        },
-        {
-            field: 'controlID',
-            headerName: 'Control ID',
-            type: 'string',
-            hide: true,
-            enableRowGroup: true,
-            sortable: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-            cellRenderer: (param: ICellRendererParams) => (
-                <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
-                >
-                    <Text className="text-gray-800">{param.value}</Text>
-                </Flex>
-            ),
-        },
-        {
             field: 'resourceLocation',
             headerName: 'Region',
             type: 'string',
@@ -159,24 +199,6 @@ export const columns = (isDemo: boolean) => {
             ),
         },
         {
-            field: 'conformanceStatus',
-            headerName: 'State Change',
-            type: 'string',
-            hide: false,
-            enableRowGroup: true,
-            sortable: false,
-            filter: true,
-            resizable: true,
-            width: 200,
-            cellRenderer: (param: ICellRendererParams) => (
-                <Flex flexDirection="row" className="h-full w-fit gap-2">
-                    {statusBadge(param.data.previousConformanceStatus)}
-                    <ArrowRightIcon className="w-5" />
-                    {statusBadge(param.value)}
-                </Flex>
-            ),
-        },
-        {
             field: 'severity',
             headerName: 'Severity',
             type: 'string',
@@ -189,28 +211,6 @@ export const columns = (isDemo: boolean) => {
             cellRenderer: (param: ValueFormatterParams) => (
                 <Flex className="h-full">{severityBadge(param.value)}</Flex>
             ),
-        },
-        {
-            field: 'evaluatedAt',
-            headerName: 'Event Time',
-            type: 'datetime',
-            sortable: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-            cellRenderer: (param: ICellRendererParams) => (
-                <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
-                >
-                    <Text className="text-gray-800">
-                        {param.value ? dateTimeDisplay(param.value) : ''}
-                    </Text>
-                </Flex>
-            ),
-            hide: true,
         },
     ]
     return temp

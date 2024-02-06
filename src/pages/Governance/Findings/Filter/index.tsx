@@ -97,6 +97,7 @@ export default function Filter({ onApply, type }: IFilters) {
     )
     const [resourceCon, setResourceCon] = useState('is')
     const [dateCon, setDateCon] = useState('isBetween')
+    const [eventDateCon, setEventDateCon] = useState('isBetween')
     const [activeTimeRange, setActiveTimeRange] = useURLParam<IDate>(
         'dateRange',
         defaultFindingsTime,
@@ -346,26 +347,26 @@ export default function Filter({ onApply, type }: IFilters) {
             defaultValue: { start: dayjs.utc(), end: dayjs.utc() },
             onDelete: () =>
                 setActiveTimeRange({ start: dayjs.utc(), end: dayjs.utc() }),
-            types: ['findings'],
+            types: ['findings', 'events'],
         },
         {
             id: 'eventDate',
-            name: 'Event Time',
+            name: 'Last Event',
             icon: CalendarIcon,
             component: (
                 <Datepicker
-                    condition={dateCon}
+                    condition={eventDateCon}
                     activeTimeRange={eventTimeRange}
                     setActiveTimeRange={(v) => setEventTimeRange(v)}
                 />
             ),
             conditions: ['isBetween', 'isRelative'],
-            setCondition: (c: string) => setDateCon(c),
+            setCondition: (c: string) => setEventDateCon(c),
             value: eventTimeRange,
             defaultValue: { start: dayjs.utc(), end: dayjs.utc() },
             onDelete: () =>
                 setEventTimeRange({ start: dayjs.utc(), end: dayjs.utc() }),
-            types: ['findings', 'events'],
+            types: ['findings'],
         },
     ]
 
@@ -399,7 +400,7 @@ export default function Filter({ onApply, type }: IFilters) {
                             <Text className="text-inherit whitespace-nowrap">
                                 {`${f?.name}${
                                     // eslint-disable-next-line no-nested-ternary
-                                    f?.id === 'date'
+                                    f?.id === 'date' || f?.id === 'eventDate'
                                         ? ` ${renderDateText(
                                               activeTimeRange.start,
                                               activeTimeRange.end
