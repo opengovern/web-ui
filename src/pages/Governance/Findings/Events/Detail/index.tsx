@@ -129,39 +129,6 @@ export default function EventDetail({ event, open, onClose }: IFindingDetail) {
                                 </Button>
                             </ListItem>
                         </List>
-                        <Grid className="w-full gap-4" numItems={2}>
-                            <SummaryCard
-                                title="Event ID"
-                                metric={event?.id}
-                                isString
-                            />
-                            <SummaryCard
-                                title="Date"
-                                metric={dateTimeDisplay(event?.evaluatedAt)}
-                                isString
-                            />
-                            <SummaryCard
-                                title="Finding"
-                                metric=""
-                                onClick={() => setOpenFinding(true)}
-                                isString
-                            />
-                            <SummaryCard
-                                title="Severity"
-                                metric={severityBadge(event?.severity)}
-                                isString
-                            />
-                            <SummaryCard
-                                title="State"
-                                metric={statusBadge(event?.conformanceStatus)}
-                                isString
-                            />
-                            <SummaryCard
-                                title="Control ID"
-                                metric={event?.controlID}
-                                isString
-                            />
-                        </Grid>
                     </TabPanel>
                     <TabPanel>
                         <Title className="mb-2">JSON</Title>
