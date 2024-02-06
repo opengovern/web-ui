@@ -7,6 +7,7 @@ import {
 } from 'ag-grid-community'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
+import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import { isDemoAtom, notificationAtom } from '../../../../store'
 import Table, { IColumn } from '../../../../components/Table'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
@@ -55,7 +56,7 @@ export const columns = (isDemo: boolean) => {
             field: 'id',
             headerName: 'Event ID',
             type: 'string',
-            hide: true,
+            hide: false,
             enableRowGroup: true,
             sortable: false,
             filter: true,
@@ -116,8 +117,8 @@ export const columns = (isDemo: boolean) => {
             ),
         },
         {
-            field: 'connectionID',
-            headerName: 'Kaytu connection ID',
+            field: 'controlID',
+            headerName: 'Control ID',
             type: 'string',
             hide: true,
             enableRowGroup: true,
@@ -138,21 +139,18 @@ export const columns = (isDemo: boolean) => {
         },
         {
             field: 'conformanceStatus',
-            headerName: 'Status',
+            headerName: 'State Change',
             type: 'string',
             hide: false,
             enableRowGroup: true,
             sortable: false,
             filter: true,
             resizable: true,
-            width: 100,
+            width: 200,
             cellRenderer: (param: ICellRendererParams) => (
-                <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    justifyContent="center"
-                    className="h-full"
-                >
+                <Flex flexDirection="row" className="h-full w-fit gap-2">
+                    {statusBadge(param.data.previousConformanceStatus)}
+                    <ArrowRightIcon className="w-5" />
                     {statusBadge(param.value)}
                 </Flex>
             ),
@@ -173,7 +171,7 @@ export const columns = (isDemo: boolean) => {
         },
         {
             field: 'evaluatedAt',
-            headerName: 'Last checked',
+            headerName: 'Event Time',
             type: 'datetime',
             sortable: false,
             filter: true,
@@ -273,6 +271,7 @@ export default function Events({ query }: ICount) {
                             rowData: resp.data.findingEvents || [],
                             rowCount: resp.data.totalCount || 0,
                         })
+                        console.log(resp.data)
                         // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         sortKey =
