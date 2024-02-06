@@ -1,9 +1,6 @@
-import { ValueFormatterParams } from 'ag-grid-community'
 import { Button, Callout, Flex, Switch, Text } from '@tremor/react'
 import { useEffect, useState } from 'react'
-import { useAtomValue } from 'jotai/index'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
-import { isDemoAtom } from '../../../../../store'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import Table, { IColumn } from '../../../../../components/Table'
 import {

@@ -28,6 +28,7 @@ import BenchmarkChart from '../../../../components/Benchmark/Chart'
 import { toErrorMessage } from '../../../../types/apierror'
 import { ChartType } from '../../../../components/Asset/Chart/Selectors'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
+import Evaluate from './Evaluate'
 
 const topResources = (
     input:
@@ -157,11 +158,8 @@ const benchmarkTrend = (
 
 export default function BenchmarkSummary() {
     const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
-    console.log(activeTimeRange)
     const { benchmarkId, resourceId } = useParams()
     const { value: selectedConnections } = useFilterState()
-    const [openTop, setOpenTop] = useState(false)
-    const [openConfirm, setOpenConfirm] = useState(false)
     const [assignments, setAssignments] = useState(0)
     const [recall, setRecall] = useState(false)
     const [chartLayout, setChartLayout] = useURLParam<'count' | 'percent'>(
@@ -188,10 +186,11 @@ export default function BenchmarkSummary() {
         isLoading,
         sendNow: updateDetail,
     } = useComplianceApiV1BenchmarksSummaryDetail(String(benchmarkId))
+    const [selectedAccounts, setSelectedAccounts] = useState<string[]>([])
     const { sendNow: triggerEvaluate, isExecuted } =
         useScheduleApiV1ComplianceTriggerUpdate(
             String(benchmarkId),
-            {},
+            { connection_id: selectedAccounts },
             {},
             false
         )
@@ -285,54 +284,16 @@ export default function BenchmarkSummary() {
                                 isAutoResponse={(x) => setRecall(true)}
                             />
                             {assignments > 0 && (
-                                <Button
-                                    icon={ArrowPathRoundedSquareIcon}
-                                    onClick={() => setOpenConfirm(true)}
-                                    loading={
-                                        !(
-                                            benchmarkDetail?.lastJobStatus ===
-                                                'FAILED' ||
-                                            benchmarkDetail?.lastJobStatus ===
-                                                'SUCCEEDED'
-                                        )
-                                    }
-                                >
-                                    {benchmarkDetail?.lastJobStatus ===
-                                        'FAILED' ||
-                                    benchmarkDetail?.lastJobStatus ===
-                                        'SUCCEEDED'
-                                        ? 'Evaluate now'
-                                        : 'Evaluating'}
-                                    {/* <Text className="whitespace-nowrap">{`Last evaluation: ${dateTimeDisplay(
-                                    benchmarkDetail?.evaluatedAt
-                                )}`}</Text> */}
-                                </Button>
+                                <Evaluate
+                                    id={benchmarkDetail?.id}
+                                    benchmarkDetail={benchmarkDetail}
+                                    onEvaluate={(c) => {
+                                        setSelectedAccounts(c)
+                                        triggerEvaluate()
+                                    }}
+                                />
                             )}
                         </Flex>
-                        <Modal
-                            open={openConfirm}
-                            onClose={() => setOpenConfirm(false)}
-                        >
-                            <Title>
-                                {`Do you want to run evaluation on ${assignments} accounts?`}
-                            </Title>
-                            <Flex className="mt-8">
-                                <Button
-                                    variant="secondary"
-                                    onClick={() => setOpenConfirm(false)}
-                                >
-                                    Close
-                                </Button>
-                                <Button
-                                    onClick={() => {
-                                        triggerEvaluate()
-                                        setOpenConfirm(false)
-                                    }}
-                                >
-                                    Evaluate
-                                </Button>
-                            </Flex>
-                        </Modal>
                     </Flex>
                     <Grid numItems={4} className="w-full gap-4 mb-4">
                         <SummaryCard
