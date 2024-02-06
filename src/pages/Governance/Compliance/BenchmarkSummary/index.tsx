@@ -157,6 +157,7 @@ const benchmarkTrend = (
 
 export default function BenchmarkSummary() {
     const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    console.log(activeTimeRange)
     const { benchmarkId, resourceId } = useParams()
     const { value: selectedConnections } = useFilterState()
     const [openTop, setOpenTop] = useState(false)
@@ -194,21 +195,30 @@ export default function BenchmarkSummary() {
             {},
             false
         )
-    const { response: benchmarkKPIStart, isLoading: benchmarkKPIStartLoading } =
-        useComplianceApiV1BenchmarksSummaryDetail(String(benchmarkId), {
-            ...topQuery,
-            timeAt: activeTimeRange.start.unix(),
-        })
-    const { response: benchmarkKPIEnd, isLoading: benchmarkKPIEndLoading } =
-        useComplianceApiV1BenchmarksSummaryDetail(String(benchmarkId), {
-            ...topQuery,
-            timeAt: activeTimeRange.end.unix(),
-        })
-    const { response: events, isLoading: eventsLoading } =
-        useComplianceApiV1FindingEventsCountList({
-            startTime: activeTimeRange.start.unix(),
-            endTime: activeTimeRange.end.unix(),
-        })
+    const {
+        response: benchmarkKPIStart,
+        isLoading: benchmarkKPIStartLoading,
+        sendNow: benchmarkKPIStartSend,
+    } = useComplianceApiV1BenchmarksSummaryDetail(String(benchmarkId), {
+        ...topQuery,
+        timeAt: activeTimeRange.start.unix(),
+    })
+    const {
+        response: benchmarkKPIEnd,
+        isLoading: benchmarkKPIEndLoading,
+        sendNow: benchmarkKPIEndSend,
+    } = useComplianceApiV1BenchmarksSummaryDetail(String(benchmarkId), {
+        ...topQuery,
+        timeAt: activeTimeRange.end.unix(),
+    })
+    const {
+        response: events,
+        isLoading: eventsLoading,
+        sendNow: eventsSend,
+    } = useComplianceApiV1FindingEventsCountList({
+        startTime: activeTimeRange.start.unix(),
+        endTime: activeTimeRange.end.unix(),
+    })
     const {
         response: trend,
         isLoading: trendLoading,
@@ -225,6 +235,13 @@ export default function BenchmarkSummary() {
             updateDetail()
         }
     }, [isExecuted, recall])
+
+    useEffect(() => {
+        benchmarkKPIStartSend()
+        benchmarkKPIEndSend()
+        eventsSend()
+        sendTrend()
+    }, [activeTimeRange])
 
     return (
         <>
