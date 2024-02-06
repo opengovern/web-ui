@@ -237,7 +237,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                         <Flex
                             justifyContent="between"
                             alignItems="start"
-                            className="truncate space-x-4 contents"
+                            className="truncate space-x-4"
                         >
                             <Text className="font-medium text-gray-500">
                                 Scoped account access
@@ -247,11 +247,11 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                                 flexDirection="col"
                                 className="w-2/3"
                                 justifyContent="start"
-                                alignItems="start"
+                                alignItems="end"
                             >
                                 <MultiSelect
                                     disabled={isConnectionListLoading}
-                                    className="w-full"
+                                    className="w-96 absolute"
                                     value={scopedConnectionIDs}
                                     onValueChange={(value) =>
                                         setScopedConnectionIDs(value)
