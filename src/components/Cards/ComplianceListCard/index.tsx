@@ -48,12 +48,18 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
         >
             <Flex>
                 <Flex justifyContent="start" className="w-3/4 gap-3">
-                    {getConnectorIcon(connector())}
+                    {benchmark?.tags?.kaytu_logo
+                        ? benchmark?.tags?.kaytu_logo.map((logo) => (
+                              <div className="min-w-[36px] w-9 h-9 rounded-full overflow-hidden border border-gray-100">
+                                  <img
+                                      className="w-full"
+                                      alt={logo}
+                                      src={logo}
+                                  />
+                              </div>
+                          ))
+                        : getConnectorIcon(connector())}
                     <Title className="truncate">{benchmark?.title}</Title>
-                    {benchmark?.tags?.kaytu_logo &&
-                        benchmark?.tags?.kaytu_logo.map((logo) => (
-                            <img className="h-6" alt={logo} src={logo} />
-                        ))}
                 </Flex>
                 <Button
                     variant="light"
