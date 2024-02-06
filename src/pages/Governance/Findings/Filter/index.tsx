@@ -190,10 +190,11 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             defaultValue: defConformanceStatus,
             onDelete: undefined,
             findingOnly: true,
+            types: ['findings', 'resources', 'events'],
         },
         {
             id: 'provider',
-            name: 'Provider',
+            name: 'Connector',
             icon: CloudConnect,
             component: (
                 <Provider
@@ -208,6 +209,13 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             defaultValue: [defConnector],
             onDelete: () => setConnector(defConnector),
             findingOnly: false,
+            types: [
+                'findings',
+                'resources',
+                'events',
+                'controls',
+                'connections',
+            ],
         },
         {
             id: 'lifecycle',
@@ -226,6 +234,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             defaultValue: defLifecycle,
             onDelete: () => setLifecycle(defLifecycle),
             findingOnly: true,
+            types: ['findings', 'resources', 'events'],
         },
         {
             id: 'severity',
@@ -245,6 +254,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             defaultValue: defSeverity,
             onDelete: () => setSeverity(defSeverity),
             findingOnly: true,
+            types: ['findings', 'resources', 'events'],
         },
         {
             id: 'connection',
@@ -266,6 +276,13 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             defaultValue: [],
             onDelete: () => setConnectionID([]),
             findingOnly: false,
+            types: [
+                'findings',
+                'resources',
+                'events',
+                'controls',
+                'connections',
+            ],
         },
         {
             id: 'control',
@@ -287,6 +304,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             defaultValue: [],
             onDelete: () => setControlID([]),
             findingOnly: true,
+            types: ['findings', 'resources', 'events'],
         },
         {
             id: 'benchmark',
@@ -308,6 +326,13 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             defaultValue: [],
             onDelete: () => setBenchmarkID([]),
             findingOnly: false,
+            types: [
+                'findings',
+                'resources',
+                'events',
+                'controls',
+                'connections',
+            ],
         },
         {
             id: 'resource',
@@ -329,6 +354,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             defaultValue: [],
             onDelete: () => setResourceTypeID([]),
             findingOnly: true,
+            types: ['findings', 'resources', 'events'],
         },
         {
             id: 'date',
@@ -348,6 +374,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             onDelete: () =>
                 setActiveTimeRange({ start: dayjs.utc(), end: dayjs.utc() }),
             findingOnly: true,
+            types: ['findings'],
         },
         {
             id: 'eventDate',
@@ -367,6 +394,7 @@ export default function Filter({ onApply, isFinding, type }: IFilters) {
             onDelete: () =>
                 setEventTimeRange({ start: dayjs.utc(), end: dayjs.utc() }),
             findingOnly: true,
+            types: ['findings', 'events'],
         },
     ]
 

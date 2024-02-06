@@ -202,7 +202,7 @@ export const columns = (isDemo: boolean) => {
                     justifyContent="center"
                     className="h-full"
                 >
-                    {statusBadge(param.value)}
+                    {dateTimeDisplay(param.value)}
                 </Flex>
             ),
             hide: true,
@@ -225,7 +225,7 @@ export const columns = (isDemo: boolean) => {
                     justifyContent="center"
                     className="h-full"
                 >
-                    {statusBadge(param.value)}
+                    {dateTimeDisplay(param.value)}
                 </Flex>
             ),
             hide: true,
