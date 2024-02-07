@@ -65,6 +65,7 @@ export default function Filter({ onApply, type }: IFilters) {
 
     const defConformanceStatus = [
         GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
     ]
     const [conformanceStatus, setConformanceStatus] = useState<
         | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
@@ -265,6 +266,7 @@ export default function Filter({ onApply, type }: IFilters) {
             value: connectionID,
             defaultValue: [],
             onDelete: () => setConnectionID([]),
+            data: filters?.connectionID,
             types: ['findings', 'resources', 'events', 'controls', 'accounts'],
         },
         {
@@ -286,6 +288,7 @@ export default function Filter({ onApply, type }: IFilters) {
             value: controlID,
             defaultValue: [],
             onDelete: () => setControlID([]),
+            data: filters?.controlID,
             types: ['findings', 'resources', 'events'],
         },
         {
@@ -307,6 +310,7 @@ export default function Filter({ onApply, type }: IFilters) {
             value: benchmarkID,
             defaultValue: [],
             onDelete: () => setBenchmarkID([]),
+            data: filters?.benchmarkID,
             types: ['findings', 'resources', 'events', 'controls', 'accounts'],
         },
         {
@@ -328,6 +332,7 @@ export default function Filter({ onApply, type }: IFilters) {
             value: resourceTypeID,
             defaultValue: [],
             onDelete: () => setResourceTypeID([]),
+            data: filters?.resourceTypeID,
             types: ['findings', 'resources', 'events'],
         },
         {
@@ -418,7 +423,17 @@ export default function Filter({ onApply, type }: IFilters) {
                                               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                               // @ts-ignore
                                               f?.value && f.value.length < 2
-                                                  ? `: ${f.value}`
+                                                  ? `: ${
+                                                        f.data
+                                                            ? f.data.find(
+                                                                  (d) =>
+                                                                      d.key ===
+                                                                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                                      // @ts-ignore
+                                                                      f.value[0]
+                                                              )?.displayName
+                                                            : f.value
+                                                    }`
                                                   : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                                     // @ts-ignore
                                                     ` (${f?.value?.length})`
