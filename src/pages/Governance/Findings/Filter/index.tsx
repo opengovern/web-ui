@@ -65,6 +65,7 @@ export default function Filter({ onApply, type }: IFilters) {
 
     const defConformanceStatus = [
         GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
     ]
     const [conformanceStatus, setConformanceStatus] = useState<
         | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
@@ -171,7 +172,6 @@ export default function Filter({ onApply, type }: IFilters) {
     ])
 
     const { response: filters } = useComplianceApiV1FindingsFiltersCreate({})
-    console.log(filters)
 
     const filterOptions = [
         {
