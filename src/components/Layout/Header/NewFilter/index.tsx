@@ -164,7 +164,18 @@ export default function NewFilter({
                                           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                           // @ts-ignore
                                           f?.value && f.value.length < 2
-                                              ? `: ${f.value}`
+                                              ? `: ${
+                                                    f.id === 'connector'
+                                                        ? f.value
+                                                        : response?.connections?.find(
+                                                              (c) =>
+                                                                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                                  // @ts-ignore
+                                                                  c.id ===
+                                                                  f.value
+                                                          )
+                                                              ?.providerConnectionName
+                                                }`
                                               : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                                 // @ts-ignore
                                                 ` (${f?.value?.length})`
