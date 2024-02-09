@@ -187,12 +187,16 @@ export function useFilterState() {
     }
 }
 
-export function useUrlDateRangeState(defaultValue: DateRange) {
+export function useUrlDateRangeState(
+    defaultValue: DateRange,
+    startDateParam = 'startDate',
+    endDateParam = 'endDate'
+) {
     const parseValue = (v: string) => {
-        return dayjs.utc(v)
+        return dayjs.utc(v.replaceAll('+', ' '), 'YYYY-MM-DD HH:mm:ss')
     }
     const toString = (v: dayjs.Dayjs) => {
-        return v.format('YYYY-MM-DD')
+        return v.format('YYYY-MM-DD HH:mm:ss')
     }
     const [state, setState] = useURLState<DateRange>(
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -200,14 +204,14 @@ export function useUrlDateRangeState(defaultValue: DateRange) {
         defaultValue,
         (v) => {
             const res = new Map<string, string[]>()
-            res.set('startDate', [toString(v.start)])
-            res.set('endDate', [toString(v.end)])
+            res.set(startDateParam, [toString(v.start)])
+            res.set(endDateParam, [toString(v.end)])
             return res
         },
         (v) => {
             return {
-                start: parseValue((v.get('startDate') || [])[0]),
-                end: parseValue((v.get('endDate') || [])[0]),
+                start: parseValue((v.get(startDateParam) || [])[0]),
+                end: parseValue((v.get(endDateParam) || [])[0]),
             }
         }
     )

@@ -38,6 +38,7 @@ import {
     defaultEventTime,
     defaultFindingsTime,
     useURLParam,
+    useUrlDateRangeState,
 } from '../../../../utilities/urlstate'
 import { renderDateText } from '../../../../components/Layout/Header/DatePicker'
 
@@ -99,44 +100,10 @@ export default function Filter({ onApply, type }: IFilters) {
     const [resourceCon, setResourceCon] = useState('is')
     const [dateCon, setDateCon] = useState('isBetween')
     const [eventDateCon, setEventDateCon] = useState('isBetween')
-    const [activeTimeRange, setActiveTimeRange] = useURLParam<IDate>(
-        'dateRange',
-        defaultFindingsTime,
-        (v) => {
-            return `${v.start.format('YYYY-MM-DD HH:mm:ss')} - ${v.end.format(
-                'YYYY-MM-DD HH:mm:ss'
-            )}`
-        },
-        (v) => {
-            const arr = v
-                .replaceAll('+', ' ')
-                .split(' - ')
-                .map((m) => dayjs(m))
-            return {
-                start: arr[0],
-                end: arr[1],
-            }
-        }
-    )
-    const [eventTimeRange, setEventTimeRange] = useURLParam<IDate>(
-        'eventDateRange',
-        defaultEventTime,
-        (v) => {
-            return `${v.start.format('YYYY-MM-DD HH:mm:ss')} - ${v.end.format(
-                'YYYY-MM-DD HH:mm:ss'
-            )}`
-        },
-        (v) => {
-            const arr = v
-                .replaceAll('+', ' ')
-                .split(' - ')
-                .map((m) => dayjs(m))
-            return {
-                start: arr[0],
-                end: arr[1],
-            }
-        }
-    )
+    const { value: activeTimeRange, setValue: setActiveTimeRange } =
+        useUrlDateRangeState(defaultFindingsTime)
+    const { value: eventTimeRange, setValue: setEventTimeRange } =
+        useUrlDateRangeState(defaultEventTime, 'eventStartDate', 'eventEndDate')
     const [selectedFilters, setSelectedFilters] = useState<string[]>([
         'conformance_status',
     ])
@@ -155,7 +122,7 @@ export default function Filter({ onApply, type }: IFilters) {
                 ? activeTimeRange
                 : undefined,
             eventTimeRange: selectedFilters.includes('eventDate')
-                ? activeTimeRange
+                ? eventTimeRange
                 : undefined,
         })
     }, [
@@ -407,8 +374,12 @@ export default function Filter({ onApply, type }: IFilters) {
                                     // eslint-disable-next-line no-nested-ternary
                                     f?.id === 'date' || f?.id === 'eventDate'
                                         ? ` ${renderDateText(
-                                              activeTimeRange.start,
-                                              activeTimeRange.end
+                                              f?.id === 'date'
+                                                  ? activeTimeRange.start
+                                                  : eventTimeRange.start,
+                                              f?.id === 'date'
+                                                  ? activeTimeRange.end
+                                                  : eventTimeRange.end
                                           )}`
                                         : compareArrays(
                                               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -469,7 +440,10 @@ export default function Filter({ onApply, type }: IFilters) {
                                                     : undefined
                                             }
                                             conditions={f?.conditions}
-                                            isDate={f?.id === 'date'}
+                                            isDate={
+                                                f?.id === 'date' ||
+                                                f?.id === 'eventDate'
+                                            }
                                         />
                                     </Flex>
                                     {f?.onDelete && (

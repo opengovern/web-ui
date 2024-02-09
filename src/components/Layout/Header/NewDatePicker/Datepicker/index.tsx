@@ -7,7 +7,11 @@ import { useDateRangePicker } from 'react-aria'
 import { Checkbox } from 'pretty-checkbox-react'
 import { ClockIcon } from '@heroicons/react/24/outline'
 import { Flex, Select, SelectItem, Text, Title } from '@tremor/react'
-import { defaultTime, useURLParam } from '../../../../../utilities/urlstate'
+import {
+    defaultTime,
+    useURLParam,
+    useUrlDateRangeState,
+} from '../../../../../utilities/urlstate'
 import { RangeCalendar } from '../../DatePicker/Calendar/RangePicker/RangeCalendar'
 import { renderDateText } from '../../DatePicker'
 
@@ -30,25 +34,8 @@ interface IDatepicker {
 }
 
 export default function Datepicker({ condition }: IDatepicker) {
-    const [activeTimeRange, setActiveTimeRange] = useURLParam<IDate>(
-        'dateRange',
-        defaultTime,
-        (v) => {
-            return `${v.start.format('YYYY-MM-DD HH:mm')} - ${v.end.format(
-                'YYYY-MM-DD HH:mm'
-            )}`
-        },
-        (v) => {
-            const arr = v
-                .replaceAll('+', ' ')
-                .split(' - ')
-                .map((m) => dayjs(m))
-            return {
-                start: arr[0],
-                end: arr[1],
-            }
-        }
-    )
+    const { value: activeTimeRange, setValue: setActiveTimeRange } =
+        useUrlDateRangeState(defaultTime)
     const [startH, setStartH] = useState(activeTimeRange.start.hour())
     const [startM, setStartM] = useState(activeTimeRange.start.minute())
     const [endH, setEndH] = useState(activeTimeRange.end.hour())

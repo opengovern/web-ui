@@ -3,7 +3,12 @@ import { Popover, Transition } from '@headlessui/react'
 import { Card, Flex, Text } from '@tremor/react'
 import { CalendarIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
-import { defaultTime, useURLParam } from '../../../../utilities/urlstate'
+import {
+    defaultTime,
+    useURLParam,
+    useURLState,
+    useUrlDateRangeState,
+} from '../../../../utilities/urlstate'
 import { IDate } from '../../../../pages/Governance/Findings/Filter/Datepicker'
 import { renderDateText } from '../DatePicker'
 import ConditionDropdown from '../../../../pages/Governance/Findings/Filter/ConditionDropdown'
@@ -11,25 +16,8 @@ import Datepicker from './Datepicker'
 
 export default function NewDatePicker() {
     const [condition, setCondition] = useState('isBetween')
-    const [activeTimeRange, setActiveTimeRange] = useURLParam<IDate>(
-        'dateRange',
-        defaultTime,
-        (v) => {
-            return `${v.start.format('YYYY-MM-DD HH:mm:ss')} - ${v.end.format(
-                'YYYY-MM-DD HH:mm:ss'
-            )}`
-        },
-        (v) => {
-            const arr = v
-                .replaceAll('+', ' ')
-                .split(' - ')
-                .map((m) => dayjs(m))
-            return {
-                start: arr[0],
-                end: arr[1],
-            }
-        }
-    )
+    const { value: activeTimeRange, setValue: setActiveTimeRange } =
+        useUrlDateRangeState(defaultTime)
 
     return (
         <Popover className="relative border-0">
