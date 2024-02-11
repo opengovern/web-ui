@@ -93,7 +93,7 @@ export default function SingleComplianceConnection() {
     const {
         response: findings,
         isLoading,
-        sendNow: updateFindings,
+        sendNowWithParams: updateFindings,
     } = useComplianceApiV1FindingsCreate({
         filters: {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -113,7 +113,17 @@ export default function SingleComplianceConnection() {
 
     const getData = (sort: SortModelItem[]) => {
         setSortModel(sort)
-        updateFindings()
+        updateFindings(
+            {
+                filters: {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    connectionID: [connection?.replace('account_', '') || ''],
+                },
+                sort: sort.length ? [{ [sort[0].colId]: sort[0].sort }] : [],
+            },
+            {}
+        )
     }
 
     const datasource: IServerSideDatasource = {
