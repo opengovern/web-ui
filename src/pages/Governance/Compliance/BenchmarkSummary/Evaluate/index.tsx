@@ -1,21 +1,16 @@
-import { useEffect, useState } from 'react'
-import {
-    Button,
-    Flex,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeaderCell,
-    TableRow,
-    Title,
-} from '@tremor/react'
+import { ICellRendererParams } from 'ag-grid-community'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Button, Flex, Title } from '@tremor/react'
 import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
 import { Checkbox, useCheckboxState } from 'pretty-checkbox-react'
 import { useComplianceApiV1AssignmentsBenchmarkDetail } from '../../../../../api/compliance.gen'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedConnection,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
+} from '../../../../../api/api'
 import Modal from '../../../../../components/Modal'
 import DrawerPanel from '../../../../../components/DrawerPanel'
+import Table, { IColumn } from '../../../../../components/Table'
 
 interface IEvaluate {
     id: string | undefined
@@ -24,7 +19,47 @@ interface IEvaluate {
         | undefined
     onEvaluate: (c: string[]) => void
 }
-
+const columns: (checkbox: {
+    state: string | boolean | any[]
+    setState: React.Dispatch<React.SetStateAction<string | boolean | any[]>>
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+}) => IColumn<
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedConnection,
+    any
+>[] = (checkbox) => [
+    {
+        type: 'string',
+        width: 50,
+        cellRenderer: (
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedConnection>
+        ) => {
+            return (
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                <Checkbox
+                    value={params.data?.connectionID}
+                    {...checkbox}
+                    className="cursor-pointer w-full h-full"
+                />
+            )
+        },
+    },
+    {
+        type: 'connector',
+        headerName: 'Provider',
+        field: 'connector',
+    },
+    {
+        type: 'string',
+        headerName: 'Account Name',
+        field: 'providerConnectionName',
+    },
+    {
+        type: 'string',
+        headerName: 'Account ID',
+        field: 'providerConnectionID',
+    },
+]
 export default function Evaluate({
     id,
     benchmarkDetail,
@@ -32,21 +67,35 @@ export default function Evaluate({
 }: IEvaluate) {
     const [open, setOpen] = useState(false)
     const [openConfirm, setOpenConfirm] = useState(false)
+    const [connections, setConnections] = useState<string[]>([])
 
     const { response: assignments } =
         useComplianceApiV1AssignmentsBenchmarkDetail(String(id), {})
 
-    const connectionCheckbox = useCheckboxState({
-        state: [],
-    })
+    const checkbox = useCheckboxState()
+
+    useEffect(() => {
+        checkbox.setState(connections)
+    }, [connections])
+
     useEffect(() => {
         if (assignments) {
             const activeAccounts = assignments?.connections
                 ?.filter((a) => a.status)
-                .map((a) => a.connectionID)
-            connectionCheckbox.setState(activeAccounts || [])
+                .map((a) => a.connectionID || '')
+            setConnections(activeAccounts || [])
         }
     }, [assignments])
+
+    const click = (connectionID: string) => {
+        const arrFiltered = connections.filter((v) => v !== connectionID)
+        if (arrFiltered.length === connections.length) {
+            setConnections(() => [...connections, connectionID])
+        } else {
+            setConnections(() => [...arrFiltered])
+        }
+    }
+
     return (
         <>
             <Button
@@ -72,8 +121,17 @@ export default function Evaluate({
                 <Flex flexDirection="col" alignItems="start" className="h-full">
                     <Flex flexDirection="col" alignItems="start">
                         <Title className="mb-6">List of cloud accounts</Title>
-                        <Table className="w-full">
-                            <TableHead>
+                        <Table
+                            id="evaluate_now"
+                            key={`evaluate_now-${connections.join('')}`}
+                            columns={columns(checkbox)}
+                            rowData={assignments?.connections}
+                            fullHeight
+                            onRowClicked={(e) =>
+                                click(e.data?.connectionID || '')
+                            }
+                        />
+                        {/* <TableHead>
                                 <TableRow>
                                     <TableHeaderCell className="pl-10">
                                         Account Name
@@ -100,7 +158,7 @@ export default function Evaluate({
                                     </Checkbox>
                                 ))}
                             </TableBody>
-                        </Table>
+                        </Table> */}
                     </Flex>
                     <Flex justifyContent="end" className="gap-3">
                         <Button
@@ -119,7 +177,7 @@ export default function Evaluate({
                 <Title>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/* @ts-ignore */}
-                    {`Do you want to run evaluation on ${connectionCheckbox.state.length} accounts?`}
+                    {`Do you want to run evaluation on ${checkbox.state.length} accounts?`}
                 </Title>
                 <Flex className="mt-8">
                     <Button
@@ -132,7 +190,7 @@ export default function Evaluate({
                         onClick={() => {
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
-                            onEvaluate(connectionCheckbox.state)
+                            onEvaluate(connections)
                             setOpenConfirm(false)
                         }}
                     >

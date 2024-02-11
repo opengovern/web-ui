@@ -221,7 +221,10 @@ export default function Table<TData = any, TValue = any>({
                 v.width = 50
                 v.cellStyle = { padding: 0 }
                 v.cellRenderer = (params: ICellRendererParams<TData>) =>
-                    getConnectorIcon(params.value)
+                    getConnectorIcon(
+                        params.value,
+                        '!w-full !h-full justify-center'
+                    )
             }
             return v
         })

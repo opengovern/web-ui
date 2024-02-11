@@ -84,12 +84,28 @@ type Params struct {
 	Code  string
 }
 
+func (p Params) CodeGen(prefix string) string {
+	var str []string
+	for i := 0; i < len(p.Names); i++ {
+		str = append(str, fmt.Sprintf("%s%s: %s", prefix, p.Names[i], p.Types[i]))
+	}
+	return strings.Join(str, ",")
+}
+
 func (p Params) String() string {
 	return p.Code
 }
 
 func (p Params) GetNames() string {
 	return strings.Join(p.Names, ",")
+}
+
+func (p Params) GetNamesWithPrefix(prefix string) string {
+	var str []string
+	for _, name := range p.Names {
+		str = append(str, prefix+name)
+	}
+	return strings.Join(str, ",")
 }
 
 type Func struct {
@@ -149,31 +165,38 @@ func ExtractFunctions(content string) []Func {
 		idx = strings.Index(code, "this.request<")
 
 		response, _ := ExtractScope(code[idx+13:], '<', '>')
-		if strings.HasSuffix(response, ", any") {
+		response = strings.TrimSpace(response)
+		if strings.HasSuffix(response, "any") {
 			response = response[:len(response)-5]
-		} else if strings.HasSuffix(response, ", EchoHTTPError") {
+		} else if strings.HasSuffix(response, "EchoHTTPError") {
 			response = response[:len(response)-15]
 		} else {
 			panic(response)
 		}
+
+		funcName := f[:strings.Index(f, ":")]
 
 		var names []string
 		var types []string
 		paramArr := strings.Split(params, ",")
 		for _, item := range paramArr {
 			item = strings.TrimSpace(item)
-			name := strings.Split(item, ":")
-			names = append(names, strings.ReplaceAll(strings.TrimSpace(name[0]), "?", ""))
+			idx := strings.Index(item, ":")
+			name := []string{item[:idx], item[idx+1:]}
 
+			names = append(names, strings.ReplaceAll(strings.TrimSpace(name[0]), "?", ""))
 			typ := strings.TrimSpace(name[1])
 			if strings.Contains(typ, "=") {
 				typ = strings.TrimSpace(strings.Split(typ, "=")[0])
+			}
+			if strings.HasSuffix(name[0], "?") {
+				typ += "| undefined"
 			}
 			types = append(types, typ)
 		}
 
 		function := Func{
-			Name: f[:strings.Index(f, ":")],
+			Name: funcName,
 			Params: Params{
 				Names: names,
 				Code:  params,

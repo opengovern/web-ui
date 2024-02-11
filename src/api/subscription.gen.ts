@@ -41,7 +41,11 @@ export const useSubscriptionApiV1MeteringListCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -61,9 +65,9 @@ export const useSubscriptionApiV1MeteringListCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.subscription
-                .apiV1MeteringListCreate(request, paramsSignal)
+                .apiV1MeteringListCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -108,7 +112,7 @@ export const useSubscriptionApiV1MeteringListCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -120,7 +124,25 @@ export const useSubscriptionApiV1MeteringListCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }

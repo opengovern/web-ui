@@ -14,10 +14,11 @@ interface IConnectorCard {
 }
 
 export const getConnectorIcon = (
-    connector: string | SourceType[] | SourceType | undefined
+    connector: string | SourceType[] | SourceType | undefined,
+    className = ''
 ) => {
     return (
-        <Flex className="w-9 h-9 gap-1">
+        <Flex className={`w-9 h-9 gap-1 ${className}`}>
             {typeof connector === 'string' ? (
                 <img
                     src={connector === 'Azure' ? AzureIcon : AWSIcon}

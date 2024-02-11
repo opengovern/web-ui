@@ -37,7 +37,7 @@ export const {{ .APIName }} = ({{ .Func.Params }}, autoExecute = true, overwrite
         JSON.stringify([{{ .Func.Params.GetNames }}, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (abortCtrl: AbortController, {{ .Func.Params.CodeGen "req" }}) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -62,10 +62,10 @@ export const {{ .APIName }} = ({{ .Func.Params }}, autoExecute = true, overwrite
             }
             {{ end }}
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api
                 .{{ .ModuleName }}
-                .{{ .Func.Name }}({{ .Func.Params.GetNames }}Signal)
+                .{{ .Func.Name }}({{ .Func.Params.GetNamesWithPrefix "req" }}Signal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -110,7 +110,7 @@ export const {{ .APIName }} = ({{ .Func.Params }}, autoExecute = true, overwrite
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, {{ .Func.Params.GetNames }})
         }
     }, [lastInput])
 
@@ -122,8 +122,16 @@ export const {{ .APIName }} = ({{ .Func.Params }}, autoExecute = true, overwrite
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, {{ .Func.Params.GetNames }})
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = ({{ .Func.Params.CodeGen "req" }}) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, {{ .Func.Params.GetNamesWithPrefix "req" }})
+    }
+
+    return { response, isLoading, isExecuted, error, sendNow, sendNowWithParams }
 }
 {{ end }}

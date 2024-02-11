@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     RequestParams,
 } from './api'
 
@@ -44,7 +44,11 @@ export const useWorkspaceApiV1BootstrapDetail = (
         JSON.stringify([workspaceName, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqworkspaceName: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -58,9 +62,9 @@ export const useWorkspaceApiV1BootstrapDetail = (
         try {
             setWorkspace('kaytu')
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
-                .apiV1BootstrapDetail(workspaceName, paramsSignal)
+                .apiV1BootstrapDetail(reqworkspaceName, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -105,7 +109,7 @@ export const useWorkspaceApiV1BootstrapDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, workspaceName, params)
         }
     }, [lastInput])
 
@@ -117,9 +121,27 @@ export const useWorkspaceApiV1BootstrapDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, workspaceName, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqworkspaceName: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqworkspaceName, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseWorkspaceApiV1BootstrapCredentialCreateState {
@@ -155,7 +177,12 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
         JSON.stringify([workspaceName, request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqworkspaceName: string,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -169,12 +196,12 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
         try {
             setWorkspace('kaytu')
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
                 .apiV1BootstrapCredentialCreate(
-                    workspaceName,
-                    request,
-                    paramsSignal
+                    reqworkspaceName,
+                    reqrequest,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -225,7 +252,7 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, workspaceName, request, params)
         }
     }, [lastInput])
 
@@ -237,9 +264,28 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, workspaceName, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqworkspaceName: string,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqworkspaceName, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseWorkspaceApiV1BootstrapFinishCreateState {
@@ -274,7 +320,11 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
         JSON.stringify([workspaceName, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqworkspaceName: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -288,9 +338,9 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
         try {
             setWorkspace('kaytu')
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
-                .apiV1BootstrapFinishCreate(workspaceName, paramsSignal)
+                .apiV1BootstrapFinishCreate(reqworkspaceName, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -335,7 +385,7 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, workspaceName, params)
         }
     }, [lastInput])
 
@@ -347,9 +397,27 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, workspaceName, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqworkspaceName: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqworkspaceName, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseWorkspaceApiV1WorkspaceCreateState {
@@ -383,7 +451,11 @@ export const useWorkspaceApiV1WorkspaceCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -397,9 +469,9 @@ export const useWorkspaceApiV1WorkspaceCreate = (
         try {
             setWorkspace('kaytu')
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspaceCreate(request, paramsSignal)
+                .apiV1WorkspaceCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -444,7 +516,7 @@ export const useWorkspaceApiV1WorkspaceCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -456,9 +528,27 @@ export const useWorkspaceApiV1WorkspaceCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseWorkspaceApiV1WorkspaceCurrentListState {
@@ -492,7 +582,10 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -512,9 +605,9 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspaceCurrentList(paramsSignal)
+                .apiV1WorkspaceCurrentList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -559,7 +652,7 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -571,9 +664,24 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseWorkspaceApiV1WorkspaceDeleteState {
@@ -607,7 +715,11 @@ export const useWorkspaceApiV1WorkspaceDelete = (
         JSON.stringify([workspaceId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqworkspaceId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -621,9 +733,9 @@ export const useWorkspaceApiV1WorkspaceDelete = (
         try {
             setWorkspace('kaytu')
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspaceDelete(workspaceId, paramsSignal)
+                .apiV1WorkspaceDelete(reqworkspaceId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -668,7 +780,7 @@ export const useWorkspaceApiV1WorkspaceDelete = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, workspaceId, params)
         }
     }, [lastInput])
 
@@ -680,9 +792,27 @@ export const useWorkspaceApiV1WorkspaceDelete = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, workspaceId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqworkspaceId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqworkspaceId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseWorkspaceApiV1WorkspacesListState {
@@ -715,7 +845,10 @@ export const useWorkspaceApiV1WorkspacesList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -729,9 +862,9 @@ export const useWorkspaceApiV1WorkspacesList = (
         try {
             setWorkspace('kaytu')
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspacesList(paramsSignal)
+                .apiV1WorkspacesList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -776,7 +909,7 @@ export const useWorkspaceApiV1WorkspacesList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -788,9 +921,24 @@ export const useWorkspaceApiV1WorkspacesList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseWorkspaceApiV1WorkspacesLimitsDetailState {
@@ -828,7 +976,16 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
         JSON.stringify([workspaceName, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqworkspaceName: string,
+        reqquery:
+            | {
+                  ignore_usage?: boolean
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -842,9 +999,13 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
         try {
             setWorkspace('kaytu')
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspacesLimitsDetail(workspaceName, query, paramsSignal)
+                .apiV1WorkspacesLimitsDetail(
+                    reqworkspaceName,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -894,7 +1055,7 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, workspaceName, query, params)
         }
     }, [lastInput])
 
@@ -906,7 +1067,30 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, workspaceName, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqworkspaceName: string,
+        reqquery:
+            | {
+                  ignore_usage?: boolean
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqworkspaceName, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }

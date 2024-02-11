@@ -2,40 +2,40 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingEventsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFilters,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFilters,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingEventsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsByFindingIDResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsByFindingIDResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFiltersWithMetadata,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
     RequestParams,
 } from './api'
 
@@ -73,7 +73,11 @@ export const useComplianceApiV1AiControlRemediationCreate = (
         JSON.stringify([controlId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqcontrolId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -93,9 +97,9 @@ export const useComplianceApiV1AiControlRemediationCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1AiControlRemediationCreate(controlId, paramsSignal)
+                .apiV1AiControlRemediationCreate(reqcontrolId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -140,7 +144,7 @@ export const useComplianceApiV1AiControlRemediationCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, controlId, params)
         }
     }, [lastInput])
 
@@ -152,9 +156,27 @@ export const useComplianceApiV1AiControlRemediationCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, controlId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqcontrolId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqcontrolId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1AssignmentsBenchmarkDetailState {
@@ -189,7 +211,11 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
         JSON.stringify([benchmarkId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqbenchmarkId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -209,9 +235,12 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1AssignmentsBenchmarkDetail(benchmarkId, paramsSignal)
+                .apiV1AssignmentsBenchmarkDetail(
+                    reqbenchmarkId,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -256,7 +285,7 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, benchmarkId, params)
         }
     }, [lastInput])
 
@@ -268,9 +297,27 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, benchmarkId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqbenchmarkId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqbenchmarkId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1AssignmentsConnectionDetailState {
@@ -305,7 +352,11 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
         JSON.stringify([connectionId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqconnectionId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -325,9 +376,12 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1AssignmentsConnectionDetail(connectionId, paramsSignal)
+                .apiV1AssignmentsConnectionDetail(
+                    reqconnectionId,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -372,7 +426,7 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, connectionId, params)
         }
     }, [lastInput])
 
@@ -384,9 +438,27 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, connectionId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqconnectionId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqconnectionId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1AssignmentsResourceCollectionDetailState {
@@ -421,7 +493,11 @@ export const useComplianceApiV1AssignmentsResourceCollectionDetail = (
         JSON.stringify([resourceCollectionId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqresourceCollectionId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -441,11 +517,11 @@ export const useComplianceApiV1AssignmentsResourceCollectionDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
                 .apiV1AssignmentsResourceCollectionDetail(
-                    resourceCollectionId,
-                    paramsSignal
+                    reqresourceCollectionId,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -496,7 +572,7 @@ export const useComplianceApiV1AssignmentsResourceCollectionDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, resourceCollectionId, params)
         }
     }, [lastInput])
 
@@ -508,9 +584,27 @@ export const useComplianceApiV1AssignmentsResourceCollectionDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, resourceCollectionId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqresourceCollectionId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqresourceCollectionId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1AssignmentsConnectionCreateState {
@@ -554,7 +648,22 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
         JSON.stringify([benchmarkId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  auto_assign?: boolean
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -574,12 +683,12 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
                 .apiV1AssignmentsConnectionCreate(
-                    benchmarkId,
-                    query,
-                    paramsSignal
+                    reqbenchmarkId,
+                    reqquery,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -627,7 +736,7 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, benchmarkId, query, params)
         }
     }, [lastInput])
 
@@ -639,9 +748,38 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, benchmarkId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  auto_assign?: boolean
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqbenchmarkId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1AssignmentsConnectionDeleteState {
@@ -683,7 +821,20 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
         JSON.stringify([benchmarkId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -703,12 +854,12 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
                 .apiV1AssignmentsConnectionDelete(
-                    benchmarkId,
-                    query,
-                    paramsSignal
+                    reqbenchmarkId,
+                    reqquery,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -756,7 +907,7 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, benchmarkId, query, params)
         }
     }, [lastInput])
 
@@ -768,9 +919,36 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, benchmarkId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqbenchmarkId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1BenchmarksSummaryListState {
@@ -819,7 +997,27 @@ export const useComplianceApiV1BenchmarksSummaryList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  tag?: string[]
+
+                  timeAt?: number
+
+                  topAccountCount?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -839,9 +1037,9 @@ export const useComplianceApiV1BenchmarksSummaryList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1BenchmarksSummaryList(query, paramsSignal)
+                .apiV1BenchmarksSummaryList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -886,7 +1084,7 @@ export const useComplianceApiV1BenchmarksSummaryList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -898,9 +1096,43 @@ export const useComplianceApiV1BenchmarksSummaryList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  tag?: string[]
+
+                  timeAt?: number
+
+                  topAccountCount?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1BenchmarksControlsDetailState {
@@ -940,7 +1172,18 @@ export const useComplianceApiV1BenchmarksControlsDetail = (
         JSON.stringify([benchmarkId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -960,9 +1203,13 @@ export const useComplianceApiV1BenchmarksControlsDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1BenchmarksControlsDetail(benchmarkId, query, paramsSignal)
+                .apiV1BenchmarksControlsDetail(
+                    reqbenchmarkId,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1009,7 +1256,7 @@ export const useComplianceApiV1BenchmarksControlsDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, benchmarkId, query, params)
         }
     }, [lastInput])
 
@@ -1021,9 +1268,34 @@ export const useComplianceApiV1BenchmarksControlsDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, benchmarkId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqbenchmarkId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1BenchmarksControlsDetail2State {
@@ -1064,7 +1336,19 @@ export const useComplianceApiV1BenchmarksControlsDetail2 = (
         JSON.stringify([benchmarkId, controlId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqbenchmarkId: string,
+        reqcontrolId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1084,13 +1368,13 @@ export const useComplianceApiV1BenchmarksControlsDetail2 = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
                 .apiV1BenchmarksControlsDetail2(
-                    benchmarkId,
-                    controlId,
-                    query,
-                    paramsSignal
+                    reqbenchmarkId,
+                    reqcontrolId,
+                    reqquery,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -1141,7 +1425,7 @@ export const useComplianceApiV1BenchmarksControlsDetail2 = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, benchmarkId, controlId, query, params)
         }
     }, [lastInput])
 
@@ -1153,9 +1437,41 @@ export const useComplianceApiV1BenchmarksControlsDetail2 = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, benchmarkId, controlId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqbenchmarkId: string,
+        reqcontrolId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(
+            newController,
+            reqbenchmarkId,
+            reqcontrolId,
+            reqquery,
+            reqparams
+        )
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1BenchmarksSummaryDetailState {
@@ -1203,7 +1519,26 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
         JSON.stringify([benchmarkId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  timeAt?: number
+
+                  topAccountCount?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1223,9 +1558,13 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1BenchmarksSummaryDetail(benchmarkId, query, paramsSignal)
+                .apiV1BenchmarksSummaryDetail(
+                    reqbenchmarkId,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1272,7 +1611,7 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, benchmarkId, query, params)
         }
     }, [lastInput])
 
@@ -1284,9 +1623,42 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, benchmarkId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  timeAt?: number
+
+                  topAccountCount?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqbenchmarkId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1BenchmarksTrendDetailState {
@@ -1334,7 +1706,26 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
         JSON.stringify([benchmarkId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1354,9 +1745,13 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1BenchmarksTrendDetail(benchmarkId, query, paramsSignal)
+                .apiV1BenchmarksTrendDetail(
+                    reqbenchmarkId,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1403,7 +1798,7 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, benchmarkId, query, params)
         }
     }, [lastInput])
 
@@ -1415,9 +1810,42 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, benchmarkId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqbenchmarkId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1ControlsSummaryListState {
@@ -1458,7 +1886,19 @@ export const useComplianceApiV1ControlsSummaryList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  controlId?: string[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1478,9 +1918,9 @@ export const useComplianceApiV1ControlsSummaryList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1ControlsSummaryList(query, paramsSignal)
+                .apiV1ControlsSummaryList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1525,7 +1965,7 @@ export const useComplianceApiV1ControlsSummaryList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -1537,9 +1977,35 @@ export const useComplianceApiV1ControlsSummaryList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  controlId?: string[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1ControlsSummaryDetailState {
@@ -1579,7 +2045,18 @@ export const useComplianceApiV1ControlsSummaryDetail = (
         JSON.stringify([controlId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqcontrolId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1599,9 +2076,13 @@ export const useComplianceApiV1ControlsSummaryDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1ControlsSummaryDetail(controlId, query, paramsSignal)
+                .apiV1ControlsSummaryDetail(
+                    reqcontrolId,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1646,7 +2127,7 @@ export const useComplianceApiV1ControlsSummaryDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, controlId, query, params)
         }
     }, [lastInput])
 
@@ -1658,9 +2139,34 @@ export const useComplianceApiV1ControlsSummaryDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, controlId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqcontrolId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqcontrolId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1ControlsTrendDetailState {
@@ -1706,7 +2212,24 @@ export const useComplianceApiV1ControlsTrendDetail = (
         JSON.stringify([controlId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqcontrolId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  granularity?: 'daily' | 'monthly'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1726,9 +2249,13 @@ export const useComplianceApiV1ControlsTrendDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1ControlsTrendDetail(controlId, query, paramsSignal)
+                .apiV1ControlsTrendDetail(
+                    reqcontrolId,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1773,7 +2300,7 @@ export const useComplianceApiV1ControlsTrendDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, controlId, query, params)
         }
     }, [lastInput])
 
@@ -1785,9 +2312,40 @@ export const useComplianceApiV1ControlsTrendDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, controlId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqcontrolId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  granularity?: 'daily' | 'monthly'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqcontrolId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1FindingEventsCreateState {
@@ -1822,7 +2380,11 @@ export const useComplianceApiV1FindingEventsCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1842,9 +2404,9 @@ export const useComplianceApiV1FindingEventsCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1FindingEventsCreate(request, paramsSignal)
+                .apiV1FindingEventsCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1889,7 +2451,7 @@ export const useComplianceApiV1FindingEventsCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -1901,9 +2463,27 @@ export const useComplianceApiV1FindingEventsCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1FindingEventsCountListState {
@@ -1946,7 +2526,21 @@ export const useComplianceApiV1FindingEventsCountList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  conformanceStatus?: ('failed' | 'passed')[]
+
+                  stateActive?: boolean[]
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1966,9 +2560,9 @@ export const useComplianceApiV1FindingEventsCountList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1FindingEventsCountList(query, paramsSignal)
+                .apiV1FindingEventsCountList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2013,7 +2607,7 @@ export const useComplianceApiV1FindingEventsCountList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -2025,9 +2619,37 @@ export const useComplianceApiV1FindingEventsCountList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  conformanceStatus?: ('failed' | 'passed')[]
+
+                  stateActive?: boolean[]
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1FindingEventsFiltersCreateState {
@@ -2062,7 +2684,11 @@ export const useComplianceApiV1FindingEventsFiltersCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFilters,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2082,9 +2708,9 @@ export const useComplianceApiV1FindingEventsFiltersCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1FindingEventsFiltersCreate(request, paramsSignal)
+                .apiV1FindingEventsFiltersCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2129,7 +2755,7 @@ export const useComplianceApiV1FindingEventsFiltersCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -2141,9 +2767,27 @@ export const useComplianceApiV1FindingEventsFiltersCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFilters,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1FindingEventsSingleDetailState {
@@ -2179,7 +2823,12 @@ export const useComplianceApiV1FindingEventsSingleDetail = (
         JSON.stringify([findingId, id, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqfindingId: string,
+        reqid: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2199,9 +2848,13 @@ export const useComplianceApiV1FindingEventsSingleDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1FindingEventsSingleDetail(findingId, id, paramsSignal)
+                .apiV1FindingEventsSingleDetail(
+                    reqfindingId,
+                    reqid,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2246,7 +2899,7 @@ export const useComplianceApiV1FindingEventsSingleDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, findingId, id, params)
         }
     }, [lastInput])
 
@@ -2258,9 +2911,28 @@ export const useComplianceApiV1FindingEventsSingleDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, findingId, id, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqfindingId: string,
+        reqid: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqfindingId, reqid, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1FindingsCreateState {
@@ -2294,7 +2966,11 @@ export const useComplianceApiV1FindingsCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2314,9 +2990,9 @@ export const useComplianceApiV1FindingsCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1FindingsCreate(request, paramsSignal)
+                .apiV1FindingsCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2361,7 +3037,7 @@ export const useComplianceApiV1FindingsCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -2373,9 +3049,27 @@ export const useComplianceApiV1FindingsCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1FindingsCountListState {
@@ -2412,7 +3106,15 @@ export const useComplianceApiV1FindingsCountList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  conformanceStatus?: ('failed' | 'passed')[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2432,9 +3134,9 @@ export const useComplianceApiV1FindingsCountList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1FindingsCountList(query, paramsSignal)
+                .apiV1FindingsCountList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2479,7 +3181,7 @@ export const useComplianceApiV1FindingsCountList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -2491,9 +3193,31 @@ export const useComplianceApiV1FindingsCountList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  conformanceStatus?: ('failed' | 'passed')[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1FindingsEventsDetailState {
@@ -2528,7 +3252,11 @@ export const useComplianceApiV1FindingsEventsDetail = (
         JSON.stringify([id, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqid: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2548,9 +3276,9 @@ export const useComplianceApiV1FindingsEventsDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1FindingsEventsDetail(id, paramsSignal)
+                .apiV1FindingsEventsDetail(reqid, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2595,7 +3323,7 @@ export const useComplianceApiV1FindingsEventsDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, id, params)
         }
     }, [lastInput])
 
@@ -2607,9 +3335,24 @@ export const useComplianceApiV1FindingsEventsDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, id, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqid: string, reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqid, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1FindingsFiltersCreateState {
@@ -2644,7 +3387,11 @@ export const useComplianceApiV1FindingsFiltersCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2664,9 +3411,9 @@ export const useComplianceApiV1FindingsFiltersCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1FindingsFiltersCreate(request, paramsSignal)
+                .apiV1FindingsFiltersCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2711,7 +3458,7 @@ export const useComplianceApiV1FindingsFiltersCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -2723,9 +3470,27 @@ export const useComplianceApiV1FindingsFiltersCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1FindingsKpiListState {
@@ -2760,7 +3525,10 @@ export const useComplianceApiV1FindingsKpiList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2780,9 +3548,9 @@ export const useComplianceApiV1FindingsKpiList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1FindingsKpiList(paramsSignal)
+                .apiV1FindingsKpiList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2827,7 +3595,7 @@ export const useComplianceApiV1FindingsKpiList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -2839,9 +3607,24 @@ export const useComplianceApiV1FindingsKpiList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1FindingsResourceCreateState {
@@ -2876,7 +3659,11 @@ export const useComplianceApiV1FindingsResourceCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2896,9 +3683,9 @@ export const useComplianceApiV1FindingsResourceCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1FindingsResourceCreate(request, paramsSignal)
+                .apiV1FindingsResourceCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2943,7 +3730,7 @@ export const useComplianceApiV1FindingsResourceCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -2955,9 +3742,27 @@ export const useComplianceApiV1FindingsResourceCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1FindingsSingleDetailState {
@@ -2992,7 +3797,11 @@ export const useComplianceApiV1FindingsSingleDetail = (
         JSON.stringify([id, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqid: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -3012,9 +3821,9 @@ export const useComplianceApiV1FindingsSingleDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1FindingsSingleDetail(id, paramsSignal)
+                .apiV1FindingsSingleDetail(reqid, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -3059,7 +3868,7 @@ export const useComplianceApiV1FindingsSingleDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, id, params)
         }
     }, [lastInput])
 
@@ -3071,9 +3880,24 @@ export const useComplianceApiV1FindingsSingleDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, id, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqid: string, reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqid, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1FindingsTopDetailState {
@@ -3133,7 +3957,44 @@ export const useComplianceApiV1FindingsTopDetail = (
         JSON.stringify([field, count, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqfield:
+            | 'resourceType'
+            | 'connectionID'
+            | 'resourceID'
+            | 'service'
+            | 'controlID',
+        reqcount: number,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  notConnectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  benchmarkId?: string[]
+
+                  controlId?: string[]
+
+                  severities?: (
+                      | 'none'
+                      | 'low'
+                      | 'medium'
+                      | 'high'
+                      | 'critical'
+                  )[]
+
+                  conformanceStatus?: ('failed' | 'passed')[]
+
+                  stateActive?: boolean[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -3153,9 +4014,14 @@ export const useComplianceApiV1FindingsTopDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1FindingsTopDetail(field, count, query, paramsSignal)
+                .apiV1FindingsTopDetail(
+                    reqfield,
+                    reqcount,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -3202,7 +4068,7 @@ export const useComplianceApiV1FindingsTopDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, field, count, query, params)
         }
     }, [lastInput])
 
@@ -3214,9 +4080,60 @@ export const useComplianceApiV1FindingsTopDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, field, count, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqfield:
+            | 'resourceType'
+            | 'connectionID'
+            | 'resourceID'
+            | 'service'
+            | 'controlID',
+        reqcount: number,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  notConnectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  benchmarkId?: string[]
+
+                  controlId?: string[]
+
+                  severities?: (
+                      | 'none'
+                      | 'low'
+                      | 'medium'
+                      | 'high'
+                      | 'critical'
+                  )[]
+
+                  conformanceStatus?: ('failed' | 'passed')[]
+
+                  stateActive?: boolean[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqfield, reqcount, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1FindingsAccountsDetailState {
@@ -3256,7 +4173,18 @@ export const useComplianceApiV1FindingsAccountsDetail = (
         JSON.stringify([benchmarkId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -3276,9 +4204,13 @@ export const useComplianceApiV1FindingsAccountsDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1FindingsAccountsDetail(benchmarkId, query, paramsSignal)
+                .apiV1FindingsAccountsDetail(
+                    reqbenchmarkId,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -3325,7 +4257,7 @@ export const useComplianceApiV1FindingsAccountsDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, benchmarkId, query, params)
         }
     }, [lastInput])
 
@@ -3337,9 +4269,34 @@ export const useComplianceApiV1FindingsAccountsDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, benchmarkId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqbenchmarkId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1FindingsServicesDetailState {
@@ -3379,7 +4336,18 @@ export const useComplianceApiV1FindingsServicesDetail = (
         JSON.stringify([benchmarkId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -3399,9 +4367,13 @@ export const useComplianceApiV1FindingsServicesDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1FindingsServicesDetail(benchmarkId, query, paramsSignal)
+                .apiV1FindingsServicesDetail(
+                    reqbenchmarkId,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -3448,7 +4420,7 @@ export const useComplianceApiV1FindingsServicesDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, benchmarkId, query, params)
         }
     }, [lastInput])
 
@@ -3460,9 +4432,34 @@ export const useComplianceApiV1FindingsServicesDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, benchmarkId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqbenchmarkId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1FindingsCountDetailState {
@@ -3511,7 +4508,33 @@ export const useComplianceApiV1FindingsCountDetail = (
         JSON.stringify([benchmarkId, field, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqbenchmarkId: string,
+        reqfield: 'resourceType' | 'connectionID' | 'resourceID' | 'service',
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  severities?: (
+                      | 'none'
+                      | 'low'
+                      | 'medium'
+                      | 'high'
+                      | 'critical'
+                  )[]
+
+                  conformanceStatus?: ('failed' | 'passed')[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -3531,13 +4554,13 @@ export const useComplianceApiV1FindingsCountDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
                 .apiV1FindingsCountDetail(
-                    benchmarkId,
-                    field,
-                    query,
-                    paramsSignal
+                    reqbenchmarkId,
+                    reqfield,
+                    reqquery,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -3588,7 +4611,7 @@ export const useComplianceApiV1FindingsCountDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, benchmarkId, field, query, params)
         }
     }, [lastInput])
 
@@ -3600,9 +4623,55 @@ export const useComplianceApiV1FindingsCountDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, benchmarkId, field, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqbenchmarkId: string,
+        reqfield: 'resourceType' | 'connectionID' | 'resourceID' | 'service',
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  severities?: (
+                      | 'none'
+                      | 'low'
+                      | 'medium'
+                      | 'high'
+                      | 'critical'
+                  )[]
+
+                  conformanceStatus?: ('failed' | 'passed')[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(
+            newController,
+            reqbenchmarkId,
+            reqfield,
+            reqquery,
+            reqparams
+        )
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1InsightListState {
@@ -3650,7 +4719,27 @@ export const useComplianceApiV1InsightList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  tag?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -3670,9 +4759,9 @@ export const useComplianceApiV1InsightList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1InsightList(query, paramsSignal)
+                .apiV1InsightList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -3717,7 +4806,7 @@ export const useComplianceApiV1InsightList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -3729,9 +4818,43 @@ export const useComplianceApiV1InsightList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  tag?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1InsightGroupListState {
@@ -3780,7 +4903,27 @@ export const useComplianceApiV1InsightGroupList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  tag?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -3800,9 +4943,9 @@ export const useComplianceApiV1InsightGroupList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1InsightGroupList(query, paramsSignal)
+                .apiV1InsightGroupList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -3847,7 +4990,7 @@ export const useComplianceApiV1InsightGroupList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -3859,9 +5002,43 @@ export const useComplianceApiV1InsightGroupList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  tag?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1InsightGroupDetailState {
@@ -3907,7 +5084,24 @@ export const useComplianceApiV1InsightGroupDetail = (
         JSON.stringify([insightGroupId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqinsightGroupId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -3927,146 +5121,12 @@ export const useComplianceApiV1InsightGroupDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1InsightGroupDetail(insightGroupId, query, paramsSignal)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    if (
-                        err.name === 'AbortError' ||
-                        err.name === 'CanceledError'
-                    ) {
-                        // Request was aborted
-                    } else {
-                        setState({
-                            ...state,
-                            error: err,
-                            response: undefined,
-                            isLoading: false,
-                            isExecuted: true,
-                        })
-                    }
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (
-        JSON.stringify([insightGroupId, query, params, autoExecute]) !==
-        lastInput
-    ) {
-        setLastInput(
-            JSON.stringify([insightGroupId, query, params, autoExecute])
-        )
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            controller.abort()
-            const newController = new AbortController()
-            setController(newController)
-            sendRequest(newController)
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        controller.abort()
-        const newController = new AbortController()
-        setController(newController)
-        sendRequest(newController)
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseComplianceApiV1InsightGroupTrendDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    error?: any
-}
-
-/**
- * URL:
- */
-export const useComplianceApiV1InsightGroupTrendDetail = (
-    insightGroupId: string,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        resourceCollection?: string[]
-
-        startTime?: number
-
-        endTime?: number
-
-        datapointCount?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true,
-    overwriteWorkspace: string | undefined = undefined
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-    const [controller, setController] = useState(new AbortController())
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    const [state, setState] =
-        useState<IuseComplianceApiV1InsightGroupTrendDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightGroupId, query, params, autoExecute])
-    )
-
-    const sendRequest = (abortCtrl: AbortController) => {
-        if (!api.instance.defaults.headers.common.Authorization) {
-            return
-        }
-
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            if (overwriteWorkspace) {
-                setWorkspace(overwriteWorkspace)
-            } else if (workspace !== undefined && workspace.length > 0) {
-                setWorkspace(workspace)
-            } else {
-                setWorkspace('kaytu')
-            }
-
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1InsightGroupTrendDetail(
-                    insightGroupId,
-                    query,
-                    paramsSignal
+                .apiV1InsightGroupDetail(
+                    reqinsightGroupId,
+                    reqquery,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -4117,7 +5177,7 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, insightGroupId, query, params)
         }
     }, [lastInput])
 
@@ -4129,9 +5189,230 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, insightGroupId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqinsightGroupId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqinsightGroupId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
+}
+
+interface IuseComplianceApiV1InsightGroupTrendDetailState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+/**
+ * URL:
+ */
+export const useComplianceApiV1InsightGroupTrendDetail = (
+    insightGroupId: string,
+    query?: {
+        connectionId?: string[]
+
+        connectionGroup?: string[]
+
+        resourceCollection?: string[]
+
+        startTime?: number
+
+        endTime?: number
+
+        datapointCount?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1InsightGroupTrendDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([insightGroupId, query, params, autoExecute])
+    )
+
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqinsightGroupId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  datapointCount?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
+            api.compliance
+                .apiV1InsightGroupTrendDetail(
+                    reqinsightGroupId,
+                    reqquery,
+                    reqparamsSignal
+                )
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (
+        JSON.stringify([insightGroupId, query, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([insightGroupId, query, params, autoExecute])
+        )
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController, insightGroupId, query, params)
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, insightGroupId, query, params)
+    }
+
+    const sendNowWithParams = (
+        reqinsightGroupId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  datapointCount?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqinsightGroupId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1InsightDetailState {
@@ -4176,7 +5457,24 @@ export const useComplianceApiV1InsightDetail = (
         JSON.stringify([insightId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqinsightId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -4196,9 +5494,9 @@ export const useComplianceApiV1InsightDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1InsightDetail(insightId, query, paramsSignal)
+                .apiV1InsightDetail(reqinsightId, reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -4243,7 +5541,7 @@ export const useComplianceApiV1InsightDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, insightId, query, params)
         }
     }, [lastInput])
 
@@ -4255,9 +5553,40 @@ export const useComplianceApiV1InsightDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, insightId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqinsightId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqinsightId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1InsightTrendDetailState {
@@ -4305,7 +5634,26 @@ export const useComplianceApiV1InsightTrendDetail = (
         JSON.stringify([insightId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqinsightId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  datapointCount?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -4325,9 +5673,13 @@ export const useComplianceApiV1InsightTrendDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1InsightTrendDetail(insightId, query, paramsSignal)
+                .apiV1InsightTrendDetail(
+                    reqinsightId,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -4372,7 +5724,7 @@ export const useComplianceApiV1InsightTrendDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, insightId, query, params)
         }
     }, [lastInput])
 
@@ -4384,9 +5736,42 @@ export const useComplianceApiV1InsightTrendDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, insightId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqinsightId: string,
+        reqquery:
+            | {
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  datapointCount?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqinsightId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1MetadataInsightDetailState {
@@ -4421,7 +5806,11 @@ export const useComplianceApiV1MetadataInsightDetail = (
         JSON.stringify([insightId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqinsightId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -4441,9 +5830,9 @@ export const useComplianceApiV1MetadataInsightDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1MetadataInsightDetail(insightId, paramsSignal)
+                .apiV1MetadataInsightDetail(reqinsightId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -4488,7 +5877,7 @@ export const useComplianceApiV1MetadataInsightDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, insightId, params)
         }
     }, [lastInput])
 
@@ -4500,9 +5889,27 @@ export const useComplianceApiV1MetadataInsightDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, insightId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqinsightId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqinsightId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1MetadataTagComplianceListState {
@@ -4536,7 +5943,10 @@ export const useComplianceApiV1MetadataTagComplianceList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -4556,9 +5966,9 @@ export const useComplianceApiV1MetadataTagComplianceList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1MetadataTagComplianceList(paramsSignal)
+                .apiV1MetadataTagComplianceList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -4603,7 +6013,7 @@ export const useComplianceApiV1MetadataTagComplianceList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -4615,9 +6025,24 @@ export const useComplianceApiV1MetadataTagComplianceList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1MetadataTagInsightListState {
@@ -4651,7 +6076,10 @@ export const useComplianceApiV1MetadataTagInsightList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -4671,9 +6099,9 @@ export const useComplianceApiV1MetadataTagInsightList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1MetadataTagInsightList(paramsSignal)
+                .apiV1MetadataTagInsightList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -4718,7 +6146,7 @@ export const useComplianceApiV1MetadataTagInsightList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -4730,9 +6158,24 @@ export const useComplianceApiV1MetadataTagInsightList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1QueriesSyncListState {
@@ -4770,7 +6213,15 @@ export const useComplianceApiV1QueriesSyncList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  configzGitURL?: string
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -4790,9 +6241,9 @@ export const useComplianceApiV1QueriesSyncList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1QueriesSyncList(query, paramsSignal)
+                .apiV1QueriesSyncList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -4837,7 +6288,7 @@ export const useComplianceApiV1QueriesSyncList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -4849,9 +6300,31 @@ export const useComplianceApiV1QueriesSyncList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  configzGitURL?: string
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseComplianceApiV1ResourceFindingsCreateState {
@@ -4886,7 +6359,11 @@ export const useComplianceApiV1ResourceFindingsCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -4906,9 +6383,9 @@ export const useComplianceApiV1ResourceFindingsCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV1ResourceFindingsCreate(request, paramsSignal)
+                .apiV1ResourceFindingsCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -4953,7 +6430,7 @@ export const useComplianceApiV1ResourceFindingsCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -4965,7 +6442,25 @@ export const useComplianceApiV1ResourceFindingsCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }

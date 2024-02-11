@@ -187,13 +187,14 @@ export default function BenchmarkSummary() {
         sendNow: updateDetail,
     } = useComplianceApiV1BenchmarksSummaryDetail(String(benchmarkId))
     const [selectedAccounts, setSelectedAccounts] = useState<string[]>([])
-    const { sendNow: triggerEvaluate, isExecuted } =
+    const { sendNowWithParams: triggerEvaluate, isExecuted } =
         useScheduleApiV1ComplianceTriggerUpdate(
             String(benchmarkId),
             { connection_id: selectedAccounts },
             {},
             false
         )
+
     const {
         response: benchmarkKPIStart,
         isLoading: benchmarkKPIStartLoading,
@@ -288,8 +289,14 @@ export default function BenchmarkSummary() {
                                     id={benchmarkDetail?.id}
                                     benchmarkDetail={benchmarkDetail}
                                     onEvaluate={(c) => {
-                                        setSelectedAccounts(c)
-                                        triggerEvaluate()
+                                        setSelectedAccounts(() => c)
+                                        triggerEvaluate(
+                                            String(benchmarkId),
+                                            {
+                                                connection_id: c,
+                                            },
+                                            {}
+                                        )
                                     }}
                                 />
                             )}

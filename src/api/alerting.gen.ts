@@ -2,16 +2,16 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
     GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
     GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
     GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
     GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
     GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
     GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
     RequestParams,
 } from './api'
 
@@ -49,7 +49,11 @@ export const useAlertingApiV1ActionCreateCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -69,9 +73,9 @@ export const useAlertingApiV1ActionCreateCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.alerting
-                .apiV1ActionCreateCreate(request, paramsSignal)
+                .apiV1ActionCreateCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -116,7 +120,7 @@ export const useAlertingApiV1ActionCreateCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -128,9 +132,27 @@ export const useAlertingApiV1ActionCreateCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAlertingApiV1ActionDeleteDeleteState {
@@ -165,7 +187,11 @@ export const useAlertingApiV1ActionDeleteDelete = (
         JSON.stringify([actionId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqactionId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -185,9 +211,9 @@ export const useAlertingApiV1ActionDeleteDelete = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.alerting
-                .apiV1ActionDeleteDelete(actionId, paramsSignal)
+                .apiV1ActionDeleteDelete(reqactionId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -232,7 +258,7 @@ export const useAlertingApiV1ActionDeleteDelete = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, actionId, params)
         }
     }, [lastInput])
 
@@ -244,9 +270,27 @@ export const useAlertingApiV1ActionDeleteDelete = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, actionId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqactionId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqactionId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAlertingApiV1ActionJiraCreateState {
@@ -280,7 +324,11 @@ export const useAlertingApiV1ActionJiraCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -300,9 +348,9 @@ export const useAlertingApiV1ActionJiraCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.alerting
-                .apiV1ActionJiraCreate(request, paramsSignal)
+                .apiV1ActionJiraCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -347,7 +395,7 @@ export const useAlertingApiV1ActionJiraCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -359,9 +407,27 @@ export const useAlertingApiV1ActionJiraCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAlertingApiV1ActionListListState {
@@ -394,7 +460,10 @@ export const useAlertingApiV1ActionListList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -414,9 +483,9 @@ export const useAlertingApiV1ActionListList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.alerting
-                .apiV1ActionListList(paramsSignal)
+                .apiV1ActionListList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -461,7 +530,7 @@ export const useAlertingApiV1ActionListList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -473,9 +542,24 @@ export const useAlertingApiV1ActionListList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAlertingApiV1ActionSlackCreateState {
@@ -511,7 +595,11 @@ export const useAlertingApiV1ActionSlackCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -531,9 +619,9 @@ export const useAlertingApiV1ActionSlackCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.alerting
-                .apiV1ActionSlackCreate(request, paramsSignal)
+                .apiV1ActionSlackCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -578,7 +666,7 @@ export const useAlertingApiV1ActionSlackCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -590,9 +678,27 @@ export const useAlertingApiV1ActionSlackCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAlertingApiV1ActionUpdateUpdateState {
@@ -628,7 +734,12 @@ export const useAlertingApiV1ActionUpdateUpdate = (
         JSON.stringify([actionId, request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqactionId: string,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -648,9 +759,13 @@ export const useAlertingApiV1ActionUpdateUpdate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.alerting
-                .apiV1ActionUpdateUpdate(actionId, request, paramsSignal)
+                .apiV1ActionUpdateUpdate(
+                    reqactionId,
+                    reqrequest,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -697,7 +812,7 @@ export const useAlertingApiV1ActionUpdateUpdate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, actionId, request, params)
         }
     }, [lastInput])
 
@@ -709,9 +824,28 @@ export const useAlertingApiV1ActionUpdateUpdate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, actionId, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqactionId: string,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqactionId, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAlertingApiV1RuleCreateCreateState {
@@ -745,7 +879,11 @@ export const useAlertingApiV1RuleCreateCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -765,9 +903,9 @@ export const useAlertingApiV1RuleCreateCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.alerting
-                .apiV1RuleCreateCreate(request, paramsSignal)
+                .apiV1RuleCreateCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -812,7 +950,7 @@ export const useAlertingApiV1RuleCreateCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -824,9 +962,27 @@ export const useAlertingApiV1RuleCreateCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAlertingApiV1RuleDeleteDeleteState {
@@ -860,7 +1016,11 @@ export const useAlertingApiV1RuleDeleteDelete = (
         JSON.stringify([ruleId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqruleId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -880,9 +1040,9 @@ export const useAlertingApiV1RuleDeleteDelete = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.alerting
-                .apiV1RuleDeleteDelete(ruleId, paramsSignal)
+                .apiV1RuleDeleteDelete(reqruleId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -927,7 +1087,7 @@ export const useAlertingApiV1RuleDeleteDelete = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, ruleId, params)
         }
     }, [lastInput])
 
@@ -939,9 +1099,24 @@ export const useAlertingApiV1RuleDeleteDelete = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, ruleId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqruleId: string, reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqruleId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAlertingApiV1RuleListListState {
@@ -974,7 +1149,10 @@ export const useAlertingApiV1RuleListList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -994,9 +1172,9 @@ export const useAlertingApiV1RuleListList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.alerting
-                .apiV1RuleListList(paramsSignal)
+                .apiV1RuleListList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1041,7 +1219,7 @@ export const useAlertingApiV1RuleListList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -1053,9 +1231,24 @@ export const useAlertingApiV1RuleListList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAlertingApiV1RuleUpdateUpdateState {
@@ -1090,7 +1283,12 @@ export const useAlertingApiV1RuleUpdateUpdate = (
         JSON.stringify([ruleId, request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqruleId: string,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1110,9 +1308,9 @@ export const useAlertingApiV1RuleUpdateUpdate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.alerting
-                .apiV1RuleUpdateUpdate(ruleId, request, paramsSignal)
+                .apiV1RuleUpdateUpdate(reqruleId, reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1157,7 +1355,7 @@ export const useAlertingApiV1RuleUpdateUpdate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, ruleId, request, params)
         }
     }, [lastInput])
 
@@ -1169,9 +1367,28 @@ export const useAlertingApiV1RuleUpdateUpdate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, ruleId, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqruleId: string,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqruleId, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAlertingApiV1RuleTriggerDetailState {
@@ -1207,7 +1424,11 @@ export const useAlertingApiV1RuleTriggerDetail = (
         JSON.stringify([ruleId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqruleId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1227,9 +1448,9 @@ export const useAlertingApiV1RuleTriggerDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.alerting
-                .apiV1RuleTriggerDetail(ruleId, paramsSignal)
+                .apiV1RuleTriggerDetail(reqruleId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1274,7 +1495,7 @@ export const useAlertingApiV1RuleTriggerDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, ruleId, params)
         }
     }, [lastInput])
 
@@ -1286,9 +1507,24 @@ export const useAlertingApiV1RuleTriggerDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, ruleId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqruleId: string, reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqruleId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAlertingApiV1TriggerListListState {
@@ -1321,7 +1557,10 @@ export const useAlertingApiV1TriggerListList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1341,9 +1580,9 @@ export const useAlertingApiV1TriggerListList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.alerting
-                .apiV1TriggerListList(paramsSignal)
+                .apiV1TriggerListList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1388,7 +1627,7 @@ export const useAlertingApiV1TriggerListList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -1400,7 +1639,22 @@ export const useAlertingApiV1TriggerListList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }

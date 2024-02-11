@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
     GithubComKaytuIoKaytuEnginePkgAuthApiChangeUserPreferencesRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
     GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
     GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
     GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
     RequestParams,
 } from './api'
 
@@ -49,7 +49,11 @@ export const useAuthApiV1KeyCreateCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -69,9 +73,9 @@ export const useAuthApiV1KeyCreateCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.auth
-                .apiV1KeyCreateCreate(request, paramsSignal)
+                .apiV1KeyCreateCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -116,7 +120,7 @@ export const useAuthApiV1KeyCreateCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -128,9 +132,27 @@ export const useAuthApiV1KeyCreateCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAuthApiV1KeyDeleteDeleteState {
@@ -164,7 +186,11 @@ export const useAuthApiV1KeyDeleteDelete = (
         JSON.stringify([id, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqid: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -184,9 +210,9 @@ export const useAuthApiV1KeyDeleteDelete = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.auth
-                .apiV1KeyDeleteDelete(id, paramsSignal)
+                .apiV1KeyDeleteDelete(reqid, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -231,7 +257,7 @@ export const useAuthApiV1KeyDeleteDelete = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, id, params)
         }
     }, [lastInput])
 
@@ -243,9 +269,24 @@ export const useAuthApiV1KeyDeleteDelete = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, id, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqid: string, reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqid, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAuthApiV1KeysListState {
@@ -278,7 +319,10 @@ export const useAuthApiV1KeysList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -298,9 +342,9 @@ export const useAuthApiV1KeysList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.auth
-                .apiV1KeysList(paramsSignal)
+                .apiV1KeysList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -345,7 +389,7 @@ export const useAuthApiV1KeysList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -357,9 +401,24 @@ export const useAuthApiV1KeysList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAuthApiV1UserInviteCreateState {
@@ -393,7 +452,11 @@ export const useAuthApiV1UserInviteCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -413,9 +476,9 @@ export const useAuthApiV1UserInviteCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.auth
-                .apiV1UserInviteCreate(request, paramsSignal)
+                .apiV1UserInviteCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -460,7 +523,7 @@ export const useAuthApiV1UserInviteCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -472,9 +535,27 @@ export const useAuthApiV1UserInviteCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAuthApiV1UserPreferencesUpdateState {
@@ -510,7 +591,11 @@ export const useAuthApiV1UserPreferencesUpdate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAuthApiChangeUserPreferencesRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -530,9 +615,9 @@ export const useAuthApiV1UserPreferencesUpdate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.auth
-                .apiV1UserPreferencesUpdate(request, paramsSignal)
+                .apiV1UserPreferencesUpdate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -577,7 +662,7 @@ export const useAuthApiV1UserPreferencesUpdate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -589,9 +674,27 @@ export const useAuthApiV1UserPreferencesUpdate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAuthApiChangeUserPreferencesRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAuthApiV1UserRoleBindingUpdateState {
@@ -627,7 +730,11 @@ export const useAuthApiV1UserRoleBindingUpdate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -647,9 +754,9 @@ export const useAuthApiV1UserRoleBindingUpdate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.auth
-                .apiV1UserRoleBindingUpdate(request, paramsSignal)
+                .apiV1UserRoleBindingUpdate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -694,7 +801,7 @@ export const useAuthApiV1UserRoleBindingUpdate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -706,9 +813,27 @@ export const useAuthApiV1UserRoleBindingUpdate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAuthApiV1UserRoleBindingDeleteState {
@@ -746,7 +871,13 @@ export const useAuthApiV1UserRoleBindingDelete = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery: {
+            userId: string
+        },
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -766,9 +897,9 @@ export const useAuthApiV1UserRoleBindingDelete = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.auth
-                .apiV1UserRoleBindingDelete(query, paramsSignal)
+                .apiV1UserRoleBindingDelete(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -813,7 +944,7 @@ export const useAuthApiV1UserRoleBindingDelete = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -825,9 +956,29 @@ export const useAuthApiV1UserRoleBindingDelete = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery: {
+            userId: string
+        },
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAuthApiV1UserRoleBindingsListState {
@@ -860,7 +1011,10 @@ export const useAuthApiV1UserRoleBindingsList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -880,9 +1034,9 @@ export const useAuthApiV1UserRoleBindingsList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.auth
-                .apiV1UserRoleBindingsList(paramsSignal)
+                .apiV1UserRoleBindingsList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -927,7 +1081,7 @@ export const useAuthApiV1UserRoleBindingsList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -939,9 +1093,24 @@ export const useAuthApiV1UserRoleBindingsList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAuthApiV1UserDetailState {
@@ -975,7 +1144,11 @@ export const useAuthApiV1UserDetail = (
         JSON.stringify([userId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        requserId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -995,9 +1168,9 @@ export const useAuthApiV1UserDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.auth
-                .apiV1UserDetail(userId, paramsSignal)
+                .apiV1UserDetail(requserId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1042,7 +1215,7 @@ export const useAuthApiV1UserDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, userId, params)
         }
     }, [lastInput])
 
@@ -1054,9 +1227,24 @@ export const useAuthApiV1UserDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, userId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (requserId: string, reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, requserId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAuthApiV1UsersListState {
@@ -1090,7 +1278,11 @@ export const useAuthApiV1UsersList = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1110,9 +1302,9 @@ export const useAuthApiV1UsersList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.auth
-                .apiV1UsersList(request, paramsSignal)
+                .apiV1UsersList(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1157,7 +1349,7 @@ export const useAuthApiV1UsersList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -1169,9 +1361,27 @@ export const useAuthApiV1UsersList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseAuthApiV1WorkspaceRoleBindingsListState {
@@ -1205,7 +1415,10 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1225,9 +1438,9 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.auth
-                .apiV1WorkspaceRoleBindingsList(paramsSignal)
+                .apiV1WorkspaceRoleBindingsList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1272,7 +1485,7 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -1284,7 +1497,22 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }

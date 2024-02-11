@@ -2,25 +2,25 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscape,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCountAnalyticsSpendResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscape,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCountAnalyticsMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
     RequestParams,
 } from './api'
 
@@ -57,7 +57,11 @@ export const useInventoryApiV1QueryList = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -77,9 +81,9 @@ export const useInventoryApiV1QueryList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV1QueryList(request, paramsSignal)
+                .apiV1QueryList(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -124,7 +128,7 @@ export const useInventoryApiV1QueryList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -136,9 +140,27 @@ export const useInventoryApiV1QueryList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV1QueryRunCreateState {
@@ -172,7 +194,11 @@ export const useInventoryApiV1QueryRunCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -192,9 +218,9 @@ export const useInventoryApiV1QueryRunCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV1QueryRunCreate(request, paramsSignal)
+                .apiV1QueryRunCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -239,7 +265,7 @@ export const useInventoryApiV1QueryRunCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -251,9 +277,27 @@ export const useInventoryApiV1QueryRunCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV1QueryRunHistoryListState {
@@ -287,7 +331,10 @@ export const useInventoryApiV1QueryRunHistoryList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -307,9 +354,9 @@ export const useInventoryApiV1QueryRunHistoryList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV1QueryRunHistoryList(paramsSignal)
+                .apiV1QueryRunHistoryList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -354,7 +401,7 @@ export const useInventoryApiV1QueryRunHistoryList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -366,9 +413,24 @@ export const useInventoryApiV1QueryRunHistoryList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2AnalyticsCategoriesListState {
@@ -407,7 +469,17 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  metricType?: 'assets' | 'spend'
+
+                  minCount?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -427,9 +499,9 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsCategoriesList(query, paramsSignal)
+                .apiV2AnalyticsCategoriesList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -474,7 +546,7 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -486,9 +558,33 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  metricType?: 'assets' | 'spend'
+
+                  minCount?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2AnalyticsCompositionDetailState {
@@ -540,7 +636,28 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
         JSON.stringify([key, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqkey: string,
+        reqquery: {
+            metricType?: 'assets' | 'spend'
+
+            top: number
+
+            connector?: ('' | 'AWS' | 'Azure')[]
+
+            connectionId?: string[]
+
+            connectionGroup?: string[]
+
+            resourceCollection?: string[]
+
+            endTime?: number
+
+            startTime?: number
+        },
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -560,9 +677,13 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsCompositionDetail(key, query, paramsSignal)
+                .apiV2AnalyticsCompositionDetail(
+                    reqkey,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -607,7 +728,7 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, key, query, params)
         }
     }, [lastInput])
 
@@ -619,9 +740,44 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, key, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqkey: string,
+        reqquery: {
+            metricType?: 'assets' | 'spend'
+
+            top: number
+
+            connector?: ('' | 'AWS' | 'Azure')[]
+
+            connectionId?: string[]
+
+            connectionGroup?: string[]
+
+            resourceCollection?: string[]
+
+            endTime?: number
+
+            startTime?: number
+        },
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqkey, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2AnalyticsCountListState {
@@ -655,7 +811,10 @@ export const useInventoryApiV2AnalyticsCountList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -675,9 +834,9 @@ export const useInventoryApiV2AnalyticsCountList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsCountList(paramsSignal)
+                .apiV2AnalyticsCountList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -722,7 +881,7 @@ export const useInventoryApiV2AnalyticsCountList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -734,9 +893,24 @@ export const useInventoryApiV2AnalyticsCountList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2AnalyticsMetricListState {
@@ -797,7 +971,39 @@ export const useInventoryApiV2AnalyticsMetricList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  tag?: string[]
+
+                  metricType?: 'assets' | 'spend'
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  metricIDs?: string[]
+
+                  endTime?: number
+
+                  startTime?: number
+
+                  minCount?: number
+
+                  sortBy?: 'name' | 'count' | 'growth' | 'growth_rate'
+
+                  pageSize?: number
+
+                  pageNumber?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -817,9 +1023,9 @@ export const useInventoryApiV2AnalyticsMetricList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsMetricList(query, paramsSignal)
+                .apiV2AnalyticsMetricList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -864,7 +1070,7 @@ export const useInventoryApiV2AnalyticsMetricList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -876,9 +1082,55 @@ export const useInventoryApiV2AnalyticsMetricList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  tag?: string[]
+
+                  metricType?: 'assets' | 'spend'
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  metricIDs?: string[]
+
+                  endTime?: number
+
+                  startTime?: number
+
+                  minCount?: number
+
+                  sortBy?: 'name' | 'count' | 'growth' | 'growth_rate'
+
+                  pageSize?: number
+
+                  pageNumber?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2AnalyticsMetricsListListState {
@@ -917,7 +1169,17 @@ export const useInventoryApiV2AnalyticsMetricsListList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  metricType?: 'assets' | 'spend'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -937,9 +1199,9 @@ export const useInventoryApiV2AnalyticsMetricsListList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsMetricsListList(query, paramsSignal)
+                .apiV2AnalyticsMetricsListList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -984,7 +1246,7 @@ export const useInventoryApiV2AnalyticsMetricsListList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -996,9 +1258,33 @@ export const useInventoryApiV2AnalyticsMetricsListList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  metricType?: 'assets' | 'spend'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2AnalyticsMetricsDetailState {
@@ -1033,7 +1319,11 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (
         JSON.stringify([metricId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqmetricId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1053,9 +1343,9 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsMetricsDetail(metricId, paramsSignal)
+                .apiV2AnalyticsMetricsDetail(reqmetricId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1100,7 +1390,7 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, metricId, params)
         }
     }, [lastInput])
 
@@ -1112,9 +1402,27 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, metricId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqmetricId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqmetricId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2AnalyticsSpendCompositionListState {
@@ -1161,7 +1469,25 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  top?: number
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1181,9 +1507,9 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsSpendCompositionList(query, paramsSignal)
+                .apiV2AnalyticsSpendCompositionList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1228,7 +1554,7 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -1240,9 +1566,41 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  top?: number
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2AnalyticsSpendCountListState {
@@ -1276,7 +1634,10 @@ export const useInventoryApiV2AnalyticsSpendCountList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1296,9 +1657,9 @@ export const useInventoryApiV2AnalyticsSpendCountList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsSpendCountList(paramsSignal)
+                .apiV2AnalyticsSpendCountList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1343,7 +1704,7 @@ export const useInventoryApiV2AnalyticsSpendCountList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -1355,9 +1716,24 @@ export const useInventoryApiV2AnalyticsSpendCountList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2AnalyticsSpendMetricListState {
@@ -1412,7 +1788,33 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  filter?: string
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  sortBy?: 'dimension' | 'cost' | 'growth' | 'growth_rate'
+
+                  pageSize?: number
+
+                  pageNumber?: number
+
+                  metricIDs?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1432,9 +1834,9 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsSpendMetricList(query, paramsSignal)
+                .apiV2AnalyticsSpendMetricList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1479,7 +1881,7 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -1491,9 +1893,49 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  filter?: string
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  sortBy?: 'dimension' | 'cost' | 'growth' | 'growth_rate'
+
+                  pageSize?: number
+
+                  pageNumber?: number
+
+                  metricIDs?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2AnalyticsSpendTableListState {
@@ -1544,7 +1986,29 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  startTime?: number
+
+                  endTime?: number
+
+                  granularity?: 'monthly' | 'daily' | 'yearly'
+
+                  dimension?: 'connection' | 'metric'
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  connector?: string[]
+
+                  metricIds?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1564,9 +2028,9 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsSpendTableList(query, paramsSignal)
+                .apiV2AnalyticsSpendTableList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1611,7 +2075,7 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -1623,9 +2087,45 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  startTime?: number
+
+                  endTime?: number
+
+                  granularity?: 'monthly' | 'daily' | 'yearly'
+
+                  dimension?: 'connection' | 'metric'
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  connector?: string[]
+
+                  metricIds?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2AnalyticsSpendTrendListState {
@@ -1674,7 +2174,27 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  metricIds?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  granularity?: 'monthly' | 'daily' | 'yearly'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1694,9 +2214,9 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsSpendTrendList(query, paramsSignal)
+                .apiV2AnalyticsSpendTrendList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1741,7 +2261,7 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -1753,9 +2273,43 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  metricIds?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  granularity?: 'monthly' | 'daily' | 'yearly'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2AnalyticsTableListState {
@@ -1798,7 +2352,21 @@ export const useInventoryApiV2AnalyticsTableList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  startTime?: number
+
+                  endTime?: number
+
+                  granularity?: 'monthly' | 'daily' | 'yearly'
+
+                  dimension?: 'connection' | 'metric'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1818,9 +2386,9 @@ export const useInventoryApiV2AnalyticsTableList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsTableList(query, paramsSignal)
+                .apiV2AnalyticsTableList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1865,7 +2433,7 @@ export const useInventoryApiV2AnalyticsTableList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -1877,9 +2445,37 @@ export const useInventoryApiV2AnalyticsTableList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  startTime?: number
+
+                  endTime?: number
+
+                  granularity?: 'monthly' | 'daily' | 'yearly'
+
+                  dimension?: 'connection' | 'metric'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2AnalyticsTagListState {
@@ -1931,7 +2527,29 @@ export const useInventoryApiV2AnalyticsTagList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  connector?: string[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  minCount?: number
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  metricType?: 'assets' | 'spend'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1951,9 +2569,9 @@ export const useInventoryApiV2AnalyticsTagList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsTagList(query, paramsSignal)
+                .apiV2AnalyticsTagList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1998,7 +2616,7 @@ export const useInventoryApiV2AnalyticsTagList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -2010,9 +2628,45 @@ export const useInventoryApiV2AnalyticsTagList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  connector?: string[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  minCount?: number
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  metricType?: 'assets' | 'spend'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2AnalyticsTrendListState {
@@ -2067,7 +2721,33 @@ export const useInventoryApiV2AnalyticsTrendList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  tag?: string[]
+
+                  metricType?: 'assets' | 'spend'
+
+                  ids?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  granularity?: 'monthly' | 'daily' | 'yearly'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2087,9 +2767,9 @@ export const useInventoryApiV2AnalyticsTrendList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsTrendList(query, paramsSignal)
+                .apiV2AnalyticsTrendList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2134,7 +2814,7 @@ export const useInventoryApiV2AnalyticsTrendList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -2146,9 +2826,49 @@ export const useInventoryApiV2AnalyticsTrendList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  tag?: string[]
+
+                  metricType?: 'assets' | 'spend'
+
+                  ids?: string[]
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  connectionGroup?: string[]
+
+                  resourceCollection?: string[]
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  granularity?: 'monthly' | 'daily' | 'yearly'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2MetadataResourceCollectionListState {
@@ -2187,7 +2907,17 @@ export const useInventoryApiV2MetadataResourceCollectionList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  id?: string[]
+
+                  status?: ('' | 'active' | 'inactive')[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2207,9 +2937,9 @@ export const useInventoryApiV2MetadataResourceCollectionList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2MetadataResourceCollectionList(query, paramsSignal)
+                .apiV2MetadataResourceCollectionList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2254,7 +2984,7 @@ export const useInventoryApiV2MetadataResourceCollectionList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -2266,9 +2996,33 @@ export const useInventoryApiV2MetadataResourceCollectionList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  id?: string[]
+
+                  status?: ('' | 'active' | 'inactive')[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2MetadataResourceCollectionDetailState {
@@ -2303,7 +3057,11 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (
         JSON.stringify([resourceCollectionId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqresourceCollectionId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2323,11 +3081,11 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
                 .apiV2MetadataResourceCollectionDetail(
-                    resourceCollectionId,
-                    paramsSignal
+                    reqresourceCollectionId,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -2378,7 +3136,7 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, resourceCollectionId, params)
         }
     }, [lastInput])
 
@@ -2390,9 +3148,27 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, resourceCollectionId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqresourceCollectionId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqresourceCollectionId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2ResourceCollectionListState {
@@ -2431,7 +3207,17 @@ export const useInventoryApiV2ResourceCollectionList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  id?: string[]
+
+                  status?: ('' | 'active' | 'inactive')[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2451,9 +3237,9 @@ export const useInventoryApiV2ResourceCollectionList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
-                .apiV2ResourceCollectionList(query, paramsSignal)
+                .apiV2ResourceCollectionList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2498,7 +3284,7 @@ export const useInventoryApiV2ResourceCollectionList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -2510,9 +3296,33 @@ export const useInventoryApiV2ResourceCollectionList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  id?: string[]
+
+                  status?: ('' | 'active' | 'inactive')[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2ResourceCollectionDetailState {
@@ -2547,7 +3357,11 @@ export const useInventoryApiV2ResourceCollectionDetail = (
         JSON.stringify([resourceCollectionId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqresourceCollectionId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2567,11 +3381,11 @@ export const useInventoryApiV2ResourceCollectionDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
                 .apiV2ResourceCollectionDetail(
-                    resourceCollectionId,
-                    paramsSignal
+                    reqresourceCollectionId,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -2622,7 +3436,7 @@ export const useInventoryApiV2ResourceCollectionDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, resourceCollectionId, params)
         }
     }, [lastInput])
 
@@ -2634,9 +3448,27 @@ export const useInventoryApiV2ResourceCollectionDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, resourceCollectionId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqresourceCollectionId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqresourceCollectionId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseInventoryApiV2ResourceCollectionLandscapeDetailState {
@@ -2671,7 +3503,11 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (
         JSON.stringify([resourceCollectionId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqresourceCollectionId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2691,11 +3527,11 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.inventory
                 .apiV2ResourceCollectionLandscapeDetail(
-                    resourceCollectionId,
-                    paramsSignal
+                    reqresourceCollectionId,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -2746,7 +3582,7 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, resourceCollectionId, params)
         }
     }, [lastInput])
 
@@ -2758,7 +3594,25 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, resourceCollectionId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqresourceCollectionId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqresourceCollectionId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }

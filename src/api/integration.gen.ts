@@ -2,20 +2,20 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCountConnectionsResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCountConnectionsResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount,
     RequestParams,
 } from './api'
 
@@ -53,7 +53,11 @@ export const useIntegrationApiV1ConnectionsAwsCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -73,9 +77,9 @@ export const useIntegrationApiV1ConnectionsAwsCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
-                .apiV1ConnectionsAwsCreate(request, paramsSignal)
+                .apiV1ConnectionsAwsCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -120,7 +124,7 @@ export const useIntegrationApiV1ConnectionsAwsCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -132,9 +136,27 @@ export const useIntegrationApiV1ConnectionsAwsCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1ConnectionsCountListState {
@@ -171,7 +193,15 @@ export const useIntegrationApiV1ConnectionsCountList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  connector?: string
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -191,9 +221,9 @@ export const useIntegrationApiV1ConnectionsCountList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
-                .apiV1ConnectionsCountList(query, paramsSignal)
+                .apiV1ConnectionsCountList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -238,7 +268,7 @@ export const useIntegrationApiV1ConnectionsCountList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -250,9 +280,31 @@ export const useIntegrationApiV1ConnectionsCountList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  connector?: string
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1ConnectionsSummariesListState {
@@ -327,7 +379,53 @@ export const useIntegrationApiV1ConnectionsSummariesList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  filter?: string
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  resourceCollection?: string[]
+
+                  connectionGroups?: string[]
+
+                  lifecycleState?:
+                      | 'DISABLED'
+                      | 'DISCOVERED'
+                      | 'IN_PROGRESS'
+                      | 'ONBOARD'
+                      | 'ARCHIVED'
+
+                  healthState?: 'healthy' | 'unhealthy'
+
+                  pageSize?: number
+
+                  pageNumber?: number
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  needCost?: boolean
+
+                  needResourceCount?: boolean
+
+                  sortBy?:
+                      | 'onboard_date'
+                      | 'resource_count'
+                      | 'cost'
+                      | 'growth'
+                      | 'growth_rate'
+                      | 'cost_growth'
+                      | 'cost_growth_rate'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -347,9 +445,9 @@ export const useIntegrationApiV1ConnectionsSummariesList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
-                .apiV1ConnectionsSummariesList(query, paramsSignal)
+                .apiV1ConnectionsSummariesList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -394,7 +492,7 @@ export const useIntegrationApiV1ConnectionsSummariesList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -406,9 +504,69 @@ export const useIntegrationApiV1ConnectionsSummariesList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  filter?: string
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  resourceCollection?: string[]
+
+                  connectionGroups?: string[]
+
+                  lifecycleState?:
+                      | 'DISABLED'
+                      | 'DISCOVERED'
+                      | 'IN_PROGRESS'
+                      | 'ONBOARD'
+                      | 'ARCHIVED'
+
+                  healthState?: 'healthy' | 'unhealthy'
+
+                  pageSize?: number
+
+                  pageNumber?: number
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  needCost?: boolean
+
+                  needResourceCount?: boolean
+
+                  sortBy?:
+                      | 'onboard_date'
+                      | 'resource_count'
+                      | 'cost'
+                      | 'growth'
+                      | 'growth_rate'
+                      | 'cost_growth'
+                      | 'cost_growth_rate'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1ConnectionsDeleteState {
@@ -443,7 +601,11 @@ export const useIntegrationApiV1ConnectionsDelete = (
         JSON.stringify([connectionId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqconnectionId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -463,9 +625,9 @@ export const useIntegrationApiV1ConnectionsDelete = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
-                .apiV1ConnectionsDelete(connectionId, paramsSignal)
+                .apiV1ConnectionsDelete(reqconnectionId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -510,7 +672,7 @@ export const useIntegrationApiV1ConnectionsDelete = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, connectionId, params)
         }
     }, [lastInput])
 
@@ -522,9 +684,27 @@ export const useIntegrationApiV1ConnectionsDelete = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, connectionId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqconnectionId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqconnectionId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1ConnectionsAwsHealthcheckDetailState {
@@ -559,7 +739,11 @@ export const useIntegrationApiV1ConnectionsAwsHealthcheckDetail = (
         JSON.stringify([connectionId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqconnectionId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -579,11 +763,11 @@ export const useIntegrationApiV1ConnectionsAwsHealthcheckDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
                 .apiV1ConnectionsAwsHealthcheckDetail(
-                    connectionId,
-                    paramsSignal
+                    reqconnectionId,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -629,7 +813,7 @@ export const useIntegrationApiV1ConnectionsAwsHealthcheckDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, connectionId, params)
         }
     }, [lastInput])
 
@@ -641,9 +825,27 @@ export const useIntegrationApiV1ConnectionsAwsHealthcheckDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, connectionId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqconnectionId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqconnectionId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1ConnectionsAzureHealthcheckDetailState {
@@ -681,7 +883,16 @@ export const useIntegrationApiV1ConnectionsAzureHealthcheckDetail = (
         JSON.stringify([connectionId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqconnectionId: string,
+        reqquery:
+            | {
+                  updateMetadata?: boolean
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -701,12 +912,12 @@ export const useIntegrationApiV1ConnectionsAzureHealthcheckDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
                 .apiV1ConnectionsAzureHealthcheckDetail(
-                    connectionId,
-                    query,
-                    paramsSignal
+                    reqconnectionId,
+                    reqquery,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -754,7 +965,7 @@ export const useIntegrationApiV1ConnectionsAzureHealthcheckDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, connectionId, query, params)
         }
     }, [lastInput])
 
@@ -766,9 +977,32 @@ export const useIntegrationApiV1ConnectionsAzureHealthcheckDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, connectionId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqconnectionId: string,
+        reqquery:
+            | {
+                  updateMetadata?: boolean
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqconnectionId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1ConnectorsListState {
@@ -803,7 +1037,10 @@ export const useIntegrationApiV1ConnectorsList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -823,9 +1060,9 @@ export const useIntegrationApiV1ConnectorsList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
-                .apiV1ConnectorsList(paramsSignal)
+                .apiV1ConnectorsList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -870,7 +1107,7 @@ export const useIntegrationApiV1ConnectorsList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -882,9 +1119,24 @@ export const useIntegrationApiV1ConnectorsList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1ConnectorsMetricsListState {
@@ -921,7 +1173,15 @@ export const useIntegrationApiV1ConnectorsMetricsList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  connector?: ('' | 'AWS' | 'Azure')[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -941,9 +1201,9 @@ export const useIntegrationApiV1ConnectorsMetricsList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
-                .apiV1ConnectorsMetricsList(query, paramsSignal)
+                .apiV1ConnectorsMetricsList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -988,7 +1248,7 @@ export const useIntegrationApiV1ConnectorsMetricsList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -1000,9 +1260,31 @@ export const useIntegrationApiV1ConnectorsMetricsList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  connector?: ('' | 'AWS' | 'Azure')[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1CredentialDeleteState {
@@ -1037,7 +1319,11 @@ export const useIntegrationApiV1CredentialDelete = (
         JSON.stringify([credentialId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqcredentialId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1057,9 +1343,9 @@ export const useIntegrationApiV1CredentialDelete = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
-                .apiV1CredentialDelete(credentialId, paramsSignal)
+                .apiV1CredentialDelete(reqcredentialId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1104,7 +1390,7 @@ export const useIntegrationApiV1CredentialDelete = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, credentialId, params)
         }
     }, [lastInput])
 
@@ -1116,9 +1402,27 @@ export const useIntegrationApiV1CredentialDelete = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, credentialId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqcredentialId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqcredentialId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1CredentialsListState {
@@ -1168,7 +1472,28 @@ export const useIntegrationApiV1CredentialsList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  connector?: '' | 'AWS' | 'Azure'
+
+                  health?: 'healthy' | 'unhealthy'
+
+                  credentialType?: (
+                      | 'auto-azure'
+                      | 'auto-aws'
+                      | 'manual-aws-org'
+                      | 'manual-azure-spn'
+                  )[]
+
+                  pageSize?: number
+
+                  pageNumber?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1188,9 +1513,9 @@ export const useIntegrationApiV1CredentialsList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
-                .apiV1CredentialsList(query, paramsSignal)
+                .apiV1CredentialsList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1235,7 +1560,7 @@ export const useIntegrationApiV1CredentialsList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -1247,9 +1572,44 @@ export const useIntegrationApiV1CredentialsList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  connector?: '' | 'AWS' | 'Azure'
+
+                  health?: 'healthy' | 'unhealthy'
+
+                  credentialType?: (
+                      | 'auto-azure'
+                      | 'auto-aws'
+                      | 'manual-aws-org'
+                      | 'manual-azure-spn'
+                  )[]
+
+                  pageSize?: number
+
+                  pageNumber?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1CredentialsAwsCreateState {
@@ -1284,7 +1644,11 @@ export const useIntegrationApiV1CredentialsAwsCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1304,9 +1668,9 @@ export const useIntegrationApiV1CredentialsAwsCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
-                .apiV1CredentialsAwsCreate(request, paramsSignal)
+                .apiV1CredentialsAwsCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1351,7 +1715,7 @@ export const useIntegrationApiV1CredentialsAwsCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -1363,9 +1727,27 @@ export const useIntegrationApiV1CredentialsAwsCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1CredentialsAwsUpdateState {
@@ -1401,7 +1783,12 @@ export const useIntegrationApiV1CredentialsAwsUpdate = (
         JSON.stringify([credentialId, config, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqcredentialId: string,
+        reqconfig: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1421,9 +1808,13 @@ export const useIntegrationApiV1CredentialsAwsUpdate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
-                .apiV1CredentialsAwsUpdate(credentialId, config, paramsSignal)
+                .apiV1CredentialsAwsUpdate(
+                    reqcredentialId,
+                    reqconfig,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1473,7 +1864,7 @@ export const useIntegrationApiV1CredentialsAwsUpdate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, credentialId, config, params)
         }
     }, [lastInput])
 
@@ -1485,9 +1876,28 @@ export const useIntegrationApiV1CredentialsAwsUpdate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, credentialId, config, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqcredentialId: string,
+        reqconfig: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqcredentialId, reqconfig, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1CredentialsAwsAutoonboardCreateState {
@@ -1522,7 +1932,11 @@ export const useIntegrationApiV1CredentialsAwsAutoonboardCreate = (
         JSON.stringify([credentialId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqcredentialId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1542,11 +1956,11 @@ export const useIntegrationApiV1CredentialsAwsAutoonboardCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
                 .apiV1CredentialsAwsAutoonboardCreate(
-                    credentialId,
-                    paramsSignal
+                    reqcredentialId,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -1592,7 +2006,7 @@ export const useIntegrationApiV1CredentialsAwsAutoonboardCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, credentialId, params)
         }
     }, [lastInput])
 
@@ -1604,9 +2018,27 @@ export const useIntegrationApiV1CredentialsAwsAutoonboardCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, credentialId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqcredentialId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqcredentialId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1CredentialsAzureCreateState {
@@ -1641,7 +2073,11 @@ export const useIntegrationApiV1CredentialsAzureCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1661,9 +2097,9 @@ export const useIntegrationApiV1CredentialsAzureCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
-                .apiV1CredentialsAzureCreate(request, paramsSignal)
+                .apiV1CredentialsAzureCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1708,7 +2144,7 @@ export const useIntegrationApiV1CredentialsAzureCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -1720,9 +2156,27 @@ export const useIntegrationApiV1CredentialsAzureCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1CredentialsAzureUpdateState {
@@ -1758,7 +2212,12 @@ export const useIntegrationApiV1CredentialsAzureUpdate = (
         JSON.stringify([credentialId, config, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqcredentialId: string,
+        reqconfig: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1778,9 +2237,13 @@ export const useIntegrationApiV1CredentialsAzureUpdate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
-                .apiV1CredentialsAzureUpdate(credentialId, config, paramsSignal)
+                .apiV1CredentialsAzureUpdate(
+                    reqcredentialId,
+                    reqconfig,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1830,7 +2293,7 @@ export const useIntegrationApiV1CredentialsAzureUpdate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, credentialId, config, params)
         }
     }, [lastInput])
 
@@ -1842,9 +2305,28 @@ export const useIntegrationApiV1CredentialsAzureUpdate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, credentialId, config, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqcredentialId: string,
+        reqconfig: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqcredentialId, reqconfig, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1CredentialsAzureAutoonboardCreateState {
@@ -1879,7 +2361,11 @@ export const useIntegrationApiV1CredentialsAzureAutoonboardCreate = (
         JSON.stringify([credentialId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqcredentialId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1899,11 +2385,11 @@ export const useIntegrationApiV1CredentialsAzureAutoonboardCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
                 .apiV1CredentialsAzureAutoonboardCreate(
-                    credentialId,
-                    paramsSignal
+                    reqcredentialId,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -1949,7 +2435,7 @@ export const useIntegrationApiV1CredentialsAzureAutoonboardCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, credentialId, params)
         }
     }, [lastInput])
 
@@ -1961,9 +2447,27 @@ export const useIntegrationApiV1CredentialsAzureAutoonboardCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, credentialId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqcredentialId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqcredentialId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseIntegrationApiV1CredentialsDetailState {
@@ -1998,7 +2502,11 @@ export const useIntegrationApiV1CredentialsDetail = (
         JSON.stringify([credentialId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqcredentialId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2018,9 +2526,9 @@ export const useIntegrationApiV1CredentialsDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
-                .apiV1CredentialsDetail(credentialId, paramsSignal)
+                .apiV1CredentialsDetail(reqcredentialId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2065,7 +2573,7 @@ export const useIntegrationApiV1CredentialsDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, credentialId, params)
         }
     }, [lastInput])
 
@@ -2077,7 +2585,25 @@ export const useIntegrationApiV1CredentialsDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, credentialId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqcredentialId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqcredentialId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }

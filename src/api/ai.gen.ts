@@ -35,7 +35,11 @@ export const useAiApiV1GptRunCreate = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -55,9 +59,9 @@ export const useAiApiV1GptRunCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.ai
-                .apiV1GptRunCreate(query, paramsSignal)
+                .apiV1GptRunCreate(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -102,7 +106,7 @@ export const useAiApiV1GptRunCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -114,7 +118,22 @@ export const useAiApiV1GptRunCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqquery: string, reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }

@@ -2,24 +2,24 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
     GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCreateAwsConnectionRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Response,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateConnectionResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Request,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Request,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateConnectionResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Response,
     RequestParams,
 } from './api'
 
@@ -60,7 +60,15 @@ export const useOnboardApiV1CatalogMetricsList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  connector?: ('' | 'AWS' | 'Azure')[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -80,9 +88,9 @@ export const useOnboardApiV1CatalogMetricsList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV1CatalogMetricsList(query, paramsSignal)
+                .apiV1CatalogMetricsList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -127,7 +135,7 @@ export const useOnboardApiV1CatalogMetricsList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -139,9 +147,31 @@ export const useOnboardApiV1CatalogMetricsList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  connector?: ('' | 'AWS' | 'Azure')[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1ConnectionGroupsListState {
@@ -178,7 +208,15 @@ export const useOnboardApiV1ConnectionGroupsList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  populateConnections?: boolean
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -198,9 +236,9 @@ export const useOnboardApiV1ConnectionGroupsList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV1ConnectionGroupsList(query, paramsSignal)
+                .apiV1ConnectionGroupsList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -245,7 +283,7 @@ export const useOnboardApiV1ConnectionGroupsList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -257,9 +295,31 @@ export const useOnboardApiV1ConnectionGroupsList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  populateConnections?: boolean
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1ConnectionGroupsDetailState {
@@ -297,7 +357,16 @@ export const useOnboardApiV1ConnectionGroupsDetail = (
         JSON.stringify([connectionGroupName, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqconnectionGroupName: string,
+        reqquery:
+            | {
+                  populateConnections?: boolean
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -317,12 +386,12 @@ export const useOnboardApiV1ConnectionGroupsDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
                 .apiV1ConnectionGroupsDetail(
-                    connectionGroupName,
-                    query,
-                    paramsSignal
+                    reqconnectionGroupName,
+                    reqquery,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -373,7 +442,7 @@ export const useOnboardApiV1ConnectionGroupsDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, connectionGroupName, query, params)
         }
     }, [lastInput])
 
@@ -385,9 +454,32 @@ export const useOnboardApiV1ConnectionGroupsDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, connectionGroupName, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqconnectionGroupName: string,
+        reqquery:
+            | {
+                  populateConnections?: boolean
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqconnectionGroupName, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1ConnectionsAwsCreateState {
@@ -422,7 +514,11 @@ export const useOnboardApiV1ConnectionsAwsCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateAwsConnectionRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -442,9 +538,9 @@ export const useOnboardApiV1ConnectionsAwsCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV1ConnectionsAwsCreate(request, paramsSignal)
+                .apiV1ConnectionsAwsCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -489,7 +585,7 @@ export const useOnboardApiV1ConnectionsAwsCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -501,9 +597,27 @@ export const useOnboardApiV1ConnectionsAwsCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateAwsConnectionRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1ConnectionsSummaryListState {
@@ -578,7 +692,53 @@ export const useOnboardApiV1ConnectionsSummaryList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  filter?: string
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  resourceCollection?: string[]
+
+                  connectionGroups?: string[]
+
+                  lifecycleState?:
+                      | 'DISABLED'
+                      | 'DISCOVERED'
+                      | 'IN_PROGRESS'
+                      | 'ONBOARD'
+                      | 'ARCHIVED'
+
+                  healthState?: 'healthy' | 'unhealthy'
+
+                  pageSize?: number
+
+                  pageNumber?: number
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  needCost?: boolean
+
+                  needResourceCount?: boolean
+
+                  sortBy?:
+                      | 'onboard_date'
+                      | 'resource_count'
+                      | 'cost'
+                      | 'growth'
+                      | 'growth_rate'
+                      | 'cost_growth'
+                      | 'cost_growth_rate'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -598,9 +758,9 @@ export const useOnboardApiV1ConnectionsSummaryList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV1ConnectionsSummaryList(query, paramsSignal)
+                .apiV1ConnectionsSummaryList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -645,7 +805,7 @@ export const useOnboardApiV1ConnectionsSummaryList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -657,9 +817,69 @@ export const useOnboardApiV1ConnectionsSummaryList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  filter?: string
+
+                  connector?: ('' | 'AWS' | 'Azure')[]
+
+                  connectionId?: string[]
+
+                  resourceCollection?: string[]
+
+                  connectionGroups?: string[]
+
+                  lifecycleState?:
+                      | 'DISABLED'
+                      | 'DISCOVERED'
+                      | 'IN_PROGRESS'
+                      | 'ONBOARD'
+                      | 'ARCHIVED'
+
+                  healthState?: 'healthy' | 'unhealthy'
+
+                  pageSize?: number
+
+                  pageNumber?: number
+
+                  startTime?: number
+
+                  endTime?: number
+
+                  needCost?: boolean
+
+                  needResourceCount?: boolean
+
+                  sortBy?:
+                      | 'onboard_date'
+                      | 'resource_count'
+                      | 'cost'
+                      | 'growth'
+                      | 'growth_rate'
+                      | 'cost_growth'
+                      | 'cost_growth_rate'
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1ConnectionsStateCreateState {
@@ -695,7 +915,12 @@ export const useOnboardApiV1ConnectionsStateCreate = (
         JSON.stringify([connectionId, request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqconnectionId: string,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -715,12 +940,12 @@ export const useOnboardApiV1ConnectionsStateCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
                 .apiV1ConnectionsStateCreate(
-                    connectionId,
-                    request,
-                    paramsSignal
+                    reqconnectionId,
+                    reqrequest,
+                    reqparamsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -771,7 +996,7 @@ export const useOnboardApiV1ConnectionsStateCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, connectionId, request, params)
         }
     }, [lastInput])
 
@@ -783,9 +1008,28 @@ export const useOnboardApiV1ConnectionsStateCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, connectionId, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqconnectionId: string,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqconnectionId, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1ConnectorListState {
@@ -818,7 +1062,10 @@ export const useOnboardApiV1ConnectorList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -838,9 +1085,9 @@ export const useOnboardApiV1ConnectorList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV1ConnectorList(paramsSignal)
+                .apiV1ConnectorList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -885,7 +1132,7 @@ export const useOnboardApiV1ConnectorList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -897,9 +1144,24 @@ export const useOnboardApiV1ConnectorList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1CredentialListState {
@@ -948,7 +1210,28 @@ export const useOnboardApiV1CredentialList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  connector?: '' | 'AWS' | 'Azure'
+
+                  health?: 'healthy' | 'unhealthy'
+
+                  credentialType?: (
+                      | 'auto-azure'
+                      | 'auto-aws'
+                      | 'manual-aws-org'
+                      | 'manual-azure-spn'
+                  )[]
+
+                  pageSize?: number
+
+                  pageNumber?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -968,9 +1251,9 @@ export const useOnboardApiV1CredentialList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV1CredentialList(query, paramsSignal)
+                .apiV1CredentialList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1015,7 +1298,7 @@ export const useOnboardApiV1CredentialList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -1027,9 +1310,44 @@ export const useOnboardApiV1CredentialList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  connector?: '' | 'AWS' | 'Azure'
+
+                  health?: 'healthy' | 'unhealthy'
+
+                  credentialType?: (
+                      | 'auto-azure'
+                      | 'auto-aws'
+                      | 'manual-aws-org'
+                      | 'manual-azure-spn'
+                  )[]
+
+                  pageSize?: number
+
+                  pageNumber?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1CredentialCreateState {
@@ -1063,7 +1381,11 @@ export const useOnboardApiV1CredentialCreate = (
         JSON.stringify([config, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqconfig: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1083,9 +1405,9 @@ export const useOnboardApiV1CredentialCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV1CredentialCreate(config, paramsSignal)
+                .apiV1CredentialCreate(reqconfig, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1130,7 +1452,7 @@ export const useOnboardApiV1CredentialCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, config, params)
         }
     }, [lastInput])
 
@@ -1142,9 +1464,27 @@ export const useOnboardApiV1CredentialCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, config, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqconfig: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqconfig, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1CredentialDetailState {
@@ -1178,7 +1518,11 @@ export const useOnboardApiV1CredentialDetail = (
         JSON.stringify([credentialId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqcredentialId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1198,9 +1542,9 @@ export const useOnboardApiV1CredentialDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV1CredentialDetail(credentialId, paramsSignal)
+                .apiV1CredentialDetail(reqcredentialId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1245,7 +1589,7 @@ export const useOnboardApiV1CredentialDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, credentialId, params)
         }
     }, [lastInput])
 
@@ -1257,9 +1601,27 @@ export const useOnboardApiV1CredentialDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, credentialId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqcredentialId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqcredentialId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1CredentialUpdateState {
@@ -1294,7 +1656,12 @@ export const useOnboardApiV1CredentialUpdate = (
         JSON.stringify([credentialId, config, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqcredentialId: string,
+        reqconfig: GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1314,9 +1681,13 @@ export const useOnboardApiV1CredentialUpdate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV1CredentialUpdate(credentialId, config, paramsSignal)
+                .apiV1CredentialUpdate(
+                    reqcredentialId,
+                    reqconfig,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1366,7 +1737,7 @@ export const useOnboardApiV1CredentialUpdate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, credentialId, config, params)
         }
     }, [lastInput])
 
@@ -1378,9 +1749,28 @@ export const useOnboardApiV1CredentialUpdate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, credentialId, config, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqcredentialId: string,
+        reqconfig: GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqcredentialId, reqconfig, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1CredentialDeleteState {
@@ -1414,7 +1804,11 @@ export const useOnboardApiV1CredentialDelete = (
         JSON.stringify([credentialId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqcredentialId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1434,9 +1828,9 @@ export const useOnboardApiV1CredentialDelete = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV1CredentialDelete(credentialId, paramsSignal)
+                .apiV1CredentialDelete(reqcredentialId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1481,7 +1875,7 @@ export const useOnboardApiV1CredentialDelete = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, credentialId, params)
         }
     }, [lastInput])
 
@@ -1493,9 +1887,27 @@ export const useOnboardApiV1CredentialDelete = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, credentialId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqcredentialId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqcredentialId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1CredentialAutoonboardCreateState {
@@ -1530,7 +1942,11 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
         JSON.stringify([credentialId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqcredentialId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1550,9 +1966,12 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV1CredentialAutoonboardCreate(credentialId, paramsSignal)
+                .apiV1CredentialAutoonboardCreate(
+                    reqcredentialId,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1597,7 +2016,7 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, credentialId, params)
         }
     }, [lastInput])
 
@@ -1609,9 +2028,27 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, credentialId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqcredentialId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqcredentialId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1SourceAwsCreateState {
@@ -1645,7 +2082,11 @@ export const useOnboardApiV1SourceAwsCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1665,9 +2106,9 @@ export const useOnboardApiV1SourceAwsCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV1SourceAwsCreate(request, paramsSignal)
+                .apiV1SourceAwsCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1712,7 +2153,7 @@ export const useOnboardApiV1SourceAwsCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -1724,9 +2165,27 @@ export const useOnboardApiV1SourceAwsCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1SourceAzureCreateState {
@@ -1760,7 +2219,11 @@ export const useOnboardApiV1SourceAzureCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1780,9 +2243,9 @@ export const useOnboardApiV1SourceAzureCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV1SourceAzureCreate(request, paramsSignal)
+                .apiV1SourceAzureCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1827,7 +2290,7 @@ export const useOnboardApiV1SourceAzureCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -1839,9 +2302,27 @@ export const useOnboardApiV1SourceAzureCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1SourceDeleteState {
@@ -1875,7 +2356,11 @@ export const useOnboardApiV1SourceDelete = (
         JSON.stringify([sourceId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqsourceId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1895,9 +2380,9 @@ export const useOnboardApiV1SourceDelete = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV1SourceDelete(sourceId, paramsSignal)
+                .apiV1SourceDelete(reqsourceId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1942,7 +2427,7 @@ export const useOnboardApiV1SourceDelete = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, sourceId, params)
         }
     }, [lastInput])
 
@@ -1954,9 +2439,27 @@ export const useOnboardApiV1SourceDelete = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, sourceId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqsourceId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqsourceId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV1SourceHealthcheckDetailState {
@@ -1994,7 +2497,16 @@ export const useOnboardApiV1SourceHealthcheckDetail = (
         JSON.stringify([sourceId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqsourceId: string,
+        reqquery:
+            | {
+                  updateMetadata?: boolean
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2014,9 +2526,13 @@ export const useOnboardApiV1SourceHealthcheckDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV1SourceHealthcheckDetail(sourceId, query, paramsSignal)
+                .apiV1SourceHealthcheckDetail(
+                    reqsourceId,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2061,7 +2577,7 @@ export const useOnboardApiV1SourceHealthcheckDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, sourceId, query, params)
         }
     }, [lastInput])
 
@@ -2073,9 +2589,32 @@ export const useOnboardApiV1SourceHealthcheckDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, sourceId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqsourceId: string,
+        reqquery:
+            | {
+                  updateMetadata?: boolean
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqsourceId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseOnboardApiV2CredentialCreateState {
@@ -2109,7 +2648,11 @@ export const useOnboardApiV2CredentialCreate = (
         JSON.stringify([config, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqconfig: GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Request,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -2129,9 +2672,9 @@ export const useOnboardApiV2CredentialCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.onboard
-                .apiV2CredentialCreate(config, paramsSignal)
+                .apiV2CredentialCreate(reqconfig, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2176,7 +2719,7 @@ export const useOnboardApiV2CredentialCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, config, params)
         }
     }, [lastInput])
 
@@ -2188,7 +2731,25 @@ export const useOnboardApiV2CredentialCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, config, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqconfig: GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Request,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqconfig, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }

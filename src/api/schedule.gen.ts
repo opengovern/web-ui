@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,
     GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
     GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
     RequestParams,
 } from './api'
 
@@ -49,7 +49,16 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
         JSON.stringify([benchmarkId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  connection_id?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -69,9 +78,13 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.schedule
-                .apiV1ComplianceTriggerUpdate(benchmarkId, query, paramsSignal)
+                .apiV1ComplianceTriggerUpdate(
+                    reqbenchmarkId,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -118,7 +131,7 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, benchmarkId, query, params)
         }
     }, [lastInput])
 
@@ -130,9 +143,32 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, benchmarkId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqbenchmarkId: string,
+        reqquery:
+            | {
+                  connection_id?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqbenchmarkId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseScheduleApiV1DescribeConnectionStatusUpdateState {
@@ -169,7 +205,13 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery: {
+            connection_id: string
+        },
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -189,9 +231,9 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.schedule
-                .apiV1DescribeConnectionStatusUpdate(query, paramsSignal)
+                .apiV1DescribeConnectionStatusUpdate(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -236,7 +278,7 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -248,9 +290,29 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery: {
+            connection_id: string
+        },
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseScheduleApiV1DescribeTriggerUpdateState {
@@ -288,7 +350,16 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
         JSON.stringify([connectionId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqconnectionId: string,
+        reqquery:
+            | {
+                  resource_type?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -308,9 +379,13 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.schedule
-                .apiV1DescribeTriggerUpdate(connectionId, query, paramsSignal)
+                .apiV1DescribeTriggerUpdate(
+                    reqconnectionId,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -357,7 +432,7 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, connectionId, query, params)
         }
     }, [lastInput])
 
@@ -369,9 +444,32 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, connectionId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqconnectionId: string,
+        reqquery:
+            | {
+                  resource_type?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqconnectionId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseScheduleApiV1DiscoveryResourcetypesListListState {
@@ -405,7 +503,10 @@ export const useScheduleApiV1DiscoveryResourcetypesListList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -425,9 +526,9 @@ export const useScheduleApiV1DiscoveryResourcetypesListList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.schedule
-                .apiV1DiscoveryResourcetypesListList(paramsSignal)
+                .apiV1DiscoveryResourcetypesListList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -472,7 +573,7 @@ export const useScheduleApiV1DiscoveryResourcetypesListList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -484,9 +585,24 @@ export const useScheduleApiV1DiscoveryResourcetypesListList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseScheduleApiV1InsightTriggerUpdateState {
@@ -521,7 +637,11 @@ export const useScheduleApiV1InsightTriggerUpdate = (
         JSON.stringify([insightId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqinsightId: number,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -541,9 +661,9 @@ export const useScheduleApiV1InsightTriggerUpdate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.schedule
-                .apiV1InsightTriggerUpdate(insightId, paramsSignal)
+                .apiV1InsightTriggerUpdate(reqinsightId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -588,7 +708,7 @@ export const useScheduleApiV1InsightTriggerUpdate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, insightId, params)
         }
     }, [lastInput])
 
@@ -600,9 +720,27 @@ export const useScheduleApiV1InsightTriggerUpdate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, insightId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqinsightId: number,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqinsightId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseScheduleApiV1JobsCreateState {
@@ -636,7 +774,11 @@ export const useScheduleApiV1JobsCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -656,9 +798,9 @@ export const useScheduleApiV1JobsCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.schedule
-                .apiV1JobsCreate(request, paramsSignal)
+                .apiV1JobsCreate(reqrequest, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -703,7 +845,7 @@ export const useScheduleApiV1JobsCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, request, params)
         }
     }, [lastInput])
 
@@ -715,9 +857,27 @@ export const useScheduleApiV1JobsCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqrequest: GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseScheduleApiV1StacksListState {
@@ -755,7 +915,17 @@ export const useScheduleApiV1StacksList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery:
+            | {
+                  tag?: string[]
+
+                  accountIds?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -775,9 +945,9 @@ export const useScheduleApiV1StacksList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksList(query, paramsSignal)
+                .apiV1StacksList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -822,7 +992,7 @@ export const useScheduleApiV1StacksList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -834,9 +1004,33 @@ export const useScheduleApiV1StacksList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery:
+            | {
+                  tag?: string[]
+
+                  accountIds?: string[]
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseScheduleApiV1StacksCreateCreateState {
@@ -879,7 +1073,19 @@ export const useScheduleApiV1StacksCreateCreate = (
         JSON.stringify([data, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqdata: {
+            stateFile?: File
+
+            tag?: string
+
+            config: string
+
+            remoteStateConfig?: string
+        },
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -899,9 +1105,9 @@ export const useScheduleApiV1StacksCreateCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksCreateCreate(data, paramsSignal)
+                .apiV1StacksCreateCreate(reqdata, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -946,7 +1152,7 @@ export const useScheduleApiV1StacksCreateCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, data, params)
         }
     }, [lastInput])
 
@@ -958,9 +1164,35 @@ export const useScheduleApiV1StacksCreateCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, data, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqdata: {
+            stateFile?: File
+
+            tag?: string
+
+            config: string
+
+            remoteStateConfig?: string
+        },
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqdata, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseScheduleApiV1StacksResourceListState {
@@ -997,7 +1229,13 @@ export const useScheduleApiV1StacksResourceList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery: {
+            resourceId: string
+        },
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1017,9 +1255,9 @@ export const useScheduleApiV1StacksResourceList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksResourceList(query, paramsSignal)
+                .apiV1StacksResourceList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1064,7 +1302,7 @@ export const useScheduleApiV1StacksResourceList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, query, params)
         }
     }, [lastInput])
 
@@ -1076,9 +1314,29 @@ export const useScheduleApiV1StacksResourceList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqquery: {
+            resourceId: string
+        },
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseScheduleApiV1StacksDetailState {
@@ -1112,7 +1370,11 @@ export const useScheduleApiV1StacksDetail = (
         JSON.stringify([stackId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqstackId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1132,9 +1394,9 @@ export const useScheduleApiV1StacksDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksDetail(stackId, paramsSignal)
+                .apiV1StacksDetail(reqstackId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1179,7 +1441,7 @@ export const useScheduleApiV1StacksDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, stackId, params)
         }
     }, [lastInput])
 
@@ -1191,9 +1453,27 @@ export const useScheduleApiV1StacksDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, stackId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqstackId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqstackId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseScheduleApiV1StacksDeleteState {
@@ -1227,7 +1507,11 @@ export const useScheduleApiV1StacksDelete = (
         JSON.stringify([stackId, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqstackId: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1247,9 +1531,9 @@ export const useScheduleApiV1StacksDelete = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksDelete(stackId, paramsSignal)
+                .apiV1StacksDelete(reqstackId, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1294,7 +1578,7 @@ export const useScheduleApiV1StacksDelete = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, stackId, params)
         }
     }, [lastInput])
 
@@ -1306,9 +1590,27 @@ export const useScheduleApiV1StacksDelete = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, stackId, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqstackId: string,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqstackId, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseScheduleApiV1StacksFindingsCreateState {
@@ -1344,7 +1646,12 @@ export const useScheduleApiV1StacksFindingsCreate = (
         JSON.stringify([stackId, request, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqstackId: string,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1364,9 +1671,13 @@ export const useScheduleApiV1StacksFindingsCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksFindingsCreate(stackId, request, paramsSignal)
+                .apiV1StacksFindingsCreate(
+                    reqstackId,
+                    reqrequest,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1411,7 +1722,7 @@ export const useScheduleApiV1StacksFindingsCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, stackId, request, params)
         }
     }, [lastInput])
 
@@ -1423,9 +1734,28 @@ export const useScheduleApiV1StacksFindingsCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, stackId, request, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqstackId: string,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqstackId, reqrequest, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseScheduleApiV1StacksInsightDetailState {
@@ -1467,7 +1797,18 @@ export const useScheduleApiV1StacksInsightDetail = (
         JSON.stringify([stackId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqstackId: string,
+        reqquery: {
+            insightId: number
+
+            startTime?: number
+
+            endTime?: number
+        },
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1487,9 +1828,9 @@ export const useScheduleApiV1StacksInsightDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksInsightDetail(stackId, query, paramsSignal)
+                .apiV1StacksInsightDetail(reqstackId, reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1534,7 +1875,7 @@ export const useScheduleApiV1StacksInsightDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, stackId, query, params)
         }
     }, [lastInput])
 
@@ -1546,9 +1887,34 @@ export const useScheduleApiV1StacksInsightDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, stackId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqstackId: string,
+        reqquery: {
+            insightId: number
+
+            startTime?: number
+
+            endTime?: number
+        },
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqstackId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseScheduleApiV1StacksInsightsDetailState {
@@ -1590,7 +1956,20 @@ export const useScheduleApiV1StacksInsightsDetail = (
         JSON.stringify([stackId, query, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqstackId: string,
+        reqquery:
+            | {
+                  insightIds?: number[]
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -1610,9 +1989,13 @@ export const useScheduleApiV1StacksInsightsDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksInsightsDetail(stackId, query, paramsSignal)
+                .apiV1StacksInsightsDetail(
+                    reqstackId,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1657,7 +2040,7 @@ export const useScheduleApiV1StacksInsightsDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, stackId, query, params)
         }
     }, [lastInput])
 
@@ -1669,7 +2052,34 @@ export const useScheduleApiV1StacksInsightsDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, stackId, query, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqstackId: string,
+        reqquery:
+            | {
+                  insightIds?: number[]
+
+                  startTime?: number
+
+                  endTime?: number
+              }
+            | undefined,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqstackId, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }

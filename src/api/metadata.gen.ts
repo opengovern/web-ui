@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
     GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
     RequestParams,
 } from './api'
 
@@ -40,7 +40,10 @@ export const useMetadataApiV1FilterList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -60,9 +63,9 @@ export const useMetadataApiV1FilterList = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.metadata
-                .apiV1FilterList(paramsSignal)
+                .apiV1FilterList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -107,7 +110,7 @@ export const useMetadataApiV1FilterList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, params)
         }
     }, [lastInput])
 
@@ -119,9 +122,24 @@ export const useMetadataApiV1FilterList = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseMetadataApiV1FilterCreateState {
@@ -155,7 +173,11 @@ export const useMetadataApiV1FilterCreate = (
         JSON.stringify([req, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqreq: GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -175,9 +197,9 @@ export const useMetadataApiV1FilterCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.metadata
-                .apiV1FilterCreate(req, paramsSignal)
+                .apiV1FilterCreate(reqreq, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -222,7 +244,7 @@ export const useMetadataApiV1FilterCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, req, params)
         }
     }, [lastInput])
 
@@ -234,9 +256,27 @@ export const useMetadataApiV1FilterCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, req, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqreq: GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqreq, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseMetadataApiV1MetadataCreateState {
@@ -270,7 +310,11 @@ export const useMetadataApiV1MetadataCreate = (
         JSON.stringify([req, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqreq: GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -290,9 +334,9 @@ export const useMetadataApiV1MetadataCreate = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.metadata
-                .apiV1MetadataCreate(req, paramsSignal)
+                .apiV1MetadataCreate(reqreq, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -337,7 +381,7 @@ export const useMetadataApiV1MetadataCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, req, params)
         }
     }, [lastInput])
 
@@ -349,9 +393,27 @@ export const useMetadataApiV1MetadataCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, req, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (
+        reqreq: GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqreq, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
 
 interface IuseMetadataApiV1MetadataDetailState {
@@ -385,7 +447,11 @@ export const useMetadataApiV1MetadataDetail = (
         JSON.stringify([key, params, autoExecute])
     )
 
-    const sendRequest = (abortCtrl: AbortController) => {
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqkey: string,
+        reqparams: RequestParams
+    ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
             return
         }
@@ -405,9 +471,9 @@ export const useMetadataApiV1MetadataDetail = (
                 setWorkspace('kaytu')
             }
 
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.metadata
-                .apiV1MetadataDetail(key, paramsSignal)
+                .apiV1MetadataDetail(reqkey, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -452,7 +518,7 @@ export const useMetadataApiV1MetadataDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController)
+            sendRequest(newController, key, params)
         }
     }, [lastInput])
 
@@ -464,7 +530,22 @@ export const useMetadataApiV1MetadataDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController)
+        sendRequest(newController, key, params)
     }
-    return { response, isLoading, isExecuted, error, sendNow }
+
+    const sendNowWithParams = (reqkey: string, reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqkey, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
 }
