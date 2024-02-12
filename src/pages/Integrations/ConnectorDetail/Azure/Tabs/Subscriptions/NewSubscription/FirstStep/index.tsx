@@ -96,6 +96,7 @@ export default function FirstStep({ onNext, onPrevious, spns }: IStep) {
         rowSelection: 'multiple',
         animateRows: true,
         paginationPageSize: 10,
+        alwaysShowHorizontalScroll: true,
         getRowHeight: (params) => 50,
         onRowClicked(
             event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential>

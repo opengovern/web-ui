@@ -9,6 +9,7 @@ import {
 } from '../../../../api/compliance.gen'
 import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedule.gen'
 import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
 } from '../../../../api/api'
@@ -102,57 +103,83 @@ const topControls = (
     return top
 }
 
+interface IStackItem {
+    name: string
+    count: number
+}
+
+const failed = (
+    v:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
+        | undefined
+) => {
+    return (v?.total || 0) - (v?.passed || 0)
+}
+
 const benchmarkTrend = (
     response:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint[]
         | undefined,
-    view: 'count' | 'percent'
+    includePassed: 'True' | 'False',
+    show: 'Conformance Status' | 'Severity' | 'Security Score',
+    view: 'Findings' | 'Controls'
 ) => {
     return response?.map((item) => {
-        if (view === 'count') {
+        if (view === 'Findings') {
             const data = {
-                ...item,
-                stack: Object.entries(item.checks || {}).map(([key, value]) => {
-                    return {
-                        name: camelCaseToLabel(key).split(' ')[0],
-                        count: value,
-                    }
-                }),
+                critical: item.checks?.criticalCount,
+                high: item.checks?.highCount,
+                medium: item.checks?.mediumCount,
+                low: item.checks?.lowCount,
+                none: item.checks?.noneCount,
             }
-            data.stack.push({
-                name: 'Passed',
-                count: item.conformanceStatusSummary?.passed,
-            })
 
-            return data
-        }
-
-        const data = {
-            ...item,
-            stack: Object.entries(item.checks || {}).map(([key, value]) => {
-                return {
-                    name: camelCaseToLabel(key).split(' ')[0],
-                    count: (
-                        ((value || 0) /
-                            ((item.conformanceStatusSummary?.total || 0) +
-                                (item.conformanceStatusSummary?.passed || 0) ||
-                                1)) *
-                        100
-                    ).toFixed(2),
+            const stack: IStackItem[] = Object.entries(data).map(
+                ([key, value]) => {
+                    return {
+                        name: camelCaseToLabel(key),
+                        count: value || 0,
+                    }
                 }
-            }),
-        }
-        data.stack.push({
-            name: 'Passed',
-            count: (
-                ((item.conformanceStatusSummary?.passed || 0) /
-                    ((item.conformanceStatusSummary?.total || 0) +
-                        (item.conformanceStatusSummary?.passed || 0) || 1)) *
-                100
-            ).toFixed(2),
-        })
+            )
 
-        return data
+            if (includePassed === 'True') {
+                stack.push({
+                    name: 'Passed',
+                    count: item.conformanceStatusSummary?.passed || 0,
+                })
+            }
+            return stack
+        }
+
+        if (view === 'Controls') {
+            const data = {
+                critical: failed(item.controlsSeverityStatus?.critical),
+                high: failed(item.controlsSeverityStatus?.high),
+                medium: failed(item.controlsSeverityStatus?.medium),
+                low: failed(item.controlsSeverityStatus?.low),
+                none: failed(item.controlsSeverityStatus?.none),
+            }
+
+            const stack: IStackItem[] = Object.entries(data).map(
+                ([key, value]) => {
+                    return {
+                        name: camelCaseToLabel(key),
+                        count: value || 0,
+                    }
+                }
+            )
+
+            if (includePassed === 'True') {
+                stack.push({
+                    name: 'Passed',
+                    count: item.controlsSeverityStatus?.total?.passed || 0,
+                })
+            }
+            return stack
+        }
+
+        return []
     })
 }
 
@@ -162,10 +189,18 @@ export default function BenchmarkSummary() {
     const { value: selectedConnections } = useFilterState()
     const [assignments, setAssignments] = useState(0)
     const [recall, setRecall] = useState(false)
-    const [chartLayout, setChartLayout] = useURLParam<'count' | 'percent'>(
-        'show',
-        'percent'
+    const [includePassed, setIncludePassed] = useURLParam<'True' | 'False'>(
+        'includePassed',
+        'False'
     )
+    const [show, setShow] = useURLParam<
+        'Conformance Status' | 'Severity' | 'Security Score'
+    >('show', 'Severity')
+    const [view, setView] = useURLParam<'Findings' | 'Controls'>(
+        'view',
+        'Controls'
+    )
+
     const [chartType, setChartType] = useURLParam<ChartType>('chartType', 'bar')
 
     const topQuery = {
@@ -216,6 +251,7 @@ export default function BenchmarkSummary() {
         isLoading: eventsLoading,
         sendNow: eventsSend,
     } = useComplianceApiV1FindingEventsCountList({
+        benchmarkID: benchmarkId ? [benchmarkId] : undefined,
         startTime: activeTimeRange.start.unix(),
         endTime: activeTimeRange.end.unix(),
     })
@@ -352,12 +388,15 @@ export default function BenchmarkSummary() {
                     <BenchmarkChart
                         title="Security Score"
                         isLoading={trendLoading}
-                        trend={benchmarkTrend(trend, chartLayout)}
+                        trend={benchmarkTrend(trend, includePassed, show, view)}
                         error={toErrorMessage(trendError)}
                         onRefresh={() => sendTrend()}
-                        chartLayout={chartLayout}
-                        setChartLayout={setChartLayout}
-                        validChartLayouts={['count', 'percent']}
+                        includePassed={includePassed}
+                        setIncludePassed={setIncludePassed}
+                        view={view}
+                        setView={setView}
+                        show={show}
+                        setShow={setShow}
                         chartType={chartType as ChartType}
                         setChartType={setChartType}
                     />

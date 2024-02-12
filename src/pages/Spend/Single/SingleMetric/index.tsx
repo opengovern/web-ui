@@ -196,6 +196,7 @@ export default function SingleSpendMetric({
             },
         },
         rowGroupPanelShow: 'always',
+        alwaysShowHorizontalScroll: true,
         groupAllowUnbalanced: true,
         autoGroupColumnDef: {
             pinned: true,

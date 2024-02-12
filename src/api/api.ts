@@ -3985,6 +3985,8 @@ export class Api<
             query?: {
                 /** ConformanceStatus to filter by defaults to all conformanceStatus except passed */
                 conformanceStatus?: ('failed' | 'passed')[]
+                /** BenchmarkID to filter by */
+                benchmarkID?: string[]
                 /** StateActive to filter by defaults to all stateActives */
                 stateActive?: boolean[]
                 /** Start time to filter by */

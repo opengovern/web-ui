@@ -74,6 +74,7 @@ export default function FinalStep({ onNext, subscriptions }: IStep) {
         pagination: true,
         rowSelection: 'multiple',
         animateRows: true,
+        alwaysShowHorizontalScroll: true,
         paginationPageSize: 10,
         getRowHeight: (params) => 50,
         sideBar: {

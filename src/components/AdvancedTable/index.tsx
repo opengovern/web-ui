@@ -339,6 +339,7 @@ export default function AdvancedTable<TData = any, TValue = any>({
         paginationPageSize: 10,
         rowSelection: 'multiple',
         suppressExcelExport: true,
+        alwaysShowHorizontalScroll: true,
         animateRows: false,
         getRowHeight: () => 50,
         onGridReady: (e) => {

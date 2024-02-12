@@ -267,6 +267,7 @@ export default function Table<TData = any, TValue = any>({
         paginationPageSize: 25,
         rowSelection: 'multiple',
         suppressExcelExport: true,
+        alwaysShowHorizontalScroll: true,
         suppressCellFocus: true,
         suppressMenuHide: true,
         animateRows: false,

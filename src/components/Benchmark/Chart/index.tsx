@@ -7,15 +7,34 @@ import { ChartType, chartTypeValues } from '../../Asset/Chart/Selectors'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
 import { errorHandlingWithErrorMessage } from '../../../types/apierror'
 
+export type BenchmarkChartShowType =
+    | 'Conformance Status'
+    | 'Severity'
+    | 'Security Score'
+export const BenchmarkChartShowValues = [
+    'Conformance Status',
+    'Severity',
+    'Security Score',
+]
+
+export type BenchmarkChartViewType = 'Findings' | 'Controls'
+export const BenchmarkChartViewValues = ['Findings', 'Controls']
+
+export type BenchmarkChartIncludePassedType = 'True' | 'False'
+export const BenchmarkChartIncludePassedValues = ['True', 'False']
+
 interface IBenchmarkChart {
     title: string
     isLoading: boolean
     trend: any[] | undefined
     error: string | undefined
     onRefresh: () => void
-    chartLayout: 'count' | 'percent'
-    setChartLayout: (v: 'count' | 'percent') => void
-    validChartLayouts: ('count' | 'percent')[]
+    includePassed: 'True' | 'False'
+    setIncludePassed: (v: 'True' | 'False') => void
+    show: 'Conformance Status' | 'Severity' | 'Security Score'
+    setShow: (v: 'Conformance Status' | 'Severity' | 'Security Score') => void
+    view: 'Findings' | 'Controls'
+    setView: (v: 'Findings' | 'Controls') => void
     chartType: ChartType
     setChartType: (v: ChartType) => void
 }
@@ -26,11 +45,14 @@ export default function BenchmarkChart({
     trend,
     error,
     onRefresh,
-    chartLayout,
-    setChartLayout,
-    validChartLayouts,
     chartType,
     setChartType,
+    includePassed,
+    setIncludePassed,
+    show,
+    setShow,
+    view,
+    setView,
 }: IBenchmarkChart) {
     const theTrend = trendChart(trend)
 
@@ -40,12 +62,32 @@ export default function BenchmarkChart({
                 <Title>{title}</Title>
                 <Flex className="w-fit gap-6">
                     <Selector
-                        values={validChartLayouts.map((v) => String(v))}
-                        value={chartLayout}
+                        values={['True', 'False']}
+                        value={includePassed}
+                        title="Include passed"
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        onValueChange={(v) => setIncludePassed(v)}
+                    />
+                    <Selector
+                        values={[
+                            'Conformance Status',
+                            'Severity',
+                            'Security Score',
+                        ]}
+                        value={show}
                         title="Show"
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore
-                        onValueChange={(v) => setChartLayout(v)}
+                        onValueChange={(v) => setShow(v)}
+                    />
+                    <Selector
+                        values={['Findings', 'Controls']}
+                        value={view}
+                        title="View"
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        onValueChange={(v) => setView(v)}
                     />
                     <TabGroup
                         index={chartTypeValues.indexOf(chartType)}
