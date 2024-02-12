@@ -11,6 +11,7 @@ import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedul
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatusSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
 } from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
@@ -103,121 +104,12 @@ const topControls = (
     return top
 }
 
-export interface ITrendItem {
-    stack: IStackItem[]
-    timestamp: string | undefined
-}
-
-export interface IStackItem {
-    name: string
-    count: number
-}
-
-const failed = (
-    v:
-        | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
-        | undefined
-) => {
-    return (v?.total || 0) - (v?.passed || 0)
-}
-
-const benchmarkTrend = (
-    response:
-        | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint[]
-        | undefined,
-    includePassed: 'True' | 'False',
-    show: 'Conformance Status' | 'Severity' | 'Security Score',
-    view: 'Findings' | 'Controls'
-): ITrendItem[] => {
-    return (
-        response?.map((item) => {
-            if (view === 'Findings') {
-                const data = {
-                    critical: item.checks?.criticalCount,
-                    high: item.checks?.highCount,
-                    medium: item.checks?.mediumCount,
-                    low: item.checks?.lowCount,
-                    none: item.checks?.noneCount,
-                }
-
-                const stack: IStackItem[] = Object.entries(data).map(
-                    ([key, value]) => {
-                        return {
-                            name: camelCaseToLabel(key),
-                            count: value || 0,
-                        }
-                    }
-                )
-
-                if (includePassed === 'True') {
-                    stack.push({
-                        name: 'Passed',
-                        count: item.conformanceStatusSummary?.passed || 0,
-                    })
-                }
-                return {
-                    timestamp: item.timestamp,
-                    stack,
-                }
-            }
-
-            if (view === 'Controls') {
-                const data = {
-                    critical: failed(item.controlsSeverityStatus?.critical),
-                    high: failed(item.controlsSeverityStatus?.high),
-                    medium: failed(item.controlsSeverityStatus?.medium),
-                    low: failed(item.controlsSeverityStatus?.low),
-                    none: failed(item.controlsSeverityStatus?.none),
-                }
-
-                const stack: IStackItem[] = Object.entries(data).map(
-                    ([key, value]) => {
-                        return {
-                            name: camelCaseToLabel(key),
-                            count: value || 0,
-                        }
-                    }
-                )
-
-                if (includePassed === 'True') {
-                    stack.push({
-                        name: 'Passed',
-                        count: item.controlsSeverityStatus?.total?.passed || 0,
-                    })
-                }
-                return {
-                    timestamp: item.timestamp,
-                    stack,
-                }
-            }
-
-            return {
-                timestamp: item.timestamp,
-                stack: [],
-            }
-        }) || []
-    )
-}
-
 export default function BenchmarkSummary() {
     const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
     const { benchmarkId, resourceId } = useParams()
     const { value: selectedConnections } = useFilterState()
     const [assignments, setAssignments] = useState(0)
     const [recall, setRecall] = useState(false)
-    const [includePassed, setIncludePassed] = useURLParam<'True' | 'False'>(
-        'includePassed',
-        'False'
-    )
-    const [show, setShow] = useURLParam<
-        'Conformance Status' | 'Severity' | 'Security Score'
-    >('show', 'Severity')
-    const [view, setView] = useURLParam<'Findings' | 'Controls'>(
-        'view',
-        'Controls'
-    )
-
-    const [chartType, setChartType] = useURLParam<ChartType>('chartType', 'bar')
 
     const topQuery = {
         ...(benchmarkId && { benchmarkId: [benchmarkId] }),
@@ -358,11 +250,12 @@ export default function BenchmarkSummary() {
                         <SummaryCard
                             title="Issues"
                             metric={
-                                benchmarkKPIEnd?.conformanceStatusSummary?.total
+                                benchmarkKPIEnd?.conformanceStatusSummary
+                                    ?.failed
                             }
                             metricPrev={
                                 benchmarkKPIStart?.conformanceStatusSummary
-                                    ?.total
+                                    ?.failed
                             }
                             loading={
                                 benchmarkKPIEndLoading ||
@@ -404,17 +297,9 @@ export default function BenchmarkSummary() {
                     <BenchmarkChart
                         title="Security Score"
                         isLoading={trendLoading}
-                        trend={benchmarkTrend(trend, includePassed, show, view)}
+                        trend={trend}
                         error={toErrorMessage(trendError)}
                         onRefresh={() => sendTrend()}
-                        includePassed={includePassed}
-                        setIncludePassed={setIncludePassed}
-                        view={view}
-                        setView={setView}
-                        show={show}
-                        setShow={setShow}
-                        chartType={chartType as ChartType}
-                        setChartType={setChartType}
                     />
                     <Controls
                         id={String(benchmarkId)}

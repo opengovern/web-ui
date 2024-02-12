@@ -1,7 +1,4 @@
-import {
-    IStackItem,
-    ITrendItem,
-} from '../../../pages/Governance/Compliance/BenchmarkSummary'
+import { ITrendItem } from '.'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import { StackItem } from '../../Chart/Stacked'
 

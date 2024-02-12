@@ -762,8 +762,8 @@ export enum GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatusSummary {
+    failed?: number
     passed?: number
-    total?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControl {

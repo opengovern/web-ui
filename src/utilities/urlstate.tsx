@@ -53,7 +53,11 @@ export function useURLState<T>(
         const params = new URLSearchParams()
         getLocationSearch()
             .split('&')
-            .map((v2) => v2.split('=').map((v3) => decodeURIComponent(v3)))
+            .map((v2) =>
+                v2
+                    .split('=')
+                    .map((v3) => decodeURIComponent(v3.replace(/\+/g, '%20')))
+            )
             .forEach((i) => {
                 if (i[0] !== '') {
                     params.append(i[0], i[1])

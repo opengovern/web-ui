@@ -5,10 +5,13 @@ import Selector from '../../Selector'
 import { ChartType, chartTypeValues } from '../../Asset/Chart/Selectors'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
 import { errorHandlingWithErrorMessage } from '../../../types/apierror'
+import { useURLParam } from '../../../utilities/urlstate'
 import {
-    IStackItem,
-    ITrendItem,
-} from '../../../pages/Governance/Compliance/BenchmarkSummary'
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatusSummary,
+} from '../../../api/api'
+import { camelCaseToLabel } from '../../../utilities/labelMaker'
 
 export type BenchmarkChartShowType =
     | 'Conformance Status'
@@ -26,20 +29,171 @@ export const BenchmarkChartViewValues = ['Findings', 'Controls']
 export type BenchmarkChartIncludePassedType = 'True' | 'False'
 export const BenchmarkChartIncludePassedValues = ['True', 'False']
 
+export interface ITrendItem {
+    stack: IStackItem[]
+    timestamp: string | undefined
+}
+
+export interface IStackItem {
+    name: string
+    count: number
+}
+
+const failed = (
+    v:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
+        | undefined
+) => {
+    return (v?.total || 0) - (v?.passed || 0)
+}
+
+const score = (
+    v:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatusSummary
+        | undefined
+) => {
+    return (100.0 * (v?.passed || 0)) / ((v?.failed || 0) + (v?.passed || 0))
+}
+
+const benchmarkTrend = (
+    response:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint[]
+        | undefined,
+    includePassed: 'True' | 'False',
+    show: 'Conformance Status' | 'Severity' | 'Security Score',
+    view: 'Findings' | 'Controls'
+): ITrendItem[] => {
+    return (
+        response?.map((item) => {
+            if (show === 'Security Score') {
+                const stack: IStackItem[] = [
+                    {
+                        name: 'Score',
+                        count: score(item.conformanceStatusSummary),
+                    },
+                ]
+                return {
+                    timestamp: item.timestamp,
+                    stack,
+                }
+            }
+
+            if (view === 'Findings') {
+                if (show === 'Conformance Status') {
+                    const data = {
+                        failed: failed(item.conformanceStatusSummary),
+                        passed: item.conformanceStatusSummary?.passed,
+                    }
+
+                    const stack: IStackItem[] = Object.entries(data).map(
+                        ([key, value]) => {
+                            return {
+                                name: camelCaseToLabel(key),
+                                count: value || 0,
+                            }
+                        }
+                    )
+                    return {
+                        timestamp: item.timestamp,
+                        stack,
+                    }
+                }
+
+                const data = {
+                    critical: item.checks?.criticalCount,
+                    high: item.checks?.highCount,
+                    medium: item.checks?.mediumCount,
+                    low: item.checks?.lowCount,
+                    none: item.checks?.noneCount,
+                }
+
+                const stack: IStackItem[] = Object.entries(data).map(
+                    ([key, value]) => {
+                        return {
+                            name: camelCaseToLabel(key),
+                            count: value || 0,
+                        }
+                    }
+                )
+
+                if (includePassed === 'True') {
+                    stack.push({
+                        name: 'Passed',
+                        count: item.conformanceStatusSummary?.passed || 0,
+                    })
+                }
+                return {
+                    timestamp: item.timestamp,
+                    stack,
+                }
+            }
+
+            if (view === 'Controls') {
+                if (show === 'Conformance Status') {
+                    const data = {
+                        failed: failed(item.controlsSeverityStatus?.total),
+                        passed: item.controlsSeverityStatus?.total?.passed,
+                    }
+
+                    const stack: IStackItem[] = Object.entries(data).map(
+                        ([key, value]) => {
+                            return {
+                                name: camelCaseToLabel(key),
+                                count: value || 0,
+                            }
+                        }
+                    )
+                    return {
+                        timestamp: item.timestamp,
+                        stack,
+                    }
+                }
+
+                const data = {
+                    critical: failed(item.controlsSeverityStatus?.critical),
+                    high: failed(item.controlsSeverityStatus?.high),
+                    medium: failed(item.controlsSeverityStatus?.medium),
+                    low: failed(item.controlsSeverityStatus?.low),
+                    none: failed(item.controlsSeverityStatus?.none),
+                }
+
+                const stack: IStackItem[] = Object.entries(data).map(
+                    ([key, value]) => {
+                        return {
+                            name: camelCaseToLabel(key),
+                            count: value || 0,
+                        }
+                    }
+                )
+
+                if (includePassed === 'True') {
+                    stack.push({
+                        name: 'Passed',
+                        count: item.controlsSeverityStatus?.total?.passed || 0,
+                    })
+                }
+                return {
+                    timestamp: item.timestamp,
+                    stack,
+                }
+            }
+
+            return {
+                timestamp: item.timestamp,
+                stack: [],
+            }
+        }) || []
+    )
+}
+
 interface IBenchmarkChart {
     title: string
     isLoading: boolean
-    trend: ITrendItem[] | undefined
+    trend:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint[]
+        | undefined
     error: string | undefined
     onRefresh: () => void
-    includePassed: 'True' | 'False'
-    setIncludePassed: (v: 'True' | 'False') => void
-    show: 'Conformance Status' | 'Severity' | 'Security Score'
-    setShow: (v: 'Conformance Status' | 'Severity' | 'Security Score') => void
-    view: 'Findings' | 'Controls'
-    setView: (v: 'Findings' | 'Controls') => void
-    chartType: ChartType
-    setChartType: (v: ChartType) => void
 }
 
 export default function BenchmarkChart({
@@ -48,30 +202,30 @@ export default function BenchmarkChart({
     trend,
     error,
     onRefresh,
-    chartType,
-    setChartType,
-    includePassed,
-    setIncludePassed,
-    show,
-    setShow,
-    view,
-    setView,
 }: IBenchmarkChart) {
-    const theTrend = trendChart(trend)
+    const [includePassed, setIncludePassed] = useURLParam<'True' | 'False'>(
+        'includePassed',
+        'False'
+    )
+    const [show, setShow] = useURLParam<
+        'Conformance Status' | 'Severity' | 'Security Score'
+    >('show', 'Severity')
+    const [view, setView] = useURLParam<'Findings' | 'Controls'>(
+        'view',
+        'Controls'
+    )
+
+    const [chartType, setChartType] = useURLParam<ChartType>('chartType', 'bar')
+
+    const theTrend = trendChart(
+        benchmarkTrend(trend, includePassed, show, view)
+    )
 
     return (
         <Card className="mb-6">
             <Flex>
                 <Title>{title}</Title>
                 <Flex className="w-fit gap-6">
-                    <Selector
-                        values={['True', 'False']}
-                        value={includePassed}
-                        title="Include passed"
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        onValueChange={(v) => setIncludePassed(v)}
-                    />
                     <Selector
                         values={[
                             'Conformance Status',
@@ -84,14 +238,29 @@ export default function BenchmarkChart({
                         // @ts-ignore
                         onValueChange={(v) => setShow(v)}
                     />
-                    <Selector
-                        values={['Findings', 'Controls']}
-                        value={view}
-                        title="View"
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        onValueChange={(v) => setView(v)}
-                    />
+
+                    {show !== 'Security Score' && (
+                        <Selector
+                            values={['Findings', 'Controls']}
+                            value={view}
+                            title="View"
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            onValueChange={(v) => setView(v)}
+                        />
+                    )}
+
+                    {show === 'Severity' && (
+                        <Selector
+                            values={['True', 'False']}
+                            value={includePassed}
+                            title="Include passed"
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            onValueChange={(v) => setIncludePassed(v)}
+                        />
+                    )}
+
                     <TabGroup
                         index={chartTypeValues.indexOf(chartType)}
                         onIndexChange={(i) =>
