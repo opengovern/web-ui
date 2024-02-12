@@ -86,7 +86,7 @@ export default function ControlDetail() {
                                     controlDetail?.control?.severity
                                 )}
                             </Flex>
-                            <div className="group w-full relative flex justify-center">
+                            <div className="group w-full relative flex justify-start">
                                 <Text className="truncate">
                                     {controlDetail?.control?.description}
                                 </Text>
