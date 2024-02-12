@@ -81,7 +81,7 @@ const benchmarkTrend = (
             if (view === 'Findings') {
                 if (show === 'Conformance Status') {
                     const data = {
-                        failed: failed(item.conformanceStatusSummary),
+                        failed: item.conformanceStatusSummary?.failed,
                         passed: item.conformanceStatusSummary?.passed,
                     }
 

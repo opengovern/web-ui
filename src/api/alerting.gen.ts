@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
     GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
     GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
     GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers,
     GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
     GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
     GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
     GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
     RequestParams,
 } from './api'
