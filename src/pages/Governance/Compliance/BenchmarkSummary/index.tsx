@@ -103,7 +103,12 @@ const topControls = (
     return top
 }
 
-interface IStackItem {
+export interface ITrendItem {
+    stack: IStackItem[]
+    timestamp: string | undefined
+}
+
+export interface IStackItem {
     name: string
     count: number
 }
@@ -123,64 +128,75 @@ const benchmarkTrend = (
     includePassed: 'True' | 'False',
     show: 'Conformance Status' | 'Severity' | 'Security Score',
     view: 'Findings' | 'Controls'
-) => {
-    return response?.map((item) => {
-        if (view === 'Findings') {
-            const data = {
-                critical: item.checks?.criticalCount,
-                high: item.checks?.highCount,
-                medium: item.checks?.mediumCount,
-                low: item.checks?.lowCount,
-                none: item.checks?.noneCount,
-            }
-
-            const stack: IStackItem[] = Object.entries(data).map(
-                ([key, value]) => {
-                    return {
-                        name: camelCaseToLabel(key),
-                        count: value || 0,
-                    }
+): ITrendItem[] => {
+    return (
+        response?.map((item) => {
+            if (view === 'Findings') {
+                const data = {
+                    critical: item.checks?.criticalCount,
+                    high: item.checks?.highCount,
+                    medium: item.checks?.mediumCount,
+                    low: item.checks?.lowCount,
+                    none: item.checks?.noneCount,
                 }
-            )
 
-            if (includePassed === 'True') {
-                stack.push({
-                    name: 'Passed',
-                    count: item.conformanceStatusSummary?.passed || 0,
-                })
-            }
-            return stack
-        }
-
-        if (view === 'Controls') {
-            const data = {
-                critical: failed(item.controlsSeverityStatus?.critical),
-                high: failed(item.controlsSeverityStatus?.high),
-                medium: failed(item.controlsSeverityStatus?.medium),
-                low: failed(item.controlsSeverityStatus?.low),
-                none: failed(item.controlsSeverityStatus?.none),
-            }
-
-            const stack: IStackItem[] = Object.entries(data).map(
-                ([key, value]) => {
-                    return {
-                        name: camelCaseToLabel(key),
-                        count: value || 0,
+                const stack: IStackItem[] = Object.entries(data).map(
+                    ([key, value]) => {
+                        return {
+                            name: camelCaseToLabel(key),
+                            count: value || 0,
+                        }
                     }
+                )
+
+                if (includePassed === 'True') {
+                    stack.push({
+                        name: 'Passed',
+                        count: item.conformanceStatusSummary?.passed || 0,
+                    })
                 }
-            )
-
-            if (includePassed === 'True') {
-                stack.push({
-                    name: 'Passed',
-                    count: item.controlsSeverityStatus?.total?.passed || 0,
-                })
+                return {
+                    timestamp: item.timestamp,
+                    stack,
+                }
             }
-            return stack
-        }
 
-        return []
-    })
+            if (view === 'Controls') {
+                const data = {
+                    critical: failed(item.controlsSeverityStatus?.critical),
+                    high: failed(item.controlsSeverityStatus?.high),
+                    medium: failed(item.controlsSeverityStatus?.medium),
+                    low: failed(item.controlsSeverityStatus?.low),
+                    none: failed(item.controlsSeverityStatus?.none),
+                }
+
+                const stack: IStackItem[] = Object.entries(data).map(
+                    ([key, value]) => {
+                        return {
+                            name: camelCaseToLabel(key),
+                            count: value || 0,
+                        }
+                    }
+                )
+
+                if (includePassed === 'True') {
+                    stack.push({
+                        name: 'Passed',
+                        count: item.controlsSeverityStatus?.total?.passed || 0,
+                    })
+                }
+                return {
+                    timestamp: item.timestamp,
+                    stack,
+                }
+            }
+
+            return {
+                timestamp: item.timestamp,
+                stack: [],
+            }
+        }) || []
+    )
 }
 
 export default function BenchmarkSummary() {

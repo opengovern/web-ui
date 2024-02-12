@@ -1,7 +1,11 @@
+import {
+    IStackItem,
+    ITrendItem,
+} from '../../../pages/Governance/Compliance/BenchmarkSummary'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import { StackItem } from '../../Chart/Stacked'
 
-export const trendChart = (trend: any[] | undefined) => {
+export const trendChart = (trend: ITrendItem[] | undefined) => {
     const label: string[] = []
     const data: StackItem[][] = []
 

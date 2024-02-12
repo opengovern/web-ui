@@ -1,4 +1,3 @@
-import dayjs from 'dayjs'
 import { Card, Flex, Tab, TabGroup, TabList, Title } from '@tremor/react'
 import { trendChart } from './helpers'
 import StackedChart from '../../Chart/Stacked'
@@ -6,6 +5,10 @@ import Selector from '../../Selector'
 import { ChartType, chartTypeValues } from '../../Asset/Chart/Selectors'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
 import { errorHandlingWithErrorMessage } from '../../../types/apierror'
+import {
+    IStackItem,
+    ITrendItem,
+} from '../../../pages/Governance/Compliance/BenchmarkSummary'
 
 export type BenchmarkChartShowType =
     | 'Conformance Status'
@@ -26,7 +29,7 @@ export const BenchmarkChartIncludePassedValues = ['True', 'False']
 interface IBenchmarkChart {
     title: string
     isLoading: boolean
-    trend: any[] | undefined
+    trend: ITrendItem[] | undefined
     error: string | undefined
     onRefresh: () => void
     includePassed: 'True' | 'False'
