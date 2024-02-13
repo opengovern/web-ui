@@ -62,7 +62,7 @@ const columns = (isDemo: boolean) => {
                     className={isDemo ? 'blur-md' : ''}
                 >
                     <Text className="text-gray-800">
-                        {param.data?.resourceName || ''}
+                        {param.data?.resourceName || 'Resource deleted'}
                     </Text>
                     <Text>{param.data?.resourceID}</Text>
                 </Flex>
