@@ -26,16 +26,19 @@ interface IImpactedResources {
 }
 
 const columns = (isDemo: boolean) => {
-    const temp: IColumn<any, any>[] = [
+    const temp: IColumn<
+        GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+        any
+    >[] = [
         {
-            width: 140,
+            width: 200,
             field: 'connector',
-            headerName: 'Cloud provider',
+            type: 'connector',
+            headerName: 'Cloud Provider',
             sortable: true,
             filter: true,
             hide: true,
             enableRowGroup: true,
-            type: 'string',
         },
         {
             field: 'resourceName',
@@ -47,6 +50,23 @@ const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
+            cellRenderer: (
+                param: ICellRendererParams<
+                    GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+                    any
+                >
+            ) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    className={isDemo ? 'blur-md' : ''}
+                >
+                    <Text className="text-gray-800">
+                        {param.data?.resourceName || ''}
+                    </Text>
+                    <Text>{param.data?.resourceID}</Text>
+                </Flex>
+            ),
         },
         {
             field: 'resourceType',
@@ -58,17 +78,23 @@ const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
-        },
-        {
-            field: 'resourceTypeName',
-            headerName: 'Resource type label',
-            type: 'string',
-            enableRowGroup: true,
-            sortable: false,
-            hide: true,
-            filter: true,
-            resizable: true,
-            flex: 1,
+            cellRenderer: (
+                param: ICellRendererParams<
+                    GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+                    any
+                >
+            ) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    className={isDemo ? 'blur-md' : ''}
+                >
+                    <Text className="text-gray-800">
+                        {param.data?.resourceType}
+                    </Text>
+                    <Text>{param.data?.resourceTypeName}</Text>
+                </Flex>
+            ),
         },
         {
             field: 'benchmarkID',
@@ -94,19 +120,8 @@ const columns = (isDemo: boolean) => {
             ),
         },
         {
-            field: 'benchmarkID',
-            headerName: 'Benchmark ID',
-            type: 'string',
-            enableRowGroup: true,
-            sortable: false,
-            hide: true,
-            filter: true,
-            resizable: true,
-            flex: 1,
-        },
-        {
             field: 'providerConnectionName',
-            headerName: 'Account name',
+            headerName: 'Account',
             type: 'string',
             enableRowGroup: true,
             hide: true,
@@ -114,22 +129,17 @@ const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
-            cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
-            ),
-        },
-        {
-            field: 'providerConnectionID',
-            headerName: 'Account ID',
-            type: 'string',
-            hide: true,
-            enableRowGroup: true,
-            sortable: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-            cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    className={isDemo ? 'blur-md' : ''}
+                >
+                    <Text className="text-gray-800">
+                        {param.data.providerConnectionName}
+                    </Text>
+                    <Text>{param.data.providerConnectionID}</Text>
+                </Flex>
             ),
         },
         {
@@ -151,13 +161,13 @@ const columns = (isDemo: boolean) => {
             filter: true,
             hide: false,
             resizable: true,
-            width: 180,
+            width: 160,
             cellRenderer: (param: ValueFormatterParams) => (
                 <Flex className="h-full">{statusBadge(param.value)}</Flex>
             ),
         },
         {
-            field: 'noOfOccurrences',
+            // field: 'noOfOccurrences',
             headerName: '# of issues',
             type: 'number',
             hide: true,
@@ -174,7 +184,7 @@ const columns = (isDemo: boolean) => {
             sortable: false,
             filter: true,
             resizable: true,
-            width: 260,
+            width: 200,
             valueFormatter: (param: ValueFormatterParams) => {
                 return param.value ? dateTimeDisplay(param.value) : ''
             },

@@ -50,7 +50,6 @@ export default function ControlDetail() {
     const { controlId, ws } = useParams()
     const setNotification = useSetAtom(notificationAtom)
 
-    const [openDetail, setOpenDetail] = useState(false)
     const [doc, setDoc] = useState('')
     const [docTitle, setDocTitle] = useState('')
     const setQuery = useSetAtom(queryAtom)
@@ -218,7 +217,7 @@ export default function ControlDetail() {
                                                     </Text>
                                                 </ListItem>
                                             </List>
-                                            <Flex justifyContent="end">
+                                            {/* <Flex justifyContent="end">
                                                 <Button
                                                     variant="light"
                                                     icon={ChevronRightIcon}
@@ -229,7 +228,7 @@ export default function ControlDetail() {
                                                 >
                                                     See more
                                                 </Button>
-                                            </Flex>
+                                            </Flex> */}
                                         </Flex>
                                     </Card>
                                 </TabPanel>
