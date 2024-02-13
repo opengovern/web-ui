@@ -201,9 +201,10 @@ export default function FindingDetail({
                                         flexDirection="row"
                                         justifyContent="between"
                                         alignItems="start"
+                                        className="w-full"
                                     >
                                         <Text className="w-1/4">Reason</Text>
-                                        <Text className="text-gray-800 text-end">
+                                        <Text className="text-gray-800 text-end text-clip w-3/4">
                                             {finding?.reason}
                                         </Text>
                                     </Flex>
