@@ -25,7 +25,6 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                 <Sidebar workspace={workspace} currentPage={current} />
             )}
             <div className="z-10 w-full h-full relative">
-                <Notification />
                 <Flex
                     flexDirection="col"
                     alignItems="center"
@@ -44,6 +43,7 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                     <Footer />
                 </Flex>
             </div>
+            <Notification />
         </Flex>
     )
 }

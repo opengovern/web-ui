@@ -8,11 +8,13 @@ dayjs.extend(utc)
 interface INotification {
     text: string | undefined
     type: 'success' | 'warning' | 'error' | 'info' | undefined
+    position?: 'topLeft' | 'topRight' | 'bottomRight' | 'bottomLeft'
 }
 
 export const notificationAtom = atom<INotification>({
     text: undefined,
     type: undefined,
+    position: undefined,
 })
 
 export const sideBarCollapsedAtom = atom(localStorage.collapse === 'true')

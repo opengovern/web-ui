@@ -1,3 +1,4 @@
+import { useSetAtom } from 'jotai'
 import {
     Button,
     Card,
@@ -34,8 +35,9 @@ import Spinner from '../../../../../components/Spinner'
 import { severityBadge } from '../../../Controls'
 import { dateTimeDisplay } from '../../../../../utilities/dateDisplay'
 import Timeline from './Timeline'
-import { benchmarkList } from '../../../Compliance'
 import { useScheduleApiV1ComplianceReEvaluateUpdate } from '../../../../../api/schedule.gen'
+import { notificationAtom } from '../../../../../store'
+import { getErrorMessage } from '../../../../../types/apierror'
 
 interface IFindingDetail {
     finding: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
@@ -96,6 +98,7 @@ export default function FindingDetail({
         ) || []
 
     const {
+        error: reevaluateError,
         isLoading: isReevaluateLoading,
         isExecuted: isReevaluateExecuted,
         sendNow: Reelavuate,
@@ -108,6 +111,26 @@ export default function FindingDetail({
         {},
         false
     )
+
+    const setNotification = useSetAtom(notificationAtom)
+    useEffect(() => {
+        if (isReevaluateExecuted && !isReevaluateLoading) {
+            const err = getErrorMessage(reevaluateError)
+            if (err.length > 0) {
+                setNotification({
+                    text: `Failed to re-evaluate due to ${err}`,
+                    type: 'error',
+                    position: 'bottomLeft',
+                })
+            } else {
+                setNotification({
+                    text: 'Re-evaluate job triggered',
+                    type: 'success',
+                    position: 'bottomLeft',
+                })
+            }
+        }
+    }, [isReevaluateLoading])
 
     return (
         <DrawerPanel
