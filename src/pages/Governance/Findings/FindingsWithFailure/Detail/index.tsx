@@ -30,6 +30,7 @@ import Spinner from '../../../../../components/Spinner'
 import { severityBadge } from '../../../Controls'
 import { dateTimeDisplay } from '../../../../../utilities/dateDisplay'
 import Timeline from './Timeline'
+import { benchmarkList } from '../../../Compliance'
 
 interface IFindingDetail {
     finding: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
@@ -150,21 +151,10 @@ export default function FindingDetail({
                 <TabPanels>
                     {type === 'finding' ? (
                         <TabPanel>
-                            <Flex className="py-4 border-b border-b-gray-200 dark:border-b-gray-700">
-                                <Title className="font-semibold">
-                                    Overview
-                                </Title>
-                            </Flex>
                             <List>
                                 <ListItem className="py-6">
                                     <Text>Findings state</Text>
                                     {renderStatus(finding?.stateActive)}
-                                </ListItem>
-                                <ListItem className="py-6">
-                                    <Text>Creation date</Text>
-                                    <Text className="text-gray-800">
-                                        {dateTimeDisplay(finding?.evaluatedAt)}
-                                    </Text>
                                 </ListItem>
                                 <ListItem className="py-6">
                                     <Text>Last evaluated</Text>
@@ -172,8 +162,26 @@ export default function FindingDetail({
                                         {dateTimeDisplay(finding?.evaluatedAt)}
                                     </Text>
                                 </ListItem>
+                                <ListItem className="py-6">
+                                    <Text>Last event</Text>
+                                    <Text className="text-gray-800">
+                                        {dateTimeDisplay(finding?.lastEvent)}
+                                    </Text>
+                                </ListItem>
+                                <ListItem className="py-6 space-x-5">
+                                    <Flex
+                                        flexDirection="row"
+                                        justifyContent="between"
+                                        alignItems="start"
+                                    >
+                                        <Text className="w-1/4">Reason</Text>
+                                        <Text className="text-gray-800 text-end">
+                                            {finding?.reason}
+                                        </Text>
+                                    </Flex>
+                                </ListItem>
                             </List>
-                            <Flex className="py-4 my-4 border-b border-b-gray-200 dark:border-b-gray-700">
+                            <Flex className="pb-4 mb-4 border-b border-b-gray-200 dark:border-b-gray-700">
                                 <Title className="font-semibold">Control</Title>
                             </Flex>
                             {isLoading ? (
@@ -213,7 +221,17 @@ export default function FindingDetail({
                                                             )}
                                                             <Flex className="border-l border-gray-200 ml-3 pl-3 h-full">
                                                                 <Text className="text-xs">
-                                                                    SECTION:
+                                                                    {control.parentBenchmarkReferences
+                                                                        ?.filter(
+                                                                            (
+                                                                                v
+                                                                            ) =>
+                                                                                v.length !==
+                                                                                0
+                                                                        )
+                                                                        .join(
+                                                                            ','
+                                                                        )}
                                                                 </Text>
                                                             </Flex>
                                                         </Flex>
