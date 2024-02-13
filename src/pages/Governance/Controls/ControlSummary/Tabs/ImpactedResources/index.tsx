@@ -18,6 +18,7 @@ import {
 import AxiosAPI from '../../../../../../api/ApiConfig'
 import { activeBadge, statusBadge } from '../../../index'
 import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
+import { getConnectorIcon } from '../../../../../../components/Cards/ConnectorCard'
 
 let sortKey = ''
 
@@ -30,16 +31,6 @@ const columns = (isDemo: boolean) => {
         GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
         any
     >[] = [
-        {
-            width: 200,
-            field: 'connector',
-            type: 'connector',
-            headerName: 'Cloud Provider',
-            sortable: true,
-            filter: true,
-            hide: true,
-            enableRowGroup: true,
-        },
         {
             field: 'resourceName',
             headerName: 'Resource name',
@@ -90,9 +81,9 @@ const columns = (isDemo: boolean) => {
                     className={isDemo ? 'blur-md' : ''}
                 >
                     <Text className="text-gray-800">
-                        {param.data?.resourceType}
+                        {param.data?.resourceTypeName}
                     </Text>
-                    <Text>{param.data?.resourceTypeName}</Text>
+                    <Text>{param.data?.resourceType}</Text>
                 </Flex>
             ),
         },
@@ -124,21 +115,29 @@ const columns = (isDemo: boolean) => {
             headerName: 'Account',
             type: 'string',
             enableRowGroup: true,
-            hide: true,
+            hide: false,
             sortable: false,
             filter: true,
             resizable: true,
             flex: 1,
-            cellRenderer: (param: ICellRendererParams) => (
-                <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    className={isDemo ? 'blur-md' : ''}
+            cellRenderer: (
+                param: ICellRendererParams<
+                    GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+                    any
                 >
-                    <Text className="text-gray-800">
-                        {param.data.providerConnectionName}
-                    </Text>
-                    <Text>{param.data.providerConnectionID}</Text>
+            ) => (
+                <Flex flexDirection="row" justifyContent="start">
+                    {getConnectorIcon(param.data?.connector, '-ml-2 mr-2')}
+                    <Flex
+                        flexDirection="col"
+                        alignItems="start"
+                        className={isDemo ? 'blur-md' : ''}
+                    >
+                        <Text className="text-gray-800">
+                            {param.data?.providerConnectionName}
+                        </Text>
+                        <Text>{param.data?.providerConnectionID}</Text>
+                    </Flex>
                 </Flex>
             ),
         },
@@ -178,17 +177,6 @@ const columns = (isDemo: boolean) => {
             cellRenderer: (param: ValueFormatterParams) => (
                 <Flex className="h-full">{statusBadge(param.value)}</Flex>
             ),
-        },
-        {
-            // field: 'noOfOccurrences',
-            headerName: '# of issues',
-            type: 'number',
-            hide: true,
-            enableRowGroup: true,
-            sortable: false,
-            filter: true,
-            resizable: true,
-            width: 115,
         },
         {
             field: 'evaluatedAt',
