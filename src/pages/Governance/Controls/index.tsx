@@ -1,5 +1,6 @@
 import {
     Badge,
+    Button,
     Card,
     Col,
     Flex,
@@ -22,6 +23,8 @@ import {
     Cog8ToothIcon,
     CommandLineIcon,
     XCircleIcon,
+    ChevronDownIcon,
+    ChevronUpIcon,
 } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import MarkdownPreview from '@uiw/react-markdown-preview'
@@ -166,9 +169,33 @@ export default function Controls({ id, assignments }: IPolicies) {
     const searchParams = useAtomValue(searchAtom)
     const [doc, setDoc] = useState('')
     const [docTitle, setDocTitle] = useState('')
+    const [openAllControls, setOpenAllControls] = useState(false)
+
+    const toggleOpen = () => {
+        setOpenAllControls(!openAllControls)
+    }
 
     return (
         <Flex flexDirection="col" className="gap-4">
+            <Flex
+                className="w-full"
+                flexDirection="row"
+                justifyContent="between"
+            >
+                <Title>Controls</Title>
+                {isLoading ? (
+                    ''
+                ) : (
+                    <Button
+                        variant="light"
+                        icon={openAllControls ? ChevronUpIcon : ChevronDownIcon}
+                        onClick={toggleOpen}
+                    >
+                        {openAllControls ? 'Collapse all' : 'Expand all'}
+                    </Button>
+                )}
+            </Flex>
+
             <DrawerPanel
                 title={docTitle}
                 open={doc.length > 0}
@@ -247,6 +274,7 @@ export default function Controls({ id, assignments }: IPolicies) {
                                         </Flex>
                                     </Flex>
                                 }
+                                defaultOpen={openAllControls}
                             >
                                 <Table className="max-w-full">
                                     <TableHead className="max-w-full">

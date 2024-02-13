@@ -246,61 +246,79 @@ export default function BenchmarkSummary() {
                             )}
                         </Flex>
                     </Flex>
-                    <Grid numItems={4} className="w-full gap-4 mb-4">
-                        <SummaryCard
-                            title="Issues"
-                            metric={
-                                benchmarkKPIEnd?.conformanceStatusSummary
-                                    ?.failed
-                            }
-                            metricPrev={
-                                benchmarkKPIStart?.conformanceStatusSummary
-                                    ?.failed
-                            }
-                            loading={
-                                benchmarkKPIEndLoading ||
-                                benchmarkKPIStartLoading
-                            }
+
+                    {benchmarkKPIEnd?.conformanceStatusSummary?.failed ===
+                        undefined &&
+                    benchmarkKPIStart?.conformanceStatusSummary?.failed ===
+                        undefined ? (
+                        ''
+                    ) : (
+                        <Grid numItems={4} className="w-full gap-4 mb-4">
+                            <SummaryCard
+                                title="Issues"
+                                metric={
+                                    benchmarkKPIEnd?.conformanceStatusSummary
+                                        ?.failed
+                                }
+                                metricPrev={
+                                    benchmarkKPIStart?.conformanceStatusSummary
+                                        ?.failed
+                                }
+                                loading={
+                                    benchmarkKPIEndLoading ||
+                                    benchmarkKPIStartLoading
+                                }
+                            />
+
+                            <SummaryCard
+                                title="Passed"
+                                metric={
+                                    benchmarkKPIEnd?.conformanceStatusSummary
+                                        ?.passed
+                                }
+                                metricPrev={
+                                    benchmarkKPIStart?.conformanceStatusSummary
+                                        ?.passed
+                                }
+                                loading={
+                                    benchmarkKPIEndLoading ||
+                                    benchmarkKPIStartLoading
+                                }
+                            />
+
+                            <SummaryCard
+                                title="Accounts"
+                                metric={
+                                    benchmarkKPIEnd?.connectionsStatus?.total
+                                }
+                                metricPrev={
+                                    benchmarkKPIStart?.connectionsStatus?.total
+                                }
+                                loading={
+                                    benchmarkKPIEndLoading ||
+                                    benchmarkKPIStartLoading
+                                }
+                            />
+
+                            <SummaryCard
+                                title="Events"
+                                metric={events?.count}
+                                loading={eventsLoading}
+                            />
+                        </Grid>
+                    )}
+                    {trend === null ? (
+                        ''
+                    ) : (
+                        <BenchmarkChart
+                            title="Security Score"
+                            isLoading={trendLoading}
+                            trend={trend}
+                            error={toErrorMessage(trendError)}
+                            onRefresh={() => sendTrend()}
                         />
-                        <SummaryCard
-                            title="Passed"
-                            metric={
-                                benchmarkKPIEnd?.conformanceStatusSummary
-                                    ?.passed
-                            }
-                            metricPrev={
-                                benchmarkKPIStart?.conformanceStatusSummary
-                                    ?.passed
-                            }
-                            loading={
-                                benchmarkKPIEndLoading ||
-                                benchmarkKPIStartLoading
-                            }
-                        />
-                        <SummaryCard
-                            title="Accounts"
-                            metric={benchmarkKPIEnd?.connectionsStatus?.total}
-                            metricPrev={
-                                benchmarkKPIStart?.connectionsStatus?.total
-                            }
-                            loading={
-                                benchmarkKPIEndLoading ||
-                                benchmarkKPIStartLoading
-                            }
-                        />
-                        <SummaryCard
-                            title="Events"
-                            metric={events?.count}
-                            loading={eventsLoading}
-                        />
-                    </Grid>
-                    <BenchmarkChart
-                        title="Security Score"
-                        isLoading={trendLoading}
-                        trend={trend}
-                        error={toErrorMessage(trendError)}
-                        onRefresh={() => sendTrend()}
-                    />
+                    )}
+
                     <Controls
                         id={String(benchmarkId)}
                         assignments={assignments}

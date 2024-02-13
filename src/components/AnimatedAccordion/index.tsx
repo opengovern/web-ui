@@ -31,6 +31,10 @@ export default function AnimatedAccordion({
     const [isOpen, setOpen] = useState(defaultOpen)
     const previous = usePrevious(isOpen)
 
+    useEffect(() => {
+        setOpen(defaultOpen)
+    }, [defaultOpen])
+
     const [ref, { height: viewHeight }] = useMeasure()
     const { height, opacity, y } = useSpring({
         from: { height: 0, opacity: 0, y: 0 },
