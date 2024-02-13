@@ -4,6 +4,8 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import dayjs from 'dayjs'
 import { severityBadge } from '../../../../Controls'
 import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsByFindingIDResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
 } from '../../../../../../api/api'
@@ -21,6 +23,43 @@ interface ITimeline {
 }
 
 export default function Timeline({ data, isLoading }: ITimeline) {
+    const prefix = (
+        event: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent,
+        idx: number
+    ) => {
+        const str = []
+        if (event.previousStateActive !== event.stateActive) {
+            if (event.stateActive === true) {
+                if (idx === 1) {
+                    str.push('Discovered')
+                } else {
+                    str.push('Re-discovered')
+                }
+            } else if (event.stateActive === false) {
+                str.push('Resource removed')
+            } else {
+                str.push('Unknown state')
+            }
+        }
+
+        if (event.previousConformanceStatus !== event.conformanceStatus) {
+            if (
+                event.conformanceStatus ===
+                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed
+            ) {
+                str.push('Got fixed')
+            } else if (
+                event.conformanceStatus ===
+                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed
+            ) {
+                str.push('Failed')
+            } else {
+                str.push('Unknown')
+            }
+        }
+        return `${str.join(' & ')} at`
+    }
+
     return isLoading ? (
         <Spinner />
     ) : (
@@ -34,7 +73,7 @@ export default function Timeline({ data, isLoading }: ITimeline) {
                 className="absolute w-0.5 bg-gray-200 z-10 top-1 left-[13px]"
                 style={{ height: 'calc(100% - 30px)' }}
             />
-            {data?.findingEvents?.map((tl) => (
+            {data?.findingEvents?.map((tl, idx) => (
                 <Flex alignItems="start" className="gap-6 z-20">
                     <Icon
                         icon={
@@ -53,9 +92,13 @@ export default function Timeline({ data, isLoading }: ITimeline) {
                     <Flex
                         flexDirection="col"
                         alignItems="start"
-                        className="w-[200px] min-w-[200px] mt-1 gap-2"
+                        className="w-[500px] min-w-[500px] mt-1 gap-2"
                     >
                         <Text className="text-gray-800">
+                            {prefix(
+                                tl,
+                                (data?.findingEvents?.length || 0) - idx
+                            )}{' '}
                             {dateTimeDisplay(tl.evaluatedAt)}
                         </Text>
                         <Text className="text-xs">

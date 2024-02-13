@@ -93,6 +93,13 @@ export default function FindingDetail({
         }
     }, [finding])
 
+    const failedEvents =
+        findingTimeline?.findingEvents?.filter(
+            (v) =>
+                v.conformanceStatus ===
+                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed
+        ) || []
+
     return (
         <DrawerPanel
             open={open}
@@ -178,20 +185,12 @@ export default function FindingDetail({
                                     </Text>
                                 </ListItem>
                                 <ListItem className="py-6">
-                                    <Text>First Discovered</Text>
+                                    <Text>First discovered</Text>
                                     <Text className="text-gray-800">
                                         {dateTimeDisplay(
-                                            findingTimeline?.findingEvents
-                                                ?.filter(
-                                                    (v) =>
-                                                        v.conformanceStatus ===
-                                                        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed
-                                                )
-                                                .at(
-                                                    (findingTimeline
-                                                        ?.findingEvents
-                                                        .length || 0) - 1
-                                                )?.evaluatedAt
+                                            failedEvents.at(
+                                                failedEvents.length - 1
+                                            )?.evaluatedAt
                                         )}
                                     </Text>
                                 </ListItem>
