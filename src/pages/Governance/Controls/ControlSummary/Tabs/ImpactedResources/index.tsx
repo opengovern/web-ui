@@ -16,7 +16,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
 } from '../../../../../../api/api'
 import AxiosAPI from '../../../../../../api/ApiConfig'
-import { statusBadge } from '../../../index'
+import { activeBadge, statusBadge } from '../../../index'
 import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
 
 let sortKey = ''
@@ -154,6 +154,19 @@ const columns = (isDemo: boolean) => {
             flex: 1,
         },
         {
+            field: 'stateActive',
+            headerName: 'State',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            hide: false,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <Flex className="h-full">{activeBadge(param.value)}</Flex>
+            ),
+        },
+        {
             field: 'conformanceStatus',
             headerName: 'Conformance status',
             type: 'string',
@@ -281,10 +294,15 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                 fullWidth
                 id="compliance_findings"
                 columns={columns(isDemo)}
-                onCellClicked={(event: RowClickedEvent) => {
+                onCellClicked={(
+                    event: RowClickedEvent<
+                        GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+                        any
+                    >
+                ) => {
                     if (
-                        event.data.kaytuResourceID &&
-                        event.data.kaytuResourceID.length > 0
+                        event.data?.kaytuResourceID &&
+                        event.data?.kaytuResourceID.length > 0
                     ) {
                         setFinding(event.data)
                         setOpen(true)
@@ -305,7 +323,7 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                 }}
             />
             <FindingDetail
-                type="resource"
+                type="finding"
                 finding={finding}
                 open={open}
                 onClose={() => setOpen(false)}

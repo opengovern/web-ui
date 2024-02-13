@@ -23,6 +23,8 @@ import DrawerPanel from '../../../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../../../components/Cards/ConnectorCard'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
 import {
+    useComplianceApiV1BenchmarksControlsDetail,
+    useComplianceApiV1ControlsSummaryDetail,
     useComplianceApiV1FindingsEventsDetail,
     useComplianceApiV1FindingsResourceCreate,
 } from '../../../../../api/compliance.gen'
@@ -73,13 +75,20 @@ export default function FindingDetail({
         response: findingTimeline,
         isLoading: findingTimelineLoading,
         sendNow: findingTimelineSend,
-    } = useComplianceApiV1FindingsEventsDetail(finding?.id || '')
+    } = useComplianceApiV1FindingsEventsDetail(finding?.id || '', {}, false)
+
+    const {
+        response: controlDetail,
+        isLoading: controlDetailLoading,
+        sendNow: controlDetailSend,
+    } = useComplianceApiV1ControlsSummaryDetail(String(finding?.controlID))
 
     useEffect(() => {
         if (finding) {
             sendNow()
             if (type === 'finding') {
                 findingTimelineSend()
+                controlDetailSend()
             }
         }
     }, [finding])
@@ -184,64 +193,53 @@ export default function FindingDetail({
                             <Flex className="pb-4 mb-4 border-b border-b-gray-200 dark:border-b-gray-700">
                                 <Title className="font-semibold">Control</Title>
                             </Flex>
-                            {isLoading ? (
+                            {controlDetailLoading ? (
                                 <Spinner className="mt-12" />
                             ) : (
                                 <List>
-                                    {response?.controls?.map(
-                                        (control, i) =>
-                                            i < 1 && (
-                                                <ListItem>
-                                                    <Flex
-                                                        flexDirection="col"
-                                                        alignItems="start"
-                                                        className="gap-1 w-fit max-w-[80%]"
-                                                    >
-                                                        <Text className="text-gray-800 w-full truncate">
-                                                            {
-                                                                control.controlTitle
-                                                            }
-                                                        </Text>
-                                                        <Flex justifyContent="start">
-                                                            {control.conformanceStatus ===
-                                                            GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed ? (
-                                                                <Flex className="w-fit gap-1.5">
-                                                                    <CheckCircleIcon className="h-4 text-emerald-500" />
-                                                                    <Text>
-                                                                        Passed
-                                                                    </Text>
-                                                                </Flex>
-                                                            ) : (
-                                                                <Flex className="w-fit gap-1.5">
-                                                                    <XCircleIcon className="h-4 text-rose-600" />
-                                                                    <Text>
-                                                                        Failed
-                                                                    </Text>
-                                                                </Flex>
-                                                            )}
-                                                            <Flex className="border-l border-gray-200 ml-3 pl-3 h-full">
-                                                                <Text className="text-xs">
-                                                                    {control.parentBenchmarkReferences
-                                                                        ?.filter(
-                                                                            (
-                                                                                v
-                                                                            ) =>
-                                                                                v.length !==
-                                                                                0
-                                                                        )
-                                                                        .join(
-                                                                            ','
-                                                                        )}
-                                                                </Text>
-                                                            </Flex>
-                                                        </Flex>
+                                    <ListItem>
+                                        <Flex
+                                            flexDirection="col"
+                                            alignItems="start"
+                                            className="gap-1 w-fit max-w-[80%]"
+                                        >
+                                            <Text className="text-gray-800 w-full truncate">
+                                                {finding?.controlTitle}
+                                            </Text>
+                                            <Flex justifyContent="start">
+                                                {controlDetail?.passed ? (
+                                                    <Flex className="w-fit gap-1.5">
+                                                        <CheckCircleIcon className="h-4 text-emerald-500" />
+                                                        <Text>Passed</Text>
                                                     </Flex>
-                                                    {severityBadge(
-                                                        control.severity
-                                                    )}
-                                                </ListItem>
-                                            )
-                                    )}
+                                                ) : (
+                                                    <Flex className="w-fit gap-1.5">
+                                                        <XCircleIcon className="h-4 text-rose-600" />
+                                                        <Text>Failed</Text>
+                                                    </Flex>
+                                                )}
+                                                <Flex className="border-l border-gray-200 ml-3 pl-3 h-full">
+                                                    <Text className="text-xs">
+                                                        {controlDetail?.benchmarks
+                                                            ?.map(
+                                                                (b) =>
+                                                                    b.referenceCode ||
+                                                                    ''
+                                                            )
+                                                            ?.filter(
+                                                                (v) =>
+                                                                    v.length !==
+                                                                    0
+                                                            )
+                                                            .join(',')}
+                                                    </Text>
+                                                </Flex>
+                                            </Flex>
+                                        </Flex>
+                                        {severityBadge(
+                                            controlDetail?.control?.severity
+                                        )}
+                                    </ListItem>
                                 </List>
                             )}
                         </TabPanel>

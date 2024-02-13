@@ -89,6 +89,23 @@ export const severityBadge = (severity: any) => {
     return <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>None</Badge>
 }
 
+export const activeBadge = (status: boolean) => {
+    if (status) {
+        return (
+            <Flex className="w-fit gap-1.5">
+                <CheckCircleIcon className="h-4 text-emerald-500" />
+                <Text>Active</Text>
+            </Flex>
+        )
+    }
+    return (
+        <Flex className="w-fit gap-1.5">
+            <XCircleIcon className="h-4 text-rose-600" />
+            <Text>Inactive</Text>
+        </Flex>
+    )
+}
+
 export const statusBadge = (status: any) => {
     if (status === 'passed') {
         return (
