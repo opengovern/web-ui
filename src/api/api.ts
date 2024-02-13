@@ -6558,6 +6558,33 @@ export class Api<
     }
     schedule = {
         /**
+         * @description Triggers a discovery job to run immediately for the given connection then triggers compliance job
+         *
+         * @tags describe
+         * @name ApiV1ComplianceReEvaluateUpdate
+         * @summary Re-evaluates compliance job
+         * @request PUT:/schedule/api/v1/compliance/re-evaluate/{benchmark_id}
+         * @secure
+         */
+        apiV1ComplianceReEvaluateUpdate: (
+            benchmarkId: string,
+            query: {
+                /** Connection ID */
+                connection_id: string[]
+                /** Control ID */
+                control_id?: string[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/schedule/api/v1/compliance/re-evaluate/${benchmarkId}`,
+                method: 'PUT',
+                query: query,
+                secure: true,
+                ...params,
+            }),
+
+        /**
          * @description Triggers a compliance job to run immediately for the given benchmark
          *
          * @tags describe

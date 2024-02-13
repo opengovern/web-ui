@@ -1,5 +1,7 @@
 import {
+    Button,
     Card,
+    Col,
     Flex,
     Grid,
     List,
@@ -33,6 +35,7 @@ import { severityBadge } from '../../../Controls'
 import { dateTimeDisplay } from '../../../../../utilities/dateDisplay'
 import Timeline from './Timeline'
 import { benchmarkList } from '../../../Compliance'
+import { useScheduleApiV1ComplianceReEvaluateUpdate } from '../../../../../api/schedule.gen'
 
 interface IFindingDetail {
     finding: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
@@ -64,7 +67,6 @@ export default function FindingDetail({
     open,
     onClose,
 }: IFindingDetail) {
-    console.log(finding)
     const { response, isLoading, sendNow } =
         useComplianceApiV1FindingsResourceCreate(
             { kaytuResourceId: finding?.kaytuResourceID || '' },
@@ -77,18 +79,11 @@ export default function FindingDetail({
         sendNow: findingTimelineSend,
     } = useComplianceApiV1FindingsEventsDetail(finding?.id || '', {}, false)
 
-    const {
-        response: controlDetail,
-        isLoading: controlDetailLoading,
-        sendNow: controlDetailSend,
-    } = useComplianceApiV1ControlsSummaryDetail(String(finding?.controlID))
-
     useEffect(() => {
         if (finding) {
             sendNow()
             if (type === 'finding') {
                 findingTimelineSend()
-                controlDetailSend()
             }
         }
     }, [finding])
@@ -99,6 +94,20 @@ export default function FindingDetail({
                 v.conformanceStatus ===
                 GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed
         ) || []
+
+    const {
+        isLoading: isReevaluateLoading,
+        isExecuted: isReevaluateExecuted,
+        sendNow: Reelavuate,
+    } = useScheduleApiV1ComplianceReEvaluateUpdate(
+        finding?.benchmarkID || '',
+        {
+            connection_id: [finding?.connectionID || ''],
+            control_id: [finding?.controlID || ''],
+        },
+        {},
+        false
+    )
 
     return (
         <DrawerPanel
@@ -115,28 +124,21 @@ export default function FindingDetail({
         >
             <Grid className="w-full gap-4 mb-6" numItems={2}>
                 <SummaryCard
-                    title="Account ID"
-                    metric={finding?.providerConnectionID}
-                    isString
-                />
-                <SummaryCard
-                    title="Account Name"
+                    title="Account"
                     metric={finding?.providerConnectionName}
+                    secondLine={finding?.providerConnectionID}
                     isString
                 />
                 <SummaryCard
-                    title="Resource ID"
-                    metric={finding?.resourceID}
-                    isString
-                />
-                <SummaryCard
-                    title="Resource Name"
-                    metric={finding?.resourceTypeName}
+                    title="Resource"
+                    metric={finding?.resourceName}
+                    secondLine={finding?.resourceID}
                     isString
                 />
                 <SummaryCard
                     title="Resource Type"
-                    metric={finding?.resourceType}
+                    metric={finding?.resourceTypeName}
+                    secondLine={finding?.resourceType}
                     isString
                 />
                 <SummaryCard
@@ -146,28 +148,64 @@ export default function FindingDetail({
                 />
             </Grid>
             <TabGroup>
-                <TabList>
-                    {type === 'finding' ? (
-                        <>
-                            <Tab>Summary</Tab>
-                            <Tab disabled={!response?.resource}>
-                                Resource Details
-                            </Tab>
-                            <Tab>Timeline</Tab>
-                        </>
-                    ) : (
-                        <>
-                            <Tab>Applicable Controls</Tab>
-                            <Tab disabled={!response?.resource}>
-                                Resource Details
-                            </Tab>
-                        </>
-                    )}
-                </TabList>
+                <Flex
+                    flexDirection="row"
+                    justifyContent="between"
+                    alignItems="end"
+                >
+                    <TabList className="w-full">
+                        {type === 'finding' ? (
+                            <>
+                                <Tab>Summary</Tab>
+                                <Tab disabled={!response?.resource}>
+                                    Resource Details
+                                </Tab>
+                                <Tab>Timeline</Tab>
+                            </>
+                        ) : (
+                            <>
+                                <Tab>Applicable Controls</Tab>
+                                <Tab disabled={!response?.resource}>
+                                    Resource Details
+                                </Tab>
+                            </>
+                        )}
+                    </TabList>
+                    <Button
+                        color="orange"
+                        variant="secondary"
+                        loading={isReevaluateExecuted && isReevaluateLoading}
+                        onClick={() => {
+                            Reelavuate()
+                        }}
+                    >
+                        Re-evaluate
+                    </Button>
+                </Flex>
+
                 <TabPanels>
                     {type === 'finding' ? (
                         <TabPanel>
                             <List>
+                                <ListItem className="py-6">
+                                    <Text>Control</Text>
+                                    {finding?.controlTitle}
+                                </ListItem>
+                                <ListItem className="py-6">
+                                    <Text>Conformance Status</Text>
+                                    {finding?.conformanceStatus ===
+                                    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed ? (
+                                        <Flex className="w-fit gap-1.5">
+                                            <CheckCircleIcon className="h-4 text-emerald-500" />
+                                            <Text>Passed</Text>
+                                        </Flex>
+                                    ) : (
+                                        <Flex className="w-fit gap-1.5">
+                                            <XCircleIcon className="h-4 text-rose-600" />
+                                            <Text>Failed</Text>
+                                        </Flex>
+                                    )}
+                                </ListItem>
                                 <ListItem className="py-6">
                                     <Text>Findings state</Text>
                                     {renderStatus(finding?.stateActive)}
@@ -176,12 +214,6 @@ export default function FindingDetail({
                                     <Text>Last evaluated</Text>
                                     <Text className="text-gray-800">
                                         {dateTimeDisplay(finding?.evaluatedAt)}
-                                    </Text>
-                                </ListItem>
-                                <ListItem className="py-6">
-                                    <Text>Last event</Text>
-                                    <Text className="text-gray-800">
-                                        {dateTimeDisplay(finding?.lastEvent)}
                                     </Text>
                                 </ListItem>
                                 <ListItem className="py-6">
@@ -209,58 +241,6 @@ export default function FindingDetail({
                                     </Flex>
                                 </ListItem>
                             </List>
-                            <Flex className="pb-4 mb-4 border-b border-b-gray-200 dark:border-b-gray-700">
-                                <Title className="font-semibold">Control</Title>
-                            </Flex>
-                            {controlDetailLoading ? (
-                                <Spinner className="mt-12" />
-                            ) : (
-                                <List>
-                                    <ListItem>
-                                        <Flex
-                                            flexDirection="col"
-                                            alignItems="start"
-                                            className="gap-1 w-fit max-w-[80%]"
-                                        >
-                                            <Text className="text-gray-800 w-full truncate">
-                                                {finding?.controlTitle}
-                                            </Text>
-                                            <Flex justifyContent="start">
-                                                {controlDetail?.passed ? (
-                                                    <Flex className="w-fit gap-1.5">
-                                                        <CheckCircleIcon className="h-4 text-emerald-500" />
-                                                        <Text>Passed</Text>
-                                                    </Flex>
-                                                ) : (
-                                                    <Flex className="w-fit gap-1.5">
-                                                        <XCircleIcon className="h-4 text-rose-600" />
-                                                        <Text>Failed</Text>
-                                                    </Flex>
-                                                )}
-                                                <Flex className="border-l border-gray-200 ml-3 pl-3 h-full">
-                                                    <Text className="text-xs">
-                                                        {controlDetail?.benchmarks
-                                                            ?.map(
-                                                                (b) =>
-                                                                    b.referenceCode ||
-                                                                    ''
-                                                            )
-                                                            ?.filter(
-                                                                (v) =>
-                                                                    v.length !==
-                                                                    0
-                                                            )
-                                                            .join(',')}
-                                                    </Text>
-                                                </Flex>
-                                            </Flex>
-                                        </Flex>
-                                        {severityBadge(
-                                            controlDetail?.control?.severity
-                                        )}
-                                    </ListItem>
-                                </List>
-                            )}
                         </TabPanel>
                     ) : (
                         <TabPanel>

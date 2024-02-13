@@ -14,6 +14,7 @@ type IProps = {
     title: string
     metric: string | number | any | undefined
     metricPrev?: string | number | undefined
+    secondLine?: string
     unit?: string
     url?: string
     onClick?: () => void
@@ -32,6 +33,7 @@ export default function SummaryCard({
     title,
     metric,
     metricPrev,
+    secondLine,
     isString = false,
     unit,
     url,
@@ -72,7 +74,7 @@ export default function SummaryCard({
             )
         }
         return (
-            <Flex flexDirection="col">
+            <Flex flexDirection="col" alignItems="start">
                 <Flex
                     justifyContent="start"
                     alignItems="end"
@@ -107,6 +109,11 @@ export default function SummaryCard({
                         </Text>
                     )}
                 </Flex>
+                {!!secondLine && (
+                    <Text className="w-full text-start mb-0.5 truncate">
+                        {secondLine}
+                    </Text>
+                )}
                 {!!metricPrev && (
                     <Flex className="mt-1">
                         <ChangeDelta
