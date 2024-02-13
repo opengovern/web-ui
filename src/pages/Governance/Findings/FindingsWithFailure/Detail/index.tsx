@@ -177,6 +177,25 @@ export default function FindingDetail({
                                         {dateTimeDisplay(finding?.lastEvent)}
                                     </Text>
                                 </ListItem>
+                                <ListItem className="py-6">
+                                    <Text>First Discovered</Text>
+                                    <Text className="text-gray-800">
+                                        {dateTimeDisplay(
+                                            findingTimeline?.findingEvents
+                                                ?.filter(
+                                                    (v) =>
+                                                        v.conformanceStatus ===
+                                                        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed
+                                                )
+                                                .at(
+                                                    (findingTimeline
+                                                        ?.findingEvents
+                                                        .length || 0) - 1
+                                                )?.evaluatedAt
+                                        )}
+                                    </Text>
+                                </ListItem>
+
                                 <ListItem className="py-6 space-x-5">
                                     <Flex
                                         flexDirection="row"
