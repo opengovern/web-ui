@@ -258,7 +258,7 @@ export default function FindingDetail({
                                         className="w-full"
                                     >
                                         <Text className="w-1/4">Reason</Text>
-                                        <Text className="text-gray-800 text-end w-3/4 whitespace-break-spaces">
+                                        <Text className="text-gray-800 text-end w-3/4 whitespace-break-spaces h-fit">
                                             {finding?.reason}
                                         </Text>
                                     </Flex>
