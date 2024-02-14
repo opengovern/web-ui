@@ -76,7 +76,7 @@ export default function APIKeyRecord({ item, refresh }: APIKeyRecordProps) {
                 flexDirection="row"
                 className="mb-4 py-2 border-b"
             >
-                <Text className="text-sm mt-1 w-1/4">Kian</Text>
+                <Text className="text-sm mt-1 w-1/4">{item.name}</Text>
                 <Flex
                     alignItems="start"
                     justifyContent="start"

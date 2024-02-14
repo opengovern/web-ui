@@ -60,13 +60,13 @@ export default function CreateAPIKey({ close }: CreateAPIKeyProps) {
     )
 
     useEffect(() => {
-        if (isExecuted && !isLoading) {
-            setNotification({
-                text: 'API key successfully added',
-                type: 'success',
-            })
-            close()
-        }
+        // if (isExecuted && !isLoading) {
+        //     setNotification({
+        //         text: 'API key successfully added',
+        //         type: 'success',
+        //     })
+        //     close()
+        // }
         if (error) {
             setNotification({
                 text: 'Unable to add new API key',
