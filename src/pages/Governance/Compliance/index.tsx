@@ -224,6 +224,7 @@ const notActiveColumns: IColumn<any, any>[] = [
 
 export default function Compliance() {
     const [selectedProvider, setSelectedProvider] = useState('')
+    const [selectedState, setSelectedState] = useState('')
     const [index, setIndex] = useState(1)
 
     const {
@@ -232,7 +233,6 @@ export default function Compliance() {
         error,
         sendNow,
     } = useComplianceApiV1BenchmarksSummaryList()
-    const [selectedState, setSelectedState] = useState('')
     // const [stateIndex, setStateIndex] = useState(0)
     //
     // useEffect(() => {

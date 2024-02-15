@@ -1,108 +1,25 @@
 import { useParams } from 'react-router-dom'
-import { Button, Card, Flex, Grid, Text, Title } from '@tremor/react'
+import { Card, Flex, Grid, Text, Title } from '@tremor/react'
 import { useEffect, useState } from 'react'
-import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
 import {
     useComplianceApiV1BenchmarksSummaryDetail,
     useComplianceApiV1BenchmarksTrendDetail,
     useComplianceApiV1FindingEventsCountList,
 } from '../../../../api/compliance.gen'
 import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedule.gen'
-import {
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatusSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-} from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
 import Controls from '../../Controls'
 import Settings from './Settings'
-import Modal from '../../../../components/Modal'
 import TopHeader from '../../../../components/Layout/Header'
 import {
     defaultTime,
     useFilterState,
     useUrlDateRangeState,
-    useURLParam,
 } from '../../../../utilities/urlstate'
-import { camelCaseToLabel } from '../../../../utilities/labelMaker'
 import BenchmarkChart from '../../../../components/Benchmark/Chart'
 import { toErrorMessage } from '../../../../types/apierror'
-import { ChartType } from '../../../../components/Asset/Chart/Selectors'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import Evaluate from './Evaluate'
-
-const topResources = (
-    input:
-        | GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
-        | undefined
-) => {
-    const data = []
-    if (input && input.records) {
-        for (let i = 0; i < (input.records?.length || 0); i += 1) {
-            data.push({
-                name:
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    input.records[i].ResourceType.resource_name.length
-                        ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                          // @ts-ignore
-                          input.records[i].ResourceType.resource_name
-                        : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                          // @ts-ignore
-                          input.records[i].ResourceType.resource_type,
-                value: input.records[i].count || 0,
-            })
-        }
-    }
-    return data
-}
-
-const topConnections = (
-    input:
-        | GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
-        | undefined,
-    id: string | undefined
-) => {
-    const top = []
-    if (input && input.records) {
-        for (let i = 0; i < input.records.length; i += 1) {
-            top.push({
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                name: input.records[i].Connection?.providerConnectionName,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                href: `${id}/account_${input.records[i].Connection?.id}`,
-                value: input.records[i].count || 0,
-            })
-        }
-    }
-    return top
-}
-
-const topControls = (
-    input:
-        | GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
-        | undefined,
-    id: string | undefined
-) => {
-    const top = []
-    if (input && input.records) {
-        for (let i = 0; i < input.records.length; i += 1) {
-            top.push({
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                name: input.records[i].Control?.title,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                href: `${id}/${input.records[i].Control?.id}`,
-                value: input.records[i].count || 0,
-            })
-        }
-    }
-    return top
-}
 
 export default function BenchmarkSummary() {
     const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
@@ -163,6 +80,7 @@ export default function BenchmarkSummary() {
         startTime: activeTimeRange.start.unix(),
         endTime: activeTimeRange.end.unix(),
     })
+
     const {
         response: trend,
         isLoading: trendLoading,
@@ -179,13 +97,6 @@ export default function BenchmarkSummary() {
             updateDetail()
         }
     }, [isExecuted, recall])
-
-    useEffect(() => {
-        benchmarkKPIStartSend()
-        benchmarkKPIEndSend()
-        eventsSend()
-        sendTrend()
-    }, [activeTimeRange])
 
     return (
         <>
