@@ -215,7 +215,10 @@ export default function BenchmarkChart({
         'Controls'
     )
 
-    const [chartType, setChartType] = useURLParam<ChartType>('chartType', 'bar')
+    const [chartType, setChartType] = useURLParam<ChartType>(
+        'chartType',
+        'line'
+    )
 
     const theTrend = trendChart(
         benchmarkTrend(trend, includePassed, show, view)
@@ -286,6 +289,7 @@ export default function BenchmarkChart({
                 loading={isLoading}
                 error={error}
                 isCost={false}
+                colors={theTrend.colors}
             />
             {errorHandlingWithErrorMessage(onRefresh, error)}
         </Card>

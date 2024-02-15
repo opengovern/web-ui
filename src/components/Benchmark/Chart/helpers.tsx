@@ -5,11 +5,23 @@ import { StackItem } from '../../Chart/Stacked'
 export const trendChart = (trend: ITrendItem[] | undefined) => {
     const label: string[] = []
     const data: StackItem[][] = []
+    const colors: string[] = []
+
+    const colorMapping: { [severity: string]: string } = {
+        Critical: '#6E120B',
+        High: '#CA2B1D',
+        Medium: '#EE9235',
+        Low: '#F4C744',
+        black: '#000',
+        None: '#9BA2AE',
+        Passed: '#54B584',
+    }
 
     if (!trend) {
         return {
             label,
             data,
+            colors,
         }
     }
 
@@ -26,8 +38,20 @@ export const trendChart = (trend: ITrendItem[] | undefined) => {
         data.push(stackData)
     }
 
+    const p = trend
+        .flatMap((v) => v.stack)
+        .map((v) => v.name)
+        .reduce<string[]>((prev, current) => {
+            return prev.includes(current) ? prev : [...prev, current]
+        }, [])
+        .map((lbl) => {
+            console.log(lbl)
+            return colorMapping[lbl]
+        })
+
     return {
         label,
         data,
+        colors: p,
     }
 }

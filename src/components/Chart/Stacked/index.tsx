@@ -21,6 +21,7 @@ interface IChart {
     error?: string
     onClick?: (param?: any) => void
     confine?: boolean
+    colors?: string[]
 }
 
 export default function StackedChart({
@@ -33,6 +34,7 @@ export default function StackedChart({
     error,
     onClick,
     confine = true,
+    colors,
 }: IChart) {
     const colorBlindMode = useAtomValue(colorBlindModeAtom)
 
@@ -64,7 +66,7 @@ export default function StackedChart({
     })
 
     const options = () => {
-        return {
+        const opt = {
             aria: {
                 enable: colorBlindMode,
                 decal: {
@@ -144,8 +146,12 @@ export default function StackedChart({
             //           '#D0D4DA',
             //           '#D0D4DA',
             //       ],
-
             series,
+        }
+
+        return {
+            ...opt,
+            ...(colors && colors.length > 0 && { color: colors }),
         }
     }
 
