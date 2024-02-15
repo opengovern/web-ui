@@ -58,16 +58,22 @@ import TopHeader from '../../components/Layout/Header'
 
 export const getTable = (
     headers: string[] | undefined,
-    details: any,
+    details: any[][] | undefined,
     isDemo: boolean
 ) => {
     const columns: IColumn<any, any>[] = []
     const rows: any[] = []
+    const headerField = headers?.map((value, idx) => {
+        if (headers.filter((v) => v === value).length > 1) {
+            return `${value}-${idx}`
+        }
+        return value
+    })
     if (headers && headers.length) {
         for (let i = 0; i < headers.length; i += 1) {
             const isHide = headers[i][0] === '_'
             columns.push({
-                field: headers[i],
+                field: headerField?.at(i),
                 headerName: snakeCaseToLabel(headers[i]),
                 type: 'string',
                 sortable: true,
@@ -87,7 +93,7 @@ export const getTable = (
         for (let i = 0; i < details.length; i += 1) {
             const row: any = {}
             for (let j = 0; j < columns.length; j += 1) {
-                row[headers?.at(j) || ''] =
+                row[headerField?.at(j) || ''] =
                     typeof details[i][j] === 'string'
                         ? details[i][j]
                         : JSON.stringify(details[i][j])

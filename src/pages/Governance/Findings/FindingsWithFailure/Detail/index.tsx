@@ -35,7 +35,10 @@ import Spinner from '../../../../../components/Spinner'
 import { severityBadge } from '../../../Controls'
 import { dateTimeDisplay } from '../../../../../utilities/dateDisplay'
 import Timeline from './Timeline'
-import { useScheduleApiV1ComplianceReEvaluateUpdate } from '../../../../../api/schedule.gen'
+import {
+    useScheduleApiV1ComplianceReEvaluateDetail,
+    useScheduleApiV1ComplianceReEvaluateUpdate,
+} from '../../../../../api/schedule.gen'
 import { notificationAtom } from '../../../../../store'
 import { getErrorMessage } from '../../../../../types/apierror'
 
@@ -82,13 +85,13 @@ export default function FindingDetail({
     } = useComplianceApiV1FindingsEventsDetail(finding?.id || '', {}, false)
 
     useEffect(() => {
-        if (finding) {
+        if (finding && open) {
             sendNow()
             if (type === 'finding') {
                 findingTimelineSend()
             }
         }
-    }, [finding])
+    }, [finding, open])
 
     const failedEvents =
         findingTimeline?.findingEvents?.filter(
@@ -96,6 +99,22 @@ export default function FindingDetail({
                 v.conformanceStatus ===
                 GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed
         ) || []
+
+    const {
+        response: getReevaluateResp,
+        error: getReevaluateError,
+        isLoading: isGetReevaluateLoading,
+        isExecuted: isGetReevaluateExecuted,
+    } = useScheduleApiV1ComplianceReEvaluateDetail(
+        finding?.benchmarkID || '',
+        {
+            connection_id: [finding?.connectionID || ''],
+            control_id: [finding?.controlID || ''],
+        },
+        {},
+        open
+    )
+    console.log(getReevaluateResp)
 
     const {
         error: reevaluateError,

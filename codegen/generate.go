@@ -232,7 +232,7 @@ func (module Module) Imports() string {
 				continue
 			}
 			switch rt {
-			case "string", "number", "RequestParams", "void":
+			case "string", "number", "RequestParams", "void", "boolean":
 			default:
 				importsMap[rt] = struct{}{}
 			}
@@ -243,7 +243,7 @@ func (module Module) Imports() string {
 			continue
 		}
 		switch rt {
-		case "string", "number", "RequestParams", "void":
+		case "string", "number", "RequestParams", "void", "boolean":
 		default:
 			importsMap[rt] = struct{}{}
 		}

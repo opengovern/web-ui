@@ -6558,6 +6558,34 @@ export class Api<
     }
     schedule = {
         /**
+         * @description Get re-evaluate job for the given connection and control
+         *
+         * @tags describe
+         * @name ApiV1ComplianceReEvaluateDetail
+         * @summary Get re-evaluates compliance job
+         * @request GET:/schedule/api/v1/compliance/re-evaluate/{benchmark_id}
+         * @secure
+         */
+        apiV1ComplianceReEvaluateDetail: (
+            benchmarkId: string,
+            query: {
+                /** Connection ID */
+                connection_id: string[]
+                /** Control ID */
+                control_id?: string[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<boolean, any>({
+                path: `/schedule/api/v1/compliance/re-evaluate/${benchmarkId}`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Triggers a discovery job to run immediately for the given connection then triggers compliance job
          *
          * @tags describe
