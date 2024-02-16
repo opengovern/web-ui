@@ -375,6 +375,7 @@ export default function FindingsWithFailure({ query }: ICount) {
                 finding={finding}
                 open={open}
                 onClose={() => setOpen(false)}
+                onRefresh={() => window.location.reload()}
             />
         </>
     )

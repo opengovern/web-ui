@@ -20,7 +20,8 @@ import Table, { IColumn } from '../../../../components/Table'
 import FindingDetail from '../FindingsWithFailure/Detail'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
-import { DateRange } from '../../../../utilities/urlstate'
+import { DateRange, useURLParam } from '../../../../utilities/urlstate'
+import { useComplianceApiV1FindingsSingleDetail } from '../../../../api/compliance.gen'
 
 const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -271,6 +272,7 @@ export default function ResourcesWithFailure({ query }: ICount) {
                 finding={finding}
                 open={open}
                 onClose={() => setOpen(false)}
+                onRefresh={() => window.location.reload()}
             />
         </>
     )

@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,
     GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
     GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiJobSeqCheckResponse,
     RequestParams,
 } from './api'
 
@@ -17,7 +18,7 @@ import AxiosAPI, { setWorkspace } from './ApiConfig'
 interface IuseScheduleApiV1ComplianceReEvaluateDetailState {
     isLoading: boolean
     isExecuted: boolean
-    response?: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobSeqCheckResponse
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }

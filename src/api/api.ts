@@ -1300,6 +1300,10 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiJob {
     updatedAt?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiJobSeqCheckResponse {
+    isRunning?: boolean
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiJobSummary {
     count?: number
     status?: string
@@ -6576,7 +6580,10 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<boolean, any>({
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgDescribeApiJobSeqCheckResponse,
+                any
+            >({
                 path: `/schedule/api/v1/compliance/re-evaluate/${benchmarkId}`,
                 method: 'GET',
                 query: query,

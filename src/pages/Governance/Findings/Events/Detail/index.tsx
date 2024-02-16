@@ -143,6 +143,7 @@ export default function EventDetail({ event, open, onClose }: IFindingDetail) {
                 type="finding"
                 open={openFinding}
                 onClose={() => setOpenFinding(false)}
+                onRefresh={() => window.location.reload()}
             />
         </DrawerPanel>
     )

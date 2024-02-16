@@ -360,6 +360,7 @@ export default function SingleComplianceConnection() {
                 finding={finding}
                 open={openFinding}
                 onClose={() => setOpenFinding(false)}
+                onRefresh={() => window.location.reload()}
             />
         </>
     )

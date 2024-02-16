@@ -315,6 +315,7 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                 finding={finding}
                 open={open}
                 onClose={() => setOpen(false)}
+                onRefresh={() => window.location.reload()}
             />
         </>
     )

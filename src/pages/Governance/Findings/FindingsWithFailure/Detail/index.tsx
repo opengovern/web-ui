@@ -15,7 +15,7 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import ReactJson from '@microlink/react-json-view'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import {
@@ -47,6 +47,7 @@ interface IFindingDetail {
     type: 'finding' | 'resource'
     open: boolean
     onClose: () => void
+    onRefresh: () => void
 }
 
 const renderStatus = (state: boolean | undefined) => {
@@ -71,6 +72,7 @@ export default function FindingDetail({
     type,
     open,
     onClose,
+    onRefresh,
 }: IFindingDetail) {
     const { response, isLoading, sendNow } =
         useComplianceApiV1FindingsResourceCreate(
@@ -105,6 +107,7 @@ export default function FindingDetail({
         error: getReevaluateError,
         isLoading: isGetReevaluateLoading,
         isExecuted: isGetReevaluateExecuted,
+        sendNow: refreshReEvaluate,
     } = useScheduleApiV1ComplianceReEvaluateDetail(
         finding?.benchmarkID || '',
         {
@@ -114,7 +117,6 @@ export default function FindingDetail({
         {},
         open
     )
-    console.log(getReevaluateResp)
 
     const {
         error: reevaluateError,
@@ -134,6 +136,7 @@ export default function FindingDetail({
     const setNotification = useSetAtom(notificationAtom)
     useEffect(() => {
         if (isReevaluateExecuted && !isReevaluateLoading) {
+            refreshReEvaluate()
             const err = getErrorMessage(reevaluateError)
             if (err.length > 0) {
                 setNotification({
@@ -150,6 +153,25 @@ export default function FindingDetail({
             }
         }
     }, [isReevaluateLoading])
+
+    const [wasReEvaluating, setWasReEvaluating] = useState<boolean>(false)
+    useEffect(() => {
+        if (isGetReevaluateExecuted && !isGetReevaluateLoading) {
+            if (getReevaluateResp?.isRunning === true) {
+                setTimeout(() => {
+                    refreshReEvaluate()
+                }, 5000)
+            } else if (wasReEvaluating) {
+                onRefresh()
+            }
+            setWasReEvaluating(getReevaluateResp?.isRunning || false)
+        }
+    }, [isGetReevaluateLoading])
+
+    const reEvaluateLoading =
+        (isReevaluateExecuted && isReevaluateLoading) ||
+        (isGetReevaluateExecuted && isGetReevaluateLoading) ||
+        getReevaluateResp?.isRunning === true
 
     return (
         <DrawerPanel
@@ -216,12 +238,20 @@ export default function FindingDetail({
                     <Button
                         color="orange"
                         variant="secondary"
-                        loading={isReevaluateExecuted && isReevaluateLoading}
+                        disabled={reEvaluateLoading}
                         onClick={() => {
                             Reelavuate()
                         }}
                     >
-                        Re-evaluate
+                        <Flex flexDirection="row">
+                            {reEvaluateLoading && (
+                                <Spinner
+                                    className="w-6 h-6"
+                                    color="fill-orange-600"
+                                />
+                            )}
+                            Re-evaluate
+                        </Flex>
                     </Button>
                 </Flex>
 
