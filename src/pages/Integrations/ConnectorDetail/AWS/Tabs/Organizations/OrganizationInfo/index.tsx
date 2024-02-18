@@ -86,7 +86,7 @@ export default function OrganizationInfo({
                 <Flex>
                     <Text>Name</Text>
                     <Text
-                        className={isDemo ? 'blur-md text-black' : 'text-black'}
+                        className={isDemo ? 'blur-sm text-black' : 'text-black'}
                     >
                         {data?.name}
                     </Text>
@@ -95,7 +95,7 @@ export default function OrganizationInfo({
                 <Flex>
                     <Text>Email</Text>
                     <Text
-                        className={isDemo ? 'blur-md text-black' : 'text-black'}
+                        className={isDemo ? 'blur-sm text-black' : 'text-black'}
                     >
                         {data?.metadata?.organization_master_account_email}
                     </Text>
@@ -104,7 +104,7 @@ export default function OrganizationInfo({
                 <Flex>
                     <Text>Onboard date</Text>
                     <Text
-                        className={isDemo ? 'blur-md text-black' : 'text-black'}
+                        className={isDemo ? 'blur-sm text-black' : 'text-black'}
                     >
                         {dateDisplay(data?.onboardDate)}
                     </Text>
@@ -126,7 +126,7 @@ export default function OrganizationInfo({
                 <Flex>
                     <Text>Last health check</Text>
                     <Text
-                        className={isDemo ? 'blur-md text-black' : 'text-black'}
+                        className={isDemo ? 'blur-sm text-black' : 'text-black'}
                     >
                         {dateDisplay(credential?.lastHealthCheckTime)}
                     </Text>
@@ -135,7 +135,7 @@ export default function OrganizationInfo({
                 <Flex>
                     <Text>Number of accounts</Text>
                     <Text
-                        className={isDemo ? 'blur-md text-black' : 'text-black'}
+                        className={isDemo ? 'blur-sm text-black' : 'text-black'}
                     >
                         {data?.total_connections}
                     </Text>
@@ -145,7 +145,7 @@ export default function OrganizationInfo({
                 <Flex>
                     <Text>AWS account name</Text>
                     <Text
-                        className={isDemo ? 'blur-md text-black' : 'text-black'}
+                        className={isDemo ? 'blur-sm text-black' : 'text-black'}
                     >
                         {data?.metadata?.iam_user_name}
                     </Text>
@@ -154,7 +154,7 @@ export default function OrganizationInfo({
                 <Flex>
                     <Text>AWS account ID</Text>
                     <Text
-                        className={isDemo ? 'blur-md text-black' : 'text-black'}
+                        className={isDemo ? 'blur-sm text-black' : 'text-black'}
                     >
                         {data?.metadata?.account_id}
                     </Text>
@@ -199,7 +199,7 @@ export default function OrganizationInfo({
                         <Flex justifyContent="end">
                             <Text
                                 className={
-                                    isDemo ? 'blur-md text-black' : 'text-black'
+                                    isDemo ? 'blur-sm text-black' : 'text-black'
                                 }
                             >
                                 {credential?.config.accessKey}
@@ -246,7 +246,7 @@ export default function OrganizationInfo({
                         <Flex justifyContent="end">
                             <Text
                                 className={
-                                    isDemo ? 'blur-md text-black' : 'text-black'
+                                    isDemo ? 'blur-sm text-black' : 'text-black'
                                 }
                             >
                                 *****************
@@ -292,7 +292,7 @@ export default function OrganizationInfo({
                             <Text
                                 className={
                                     isDemo
-                                        ? 'blur-md text-black text-end'
+                                        ? 'blur-sm text-black text-end'
                                         : 'text-black text-end'
                                 }
                             >
@@ -339,7 +339,7 @@ export default function OrganizationInfo({
                         <Flex justifyContent="end">
                             <Text
                                 className={
-                                    isDemo ? 'blur-md text-black' : 'text-black'
+                                    isDemo ? 'blur-sm text-black' : 'text-black'
                                 }
                             >
                                 {credential?.config.externalId}

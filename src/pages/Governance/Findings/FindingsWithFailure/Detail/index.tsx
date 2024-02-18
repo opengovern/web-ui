@@ -1,4 +1,4 @@
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import {
     Button,
     Card,
@@ -39,7 +39,7 @@ import {
     useScheduleApiV1ComplianceReEvaluateDetail,
     useScheduleApiV1ComplianceReEvaluateUpdate,
 } from '../../../../../api/schedule.gen'
-import { notificationAtom } from '../../../../../store'
+import { isDemoAtom, notificationAtom } from '../../../../../store'
 import { getErrorMessage } from '../../../../../types/apierror'
 
 interface IFindingDetail {
@@ -173,6 +173,8 @@ export default function FindingDetail({
         (isGetReevaluateExecuted && isGetReevaluateLoading) ||
         getReevaluateResp?.isRunning === true
 
+    const isDemo = useAtomValue(isDemoAtom)
+
     return (
         <DrawerPanel
             open={open}
@@ -191,12 +193,15 @@ export default function FindingDetail({
                     title="Account"
                     metric={finding?.providerConnectionName}
                     secondLine={finding?.providerConnectionID}
+                    blur={isDemo}
+                    blurSecondLine={isDemo}
                     isString
                 />
                 <SummaryCard
                     title="Resource"
                     metric={finding?.resourceName}
                     secondLine={finding?.resourceID}
+                    blurSecondLine={isDemo}
                     isString
                 />
                 <SummaryCard

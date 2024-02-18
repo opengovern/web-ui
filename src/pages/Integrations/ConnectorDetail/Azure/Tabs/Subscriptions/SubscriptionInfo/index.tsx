@@ -120,7 +120,7 @@ export default function SubscriptionInfo({
                         <Text>Name</Text>
                         <Text
                             className={
-                                isDemo ? 'blur-md text-black' : 'text-black'
+                                isDemo ? 'blur-sm text-black' : 'text-black'
                             }
                         >
                             {data?.providerConnectionName}
@@ -131,7 +131,7 @@ export default function SubscriptionInfo({
                         <Text>ID</Text>
                         <Text
                             className={
-                                isDemo ? 'blur-md text-black' : 'text-black'
+                                isDemo ? 'blur-sm text-black' : 'text-black'
                             }
                         >
                             {data?.providerConnectionID}
@@ -216,7 +216,7 @@ export default function SubscriptionInfo({
                                     <Text
                                         className={
                                             isDemo
-                                                ? 'blur-md text-black'
+                                                ? 'blur-sm text-black'
                                                 : 'text-black'
                                         }
                                     >
@@ -231,7 +231,7 @@ export default function SubscriptionInfo({
                                     <Text
                                         className={
                                             isDemo
-                                                ? 'blur-md text-black'
+                                                ? 'blur-sm text-black'
                                                 : 'text-black'
                                         }
                                     >
@@ -244,7 +244,7 @@ export default function SubscriptionInfo({
                                     <Text
                                         className={
                                             isDemo
-                                                ? 'blur-md text-black'
+                                                ? 'blur-sm text-black'
                                                 : 'text-black'
                                         }
                                     >
@@ -259,7 +259,7 @@ export default function SubscriptionInfo({
                                     <Text
                                         className={
                                             isDemo
-                                                ? 'blur-md text-black'
+                                                ? 'blur-sm text-black'
                                                 : 'text-black'
                                         }
                                     >

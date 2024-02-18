@@ -73,7 +73,7 @@ const getTable = (header: any, details: any, isDemo: boolean) => {
                 filter: true,
                 flex: 1,
                 cellRenderer: (param: ValueFormatterParams) => (
-                    <span className={isDemo ? 'blur-md' : ''}>
+                    <span className={isDemo ? 'blur-sm' : ''}>
                         {param.value}
                     </span>
                 ),

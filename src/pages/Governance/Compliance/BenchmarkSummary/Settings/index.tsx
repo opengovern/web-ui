@@ -1,6 +1,9 @@
+import { ValueFormatterParams } from 'ag-grid-community'
+import { useAtomValue } from 'jotai'
 import { Button, Callout, Flex, Switch, Text } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
+import { isDemoAtom } from '../../../../../store'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import Table, { IColumn } from '../../../../../components/Table'
 import {
@@ -17,7 +20,7 @@ interface ISettings {
     isAutoResponse: (x: boolean) => void
 }
 
-const columns: IColumn<any, any>[] = [
+const columns: (isDemo: boolean) => IColumn<any, any>[] = (isDemo) => [
     {
         width: 120,
         sortable: true,
@@ -34,15 +37,21 @@ const columns: IColumn<any, any>[] = [
         filter: true,
         resizable: true,
         flex: 1,
+        cellRenderer: (param: ValueFormatterParams) => (
+            <span className={isDemo ? 'blur-sm' : ''}>{param.value}</span>
+        ),
     },
     {
-        field: 'connectionID',
+        field: 'providerConnectionID',
         headerName: 'Connection ID',
         type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
+        cellRenderer: (param: ValueFormatterParams) => (
+            <span className={isDemo ? 'blur-sm' : ''}>{param.value}</span>
+        ),
     },
     {
         headerName: 'Enable',
@@ -84,6 +93,7 @@ export default function Settings({
     })
     const [allEnable, setAllEnable] = useState(autoAssign)
     const [banner, setBanner] = useState(autoAssign)
+    const isDemo = useAtomValue(isDemoAtom)
 
     const {
         sendNow: sendEnable,
@@ -216,7 +226,7 @@ export default function Settings({
                         )}
                         <Table
                             id="compliance_assignments"
-                            columns={columns}
+                            columns={columns(isDemo)}
                             onCellClicked={(event) => {
                                 if (event.colDef.headerName === 'Enable') {
                                     setTransfer({

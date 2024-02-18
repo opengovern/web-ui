@@ -69,7 +69,7 @@ const columns = (isDemo: boolean) => {
             resizable: true,
             flex: 1,
             cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+                <span className={isDemo ? 'blur-sm' : ''}>{param.value}</span>
             ),
         },
         {
@@ -81,7 +81,7 @@ const columns = (isDemo: boolean) => {
             resizable: true,
             flex: 1,
             cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+                <span className={isDemo ? 'blur-sm' : ''}>{param.value}</span>
             ),
         },
         {
@@ -93,7 +93,7 @@ const columns = (isDemo: boolean) => {
             resizable: true,
             flex: 1,
             cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+                <span className={isDemo ? 'blur-sm' : ''}>{param.value}</span>
             ),
         },
         {

@@ -47,15 +47,13 @@ const columns = (isDemo: boolean) => {
                     any
                 >
             ) => (
-                <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    className={isDemo ? 'blur-md' : ''}
-                >
+                <Flex flexDirection="col" alignItems="start">
                     <Text className="text-gray-800">
                         {param.data?.resourceName || 'Resource deleted'}
                     </Text>
-                    <Text>{param.data?.resourceID}</Text>
+                    <Text className={isDemo ? 'blur-sm' : ''}>
+                        {param.data?.resourceID}
+                    </Text>
                 </Flex>
             ),
         },
@@ -75,11 +73,7 @@ const columns = (isDemo: boolean) => {
                     any
                 >
             ) => (
-                <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    className={isDemo ? 'blur-md' : ''}
-                >
+                <Flex flexDirection="col" alignItems="start">
                     <Text className="text-gray-800">
                         {param.data?.resourceTypeName}
                     </Text>
@@ -98,11 +92,7 @@ const columns = (isDemo: boolean) => {
             resizable: true,
             flex: 1,
             cellRenderer: (param: ICellRendererParams) => (
-                <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    className={isDemo ? 'blur-md' : ''}
-                >
+                <Flex flexDirection="col" alignItems="start">
                     <Text className="text-gray-800">
                         {param.data.parentBenchmarkNames[0]}
                     </Text>
@@ -131,7 +121,7 @@ const columns = (isDemo: boolean) => {
                     <Flex
                         flexDirection="col"
                         alignItems="start"
-                        className={isDemo ? 'blur-md' : ''}
+                        className={isDemo ? 'blur-sm' : ''}
                     >
                         <Text className="text-gray-800">
                             {param.data?.providerConnectionName}

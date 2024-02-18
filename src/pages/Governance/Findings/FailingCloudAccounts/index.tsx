@@ -1,3 +1,4 @@
+import { useAtomValue } from 'jotai'
 import { Card, Flex, Text } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
@@ -11,6 +12,7 @@ import Table, { IColumn } from '../../../../components/Table'
 import { topConnections } from '../../Controls/ControlSummary/Tabs/ImpactedAccounts'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import CloudAccountDetail from './Detail'
+import { isDemoAtom } from '../../../../store'
 
 const cloudAccountColumns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -25,7 +27,7 @@ const cloudAccountColumns = (isDemo: boolean) => {
                 <Flex
                     justifyContent="start"
                     className={`h-full gap-3 group relative ${
-                        isDemo ? 'blur-md' : ''
+                        isDemo ? 'blur-sm' : ''
                     }`}
                 >
                     {getConnectorIcon(param.data.connector)}
@@ -138,6 +140,7 @@ interface ICount {
 export default function FailingCloudAccounts({ query }: ICount) {
     const [account, setAccount] = useState<any>(undefined)
     const [open, setOpen] = useState(false)
+    const isDemo = useAtomValue(isDemoAtom)
 
     const topQuery = {
         connector: query.connector.length ? [query.connector] : [],
@@ -152,7 +155,7 @@ export default function FailingCloudAccounts({ query }: ICount) {
         <>
             <Table
                 id="impacted_accounts"
-                columns={cloudAccountColumns(false)}
+                columns={cloudAccountColumns(isDemo)}
                 rowData={topConnections(accounts)}
                 loading={accountsLoading}
                 onGridReady={(e) => {

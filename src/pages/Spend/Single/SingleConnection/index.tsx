@@ -30,7 +30,7 @@ import {
     useInventoryApiV2AnalyticsSpendTableList,
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../../api/inventory.gen'
-import { notificationAtom } from '../../../../store'
+import { isDemoAtom, notificationAtom } from '../../../../store'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../api/integration.gen'
 import { dateDisplay, dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Spinner from '../../../../components/Spinner'
@@ -68,6 +68,8 @@ export default function SingleSpendConnection({
     activeTimeRange,
     id,
 }: ISingle) {
+    const isDemo = useAtomValue(isDemoAtom)
+
     const [openDrawer, setOpenDrawer] = useState(false)
     const [selectedChartIndex, setSelectedChartIndex] = useState(0)
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar'>('line')
@@ -276,7 +278,11 @@ export default function SingleSpendConnection({
                                                 }
                                                 icon={Square2StackIcon}
                                             />
-                                            <Text className="text-gray-800">
+                                            <Text
+                                                className={`${
+                                                    isDemo ? 'blur-sm' : ''
+                                                } text-gray-800`}
+                                            >
                                                 {
                                                     connection?.providerConnectionName
                                                 }
@@ -300,7 +306,11 @@ export default function SingleSpendConnection({
                                                 }
                                                 icon={Square2StackIcon}
                                             />
-                                            <Text className="text-gray-800">
+                                            <Text
+                                                className={`${
+                                                    isDemo ? 'blur-sm' : ''
+                                                } text-gray-800`}
+                                            >
                                                 {
                                                     connection?.providerConnectionID
                                                 }

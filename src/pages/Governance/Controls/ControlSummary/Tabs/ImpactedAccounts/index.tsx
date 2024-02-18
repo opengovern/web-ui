@@ -1,8 +1,10 @@
+import { useAtomValue } from 'jotai'
 import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
 import { Flex, Text } from '@tremor/react'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../../../api/compliance.gen'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse } from '../../../../../../api/api'
+import { isDemoAtom } from '../../../../../../store'
 
 interface IImpactedAccounts {
     controlId: string | undefined
@@ -28,7 +30,7 @@ export const cloudAccountColumns = (isDemo: boolean) => {
             sortable: true,
             filter: true,
             cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+                <span className={isDemo ? 'blur-sm' : ''}>{param.value}</span>
             ),
         },
         {
@@ -39,7 +41,7 @@ export const cloudAccountColumns = (isDemo: boolean) => {
             sortable: true,
             filter: true,
             cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+                <span className={isDemo ? 'blur-sm' : ''}>{param.value}</span>
             ),
         },
         {
@@ -91,6 +93,7 @@ export const topConnections = (
 }
 
 export default function ImpactedAccounts({ controlId }: IImpactedAccounts) {
+    const isDemo = useAtomValue(isDemoAtom)
     const { response: accounts, isLoading: accountsLoading } =
         useComplianceApiV1FindingsTopDetail('connectionID', 10000, {
             controlId: [String(controlId)],
@@ -98,7 +101,7 @@ export default function ImpactedAccounts({ controlId }: IImpactedAccounts) {
     return (
         <Table
             id="impacted_accounts"
-            columns={cloudAccountColumns(false)}
+            columns={cloudAccountColumns(isDemo)}
             rowData={topConnections(accounts)}
             loading={accountsLoading}
             onGridReady={(e) => {

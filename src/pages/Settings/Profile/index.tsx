@@ -15,7 +15,7 @@ import jwtDecode from 'jwt-decode'
 import dayjs from 'dayjs'
 import { useAuthApiV1UserPreferencesUpdate } from '../../../api/auth.gen'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from '../../../api/api'
-import { colorBlindModeAtom, tokenAtom } from '../../../store'
+import { colorBlindModeAtom, isDemoAtom, tokenAtom } from '../../../store'
 import { applyTheme, currentTheme, parseTheme } from '../../../utilities/theme'
 import { Auth0AppMetadata } from '../../../types/appMetadata'
 
@@ -23,6 +23,7 @@ export default function SettingsProfile() {
     const { user } = useAuth0()
     const token = useAtomValue(tokenAtom)
     const [colorBlindMode, setColorBlindMode] = useAtom(colorBlindModeAtom)
+    const [isDemo, setIsDemo] = useAtom(isDemoAtom)
 
     const decodedToken =
         token === undefined || token === ''
@@ -154,6 +155,21 @@ export default function SettingsProfile() {
                     >
                         <SelectItem value="true">Enabled</SelectItem>
                         <SelectItem value="false">Disabled</SelectItem>
+                    </Select>
+                </Flex>
+                <Divider className="my-1 py-1" />
+                <Flex flexDirection="row" justifyContent="between">
+                    <Text className="w-1/2">Demo mode</Text>
+                    <Select
+                        value={String(isDemo)}
+                        onValueChange={(v) => {
+                            setIsDemo(v === 'true')
+                            localStorage.setItem('demoMode', String(v))
+                        }}
+                        className="w-1/2"
+                    >
+                        <SelectItem value="true">True</SelectItem>
+                        <SelectItem value="false">False</SelectItem>
                     </Select>
                 </Flex>
                 <Flex flexDirection="row" justifyContent="end" className="mt-2">

@@ -46,7 +46,7 @@ export const cloudAccountColumns = (isDemo: boolean) => {
             sortable: true,
             filter: true,
             cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+                <span className={isDemo ? 'blur-sm' : ''}>{param.value}</span>
             ),
         },
         {
@@ -57,7 +57,7 @@ export const cloudAccountColumns = (isDemo: boolean) => {
             sortable: true,
             filter: true,
             cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+                <span className={isDemo ? 'blur-sm' : ''}>{param.value}</span>
             ),
         },
         {

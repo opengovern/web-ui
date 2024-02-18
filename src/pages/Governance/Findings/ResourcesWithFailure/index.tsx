@@ -40,10 +40,12 @@ const columns = (isDemo: boolean) => {
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                    className="h-full"
                 >
                     <Text className="text-gray-800">{param.value}</Text>
-                    <Text>{param.data.kaytuResourceID}</Text>
+                    <Text className={isDemo ? 'blur-sm' : ''}>
+                        {param.data.kaytuResourceID}
+                    </Text>
                 </Flex>
             ),
         },
@@ -62,7 +64,6 @@ const columns = (isDemo: boolean) => {
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
                 >
                     <Text className="text-gray-800">{param.value}</Text>
                     <Text>{param.data.resourceTypeLabel}</Text>
@@ -92,7 +93,7 @@ const columns = (isDemo: boolean) => {
                 <Flex
                     justifyContent="start"
                     className={`h-full gap-3 group relative ${
-                        isDemo ? 'blur-md' : ''
+                        isDemo ? 'blur-sm' : ''
                     }`}
                 >
                     {getConnectorIcon(param.data.connector)}

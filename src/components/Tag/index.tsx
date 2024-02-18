@@ -18,7 +18,7 @@ export default function Tag({ text, onClick, isDemo }: ITag) {
             <Text
                 className={
                     isDemo
-                        ? 'text-kaytu-500 blur-md break-words'
+                        ? 'text-kaytu-500 blur-sm break-words'
                         : 'text-kaytu-500 break-words'
                 }
             >

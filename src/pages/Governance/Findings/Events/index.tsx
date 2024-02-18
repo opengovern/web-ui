@@ -41,7 +41,7 @@ export const columns = (isDemo: boolean) => {
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                    className="h-full"
                 >
                     <Text className="text-gray-800">{param.value}</Text>
                 </Flex>
@@ -60,7 +60,7 @@ export const columns = (isDemo: boolean) => {
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                    className="h-full"
                 >
                     <Text className="text-gray-800">
                         {param.value ? dateTimeDisplay(param.value) : ''}
@@ -84,7 +84,7 @@ export const columns = (isDemo: boolean) => {
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                    className={isDemo ? 'h-full blur-sm' : 'h-full'}
                 >
                     <Text className="text-gray-800">{param.value}</Text>
                     <Text>{param.data.resourceID}</Text>
@@ -124,7 +124,7 @@ export const columns = (isDemo: boolean) => {
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                    className="h-full"
                 >
                     <Text className="text-gray-800">{param.value}</Text>
                 </Flex>
@@ -145,7 +145,7 @@ export const columns = (isDemo: boolean) => {
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                    className="h-full"
                 >
                     <Text className="text-gray-800">{param.value}</Text>
                 </Flex>
@@ -163,7 +163,7 @@ export const columns = (isDemo: boolean) => {
                 <Flex
                     justifyContent="start"
                     className={`h-full gap-3 group relative ${
-                        isDemo ? 'blur-md' : ''
+                        isDemo ? 'blur-sm' : ''
                     }`}
                 >
                     {getConnectorIcon(param.data.connector)}
@@ -192,7 +192,7 @@ export const columns = (isDemo: boolean) => {
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                    className="h-full"
                 >
                     <Text className="text-gray-800">{param.value}</Text>
                 </Flex>

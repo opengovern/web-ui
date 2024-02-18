@@ -1,3 +1,4 @@
+import { useAtomValue } from 'jotai'
 import {
     Button,
     Card,
@@ -24,6 +25,7 @@ import { dateTimeDisplay } from '../../../../../utilities/dateDisplay'
 import { severityBadge, statusBadge } from '../../../Controls'
 import FindingDetail from '../../FindingsWithFailure/Detail'
 import { useComplianceApiV1FindingsSingleDetail } from '../../../../../api/compliance.gen'
+import { isDemoAtom } from '../../../../../store'
 
 interface IFindingDetail {
     event: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent | undefined
@@ -33,6 +35,7 @@ interface IFindingDetail {
 
 export default function EventDetail({ event, open, onClose }: IFindingDetail) {
     const [openFinding, setOpenFinding] = useState(false)
+    const isDemo = useAtomValue(isDemoAtom)
     const { response: finding, sendNow } =
         useComplianceApiV1FindingsSingleDetail(
             event?.findingID || '',
@@ -61,11 +64,13 @@ export default function EventDetail({ event, open, onClose }: IFindingDetail) {
                 <SummaryCard
                     title="Account ID"
                     metric={event?.providerConnectionID}
+                    blur={isDemo}
                     isString
                 />
                 <SummaryCard
                     title="Account Name"
                     metric={event?.providerConnectionName}
+                    blur={isDemo}
                     isString
                 />
                 <SummaryCard

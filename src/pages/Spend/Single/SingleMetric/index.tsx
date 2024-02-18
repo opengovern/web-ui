@@ -267,7 +267,7 @@ export default function SingleSpendMetric({
                     pinned: true,
                     // eslint-disable-next-line react/no-unstable-nested-components
                     cellRenderer: (param: ValueFormatterParams) => (
-                        <span className={isDemo ? 'blur-md' : ''}>
+                        <span className={isDemo ? 'blur-sm' : ''}>
                             {param.value}
                         </span>
                     ),

@@ -82,7 +82,7 @@ export const getTable = (
                 filter: true,
                 width: 170,
                 cellRenderer: (param: ValueFormatterParams) => (
-                    <span className={isDemo ? 'blur-md' : ''}>
+                    <span className={isDemo ? 'blur-sm' : ''}>
                         {param.value}
                     </span>
                 ),

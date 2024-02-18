@@ -133,7 +133,7 @@ export default function AccountInfo({
                         <Text>Account name</Text>
                         <Text
                             className={
-                                isDemo ? 'blur-md text-black' : 'text-black'
+                                isDemo ? 'blur-sm text-black' : 'text-black'
                             }
                         >
                             {data?.providerConnectionName}
@@ -144,7 +144,7 @@ export default function AccountInfo({
                         <Text>Account ID</Text>
                         <Text
                             className={
-                                isDemo ? 'blur-md text-black' : 'text-black'
+                                isDemo ? 'blur-sm text-black' : 'text-black'
                             }
                         >
                             {data?.metadata?.account_id}
@@ -234,7 +234,7 @@ export default function AccountInfo({
                                     <Text
                                         className={
                                             isDemo
-                                                ? 'blur-md text-black'
+                                                ? 'blur-sm text-black'
                                                 : 'text-black'
                                         }
                                     >
@@ -250,7 +250,7 @@ export default function AccountInfo({
                                     <Text
                                         className={
                                             isDemo
-                                                ? 'blur-md text-black'
+                                                ? 'blur-sm text-black'
                                                 : 'text-black'
                                         }
                                     >
@@ -263,7 +263,7 @@ export default function AccountInfo({
                                     <Text
                                         className={
                                             isDemo
-                                                ? 'blur-md text-black'
+                                                ? 'blur-sm text-black'
                                                 : 'text-black'
                                         }
                                     >
@@ -276,7 +276,7 @@ export default function AccountInfo({
                                     <Text
                                         className={
                                             isDemo
-                                                ? 'blur-md text-black'
+                                                ? 'blur-sm text-black'
                                                 : 'text-black'
                                         }
                                     >

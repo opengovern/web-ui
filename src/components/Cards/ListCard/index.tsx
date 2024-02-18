@@ -157,7 +157,7 @@ export default function ListCard({
                                             <Text
                                                 className={
                                                     type === 'account' && isDemo
-                                                        ? 'ml-1 truncate blur-md'
+                                                        ? 'ml-1 truncate blur-sm'
                                                         : 'ml-1 truncate'
                                                 }
                                             >

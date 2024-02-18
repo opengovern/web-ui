@@ -1,4 +1,5 @@
-import { ICellRendererParams } from 'ag-grid-community'
+import { useAtomValue } from 'jotai'
+import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Button, Flex, Title } from '@tremor/react'
 import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
@@ -11,6 +12,7 @@ import {
 import Modal from '../../../../../components/Modal'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import Table, { IColumn } from '../../../../../components/Table'
+import { isDemoAtom } from '../../../../../store'
 
 interface IEvaluate {
     id: string | undefined
@@ -19,14 +21,17 @@ interface IEvaluate {
         | undefined
     onEvaluate: (c: string[]) => void
 }
-const columns: (checkbox: {
-    state: string | boolean | any[]
-    setState: React.Dispatch<React.SetStateAction<string | boolean | any[]>>
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-}) => IColumn<
+const columns: (
+    checkbox: {
+        state: string | boolean | any[]
+        setState: React.Dispatch<React.SetStateAction<string | boolean | any[]>>
+        onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    },
+    isDemo: boolean
+) => IColumn<
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedConnection,
     any
->[] = (checkbox) => [
+>[] = (checkbox, isDemo) => [
     {
         type: 'string',
         width: 50,
@@ -53,11 +58,17 @@ const columns: (checkbox: {
         type: 'string',
         headerName: 'Account Name',
         field: 'providerConnectionName',
+        cellRenderer: (param: ValueFormatterParams) => (
+            <span className={isDemo ? 'blur-sm' : ''}>{param.value}</span>
+        ),
     },
     {
         type: 'string',
         headerName: 'Account ID',
         field: 'providerConnectionID',
+        cellRenderer: (param: ValueFormatterParams) => (
+            <span className={isDemo ? 'blur-sm' : ''}>{param.value}</span>
+        ),
     },
 ]
 export default function Evaluate({
@@ -66,6 +77,7 @@ export default function Evaluate({
     onEvaluate,
 }: IEvaluate) {
     const [open, setOpen] = useState(false)
+    const isDemo = useAtomValue(isDemoAtom)
     const [openConfirm, setOpenConfirm] = useState(false)
     const [connections, setConnections] = useState<string[]>([])
 
@@ -124,7 +136,7 @@ export default function Evaluate({
                         <Table
                             id="evaluate_now"
                             key={`evaluate_now-${connections.join('')}`}
-                            columns={columns(checkbox)}
+                            columns={columns(checkbox, isDemo)}
                             rowData={assignments?.connections}
                             fullHeight
                             onRowClicked={(e) =>

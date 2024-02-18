@@ -1,9 +1,11 @@
+import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { Button, Flex, Text, TextInput } from '@tremor/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { Checkbox, useCheckboxState } from 'pretty-checkbox-react'
 import { GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse } from '../../../../../../api/api'
 import Spinner from '../../../../../Spinner'
+import { isDemoAtom } from '../../../../../../store'
 
 export const compareArrays = (a: any[], b: any[]) => {
     if (a && b) {
@@ -37,6 +39,7 @@ export default function CloudAccounts({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const checkbox = useCheckboxState({ state: [...value] })
+    const isDemo = useAtomValue(isDemoAtom)
 
     useEffect(() => {
         if (
@@ -109,10 +112,18 @@ export default function CloudAccounts({
                                             flexDirection="col"
                                             alignItems="start"
                                         >
-                                            <Text className="text-gray-800 truncate">
+                                            <Text
+                                                className={`${
+                                                    isDemo ? 'blur-sm' : ''
+                                                } text-gray-800 truncate`}
+                                            >
                                                 {d.providerConnectionName}
                                             </Text>
-                                            <Text className="text-xs truncate max-w-[200px]">
+                                            <Text
+                                                className={`${
+                                                    isDemo ? 'blur-sm' : ''
+                                                } text-xs truncate max-w-[200px]`}
+                                            >
                                                 {d.providerConnectionID}
                                             </Text>
                                         </Flex>

@@ -37,7 +37,7 @@ export const columns = (isDemo: boolean) => {
                 <Flex
                     justifyContent="start"
                     className={`h-full gap-3 group relative ${
-                        isDemo ? 'blur-md' : ''
+                        isDemo ? 'blur-sm' : ''
                     }`}
                 >
                     {getConnectorIcon(param.data.connector)}
@@ -66,7 +66,7 @@ export const columns = (isDemo: boolean) => {
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                    className={isDemo ? 'h-full' : 'h-full'}
                 >
                     <Text className="text-gray-800">{param.value}</Text>
                     <Text>{param.data.resourceTypeName}</Text>
@@ -88,10 +88,12 @@ export const columns = (isDemo: boolean) => {
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                    className="h-full"
                 >
                     <Text className="text-gray-800">{param.value}</Text>
-                    <Text>{param.data.resourceID}</Text>
+                    <Text className={isDemo ? 'blur-sm' : ''}>
+                        {param.data.resourceID}
+                    </Text>
                 </Flex>
             ),
         },
@@ -110,7 +112,7 @@ export const columns = (isDemo: boolean) => {
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                    className="h-full"
                 >
                     <Text className="text-gray-800">
                         {param.data.parentBenchmarkNames[0]}
@@ -140,7 +142,7 @@ export const columns = (isDemo: boolean) => {
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="center"
-                    className={isDemo ? 'h-full blur-md' : 'h-full'}
+                    className="h-full"
                 >
                     <Text className="text-gray-800">
                         {param.data.parentBenchmarkNames[0]}

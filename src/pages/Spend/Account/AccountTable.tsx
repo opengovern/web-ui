@@ -17,6 +17,7 @@ import {
 } from '../../../utilities/numericDisplay'
 import { renderDateText } from '../../../components/Layout/Header/DatePicker'
 import { searchAtom } from '../../../utilities/urlstate'
+import { isDemoAtom } from '../../../store'
 
 export type MSort = {
     sortCol: string
@@ -255,6 +256,7 @@ export default function AccountTable({
         return columns
     }
     const [manualGrouping, onManualGrouping] = useState<string>('none')
+    const isDemo = useAtomValue(isDemoAtom)
 
     const columns: IColumn<any, any>[] = [
         {
@@ -284,6 +286,12 @@ export default function AccountTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
+                    // eslint-disable-next-line react/no-unstable-nested-components
+                    cellRenderer: (param: ValueFormatterParams) => (
+                        <span className={isDemo ? 'blur-sm' : ''}>
+                            {param.value}
+                        </span>
+                    ),
                 },
                 {
                     field: 'accountId',
@@ -295,6 +303,12 @@ export default function AccountTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
+                    // eslint-disable-next-line react/no-unstable-nested-components
+                    cellRenderer: (param: ValueFormatterParams) => (
+                        <span className={isDemo ? 'blur-sm' : ''}>
+                            {param.value}
+                        </span>
+                    ),
                 },
                 {
                     field: 'dimensionId',

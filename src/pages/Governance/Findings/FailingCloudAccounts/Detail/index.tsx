@@ -1,3 +1,4 @@
+import { useAtomValue } from 'jotai'
 import { Card, Flex, Grid, Text, Title } from '@tremor/react'
 import { useEffect } from 'react'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
@@ -9,6 +10,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
     TypesFindingSeverity,
 } from '../../../../../api/api'
+import { isDemoAtom } from '../../../../../store'
 
 interface IAccountDetail {
     account: any
@@ -21,6 +23,7 @@ export default function CloudAccountDetail({
     open,
     onClose,
 }: IAccountDetail) {
+    const isDemo = useAtomValue(isDemoAtom)
     const { response: filters, sendNow } =
         useComplianceApiV1FindingsFiltersCreate(
             {
@@ -101,11 +104,13 @@ export default function CloudAccountDetail({
                 <SummaryCard
                     title="Account ID"
                     metric={account?.providerConnectionID}
+                    blur={isDemo}
                     isString
                 />
                 <SummaryCard
                     title="Account name"
                     metric={account?.providerConnectionName}
+                    blur={isDemo}
                     isString
                 />
             </Grid>

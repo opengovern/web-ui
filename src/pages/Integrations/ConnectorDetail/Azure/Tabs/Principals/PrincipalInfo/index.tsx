@@ -81,7 +81,7 @@ export default function PrincipalInfo({
                         <Text>Name</Text>
                         <Text
                             className={
-                                isDemo ? 'blur-md text-black' : 'text-black'
+                                isDemo ? 'blur-sm text-black' : 'text-black'
                             }
                         >
                             {data?.name}
@@ -92,7 +92,7 @@ export default function PrincipalInfo({
                         <Text>Application ID</Text>
                         <Text
                             className={
-                                isDemo ? 'blur-md text-black' : 'text-black'
+                                isDemo ? 'blur-sm text-black' : 'text-black'
                             }
                         >
                             {data?.metadata?.organization_master_account_email}
@@ -103,7 +103,7 @@ export default function PrincipalInfo({
                         <Text>Object ID</Text>
                         <Text
                             className={
-                                isDemo ? 'blur-md text-black' : 'text-black'
+                                isDemo ? 'blur-sm text-black' : 'text-black'
                             }
                         >
                             {data?.metadata?.object_id}
@@ -114,7 +114,7 @@ export default function PrincipalInfo({
                         <Text>Directory ID</Text>
                         <Text
                             className={
-                                isDemo ? 'blur-md text-black' : 'text-black'
+                                isDemo ? 'blur-sm text-black' : 'text-black'
                             }
                         >
                             {data?.metadata?.organization_master_account_email}
@@ -138,7 +138,7 @@ export default function PrincipalInfo({
                         <Text>Last health check</Text>
                         <Text
                             className={
-                                isDemo ? 'blur-md text-black' : 'text-black'
+                                isDemo ? 'blur-sm text-black' : 'text-black'
                             }
                         >
                             {dateDisplay(data?.lastHealthCheckTime)}
@@ -172,7 +172,7 @@ export default function PrincipalInfo({
                                 <Text
                                     className={
                                         isDemo
-                                            ? 'blur-md text-black'
+                                            ? 'blur-sm text-black'
                                             : 'text-black'
                                     }
                                 >
@@ -219,7 +219,7 @@ export default function PrincipalInfo({
                                 <Text
                                     className={
                                         isDemo
-                                            ? 'blur-md text-black'
+                                            ? 'blur-sm text-black'
                                             : 'text-black'
                                     }
                                 >
@@ -240,7 +240,7 @@ export default function PrincipalInfo({
                         <Text>Number of subscriptions</Text>
                         <Text
                             className={
-                                isDemo ? 'blur-md text-black' : 'text-black'
+                                isDemo ? 'blur-sm text-black' : 'text-black'
                             }
                         >
                             {data?.total_connections}

@@ -26,7 +26,7 @@ import {
     useInventoryApiV2AnalyticsMetricList,
     useInventoryApiV2AnalyticsTrendList,
 } from '../../../../api/inventory.gen'
-import { notificationAtom } from '../../../../store'
+import { isDemoAtom, notificationAtom } from '../../../../store'
 import Table from '../../../../components/Table'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../api/integration.gen'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
@@ -64,6 +64,7 @@ export default function SingleConnection({
     id,
     resourceId,
 }: ISingle) {
+    const isDemo = useAtomValue(isDemoAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
     const setNotification = useSetAtom(notificationAtom)
     const navigate = useNavigate()
@@ -154,7 +155,11 @@ export default function SingleConnection({
                                                 }
                                                 icon={Square2StackIcon}
                                             />
-                                            <Text className="text-gray-800">
+                                            <Text
+                                                className={`${
+                                                    isDemo ? 'blur-sm' : ''
+                                                } text-gray-800`}
+                                            >
                                                 {
                                                     connection?.providerConnectionName
                                                 }
@@ -178,7 +183,11 @@ export default function SingleConnection({
                                                 }
                                                 icon={Square2StackIcon}
                                             />
-                                            <Text className="text-gray-800">
+                                            <Text
+                                                className={`${
+                                                    isDemo ? 'blur-sm' : ''
+                                                } text-gray-800`}
+                                            >
                                                 {
                                                     connection?.providerConnectionID
                                                 }

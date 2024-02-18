@@ -19,6 +19,7 @@ import SummaryCard from '../SummaryCard'
 import { getConnectorIcon } from '../ConnectorCard'
 import SeverityBar from '../../SeverityBar'
 import { searchAtom } from '../../../utilities/urlstate'
+import { isDemoAtom } from '../../../store'
 
 interface IComplianceCard {
     benchmark:
@@ -29,6 +30,7 @@ interface IComplianceCard {
 export default function ComplianceListCard({ benchmark }: IComplianceCard) {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
+    const isDemo = useAtomValue(isDemoAtom)
 
     const connector = () => {
         if (benchmark?.tags?.plugin) {
@@ -95,7 +97,11 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                         <List>
                             {benchmark?.topConnections?.map((c) => (
                                 <ListItem>
-                                    <Text>
+                                    <Text
+                                        className={`${
+                                            isDemo ? 'blur-sm' : ''
+                                        } text-gray-800`}
+                                    >
                                         {
                                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                             // @ts-ignore

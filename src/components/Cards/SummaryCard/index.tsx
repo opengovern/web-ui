@@ -27,6 +27,8 @@ type IProps = {
     isPrice?: boolean
     isPercent?: boolean
     isString?: boolean
+    blur?: boolean
+    blurSecondLine?: boolean
 }
 
 export default function SummaryCard({
@@ -46,6 +48,8 @@ export default function SummaryCard({
     isPrice = false,
     isPercent = false,
     onClick,
+    blur,
+    blurSecondLine,
 }: IProps) {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
@@ -81,7 +85,13 @@ export default function SummaryCard({
                     className="gap-1 mb-1"
                 >
                     {isString ? (
-                        <Text className="text-gray-800 truncate">{metric}</Text>
+                        <Text
+                            className={`${
+                                blur === true ? 'blur-sm' : ''
+                            } text-gray-800 truncate`}
+                        >
+                            {metric}
+                        </Text>
                     ) : (
                         <Metric>
                             {isExact
@@ -110,7 +120,11 @@ export default function SummaryCard({
                     )}
                 </Flex>
                 {!!secondLine && (
-                    <Text className="w-full text-start mb-0.5 truncate">
+                    <Text
+                        className={`${
+                            blurSecondLine === true ? 'blur-sm' : ''
+                        } w-full text-start mb-0.5 truncate`}
+                    >
                         {secondLine}
                     </Text>
                 )}
