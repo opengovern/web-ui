@@ -952,8 +952,34 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent {
     stateActive?: boolean
 }
 
-export type GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFilters =
-    object
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFilters {
+    /** @example ["azure_cis_v140"] */
+    benchmarkID?: string[]
+    /** @example ["alarm"] */
+    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+    /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
+    connectionID?: string[]
+    /** @example ["Azure"] */
+    connector?: SourceType[]
+    /** @example ["azure_cis_v140_7_5"] */
+    controlID?: string[]
+    evaluatedAt?: {
+        from?: number
+        to?: number
+    }
+    /** @example ["8e0f8e7a1b1c4e6fb7e49c6af9d2b1c8"] */
+    findingID?: string[]
+    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"] */
+    kaytuResourceID?: string[]
+    /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
+    notConnectionID?: string[]
+    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines"] */
+    resourceType?: string[]
+    /** @example ["low"] */
+    severity?: TypesFindingSeverity[]
+    /** @example [true] */
+    stateActive?: boolean[]
+}
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFiltersWithMetadata {
     benchmarkID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFilterWithMetadata[]
@@ -967,7 +993,48 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFiltersW
     stateActive?: GithubComKaytuIoKaytuEnginePkgComplianceApiFilterWithMetadata[]
 }
 
-export type GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters = object
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventsSort {
+    benchmarkID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    connectionID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    connector?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    controlID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    kaytuResourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceType?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    severity?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    stateActive?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
+    /** @example ["azure_cis_v140"] */
+    benchmarkID?: string[]
+    /** @example ["alarm"] */
+    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+    /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
+    connectionID?: string[]
+    /** @example ["Azure"] */
+    connector?: SourceType[]
+    /** @example ["azure_cis_v140_7_5"] */
+    controlID?: string[]
+    evaluatedAt?: {
+        from?: number
+        to?: number
+    }
+    lastEvent?: {
+        from?: number
+        to?: number
+    }
+    /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
+    notConnectionID?: string[]
+    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"] */
+    resourceID?: string[]
+    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines"] */
+    resourceTypeID?: string[]
+    /** @example ["low"] */
+    severity?: TypesFindingSeverity[]
+    /** @example [true] */
+    stateActive?: boolean[]
+}
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata {
     benchmarkID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFilterWithMetadata[]
@@ -988,6 +1055,19 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse {
     failedResourceCount?: number
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingsSort {
+    benchmarkID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    connectionID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    connector?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    controlID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    kaytuResourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceTypeID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    severity?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    stateActive?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse {
     accounts?: GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSummary[]
 }
@@ -1002,8 +1082,13 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsByFi
     findingEvents?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent[]
 }
 
-export type GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsRequest =
-    object
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsRequest {
+    afterSortKey?: any[]
+    filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFilters
+    /** @example 100 */
+    limit?: number
+    sort?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventsSort[]
+}
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsResponse {
     findingEvents?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent[]
@@ -1011,8 +1096,13 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsResp
     totalCount?: number
 }
 
-export type GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest =
-    object
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest {
+    afterSortKey?: any[]
+    filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters
+    /** @example 100 */
+    limit?: number
+    sort?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingsSort[]
+}
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse {
     findings?: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding[]
@@ -1180,8 +1270,13 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoin
     value?: number
 }
 
-export type GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest =
-    object
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest {
+    afterSortKey?: any[]
+    filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingFilters
+    /** @example 100 */
+    limit?: number
+    sort?: GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsSort[]
+}
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse {
     resourceFindings?: GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding[]
@@ -1243,6 +1338,41 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding {
     totalCount?: number
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingFilters {
+    /** @example ["azure_cis_v140"] */
+    benchmarkID?: string[]
+    /** @example ["alarm"] */
+    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+    /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
+    connectionID?: string[]
+    /** @example ["Azure"] */
+    connector?: SourceType[]
+    /** @example ["azure_cis_v140_7_5"] */
+    controlID?: string[]
+    evaluatedAt?: {
+        from?: number
+        to?: number
+    }
+    /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
+    notConnectionID?: string[]
+    /** @example ["example-rc"] */
+    resourceCollection?: string[]
+    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"] */
+    resourceID?: string[]
+    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines"] */
+    resourceTypeID?: string[]
+    /** @example ["low"] */
+    severity?: TypesFindingSeverity[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsSort {
+    failedCount?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    kaytuResourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceLocation?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceName?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceType?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSummary {
     conformanceStatusesCount?: {
         failed?: number
@@ -1258,6 +1388,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSumma
         medium?: number
         none?: number
     }
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection {
+    SortDirectionAscending = 'asc',
+    SortDirectionDescending = 'desc',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {
@@ -6640,6 +6775,26 @@ export class Api<
                 path: `/schedule/api/v1/compliance/trigger/${benchmarkId}`,
                 method: 'PUT',
                 query: query,
+                secure: true,
+                ...params,
+            }),
+
+        /**
+         * @description Triggers a compliance job to run immediately for the given benchmark
+         *
+         * @tags describe
+         * @name ApiV1ComplianceTriggerSummaryUpdate
+         * @summary Triggers compliance job
+         * @request PUT:/schedule/api/v1/compliance/trigger/{benchmark_id}/summary
+         * @secure
+         */
+        apiV1ComplianceTriggerSummaryUpdate: (
+            benchmarkId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/schedule/api/v1/compliance/trigger/${benchmarkId}/summary`,
+                method: 'PUT',
                 secure: true,
                 ...params,
             }),

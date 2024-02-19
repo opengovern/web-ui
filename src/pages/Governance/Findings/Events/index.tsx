@@ -260,7 +260,7 @@ export default function Events({ query }: ICount) {
                             connectionID: query.connectionID,
                             benchmarkID: query.benchmarkID,
                             severity: query.severity,
-                            resourceTypeID: query.resourceTypeID,
+                            resourceType: query.resourceTypeID,
                             conformanceStatus: query.conformanceStatus,
                             stateActive: query.lifecycle,
                             ...(query.activeTimeRange && {

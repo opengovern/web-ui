@@ -1,3 +1,4 @@
+import { Link, useNavigate } from 'react-router-dom'
 import { useAtomValue, useSetAtom } from 'jotai'
 import {
     Button,
@@ -41,6 +42,7 @@ import {
 } from '../../../../../api/schedule.gen'
 import { isDemoAtom, notificationAtom } from '../../../../../store'
 import { getErrorMessage } from '../../../../../types/apierror'
+import { searchAtom } from '../../../../../utilities/urlstate'
 
 interface IFindingDetail {
     finding: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
@@ -132,6 +134,9 @@ export default function FindingDetail({
         {},
         false
     )
+
+    const navigate = useNavigate()
+    const searchParams = useAtomValue(searchAtom)
 
     const setNotification = useSetAtom(notificationAtom)
     useEffect(() => {
@@ -266,7 +271,12 @@ export default function FindingDetail({
                             <List>
                                 <ListItem className="py-6">
                                     <Text>Control</Text>
-                                    {finding?.controlTitle}
+                                    <Link
+                                        className="text-kaytu-500 cursor-pointer underline"
+                                        to={`${finding?.controlID}?${searchParams}`}
+                                    >
+                                        {finding?.controlTitle}
+                                    </Link>
                                 </ListItem>
                                 <ListItem className="py-6">
                                     <Text>Conformance Status</Text>

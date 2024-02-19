@@ -129,7 +129,10 @@ export default function EventDetail({ event, open, onClose }: IFindingDetail) {
                             </ListItem>
                             <ListItem className="py-6">
                                 <Text>Finding</Text>
-                                <Button variant="light">
+                                <Button
+                                    variant="light"
+                                    onClick={() => setOpenFinding(true)}
+                                >
                                     Click to see finding detail
                                 </Button>
                             </ListItem>
