@@ -477,24 +477,17 @@ export default function SingleSpendMetric({
                     </div>
                     <Col numColSpan={2}>
                         <Flex justifyContent="end" className="gap-4">
-                            <Select
-                                enableClear={false}
-                                value={selectedGranularity}
-                                placeholder={capitalizeFirstLetter(
-                                    selectedGranularity
-                                )}
-                                onValueChange={(v) => {
+                            {generateItems(
+                                activeTimeRange.start,
+                                activeTimeRange.end,
+                                capitalizeFirstLetter(selectedGranularity),
+                                selectedGranularity,
+                                (v) => {
                                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                     // @ts-ignore
                                     setSelectedGranularity(v)
-                                }}
-                                className="w-10"
-                            >
-                                {generateItems(
-                                    activeTimeRange.start,
-                                    activeTimeRange.end
-                                )}
-                            </Select>
+                                }
+                            )}
                             <TabGroup
                                 index={selectedIndex}
                                 onIndexChange={setSelectedIndex}

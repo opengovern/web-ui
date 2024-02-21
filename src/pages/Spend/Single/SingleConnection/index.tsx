@@ -389,24 +389,19 @@ export default function SingleSpendConnection({
                                         justifyContent="end"
                                         className="gap-4"
                                     >
-                                        <Select
-                                            enableClear={false}
-                                            value={selectedGranularity}
-                                            placeholder={capitalizeFirstLetter(
+                                        {generateItems(
+                                            activeTimeRange.start,
+                                            activeTimeRange.end,
+                                            capitalizeFirstLetter(
                                                 selectedGranularity
-                                            )}
-                                            onValueChange={(v) => {
+                                            ),
+                                            selectedGranularity,
+                                            (v) => {
                                                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                                 // @ts-ignore
                                                 setSelectedGranularity(v)
-                                            }}
-                                            className="w-10"
-                                        >
-                                            {generateItems(
-                                                activeTimeRange.start,
-                                                activeTimeRange.end
-                                            )}
-                                        </Select>
+                                            }
+                                        )}
                                         <TabGroup
                                             index={selectedChartIndex}
                                             onIndexChange={

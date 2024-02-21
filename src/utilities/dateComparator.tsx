@@ -1,5 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs'
-import { SelectItem, Text } from '@tremor/react'
+import { Select, SelectItem, Text } from '@tremor/react'
 
 export const agGridDateComparator = (
     filterLocalDateAtMidnight: Date,
@@ -50,24 +50,56 @@ export const checkGranularity = (start: Dayjs, end: Dayjs) => {
     }
 }
 
-export const generateItems = (s: Dayjs, e: Dayjs) => {
+export const generateItems = (
+    s: Dayjs,
+    e: Dayjs,
+    placeholder: string,
+    value: string,
+    onValueChange: (v: string) => void
+) => {
+    const generateSelectItem = (vl: string, title: string) => {
+        return (
+            <SelectItem value={vl}>
+                <Text>{title}</Text>
+            </SelectItem>
+        )
+    }
+
+    const items = () => {
+        const i = []
+        const x = checkGranularity(s, e)
+        if (x.daily) {
+            i.push({
+                title: 'Daily',
+                value: 'daily',
+            })
+        }
+        if (x.monthly) {
+            i.push({
+                title: 'Monthly',
+                value: 'monthly',
+            })
+        }
+        if (x.yearly) {
+            i.push({
+                title: 'Yearly',
+                value: 'yearly',
+            })
+        }
+
+        return i.map((v) => generateSelectItem(v.value, v.title))
+    }
     return (
-        <>
-            {checkGranularity(s, e).daily && (
-                <SelectItem value="daily">
-                    <Text>Daily</Text>
-                </SelectItem>
-            )}
-            {checkGranularity(s, e).monthly && (
-                <SelectItem value="monthly">
-                    <Text>Monthly</Text>
-                </SelectItem>
-            )}
-            {checkGranularity(s, e).yearly && (
-                <SelectItem value="yearly">
-                    <Text>Yearly</Text>
-                </SelectItem>
-            )}
-        </>
+        <div>
+            <Select
+                enableClear={false}
+                value={value}
+                placeholder={placeholder}
+                onValueChange={onValueChange}
+                className="w-10 asdasdsa"
+            >
+                {items()}
+            </Select>
+        </div>
     )
 }
