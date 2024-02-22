@@ -36,6 +36,7 @@ import Layout from '../components/Layout'
 import RequestDemo from '../pages/RequestDemo'
 import AssetAccounts from '../pages/Assets/Account'
 import AssetMetrics from '../pages/Assets/Metric'
+import ScoreOverview from '../pages/Insights/ScoreOverview'
 
 const authRoutes = [
     {
@@ -193,6 +194,11 @@ const authRoutes = [
         key: 'insight detail',
         path: '/:ws/insights/:id',
         component: InsightDetails,
+    },
+    {
+        key: 'score',
+        path: '/:ws/score',
+        component: ScoreOverview,
     },
     {
         key: 'integrations',

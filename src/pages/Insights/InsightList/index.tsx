@@ -10,10 +10,23 @@ import {
     TabList,
     Text,
     TextInput,
+    Icon,
+    Badge,
+    TabPanels,
+    TabPanel,
 } from '@tremor/react'
 import { useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import {
+    CheckBadgeIcon,
+    CheckCircleIcon,
+    XCircleIcon,
+    MagnifyingGlassIcon,
+    CommandLineIcon,
+    BookOpenIcon,
+    CodeBracketIcon,
+    Cog8ToothIcon,
+} from '@heroicons/react/24/outline'
 import {
     GridOptions,
     ICellRendererParams,
@@ -25,7 +38,6 @@ import {
     useComplianceApiV1MetadataTagInsightList,
 } from '../../../api/compliance.gen'
 import { notificationAtom } from '../../../store'
-import Table, { IColumn } from '../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import { badgeDelta } from '../../../utilities/deltaType'
 import TopHeader from '../../../components/Layout/Header'
@@ -33,59 +45,147 @@ import {
     defaultTime,
     searchAtom,
     useFilterState,
+    useURLParam,
     useUrlDateRangeState,
 } from '../../../utilities/urlstate'
+import Table, { IColumn } from '../../../components/Table'
 
 const columns: IColumn<any, any>[] = [
     {
-        headerName: 'Cloud provider',
-        field: 'connector',
-        type: 'string',
-        sortable: true,
-        width: 140,
-        enableRowGroup: true,
-    },
-    {
-        headerName: 'Insight',
-        type: 'string',
+        headerName: 'Insight Title',
+        type: 'custom',
         sortable: false,
-        field: 'shortTitle',
-        // cellRenderer: (
-        //     params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiInsight>
-        // ) =>
-        //     params.data?.connector && (
-        //         <Flex flexDirection="col" alignItems="start">
-        //             <Text className="text-gray-800 mb-0.5">
-        //                 {params.data?.shortTitle}
-        //             </Text>
-        //             <Text>{params.data?.longTitle}</Text>
-        //         </Flex>
-        //     ),
-    },
-    {
-        field: 'totalResultValue',
-        headerName: 'Count',
-        type: 'number',
-        width: 100,
-    },
-    {
-        field: 'oldTotalResultValue',
-        headerName: 'Previous Count',
-        type: 'number',
-        width: 140,
-    },
-    {
-        headerName: 'Growth',
-        type: 'string',
-        width: 120,
+        isBold: true,
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiInsight>
         ) =>
-            params.data?.connector &&
-            badgeDelta(
-                params.data?.oldTotalResultValue,
-                params.data?.totalResultValue
+            params.data?.connector && (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="center"
+                    className="gap-2"
+                >
+                    <Text className="text-gray-800 mb-0.5 font-bold">
+                        {params.data?.shortTitle}
+                    </Text>
+                </Flex>
             ),
+    },
+    {
+        headerName: 'Service',
+        field: 'connector',
+        type: 'string',
+        sortable: true,
+        width: 200,
+        enableRowGroup: true,
+    },
+    {
+        headerName: 'Categories',
+        type: 'custom',
+        sortable: true,
+        width: 120,
+        enableRowGroup: true,
+        cellRenderer: () => (
+            <Flex
+                justifyContent="center"
+                className="gap-1.5"
+                flexDirection="col"
+            >
+                <Badge size="xs" color="gray">
+                    Security
+                </Badge>
+                <Badge size="xs" color="gray">
+                    Reliablity
+                </Badge>
+            </Flex>
+        ),
+    },
+
+    {
+        headerName: 'Risk',
+        field: 'risk',
+        type: 'custom',
+        sortable: true,
+        width: 100,
+        enableRowGroup: true,
+        cellRenderer: () => (
+            <Flex justifyContent="start" className="gap-1">
+                <Badge size="xs" color="emerald">
+                    Low
+                </Badge>
+            </Flex>
+        ),
+    },
+
+    {
+        headerName: 'Result',
+        field: 'result',
+        type: 'custom',
+        width: 160,
+        cellRenderer: () => (
+            <Flex className="mt-1" flexDirection="col" justifyContent="center">
+                <Flex justifyContent="start" className="gap-1">
+                    <Icon
+                        className="w-4"
+                        icon={CheckCircleIcon}
+                        color="emerald"
+                    />
+                    <Text>Passed :</Text>
+                    <Text className="font-bold">112</Text>
+                </Flex>
+                <Flex justifyContent="start" className="gap-1">
+                    <Icon className="w-4" icon={XCircleIcon} color="rose" />
+                    <Text>Failed :</Text>
+                    <Text className="font-bold ">34</Text>
+                </Flex>
+            </Flex>
+        ),
+    },
+    {
+        headerName: 'Fix It',
+        type: 'custom',
+        sortable: true,
+        width: 200,
+        enableRowGroup: true,
+        cellRenderer: (
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiInsight>
+        ) => (
+            <Flex justifyContent="start" className="gap-3">
+                {true && (
+                    <div className="group relative flex justify-center cursor-pointer">
+                        <CommandLineIcon className="text-kaytu-500 w-5" />
+                        <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                            <Text>Command line (CLI)</Text>
+                        </Card>
+                    </div>
+                )}
+                {true && (
+                    <div className="group relative flex justify-center cursor-pointer">
+                        <BookOpenIcon className="text-kaytu-500 w-5" />
+                        <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                            <Text>Manual</Text>
+                        </Card>
+                    </div>
+                )}
+                {true && (
+                    <div className="group relative flex justify-center cursor-pointer">
+                        <CodeBracketIcon className="text-kaytu-500 w-5" />
+                        <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                            <Text>Programmatic</Text>
+                        </Card>
+                    </div>
+                )}
+                {true && (
+                    <div className="group relative flex justify-center cursor-pointer">
+                        <Cog8ToothIcon className="text-kaytu-500 w-5" />
+                        <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                            <Text>Guard rail</Text>
+                        </Card>
+                    </div>
+                )}
+            </Flex>
+        ),
     },
 ]
 
@@ -96,6 +196,7 @@ const options: GridOptions = {
 }
 
 export default function InsightList() {
+    const [category, setCategory] = useURLParam('category', '')
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const [searchCategory, setSearchCategory] = useState('')
@@ -139,8 +240,9 @@ export default function InsightList() {
     return (
         <>
             <TopHeader datePicker filter />
+
             <Flex alignItems="start" className="gap-4">
-                <Card className="sticky w-fit">
+                {/* <Card className="sticky w-fit">
                     <TextInput
                         className="w-56 mb-6"
                         icon={MagnifyingGlassIcon}
@@ -239,53 +341,62 @@ export default function InsightList() {
                             </Text>
                         </AccordionBody>
                     </Accordion>
-                </Card>
+                                </Card> */}
                 {insightError === undefined ? (
-                    <Table
-                        id="insight_list"
-                        columns={columns}
-                        rowData={insightList
-                            ?.filter((i) => {
-                                if (selectedConnections.provider.length) {
-                                    return (
-                                        i.connector ===
-                                        selectedConnections.provider
-                                    )
-                                }
-                                return i
-                            })
-                            ?.filter((i) => {
-                                if (selectedCategory.length) {
-                                    return i.tags?.category?.includes(
-                                        selectedCategory
-                                    )
-                                }
-                                return i
-                            })
-                            ?.filter((i) => {
-                                if (selectedPersona.length) {
-                                    return i.tags?.persona?.includes(
-                                        selectedPersona
-                                    )
-                                }
-                                return i
-                            })}
-                        options={options}
-                        onRowClicked={(event: RowClickedEvent) => {
-                            if (
-                                event.data?.totalResultValue ||
-                                event.data?.oldTotalResultValue
-                            ) {
-                                navigateToInsightsDetails(event.data?.id)
-                            } else {
-                                setNotification({
-                                    text: 'Time period is not covered by insight',
-                                    type: 'warning',
+                    <Flex className="flex flex-col">
+                        <TabGroup className="mb-6">
+                            <TabList>
+                                <Tab>SCORE Insights</Tab>
+                                <Tab>Service Insights</Tab>
+                            </TabList>
+                        </TabGroup>
+                        <Table
+                            id="insight_list"
+                            columns={columns}
+                            rowData={insightList
+                                ?.filter((i) => {
+                                    if (selectedConnections.provider.length) {
+                                        return (
+                                            i.connector ===
+                                            selectedConnections.provider
+                                        )
+                                    }
+                                    return i
                                 })
-                            }
-                        }}
-                        loading={listLoading}
-                    >
+                                ?.filter((i) => {
+                                    if (selectedCategory.length) {
+                                        return i.tags?.category?.includes(
+                                            selectedCategory
+                                        )
+                                    }
+                                    return i
+                                })
+                                ?.filter((i) => {
+                                    if (selectedPersona.length) {
+                                        return i.tags?.persona?.includes(
+                                            selectedPersona
+                                        )
+                                    }
+                                    return i
+                                })}
+                            options={options}
+                            onRowClicked={(event: RowClickedEvent) => {
+                                if (
+                                    event.data?.totalResultValue ||
+                                    event.data?.oldTotalResultValue
+                                ) {
+                                    navigateToInsightsDetails(event.data?.id)
+                                } else {
+                                    setNotification({
+                                        text: 'Time period is not covered by insight',
+                                        type: 'warning',
+                                    })
+                                }
+                            }}
+                            loading={listLoading}
+                            rowHeight="xl"
+                        >
+                            {/*
                         <TabGroup>
                             <TabList variant="solid" className="px-0">
                                 <Tab
@@ -294,7 +405,7 @@ export default function InsightList() {
                                 >
                                     All
                                 </Tab>
-                                {/* eslint-disable-next-line react/jsx-no-useless-fragment */}
+                                // eslint-disable-next-line react/jsx-no-useless-fragment
                                 <>
                                     {categories?.persona?.map((cat) => (
                                         <Tab
@@ -309,7 +420,9 @@ export default function InsightList() {
                                 </>
                             </TabList>
                         </TabGroup>
-                    </Table>
+                        */}
+                        </Table>
+                    </Flex>
                 ) : (
                     <Button onClick={() => insightSendNow()}>Retry</Button>
                 )}

@@ -65,6 +65,7 @@ export interface IColumn<TData, TValue> {
         | 'datetime'
         | 'connector'
         | 'parent'
+        | 'custom'
     field?: ColDefField<TData, TValue>
     width?: number
     cellStyle?: any
