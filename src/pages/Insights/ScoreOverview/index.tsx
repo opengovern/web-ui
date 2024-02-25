@@ -58,7 +58,7 @@ function SecurityScore(
 }
 
 export default function ScoreOverview() {
-    const { response } = useComplianceApiV1BenchmarksSummaryList({
+    const { response, isLoading } = useComplianceApiV1BenchmarksSummaryList({
         tag: ['type=SCORE'],
     })
     const controlTotal =
@@ -132,13 +132,20 @@ export default function ScoreOverview() {
                                 className="relative"
                             >
                                 <Flex flexDirection="col">
-                                    <Title>{securityScore.toFixed(1)}%</Title>
+                                    {isLoading ? (
+                                        <div className="animate-pulse h-3 w-16 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                    ) : (
+                                        <Title>
+                                            {securityScore.toFixed(1)}%
+                                        </Title>
+                                    )}
+
                                     <Text>Compliant</Text>
                                 </Flex>
                             </ProgressCircle>
-                            <BadgeDeltaSimple change={20}>
+                            {/* <BadgeDeltaSimple change={20}>
                                 from previous month
-                            </BadgeDeltaSimple>
+                            </BadgeDeltaSimple> */}
                         </Flex>
                         <hr className="w-full border border-gray-200" />
                         <Flex
@@ -148,24 +155,39 @@ export default function ScoreOverview() {
                         >
                             <Flex justifyContent="start">
                                 <Title className="mr-1.5 font-bold">
-                                    {response?.benchmarkSummary
-                                        ?.map(
-                                            (i) =>
-                                                (i?.conformanceStatusSummary
-                                                    ?.passed || 0) +
-                                                (i?.conformanceStatusSummary
-                                                    ?.failed || 0)
-                                        )
-                                        .reduce((prev, curr) => prev + curr, 0)}
+                                    {isLoading ? (
+                                        <div className="animate-pulse h-3 w-8 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                    ) : (
+                                        response?.benchmarkSummary
+                                            ?.map(
+                                                (i) =>
+                                                    (i?.conformanceStatusSummary
+                                                        ?.passed || 0) +
+                                                    (i?.conformanceStatusSummary
+                                                        ?.failed || 0)
+                                            )
+                                            .reduce(
+                                                (prev, curr) => prev + curr,
+                                                0
+                                            )
+                                    )}
                                 </Title>
                                 insight evaluations performed across
                                 <Title className="mx-1.5 font-bold">
-                                    {response?.benchmarkSummary
-                                        ?.map(
-                                            (i) =>
-                                                i?.connectionsStatus?.total || 0
-                                        )
-                                        .reduce((prev, curr) => prev + curr, 0)}
+                                    {isLoading ? (
+                                        <div className="animate-pulse h-3 w-8 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                    ) : (
+                                        response?.benchmarkSummary
+                                            ?.map(
+                                                (i) =>
+                                                    i?.connectionsStatus
+                                                        ?.total || 0
+                                            )
+                                            .reduce(
+                                                (prev, curr) => prev + curr,
+                                                0
+                                            )
+                                    )}
                                 </Title>
                                 cloud accounts
                             </Flex>
@@ -182,17 +204,22 @@ export default function ScoreOverview() {
                                         className="gap-3"
                                     >
                                         <Metric color="rose">
-                                            {response?.benchmarkSummary
-                                                ?.map(
-                                                    (i) =>
-                                                        i
-                                                            ?.conformanceStatusSummary
-                                                            ?.failed || 0
-                                                )
-                                                .reduce(
-                                                    (prev, curr) => prev + curr,
-                                                    0
-                                                )}
+                                            {isLoading ? (
+                                                <div className="animate-pulse h-3 w-16 my-0 bg-slate-200 dark:bg-slate-700 rounded" />
+                                            ) : (
+                                                response?.benchmarkSummary
+                                                    ?.map(
+                                                        (i) =>
+                                                            i
+                                                                ?.conformanceStatusSummary
+                                                                ?.failed || 0
+                                                    )
+                                                    .reduce(
+                                                        (prev, curr) =>
+                                                            prev + curr,
+                                                        0
+                                                    )
+                                            )}
                                         </Metric>
 
                                         <Subtitle className="text-gray-500 mt-2">
@@ -200,9 +227,9 @@ export default function ScoreOverview() {
                                         </Subtitle>
                                     </Flex>
 
-                                    <BadgeDeltaSimple change={-7}>
+                                    {/* <BadgeDeltaSimple change={-7}>
                                         from previous time period
-                                    </BadgeDeltaSimple>
+                                    </BadgeDeltaSimple> */}
                                 </Flex>
                                 <Flex
                                     justifyContent="start"
@@ -216,26 +243,31 @@ export default function ScoreOverview() {
                                         className="gap-3"
                                     >
                                         <Metric color="emerald">
-                                            {response?.benchmarkSummary
-                                                ?.map(
-                                                    (i) =>
-                                                        i
-                                                            ?.conformanceStatusSummary
-                                                            ?.passed || 0
-                                                )
-                                                .reduce(
-                                                    (prev, curr) => prev + curr,
-                                                    0
-                                                )}
+                                            {isLoading ? (
+                                                <div className="animate-pulse h-3 w-16 my-0 bg-slate-200 dark:bg-slate-700 rounded" />
+                                            ) : (
+                                                response?.benchmarkSummary
+                                                    ?.map(
+                                                        (i) =>
+                                                            i
+                                                                ?.conformanceStatusSummary
+                                                                ?.passed || 0
+                                                    )
+                                                    .reduce(
+                                                        (prev, curr) =>
+                                                            prev + curr,
+                                                        0
+                                                    )
+                                            )}
                                         </Metric>
                                         <Subtitle className="text-gray-500">
                                             Passed Checks
                                         </Subtitle>
                                     </Flex>
 
-                                    <BadgeDeltaSimple change={6}>
+                                    {/* <BadgeDeltaSimple change={6}>
                                         from previous time period
-                                    </BadgeDeltaSimple>
+                                    </BadgeDeltaSimple> */}
                                 </Flex>
                             </Flex>
                             <Flex justifyContent="start" className="gap-2">
@@ -269,20 +301,38 @@ export default function ScoreOverview() {
                 </Flex>
 
                 <Flex flexDirection="col" className="gap-6">
-                    {response?.benchmarkSummary
-                        ?.map((i) => i)
-                        .map((item) => {
-                            return (
-                                <ScoreCategoryCard
-                                    title={item.title || ''}
-                                    value={SecurityScore(
-                                        item.controlsSeverityStatus?.total
-                                    )}
-                                    change={0}
-                                    category={item.id || ''}
-                                />
-                            )
-                        })}
+                    {isLoading
+                        ? [1, 2, 3, 4, 5].map((i) => (
+                              <Flex className="gap-6 px-8 py-8 bg-white rounded-xl shadow-sm hover:shadow-md hover:cursor-pointer">
+                                  <Flex className="relative w-fit">
+                                      <ProgressCircle value={0} size="md">
+                                          <div className="animate-pulse h-3 w-8 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                      </ProgressCircle>
+                                  </Flex>
+
+                                  <Flex
+                                      alignItems="start"
+                                      flexDirection="col"
+                                      className="gap-1"
+                                  >
+                                      <div className="animate-pulse h-3 w-56 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                  </Flex>
+                              </Flex>
+                          ))
+                        : response?.benchmarkSummary
+                              ?.map((i) => i)
+                              .map((item) => {
+                                  return (
+                                      <ScoreCategoryCard
+                                          title={item.title || ''}
+                                          value={SecurityScore(
+                                              item.controlsSeverityStatus?.total
+                                          )}
+                                          change={0}
+                                          category={item.id || ''}
+                                      />
+                                  )
+                              })}
                 </Flex>
             </Flex>
         </>

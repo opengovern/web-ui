@@ -57,9 +57,9 @@ export default function ScoreCategoryCard({
 
             <Flex alignItems="start" flexDirection="col" className="gap-1">
                 <Title className="text-xl">{title}</Title>
-                <BadgeDeltaSimple change={change}>
+                {/* <BadgeDeltaSimple change={change}>
                     from previous time period
-                </BadgeDeltaSimple>
+                </BadgeDeltaSimple> */}
             </Flex>
             <Icon size="md" icon={ChevronRightIcon} />
         </Flex>
