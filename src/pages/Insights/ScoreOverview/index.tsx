@@ -1,102 +1,103 @@
 import {
-    Button,
     Flex,
     Text,
     Title,
     Subtitle,
     Metric,
     Badge,
-    BadgeDelta,
     ProgressCircle,
 } from '@tremor/react'
-import {
-    CubeIcon,
-    CurrencyDollarIcon,
-    ShieldCheckIcon,
-    CpuChipIcon,
-} from '@heroicons/react/24/outline'
 import ScoreCategoryCard from '../../../components/Cards/ScoreCategoryCard'
-import { Speed } from '../../../icons/icons'
 import TopHeader from '../../../components/Layout/Header'
 import BadgeDeltaSimple from '../../../components/ChangeDeltaSimple'
+import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult } from '../../../api/api'
 
-const data = [
+const severityColor = [
     {
-        title: 'Security',
-        value: 31,
-        category: 'security',
-        change: 23,
-        icon: ShieldCheckIcon,
-    },
-    {
-        title: 'Cost Optimization',
-        value: 65,
-        category: 'costoptimization',
-        change: -23,
-        icon: CurrencyDollarIcon,
-    },
-    {
-        title: 'Operational Excellence',
-        value: 17,
-        category: 'operationalexcellence',
-        change: 23,
-        icon: CpuChipIcon,
-    },
-    {
-        title: 'Reliability',
-        value: 81,
-        category: 'reliability',
-        change: -23,
-
-        icon: CubeIcon,
-    },
-
-    {
-        title: 'Efficiency',
-        value: 91,
-        category: 'efficiency',
-        change: 23,
-        icon: Speed,
-    },
-]
-
-const checkDetails = [
-    {
-        level: 'Critical Risk',
-        count: 89,
+        name: 'critical',
+        title: 'Critical Risk',
         color: 'rose',
     },
     {
-        level: 'High Risk',
-        count: 45,
+        name: 'high',
+        title: 'High Risk',
         color: 'orange',
     },
     {
-        level: 'Medium Risk',
-        count: 23,
+        name: 'medium',
+        title: 'Medium Risk',
         color: 'amber',
     },
     {
-        level: 'Low Risk',
-        count: 19,
+        name: 'low',
+        title: 'Low Risk',
         color: 'yellow',
     },
     {
-        level: 'None',
-        count: 4,
+        name: 'none',
+        title: 'None',
         color: 'gray',
     },
     {
-        level: 'Passed',
-        count: 45,
+        name: 'passed',
+        title: 'Passed',
         color: 'emerald',
     },
 ]
 
+function SecurityScore(
+    v:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
+        | undefined
+) {
+    if ((v?.total || 0) === 0) {
+        return 0
+    }
+    return ((v?.passed || 0) / (v?.total || 0)) * 100
+}
+
 export default function ScoreOverview() {
+    const { response } = useComplianceApiV1BenchmarksSummaryList({
+        tag: ['type=SCORE'],
+    })
+    const controlTotal =
+        response?.benchmarkSummary?.map(
+            (i) => i.controlsSeverityStatus?.total
+        ) || []
+    const total = controlTotal
+        .map((i) => i?.total || 0)
+        .reduce((prev, curr) => prev + curr, 0)
+    const passed = controlTotal
+        .map((i) => i?.passed || 0)
+        .reduce((prev, curr) => prev + curr, 0)
+
+    const securityScore = (passed / total) * 100
+
+    const severityMap = response?.benchmarkSummary
+        ?.map((v) => v.checks)
+        .reduce(
+            (prev, curr) => {
+                return {
+                    critical: prev.critical + (curr?.criticalCount || 0),
+                    high: prev.high + (curr?.highCount || 0),
+                    medium: prev.medium + (curr?.mediumCount || 0),
+                    low: prev.low + (curr?.lowCount || 0),
+                    none: prev.none + (curr?.noneCount || 0),
+                }
+            },
+            {
+                critical: 0,
+                high: 0,
+                medium: 0,
+                low: 0,
+                none: 0,
+            }
+        )
+
     return (
         <>
-            <TopHeader datePicker filter />
+            <TopHeader />
 
             <Flex alignItems="start" className="gap-20">
                 <Flex flexDirection="col" className="h-full">
@@ -110,7 +111,7 @@ export default function ScoreOverview() {
                             alignItems="start"
                             className="gap-3"
                         >
-                            <Metric>What is SCORE ?</Metric>
+                            <Metric>What is SCORE?</Metric>
                             <Subtitle className="text-gray-500">
                                 SCORE is a comprehensive evaluation suite that
                                 assesses your infrastructure against leading
@@ -126,12 +127,12 @@ export default function ScoreOverview() {
                             className="gap-2"
                         >
                             <ProgressCircle
-                                value={81}
+                                value={securityScore}
                                 size="xl"
                                 className="relative"
                             >
                                 <Flex flexDirection="col">
-                                    <Title>{81}%</Title>
+                                    <Title>{securityScore.toFixed(1)}%</Title>
                                     <Text>Compliant</Text>
                                 </Flex>
                             </ProgressCircle>
@@ -146,11 +147,26 @@ export default function ScoreOverview() {
                             className="gap-8"
                         >
                             <Flex justifyContent="start">
-                                <Title className="mr-1.5 font-bold">104</Title>
-                                insight evaluations performed across{' '}
+                                <Title className="mr-1.5 font-bold">
+                                    {response?.benchmarkSummary
+                                        ?.map(
+                                            (i) =>
+                                                (i?.conformanceStatusSummary
+                                                    ?.passed || 0) +
+                                                (i?.conformanceStatusSummary
+                                                    ?.failed || 0)
+                                        )
+                                        .reduce((prev, curr) => prev + curr, 0)}
+                                </Title>
+                                insight evaluations performed across
                                 <Title className="mx-1.5 font-bold">
-                                    231
-                                </Title>{' '}
+                                    {response?.benchmarkSummary
+                                        ?.map(
+                                            (i) =>
+                                                i?.connectionsStatus?.total || 0
+                                        )
+                                        .reduce((prev, curr) => prev + curr, 0)}
+                                </Title>
                                 cloud accounts
                             </Flex>
                             <Flex>
@@ -165,7 +181,19 @@ export default function ScoreOverview() {
                                         alignItems="baseline"
                                         className="gap-3"
                                     >
-                                        <Metric color="rose">129</Metric>
+                                        <Metric color="rose">
+                                            {response?.benchmarkSummary
+                                                ?.map(
+                                                    (i) =>
+                                                        i
+                                                            ?.conformanceStatusSummary
+                                                            ?.failed || 0
+                                                )
+                                                .reduce(
+                                                    (prev, curr) => prev + curr,
+                                                    0
+                                                )}
+                                        </Metric>
 
                                         <Subtitle className="text-gray-500 mt-2">
                                             Failed Checks
@@ -187,7 +215,19 @@ export default function ScoreOverview() {
                                         alignItems="baseline"
                                         className="gap-3"
                                     >
-                                        <Metric color="emerald">32</Metric>
+                                        <Metric color="emerald">
+                                            {response?.benchmarkSummary
+                                                ?.map(
+                                                    (i) =>
+                                                        i
+                                                            ?.conformanceStatusSummary
+                                                            ?.passed || 0
+                                                )
+                                                .reduce(
+                                                    (prev, curr) => prev + curr,
+                                                    0
+                                                )}
+                                        </Metric>
                                         <Subtitle className="text-gray-500">
                                             Passed Checks
                                         </Subtitle>
@@ -199,31 +239,50 @@ export default function ScoreOverview() {
                                 </Flex>
                             </Flex>
                             <Flex justifyContent="start" className="gap-2">
-                                {checkDetails.map((item) => (
-                                    <Flex flexDirection="col" className="gap-2">
-                                        <Badge
-                                            color={item.color}
-                                            className="w-full"
+                                {Object.entries(severityMap || {}).map(
+                                    (item) => (
+                                        <Flex
+                                            flexDirection="col"
+                                            className="gap-2"
                                         >
-                                            {item.count}
-                                        </Badge>
-                                        <Text>{item.level}</Text>
-                                    </Flex>
-                                ))}
+                                            <Badge
+                                                color={
+                                                    severityColor
+                                                        .filter(
+                                                            (v) =>
+                                                                v.name ===
+                                                                item[0]
+                                                        )
+                                                        .at(0)?.color
+                                                }
+                                                className="w-full"
+                                            >
+                                                {item[1]}
+                                            </Badge>
+                                            <Text>{item[0]}</Text>
+                                        </Flex>
+                                    )
+                                )}
                             </Flex>
                         </Flex>
                     </Flex>
                 </Flex>
 
                 <Flex flexDirection="col" className="gap-6">
-                    {data.map((item) => (
-                        <ScoreCategoryCard
-                            title={item.title}
-                            value={item.value}
-                            change={item.change}
-                            category={item.category}
-                        />
-                    ))}
+                    {response?.benchmarkSummary
+                        ?.map((i) => i)
+                        .map((item) => {
+                            return (
+                                <ScoreCategoryCard
+                                    title={item.title || ''}
+                                    value={SecurityScore(
+                                        item.controlsSeverityStatus?.total
+                                    )}
+                                    change={0}
+                                    category={item.id || ''}
+                                />
+                            )
+                        })}
                 </Flex>
             </Flex>
         </>

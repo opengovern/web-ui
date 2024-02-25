@@ -46,14 +46,12 @@ export default function ScoreCategoryCard({
 
     return (
         <Flex
-            onClick={() =>
-                navigate(`/${workspace}/insights?category=${category}`)
-            }
+            onClick={() => navigate(`${category}`)}
             className="gap-6 px-8 py-8 bg-white rounded-xl shadow-sm hover:shadow-md hover:cursor-pointer"
         >
             <Flex className="relative w-fit">
                 <ProgressCircle color={color} value={value} size="md">
-                    <Subtitle>{value}%</Subtitle>
+                    <Subtitle>{value.toFixed(1)}%</Subtitle>
                 </ProgressCircle>
             </Flex>
 

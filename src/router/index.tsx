@@ -17,8 +17,6 @@ import Query from '../pages/Query'
 import Single from '../pages/Assets/Single'
 import SingleSpend from '../pages/Spend/Single'
 import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
-import InsightDetails from '../pages/Insights/Details'
-import InsightList from '../pages/Insights/InsightList'
 import Rules from '../pages/Automation/Rules'
 import Alerts from '../pages/Automation/Alerts'
 import SingleComplianceConnection from '../pages/Governance/Compliance/BenchmarkSummary/SingleConnection'
@@ -37,6 +35,8 @@ import RequestDemo from '../pages/RequestDemo'
 import AssetAccounts from '../pages/Assets/Account'
 import AssetMetrics from '../pages/Assets/Metric'
 import ScoreOverview from '../pages/Insights/ScoreOverview'
+import ScoreCategory from '../pages/Insights/ScoreCategory'
+import ScoreDetails from '../pages/Insights/Details'
 
 const authRoutes = [
     {
@@ -186,19 +186,19 @@ const authRoutes = [
         component: SingleSpend,
     },
     {
-        key: 'insights',
-        path: '/:ws/insights',
-        component: InsightList,
-    },
-    {
-        key: 'insight detail',
-        path: '/:ws/insights/:id',
-        component: InsightDetails,
-    },
-    {
         key: 'score',
         path: '/:ws/score',
         component: ScoreOverview,
+    },
+    {
+        key: 'score category',
+        path: '/:ws/score/:category',
+        component: ScoreCategory,
+    },
+    {
+        key: 'score details',
+        path: '/:ws/score/:category/:id',
+        component: ScoreDetails,
     },
     {
         key: 'integrations',
