@@ -125,7 +125,7 @@ const gridOptions: GridOptions = {
     },
 }
 
-export default function InsightDetails() {
+export default function ScoreDetails() {
     const { id, ws } = useParams()
 
     const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
@@ -227,12 +227,8 @@ export default function InsightDetails() {
         <>
             <TopHeader
                 breadCrumb={[
-                    insightDetail
-                        ? insightDetail?.shortTitle
-                        : 'Insight detail',
+                    insightDetail ? insightDetail?.shortTitle : 'Score detail',
                 ]}
-                datePicker
-                filter
             />
             {trendLoading || detailLoading ? (
                 <Flex justifyContent="center" className="mt-56">

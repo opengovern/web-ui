@@ -191,8 +191,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             isPreview: false,
         },
         {
-            name: 'Insights',
-            page: 'insights',
+            name: 'SCORE',
+            page: 'score',
             icon: DocumentChartBarIcon,
             isPreview: true,
         },

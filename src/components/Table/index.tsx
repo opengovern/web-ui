@@ -28,7 +28,14 @@ import { dateDisplay, dateTimeDisplay } from '../../utilities/dateDisplay'
 import Spinner from '../Spinner'
 
 export interface IColumn<TData, TValue> {
-    type: 'string' | 'number' | 'price' | 'date' | 'datetime' | 'connector'
+    type:
+        | 'string'
+        | 'number'
+        | 'price'
+        | 'date'
+        | 'datetime'
+        | 'connector'
+        | 'custom'
     field?: NestedFieldPaths<TData, any>
     width?: number
     cellStyle?: any
@@ -50,6 +57,7 @@ export interface IColumn<TData, TValue> {
     sortable?: boolean
     resizable?: boolean
     flex?: number
+    isBold?: boolean
 }
 
 interface IProps<TData, TValue> {
@@ -69,7 +77,7 @@ interface IProps<TData, TValue> {
     loading?: boolean
     fullWidth?: boolean
     fullHeight?: boolean
-    rowHeight?: 'md' | 'lg'
+    rowHeight?: 'md' | 'lg' | 'xl'
 }
 
 export default function Table<TData = any, TValue = any>({
@@ -158,6 +166,15 @@ export default function Table<TData = any, TValue = any>({
                 v.hide = !visibility.current.get(item.field || '')
             }
 
+            if (item.type === 'string') {
+                v.cellDataType = 'text'
+                v.cellRenderer = (params: ICellRendererParams<TData>) => (
+                    <Flex className={`${item.isBold ? ' text-gray-900' : ''}`}>
+                        {params.value}
+                    </Flex>
+                )
+            }
+
             if (item.type === 'price') {
                 v.filter = 'agNumberColumnFilter'
                 v.cellDataType = 'text'
@@ -226,6 +243,11 @@ export default function Table<TData = any, TValue = any>({
                         '!w-full !h-full justify-center'
                     )
             }
+            v.cellStyle = {
+                display: 'flex',
+                'align-content': 'center',
+            }
+
             return v
         })
     }
@@ -271,7 +293,15 @@ export default function Table<TData = any, TValue = any>({
         suppressCellFocus: true,
         suppressMenuHide: true,
         animateRows: false,
-        getRowHeight: () => (rowHeight === 'md' ? 50 : 64),
+        getRowHeight: () => {
+            if (rowHeight === 'md') {
+                return 50
+            }
+            if (rowHeight === 'lg') {
+                return 64
+            }
+            return 80
+        },
         onGridReady: (e) => {
             if (onGridReady) {
                 onGridReady(e)
