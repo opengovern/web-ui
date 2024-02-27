@@ -11,7 +11,11 @@ import ScoreCategoryCard from '../../../components/Cards/ScoreCategoryCard'
 import TopHeader from '../../../components/Layout/Header'
 import BadgeDeltaSimple from '../../../components/ChangeDeltaSimple'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult } from '../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult,
+    SourceType,
+} from '../../../api/api'
+import { useFilterState } from '../../../utilities/urlstate'
 
 const severityColor = [
     {
@@ -57,14 +61,44 @@ function SecurityScore(
     return ((v?.passed || 0) / (v?.total || 0)) * 100
 }
 
+function fixSort(t: string) {
+    return t
+        .replaceAll('s', 'a')
+        .replaceAll('S', 'a')
+        .replaceAll('c', 'b')
+        .replaceAll('C', 'b')
+        .replaceAll('o', 'c')
+        .replaceAll('O', 'c')
+        .replaceAll('r', 'd')
+        .replaceAll('R', 'd')
+        .replaceAll('E', 'e')
+}
 export default function ScoreOverview() {
-    const { response, isLoading } = useComplianceApiV1BenchmarksSummaryList({
-        tag: ['type=SCORE'],
+    const { value: selectedConnections } = useFilterState()
+
+    const query = {
+        ...{ tag: ['type=SCORE'] },
+        ...(selectedConnections.connections.length > 0 && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(selectedConnections.provider !== SourceType.Nil && {
+            connector: [selectedConnections.provider],
+        }),
+    }
+    const { response, isLoading } =
+        useComplianceApiV1BenchmarksSummaryList(query)
+    const responseSorted = response?.benchmarkSummary?.sort((a, b) => {
+        const aTitle = fixSort(a.title || '')
+        const bTitle = fixSort(b.title || '')
+
+        if (a.title === b.title) {
+            return 0
+        }
+
+        return aTitle < bTitle ? -1 : 1
     })
     const controlTotal =
-        response?.benchmarkSummary?.map(
-            (i) => i.controlsSeverityStatus?.total
-        ) || []
+        responseSorted?.map((i) => i.controlsSeverityStatus?.total) || []
     const total = controlTotal
         .map((i) => i?.total || 0)
         .reduce((prev, curr) => prev + curr, 0)
@@ -74,7 +108,7 @@ export default function ScoreOverview() {
 
     const securityScore = (passed / total) * 100
 
-    const severityMap = response?.benchmarkSummary
+    const severityMap = responseSorted
         ?.map((v) => v.checks)
         .reduce(
             (prev, curr) => {
@@ -97,7 +131,7 @@ export default function ScoreOverview() {
 
     return (
         <>
-            <TopHeader />
+            <TopHeader filter />
 
             <Flex alignItems="start" className="gap-20">
                 <Flex flexDirection="col" className="h-full">
@@ -158,7 +192,7 @@ export default function ScoreOverview() {
                                     {isLoading ? (
                                         <div className="animate-pulse h-3 w-8 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
                                     ) : (
-                                        response?.benchmarkSummary
+                                        responseSorted
                                             ?.map(
                                                 (i) =>
                                                     (i?.conformanceStatusSummary
@@ -177,7 +211,7 @@ export default function ScoreOverview() {
                                     {isLoading ? (
                                         <div className="animate-pulse h-3 w-8 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
                                     ) : (
-                                        response?.benchmarkSummary
+                                        responseSorted
                                             ?.map(
                                                 (i) =>
                                                     i?.connectionsStatus
@@ -207,7 +241,7 @@ export default function ScoreOverview() {
                                             {isLoading ? (
                                                 <div className="animate-pulse h-3 w-16 my-0 bg-slate-200 dark:bg-slate-700 rounded" />
                                             ) : (
-                                                response?.benchmarkSummary
+                                                responseSorted
                                                     ?.map(
                                                         (i) =>
                                                             i
@@ -246,7 +280,7 @@ export default function ScoreOverview() {
                                             {isLoading ? (
                                                 <div className="animate-pulse h-3 w-16 my-0 bg-slate-200 dark:bg-slate-700 rounded" />
                                             ) : (
-                                                response?.benchmarkSummary
+                                                responseSorted
                                                     ?.map(
                                                         (i) =>
                                                             i
@@ -319,7 +353,7 @@ export default function ScoreOverview() {
                                   </Flex>
                               </Flex>
                           ))
-                        : response?.benchmarkSummary
+                        : responseSorted
                               ?.map((i) => i)
                               .map((item) => {
                                   return (

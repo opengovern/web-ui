@@ -73,6 +73,7 @@ export default function ScoreDetails() {
                 breadCrumb={[
                     !isLoading ? controlDetail?.control?.title : 'Score detail',
                 ]}
+                filter
             />
             {isLoading ? (
                 <Flex justifyContent="center" className="mt-56">
@@ -159,9 +160,11 @@ export default function ScoreDetails() {
                                 </Badge>
                                 <Badge icon={ClockIcon} color="gray">
                                     Last updated:{' '}
-                                    {dateTimeDisplay(
-                                        controlDetail?.evaluatedAt
-                                    )}
+                                    {(controlDetail?.evaluatedAt || 0) <= 0
+                                        ? 'Never'
+                                        : dateTimeDisplay(
+                                              controlDetail?.evaluatedAt
+                                          )}
                                 </Badge>
                             </Flex>
                         </Flex>

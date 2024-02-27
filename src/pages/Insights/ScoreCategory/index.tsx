@@ -28,7 +28,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useComplianceApiV1BenchmarksControlsDetail } from '../../../api/compliance.gen'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../../api/api'
 import TopHeader from '../../../components/Layout/Header'
-import { searchAtom } from '../../../utilities/urlstate'
+import { searchAtom, useFilterState } from '../../../utilities/urlstate'
 import Table, { IColumn } from '../../../components/Table'
 
 const columns: IColumn<
@@ -201,12 +201,15 @@ const options: GridOptions = {
 }
 
 export default function ScoreCategory() {
+    const { value: selectedConnections } = useFilterState()
     const { category } = useParams()
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
 
     const { response, isLoading, error, sendNow } =
-        useComplianceApiV1BenchmarksControlsDetail(category || '')
+        useComplianceApiV1BenchmarksControlsDetail(category || '', {
+            connectionId: selectedConnections.connections,
+        })
 
     const navigateToInsightsDetails = (id: string) => {
         navigate(`${id}?${searchParams}`)
@@ -214,7 +217,7 @@ export default function ScoreCategory() {
 
     return (
         <>
-            <TopHeader />
+            <TopHeader filter />
 
             <Flex alignItems="start" className="gap-4">
                 {error === undefined ? (
