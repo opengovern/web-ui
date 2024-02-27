@@ -258,7 +258,9 @@ export default function ScoreDetails() {
                         )}
 
                         <SummaryCard
-                            title="Virtual Networks (VPC’s)"
+                            title={
+                                controlDetail?.resourceType?.resource_name || ''
+                            }
                             metric={controlDetail?.totalResourcesCount}
                         />
                         <SummaryCard
