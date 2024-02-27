@@ -48,7 +48,7 @@ const columns: IColumn<
                 flexDirection="col"
                 alignItems="start"
                 justifyContent="center"
-                className="gap-2"
+                className="gap-2 h-full"
             >
                 <Text className="text-gray-800 mb-0.5 font-bold">
                     {params.value}
