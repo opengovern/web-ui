@@ -194,7 +194,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             name: 'SCORE',
             page: 'score',
             icon: DocumentChartBarIcon,
-            isPreview: true,
+            isPreview: false,
         },
         {
             name: 'Query',

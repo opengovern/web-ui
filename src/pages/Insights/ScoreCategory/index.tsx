@@ -222,7 +222,6 @@ export default function ScoreCategory() {
                         <TabGroup className="mb-6">
                             <TabList>
                                 <Tab>SCORE Insights</Tab>
-                                <Tab>Service Insights</Tab>
                             </TabList>
                         </TabGroup>
                         <Table
