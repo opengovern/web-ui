@@ -346,7 +346,7 @@ export enum GithubComKaytuIoKaytuEnginePkgAuthApiInviteStatus {
 
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest {
     /** Name of the role */
-    connectionIDs: string[]
+    connectionIDs?: string[]
     /**
      * Name of the role
      * @example "admin"
@@ -1294,6 +1294,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
     id?: string
     /** @example ["null"] */
     listOfTables?: string[]
+    parameters?: GithubComKaytuIoKaytuEnginePkgComplianceApiQueryParameter[]
     /** @example "null" */
     primaryTable?: string
     /**
@@ -1307,6 +1308,13 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
     queryToExecute?: string
     /** @example "2023-06-16T14:58:08.759554Z" */
     updatedAt?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQueryParameter {
+    /** @example "key" */
+    key?: string
+    /** @example true */
+    required?: boolean
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding {
@@ -1938,9 +1946,22 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow {
     dimensionName?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgMetadataApiListQueryParametersResponse {
+    queryParameters?: GithubComKaytuIoKaytuEnginePkgMetadataApiQueryParameter[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgMetadataApiQueryParameter {
+    key?: string
+    value?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest {
     key?: string
     value?: any
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgMetadataApiSetQueryParameterRequest {
+    queryParameters?: GithubComKaytuIoKaytuEnginePkgMetadataApiQueryParameter[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata {
@@ -6170,6 +6191,49 @@ export class Api<
                 method: 'GET',
                 secure: true,
                 format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Returns the list of query parameters
+         *
+         * @tags metadata
+         * @name ApiV1QueryParameterList
+         * @summary List query parameters
+         * @request GET:/metadata/api/v1/query_parameter
+         * @secure
+         */
+        apiV1QueryParameterList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgMetadataApiListQueryParametersResponse,
+                any
+            >({
+                path: `/metadata/api/v1/query_parameter`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Sets the query parameters from the request body
+         *
+         * @tags metadata
+         * @name ApiV1QueryParameterCreate
+         * @summary Set query parameter
+         * @request POST:/metadata/api/v1/query_parameter
+         * @secure
+         */
+        apiV1QueryParameterCreate: (
+            req: GithubComKaytuIoKaytuEnginePkgMetadataApiSetQueryParameterRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/metadata/api/v1/query_parameter`,
+                method: 'POST',
+                body: req,
+                secure: true,
+                type: ContentType.Json,
                 ...params,
             }),
     }

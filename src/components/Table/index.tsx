@@ -157,6 +157,7 @@ export default function Table<TData = any, TValue = any>({
                 pivot: item.pivot || false,
                 valueFormatter: item.valueFormatter,
                 comparator: item.comparator,
+                cellStyle: item.cellStyle,
             }
 
             if (
@@ -165,6 +166,11 @@ export default function Table<TData = any, TValue = any>({
             ) {
                 v.hide = !visibility.current.get(item.field || '')
             }
+
+            // v.cellStyle = {
+            //     display: 'flex',
+            //     'align-content': 'center',
+            // }
 
             if (item.type === 'string') {
                 v.cellDataType = 'text'
@@ -247,11 +253,6 @@ export default function Table<TData = any, TValue = any>({
                         '!w-full !h-full justify-center'
                     )
             }
-            v.cellStyle = {
-                display: 'flex',
-                'align-content': 'center',
-            }
-
             return v
         })
     }

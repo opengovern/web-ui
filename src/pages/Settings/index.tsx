@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Flex } from '@tremor/react'
-import { BugAntIcon, FolderIcon, UserIcon } from '@heroicons/react/24/outline'
+import {
+    AdjustmentsVerticalIcon,
+    BugAntIcon,
+    FolderIcon,
+    UserIcon,
+} from '@heroicons/react/24/outline'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
 import { useAtomValue } from 'jotai'
@@ -16,6 +21,7 @@ import SettingsJobs from './Jobs'
 import SettingsCustomization from './Customization'
 import { Auth0AppMetadata } from '../../types/appMetadata'
 import TopHeader from '../../components/Layout/Header'
+import SettingsParameters from './Parameters'
 
 const navigation = [
     {
@@ -70,6 +76,18 @@ const navigation = [
         ],
     },
     {
+        name: 'Metadata',
+        icon: AdjustmentsVerticalIcon,
+        role: ['admin', 'editor', 'viewer'],
+        children: [
+            {
+                name: 'Parameters',
+                page: 'parameters',
+                role: ['admin'],
+            },
+        ],
+    },
+    {
         name: 'Personal',
         icon: UserIcon,
         role: ['admin', 'editor', 'viewer'],
@@ -117,6 +135,9 @@ export default function Settings() {
                 break
             case 'jobs':
                 setSelectedTab(<SettingsJobs />)
+                break
+            case 'parameters':
+                setSelectedTab(<SettingsParameters />)
                 break
             case 'customization':
                 setSelectedTab(<SettingsCustomization />)
