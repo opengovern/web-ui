@@ -1,3 +1,4 @@
+import { ChartBarIcon } from '@heroicons/react/24/outline'
 import { Flex, Text } from '@tremor/react'
 
 const easeOfSolution = (easiness: 'easy' | 'medium' | 'hard') => {
@@ -48,12 +49,14 @@ const easeOfSolution = (easiness: 'easy' | 'medium' | 'hard') => {
 }
 
 interface IProbs {
+    isEmpty: boolean
     scalability: 'easy' | 'medium' | 'hard'
     complexity: 'easy' | 'medium' | 'hard'
     disruptivity: 'easy' | 'medium' | 'hard'
 }
 
 export default function EaseOfSolutionChart({
+    isEmpty,
     scalability,
     complexity,
     disruptivity,
@@ -86,9 +89,20 @@ export default function EaseOfSolutionChart({
                         alignItems="center"
                         className="w-full h-full gap-3 pb-3 pl-3 border-b border-l"
                     >
-                        {easeOfSolution(scalability)}
-                        {easeOfSolution(complexity)}
-                        {easeOfSolution(disruptivity)}
+                        {isEmpty ? (
+                            <div className="text-center">
+                                <ChartBarIcon className="mx-auto h-7 w-7 text-tremor-content-subtle dark:text-dark-tremor-content-subtle" />
+                                <p className="mt-2 text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
+                                    No data to show
+                                </p>
+                            </div>
+                        ) : (
+                            <>
+                                {easeOfSolution(scalability)}
+                                {easeOfSolution(complexity)}
+                                {easeOfSolution(disruptivity)}
+                            </>
+                        )}
                     </Flex>
                     <Flex className="gap-3">
                         <Text className="w-full text-center text-gray-900">

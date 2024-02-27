@@ -9,9 +9,12 @@ import {
 } from '../../../utilities/numericDisplay'
 import ChangeDelta from '../../ChangeDelta'
 import { searchAtom } from '../../../utilities/urlstate'
+import { SourceType } from '../../../api/api'
+import { getConnectorIcon } from '../ConnectorCard'
 
 type IProps = {
     title: string
+    connector?: SourceType
     metric: string | number | any | undefined
     metricPrev?: string | number | undefined
     secondLine?: string
@@ -33,6 +36,7 @@ type IProps = {
 
 export default function SummaryCard({
     title,
+    connector,
     metric,
     metricPrev,
     secondLine,
@@ -159,6 +163,7 @@ export default function SummaryCard({
             } ${blueBorder ? 'border-l-kaytu-500 border-l-2' : ''}`}
         >
             <Flex justifyContent="start" className="mb-1.5">
+                {connector && getConnectorIcon(connector, '!h-1 mr-2')}
                 <Text className="font-semibold">{title}</Text>
                 {!border && (url || onClick) && (
                     <ChevronRightIcon className="ml-1 h-4 text-kaytu-500" />
