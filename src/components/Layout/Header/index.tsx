@@ -45,6 +45,12 @@ export default function TopHeader({
         if (url[2] === 'score') {
             return 'SCORE'
         }
+        if (url[2] === 'spend-metrics') {
+            return 'Services'
+        }
+        if (url[2] === 'asset-metrics') {
+            return 'Inventory'
+        }
         return url[2] ? kebabCaseToLabel(url[2]) : 'Workspaces'
     }
 
