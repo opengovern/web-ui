@@ -58,7 +58,7 @@ export default function ScoreDetails() {
     const [explanationModalData, setExplanationModalData] = useState('')
     const setNotification = useSetAtom(notificationAtom)
     const setQuery = useSetAtom(queryAtom)
-    const [hideTabs, setHideTabs] = useState(true)
+    const [hideTabs, setHideTabs] = useState(false)
 
     const { response: controlDetail, isLoading } =
         useComplianceApiV1ControlsSummaryDetail(String(id), {
@@ -550,7 +550,7 @@ export default function ScoreDetails() {
                         </Flex>
                     </Card>
 
-                    <Flex
+                    {/* <Flex
                         flexDirection="row"
                         justifyContent="center"
                         onClick={() => setHideTabs(!hideTabs)}
@@ -564,7 +564,7 @@ export default function ScoreDetails() {
                         ) : (
                             <ChevronUpIcon className="ml-2 w-4" />
                         )}
-                    </Flex>
+                    </Flex> */}
 
                     {!hideTabs && (
                         <TabGroup>
