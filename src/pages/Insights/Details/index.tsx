@@ -17,12 +17,26 @@ import {
     TabList,
     Text,
     Title,
+    Badge,
+    Metric,
+    Icon,
+    Subtitle,
 } from '@tremor/react'
 import Editor from 'react-simple-code-editor'
 import { highlight, languages } from 'prismjs'
-import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
+import {
+    DocumentDuplicateIcon,
+    DocumentTextIcon,
+    CommandLineIcon,
+    Square2StackIcon,
+    ClockIcon,
+    CodeBracketIcon,
+    Cog8ToothIcon,
+    BookOpenIcon,
+} from '@heroicons/react/24/outline'
 import clipboardCopy from 'clipboard-copy'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
+import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { isDemoAtom, notificationAtom, queryAtom } from '../../../store'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import Table, { IColumn } from '../../../components/Table'
@@ -34,15 +48,15 @@ import {
 } from '../../../api/compliance.gen'
 import Spinner from '../../../components/Spinner'
 import Modal from '../../../components/Modal'
-import SummaryCard from '../../../components/Cards/SummaryCard'
-import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
-import Chart from '../../../components/Chart'
 import TopHeader from '../../../components/Layout/Header'
 import {
     defaultTime,
     useFilterState,
     useUrlDateRangeState,
 } from '../../../utilities/urlstate'
+import MetricCard from '../../../components/Cards/MetricCard'
+import SummaryCard from '../../../components/Cards/SummaryCard'
+import EaseOfSolutionChart from '../../../components/EaseOfSolutionChart'
 
 export const chartData = (inputData: any) => {
     const label = []
@@ -223,6 +237,59 @@ export default function ScoreDetails() {
         )
     }
 
+    const severityBadge = (severity: any) => {
+        const style = {
+            color: '#fff',
+            borderRadius: '8px',
+            width: '64px',
+        }
+        if (severity) {
+            if (severity === 'critical') {
+                return (
+                    <Badge style={{ backgroundColor: '#6E120B', ...style }}>
+                        Critical
+                    </Badge>
+                )
+            }
+            if (severity === 'high') {
+                return (
+                    <Badge style={{ backgroundColor: '#CA2B1D', ...style }}>
+                        High
+                    </Badge>
+                )
+            }
+            if (severity === 'medium') {
+                return (
+                    <Badge style={{ backgroundColor: '#EE9235', ...style }}>
+                        Medium
+                    </Badge>
+                )
+            }
+            if (severity === 'low') {
+                return (
+                    <Badge style={{ backgroundColor: '#F4C744', ...style }}>
+                        Low
+                    </Badge>
+                )
+            }
+            if (severity === 'none') {
+                return (
+                    <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>
+                        None
+                    </Badge>
+                )
+            }
+            return (
+                <Badge style={{ backgroundColor: '#54B584', ...style }}>
+                    Passed
+                </Badge>
+            )
+        }
+        return (
+            <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>None</Badge>
+        )
+    }
+
     return (
         <>
             <TopHeader
@@ -236,31 +303,73 @@ export default function ScoreDetails() {
                 </Flex>
             ) : (
                 <>
-                    <Flex className="mb-6">
-                        <Flex
-                            flexDirection="col"
-                            alignItems="start"
-                            justifyContent="start"
-                            className="max-w-[70%] gap-2"
-                        >
-                            <Title className="font-semibold whitespace-nowrap">
-                                {insightDetail?.shortTitle}
-                            </Title>
-                            <Text>{insightDetail?.description}</Text>
+                    <Flex flexDirection="col" className="mb-8 mt-4 gap-4">
+                        <Flex justifyContent="start" className="gap-4">
+                            <Metric className="font-semibold whitespace-nowrap">
+                                VPC flow logs should be enabled
+                            </Metric>
+                            {severityBadge('medium')}
                         </Flex>
-                        <Button
-                            variant="secondary"
-                            onClick={() =>
-                                setModalData(
-                                    insightDetail?.query?.queryToExecute?.replace(
-                                        '$IS_ALL_CONNECTIONS_QUERY',
-                                        'true'
-                                    ) || ''
-                                )
-                            }
+                        <Flex
+                            justifyContent="start"
+                            alignItems="start"
+                            className="gap-10"
                         >
-                            See query
-                        </Button>
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="gap-6 w-full "
+                            >
+                                <Subtitle className="text-gray-500">
+                                    The VPC flow logs provide detailed records
+                                    for information about the IP traffic going
+                                    to and from network interfaces in your
+                                    Amazon Virtual Private Cloud
+                                </Subtitle>
+
+                                <Flex justifyContent="start" className="gap-4">
+                                    <Button
+                                        icon={DocumentTextIcon}
+                                        variant="light"
+                                    >
+                                        Show Explanation
+                                    </Button>
+                                    <div className="border-l h-4 border-gray-300" />
+                                    <Button
+                                        icon={CommandLineIcon}
+                                        variant="light"
+                                        onClick={() =>
+                                            setModalData(
+                                                insightDetail?.query?.queryToExecute?.replace(
+                                                    '$IS_ALL_CONNECTIONS_QUERY',
+                                                    'true'
+                                                ) || ''
+                                            )
+                                        }
+                                    >
+                                        Show Query
+                                    </Button>
+                                </Flex>
+                            </Flex>
+
+                            <Flex
+                                flexDirection="col"
+                                alignItems="end"
+                                justifyContent="start"
+                                className="w-fit gap-2"
+                            >
+                                <Badge
+                                    icon={Square2StackIcon}
+                                    color="gray"
+                                    className="hover:cursor-pointer"
+                                >
+                                    Control ID : aws_vpc_flow_logs_enabled
+                                </Badge>
+                                <Badge icon={ClockIcon} color="gray">
+                                    Last updated : Feb 25, 2024 10:49 UTC
+                                </Badge>
+                            </Flex>
+                        </Flex>
                     </Flex>
                     <Modal
                         open={!!modalData.length}
@@ -314,63 +423,257 @@ export default function ScoreDetails() {
                             </Flex>
                         </Flex>
                     </Modal>
-                    <Card className="mb-4 gap-4">
-                        <Grid numItems={4} className="w-full gap-4 mb-4">
-                            <SummaryCard
-                                border={false}
-                                title="Total result"
-                                metric={insightDetail?.totalResultValue}
-                                metricPrev={insightDetail?.oldTotalResultValue}
-                                loading={detailLoading}
-                            />
-                            {insightDetail?.result &&
-                                !!insightDetail?.result[0]?.connections
-                                    ?.length && (
-                                    <div className="pl-4 border-l border-l-gray-200">
-                                        <SummaryCard
-                                            border={false}
-                                            title="Results in"
-                                            loading={detailLoading}
-                                            metric={
-                                                insightDetail?.result
-                                                    ? insightDetail?.result[0]
-                                                          ?.connections?.length
-                                                    : 0
-                                            }
-                                            unit="Cloud accounts"
-                                        />
-                                    </div>
-                                )}
-                            <Col numColSpan={2}>
-                                <Flex justifyContent="end" alignItems="start">
-                                    <TabGroup
-                                        index={selectedIndex}
-                                        onIndexChange={setSelectedIndex}
-                                        className="w-fit rounded-lg"
-                                    >
-                                        <TabList variant="solid">
-                                            <Tab value="line">
-                                                <LineChartIcon className="h-5" />
-                                            </Tab>
-                                            <Tab value="bar">
-                                                <BarChartIcon className="h-5" />
-                                            </Tab>
-                                        </TabList>
-                                    </TabGroup>
-                                </Flex>
-                            </Col>
-                        </Grid>
-                        <Flex justifyContent="end" className="gap-2.5">
-                            <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
-                            <Text>Insight count</Text>
-                        </Flex>
-                        <Chart
-                            labels={chartData(insightTrend).label}
-                            chartData={chartData(insightTrend).data}
-                            chartType={selectedChart}
-                            chartAggregation="trend"
+                    <Flex justifyContent="start" className="w-full mb-8 gap-6">
+                        <SummaryCard
+                            title="Estimated Saving Opportunities "
+                            metric={1200}
+                            isPrice
                         />
+                        <SummaryCard
+                            title="Virtual Networks (VPC’s)"
+                            metric={96}
+                        />
+                        <SummaryCard title="AWS Accounts" metric={7} />
+                    </Flex>
+
+                    <Card className="mb-8 p-8">
+                        <Flex
+                            justifyContent="start"
+                            alignItems="start"
+                            className="gap-12"
+                        >
+                            <Flex
+                                className="w-1/3 h-full"
+                                justifyContent="start"
+                            >
+                                <EaseOfSolutionChart
+                                    scalability="medium"
+                                    complexity="hard"
+                                    disruptivity="easy"
+                                />
+                            </Flex>
+
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                justifyContent="start"
+                                className="h-full w-2/3"
+                            >
+                                {/*  <DrawerPanel
+                                    title={docTitle}
+                                    open={doc.length > 0}
+                                    onClose={() => setDoc('')}
+                                >
+                                    <MarkdownPreview
+                                        source={doc}
+                                        className="!bg-transparent"
+                                        wrapperElement={{
+                                            'data-color-mode': 'light',
+                                        }}
+                                        rehypeRewrite={(
+                                            node,
+                                            index,
+                                            parent
+                                        ) => {
+                                            if (
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                node.tagName === 'a' &&
+                                                parent &&
+                                                /^h(1|2|3|4|5|6)/.test(
+                                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                    // @ts-ignore
+                                                    parent.tagName
+                                                )
+                                            ) {
+                                                // eslint-disable-next-line no-param-reassign
+                                                parent.children =
+                                                    parent.children.slice(1)
+                                            }
+                                        }}
+                                    />
+                                </DrawerPanel> */}
+                                <Text className="font-bold mb-4 text-gray-400">
+                                    Remediation
+                                </Text>
+                                <Flex className="rounded-lg border border-gray-100 relative">
+                                    <Grid
+                                        numItems={2}
+                                        className="w-full h-full"
+                                    >
+                                        <Flex
+                                            className="cursor-pointer px-6 py-4 h-full gap-3 "
+                                            flexDirection="col"
+                                            justifyContent="start"
+                                            alignItems="start"
+
+                                            /* onClick={() => {
+                                            if (
+                                                controlDetail?.control
+                                                    ?.manualRemediation &&
+                                                controlDetail?.control
+                                                    ?.manualRemediation.length
+                                            ) {
+                                                setDoc(
+                                                    controlDetail?.control
+                                                        ?.manualRemediation
+                                                )
+                                                setDocTitle(
+                                                    'Manual remediation'
+                                                )
+                                            }
+                                        }} */
+                                        >
+                                            <Flex>
+                                                <Flex
+                                                    justifyContent="start"
+                                                    className="w-fit gap-3"
+                                                >
+                                                    <Icon
+                                                        icon={BookOpenIcon}
+                                                        className="p-0 text-gray-900"
+                                                    />
+                                                    <Title className="font-semibold">
+                                                        Manual
+                                                    </Title>
+                                                </Flex>
+                                                <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                            </Flex>
+                                            <Text>
+                                                Step by Step Guided solution to
+                                                resolve instances of
+                                                non-compliance
+                                            </Text>
+                                        </Flex>
+                                        <Flex
+                                            className="cursor-pointer px-6 py-4 h-full gap-3 "
+                                            flexDirection="col"
+                                            justifyContent="start"
+                                            alignItems="start"
+
+                                            /* onClick={() => {
+                                            if (
+                                                controlDetail?.control
+                                                    ?.cliRemediation &&
+                                                controlDetail?.control
+                                                    ?.cliRemediation.length
+                                            ) {
+                                                setDoc(
+                                                    controlDetail?.control
+                                                        ?.cliRemediation
+                                                )
+                                                setDocTitle(
+                                                    'Command line (CLI) remediation'
+                                                )
+                                            }
+                                        }} */
+                                        >
+                                            <Flex>
+                                                <Flex
+                                                    justifyContent="start"
+                                                    className="w-fit gap-3"
+                                                >
+                                                    <Icon
+                                                        icon={CommandLineIcon}
+                                                        className="p-0 text-gray-900"
+                                                    />
+                                                    <Title className="font-semibold">
+                                                        Command line (CLI)
+                                                    </Title>
+                                                </Flex>
+                                                <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                            </Flex>
+                                            <Text>
+                                                Guided steps to resolve the
+                                                issue utilizing CLI
+                                            </Text>
+                                        </Flex>
+                                        <Flex
+                                            className="cursor-pointer px-6 py-4 h-full gap-3 "
+                                            flexDirection="col"
+                                            justifyContent="start"
+                                            alignItems="start"
+
+                                            /* onClick={() => {
+                                            if (
+                                                controlDetail?.control
+                                                    ?.guardrailRemediation &&
+                                                controlDetail?.control
+                                                    ?.guardrailRemediation
+                                                    .length
+                                            ) {
+                                                setDoc(
+                                                    controlDetail?.control
+                                                        ?.guardrailRemediation
+                                                )
+                                                setDocTitle(
+                                                    'Guard rails remediation'
+                                                )
+                                            }
+                                        }} */
+                                        >
+                                            <Flex>
+                                                <Flex
+                                                    justifyContent="start"
+                                                    className="w-fit gap-3"
+                                                >
+                                                    <Icon
+                                                        icon={Cog8ToothIcon}
+                                                        className="p-0 text-gray-900"
+                                                    />
+                                                    <Title className="font-semibold">
+                                                        Guard rails
+                                                    </Title>
+                                                </Flex>
+                                                <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                            </Flex>
+                                            <Text>
+                                                Resolve and ensure compliance,
+                                                at scale utilizing solutions
+                                                where possible
+                                            </Text>
+                                        </Flex>
+                                        <Flex
+                                            className={
+                                                /* controlDetail?.control
+                                                ?.programmaticRemediation &&
+                                            controlDetail?.control
+                                                ?.programmaticRemediation.length
+                                                ? 'cursor-pointer'
+                                                : */ 'grayscale opacity-70 px-6 py-4 h-full gap-3'
+                                            }
+                                            flexDirection="col"
+                                            justifyContent="start"
+                                            alignItems="start"
+                                        >
+                                            <Flex>
+                                                <Flex
+                                                    justifyContent="start"
+                                                    className="w-fit gap-3"
+                                                >
+                                                    <Icon
+                                                        icon={CodeBracketIcon}
+                                                        className="p-0 text-gray-900"
+                                                    />
+                                                    <Title className="font-semibold">
+                                                        Programmatic
+                                                    </Title>
+                                                </Flex>
+                                                <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                            </Flex>
+                                            <Text>
+                                                Scripts that help you resolve
+                                                the issue, at scale
+                                            </Text>
+                                        </Flex>
+                                    </Grid>
+                                    <div className="border-t border-gray-100 w-full absolute top-1/2" />
+                                    <div className="border-l border-gray-100 h-full absolute left-1/2" />
+                                </Flex>
+                            </Flex>
+                        </Flex>
                     </Card>
+
                     <Card>
                         {detailsDate !== '' && (
                             <Flex
