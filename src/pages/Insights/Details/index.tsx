@@ -121,12 +121,13 @@ export default function ScoreDetails() {
                                             (controlDetail?.control
                                                 ?.explanation || '') === ''
                                         }
-                                        onClick={() =>
-                                            setExplanationModalData(
+                                        onClick={() => {
+                                            setDoc(
                                                 controlDetail?.control
                                                     ?.explanation || ''
                                             )
-                                        }
+                                            setDocTitle('Detailed Explanation')
+                                        }}
                                     >
                                         Show Explanation
                                     </Button>
@@ -223,35 +224,6 @@ export default function ScoreDetails() {
                         </Flex>
                     </Modal>
 
-                    <Modal
-                        open={!!explanationModalData.length}
-                        onClose={() => setExplanationModalData('')}
-                    >
-                        <Title className="font-semibold">Explanation</Title>
-                        <Card className="my-4">
-                            <Editor
-                                onValueChange={() => console.log('')}
-                                highlight={(text) =>
-                                    highlight(text, languages.sql, 'sql')
-                                }
-                                value={modalData}
-                                className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
-                                style={{
-                                    minHeight: '200px',
-                                }}
-                                placeholder="-- write your SQL query here"
-                            />
-                        </Card>
-                        <Flex>
-                            <Flex className="w-fit gap-4">
-                                <Button
-                                    onClick={() => setExplanationModalData('')}
-                                >
-                                    Close
-                                </Button>
-                            </Flex>
-                        </Flex>
-                    </Modal>
                     <Flex justifyContent="start" className="w-full mb-8 gap-6">
                         {costSaving !== 0 && (
                             <SummaryCard

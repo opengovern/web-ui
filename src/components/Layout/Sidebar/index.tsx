@@ -124,7 +124,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     error: assetCountErr,
                 },
                 {
-                    name: 'Metrics',
+                    name: 'Inventory',
                     page: 'asset-metrics',
                     isPreview: false,
                     isLoading: assetsIsLoading,
@@ -156,7 +156,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     error: spendCountErr,
                 },
                 {
-                    name: 'Metrics',
+                    name: 'Services',
                     page: 'spend-metrics',
                     isPreview: false,
                     isLoading: spendCountIsLoading,
