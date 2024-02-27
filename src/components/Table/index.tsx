@@ -168,11 +168,15 @@ export default function Table<TData = any, TValue = any>({
 
             if (item.type === 'string') {
                 v.cellDataType = 'text'
-                v.cellRenderer = (params: ICellRendererParams<TData>) => (
-                    <Flex className={`${item.isBold ? ' text-gray-900' : ''}`}>
-                        {params.value}
-                    </Flex>
-                )
+                if (item.cellRenderer === undefined) {
+                    v.cellRenderer = (params: ICellRendererParams<TData>) => (
+                        <Flex
+                            className={`${item.isBold ? ' text-gray-900' : ''}`}
+                        >
+                            {params.value}
+                        </Flex>
+                    )
+                }
             }
 
             if (item.type === 'price') {
