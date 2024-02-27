@@ -32,6 +32,7 @@ type IProps = {
     isString?: boolean
     blur?: boolean
     blurSecondLine?: boolean
+    cardClickable?: boolean
 }
 
 export default function SummaryCard({
@@ -54,6 +55,7 @@ export default function SummaryCard({
     onClick,
     blur,
     blurSecondLine,
+    cardClickable,
 }: IProps) {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
@@ -159,8 +161,10 @@ export default function SummaryCard({
                     : null
             }
             className={`${border ? '' : 'ring-0 !shadow-transparent p-0'} ${
-                url ? 'cursor-pointer' : ''
-            } ${blueBorder ? 'border-l-kaytu-500 border-l-2' : ''}`}
+                cardClickable ? 'cursor-pointer' : ''
+            } ${url ? 'cursor-pointer' : ''} ${
+                blueBorder ? 'border-l-kaytu-500 border-l-2' : ''
+            }`}
         >
             <Flex justifyContent="start" className="mb-1.5">
                 {connector && getConnectorIcon(connector, '!h-1 mr-2')}
@@ -178,7 +182,7 @@ export default function SummaryCard({
                     <Flex>{value()}</Flex>
                     {border && (
                         <div className="justify-self-end">
-                            {(url || onClick) && (
+                            {(url || (onClick && !cardClickable)) && (
                                 <Button
                                     size="xs"
                                     variant="light"

@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useSetAtom } from 'jotai'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid'
 import {
     Button,
@@ -59,6 +59,7 @@ export default function ScoreDetails() {
     const setNotification = useSetAtom(notificationAtom)
     const setQuery = useSetAtom(queryAtom)
     const [hideTabs, setHideTabs] = useState(false)
+    const [selectedTabIndex, setSelectedTabIndex] = useState(0)
 
     const { response: controlDetail, isLoading } =
         useComplianceApiV1ControlsSummaryDetail(String(id), {
@@ -265,6 +266,10 @@ export default function ScoreDetails() {
                                 controlDetail?.resourceType?.resource_name || ''
                             }
                             metric={controlDetail?.totalResourcesCount}
+                            onClick={() => {
+                                setSelectedTabIndex(0)
+                            }}
+                            cardClickable
                         />
                         <SummaryCard
                             connector={controlDetail?.control?.connector}
@@ -275,6 +280,10 @@ export default function ScoreDetails() {
                                     : 'Azure Subscriptions'
                             }
                             metric={controlDetail?.totalConnectionCount}
+                            onClick={() => {
+                                setSelectedTabIndex(1)
+                            }}
+                            cardClickable
                         />
                     </Flex>
 
@@ -572,21 +581,34 @@ export default function ScoreDetails() {
                     </Flex> */}
 
                     {!hideTabs && (
-                        <TabGroup>
+                        <TabGroup
+                            key={`tabs-${selectedTabIndex}`}
+                            defaultIndex={selectedTabIndex}
+                            tabIndex={selectedTabIndex}
+                            onIndexChange={setSelectedTabIndex}
+                        >
                             <TabList>
                                 <Tab>Impacted resources</Tab>
                                 <Tab>Impacted accounts</Tab>
                             </TabList>
                             <TabPanels>
                                 <TabPanel>
-                                    <ImpactedResources
-                                        controlId={controlDetail?.control?.id}
-                                    />
+                                    {selectedTabIndex === 0 && (
+                                        <ImpactedResources
+                                            controlId={
+                                                controlDetail?.control?.id
+                                            }
+                                        />
+                                    )}
                                 </TabPanel>
                                 <TabPanel>
-                                    <ImpactedAccounts
-                                        controlId={controlDetail?.control?.id}
-                                    />
+                                    {selectedTabIndex === 1 && (
+                                        <ImpactedAccounts
+                                            controlId={
+                                                controlDetail?.control?.id
+                                            }
+                                        />
+                                    )}
                                 </TabPanel>
                             </TabPanels>
                         </TabGroup>
