@@ -58,7 +58,7 @@ export default function ScoreDetails() {
     const [explanationModalData, setExplanationModalData] = useState('')
     const setNotification = useSetAtom(notificationAtom)
     const setQuery = useSetAtom(queryAtom)
-    const [hideTabs, setHideTabs] = useState(true)
+    const [hideTabs, setHideTabs] = useState(false)
 
     const { response: controlDetail, isLoading } =
         useComplianceApiV1ControlsSummaryDetail(String(id), {
@@ -73,6 +73,7 @@ export default function ScoreDetails() {
                 breadCrumb={[
                     !isLoading ? controlDetail?.control?.title : 'Score detail',
                 ]}
+                filter
             />
             {isLoading ? (
                 <Flex justifyContent="center" className="mt-56">
@@ -159,9 +160,11 @@ export default function ScoreDetails() {
                                 </Badge>
                                 <Badge icon={ClockIcon} color="gray">
                                     Last updated:{' '}
-                                    {dateTimeDisplay(
-                                        controlDetail?.evaluatedAt
-                                    )}
+                                    {(controlDetail?.evaluatedAt || 0) <= 0
+                                        ? 'Never'
+                                        : dateTimeDisplay(
+                                              controlDetail?.evaluatedAt
+                                          )}
                                 </Badge>
                             </Flex>
                         </Flex>
@@ -258,7 +261,9 @@ export default function ScoreDetails() {
                         )}
 
                         <SummaryCard
-                            title="Virtual Networks (VPC’s)"
+                            title={
+                                controlDetail?.resourceType?.resource_name || ''
+                            }
                             metric={controlDetail?.totalResourcesCount}
                         />
                         <SummaryCard
@@ -550,7 +555,7 @@ export default function ScoreDetails() {
                         </Flex>
                     </Card>
 
-                    <Flex
+                    {/* <Flex
                         flexDirection="row"
                         justifyContent="center"
                         onClick={() => setHideTabs(!hideTabs)}
@@ -564,7 +569,7 @@ export default function ScoreDetails() {
                         ) : (
                             <ChevronUpIcon className="ml-2 w-4" />
                         )}
-                    </Flex>
+                    </Flex> */}
 
                     {!hideTabs && (
                         <TabGroup>
