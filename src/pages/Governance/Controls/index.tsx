@@ -35,6 +35,7 @@ import { numberDisplay } from '../../../utilities/numericDisplay'
 import DrawerPanel from '../../../components/DrawerPanel'
 import AnimatedAccordion from '../../../components/AnimatedAccordion'
 import { searchAtom } from '../../../utilities/urlstate'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary } from '../../../api/api'
 
 interface IPolicies {
     id: string | undefined
@@ -175,6 +176,32 @@ export default function Controls({ id, assignments }: IPolicies) {
         setOpenAllControls(!openAllControls)
     }
 
+    const countControls = (
+        v:
+            | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary
+            | undefined
+    ) => {
+        const countChildren = v?.children
+            ?.map((i) => countControls(i))
+            .reduce((prev, curr) => prev + curr, 0)
+        const total: number = (countChildren || 0) + (v?.control?.length || 0)
+        return total
+    }
+
+    const countBenchmarks = (
+        v:
+            | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary
+            | undefined
+    ) => {
+        const countChildren = v?.children
+            ?.map((i) => countBenchmarks(i))
+            .reduce((prev, curr) => prev + curr, 0)
+        const total: number = (countChildren || 0) + (v?.children?.length || 0)
+        return total
+    }
+
+    const sections = Object.entries(groupBy(treeRows(controls), 'parentName'))
+
     return (
         <Flex flexDirection="col" className="gap-4">
             <Flex
@@ -182,7 +209,7 @@ export default function Controls({ id, assignments }: IPolicies) {
                 flexDirection="row"
                 justifyContent="between"
             >
-                <Title>Controls</Title>
+                <Title>Controls ({countControls(controls)})</Title>
                 {isLoading ? (
                     ''
                 ) : (
@@ -191,7 +218,11 @@ export default function Controls({ id, assignments }: IPolicies) {
                         icon={openAllControls ? ChevronUpIcon : ChevronDownIcon}
                         onClick={toggleOpen}
                     >
-                        {openAllControls ? 'Collapse all' : 'Expand all'}
+                        {openAllControls
+                            ? 'Collapse all'
+                            : `Expand ${sections.length} section${
+                                  sections.length > 1 ? 's' : ''
+                              }`}
                     </Button>
                 )}
             </Flex>

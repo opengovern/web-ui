@@ -71,6 +71,13 @@ export default function BenchmarkSummary() {
         ...topQuery,
         timeAt: activeTimeRange.end.unix(),
     })
+
+    const hideKPIs =
+        (benchmarkKPIEnd?.conformanceStatusSummary?.failed || 0) +
+            (benchmarkKPIEnd?.conformanceStatusSummary?.passed || 0) +
+            (benchmarkKPIStart?.conformanceStatusSummary?.failed || 0) +
+            (benchmarkKPIStart?.conformanceStatusSummary?.passed || 0) ===
+        0
     const {
         response: events,
         isLoading: eventsLoading,
@@ -123,8 +130,8 @@ export default function BenchmarkSummary() {
                             <Title className="font-semibold">
                                 {benchmarkDetail?.title}
                             </Title>
-                            <div className="group w-full relative flex justify-center">
-                                <Text className="truncate">
+                            <div className="group w-full relative flex justify-start">
+                                <Text className="test-start truncate">
                                     {benchmarkDetail?.description}
                                 </Text>
                                 <Card className="absolute w-full z-40 top-0 scale-0 transition-all p-2 group-hover:scale-100">
@@ -139,29 +146,24 @@ export default function BenchmarkSummary() {
                                 autoAssign={benchmarkDetail?.autoAssign}
                                 isAutoResponse={(x) => setRecall(true)}
                             />
-                            {assignments > 0 && (
-                                <Evaluate
-                                    id={benchmarkDetail?.id}
-                                    benchmarkDetail={benchmarkDetail}
-                                    onEvaluate={(c) => {
-                                        setSelectedAccounts(() => c)
-                                        triggerEvaluate(
-                                            String(benchmarkId),
-                                            {
-                                                connection_id: c,
-                                            },
-                                            {}
-                                        )
-                                    }}
-                                />
-                            )}
+                            <Evaluate
+                                id={benchmarkDetail?.id}
+                                benchmarkDetail={benchmarkDetail}
+                                onEvaluate={(c) => {
+                                    setSelectedAccounts(() => c)
+                                    triggerEvaluate(
+                                        String(benchmarkId),
+                                        {
+                                            connection_id: c,
+                                        },
+                                        {}
+                                    )
+                                }}
+                            />
                         </Flex>
                     </Flex>
 
-                    {benchmarkKPIEnd?.conformanceStatusSummary?.failed ===
-                        undefined &&
-                    benchmarkKPIStart?.conformanceStatusSummary?.failed ===
-                        undefined ? (
+                    {hideKPIs ? (
                         ''
                     ) : (
                         <Grid numItems={4} className="w-full gap-4 mb-4">
