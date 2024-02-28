@@ -75,6 +75,7 @@ const rowGenerator = (
     loading: boolean
 ) => {
     let sum = 0
+    let sumInPrev = 0
     const roww = []
     const granularity: any = {}
 
@@ -84,15 +85,14 @@ const rowGenerator = (
     if (!loading) {
         const rows =
             input?.map((row) => {
-                let temp = {}
+                let temp: [string, number][] = []
                 let totalCost = 0
                 if (row.costValue) {
-                    temp = Object.fromEntries(Object.entries(row.costValue))
+                    temp = Object.entries(row.costValue)
                 }
-                Object.values(temp).map(
-                    // eslint-disable-next-line no-return-assign
-                    (v: number | unknown) => (totalCost += Number(v))
-                )
+                Object.values(temp).forEach((v) => {
+                    totalCost += v[1]
+                })
                 const totalAccountsSpendInPrev =
                     inputPrev
                         ?.flatMap((v) => Object.entries(v.costValue || {}))
@@ -127,6 +127,7 @@ const rowGenerator = (
             }) || []
         for (let i = 0; i < rows.length; i += 1) {
             sum += rows[i].totalCost
+            sumInPrev += rows[i].prevTotalCost
             // eslint-disable-next-line array-callback-return
             Object.entries(rows[i]).map(([key, value]) => {
                 if (Number(key[0])) {
@@ -139,7 +140,16 @@ const rowGenerator = (
             })
         }
         pinnedRow = [
-            { totalCost: sum, dimension: 'Total spend', ...granularity },
+            {
+                totalCost: sum,
+                percent: 100.0,
+                prevTotalCost: sumInPrev,
+                prevPercent: 100.0,
+                changePercent: ((sum - sumInPrev) / sumInPrev) * 100.0,
+                change: sum - sumInPrev,
+                dimension: 'Total spend',
+                ...granularity,
+            },
         ]
         for (let i = 0; i < rows.length; i += 1) {
             roww.push({

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
     Button,
     Card,
@@ -8,6 +9,7 @@ import {
     Text,
     Icon,
     Badge,
+    Switch,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import {
@@ -36,6 +38,14 @@ const columns: IColumn<
     any
 >[] = [
     {
+        headerName: 'Provider',
+        field: 'control.connector',
+        type: 'connector',
+        sortable: true,
+        width: 200,
+        enableRowGroup: true,
+    },
+    {
         headerName: 'Title',
         field: 'control.title',
         type: 'custom',
@@ -57,12 +67,27 @@ const columns: IColumn<
         ),
     },
     {
-        headerName: 'Provider',
-        field: 'control.connector',
-        type: 'connector',
-        sortable: true,
-        width: 200,
-        enableRowGroup: true,
+        headerName: 'Service Name',
+        type: 'custom',
+        sortable: false,
+        isBold: true,
+        cellRenderer: (
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
+        ) => (
+            <Flex
+                flexDirection="col"
+                alignItems="start"
+                justifyContent="center"
+                className="gap-2 h-full"
+            >
+                <Text className="text-gray-800 mb-0.5 font-bold">
+                    {Object.entries(params.data?.control?.tags || {})
+                        .filter((v) => v[0] === 'score-service-name')
+                        .map((v) => v[1].join(','))
+                        .join('\n')}
+                </Text>
+            </Flex>
+        ),
     },
     {
         headerName: 'Categories',
@@ -90,7 +115,6 @@ const columns: IColumn<
             </Flex>
         ),
     },
-
     {
         headerName: 'Risk',
         type: 'custom',
@@ -151,6 +175,7 @@ const columns: IColumn<
         headerName: 'Fix It',
         type: 'custom',
         sortable: true,
+        hide: true,
         width: 200,
         enableRowGroup: true,
         cellRenderer: (
@@ -205,6 +230,7 @@ export default function ScoreCategory() {
     const { category } = useParams()
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
+    const [hideZero, setHideZero] = useState(true)
 
     const { response, isLoading, error, sendNow } =
         useComplianceApiV1BenchmarksControlsDetail(category || '', {
@@ -225,12 +251,27 @@ export default function ScoreCategory() {
                         <TabGroup className="mb-6">
                             <TabList>
                                 <Tab>SCORE Insights</Tab>
+                                <Flex flexDirection="row" justifyContent="end">
+                                    <Text className="mr-2">
+                                        Hide zero results
+                                    </Text>
+                                    <Switch
+                                        id="switch"
+                                        name="switch"
+                                        checked={hideZero}
+                                        onChange={setHideZero}
+                                    />
+                                </Flex>
                             </TabList>
                         </TabGroup>
                         <Table
                             id="insight_list"
                             columns={columns}
-                            rowData={response?.control}
+                            rowData={response?.control?.filter((v) => {
+                                return hideZero
+                                    ? (v.totalResourcesCount || 0) !== 0
+                                    : true
+                            })}
                             options={options}
                             onRowClicked={(
                                 event: RowClickedEvent<

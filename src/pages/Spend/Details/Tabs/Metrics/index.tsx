@@ -32,7 +32,7 @@ export const rowGenerator = (
     const roww = []
     const granularity: any = {}
     let pinnedRow = [
-        { totalCost: sum, dimension: 'Total spend', ...granularity },
+        { totalCost: sum, dimension: 'aTotal spend', ...granularity },
     ]
     if (!loading) {
         const rows =
@@ -73,7 +73,7 @@ export const rowGenerator = (
             })
         }
         pinnedRow = [
-            { totalCost: sum, dimension: 'Total spend', ...granularity },
+            { totalCost: sum, dimension: 'bTotal spend', ...granularity },
         ]
         for (let i = 0; i < rows.length; i += 1) {
             roww.push({

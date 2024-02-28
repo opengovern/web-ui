@@ -47,6 +47,8 @@ import ImpactedAccounts from '../../Governance/Controls/ControlSummary/Tabs/Impa
 import { severityBadge } from '../../Governance/Controls'
 import { SourceType } from '../../../api/api'
 import DrawerPanel from '../../../components/DrawerPanel'
+import { numberDisplay } from '../../../utilities/numericDisplay'
+import ControlDetail from '../../Governance/Controls/ControlSummary'
 
 export default function ScoreDetails() {
     const { id, ws } = useParams()
@@ -237,7 +239,41 @@ export default function ScoreDetails() {
                             title={
                                 controlDetail?.resourceType?.resource_name || ''
                             }
-                            metric={controlDetail?.totalResourcesCount}
+                            metric={
+                                <Flex
+                                    flexDirection="row"
+                                    justifyContent="between"
+                                    alignItems="end"
+                                    className="w-full aaa"
+                                >
+                                    <Metric>
+                                        {`${numberDisplay(
+                                            controlDetail?.totalResourcesCount,
+                                            0
+                                        )}`}
+                                    </Metric>
+                                    <Text className="text-lg">
+                                        <span className="text-red-600 font-bold">
+                                            {numberDisplay(
+                                                controlDetail?.failedResourcesCount,
+                                                0
+                                            )}
+                                        </span>{' '}
+                                        Failed{' '}
+                                        <span className="text-green-600 ml-2 font-bold">
+                                            {numberDisplay(
+                                                (controlDetail?.totalResourcesCount ||
+                                                    0) -
+                                                    (controlDetail?.failedResourcesCount ||
+                                                        0),
+                                                0
+                                            )}
+                                        </span>{' '}
+                                        Passed
+                                    </Text>
+                                </Flex>
+                            }
+                            isElement
                             onClick={() => {
                                 setSelectedTabIndex(0)
                             }}

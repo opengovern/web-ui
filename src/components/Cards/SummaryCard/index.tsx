@@ -30,6 +30,7 @@ type IProps = {
     isPrice?: boolean
     isPercent?: boolean
     isString?: boolean
+    isElement?: boolean
     blur?: boolean
     blurSecondLine?: boolean
     cardClickable?: boolean
@@ -42,6 +43,7 @@ export default function SummaryCard({
     metricPrev,
     secondLine,
     isString = false,
+    isElement = false,
     unit,
     url,
     loading = false,
@@ -59,6 +61,37 @@ export default function SummaryCard({
 }: IProps) {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
+
+    const metricValue = () => {
+        if (isElement) {
+            return metric
+        }
+
+        if (isString) {
+            return (
+                <Text
+                    className={`${
+                        blur === true ? 'blur-sm' : ''
+                    } text-gray-800 truncate`}
+                >
+                    {metric}
+                </Text>
+            )
+        }
+
+        return (
+            <Metric>
+                {isExact
+                    ? `${isPrice ? '$' : ''}${numberDisplay(
+                          metric,
+                          isExact && isPrice ? 2 : 0
+                      )}${isPercent ? '%' : ''}`
+                    : `${isPrice ? '$' : ''}${numericDisplay(metric)}${
+                          isPercent ? '%' : ''
+                      }`}
+            </Metric>
+        )
+    }
 
     const value = () => {
         if (error !== undefined && error.length > 0) {
@@ -90,26 +123,7 @@ export default function SummaryCard({
                     alignItems="end"
                     className="gap-1 mb-1"
                 >
-                    {isString ? (
-                        <Text
-                            className={`${
-                                blur === true ? 'blur-sm' : ''
-                            } text-gray-800 truncate`}
-                        >
-                            {metric}
-                        </Text>
-                    ) : (
-                        <Metric>
-                            {isExact
-                                ? `${isPrice ? '$' : ''}${numberDisplay(
-                                      metric,
-                                      isExact && isPrice ? 2 : 0
-                                  )}${isPercent ? '%' : ''}`
-                                : `${isPrice ? '$' : ''}${numericDisplay(
-                                      metric
-                                  )}${isPercent ? '%' : ''}`}
-                        </Metric>
-                    )}
+                    {metricValue()}
                     {!!unit && <Text className="mb-0.5">{unit}</Text>}
                     {!!metricPrev && (
                         <Text className="mb-0.5">

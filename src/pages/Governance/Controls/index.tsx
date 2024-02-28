@@ -127,14 +127,18 @@ export const statusBadge = (status: any) => {
     )
 }
 
-export const treeRows = (json: any) => {
+export const treeRows = (
+    json:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary
+        | undefined
+) => {
     let arr: any = []
     if (json) {
         if (json.control !== null && json.control !== undefined) {
             for (let i = 0; i < json.control.length; i += 1) {
                 let obj = {}
                 obj = {
-                    parentName: json.benchmark.title,
+                    parentName: json?.benchmark?.title,
                     ...json.control[i].control,
                     ...json.control[i],
                 }
@@ -163,6 +167,18 @@ export const groupBy = (input: any[], key: string) => {
     }, {})
 }
 
+export const countControls = (
+    v:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary
+        | undefined
+) => {
+    const countChildren = v?.children
+        ?.map((i) => countControls(i))
+        .reduce((prev, curr) => prev + curr, 0)
+    const total: number = (countChildren || 0) + (v?.control?.length || 0)
+    return total
+}
+
 export default function Controls({ id, assignments }: IPolicies) {
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
@@ -174,18 +190,6 @@ export default function Controls({ id, assignments }: IPolicies) {
 
     const toggleOpen = () => {
         setOpenAllControls(!openAllControls)
-    }
-
-    const countControls = (
-        v:
-            | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary
-            | undefined
-    ) => {
-        const countChildren = v?.children
-            ?.map((i) => countControls(i))
-            .reduce((prev, curr) => prev + curr, 0)
-        const total: number = (countChildren || 0) + (v?.control?.length || 0)
-        return total
     }
 
     const countBenchmarks = (

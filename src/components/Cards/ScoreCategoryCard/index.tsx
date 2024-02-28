@@ -16,12 +16,19 @@ import {
 } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import BadgeDeltaSimple from '../../ChangeDeltaSimple'
+import { useComplianceApiV1BenchmarksControlsDetail } from '../../../api/compliance.gen'
+import {
+    countControls,
+    groupBy,
+    treeRows,
+} from '../../../pages/Governance/Controls'
 
 interface IScoreCategoryCard {
     title: string
     value: number
     change: number
     category: string
+    controlID: string
 }
 
 export default function ScoreCategoryCard({
@@ -29,8 +36,12 @@ export default function ScoreCategoryCard({
     value,
     change,
     category,
+    controlID,
 }: IScoreCategoryCard) {
     const navigate = useNavigate()
+    const { response, isLoading } =
+        useComplianceApiV1BenchmarksControlsDetail(controlID)
+
     const workspace = useParams<{ ws: string }>().ws
 
     let color = 'blue'
@@ -43,7 +54,6 @@ export default function ScoreCategoryCard({
     } else if (value >= 0 && value < 25) {
         color = 'red'
     }
-
     return (
         <Flex
             onClick={() => navigate(`${category}`)}
@@ -57,6 +67,12 @@ export default function ScoreCategoryCard({
 
             <Flex alignItems="start" flexDirection="col" className="gap-1">
                 <Title className="text-xl">{title}</Title>
+                <Text>
+                    <span className="text-black">
+                        {countControls(response)}
+                    </span>{' '}
+                    Controls
+                </Text>
                 {/* <BadgeDeltaSimple change={change}>
                     from previous time period
                 </BadgeDeltaSimple> */}

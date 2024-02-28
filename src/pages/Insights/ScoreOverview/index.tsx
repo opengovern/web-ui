@@ -7,6 +7,11 @@ import {
     Badge,
     ProgressCircle,
 } from '@tremor/react'
+import { useSetAtom } from 'jotai'
+import { useEffect } from 'react'
+import { ArrowPathIcon } from '@heroicons/react/24/outline'
+import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../api/schedule.gen'
+import { notificationAtom } from '../../../store'
 import ScoreCategoryCard from '../../../components/Cards/ScoreCategoryCard'
 import TopHeader from '../../../components/Layout/Header'
 import BadgeDeltaSimple from '../../../components/ChangeDeltaSimple'
@@ -16,6 +21,8 @@ import {
     SourceType,
 } from '../../../api/api'
 import { useFilterState } from '../../../utilities/urlstate'
+import { getErrorMessage } from '../../../types/apierror'
+import { groupBy, treeRows } from '../../Governance/Controls'
 
 const severityColor = [
     {
@@ -75,6 +82,7 @@ function fixSort(t: string) {
 }
 export default function ScoreOverview() {
     const { value: selectedConnections } = useFilterState()
+    const setNotification = useSetAtom(notificationAtom)
 
     const query = {
         ...{ tag: ['type=SCORE'] },
@@ -87,6 +95,33 @@ export default function ScoreOverview() {
     }
     const { response, isLoading } =
         useComplianceApiV1BenchmarksSummaryList(query)
+
+    const {
+        sendNowWithParams: triggerEvaluate,
+        isExecuted,
+        error,
+        isLoading: triggerIsLoading,
+    } = useScheduleApiV1ComplianceTriggerUpdate('', {}, {}, false)
+
+    useEffect(() => {
+        if (isExecuted && !triggerIsLoading) {
+            const err = getErrorMessage(error)
+            if (err === '') {
+                setNotification({
+                    text: 'Evaluation triggered',
+                    type: 'success',
+                    position: 'bottomLeft',
+                })
+            } else {
+                setNotification({
+                    text: `Evaluation trigger failed due to ${err}`,
+                    type: 'error',
+                    position: 'bottomLeft',
+                })
+            }
+        }
+    }, [triggerIsLoading])
+
     const responseSorted = response?.benchmarkSummary?.sort((a, b) => {
         const aTitle = fixSort(a.title || '')
         const bTitle = fixSort(b.title || '')
@@ -109,15 +144,15 @@ export default function ScoreOverview() {
     const securityScore = (passed / total) * 100
 
     const severityMap = responseSorted
-        ?.map((v) => v.checks)
+        ?.map((v) => v.controlsSeverityStatus)
         .reduce(
             (prev, curr) => {
                 return {
-                    critical: prev.critical + (curr?.criticalCount || 0),
-                    high: prev.high + (curr?.highCount || 0),
-                    medium: prev.medium + (curr?.mediumCount || 0),
-                    low: prev.low + (curr?.lowCount || 0),
-                    none: prev.none + (curr?.noneCount || 0),
+                    critical: prev.critical + (curr?.critical?.total || 0),
+                    high: prev.high + (curr?.high?.total || 0),
+                    medium: prev.medium + (curr?.medium?.total || 0),
+                    low: prev.low + (curr?.low?.total || 0),
+                    none: prev.none + (curr?.none?.total || 0),
                 }
             },
             {
@@ -128,6 +163,12 @@ export default function ScoreOverview() {
                 none: 0,
             }
         )
+
+    const reevaluate = () => {
+        response?.benchmarkSummary?.forEach((v) => {
+            triggerEvaluate(v.id || '', {}, {})
+        })
+    }
 
     return (
         <>
@@ -153,6 +194,17 @@ export default function ScoreOverview() {
                                 alignment with industry standards and best
                                 practices.
                             </Subtitle>
+                            <Flex
+                                flexDirection="row"
+                                justifyContent="start"
+                                className="cursor-pointer"
+                                onClick={() => reevaluate()}
+                            >
+                                <ArrowPathIcon className="w-4 mr-1 text-blue-600" />
+                                <Text className="text-blue-600">
+                                    Evaluate Now
+                                </Text>
+                            </Flex>
                         </Flex>
                         <hr className="w-full border border-gray-200" />
                         <Flex
@@ -192,37 +244,11 @@ export default function ScoreOverview() {
                                     {isLoading ? (
                                         <div className="animate-pulse h-3 w-8 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
                                     ) : (
-                                        responseSorted
-                                            ?.map(
-                                                (i) =>
-                                                    (i?.conformanceStatusSummary
-                                                        ?.passed || 0) +
-                                                    (i?.conformanceStatusSummary
-                                                        ?.failed || 0)
-                                            )
-                                            .reduce(
-                                                (prev, curr) => prev + curr,
-                                                0
-                                            )
+                                        total
                                     )}
                                 </Title>
                                 insight evaluations performed across
-                                <Title className="mx-1.5 font-bold">
-                                    {isLoading ? (
-                                        <div className="animate-pulse h-3 w-8 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
-                                    ) : (
-                                        responseSorted
-                                            ?.map(
-                                                (i) =>
-                                                    i?.connectionsStatus
-                                                        ?.total || 0
-                                            )
-                                            .reduce(
-                                                (prev, curr) => prev + curr,
-                                                0
-                                            )
-                                    )}
-                                </Title>
+                                <Title className="mx-1.5 font-bold">all</Title>
                                 cloud accounts
                             </Flex>
                             <Flex>
@@ -241,18 +267,7 @@ export default function ScoreOverview() {
                                             {isLoading ? (
                                                 <div className="animate-pulse h-3 w-16 my-0 bg-slate-200 dark:bg-slate-700 rounded" />
                                             ) : (
-                                                responseSorted
-                                                    ?.map(
-                                                        (i) =>
-                                                            i
-                                                                ?.conformanceStatusSummary
-                                                                ?.failed || 0
-                                                    )
-                                                    .reduce(
-                                                        (prev, curr) =>
-                                                            prev + curr,
-                                                        0
-                                                    )
+                                                total - passed
                                             )}
                                         </Metric>
 
@@ -280,18 +295,7 @@ export default function ScoreOverview() {
                                             {isLoading ? (
                                                 <div className="animate-pulse h-3 w-16 my-0 bg-slate-200 dark:bg-slate-700 rounded" />
                                             ) : (
-                                                responseSorted
-                                                    ?.map(
-                                                        (i) =>
-                                                            i
-                                                                ?.conformanceStatusSummary
-                                                                ?.passed || 0
-                                                    )
-                                                    .reduce(
-                                                        (prev, curr) =>
-                                                            prev + curr,
-                                                        0
-                                                    )
+                                                passed
                                             )}
                                         </Metric>
                                         <Subtitle className="text-gray-500">
@@ -363,6 +367,7 @@ export default function ScoreOverview() {
                                               item.controlsSeverityStatus?.total
                                           )}
                                           change={0}
+                                          controlID={item.id || ''}
                                           category={item.id || ''}
                                       />
                                   )

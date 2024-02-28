@@ -45,38 +45,23 @@ const rowGenerator = (
     loading: boolean
 ) => {
     let sum = 0
+    let sumInPrev = 0
     const roww = []
     const granularity: any = {}
     let pinnedRow = [
         { totalCost: sum, dimension: 'Total spend', ...granularity },
     ]
     if (!loading) {
-        const sortedDate =
-            input
-                ?.flatMap((row) => Object.entries(row.costValue || {}))
-                .map((v) => dayjs(v[0]))
-                .sort((a, b) => {
-                    if (a.isSame(b)) {
-                        return 0
-                    }
-                    return a.isBefore(b) ? -1 : 1
-                }) || []
-        const oldestDate = sortedDate.at(0)?.format('YYYY-MM-DD')
-        const latestDate = sortedDate
-            .at(sortedDate.length - 1)
-            ?.format('YYYY-MM-DD')
-
         const rows =
             input?.map((row) => {
-                let temp = {}
+                let temp: [string, number][] = []
                 let totalCost = 0
                 if (row.costValue) {
-                    temp = Object.fromEntries(Object.entries(row.costValue))
+                    temp = Object.entries(row.costValue)
                 }
-                Object.values(temp).map(
-                    // eslint-disable-next-line no-return-assign
-                    (v: number | unknown) => (totalCost += Number(v))
-                )
+                temp.forEach((v) => {
+                    totalCost += v[1]
+                })
                 const totalMetricSpendInPrev =
                     inputPrev
                         ?.flatMap((v) => Object.entries(v.costValue || {}))
@@ -88,14 +73,6 @@ const rowGenerator = (
                         .flatMap((v) => Object.entries(v.costValue || {}))
                         .map((v) => v[1])
                         .reduce((prev, curr) => prev + curr, 0) || 0
-                const oldest =
-                    Object.entries(row.costValue || {})
-                        .filter((v) => v[0] === oldestDate)
-                        .at(0)?.[1] || 0
-                const latest =
-                    Object.entries(row.costValue || {})
-                        .filter((v) => v[0] === latestDate)
-                        .at(0)?.[1] || 0
                 return {
                     dimension: row.dimensionName
                         ? row.dimensionName
@@ -118,6 +95,7 @@ const rowGenerator = (
             }) || []
         for (let i = 0; i < rows.length; i += 1) {
             sum += rows[i].totalCost
+            sumInPrev += rows[i].prevTotalCost
             // eslint-disable-next-line array-callback-return
             Object.entries(rows[i]).map(([key, value]) => {
                 if (Number(key[0])) {
@@ -130,13 +108,21 @@ const rowGenerator = (
             })
         }
         pinnedRow = [
-            { totalCost: sum, dimension: 'Total spend', ...granularity },
+            {
+                totalCost: sum,
+                percent: 100.0,
+                prevTotalCost: sumInPrev,
+                prevPercent: 100.0,
+                changePercent: ((sum - sumInPrev) / sumInPrev) * 100.0,
+                change: sum - sumInPrev,
+                dimension: 'Total spend',
+                ...granularity,
+            },
         ]
         for (let i = 0; i < rows.length; i += 1) {
             roww.push({
                 ...rows[i],
                 percent: (rows[i].totalCost / sum) * 100,
-                spendInPrev: 0,
             })
         }
     }
