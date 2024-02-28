@@ -68,10 +68,16 @@ export default function ScoreCategoryCard({
             <Flex alignItems="start" flexDirection="col" className="gap-1">
                 <Title className="text-xl">{title}</Title>
                 <Text>
-                    <span className="text-black">
-                        {countControls(response)}
-                    </span>{' '}
-                    Controls
+                    {isLoading ? (
+                        <div className="animate-pulse h-3 w-16 my-0 bg-slate-200 dark:bg-slate-700 rounded" />
+                    ) : (
+                        <>
+                            <span className="text-black">
+                                {countControls(response)}
+                            </span>{' '}
+                            Controls
+                        </>
+                    )}
                 </Text>
                 {/* <BadgeDeltaSimple change={change}>
                     from previous time period
