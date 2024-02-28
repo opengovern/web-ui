@@ -92,16 +92,16 @@ export default function ScoreDetails() {
                             {severityBadge(controlDetail?.control?.severity)}
                         </Flex>
                         <Flex
-                            justifyContent="start"
+                            justifyContent="between"
                             alignItems="start"
-                            className="gap-10"
+                            className="gap-10 w-full"
                         >
                             <Flex
                                 flexDirection="col"
                                 alignItems="start"
-                                className="gap-6 w-full "
+                                className="gap-6 w-full"
                             >
-                                <div className="group w-full relative flex justify-start">
+                                <div className="group w-[800px] relative flex justify-start">
                                     <Text className="truncate">
                                         {controlDetail?.control?.description}
                                     </Text>

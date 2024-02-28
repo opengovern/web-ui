@@ -13,14 +13,17 @@ import FindingDetail from '../../../../Findings/FindingsWithFailure/Detail'
 import { isDemoAtom, notificationAtom } from '../../../../../../store'
 import {
     Api,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,
 } from '../../../../../../api/api'
 import AxiosAPI from '../../../../../../api/ApiConfig'
 import { activeBadge, statusBadge } from '../../../index'
 import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
 import { getConnectorIcon } from '../../../../../../components/Cards/ConnectorCard'
+import ResourceFindingDetail from '../../../../Findings/ResourceFindingDetail'
 
-let sortKey = ''
+let sortKey: any[] = []
 
 interface IImpactedResources {
     controlId: string | undefined
@@ -28,7 +31,7 @@ interface IImpactedResources {
 
 const columns = (isDemo: boolean) => {
     const temp: IColumn<
-        GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+        GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,
         any
     >[] = [
         {
@@ -43,7 +46,7 @@ const columns = (isDemo: boolean) => {
             flex: 1,
             cellRenderer: (
                 param: ICellRendererParams<
-                    GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+                    GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,
                     any
                 >
             ) => (
@@ -52,7 +55,7 @@ const columns = (isDemo: boolean) => {
                         {param.data?.resourceName || 'Resource deleted'}
                     </Text>
                     <Text className={isDemo ? 'blur-sm' : ''}>
-                        {param.data?.resourceID}
+                        {param.data?.kaytuResourceID}
                     </Text>
                 </Flex>
             ),
@@ -69,37 +72,37 @@ const columns = (isDemo: boolean) => {
             flex: 1,
             cellRenderer: (
                 param: ICellRendererParams<
-                    GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+                    GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,
                     any
                 >
             ) => (
                 <Flex flexDirection="col" alignItems="start">
                     <Text className="text-gray-800">
-                        {param.data?.resourceTypeName}
+                        {param.data?.resourceTypeLabel}
                     </Text>
                     <Text>{param.data?.resourceType}</Text>
                 </Flex>
             ),
         },
-        {
-            field: 'benchmarkID',
-            headerName: 'Benchmark',
-            type: 'string',
-            enableRowGroup: true,
-            sortable: false,
-            hide: true,
-            filter: true,
-            resizable: true,
-            flex: 1,
-            cellRenderer: (param: ICellRendererParams) => (
-                <Flex flexDirection="col" alignItems="start">
-                    <Text className="text-gray-800">
-                        {param.data.parentBenchmarkNames[0]}
-                    </Text>
-                    <Text>{param.value}</Text>
-                </Flex>
-            ),
-        },
+        // {
+        //     field: 'benchmarkID',
+        //     headerName: 'Benchmark',
+        //     type: 'string',
+        //     enableRowGroup: true,
+        //     sortable: false,
+        //     hide: true,
+        //     filter: true,
+        //     resizable: true,
+        //     flex: 1,
+        //     cellRenderer: (param: ICellRendererParams) => (
+        //         <Flex flexDirection="col" alignItems="start">
+        //             <Text className="text-gray-800">
+        //                 {param.data.parentBenchmarkNames[0]}
+        //             </Text>
+        //             <Text>{param.value}</Text>
+        //         </Flex>
+        //     ),
+        // },
         {
             field: 'providerConnectionName',
             headerName: 'Account',
@@ -112,7 +115,7 @@ const columns = (isDemo: boolean) => {
             flex: 1,
             cellRenderer: (
                 param: ICellRendererParams<
-                    GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+                    GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,
                     any
                 >
             ) => (
@@ -142,21 +145,21 @@ const columns = (isDemo: boolean) => {
             resizable: true,
             flex: 1,
         },
+        // {
+        //     field: 'stateActive',
+        //     headerName: 'State',
+        //     type: 'string',
+        //     sortable: true,
+        //     filter: true,
+        //     hide: false,
+        //     resizable: true,
+        //     flex: 1,
+        //     cellRenderer: (param: ValueFormatterParams) => (
+        //         <Flex className="h-full">{activeBadge(param.value)}</Flex>
+        //     ),
+        // },
         {
-            field: 'stateActive',
-            headerName: 'State',
-            type: 'string',
-            sortable: true,
-            filter: true,
-            hide: false,
-            resizable: true,
-            flex: 1,
-            cellRenderer: (param: ValueFormatterParams) => (
-                <Flex className="h-full">{activeBadge(param.value)}</Flex>
-            ),
-        },
-        {
-            field: 'conformanceStatus',
+            field: 'failedCount',
             headerName: 'Conformance status',
             type: 'string',
             sortable: true,
@@ -165,7 +168,13 @@ const columns = (isDemo: boolean) => {
             resizable: true,
             width: 160,
             cellRenderer: (param: ValueFormatterParams) => (
-                <Flex className="h-full">{statusBadge(param.value)}</Flex>
+                <Flex className="h-full">
+                    {statusBadge(
+                        param.value > 0
+                            ? GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed
+                            : GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed
+                    )}
+                </Flex>
             ),
         },
         {
@@ -191,7 +200,7 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
 
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<
-        GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
+        GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding | undefined
     >(undefined)
     const [error, setError] = useState('')
 
@@ -201,12 +210,13 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                 const api = new Api()
                 api.instance = AxiosAPI
                 api.compliance
-                    .apiV1FindingsCreate({
+                    .apiV1ResourceFindingsCreate({
                         filters: {
                             controlID: [controlId || ''],
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            conformanceStatus: ['passed', 'failed'],
+                            conformanceStatus: [
+                                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
+                                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+                            ],
                         },
                         sort: params.request.sortModel.length
                             ? [
@@ -217,33 +227,21 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                               ]
                             : [],
                         limit: 100,
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
                         afterSortKey:
-                            params.request.startRow === 0 ||
-                            sortKey.length < 1 ||
-                            sortKey === 'none'
+                            params.request.startRow === 0 || sortKey.length < 1
                                 ? []
                                 : sortKey,
                     })
                     .then((resp) => {
                         params.success({
-                            rowData: resp.data.findings || [],
+                            rowData: resp.data.resourceFindings || [],
                             rowCount: resp.data.totalCount || 0,
                         })
 
-                        // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
-                        // @ts-ignore
                         sortKey =
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            // eslint-disable-next-line no-unsafe-optional-chaining
-                            resp.data.findings[
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                // eslint-disable-next-line no-unsafe-optional-chaining
-                                resp.data.findings?.length - 1
-                            ].sortKey
+                            resp.data.resourceFindings?.at(
+                                (resp.data.resourceFindings?.length || 0) - 1
+                            )?.sortKey || []
                     })
                     .catch((err) => {
                         if (
@@ -274,7 +272,7 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                 columns={columns(isDemo)}
                 onCellClicked={(
                     event: RowClickedEvent<
-                        GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+                        GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,
                         any
                     >
                 ) => {
@@ -293,16 +291,16 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                 }}
                 serverSideDatasource={serverSideRows}
                 onSortChange={() => {
-                    sortKey = ''
+                    sortKey = []
                 }}
                 options={{
                     rowModelType: 'serverSide',
                     serverSideDatasource: serverSideRows,
                 }}
             />
-            <FindingDetail
-                type="finding"
-                finding={finding}
+            <ResourceFindingDetail
+                resourceFinding={finding}
+                controlID={controlId}
                 open={open}
                 onClose={() => setOpen(false)}
                 onRefresh={() => window.location.reload()}

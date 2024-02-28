@@ -35,7 +35,10 @@ import { numberDisplay } from '../../../utilities/numericDisplay'
 import DrawerPanel from '../../../components/DrawerPanel'
 import AnimatedAccordion from '../../../components/AnimatedAccordion'
 import { searchAtom } from '../../../utilities/urlstate'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary } from '../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
+} from '../../../api/api'
 
 interface IPolicies {
     id: string | undefined
@@ -110,8 +113,15 @@ export const activeBadge = (status: boolean) => {
     )
 }
 
-export const statusBadge = (status: any) => {
-    if (status === 'passed') {
+export const statusBadge = (
+    status:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus
+        | undefined
+) => {
+    if (
+        status ===
+        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed
+    ) {
         return (
             <Flex className="w-fit gap-1.5">
                 <CheckCircleIcon className="h-4 text-emerald-500" />

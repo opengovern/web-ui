@@ -22,6 +22,7 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,
 } from '../../../../../api/api'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../../../components/Cards/ConnectorCard'

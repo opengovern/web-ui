@@ -225,13 +225,13 @@ export default function SettingsCustomization() {
                 <NumberMetric
                     metricId="describe_job_interval"
                     title="Fast Discovery Interval (Hours)"
-                    min={8}
+                    min={1}
                     max={120}
                 />
                 <NumberMetric
                     metricId="full_discovery_job_interval"
                     title="Full Discovery Interval (Hours)"
-                    min={24}
+                    min={1}
                     max={120}
                 />
                 <NumberMetric

@@ -373,7 +373,7 @@ export default function Query() {
                                     </Card>
                                     <Flex className="w-full mt-4">
                                         <Flex justifyContent="start">
-                                            <Text className="mr-2">
+                                            <Text className="mr-2 w-fit">
                                                 Maximum rows:
                                             </Text>
                                             <Select
