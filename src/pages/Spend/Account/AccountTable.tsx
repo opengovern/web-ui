@@ -93,6 +93,7 @@ const rowGenerator = (
                 Object.values(temp).forEach((v) => {
                     totalCost += v[1]
                 })
+                const dateColumns = Object.fromEntries(temp)
                 const totalAccountsSpendInPrev =
                     inputPrev
                         ?.flatMap((v) => Object.entries(v.costValue || {}))
@@ -122,7 +123,7 @@ const rowGenerator = (
                         ((totalCost - totalSpendInPrev) / totalSpendInPrev) *
                         100.0,
                     change: totalCost - totalSpendInPrev,
-                    ...temp,
+                    ...dateColumns,
                 }
             }) || []
         for (let i = 0; i < rows.length; i += 1) {

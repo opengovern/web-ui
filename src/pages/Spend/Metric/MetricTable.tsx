@@ -62,6 +62,7 @@ const rowGenerator = (
                 temp.forEach((v) => {
                     totalCost += v[1]
                 })
+                const dateColumns = Object.fromEntries(temp)
                 const totalMetricSpendInPrev =
                     inputPrev
                         ?.flatMap((v) => Object.entries(v.costValue || {}))
@@ -73,7 +74,7 @@ const rowGenerator = (
                         .flatMap((v) => Object.entries(v.costValue || {}))
                         .map((v) => v[1])
                         .reduce((prev, curr) => prev + curr, 0) || 0
-                return {
+                const result = {
                     dimension: row.dimensionName
                         ? row.dimensionName
                         : row.dimensionId,
@@ -90,8 +91,9 @@ const rowGenerator = (
                         ((totalCost - totalSpendInPrev) / totalSpendInPrev) *
                         100.0,
                     change: totalCost - totalSpendInPrev,
-                    ...temp,
+                    ...dateColumns,
                 }
+                return result
             }) || []
         for (let i = 0; i < rows.length; i += 1) {
             sum += rows[i].totalCost
