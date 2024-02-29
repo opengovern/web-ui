@@ -71,7 +71,9 @@ export default function Filter({ onApply, type }: IFilters) {
     const [conformanceStatus, setConformanceStatus] = useState<
         | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
         | undefined
-    >(defConformanceStatus)
+    >([
+        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+    ])
 
     const defLifecycle = [true, false]
     const [lifecycle, setLifecycle] = useState<boolean[]>(defLifecycle)
