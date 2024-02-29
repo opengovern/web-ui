@@ -367,6 +367,14 @@ export default function ScoreOverview() {
                                           value={SecurityScore(
                                               item.controlsSeverityStatus?.total
                                           )}
+                                          passed={
+                                              item.controlsSeverityStatus?.total
+                                                  ?.passed || 0
+                                          }
+                                          total={
+                                              item.controlsSeverityStatus?.total
+                                                  ?.total || 0
+                                          }
                                           change={0}
                                           controlID={item.id || ''}
                                           category={item.id || ''}
