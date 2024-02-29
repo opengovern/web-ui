@@ -4,6 +4,7 @@ import {
     ColGroupDef,
     GridOptions,
     GridReadyEvent,
+    IAggFunc,
     ICellRendererParams,
     IServerSideDatasource,
     NestedFieldPaths,
@@ -47,7 +48,7 @@ export interface IColumn<TData, TValue> {
     rowGroup?: boolean
     enableRowGroup?: boolean
     pinned?: boolean
-    aggFunc?: string
+    aggFunc?: string | IAggFunc<TData, TValue> | null
     suppressMenu?: boolean
     floatingFilter?: boolean
     pivot?: boolean
