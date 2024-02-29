@@ -181,7 +181,7 @@ export default function ScoreDetails() {
                         <Title className="font-semibold">Query</Title>
                         <Card className="my-4">
                             <Editor
-                                onValueChange={() => console.log('')}
+                                onValueChange={() => 1}
                                 highlight={(text) =>
                                     highlight(text, languages.sql, 'sql')
                                 }

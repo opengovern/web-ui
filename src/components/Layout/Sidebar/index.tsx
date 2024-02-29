@@ -82,16 +82,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
 
     useEffect(() => {
         if (isAuthenticated) {
-            getAccessTokenSilently()
-                .then((res) => {
-                    console.log('')
-                })
-                .then((res) => {
-                    sendSpend()
-                    sendAssets()
-                    sendFindings()
-                    sendConnections()
-                })
+            getAccessTokenSilently().then((res) => {
+                sendSpend()
+                sendAssets()
+                sendFindings()
+                sendConnections()
+            })
         }
     }, [isAuthenticated, workspace])
 

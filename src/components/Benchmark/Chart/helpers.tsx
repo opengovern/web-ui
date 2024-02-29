@@ -45,7 +45,6 @@ export const trendChart = (trend: ITrendItem[] | undefined) => {
             return prev.includes(current) ? prev : [...prev, current]
         }, [])
         .map((lbl) => {
-            console.log(lbl)
             return colorMapping[lbl]
         })
 

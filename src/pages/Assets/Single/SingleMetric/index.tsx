@@ -198,7 +198,7 @@ export default function SingleMetric({
                 <Title className="font-semibold">Metric query</Title>
                 <Card className="my-4">
                     <Editor
-                        onValueChange={() => console.log('')}
+                        onValueChange={() => 1}
                         highlight={(text) =>
                             highlight(text, languages.sql, 'sql')
                         }

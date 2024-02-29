@@ -128,7 +128,6 @@ export const topCategories = (
 export const categoryTrend = (
     responseChart: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[]
 ) => {
-    console.log(responseChart)
     return responseChart?.map((item) => {
         return {
             ...item,

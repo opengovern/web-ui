@@ -235,9 +235,7 @@ export default function ControlDetail() {
                                 <TabPanel>
                                     <Card className="max-h-[289px] overflow-scroll">
                                         <Editor
-                                            onValueChange={() =>
-                                                console.log('')
-                                            }
+                                            onValueChange={() => 1}
                                             highlight={(text) =>
                                                 highlight(
                                                     text,
