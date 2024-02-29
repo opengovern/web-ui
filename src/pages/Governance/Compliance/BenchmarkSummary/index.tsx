@@ -49,8 +49,10 @@ export default function BenchmarkSummary() {
     const [selectedAccounts, setSelectedAccounts] = useState<string[]>([])
     const { sendNowWithParams: triggerEvaluate, isExecuted } =
         useScheduleApiV1ComplianceTriggerUpdate(
-            String(benchmarkId),
-            { connection_id: selectedAccounts },
+            {
+                benchmark_id: [],
+                connection_id: [],
+            },
             {},
             false
         )
@@ -152,8 +154,8 @@ export default function BenchmarkSummary() {
                                 onEvaluate={(c) => {
                                     setSelectedAccounts(() => c)
                                     triggerEvaluate(
-                                        String(benchmarkId),
                                         {
+                                            benchmark_id: [benchmarkId || ''],
                                             connection_id: c,
                                         },
                                         {}

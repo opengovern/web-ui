@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
+    Button,
     Card,
     Divider,
     Flex,
@@ -11,15 +12,16 @@ import {
     TextInput,
     Title,
 } from '@tremor/react'
-import { useAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 import {
     useMetadataApiV1MetadataCreate,
     useMetadataApiV1MetadataDetail,
 } from '../../../api/metadata.gen'
 import Spinner from '../../../components/Spinner'
 import { getErrorMessage } from '../../../types/apierror'
-import { previewAtom } from '../../../store'
+import { notificationAtom, previewAtom } from '../../../store'
 import { ConvertToBoolean } from '../../../utilities/bool'
+import { useComplianceApiV1QueriesSyncList } from '../../../api/compliance.gen'
 
 interface ITextMetric {
     title: string
@@ -212,6 +214,33 @@ export default function SettingsCustomization() {
         }
     }, [preview])
 
+    const setNotification = useSetAtom(notificationAtom)
+    const {
+        isLoading: syncLoading,
+        isExecuted: syncExecuted,
+        error: syncError,
+        sendNow: runSync,
+    } = useComplianceApiV1QueriesSyncList()
+
+    useEffect(() => {
+        if (syncExecuted && !syncLoading) {
+            const err = getErrorMessage(syncError)
+            if (err === '') {
+                setNotification({
+                    text: 'Re-Sync triggered.',
+                    type: 'success',
+                    position: 'bottomLeft',
+                })
+            } else {
+                setNotification({
+                    text: `Re-Sync trigger failed due to ${err}`,
+                    type: 'error',
+                    position: 'bottomLeft',
+                })
+            }
+        }
+    }, [syncLoading])
+
     return (
         <Card key="summary" className="">
             <Title className="font-semibold">Customization</Title>
@@ -278,6 +307,7 @@ export default function SettingsCustomization() {
                         isCustomizationEnabled === false
                     }
                 />
+                <Button onClick={() => runSync()}>Re-Sync</Button>
             </Flex>
 
             <Title className="font-semibold mt-8">App configurations</Title>

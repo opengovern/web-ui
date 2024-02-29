@@ -6,15 +6,15 @@ import {
     Metric,
     Badge,
     ProgressCircle,
+    Button,
 } from '@tremor/react'
 import { useSetAtom } from 'jotai'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../api/schedule.gen'
 import { notificationAtom } from '../../../store'
 import ScoreCategoryCard from '../../../components/Cards/ScoreCategoryCard'
 import TopHeader from '../../../components/Layout/Header'
-import BadgeDeltaSimple from '../../../components/ChangeDeltaSimple'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult,
@@ -22,7 +22,7 @@ import {
 } from '../../../api/api'
 import { useFilterState } from '../../../utilities/urlstate'
 import { getErrorMessage } from '../../../types/apierror'
-import { groupBy, treeRows } from '../../Governance/Controls'
+import Modal from '../../../components/Modal'
 
 const severityColor = [
     {
@@ -83,6 +83,7 @@ function fixSort(t: string) {
 export default function ScoreOverview() {
     const { value: selectedConnections } = useFilterState()
     const setNotification = useSetAtom(notificationAtom)
+    const [openConfirm, setOpenConfirm] = useState<boolean>(false)
 
     const query = {
         ...{ tag: ['type=SCORE'] },
@@ -101,7 +102,13 @@ export default function ScoreOverview() {
         isExecuted,
         error,
         isLoading: triggerIsLoading,
-    } = useScheduleApiV1ComplianceTriggerUpdate('', {}, {}, false)
+    } = useScheduleApiV1ComplianceTriggerUpdate(
+        {
+            benchmark_id: [],
+        },
+        {},
+        false
+    )
 
     useEffect(() => {
         if (isExecuted && !triggerIsLoading) {
@@ -164,12 +171,6 @@ export default function ScoreOverview() {
             }
         )
 
-    const reevaluate = () => {
-        response?.benchmarkSummary?.forEach((v) => {
-            triggerEvaluate(v.id || '', {}, {})
-        })
-    }
-
     return (
         <>
             <TopHeader filter />
@@ -198,7 +199,7 @@ export default function ScoreOverview() {
                                 flexDirection="row"
                                 justifyContent="start"
                                 className="cursor-pointer"
-                                onClick={() => reevaluate()}
+                                onClick={() => setOpenConfirm(true)}
                             >
                                 <ArrowPathIcon className="w-4 mr-1 text-blue-600" />
                                 <Text className="text-blue-600">
@@ -374,6 +375,33 @@ export default function ScoreOverview() {
                               })}
                 </Flex>
             </Flex>
+            <Modal open={openConfirm} onClose={() => setOpenConfirm(false)}>
+                <Title>Do you want to run evaluation on all accounts?</Title>
+                <Flex className="mt-8">
+                    <Button
+                        variant="secondary"
+                        onClick={() => setOpenConfirm(false)}
+                    >
+                        Close
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            triggerEvaluate(
+                                {
+                                    benchmark_id:
+                                        response?.benchmarkSummary?.map(
+                                            (b) => b.id || ''
+                                        ) || [],
+                                },
+                                {}
+                            )
+                            setOpenConfirm(false)
+                        }}
+                    >
+                        Evaluate
+                    </Button>
+                </Flex>
+            </Modal>
         </>
     )
 }

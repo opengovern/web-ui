@@ -673,6 +673,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      */
     controls?: string[]
     controlsSeverityStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatus
+    costOptimization?: number
     /**
      * Benchmark creation date
      * @example "2020-01-01T00:00:00Z"
@@ -810,6 +811,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControl {
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary {
     benchmarks?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark[]
     control?: GithubComKaytuIoKaytuEnginePkgComplianceApiControl
+    costOptimization?: number
     evaluatedAt?: number
     failedConnectionCount?: number
     failedResourcesCount?: number
@@ -862,6 +864,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     /** @example "azure_cis_v140_7_5" */
     controlID?: string
     controlTitle?: string
+    /** @example 0.5 */
+    costOptimization?: number
     /** @example 1589395200 */
     evaluatedAt?: number
     /** @example "steampipe-v0.5" */
@@ -6824,10 +6828,38 @@ export class Api<
          * @tags describe
          * @name ApiV1ComplianceTriggerUpdate
          * @summary Triggers compliance job
-         * @request PUT:/schedule/api/v1/compliance/trigger/{benchmark_id}
+         * @request PUT:/schedule/api/v1/compliance/trigger
          * @secure
          */
         apiV1ComplianceTriggerUpdate: (
+            query: {
+                /** Benchmark ID */
+                benchmark_id: string[]
+                /** Connection ID */
+                connection_id?: string[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/schedule/api/v1/compliance/trigger`,
+                method: 'PUT',
+                query: query,
+                secure: true,
+                ...params,
+            }),
+
+        /**
+         * @description Triggers a compliance job to run immediately for the given benchmark
+         *
+         * @tags describe
+         * @name ApiV1ComplianceTriggerUpdate2
+         * @summary Triggers compliance job
+         * @request PUT:/schedule/api/v1/compliance/trigger/{benchmark_id}
+         * @originalName apiV1ComplianceTriggerUpdate
+         * @duplicate
+         * @secure
+         */
+        apiV1ComplianceTriggerUpdate2: (
             benchmarkId: string,
             query?: {
                 /** Connection ID */

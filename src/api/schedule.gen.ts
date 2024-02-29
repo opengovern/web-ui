@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,
     GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
     GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
     GithubComKaytuIoKaytuEnginePkgDescribeApiJobSeqCheckResponse,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,
     RequestParams,
 } from './api'
 
@@ -345,6 +345,156 @@ interface IuseScheduleApiV1ComplianceTriggerUpdateState {
  * URL:
  */
 export const useScheduleApiV1ComplianceTriggerUpdate = (
+    query: {
+        benchmark_id: string[]
+
+        connection_id?: string[]
+    },
+    params: RequestParams = {},
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    const [state, setState] =
+        useState<IuseScheduleApiV1ComplianceTriggerUpdateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, autoExecute])
+    )
+
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqquery: {
+            benchmark_id: string[]
+
+            connection_id?: string[]
+        },
+        reqparams: RequestParams
+    ) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
+            api.schedule
+                .apiV1ComplianceTriggerUpdate(reqquery, reqparamsSignal)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController, query, params)
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, query, params)
+    }
+
+    const sendNowWithParams = (
+        reqquery: {
+            benchmark_id: string[]
+
+            connection_id?: string[]
+        },
+        reqparams: RequestParams
+    ) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqquery, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
+}
+
+interface IuseScheduleApiV1ComplianceTriggerUpdate2State {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+/**
+ * URL:
+ */
+export const useScheduleApiV1ComplianceTriggerUpdate2 = (
     benchmarkId: string,
     query?: {
         connection_id?: string[]
@@ -360,7 +510,7 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseScheduleApiV1ComplianceTriggerUpdateState>({
+        useState<IuseScheduleApiV1ComplianceTriggerUpdate2State>({
             isLoading: true,
             isExecuted: false,
         })
@@ -399,7 +549,7 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.schedule
-                .apiV1ComplianceTriggerUpdate(
+                .apiV1ComplianceTriggerUpdate2(
                     reqbenchmarkId,
                     reqquery,
                     reqparamsSignal
