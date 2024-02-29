@@ -54,7 +54,10 @@ const columns = (controlID: string, isDemo: boolean) => {
             ) => (
                 <Flex flexDirection="col" alignItems="start">
                     <Text className="text-gray-800">
-                        {param.data?.resourceName || 'Resource deleted'}
+                        {param.data?.resourceName ||
+                            (param.data?.findings?.at(0)?.stateActive === false
+                                ? 'Resource deleted'
+                                : '')}
                     </Text>
                     <Text className={isDemo ? 'blur-sm' : ''}>
                         {param.data?.kaytuResourceID}

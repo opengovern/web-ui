@@ -16,6 +16,7 @@ import { isDemoAtom } from '../../../../../store'
 
 interface IEvaluate {
     id: string | undefined
+    assignmentsCount: number
     benchmarkDetail:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
         | undefined
@@ -74,6 +75,7 @@ const columns: (
 export default function Evaluate({
     id,
     benchmarkDetail,
+    assignmentsCount,
     onEvaluate,
 }: IEvaluate) {
     const [open, setOpen] = useState(false)
@@ -116,12 +118,14 @@ export default function Evaluate({
                 loading={
                     !(
                         benchmarkDetail?.lastJobStatus === 'FAILED' ||
-                        benchmarkDetail?.lastJobStatus === 'SUCCEEDED'
+                        benchmarkDetail?.lastJobStatus === 'SUCCEEDED' ||
+                        (benchmarkDetail?.lastJobStatus || '') === ''
                     )
                 }
             >
                 {benchmarkDetail?.lastJobStatus === 'FAILED' ||
-                benchmarkDetail?.lastJobStatus === 'SUCCEEDED'
+                benchmarkDetail?.lastJobStatus === 'SUCCEEDED' ||
+                (benchmarkDetail?.lastJobStatus || '') === ''
                     ? 'Evaluate now'
                     : 'Evaluating'}
             </Button>

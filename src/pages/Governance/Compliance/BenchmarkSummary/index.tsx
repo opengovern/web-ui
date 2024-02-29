@@ -151,6 +151,7 @@ export default function BenchmarkSummary() {
                             <Evaluate
                                 id={benchmarkDetail?.id}
                                 benchmarkDetail={benchmarkDetail}
+                                assignmentsCount={assignments}
                                 onEvaluate={(c) => {
                                     setSelectedAccounts(() => c)
                                     triggerEvaluate(
