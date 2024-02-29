@@ -24,7 +24,10 @@ import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import { DateRange } from '../../../../utilities/urlstate'
 
 export const columns = (isDemo: boolean) => {
-    const temp: IColumn<any, any>[] = [
+    const temp: IColumn<
+        GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+        any
+    >[] = [
         {
             field: 'providerConnectionName',
             headerName: 'Cloud Account',
@@ -33,17 +36,19 @@ export const columns = (isDemo: boolean) => {
             hide: true,
             enableRowGroup: true,
             type: 'string',
-            cellRenderer: (param: ICellRendererParams) => (
+            cellRenderer: (
+                param: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiFinding>
+            ) => (
                 <Flex
                     justifyContent="start"
                     className={`h-full gap-3 group relative ${
                         isDemo ? 'blur-sm' : ''
                     }`}
                 >
-                    {getConnectorIcon(param.data.connector)}
+                    {getConnectorIcon(param.data?.connector)}
                     <Flex flexDirection="col" alignItems="start">
                         <Text className="text-gray-800">{param.value}</Text>
-                        <Text>{param.data.providerConnectionID}</Text>
+                        <Text>{param.data?.providerConnectionID}</Text>
                     </Flex>
                     <Card className="cursor-pointer absolute w-fit h-fit z-40 right-1 scale-0 transition-all py-1 px-4 group-hover:scale-100">
                         <Text color="blue">Open</Text>
@@ -61,7 +66,9 @@ export const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
-            cellRenderer: (param: ICellRendererParams) => (
+            cellRenderer: (
+                param: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiFinding>
+            ) => (
                 <Flex
                     flexDirection="col"
                     alignItems="start"
@@ -69,7 +76,7 @@ export const columns = (isDemo: boolean) => {
                     className={isDemo ? 'h-full' : 'h-full'}
                 >
                     <Text className="text-gray-800">{param.value}</Text>
-                    <Text>{param.data.resourceTypeName}</Text>
+                    <Text>{param.data?.resourceTypeName}</Text>
                 </Flex>
             ),
         },
@@ -83,7 +90,9 @@ export const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
-            cellRenderer: (param: ICellRendererParams) => (
+            cellRenderer: (
+                param: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiFinding>
+            ) => (
                 <Flex
                     flexDirection="col"
                     alignItems="start"
@@ -92,7 +101,7 @@ export const columns = (isDemo: boolean) => {
                 >
                     <Text className="text-gray-800">{param.value}</Text>
                     <Text className={isDemo ? 'blur-sm' : ''}>
-                        {param.data.resourceID}
+                        {param.data?.resourceID}
                     </Text>
                 </Flex>
             ),
@@ -107,7 +116,9 @@ export const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
-            cellRenderer: (param: ICellRendererParams) => (
+            cellRenderer: (
+                param: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiFinding>
+            ) => (
                 <Flex
                     flexDirection="col"
                     alignItems="start"
@@ -115,14 +126,12 @@ export const columns = (isDemo: boolean) => {
                     className="h-full"
                 >
                     <Text className="text-gray-800">
-                        {param.data.parentBenchmarkNames[0]}
+                        {param.data?.parentBenchmarkNames?.at(0)}
                     </Text>
                     <Text>
-                        {
-                            param.data.parentBenchmarkNames[
-                                param.data.parentBenchmarkNames.length - 1
-                            ]
-                        }
+                        {param.data?.parentBenchmarkNames?.at(
+                            (param.data?.parentBenchmarkNames?.length || 0) - 1
+                        )}
                     </Text>
                 </Flex>
             ),
@@ -137,7 +146,9 @@ export const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             width: 200,
-            cellRenderer: (param: ICellRendererParams) => (
+            cellRenderer: (
+                param: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiFinding>
+            ) => (
                 <Flex
                     flexDirection="col"
                     alignItems="start"
@@ -145,9 +156,9 @@ export const columns = (isDemo: boolean) => {
                     className="h-full"
                 >
                     <Text className="text-gray-800">
-                        {param.data.parentBenchmarkNames[0]}
+                        {param.data?.parentBenchmarkNames?.at(0)}
                     </Text>
-                    <Text>{param.data.controlTitle}</Text>
+                    <Text>{param.data?.controlTitle}</Text>
                 </Flex>
             ),
         },
@@ -161,7 +172,9 @@ export const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             width: 100,
-            cellRenderer: (param: ICellRendererParams) => (
+            cellRenderer: (
+                param: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiFinding>
+            ) => (
                 <Flex
                     flexDirection="col"
                     alignItems="start"
@@ -182,9 +195,9 @@ export const columns = (isDemo: boolean) => {
             hide: true,
             resizable: true,
             width: 100,
-            cellRenderer: (param: ValueFormatterParams) => (
-                <Flex className="h-full">{severityBadge(param.value)}</Flex>
-            ),
+            cellRenderer: (
+                param: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiFinding>
+            ) => <Flex className="h-full">{severityBadge(param.value)}</Flex>,
         },
         {
             field: 'evaluatedAt',
@@ -194,10 +207,14 @@ export const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
-            valueFormatter: (param: ValueFormatterParams) => {
+            valueFormatter: (
+                param: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgComplianceApiFinding>
+            ) => {
                 return param.value ? dateTimeDisplay(param.value) : ''
             },
-            cellRenderer: (param: ICellRendererParams) => (
+            cellRenderer: (
+                param: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiFinding>
+            ) => (
                 <Flex
                     flexDirection="col"
                     alignItems="start"
@@ -217,10 +234,14 @@ export const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
-            valueFormatter: (param: ValueFormatterParams) => {
+            valueFormatter: (
+                param: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgComplianceApiFinding>
+            ) => {
                 return param.value ? dateTimeDisplay(param.value) : ''
             },
-            cellRenderer: (param: ICellRendererParams) => (
+            cellRenderer: (
+                param: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiFinding>
+            ) => (
                 <Flex
                     flexDirection="col"
                     alignItems="start"
