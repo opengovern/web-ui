@@ -236,40 +236,67 @@ export default function ScoreDetails() {
                         )}
 
                         <SummaryCard
-                            title={
+                            title={`Compliant ${
                                 controlDetail?.resourceType?.resource_name || ''
-                            }
+                            }`}
                             metric={
                                 <Flex
                                     flexDirection="row"
-                                    justifyContent="between"
-                                    alignItems="end"
-                                    className="w-full aaa"
+                                    justifyContent="start"
+                                    alignItems="baseline"
+                                    className="gap-3"
                                 >
-                                    <Metric>
-                                        {`${numberDisplay(
-                                            controlDetail?.totalResourcesCount,
+                                    <Metric className="text-emerald-500">
+                                        {numberDisplay(
+                                            (controlDetail?.totalResourcesCount ||
+                                                0) -
+                                                (controlDetail?.failedResourcesCount ||
+                                                    0),
                                             0
-                                        )}`}
+                                        )}
                                     </Metric>
-                                    <Text className="text-lg">
-                                        <span className="text-red-600 font-bold">
-                                            {numberDisplay(
-                                                controlDetail?.failedResourcesCount,
-                                                0
-                                            )}
-                                        </span>{' '}
-                                        Failed{' '}
-                                        <span className="text-green-600 ml-2 font-bold">
-                                            {numberDisplay(
-                                                (controlDetail?.totalResourcesCount ||
-                                                    0) -
-                                                    (controlDetail?.failedResourcesCount ||
-                                                        0),
-                                                0
-                                            )}
-                                        </span>{' '}
-                                        Passed
+                                    <Text>
+                                        from{' '}
+                                        {numberDisplay(
+                                            controlDetail?.totalResourcesCount ||
+                                                0,
+                                            0
+                                        )}
+                                    </Text>
+                                </Flex>
+                            }
+                            isElement
+                            onClick={() => {
+                                setSelectedTabIndex(0)
+                            }}
+                            cardClickable
+                        />
+
+                        <SummaryCard
+                            title={`Non-Compliant ${
+                                controlDetail?.resourceType?.resource_name || ''
+                            }`}
+                            metric={
+                                <Flex
+                                    flexDirection="row"
+                                    justifyContent="start"
+                                    alignItems="baseline"
+                                    className="gap-3"
+                                >
+                                    <Metric className="text-rose-500">
+                                        {numberDisplay(
+                                            controlDetail?.failedResourcesCount ||
+                                                0,
+                                            0
+                                        )}
+                                    </Metric>
+                                    <Text>
+                                        from{' '}
+                                        {numberDisplay(
+                                            controlDetail?.totalResourcesCount ||
+                                                0,
+                                            0
+                                        )}
                                     </Text>
                                 </Flex>
                             }
@@ -281,12 +308,12 @@ export default function ScoreDetails() {
                         />
                         <SummaryCard
                             connector={controlDetail?.control?.connector}
-                            title={
+                            title={`${
                                 controlDetail?.control?.connector ===
                                 SourceType.CloudAWS
                                     ? 'AWS Accounts'
                                     : 'Azure Subscriptions'
-                            }
+                            } Checked`}
                             metric={controlDetail?.totalConnectionCount}
                             onClick={() => {
                                 setSelectedTabIndex(1)

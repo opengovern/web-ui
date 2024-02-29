@@ -71,12 +71,14 @@ export default function ScoreCategoryCard({
                     {isLoading ? (
                         <div className="animate-pulse h-3 w-16 my-0 bg-slate-200 dark:bg-slate-700 rounded" />
                     ) : (
-                        <>
-                            <span className="text-black">
+                        <Flex className="gap-1">
+                            <span className="text-gray-900">23</span>
+                            <span>of</span>
+                            <span className="text-gray-900">
                                 {countControls(response)}
                             </span>{' '}
-                            Controls
-                        </>
+                            <span>Passed</span>
+                        </Flex>
                     )}
                 </Text>
                 {/* <BadgeDeltaSimple change={change}>
