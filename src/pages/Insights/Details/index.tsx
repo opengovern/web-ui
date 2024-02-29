@@ -49,6 +49,7 @@ import { SourceType } from '../../../api/api'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import ControlDetail from '../../Governance/Controls/ControlSummary'
+import ControlFindings from '../../Governance/Controls/ControlSummary/Tabs/ControlFindings'
 
 export default function ScoreDetails() {
     const { id, ws } = useParams()
@@ -626,6 +627,7 @@ export default function ScoreDetails() {
                             <TabList>
                                 <Tab>Impacted resources</Tab>
                                 <Tab>Impacted accounts</Tab>
+                                <Tab>Findings</Tab>
                             </TabList>
                             <TabPanels>
                                 <TabPanel>
@@ -640,6 +642,15 @@ export default function ScoreDetails() {
                                 <TabPanel>
                                     {selectedTabIndex === 1 && (
                                         <ImpactedAccounts
+                                            controlId={
+                                                controlDetail?.control?.id
+                                            }
+                                        />
+                                    )}
+                                </TabPanel>
+                                <TabPanel>
+                                    {selectedTabIndex === 2 && (
+                                        <ControlFindings
                                             controlId={
                                                 controlDetail?.control?.id
                                             }

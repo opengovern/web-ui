@@ -94,10 +94,12 @@ const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
-            cellRenderer: (param: ICellRendererParams) => (
+            cellRenderer: (
+                param: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiFinding>
+            ) => (
                 <Flex flexDirection="col" alignItems="start">
                     <Text className="text-gray-800">
-                        {param.data.parentBenchmarkNames[0]}
+                        {param.data?.parentBenchmarkNames?.at(0)}
                     </Text>
                     <Text>{param.value}</Text>
                 </Flex>
