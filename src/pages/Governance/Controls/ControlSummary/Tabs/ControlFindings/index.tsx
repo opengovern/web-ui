@@ -21,7 +21,6 @@ import AxiosAPI from '../../../../../../api/ApiConfig'
 import { activeBadge, statusBadge } from '../../../index'
 import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
 import { getConnectorIcon } from '../../../../../../components/Cards/ConnectorCard'
-import ResourceFindingDetail from '../../../../Findings/ResourceFindingDetail'
 
 let sortKey: any[] = []
 

@@ -258,7 +258,7 @@ export default function ScoreDetails() {
                                         )}
                                     </Metric>
                                     <Text>
-                                        from{' '}
+                                        of{' '}
                                         {numberDisplay(
                                             controlDetail?.totalResourcesCount ||
                                                 0,
@@ -293,7 +293,7 @@ export default function ScoreDetails() {
                                         )}
                                     </Metric>
                                     <Text>
-                                        from{' '}
+                                        of{' '}
                                         {numberDisplay(
                                             controlDetail?.totalResourcesCount ||
                                                 0,
@@ -634,8 +634,9 @@ export default function ScoreDetails() {
                                     {selectedTabIndex === 0 && (
                                         <ImpactedResources
                                             controlId={
-                                                controlDetail?.control?.id
+                                                controlDetail?.control?.id || ''
                                             }
+                                            linkPrefix={`/${ws}/score/categories/`}
                                         />
                                     )}
                                 </TabPanel>

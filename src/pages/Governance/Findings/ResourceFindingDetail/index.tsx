@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useAtomValue, useSetAtom } from 'jotai'
 import {
     Card,
@@ -28,23 +29,29 @@ import Spinner from '../../../../components/Spinner'
 import { severityBadge } from '../../Controls'
 import { isDemoAtom, notificationAtom } from '../../../../store'
 import Timeline from '../FindingsWithFailure/Detail/Timeline'
+import { searchAtom } from '../../../../utilities/urlstate'
+import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 
 interface IResourceFindingDetail {
     resourceFinding:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding
         | undefined
     controlID?: string
+    showOnlyOneControl: boolean
     open: boolean
     onClose: () => void
     onRefresh: () => void
+    linkPrefix?: string
 }
 
 export default function ResourceFindingDetail({
     resourceFinding,
     controlID,
+    showOnlyOneControl,
     open,
     onClose,
     onRefresh,
+    linkPrefix = '',
 }: IResourceFindingDetail) {
     const { response, isLoading, sendNow } =
         useComplianceApiV1FindingsResourceCreate(
@@ -52,6 +59,7 @@ export default function ResourceFindingDetail({
             {},
             false
         )
+    const searchParams = useAtomValue(searchAtom)
 
     useEffect(() => {
         if (resourceFinding && open) {
@@ -60,6 +68,44 @@ export default function ResourceFindingDetail({
     }, [resourceFinding, open])
 
     const isDemo = useAtomValue(isDemoAtom)
+
+    const finding = resourceFinding?.findings
+        ?.filter((f) => f.controlID === controlID)
+        .at(0)
+
+    const conformance = () => {
+        if (showOnlyOneControl) {
+            return (finding?.conformanceStatus || 0) ===
+                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed ? (
+                <Flex className="w-fit gap-1.5">
+                    <XCircleIcon className="h-4 text-rose-600" />
+                    <Text>Failed</Text>
+                </Flex>
+            ) : (
+                <Flex className="w-fit gap-1.5">
+                    <CheckCircleIcon className="h-4 text-emerald-500" />
+                    <Text>Passed</Text>
+                </Flex>
+            )
+        }
+
+        const failingControls = new Map<string, string>()
+        resourceFinding?.findings?.forEach((f) => {
+            failingControls.set(f.controlID || '', '')
+        })
+
+        return failingControls.size > 0 ? (
+            <Flex className="w-fit gap-1.5">
+                <XCircleIcon className="h-4 text-rose-600" />
+                <Text>{failingControls.size} Failing</Text>
+            </Flex>
+        ) : (
+            <Flex className="w-fit gap-1.5">
+                <CheckCircleIcon className="h-4 text-emerald-500" />
+                <Text>Passed</Text>
+            </Flex>
+        )
+    }
 
     return (
         <DrawerPanel
@@ -98,19 +144,7 @@ export default function ResourceFindingDetail({
                 />
                 <SummaryCard
                     title="Conformance Status"
-                    metric={
-                        (resourceFinding?.failedCount || 0) > 0 ? (
-                            <Flex className="w-fit gap-1.5">
-                                <XCircleIcon className="h-4 text-rose-600" />
-                                <Text>Failed</Text>
-                            </Flex>
-                        ) : (
-                            <Flex className="w-fit gap-1.5">
-                                <CheckCircleIcon className="h-4 text-emerald-500" />
-                                <Text>Passed</Text>
-                            </Flex>
-                        )
-                    }
+                    metric={conformance()}
                     isString
                 />
             </Grid>
@@ -122,7 +156,11 @@ export default function ResourceFindingDetail({
                 >
                     <TabList className="w-full">
                         <>
-                            <Tab>Applicable Controls</Tab>
+                            <Tab>
+                                {showOnlyOneControl
+                                    ? 'Summary'
+                                    : 'Applicable Controls'}
+                            </Tab>
                             <Tab disabled={!response?.resource}>
                                 Resource Details
                             </Tab>
@@ -132,50 +170,104 @@ export default function ResourceFindingDetail({
 
                 <TabPanels>
                     <TabPanel>
-                        {isLoading ? (
-                            <Spinner className="mt-12" />
+                        {showOnlyOneControl ? (
+                            <List>
+                                <ListItem className="py-6">
+                                    <Text>Control</Text>
+
+                                    {isLoading ? (
+                                        <div className="animate-pulse h-3 w-64 my-1 bg-slate-200 dark:bg-slate-700 rounded" />
+                                    ) : (
+                                        <Link
+                                            className="text-right text-kaytu-500 cursor-pointer underline"
+                                            to={`${linkPrefix}${finding?.controlID}?${searchParams}`}
+                                        >
+                                            {response?.controls
+                                                ?.filter(
+                                                    (c) =>
+                                                        c.controlID ===
+                                                        finding?.controlID
+                                                )
+                                                .map((c) => c.controlTitle)}
+                                        </Link>
+                                    )}
+                                </ListItem>
+                                <ListItem className="py-6">
+                                    <Text>Severity</Text>
+                                    {severityBadge(finding?.severity)}
+                                </ListItem>
+                                <ListItem className="py-6">
+                                    <Text>Last evaluated</Text>
+                                    <Text className="text-gray-800">
+                                        {dateTimeDisplay(finding?.evaluatedAt)}
+                                    </Text>
+                                </ListItem>
+                                <ListItem className="py-6 space-x-5">
+                                    <Flex
+                                        flexDirection="row"
+                                        justifyContent="between"
+                                        alignItems="start"
+                                        className="w-full"
+                                    >
+                                        <Text className="w-1/4">Reason</Text>
+                                        <Text className="text-gray-800 text-end w-3/4 whitespace-break-spaces h-fit">
+                                            {finding?.reason}
+                                        </Text>
+                                    </Flex>
+                                </ListItem>
+                            </List>
                         ) : (
                             <List>
-                                {response?.controls
-                                    ?.filter((c) => {
-                                        if (controlID !== undefined) {
-                                            return c.controlID === controlID
-                                        }
-                                        return true
-                                    })
-                                    .map((control) => (
-                                        <ListItem>
-                                            <Flex
-                                                flexDirection="col"
-                                                alignItems="start"
-                                                className="gap-1 w-fit max-w-[80%]"
-                                            >
-                                                <Text className="text-gray-800 w-full truncate">
-                                                    {control.controlTitle}
-                                                </Text>
-                                                <Flex justifyContent="start">
-                                                    {control.conformanceStatus ===
-                                                    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed ? (
-                                                        <Flex className="w-fit gap-1.5">
-                                                            <CheckCircleIcon className="h-4 text-emerald-500" />
-                                                            <Text>Passed</Text>
+                                {isLoading ? (
+                                    <Spinner className="mt-40" />
+                                ) : (
+                                    response?.controls
+                                        ?.filter((c) => {
+                                            if (showOnlyOneControl) {
+                                                return c.controlID === controlID
+                                            }
+                                            return true
+                                        })
+                                        .map((control) => (
+                                            <ListItem>
+                                                <Flex
+                                                    flexDirection="col"
+                                                    alignItems="start"
+                                                    className="gap-1 w-fit max-w-[80%]"
+                                                >
+                                                    <Text className="text-gray-800 w-full truncate">
+                                                        {control.controlTitle}
+                                                    </Text>
+                                                    <Flex justifyContent="start">
+                                                        {control.conformanceStatus ===
+                                                        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed ? (
+                                                            <Flex className="w-fit gap-1.5">
+                                                                <CheckCircleIcon className="h-4 text-emerald-500" />
+                                                                <Text>
+                                                                    Passed
+                                                                </Text>
+                                                            </Flex>
+                                                        ) : (
+                                                            <Flex className="w-fit gap-1.5">
+                                                                <XCircleIcon className="h-4 text-rose-600" />
+                                                                <Text>
+                                                                    Failed
+                                                                </Text>
+                                                            </Flex>
+                                                        )}
+                                                        <Flex className="border-l border-gray-200 ml-3 pl-3 h-full">
+                                                            <Text className="text-xs">
+                                                                SECTION:
+                                                            </Text>
                                                         </Flex>
-                                                    ) : (
-                                                        <Flex className="w-fit gap-1.5">
-                                                            <XCircleIcon className="h-4 text-rose-600" />
-                                                            <Text>Failed</Text>
-                                                        </Flex>
-                                                    )}
-                                                    <Flex className="border-l border-gray-200 ml-3 pl-3 h-full">
-                                                        <Text className="text-xs">
-                                                            SECTION:
-                                                        </Text>
                                                     </Flex>
                                                 </Flex>
-                                            </Flex>
-                                            {severityBadge(control.severity)}
-                                        </ListItem>
-                                    ))}
+                                                {severityBadge(
+                                                    control.severity
+                                                )}
+                                            </ListItem>
+                                        ))
+                                )}
                             </List>
                         )}
                     </TabPanel>

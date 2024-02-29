@@ -549,7 +549,8 @@ export default function ControlDetail() {
                         <TabPanels>
                             <TabPanel>
                                 <ImpactedResources
-                                    controlId={controlDetail?.control?.id}
+                                    controlId={controlDetail?.control?.id || ''}
+                                    linkPrefix={`/${ws}/score/categories/`}
                                 />
                             </TabPanel>
                             <TabPanel>

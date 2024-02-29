@@ -130,7 +130,7 @@ const columns: IColumn<IRecord, any>[] = [
 
     {
         field: 'failedResourcesCount',
-        headerName: 'Failed',
+        headerName: 'Failing Resources',
         type: 'custom',
         aggFunc: 'sum',
         sortable: true,
@@ -146,17 +146,16 @@ const columns: IColumn<IRecord, any>[] = [
                 alignItems="center"
                 className="h-full gap-1"
             >
-                <Icon className="w-4" icon={XCircleIcon} color="rose" />
-                <Text>Failed:</Text>
-                <Text className="font-bold ">{param.value}</Text>
+                <Text className="font-bold ">{param.value} resources</Text>
             </Flex>
         ),
     },
     {
         field: 'passedResourcesCount',
-        headerName: 'Passed',
+        headerName: 'Passing Resources',
         type: 'string',
         width: 160,
+        hide: true,
         aggFunc: 'sum',
         sortable: true,
         cellRenderer: (
@@ -170,9 +169,7 @@ const columns: IColumn<IRecord, any>[] = [
                 alignItems="center"
                 className="h-full gap-1"
             >
-                <Icon className="w-4" icon={CheckCircleIcon} color="emerald" />
-                <Text>Passed:</Text>
-                <Text className="font-bold ">{param.value}</Text>
+                <Text className="font-bold ">{param.value} resources</Text>
             </Flex>
         ),
     },

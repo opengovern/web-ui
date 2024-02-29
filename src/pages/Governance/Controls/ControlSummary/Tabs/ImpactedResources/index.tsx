@@ -26,10 +26,11 @@ import ResourceFindingDetail from '../../../../Findings/ResourceFindingDetail'
 let sortKey: any[] = []
 
 interface IImpactedResources {
-    controlId: string | undefined
+    controlId: string
+    linkPrefix?: string
 }
 
-const columns = (isDemo: boolean) => {
+const columns = (controlID: string, isDemo: boolean) => {
     const temp: IColumn<
         GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,
         any
@@ -167,12 +168,15 @@ const columns = (isDemo: boolean) => {
             hide: false,
             resizable: true,
             width: 160,
-            cellRenderer: (param: ValueFormatterParams) => (
+            cellRenderer: (
+                param: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding>
+            ) => (
                 <Flex className="h-full">
                     {statusBadge(
-                        param.value > 0
-                            ? GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed
-                            : GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed
+                        param.data?.findings
+                            ?.filter((f) => f.controlID === controlID)
+                            .map((f) => f.conformanceStatus)
+                            .at(0)
                     )}
                 </Flex>
             ),
@@ -194,7 +198,10 @@ const columns = (isDemo: boolean) => {
     return temp
 }
 
-export default function ImpactedResources({ controlId }: IImpactedResources) {
+export default function ImpactedResources({
+    controlId,
+    linkPrefix,
+}: IImpactedResources) {
     const isDemo = useAtomValue(isDemoAtom)
     const setNotification = useSetAtom(notificationAtom)
 
@@ -269,7 +276,7 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
             <Table
                 fullWidth
                 id="compliance_findings"
-                columns={columns(isDemo)}
+                columns={columns(controlId, isDemo)}
                 onCellClicked={(
                     event: RowClickedEvent<
                         GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,
@@ -301,9 +308,11 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
             <ResourceFindingDetail
                 resourceFinding={finding}
                 controlID={controlId}
+                showOnlyOneControl
                 open={open}
                 onClose={() => setOpen(false)}
                 onRefresh={() => window.location.reload()}
+                linkPrefix={linkPrefix}
             />
         </>
     )

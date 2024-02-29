@@ -11,6 +11,7 @@ import {
     Api,
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,
     SourceType,
     TypesFindingSeverity,
 } from '../../../../api/api'
@@ -22,6 +23,7 @@ import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import { DateRange, useURLParam } from '../../../../utilities/urlstate'
 import { useComplianceApiV1FindingsSingleDetail } from '../../../../api/compliance.gen'
+import ResourceFindingDetail from '../ResourceFindingDetail'
 
 const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -148,7 +150,7 @@ const columns = (isDemo: boolean) => {
     return temp
 }
 
-let sortKey = ''
+let sortKey: any[] = []
 
 interface ICount {
     query: {
@@ -170,14 +172,16 @@ export default function ResourcesWithFailure({ query }: ICount) {
 
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<
-        GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
+        GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding | undefined
     >(undefined)
 
     const isDemo = useAtomValue(isDemoAtom)
 
     const ssr = () => {
         return {
-            getRows: (params: IServerSideGetRowsParams) => {
+            getRows: (
+                params: IServerSideGetRowsParams<GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding>
+            ) => {
                 const api = new Api()
                 api.instance = AxiosAPI
                 api.compliance
@@ -202,12 +206,8 @@ export default function ResourcesWithFailure({ query }: ICount) {
                               ]
                             : [],
                         limit: 100,
-                        // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
-                        // @ts-ignore
                         afterSortKey:
-                            params.request.startRow === 0 ||
-                            sortKey.length < 1 ||
-                            sortKey === 'none'
+                            params.request.startRow === 0 || sortKey.length < 1
                                 ? []
                                 : sortKey,
                     })
@@ -216,18 +216,10 @@ export default function ResourcesWithFailure({ query }: ICount) {
                             rowData: resp.data.resourceFindings || [],
                             rowCount: resp.data.totalCount || 0,
                         })
-                        // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
-                        // @ts-ignore
                         sortKey =
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            // eslint-disable-next-line no-unsafe-optional-chaining
-                            resp.data.resourceFindings[
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                // eslint-disable-next-line no-unsafe-optional-chaining
-                                resp.data.resourceFindings?.length - 1
-                            ].sortKey
+                            resp.data?.resourceFindings?.at(
+                                (resp.data.resourceFindings?.length || 0) - 1
+                            )?.sortKey || []
                     })
                     .catch((err) => {
                         params.fail()
@@ -244,10 +236,12 @@ export default function ResourcesWithFailure({ query }: ICount) {
                 fullWidth
                 id="compliance_findings"
                 columns={columns(isDemo)}
-                onCellClicked={(event: RowClickedEvent) => {
+                onCellClicked={(
+                    event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding>
+                ) => {
                     if (
-                        event.data.kaytuResourceID &&
-                        event.data.kaytuResourceID.length > 0
+                        event.data?.kaytuResourceID &&
+                        event.data?.kaytuResourceID.length > 0
                     ) {
                         setFinding(event.data)
                         setOpen(true)
@@ -259,7 +253,7 @@ export default function ResourcesWithFailure({ query }: ICount) {
                     }
                 }}
                 onSortChange={() => {
-                    sortKey = ''
+                    sortKey = []
                 }}
                 serverSideDatasource={serverSideRows}
                 options={{
@@ -268,10 +262,11 @@ export default function ResourcesWithFailure({ query }: ICount) {
                 }}
                 rowHeight="lg"
             />
-            <FindingDetail
-                type="resource"
-                finding={finding}
+            <ResourceFindingDetail
+                // type="resource"
+                resourceFinding={finding}
                 open={open}
+                showOnlyOneControl={false}
                 onClose={() => setOpen(false)}
                 onRefresh={() => window.location.reload()}
             />
