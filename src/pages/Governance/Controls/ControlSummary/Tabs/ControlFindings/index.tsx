@@ -25,6 +25,7 @@ import { getConnectorIcon } from '../../../../../../components/Cards/ConnectorCa
 let sortKey: any[] = []
 
 interface IControlFindings {
+    onlyFailed?: boolean
     controlId: string | undefined
 }
 
@@ -189,7 +190,10 @@ const columns = (isDemo: boolean) => {
     return temp
 }
 
-export default function ControlFindings({ controlId }: IControlFindings) {
+export default function ControlFindings({
+    controlId,
+    onlyFailed,
+}: IControlFindings) {
     const isDemo = useAtomValue(isDemoAtom)
     const setNotification = useSetAtom(notificationAtom)
 
@@ -208,10 +212,15 @@ export default function ControlFindings({ controlId }: IControlFindings) {
                     .apiV1FindingsCreate({
                         filters: {
                             controlID: [controlId || ''],
-                            conformanceStatus: [
-                                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
-                                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
-                            ],
+                            conformanceStatus:
+                                onlyFailed === true
+                                    ? [
+                                          GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+                                      ]
+                                    : [
+                                          GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
+                                          GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+                                      ],
                         },
                         sort: params.request.sortModel.length
                             ? [
@@ -251,7 +260,7 @@ export default function ControlFindings({ controlId }: IControlFindings) {
         }
     }
 
-    const serverSideRows = useMemo(() => ssr(), [])
+    const serverSideRows = useMemo(() => ssr(), [onlyFailed])
 
     return (
         <>

@@ -17,6 +17,7 @@ import {
     Icon,
     TabPanels,
     TabPanel,
+    Switch,
 } from '@tremor/react'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 import Editor from 'react-simple-code-editor'
@@ -70,6 +71,12 @@ export default function ScoreDetails() {
         })
 
     const costSaving = 0
+
+    const customizableQuery = (
+        controlDetail?.control?.query?.queryToExecute || ''
+    ).includes('{{')
+
+    const [onlyFailed, setOnlyFailed] = useState(false)
 
     return (
         <>
@@ -146,7 +153,9 @@ export default function ScoreDetails() {
                                             )
                                         }
                                     >
-                                        Show Query
+                                        {customizableQuery
+                                            ? 'Show Customizable Query'
+                                            : 'Show Query'}
                                     </Button>
                                 </Flex>
                             </Flex>
@@ -180,20 +189,43 @@ export default function ScoreDetails() {
                         onClose={() => setModalData('')}
                     >
                         <Title className="font-semibold">Query</Title>
-                        <Card className="my-4">
-                            <Editor
-                                onValueChange={() => 1}
-                                highlight={(text) =>
-                                    highlight(text, languages.sql, 'sql')
-                                }
-                                value={modalData}
-                                className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
-                                style={{
-                                    minHeight: '200px',
-                                }}
-                                placeholder="-- write your SQL query here"
-                            />
-                        </Card>
+                        <Flex flexDirection="row" alignItems="start">
+                            <Card className="my-4">
+                                <Editor
+                                    onValueChange={() => 1}
+                                    highlight={(text) =>
+                                        highlight(text, languages.sql, 'sql')
+                                    }
+                                    value={modalData}
+                                    className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
+                                    style={{
+                                        minHeight: '200px',
+                                    }}
+                                    placeholder="-- write your SQL query here"
+                                />
+                            </Card>
+                            <Flex
+                                flexDirection="col"
+                                justifyContent="start"
+                                alignItems="start"
+                                className="mt-2 ml-2 w-1/3"
+                            >
+                                <Text>Customizable Parameters:</Text>
+                                {controlDetail?.control?.query?.parameters?.map(
+                                    (param) => {
+                                        return <Text>- {param.key}</Text>
+                                    }
+                                )}
+                                <Link
+                                    to={`/${ws}/settings?sp=parameters`}
+                                    className="text-kaytu-500 cursor-pointer"
+                                >
+                                    <Text className="text-kaytu-500">
+                                        Click here to change parameters
+                                    </Text>
+                                </Link>
+                            </Flex>
+                        </Flex>
                         <Flex>
                             <Button
                                 variant="light"
@@ -601,22 +633,6 @@ export default function ScoreDetails() {
                         </Flex>
                     </Card>
 
-                    {/* <Flex
-                        flexDirection="row"
-                        justifyContent="center"
-                        onClick={() => setHideTabs(!hideTabs)}
-                        className="text-blue-500 cursor-pointer"
-                    >
-                        <Text className="text-blue-500">
-                            {hideTabs ? 'Show' : 'Hide'} Results
-                        </Text>
-                        {hideTabs ? (
-                            <ChevronDownIcon className="ml-2 w-4" />
-                        ) : (
-                            <ChevronUpIcon className="ml-2 w-4" />
-                        )}
-                    </Flex> */}
-
                     {!hideTabs && (
                         <TabGroup
                             key={`tabs-${selectedTabIndex}`}
@@ -624,11 +640,30 @@ export default function ScoreDetails() {
                             tabIndex={selectedTabIndex}
                             onIndexChange={setSelectedTabIndex}
                         >
-                            <TabList>
-                                <Tab>Impacted resources</Tab>
-                                <Tab>Impacted accounts</Tab>
-                                <Tab>Findings</Tab>
-                            </TabList>
+                            <Flex
+                                flexDirection="row"
+                                justifyContent="between"
+                                className="mb-2"
+                            >
+                                <div className="w-fit">
+                                    <TabList>
+                                        <Tab>Impacted resources</Tab>
+                                        <Tab>Impacted accounts</Tab>
+                                        <Tab>Findings</Tab>
+                                    </TabList>
+                                </div>
+                                <Flex flexDirection="row" className="w-fit">
+                                    <Text className="mr-2">
+                                        Show failing only
+                                    </Text>
+                                    <Switch
+                                        id="switch"
+                                        name="switch"
+                                        checked={onlyFailed}
+                                        onChange={setOnlyFailed}
+                                    />
+                                </Flex>
+                            </Flex>
                             <TabPanels>
                                 <TabPanel>
                                     {selectedTabIndex === 0 && (
@@ -636,6 +671,7 @@ export default function ScoreDetails() {
                                             controlId={
                                                 controlDetail?.control?.id || ''
                                             }
+                                            onlyFailed={onlyFailed}
                                             linkPrefix={`/${ws}/score/categories/`}
                                         />
                                     )}
@@ -652,6 +688,7 @@ export default function ScoreDetails() {
                                 <TabPanel>
                                     {selectedTabIndex === 2 && (
                                         <ControlFindings
+                                            onlyFailed={onlyFailed}
                                             controlId={
                                                 controlDetail?.control?.id
                                             }

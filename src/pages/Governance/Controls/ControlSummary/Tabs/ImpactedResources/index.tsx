@@ -27,6 +27,7 @@ let sortKey: any[] = []
 
 interface IImpactedResources {
     controlId: string
+    onlyFailed?: boolean
     linkPrefix?: string
 }
 
@@ -200,6 +201,7 @@ const columns = (controlID: string, isDemo: boolean) => {
 
 export default function ImpactedResources({
     controlId,
+    onlyFailed,
     linkPrefix,
 }: IImpactedResources) {
     const isDemo = useAtomValue(isDemoAtom)
@@ -220,10 +222,15 @@ export default function ImpactedResources({
                     .apiV1ResourceFindingsCreate({
                         filters: {
                             controlID: [controlId || ''],
-                            conformanceStatus: [
-                                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
-                                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
-                            ],
+                            conformanceStatus:
+                                onlyFailed === true
+                                    ? [
+                                          GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+                                      ]
+                                    : [
+                                          GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
+                                          GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+                                      ],
                         },
                         sort: params.request.sortModel.length
                             ? [
@@ -263,7 +270,7 @@ export default function ImpactedResources({
         }
     }
 
-    const serverSideRows = useMemo(() => ssr(), [])
+    const serverSideRows = useMemo(() => ssr(), [onlyFailed])
 
     return (
         <>

@@ -31,7 +31,7 @@ export default function Modal({ open, onClose, children }: IModal) {
 
                 <div
                     className="fixed mx-auto inset-0 z-50 overflow-y-auto"
-                    style={{ width: '600px' }}
+                    style={{ width: '1000px' }}
                 >
                     <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
                         <Transition.Child
