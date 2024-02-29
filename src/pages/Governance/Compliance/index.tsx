@@ -252,6 +252,23 @@ export default function Compliance() {
     //     }
     // }, [selectedState])
 
+    const active = benchmarkList(benchmarks?.benchmarkSummary).connected.filter(
+        (bm) =>
+            selectedProvider.length
+                ? bm?.tags?.service?.includes(selectedProvider)
+                : bm
+    )
+
+    const inactive = benchmarkList(benchmarks?.benchmarkSummary)
+        .notConnected?.sort(
+            (a, b) =>
+                (b?.checks?.passedCount || 0) - (a?.checks?.passedCount || 0)
+        )
+        .filter((bm) =>
+            selectedProvider.length
+                ? bm?.tags?.service?.includes(selectedProvider)
+                : bm
+        )
     return (
         <>
             <TopHeader />
@@ -285,7 +302,7 @@ export default function Compliance() {
             </Flex>
             {(selectedState === '' || selectedState === 'active') && (
                 <div className="mb-6">
-                    <Text className="mb-3">Active</Text>
+                    <Text className="mb-3">Active ({active.length})</Text>
                     {/* eslint-disable-next-line no-nested-ternary */}
                     {isLoading ? (
                         <Spinner className="my-56" />
@@ -293,41 +310,23 @@ export default function Compliance() {
                     error === undefined ? (
                         index === 1 ? (
                             <Grid className="w-full gap-4">
-                                {benchmarkList(benchmarks?.benchmarkSummary)
-                                    .connected.filter((bm) =>
-                                        selectedProvider.length
-                                            ? bm?.tags?.service?.includes(
-                                                  selectedProvider
-                                              )
-                                            : bm
+                                {active.map(
+                                    (
+                                        bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                                    ) => (
+                                        <ComplianceListCard benchmark={bm} />
                                     )
-                                    .map(
-                                        (
-                                            bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
-                                        ) => (
-                                            <ComplianceListCard
-                                                benchmark={bm}
-                                            />
-                                        )
-                                    )}
+                                )}
                             </Grid>
                         ) : (
                             <Grid numItems={3} className="w-full gap-4">
-                                {benchmarkList(benchmarks?.benchmarkSummary)
-                                    .connected.filter((bm) =>
-                                        selectedProvider.length
-                                            ? bm?.tags?.service?.includes(
-                                                  selectedProvider
-                                              )
-                                            : bm
+                                {active.map(
+                                    (
+                                        bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                                    ) => (
+                                        <ComplianceCard benchmark={bm} />
                                     )
-                                    .map(
-                                        (
-                                            bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
-                                        ) => (
-                                            <ComplianceCard benchmark={bm} />
-                                        )
-                                    )}
+                                )}
                             </Grid>
                         )
                     ) : (
@@ -337,7 +336,7 @@ export default function Compliance() {
             )}
             {(selectedState === '' || selectedState === 'not-active') && (
                 <>
-                    <Text className="mb-3">Not active</Text>
+                    <Text className="mb-3">Not active ({inactive.length})</Text>
                     {/* eslint-disable-next-line no-nested-ternary */}
                     {isLoading ? (
                         <Spinner className="mt-56" />
@@ -345,51 +344,23 @@ export default function Compliance() {
                     error === undefined ? (
                         index === 1 ? (
                             <Grid className="w-full gap-4">
-                                {benchmarkList(benchmarks?.benchmarkSummary)
-                                    .notConnected?.sort(
-                                        (a, b) =>
-                                            (b?.checks?.passedCount || 0) -
-                                            (a?.checks?.passedCount || 0)
+                                {inactive.map(
+                                    (
+                                        bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                                    ) => (
+                                        <ComplianceListCard benchmark={bm} />
                                     )
-                                    .filter((bm) =>
-                                        selectedProvider.length
-                                            ? bm?.tags?.service?.includes(
-                                                  selectedProvider
-                                              )
-                                            : bm
-                                    )
-                                    .map(
-                                        (
-                                            bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
-                                        ) => (
-                                            <ComplianceListCard
-                                                benchmark={bm}
-                                            />
-                                        )
-                                    )}
+                                )}
                             </Grid>
                         ) : (
                             <Grid numItems={3} className="w-full gap-4">
-                                {benchmarkList(benchmarks?.benchmarkSummary)
-                                    .notConnected?.sort(
-                                        (a, b) =>
-                                            (b?.checks?.passedCount || 0) -
-                                            (a?.checks?.passedCount || 0)
+                                {inactive.map(
+                                    (
+                                        bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                                    ) => (
+                                        <ComplianceCard benchmark={bm} />
                                     )
-                                    .filter((bm) =>
-                                        selectedProvider.length
-                                            ? bm?.tags?.service?.includes(
-                                                  selectedProvider
-                                              )
-                                            : bm
-                                    )
-                                    .map(
-                                        (
-                                            bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
-                                        ) => (
-                                            <ComplianceCard benchmark={bm} />
-                                        )
-                                    )}
+                                )}
                             </Grid>
                         )
                     ) : (
