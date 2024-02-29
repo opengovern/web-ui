@@ -16,6 +16,7 @@ import { CloudConnect, Id } from '../../../icons/icons'
 
 interface IHeader {
     filter?: boolean
+    filterList?: string[]
     datePicker?: boolean
     children?: ReactNode
     breadCrumb?: (string | undefined)[]
@@ -23,6 +24,7 @@ interface IHeader {
 
 export default function TopHeader({
     filter = false,
+    filterList = ['cloud-account', 'connector'],
     datePicker = false,
     children,
     breadCrumb,
@@ -36,7 +38,9 @@ export default function TopHeader({
     const filterOptions = [
         { id: 'connector', name: 'Connector', icon: CloudConnect },
         { id: 'cloud-account', name: 'Cloud Account', icon: Id },
-    ]
+    ].filter((v) => {
+        return filterList.includes(v.id)
+    })
 
     const mainPage = () => {
         if (url[1] === 'billing') {

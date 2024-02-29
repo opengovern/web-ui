@@ -173,7 +173,7 @@ export default function ScoreOverview() {
 
     return (
         <>
-            <TopHeader filter />
+            <TopHeader filter filterList={['cloud-account']} />
 
             <Flex alignItems="start" className="gap-20">
                 <Flex flexDirection="col" className="h-full">

@@ -77,6 +77,7 @@ export default function ScoreDetails() {
                     !isLoading ? controlDetail?.control?.title : 'Score detail',
                 ]}
                 filter
+                filterList={['cloud-account']}
             />
             {isLoading ? (
                 <Flex justifyContent="center" className="mt-56">

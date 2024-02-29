@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     Button,
     Card,
@@ -32,19 +32,13 @@ import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../..
 import TopHeader from '../../../components/Layout/Header'
 import { searchAtom, useFilterState } from '../../../utilities/urlstate'
 import Table, { IColumn } from '../../../components/Table'
+import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
+import { severityBadge } from '../../Governance/Controls'
 
 const columns: IColumn<
     GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
     any
 >[] = [
-    {
-        headerName: 'Provider',
-        field: 'control.connector',
-        type: 'connector',
-        sortable: true,
-        width: 200,
-        enableRowGroup: true,
-    },
     {
         headerName: 'Title',
         field: 'control.title',
@@ -55,11 +49,12 @@ const columns: IColumn<
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
         ) => (
             <Flex
-                flexDirection="col"
-                alignItems="start"
-                justifyContent="center"
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="start"
                 className="gap-2 h-full"
             >
+                {getConnectorIcon(params.data?.control?.connector)}
                 <Text className="text-gray-800 mb-0.5 font-bold">
                     {params.value}
                 </Text>
@@ -82,7 +77,7 @@ const columns: IColumn<
             >
                 <Text className="text-gray-800 mb-0.5 font-bold">
                     {Object.entries(params.data?.control?.tags || {})
-                        .filter((v) => v[0] === 'score-service-name')
+                        .filter((v) => v[0] === 'score_service_name')
                         .map((v) => v[1].join(','))
                         .join('\n')}
                 </Text>
@@ -90,32 +85,7 @@ const columns: IColumn<
         ),
     },
     {
-        headerName: 'Categories',
-        type: 'custom',
-        sortable: true,
-        width: 120,
-        enableRowGroup: true,
-        cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-        ) => (
-            <Flex
-                justifyContent="center"
-                className="gap-1.5"
-                flexDirection="col"
-            >
-                {Object.entries(params.data?.control?.tags || {})
-                    .filter((v) => v[0] === 'score_category')
-                    .map((v) =>
-                        v[1].map((b) => (
-                            <Badge size="xs" color="gray">
-                                {b}
-                            </Badge>
-                        ))
-                    )}
-            </Flex>
-        ),
-    },
-    {
+        field: 'control.severity',
         headerName: 'Risk',
         type: 'custom',
         sortable: true,
@@ -123,23 +93,12 @@ const columns: IColumn<
         enableRowGroup: true,
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-        ) => (
-            <Flex justifyContent="start" className="gap-1">
-                {Object.entries(params.data?.control?.tags || {})
-                    .filter((v) => v[0] === 'score_risk')
-                    .map((v) =>
-                        v[1].map((b) => (
-                            <Badge size="xs" color="emerald">
-                                {b}
-                            </Badge>
-                        ))
-                    )}
-            </Flex>
-        ),
+        ) => <Flex className="h-full">{severityBadge(params.value)}</Flex>,
     },
 
     {
-        headerName: 'Result',
+        field: 'failedResourcesCount',
+        headerName: 'Failed',
         type: 'custom',
         width: 160,
         cellRenderer: (
@@ -148,26 +107,76 @@ const columns: IColumn<
                 any
             >
         ) => (
-            <Flex className="mt-1" flexDirection="col" justifyContent="center">
-                <Flex justifyContent="start" className="gap-1">
-                    <Icon
-                        className="w-4"
-                        icon={CheckCircleIcon}
-                        color="emerald"
-                    />
-                    <Text>Passed:</Text>
-                    <Text className="font-bold">
-                        {(param.data?.totalResourcesCount || 0) -
-                            (param.data?.failedResourcesCount || 0)}
-                    </Text>
-                </Flex>
-                <Flex justifyContent="start" className="gap-1">
-                    <Icon className="w-4" icon={XCircleIcon} color="rose" />
-                    <Text>Failed:</Text>
-                    <Text className="font-bold ">
-                        {param.data?.failedResourcesCount || 0}
-                    </Text>
-                </Flex>
+            <Flex
+                justifyContent="start"
+                alignItems="center"
+                className="h-full gap-1"
+            >
+                <Icon className="w-4" icon={XCircleIcon} color="rose" />
+                <Text>Failed:</Text>
+                <Text className="font-bold ">
+                    {param.data?.failedResourcesCount || 0}
+                </Text>
+            </Flex>
+        ),
+    },
+    {
+        headerName: 'Passed',
+        type: 'string',
+        width: 160,
+        sortable: true,
+        comparator: (
+            valueA:
+                | GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary
+                | undefined,
+            valueB:
+                | GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary
+                | undefined,
+            isDescending: boolean
+        ) => {
+            const passedA =
+                (valueA?.totalResourcesCount || 0) -
+                (valueA?.failedResourcesCount || 0)
+            const passedB =
+                (valueB?.totalResourcesCount || 0) -
+                (valueB?.failedResourcesCount || 0)
+            const z = isDescending ? 1 : -1
+            return passedA > passedB ? 1 * z : -1 * z
+        },
+        cellRenderer: (
+            param: ValueFormatterParams<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
+                any
+            >
+        ) => (
+            <Flex
+                justifyContent="start"
+                alignItems="center"
+                className="h-full gap-1"
+            >
+                <Icon className="w-4" icon={CheckCircleIcon} color="emerald" />
+                <Text>Passed:</Text>
+                <Text className="font-bold">
+                    {(param.data?.totalResourcesCount || 0) -
+                        (param.data?.failedResourcesCount || 0)}
+                </Text>
+            </Flex>
+        ),
+    },
+    {
+        field: 'control.query.parameters',
+        headerName: 'Customizable',
+        type: 'string',
+        sortable: true,
+        hide: true,
+        width: 200,
+        cellRenderer: (
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
+        ) => (
+            <Flex>
+                {(params.data?.control?.query?.parameters?.length || 0) > 0
+                    ? 'True'
+                    : 'False'}
             </Flex>
         ),
     },
@@ -231,43 +240,141 @@ export default function ScoreCategory() {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const [hideZero, setHideZero] = useState(true)
+    const categories = [
+        'security',
+        'cost_optimization',
+        'operational_excellence',
+        'reliability',
+        'performance_efficiency',
+    ]
+    const [tabIndex, setTabIndex] = useState<number>(
+        categories.indexOf(category || '') + 1
+    )
 
-    const { response, isLoading, error, sendNow } =
-        useComplianceApiV1BenchmarksControlsDetail(category || '', {
-            connectionId: selectedConnections.connections,
-        })
+    const {
+        response: responseS,
+        isLoading: isLoadingS,
+        error: errorS,
+        sendNow: sendNowS,
+    } = useComplianceApiV1BenchmarksControlsDetail('security', {
+        connectionId: selectedConnections.connections,
+    })
+
+    const {
+        response: responseC,
+        isLoading: isLoadingC,
+        error: errorC,
+        sendNow: sendNowC,
+    } = useComplianceApiV1BenchmarksControlsDetail('cost_optimization', {
+        connectionId: selectedConnections.connections,
+    })
+
+    const {
+        response: responseO,
+        isLoading: isLoadingO,
+        error: errorO,
+        sendNow: sendNowO,
+    } = useComplianceApiV1BenchmarksControlsDetail('operational_excellence', {
+        connectionId: selectedConnections.connections,
+    })
+
+    const {
+        response: responseR,
+        isLoading: isLoadingR,
+        error: errorR,
+        sendNow: sendNowR,
+    } = useComplianceApiV1BenchmarksControlsDetail('reliability', {
+        connectionId: selectedConnections.connections,
+    })
+
+    const {
+        response: responseE,
+        isLoading: isLoadingE,
+        error: errorE,
+        sendNow: sendNowE,
+    } = useComplianceApiV1BenchmarksControlsDetail('performance_efficiency', {
+        connectionId: selectedConnections.connections,
+    })
 
     const navigateToInsightsDetails = (id: string) => {
         navigate(`${id}?${searchParams}`)
     }
 
+    const responseControls = (idx: number) => {
+        const controls: GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[] =
+            []
+
+        if (idx === 0 || idx === 1) {
+            responseS?.control?.forEach((v) => controls.push(v))
+        }
+        if (idx === 0 || idx === 2) {
+            responseC?.control?.forEach((v) => controls.push(v))
+        }
+        if (idx === 0 || idx === 3) {
+            responseO?.control?.forEach((v) => controls.push(v))
+        }
+        if (idx === 0 || idx === 4) {
+            responseR?.control?.forEach((v) => controls.push(v))
+        }
+        if (idx === 0 || idx === 5) {
+            responseE?.control?.forEach((v) => controls.push(v))
+        }
+
+        return controls
+    }
+
+    useEffect(() => {
+        console.log(tabIndex)
+    }, [tabIndex])
+
     return (
         <>
-            <TopHeader filter />
+            <TopHeader filter filterList={['cloud-account']} />
 
             <Flex alignItems="start" className="gap-4">
-                {error === undefined ? (
+                {errorS === undefined &&
+                errorC === undefined &&
+                errorO === undefined &&
+                errorR === undefined &&
+                errorE === undefined ? (
                     <Flex className="flex flex-col">
-                        <TabGroup className="mb-6">
-                            <TabList>
-                                <Tab>SCORE Insights</Tab>
-                                <Flex flexDirection="row" justifyContent="end">
-                                    <Text className="mr-2">
-                                        Hide zero results
-                                    </Text>
-                                    <Switch
-                                        id="switch"
-                                        name="switch"
-                                        checked={hideZero}
-                                        onChange={setHideZero}
-                                    />
-                                </Flex>
-                            </TabList>
-                        </TabGroup>
+                        <Flex
+                            flexDirection="row"
+                            justifyContent="between"
+                            className="mb-2"
+                        >
+                            <div className="w-fit">
+                                <TabGroup
+                                    className="mb-6 m-0"
+                                    defaultIndex={tabIndex}
+                                    tabIndex={tabIndex}
+                                    onIndexChange={(i) => setTabIndex(i)}
+                                >
+                                    <TabList>
+                                        <Tab>All SCORE Insights</Tab>
+                                        <Tab>Security</Tab>
+                                        <Tab>Cost Optimization</Tab>
+                                        <Tab>Operational Excellence</Tab>
+                                        <Tab>Reliability</Tab>
+                                        <Tab>Efficiency</Tab>
+                                    </TabList>
+                                </TabGroup>
+                            </div>
+                            <Flex flexDirection="row" className="w-fit">
+                                <Text className="mr-2">Hide zero results</Text>
+                                <Switch
+                                    id="switch"
+                                    name="switch"
+                                    checked={hideZero}
+                                    onChange={setHideZero}
+                                />
+                            </Flex>
+                        </Flex>
                         <Table
-                            id="insight_list"
+                            key={`insight_list_${tabIndex}`}
+                            id={`insight_list_${tabIndex}`}
                             columns={columns}
-                            rowData={response?.control?.filter((v) => {
+                            rowData={responseControls(tabIndex)?.filter((v) => {
                                 return hideZero
                                     ? (v.totalResourcesCount || 0) !== 0
                                     : true
@@ -283,12 +390,28 @@ export default function ScoreCategory() {
                                     event.data?.control?.id || ''
                                 )
                             }}
-                            loading={isLoading}
+                            loading={
+                                isLoadingS ||
+                                isLoadingC ||
+                                isLoadingO ||
+                                isLoadingR ||
+                                isLoadingE
+                            }
                             rowHeight="xl"
                         />
                     </Flex>
                 ) : (
-                    <Button onClick={() => sendNow()}>Retry</Button>
+                    <Button
+                        onClick={() => {
+                            sendNowS()
+                            sendNowC()
+                            sendNowO()
+                            sendNowR()
+                            sendNowE()
+                        }}
+                    >
+                        Retry
+                    </Button>
                 )}
             </Flex>
         </>

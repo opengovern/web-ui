@@ -220,7 +220,7 @@ export default function SettingsCustomization() {
         isExecuted: syncExecuted,
         error: syncError,
         sendNow: runSync,
-    } = useComplianceApiV1QueriesSyncList()
+    } = useComplianceApiV1QueriesSyncList({}, {}, false)
 
     useEffect(() => {
         if (syncExecuted && !syncLoading) {
@@ -229,13 +229,13 @@ export default function SettingsCustomization() {
                 setNotification({
                     text: 'Re-Sync triggered.',
                     type: 'success',
-                    position: 'bottomLeft',
+                    position: 'bottomRight',
                 })
             } else {
                 setNotification({
                     text: `Re-Sync trigger failed due to ${err}`,
                     type: 'error',
-                    position: 'bottomLeft',
+                    position: 'bottomRight',
                 })
             }
         }
@@ -298,7 +298,7 @@ export default function SettingsCustomization() {
                     </Text>
                 </div>
             </Flex>
-            <Flex flexDirection="col" className="mt-4">
+            <Flex flexDirection="col" className="mt-4" alignItems="end">
                 <TextMetric
                     metricId="analytics_git_url"
                     title="Configuration Git URL"
@@ -307,7 +307,13 @@ export default function SettingsCustomization() {
                         isCustomizationEnabled === false
                     }
                 />
-                <Button onClick={() => runSync()}>Re-Sync</Button>
+                <Button
+                    variant="secondary"
+                    loading={syncExecuted && syncLoading}
+                    onClick={() => runSync()}
+                >
+                    Re-Sync
+                </Button>
             </Flex>
 
             <Title className="font-semibold mt-8">App configurations</Title>
