@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import {
     Flex,
     Text,
@@ -232,6 +233,27 @@ export default function ScoreOverview() {
         )
     }
 
+    const evaluating =
+        (
+            response?.benchmarkSummary
+                ?.map((b) => {
+                    return !(
+                        b?.lastJobStatus === 'FAILED' ||
+                        b?.lastJobStatus === 'SUCCEEDED' ||
+                        (b?.lastJobStatus || '') === ''
+                    )
+                })
+                .filter((l) => l === true) || []
+        ).length > 0
+
+    const lastEvaluatedAt =
+        response?.benchmarkSummary
+            ?.map((b) => dayjs.utc(b.evaluatedAt))
+            .reduce((prev, curr) => {
+                return curr.isAfter(prev) ? curr : prev
+            }, dayjs.utc(0))
+            ?.format('MMM DD, YYYY kk:mm UTC') || 'Never'
+
     return (
         <>
             <TopHeader filter filterList={['cloud-account']} />
@@ -264,9 +286,10 @@ export default function ScoreOverview() {
                             >
                                 <ArrowPathIcon className="w-4 mr-1 text-blue-600" />
                                 <Text className="text-blue-600">
-                                    Evaluate Now
+                                    {evaluating ? 'Evaluating' : 'Evaluate Now'}
                                 </Text>
                             </Flex>
+                            <Text>Last Evaluated: {lastEvaluatedAt}</Text>
                         </Flex>
                         <hr className="w-full border border-gray-200" />
                         <Flex
@@ -302,16 +325,20 @@ export default function ScoreOverview() {
                             className="gap-8"
                         >
                             <Flex justifyContent="start">
-                                <Title className="mr-1.5 font-bold">
+                                <div>
                                     {isLoading ? (
                                         <div className="animate-pulse h-3 w-8 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
                                     ) : (
-                                        total
+                                        <span className="mr-1.5 font-bold">
+                                            {total}
+                                        </span>
                                     )}
-                                </Title>
-                                insight evaluations performed across
-                                <Title className="mx-1.5 font-bold">all</Title>
-                                cloud accounts
+                                    insight evaluations performed across
+                                    <span className="mx-1.5 font-bold">
+                                        all
+                                    </span>
+                                    cloud accounts
+                                </div>
                             </Flex>
                             <Flex>
                                 <Flex
