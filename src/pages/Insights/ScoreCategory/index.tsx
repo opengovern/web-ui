@@ -30,7 +30,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useComplianceApiV1BenchmarksControlsDetail } from '../../../api/compliance.gen'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../../api/api'
 import TopHeader from '../../../components/Layout/Header'
-import { searchAtom, useFilterState } from '../../../utilities/urlstate'
+import {
+    searchAtom,
+    useFilterState,
+    useURLParam,
+} from '../../../utilities/urlstate'
 import Table, { IColumn } from '../../../components/Table'
 import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
 import { severityBadge } from '../../Governance/Controls'
@@ -43,6 +47,7 @@ const columns: IColumn<
         headerName: 'Title',
         field: 'control.title',
         type: 'custom',
+        flex: 1,
         sortable: false,
         isBold: true,
         cellRenderer: (
@@ -64,6 +69,7 @@ const columns: IColumn<
     {
         headerName: 'Service Name',
         type: 'custom',
+        width: 150,
         sortable: false,
         isBold: true,
         cellRenderer: (
@@ -169,11 +175,16 @@ const columns: IColumn<
         type: 'string',
         sortable: true,
         hide: true,
-        width: 200,
+        width: 150,
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
         ) => (
-            <Flex>
+            <Flex
+                flexDirection="col"
+                className="h-full"
+                justifyContent="center"
+                alignItems="start"
+            >
                 {(params.data?.control?.query?.parameters?.length || 0) > 0
                     ? 'True'
                     : 'False'}
@@ -236,7 +247,7 @@ const options: GridOptions = {
 
 export default function ScoreCategory() {
     const { value: selectedConnections } = useFilterState()
-    const { category } = useParams()
+    const [category, setCategory] = useURLParam('category', '')
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const [hideZero, setHideZero] = useState(true)
@@ -247,9 +258,15 @@ export default function ScoreCategory() {
         'reliability',
         'performance_efficiency',
     ]
-    const [tabIndex, setTabIndex] = useState<number>(
-        categories.indexOf(category || '') + 1
-    )
+
+    const tabIndex = category === '' ? 0 : categories.indexOf(category) + 1
+    const setTabIndex = (i: number) => {
+        if (i === 0) {
+            setCategory('')
+        } else {
+            setCategory(categories[i - 1])
+        }
+    }
 
     const {
         response: responseS,
@@ -323,9 +340,28 @@ export default function ScoreCategory() {
         return controls
     }
 
-    useEffect(() => {
-        console.log(tabIndex)
-    }, [tabIndex])
+    const isLoading = (idx: number) => {
+        switch (idx) {
+            case 1:
+                return isLoadingS
+            case 2:
+                return isLoadingC
+            case 3:
+                return isLoadingO
+            case 4:
+                return isLoadingR
+            case 5:
+                return isLoadingE
+            default:
+                return (
+                    isLoadingS ||
+                    isLoadingC ||
+                    isLoadingR ||
+                    isLoadingO ||
+                    isLoadingE
+                )
+        }
+    }
 
     return (
         <>
@@ -390,13 +426,7 @@ export default function ScoreCategory() {
                                     event.data?.control?.id || ''
                                 )
                             }}
-                            loading={
-                                isLoadingS ||
-                                isLoadingC ||
-                                isLoadingO ||
-                                isLoadingR ||
-                                isLoadingE
-                            }
+                            loading={isLoading(tabIndex)}
                             rowHeight="xl"
                         />
                     </Flex>

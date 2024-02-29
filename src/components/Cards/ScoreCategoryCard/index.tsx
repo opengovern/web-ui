@@ -42,8 +42,6 @@ export default function ScoreCategoryCard({
     const { response, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(controlID)
 
-    const workspace = useParams<{ ws: string }>().ws
-
     let color = 'blue'
     if (value >= 75) {
         color = 'emerald'
@@ -56,7 +54,7 @@ export default function ScoreCategoryCard({
     }
     return (
         <Flex
-            onClick={() => navigate(`${category}`)}
+            onClick={() => navigate(`categories?category=${category}`)}
             className="gap-6 px-8 py-8 bg-white rounded-xl shadow-sm hover:shadow-md hover:cursor-pointer"
         >
             <Flex className="relative w-fit">
