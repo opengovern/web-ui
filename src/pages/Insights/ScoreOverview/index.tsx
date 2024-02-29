@@ -17,6 +17,7 @@ import ScoreCategoryCard from '../../../components/Cards/ScoreCategoryCard'
 import TopHeader from '../../../components/Layout/Header'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
 import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult,
     SourceType,
 } from '../../../api/api'
@@ -59,13 +60,18 @@ const severityColor = [
 
 function SecurityScore(
     v:
-        | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult[]
         | undefined
 ) {
-    if ((v?.total || 0) === 0) {
+    const total =
+        v?.map((t) => t.total || 0).reduce((prev, curr) => prev + curr, 0) || 0
+    const passed =
+        v?.map((t) => t.passed || 0).reduce((prev, curr) => prev + curr, 0) || 0
+
+    if (total === 0) {
         return 0
     }
-    return ((v?.passed || 0) / (v?.total || 0)) * 100
+    return (passed / total) * 100
 }
 
 function fixSort(t: string) {
@@ -80,6 +86,13 @@ function fixSort(t: string) {
         .replaceAll('R', 'd')
         .replaceAll('E', 'e')
 }
+
+interface MR {
+    category: string
+    title: string
+    summary: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary[]
+}
+
 export default function ScoreOverview() {
     const { value: selectedConnections } = useFilterState()
     const setNotification = useSetAtom(notificationAtom)
@@ -170,6 +183,54 @@ export default function ScoreOverview() {
                 none: 0,
             }
         )
+    const categories = () => {
+        const titleMap = new Map<string, string>()
+        titleMap.set('reliability', 'Reliability')
+        titleMap.set('security', 'Security')
+        titleMap.set('performance_efficiency', 'Performance Efficiency')
+        titleMap.set('operational_excellence', 'Operational Excellence')
+        titleMap.set('cost_optimization', 'Cost Optimization')
+
+        return (
+            responseSorted
+                ?.map((i) => {
+                    const category =
+                        Object.entries(i.tags || {})
+                            .filter((t) => t[0] === 'score_category')
+                            .flatMap((t) => t[1])
+                            .at(0) || ''
+                    return {
+                        category,
+                        summary: i,
+                    }
+                })
+                .reduce<MR[]>((prev, curr) => {
+                    if (
+                        prev.filter((p) => p.category === curr.category)
+                            .length > 0
+                    ) {
+                        return prev.map((v) => {
+                            if (v.category === curr.category) {
+                                return {
+                                    category: curr.category,
+                                    title: titleMap.get(curr.category) || '',
+                                    summary: [curr.summary, ...v.summary],
+                                }
+                            }
+                            return v
+                        })
+                    }
+                    return [
+                        ...prev,
+                        {
+                            category: curr.category,
+                            title: titleMap.get(curr.category) || '',
+                            summary: [curr.summary],
+                        },
+                    ]
+                }, []) || []
+        )
+    }
 
     return (
         <>
@@ -358,29 +419,42 @@ export default function ScoreOverview() {
                                   </Flex>
                               </Flex>
                           ))
-                        : responseSorted
-                              ?.map((i) => i)
-                              .map((item) => {
-                                  return (
-                                      <ScoreCategoryCard
-                                          title={item.title || ''}
-                                          value={SecurityScore(
-                                              item.controlsSeverityStatus?.total
+                        : categories().map((item) => {
+                              return (
+                                  <ScoreCategoryCard
+                                      title={item.title || ''}
+                                      value={SecurityScore(
+                                          item.summary.map(
+                                              (c) =>
+                                                  c.controlsSeverityStatus
+                                                      ?.total || {}
+                                          )
+                                      )}
+                                      passed={item.summary
+                                          .map(
+                                              (c) =>
+                                                  c.controlsSeverityStatus
+                                                      ?.total?.passed || 0
+                                          )
+                                          .reduce<number>(
+                                              (prev, curr) => prev + curr,
+                                              0
                                           )}
-                                          passed={
-                                              item.controlsSeverityStatus?.total
-                                                  ?.passed || 0
-                                          }
-                                          total={
-                                              item.controlsSeverityStatus?.total
-                                                  ?.total || 0
-                                          }
-                                          change={0}
-                                          controlID={item.id || ''}
-                                          category={item.id || ''}
-                                      />
-                                  )
-                              })}
+                                      total={item.summary
+                                          .map(
+                                              (c) =>
+                                                  c.controlsSeverityStatus
+                                                      ?.total?.total || 0
+                                          )
+                                          .reduce<number>(
+                                              (prev, curr) => prev + curr,
+                                              0
+                                          )}
+                                      change={0}
+                                      category={item.category}
+                                  />
+                              )
+                          })}
                 </Flex>
             </Flex>
             <Modal open={openConfirm} onClose={() => setOpenConfirm(false)}>

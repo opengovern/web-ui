@@ -34,7 +34,6 @@ interface IScoreCategoryCard {
     total: number
     change: number
     category: string
-    controlID: string
 }
 
 export default function ScoreCategoryCard({
@@ -44,7 +43,6 @@ export default function ScoreCategoryCard({
     total,
     change,
     category,
-    controlID,
 }: IScoreCategoryCard) {
     const navigate = useNavigate()
     // const { response, isLoading } =

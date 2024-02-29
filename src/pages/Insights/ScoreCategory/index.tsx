@@ -28,8 +28,14 @@ import {
     ValueFormatterParams,
 } from 'ag-grid-community'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useComplianceApiV1BenchmarksControlsDetail } from '../../../api/compliance.gen'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../../api/api'
+import {
+    useComplianceApiV1BenchmarksControlsDetail,
+    useComplianceApiV1BenchmarksSummaryList,
+} from '../../../api/compliance.gen'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
+    SourceType,
+} from '../../../api/api'
 import TopHeader from '../../../components/Layout/Header'
 import {
     searchAtom,
@@ -281,49 +287,112 @@ export default function ScoreCategory() {
     }
 
     const {
-        response: responseS,
-        isLoading: isLoadingS,
-        error: errorS,
-        sendNow: sendNowS,
-    } = useComplianceApiV1BenchmarksControlsDetail('security', {
+        response: responseWS,
+        isLoading: isLoadingWS,
+        error: errorWS,
+        sendNow: sendNowWS,
+    } = useComplianceApiV1BenchmarksControlsDetail('aws_score_security', {
         connectionId: selectedConnections.connections,
     })
 
     const {
-        response: responseC,
-        isLoading: isLoadingC,
-        error: errorC,
-        sendNow: sendNowC,
-    } = useComplianceApiV1BenchmarksControlsDetail('cost_optimization', {
+        response: responseZS,
+        isLoading: isLoadingZS,
+        error: errorZS,
+        sendNow: sendNowZS,
+    } = useComplianceApiV1BenchmarksControlsDetail('azure_score_security', {
         connectionId: selectedConnections.connections,
     })
 
     const {
-        response: responseO,
-        isLoading: isLoadingO,
-        error: errorO,
-        sendNow: sendNowO,
-    } = useComplianceApiV1BenchmarksControlsDetail('operational_excellence', {
+        response: responseWC,
+        isLoading: isLoadingWC,
+        error: errorWC,
+        sendNow: sendNowWC,
+    } = useComplianceApiV1BenchmarksControlsDetail(
+        'aws_score_cost_optimization',
+        {
+            connectionId: selectedConnections.connections,
+        }
+    )
+
+    const {
+        response: responseZC,
+        isLoading: isLoadingZC,
+        error: errorZC,
+        sendNow: sendNowZC,
+    } = useComplianceApiV1BenchmarksControlsDetail(
+        'azure_score_cost_optimization',
+        {
+            connectionId: selectedConnections.connections,
+        }
+    )
+
+    const {
+        response: responseWO,
+        isLoading: isLoadingWO,
+        error: errorWO,
+        sendNow: sendNowWO,
+    } = useComplianceApiV1BenchmarksControlsDetail(
+        'aws_score_operational_excellence',
+        {
+            connectionId: selectedConnections.connections,
+        }
+    )
+
+    const {
+        response: responseZO,
+        isLoading: isLoadingZO,
+        error: errorZO,
+        sendNow: sendNowZO,
+    } = useComplianceApiV1BenchmarksControlsDetail(
+        'azure_score_operational_excellence',
+        {
+            connectionId: selectedConnections.connections,
+        }
+    )
+
+    const {
+        response: responseWR,
+        isLoading: isLoadingWR,
+        error: errorWR,
+        sendNow: sendNowWR,
+    } = useComplianceApiV1BenchmarksControlsDetail('aws_score_reliability', {
         connectionId: selectedConnections.connections,
     })
 
     const {
-        response: responseR,
-        isLoading: isLoadingR,
-        error: errorR,
-        sendNow: sendNowR,
-    } = useComplianceApiV1BenchmarksControlsDetail('reliability', {
+        response: responseZR,
+        isLoading: isLoadingZR,
+        error: errorZR,
+        sendNow: sendNowZR,
+    } = useComplianceApiV1BenchmarksControlsDetail('azure_score_reliability', {
         connectionId: selectedConnections.connections,
     })
 
     const {
-        response: responseE,
-        isLoading: isLoadingE,
-        error: errorE,
-        sendNow: sendNowE,
-    } = useComplianceApiV1BenchmarksControlsDetail('performance_efficiency', {
-        connectionId: selectedConnections.connections,
-    })
+        response: responseWE,
+        isLoading: isLoadingWE,
+        error: errorWE,
+        sendNow: sendNowWE,
+    } = useComplianceApiV1BenchmarksControlsDetail(
+        'aws_score_performance_efficiency',
+        {
+            connectionId: selectedConnections.connections,
+        }
+    )
+
+    const {
+        response: responseZE,
+        isLoading: isLoadingZE,
+        error: errorZE,
+        sendNow: sendNowZE,
+    } = useComplianceApiV1BenchmarksControlsDetail(
+        'azure_score_performance_efficiency',
+        {
+            connectionId: selectedConnections.connections,
+        }
+    )
 
     const navigateToInsightsDetails = (id: string) => {
         navigate(`${id}?${searchParams}`)
@@ -334,19 +403,24 @@ export default function ScoreCategory() {
             []
 
         if (idx === 0 || idx === 1) {
-            responseS?.control?.forEach((v) => controls.push(v))
+            responseWS?.control?.forEach((v) => controls.push(v))
+            responseZS?.control?.forEach((v) => controls.push(v))
         }
         if (idx === 0 || idx === 2) {
-            responseC?.control?.forEach((v) => controls.push(v))
+            responseWC?.control?.forEach((v) => controls.push(v))
+            responseZC?.control?.forEach((v) => controls.push(v))
         }
         if (idx === 0 || idx === 3) {
-            responseO?.control?.forEach((v) => controls.push(v))
+            responseWO?.control?.forEach((v) => controls.push(v))
+            responseZO?.control?.forEach((v) => controls.push(v))
         }
         if (idx === 0 || idx === 4) {
-            responseR?.control?.forEach((v) => controls.push(v))
+            responseWR?.control?.forEach((v) => controls.push(v))
+            responseZR?.control?.forEach((v) => controls.push(v))
         }
         if (idx === 0 || idx === 5) {
-            responseE?.control?.forEach((v) => controls.push(v))
+            responseWE?.control?.forEach((v) => controls.push(v))
+            responseZE?.control?.forEach((v) => controls.push(v))
         }
 
         return controls.map((item) => {
@@ -367,22 +441,27 @@ export default function ScoreCategory() {
     const isLoading = (idx: number) => {
         switch (idx) {
             case 1:
-                return isLoadingS
+                return isLoadingWS || isLoadingZS
             case 2:
-                return isLoadingC
+                return isLoadingWC || isLoadingZC
             case 3:
-                return isLoadingO
+                return isLoadingWO || isLoadingZO
             case 4:
-                return isLoadingR
+                return isLoadingWR || isLoadingZR
             case 5:
-                return isLoadingE
+                return isLoadingWE || isLoadingZE
             default:
                 return (
-                    isLoadingS ||
-                    isLoadingC ||
-                    isLoadingR ||
-                    isLoadingO ||
-                    isLoadingE
+                    isLoadingWS ||
+                    isLoadingWC ||
+                    isLoadingWR ||
+                    isLoadingWO ||
+                    isLoadingWE ||
+                    isLoadingZS ||
+                    isLoadingZC ||
+                    isLoadingZR ||
+                    isLoadingZO ||
+                    isLoadingZE
                 )
         }
     }
@@ -392,11 +471,16 @@ export default function ScoreCategory() {
             <TopHeader filter filterList={['cloud-account']} />
 
             <Flex alignItems="start" className="gap-4">
-                {errorS === undefined &&
-                errorC === undefined &&
-                errorO === undefined &&
-                errorR === undefined &&
-                errorE === undefined ? (
+                {errorWS === undefined &&
+                errorWC === undefined &&
+                errorWO === undefined &&
+                errorWR === undefined &&
+                errorWE === undefined &&
+                errorZS === undefined &&
+                errorZC === undefined &&
+                errorZO === undefined &&
+                errorZR === undefined &&
+                errorZE === undefined ? (
                     <Flex className="flex flex-col">
                         <Flex
                             flexDirection="row"
@@ -454,11 +538,16 @@ export default function ScoreCategory() {
                 ) : (
                     <Button
                         onClick={() => {
-                            sendNowS()
-                            sendNowC()
-                            sendNowO()
-                            sendNowR()
-                            sendNowE()
+                            sendNowWS()
+                            sendNowWC()
+                            sendNowWO()
+                            sendNowWR()
+                            sendNowWE()
+                            sendNowZS()
+                            sendNowZC()
+                            sendNowZO()
+                            sendNowZR()
+                            sendNowZE()
                         }}
                     >
                         Retry

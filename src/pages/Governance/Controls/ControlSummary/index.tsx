@@ -45,6 +45,7 @@ import ImpactedAccounts from './Tabs/ImpactedAccounts'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import TopHeader from '../../../../components/Layout/Header'
+import ControlFindings from './Tabs/ControlFindings'
 
 export default function ControlDetail() {
     const { controlId, ws } = useParams()
@@ -178,7 +179,9 @@ export default function ControlDetail() {
                                                     </Flex>
                                                 </ListItem>
                                                 <ListItem>
-                                                    <Text># of findings</Text>
+                                                    <Text>
+                                                        # of impacted resources
+                                                    </Text>
                                                     <Text className="text-gray-800">
                                                         {
                                                             controlDetail?.totalResourcesCount
@@ -187,7 +190,7 @@ export default function ControlDetail() {
                                                 </ListItem>
                                                 <ListItem>
                                                     <Text>
-                                                        # of passed findings
+                                                        # of passed resources
                                                     </Text>
                                                     <Text className="text-emerald-500">
                                                         {(controlDetail?.totalResourcesCount ||
@@ -198,7 +201,7 @@ export default function ControlDetail() {
                                                 </ListItem>
                                                 <ListItem>
                                                     <Text>
-                                                        # of failed findings
+                                                        # of failed resources
                                                     </Text>
                                                     <Text className="text-rose-600">
                                                         {
@@ -541,6 +544,7 @@ export default function ControlDetail() {
                                 Control information
                             </Tab>
                             <Tab>Benchmarks</Tab>
+                            <Tab>Findings</Tab>
                         </TabList>
                         <TabPanels>
                             <TabPanel>
@@ -559,6 +563,11 @@ export default function ControlDetail() {
                             <TabPanel>
                                 <Benchmarks
                                     benchmarks={controlDetail?.benchmarks}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <ControlFindings
+                                    controlId={controlDetail?.control?.id}
                                 />
                             </TabPanel>
                         </TabPanels>
