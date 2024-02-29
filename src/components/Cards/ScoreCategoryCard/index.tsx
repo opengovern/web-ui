@@ -16,7 +16,11 @@ import {
 } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import BadgeDeltaSimple from '../../ChangeDeltaSimple'
-import { useComplianceApiV1BenchmarksControlsDetail } from '../../../api/compliance.gen'
+import {
+    useComplianceApiV1BenchmarksControlsDetail,
+    useComplianceApiV1BenchmarksControlsDetail2,
+    useComplianceApiV1BenchmarksSummaryDetail,
+} from '../../../api/compliance.gen'
 import {
     countControls,
     groupBy,
@@ -26,6 +30,8 @@ import {
 interface IScoreCategoryCard {
     title: string
     value: number
+    passed: number
+    total: number
     change: number
     category: string
     controlID: string
@@ -34,13 +40,15 @@ interface IScoreCategoryCard {
 export default function ScoreCategoryCard({
     title,
     value,
+    passed,
+    total,
     change,
     category,
     controlID,
 }: IScoreCategoryCard) {
     const navigate = useNavigate()
-    const { response, isLoading } =
-        useComplianceApiV1BenchmarksControlsDetail(controlID)
+    // const { response, isLoading } =
+    //     useComplianceApiV1BenchmarksControlsDetail(controlID)
 
     let color = 'blue'
     if (value >= 75) {
@@ -66,16 +74,12 @@ export default function ScoreCategoryCard({
             <Flex alignItems="start" flexDirection="col" className="gap-1">
                 <Title className="text-xl">{title}</Title>
                 <Text>
-                    {isLoading ? (
-                        <div className="animate-pulse h-3 w-16 my-0 bg-slate-200 dark:bg-slate-700 rounded" />
-                    ) : (
-                        <>
-                            <span className="text-black">
-                                {countControls(response)}
-                            </span>{' '}
-                            Controls
-                        </>
-                    )}
+                    <Flex className="gap-1">
+                        <span className="text-gray-900">{passed}</span>
+                        <span>of</span>
+                        <span className="text-gray-900">{total}</span>{' '}
+                        <span>Passed</span>
+                    </Flex>
                 </Text>
                 {/* <BadgeDeltaSimple change={change}>
                     from previous time period
