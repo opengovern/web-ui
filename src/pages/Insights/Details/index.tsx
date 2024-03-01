@@ -265,6 +265,7 @@ export default function ScoreDetails() {
                                 title="Estimated Saving Opportunities "
                                 metric={costSaving} // TODO-Saleh add saving opportunities
                                 isPrice
+                                isExact
                             />
                         )}
 
