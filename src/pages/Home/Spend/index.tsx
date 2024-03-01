@@ -29,7 +29,7 @@ import {
     useUrlDateRangeState,
 } from '../../../utilities/urlstate'
 
-const colors = ['#1E7CE0', '#2ECC71', '#FFA500', '#9B59B6', '#D0D4DA']
+const colors = ['#1E7CE0', '#2ECC71', '#FFA500', '#ee6666', '#73c0de']
 
 export default function Spend() {
     const workspace = useParams<{ ws: string }>().ws
@@ -219,21 +219,23 @@ export default function Spend() {
                     </Flex>
                 </Col>
             </Grid>
-            <Flex justifyContent="start" className="gap-4 w-fit">
+            <Flex justifyContent="start" className="gap-4 w-full flex-wrap">
                 {trendStacked.data[0] ? (
                     trendStacked.data[0].map((t, i) => (
-                        <Flex
-                            justifyContent="start"
-                            className="gap-2 w-fit max-w-[180px]"
-                        >
-                            <div
-                                className="h-2 w-2 min-w-[8px] rounded-full"
-                                style={{
-                                    backgroundColor: colors[i],
-                                }}
-                            />
-                            <Text className="truncate">{t.label}</Text>
-                        </Flex>
+                        <div>
+                            <Flex
+                                justifyContent="start"
+                                className="gap-2 w-fit"
+                            >
+                                <div
+                                    className="h-2 w-2 min-w-[8px] rounded-full"
+                                    style={{
+                                        backgroundColor: colors[i],
+                                    }}
+                                />
+                                <Text className="truncate">{t.label}</Text>
+                            </Flex>
+                        </div>
                     ))
                 ) : (
                     <div className="h-6" />
