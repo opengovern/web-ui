@@ -94,8 +94,8 @@ export default function ScoreDetails() {
             ) : (
                 <>
                     <Flex flexDirection="col" className="mb-8 mt-4 gap-4">
-                        <Flex justifyContent="start" className="gap-4">
-                            <Metric className="font-semibold whitespace-nowrap">
+                        <Flex justifyContent="start" className="gap-4 w-full">
+                            <Metric className="font-semibold whitespace-nowrap truncate">
                                 {controlDetail?.control?.title}
                             </Metric>
                             {severityBadge(controlDetail?.control?.severity)}
@@ -108,7 +108,7 @@ export default function ScoreDetails() {
                             <Flex
                                 flexDirection="col"
                                 alignItems="start"
-                                className="gap-6 w-full"
+                                className="gap-6 w-2/3"
                             >
                                 <div className="group w-[800px] relative flex justify-start">
                                     <Text className="truncate">
@@ -164,7 +164,7 @@ export default function ScoreDetails() {
                                 flexDirection="col"
                                 alignItems="end"
                                 justifyContent="start"
-                                className="w-fit gap-2"
+                                className="w-1/3 gap-2"
                             >
                                 <Badge
                                     icon={Square2StackIcon}
