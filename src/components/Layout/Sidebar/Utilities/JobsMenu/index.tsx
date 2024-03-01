@@ -84,7 +84,8 @@ function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
                 count:
                     inProgressJobs
                         ?.map((v) => v.count)
-                        .reduce((prev, curr) => (prev || 0) + (curr || 0)) || 0,
+                        .reduce((prev, curr) => (prev || 0) + (curr || 0), 0) ||
+                    0,
                 icon: ArrowPathRoundedSquareIcon,
                 color,
             }
@@ -96,7 +97,8 @@ function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
                 count:
                     failedJobs
                         ?.map((v) => v.count)
-                        .reduce((prev, curr) => (prev || 0) + (curr || 0)) || 0,
+                        .reduce((prev, curr) => (prev || 0) + (curr || 0), 0) ||
+                    0,
                 icon: ExclamationTriangleIcon,
                 color,
             }
@@ -108,7 +110,8 @@ function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
                 count:
                     unknownJobs
                         ?.map((v) => v.count)
-                        .reduce((prev, curr) => (prev || 0) + (curr || 0)) || 0,
+                        .reduce((prev, curr) => (prev || 0) + (curr || 0), 0) ||
+                    0,
                 icon: ArrowPathRoundedSquareIcon,
                 color,
             }
@@ -121,8 +124,10 @@ function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
                     ? 0
                     : succeededJobs
                           ?.map((v) => v.count)
-                          .reduce((prev, curr) => (prev || 0) + (curr || 0)) ||
-                      0,
+                          .reduce(
+                              (prev, curr) => (prev || 0) + (curr || 0),
+                              0
+                          ) || 0,
             icon: CheckIcon,
             color,
         }
@@ -135,7 +140,7 @@ function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
             ?.map((v) => v.count)
             .reduce((prev, current) => {
                 return (prev || 0) + (current || 0)
-            }) || 0
+            }, 0) || 0
 
     const data =
         summaries?.map((v) => {
@@ -303,15 +308,6 @@ export default function JobsMenu({ isCollapsed, workspace }: IJobsMenu) {
                                         (v) =>
                                             v.type ===
                                             GithubComKaytuIoKaytuEnginePkgDescribeApiJobType.JobTypeAnalytics
-                                    )}
-                                />
-                                <JobCategoryItem
-                                    title="Insight"
-                                    jobType="insight"
-                                    summaries={jobs?.summaries?.filter(
-                                        (v) =>
-                                            v.type ===
-                                            GithubComKaytuIoKaytuEnginePkgDescribeApiJobType.JobTypeInsight
                                     )}
                                 />
                                 <JobCategoryItem
