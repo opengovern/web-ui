@@ -59,7 +59,6 @@ export default function ScoreDetails() {
     const [doc, setDoc] = useState('')
     const [docTitle, setDocTitle] = useState('')
     const [modalData, setModalData] = useState('')
-    const [explanationModalData, setExplanationModalData] = useState('')
     const setNotification = useSetAtom(notificationAtom)
     const setQuery = useSetAtom(queryAtom)
     const [hideTabs, setHideTabs] = useState(false)
@@ -70,7 +69,7 @@ export default function ScoreDetails() {
             connectionId: selectedConnections.connections,
         })
 
-    const costSaving = 0
+    const costSaving = controlDetail?.costOptimization || 0
 
     const customizableQuery = (
         controlDetail?.control?.query?.queryToExecute || ''
