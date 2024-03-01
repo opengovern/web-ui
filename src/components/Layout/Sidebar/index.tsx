@@ -39,6 +39,7 @@ import { useIntegrationApiV1ConnectionsCountList } from '../../../api/integratio
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Workspaces from './Workspaces'
 import AnimatedAccordion from '../../AnimatedAccordion'
+import { setAuthHeader } from '../../../api/ApiConfig'
 
 const badgeStyle = {
     color: '#fff',
@@ -84,8 +85,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         if (isAuthenticated) {
             console.log('====> authenticated')
             getAccessTokenSilently()
-                .then((res) => {
-                    console.log('====> get the token')
+                .then((accessToken) => {
+                    setAuthHeader(accessToken)
+                    console.log('====> get the token', accessToken.slice(0, 5))
                     sendSpend()
                     sendAssets()
                     sendFindings()
