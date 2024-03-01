@@ -192,10 +192,6 @@ const jobTypes = [
         value: 'discovery',
     },
     {
-        label: 'Insight',
-        value: 'insight',
-    },
-    {
         label: 'Governance',
         value: 'compliance',
     },
@@ -276,7 +272,8 @@ export default function SettingsJobs() {
                             rowCount: resp.data.summaries
                                 ?.map((v) => v.count)
                                 .reduce(
-                                    (prev, curr) => (prev || 0) + (curr || 0)
+                                    (prev, curr) => (prev || 0) + (curr || 0),
+                                    0
                                 ),
                         })
                     })
