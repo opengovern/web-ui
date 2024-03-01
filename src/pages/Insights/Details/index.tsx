@@ -169,6 +169,11 @@ export default function ScoreDetails() {
                                     icon={Square2StackIcon}
                                     color="gray"
                                     className="hover:cursor-pointer"
+                                    onClick={() => {
+                                        clipboardCopy(
+                                            controlDetail?.control?.id || ''
+                                        )
+                                    }}
                                 >
                                     Control ID: {controlDetail?.control?.id}
                                 </Badge>
