@@ -71,9 +71,9 @@ export default function ScoreDetails() {
 
     const costSaving = controlDetail?.costOptimization || 0
 
-    const customizableQuery = (
-        controlDetail?.control?.query?.queryToExecute || ''
-    ).includes('{{')
+    const customizableQuery =
+        (controlDetail?.control?.query?.parameters?.length || 0) > 0 ||
+        (controlDetail?.control?.query?.queryToExecute || '').includes('{{')
 
     const [onlyFailed, setOnlyFailed] = useState(false)
 
