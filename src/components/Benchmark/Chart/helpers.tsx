@@ -15,6 +15,8 @@ export const trendChart = (trend: ITrendItem[] | undefined) => {
         black: '#000',
         None: '#9BA2AE',
         Passed: '#54B584',
+        Failed: '#CA2B1D',
+        Score: '#F4C744',
     }
 
     if (!trend) {
