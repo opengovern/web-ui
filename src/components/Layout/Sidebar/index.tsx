@@ -82,12 +82,18 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
 
     useEffect(() => {
         if (isAuthenticated) {
-            getAccessTokenSilently().then((res) => {
-                sendSpend()
-                sendAssets()
-                sendFindings()
-                sendConnections()
-            })
+            console.log('====> authenticated')
+            getAccessTokenSilently()
+                .then((res) => {
+                    console.log('====> get the token')
+                    sendSpend()
+                    sendAssets()
+                    sendFindings()
+                    sendConnections()
+                })
+                .catch((e) => {
+                    console.log('====> failed to get token due to', e)
+                })
         }
     }, [isAuthenticated, workspace])
 
