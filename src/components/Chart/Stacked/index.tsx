@@ -92,7 +92,9 @@ export default function StackedChart({
                             }
 
                             return `${param.value} (Total: ${
-                                isCost ? exactPriceDisplay(total) : total
+                                isCost
+                                    ? exactPriceDisplay(total)
+                                    : total.toFixed(2)
                             })`
                         },
                         // backgroundColor: '#6a7985',
@@ -102,7 +104,7 @@ export default function StackedChart({
                     if (isCost) {
                         return exactPriceDisplay(value)
                     }
-                    return value.toString()
+                    return numericDisplay(value)
                 },
                 order: 'valueDesc',
             },
