@@ -23,7 +23,7 @@ import {
     SourceType,
 } from '../../../api/api'
 import { useFilterState } from '../../../utilities/urlstate'
-import { getErrorMessage } from '../../../types/apierror'
+import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
 import Modal from '../../../components/Modal'
 
 const severityColor = [
@@ -108,8 +108,12 @@ export default function ScoreOverview() {
             connector: [selectedConnections.provider],
         }),
     }
-    const { response, isLoading } =
-        useComplianceApiV1BenchmarksSummaryList(query)
+    const {
+        response,
+        error: summaryListError,
+        isLoading,
+        sendNow: refresh,
+    } = useComplianceApiV1BenchmarksSummaryList(query)
 
     const {
         sendNowWithParams: triggerEvaluate,
@@ -457,6 +461,12 @@ export default function ScoreOverview() {
                                                       ?.total || {}
                                           )
                                       )}
+                                      costOptimization={item.summary
+                                          .map((b) => b.costOptimization || 0)
+                                          .reduce<number>(
+                                              (prev, curr) => prev + curr,
+                                              0
+                                          )}
                                       passed={item.summary
                                           .map(
                                               (c) =>
@@ -484,6 +494,35 @@ export default function ScoreOverview() {
                           })}
                 </Flex>
             </Flex>
+            {toErrorMessage(summaryListError) && (
+                <Flex
+                    flexDirection="col"
+                    justifyContent="between"
+                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
+                >
+                    <Flex
+                        flexDirection="col"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <Title className="mt-6">Failed to load component</Title>
+                        <Text className="mt-2">
+                            {toErrorMessage(summaryListError)}
+                        </Text>
+                    </Flex>
+                    <Button
+                        variant="secondary"
+                        className="mb-6"
+                        color="slate"
+                        onClick={() => {
+                            refresh()
+                        }}
+                    >
+                        Try Again
+                    </Button>
+                </Flex>
+            )}
+
             <Modal open={openConfirm} onClose={() => setOpenConfirm(false)}>
                 <Title>Do you want to run evaluation on all accounts?</Title>
                 <Flex className="mt-8">

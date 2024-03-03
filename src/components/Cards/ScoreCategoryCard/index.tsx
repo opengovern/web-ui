@@ -31,6 +31,7 @@ interface IScoreCategoryCard {
     title: string
     value: number
     passed: number
+    costOptimization: number
     total: number
     change: number
     category: string
@@ -41,6 +42,7 @@ export default function ScoreCategoryCard({
     value,
     passed,
     total,
+    costOptimization,
     change,
     category,
 }: IScoreCategoryCard) {
@@ -71,14 +73,24 @@ export default function ScoreCategoryCard({
 
             <Flex alignItems="start" flexDirection="col" className="gap-1">
                 <Title className="text-xl">{title}</Title>
-                <Text>
-                    <Flex className="gap-1">
-                        <span className="text-gray-900">{passed}</span>
-                        <span>of</span>
-                        <span className="text-gray-900">{total}</span>{' '}
-                        <span>Passed</span>
-                    </Flex>
-                </Text>
+
+                {costOptimization > 0 ? (
+                    <Text>
+                        Reduce your cost by{' '}
+                        <span className="text-gray-900">
+                            ${costOptimization.toFixed(2)}
+                        </span>
+                    </Text>
+                ) : (
+                    <Text>
+                        <Flex className="gap-1">
+                            <span className="text-gray-900">{passed}</span>
+                            <span>of</span>
+                            <span className="text-gray-900">{total}</span>{' '}
+                            <span>Passed</span>
+                        </Flex>
+                    </Text>
+                )}
                 {/* <BadgeDeltaSimple change={change}>
                     from previous time period
                 </BadgeDeltaSimple> */}

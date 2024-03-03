@@ -52,197 +52,230 @@ interface IRecord
     passedResourcesCount?: number
 }
 
-const columns: IColumn<IRecord, any>[] = [
-    {
-        headerName: 'Title',
-        field: 'control.title',
-        type: 'custom',
-        flex: 1,
-        sortable: true,
-        isBold: true,
-        cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-        ) => (
-            <Flex
-                flexDirection="row"
-                alignItems="center"
-                justifyContent="start"
-                className="gap-2 h-full"
-            >
-                {getConnectorIcon(params.data?.control?.connector)}
-                <Text className="text-gray-800 mb-0.5 font-bold">
-                    {params.value}
-                </Text>
-            </Flex>
-        ),
-    },
-    {
-        field: 'serviceName',
-        headerName: 'Service Name',
-        type: 'string',
-        width: 150,
-        sortable: true,
-        enableRowGroup: true,
-        isBold: true,
-        cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-        ) => {
-            return params.data ? (
+const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
+    const fixedColumns: IColumn<IRecord, any>[] = [
+        {
+            headerName: 'Title',
+            field: 'control.title',
+            type: 'custom',
+            flex: 1,
+            sortable: true,
+            isBold: true,
+            cellRenderer: (
+                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
+            ) => (
                 <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    justifyContent="center"
+                    flexDirection="row"
+                    alignItems="center"
+                    justifyContent="start"
                     className="gap-2 h-full"
                 >
+                    {getConnectorIcon(params.data?.control?.connector)}
                     <Text className="text-gray-800 mb-0.5 font-bold">
-                        {params.data
-                            ? Object.entries(params.data?.control?.tags || {})
-                                  .filter((v) => v[0] === 'score_service_name')
-                                  .map((v) => v[1].join(','))
-                                  .join('\n')
-                            : params.value}
+                        {params.value}
                     </Text>
                 </Flex>
-            ) : (
-                params.value
-            )
-        },
-    },
-    {
-        field: 'control.severity',
-        headerName: 'Risk',
-        type: 'string',
-        sortable: true,
-        aggFunc: (p: IAggFuncParams<IRecord>) => {
-            return 'grouped'
-        },
-        width: 100,
-        enableRowGroup: true,
-        cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-        ) =>
-            params.value !== 'grouped' && (
-                <Flex className="h-full min-h-[40px]">
-                    {severityBadge(params.value)}
-                </Flex>
             ),
-    },
+        },
+        {
+            field: 'serviceName',
+            headerName: 'Service Name',
+            type: 'string',
+            width: 150,
+            sortable: true,
+            enableRowGroup: true,
+            isBold: true,
+            cellRenderer: (
+                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
+            ) => {
+                return params.data ? (
+                    <Flex
+                        flexDirection="col"
+                        alignItems="start"
+                        justifyContent="center"
+                        className="gap-2 h-full"
+                    >
+                        <Text className="text-gray-800 mb-0.5 font-bold">
+                            {params.data
+                                ? Object.entries(
+                                      params.data?.control?.tags || {}
+                                  )
+                                      .filter(
+                                          (v) => v[0] === 'score_service_name'
+                                      )
+                                      .map((v) => v[1].join(','))
+                                      .join('\n')
+                                : params.value}
+                        </Text>
+                    </Flex>
+                ) : (
+                    params.value
+                )
+            },
+        },
+        {
+            field: 'control.severity',
+            headerName: 'Risk',
+            type: 'string',
+            sortable: true,
+            aggFunc: (p: IAggFuncParams<IRecord>) => {
+                return 'grouped'
+            },
+            width: 100,
+            enableRowGroup: true,
+            cellRenderer: (
+                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
+            ) =>
+                params.value !== 'grouped' && (
+                    <Flex className="h-full min-h-[40px]">
+                        {severityBadge(params.value)}
+                    </Flex>
+                ),
+        },
 
-    {
-        field: 'failedResourcesCount',
-        headerName: 'Failing Resources',
-        type: 'custom',
-        aggFunc: 'sum',
-        sortable: true,
-        width: 160,
-        cellRenderer: (
-            param: ValueFormatterParams<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
-                any
-            >
-        ) => (
-            <Flex
-                justifyContent="start"
-                alignItems="center"
-                className="h-full gap-1"
-            >
-                <Text className="font-bold ">{param.value} resources</Text>
-            </Flex>
-        ),
-    },
-    {
-        field: 'passedResourcesCount',
-        headerName: 'Passing Resources',
-        type: 'string',
-        width: 160,
-        hide: true,
-        aggFunc: 'sum',
-        sortable: true,
-        cellRenderer: (
-            param: ValueFormatterParams<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
-                any
-            >
-        ) => (
-            <Flex
-                justifyContent="start"
-                alignItems="center"
-                className="h-full gap-1"
-            >
-                <Text className="font-bold ">{param.value} resources</Text>
-            </Flex>
-        ),
-    },
-    {
-        field: 'control.query.parameters',
-        headerName: 'Customizable',
-        type: 'string',
-        sortable: true,
-        hide: true,
-        width: 150,
-        cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-        ) =>
-            params.data && (
-                <Flex
-                    flexDirection="col"
-                    className="h-full"
-                    justifyContent="center"
-                    alignItems="start"
+        {
+            field: 'failedResourcesCount',
+            headerName: 'Failing Resources',
+            type: 'custom',
+            aggFunc: 'sum',
+            sortable: true,
+            width: 160,
+            cellRenderer: (
+                param: ValueFormatterParams<
+                    GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
+                    any
                 >
-                    {(params.data?.control?.query?.parameters?.length || 0) > 0
-                        ? 'True'
-                        : 'False'}
+            ) => (
+                <Flex
+                    justifyContent="start"
+                    alignItems="center"
+                    className="h-full gap-1"
+                >
+                    <Text className="font-bold ">{param.value} resources</Text>
                 </Flex>
             ),
-    },
-    {
-        headerName: 'Fix It',
-        type: 'custom',
-        hide: true,
-        width: 200,
-        enableRowGroup: true,
-        cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-        ) =>
-            params.data && (
-                <Flex justifyContent="start" className="gap-3">
-                    {params.data?.control?.cliRemediation && (
-                        <div className="group relative flex justify-center cursor-pointer">
-                            <CommandLineIcon className="text-kaytu-500 w-5" />
-                            <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
-                                <Text>Command line (CLI)</Text>
-                            </Card>
-                        </div>
-                    )}
-                    {params.data?.control?.manualRemediation && (
-                        <div className="group relative flex justify-center cursor-pointer">
-                            <BookOpenIcon className="text-kaytu-500 w-5" />
-                            <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
-                                <Text>Manual</Text>
-                            </Card>
-                        </div>
-                    )}
-                    {params.data?.control?.programmaticRemediation && (
-                        <div className="group relative flex justify-center cursor-pointer">
-                            <CodeBracketIcon className="text-kaytu-500 w-5" />
-                            <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
-                                <Text>Programmatic</Text>
-                            </Card>
-                        </div>
-                    )}
-                    {params.data?.control?.guardrailRemediation && (
-                        <div className="group relative flex justify-center cursor-pointer">
-                            <Cog8ToothIcon className="text-kaytu-500 w-5" />
-                            <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
-                                <Text>Guard rail</Text>
-                            </Card>
-                        </div>
-                    )}
+        },
+        {
+            field: 'passedResourcesCount',
+            headerName: 'Passing Resources',
+            type: 'string',
+            width: 160,
+            hide: true,
+            aggFunc: 'sum',
+            sortable: true,
+            cellRenderer: (
+                param: ValueFormatterParams<
+                    GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
+                    any
+                >
+            ) => (
+                <Flex
+                    justifyContent="start"
+                    alignItems="center"
+                    className="h-full gap-1"
+                >
+                    <Text className="font-bold ">{param.value} resources</Text>
                 </Flex>
             ),
-    },
-]
+        },
+        {
+            field: 'control.query.parameters',
+            headerName: 'Customizable',
+            type: 'string',
+            sortable: true,
+            hide: true,
+            width: 150,
+            cellRenderer: (
+                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
+            ) =>
+                params.data && (
+                    <Flex
+                        flexDirection="col"
+                        className="h-full"
+                        justifyContent="center"
+                        alignItems="start"
+                    >
+                        {(params.data?.control?.query?.parameters?.length ||
+                            0) > 0
+                            ? 'True'
+                            : 'False'}
+                    </Flex>
+                ),
+        },
+        {
+            headerName: 'Fix It',
+            type: 'custom',
+            hide: true,
+            width: 200,
+            enableRowGroup: true,
+            cellRenderer: (
+                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
+            ) =>
+                params.data && (
+                    <Flex justifyContent="start" className="gap-3">
+                        {params.data?.control?.cliRemediation && (
+                            <div className="group relative flex justify-center cursor-pointer">
+                                <CommandLineIcon className="text-kaytu-500 w-5" />
+                                <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                                    <Text>Command line (CLI)</Text>
+                                </Card>
+                            </div>
+                        )}
+                        {params.data?.control?.manualRemediation && (
+                            <div className="group relative flex justify-center cursor-pointer">
+                                <BookOpenIcon className="text-kaytu-500 w-5" />
+                                <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                                    <Text>Manual</Text>
+                                </Card>
+                            </div>
+                        )}
+                        {params.data?.control?.programmaticRemediation && (
+                            <div className="group relative flex justify-center cursor-pointer">
+                                <CodeBracketIcon className="text-kaytu-500 w-5" />
+                                <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                                    <Text>Programmatic</Text>
+                                </Card>
+                            </div>
+                        )}
+                        {params.data?.control?.guardrailRemediation && (
+                            <div className="group relative flex justify-center cursor-pointer">
+                                <Cog8ToothIcon className="text-kaytu-500 w-5" />
+                                <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                                    <Text>Guard rail</Text>
+                                </Card>
+                            </div>
+                        )}
+                    </Flex>
+                ),
+        },
+    ]
+
+    if (category === 'cost_optimization') {
+        fixedColumns.push({
+            field: 'costOptimization',
+            headerName: 'Cost Optimization',
+            type: 'number',
+            sortable: true,
+            hide: false,
+            width: 150,
+            cellRenderer: (
+                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
+            ) =>
+                params.data && (
+                    <Flex
+                        flexDirection="col"
+                        className="h-full text-gray-900"
+                        justifyContent="center"
+                        alignItems="start"
+                    >
+                        ${params.data.costOptimization?.toFixed(2) || '0'}
+                    </Flex>
+                ),
+        })
+    }
+
+    return fixedColumns
+}
 
 const options: GridOptions = {
     rowGroupPanelShow: 'always',
@@ -514,7 +547,7 @@ export default function ScoreCategory() {
                         <Table
                             key={`insight_list_${tabIndex}`}
                             id={`insight_list_${tabIndex}`}
-                            columns={columns}
+                            columns={columns(category)}
                             rowData={responseControls(tabIndex)?.filter((v) => {
                                 return hideZero
                                     ? (v.totalResourcesCount || 0) !== 0
