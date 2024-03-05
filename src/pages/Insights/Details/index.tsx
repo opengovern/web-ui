@@ -36,7 +36,10 @@ import clipboardCopy from 'clipboard-copy'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { notificationAtom, queryAtom } from '../../../store'
 import { dateTimeDisplay } from '../../../utilities/dateDisplay'
-import { useComplianceApiV1ControlsSummaryDetail } from '../../../api/compliance.gen'
+import {
+    useComplianceApiV1AssignmentsBenchmarkDetail,
+    useComplianceApiV1ControlsSummaryDetail,
+} from '../../../api/compliance.gen'
 import Spinner from '../../../components/Spinner'
 import Modal from '../../../components/Modal'
 import TopHeader from '../../../components/Layout/Header'
@@ -49,7 +52,6 @@ import { severityBadge } from '../../Governance/Controls'
 import { SourceType } from '../../../api/api'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { numberDisplay } from '../../../utilities/numericDisplay'
-import ControlFindings from '../../Governance/Controls/ControlSummary/Tabs/ControlFindings'
 import { useMetadataApiV1QueryParameterList } from '../../../api/metadata.gen'
 
 export default function ScoreDetails() {
@@ -381,13 +383,13 @@ export default function ScoreDetails() {
                             cardClickable
                         />
                         <SummaryCard
-                            connector={controlDetail?.control?.connector}
+                            // connector={controlDetail?.control?.connector}
                             title={`${
                                 controlDetail?.control?.connector ===
                                 SourceType.CloudAWS
-                                    ? 'AWS Accounts'
-                                    : 'Azure Subscriptions'
-                            } Checked`}
+                                    ? 'Impacted AWS Accounts'
+                                    : 'Impacted Azure Subscriptions'
+                            }`}
                             metric={controlDetail?.totalConnectionCount}
                             onClick={() => {
                                 setSelectedTabIndex(1)
@@ -396,282 +398,304 @@ export default function ScoreDetails() {
                         />
                     </Flex>
 
-                    <Card className="mb-8 p-8">
-                        <Flex
-                            justifyContent="start"
-                            alignItems="start"
-                            className="gap-12"
-                        >
+                    {(controlDetail?.control?.manualRemediation &&
+                        controlDetail?.control?.manualRemediation.length > 0) ||
+                    (controlDetail?.control?.cliRemediation &&
+                        controlDetail?.control?.cliRemediation.length > 0) ||
+                    (controlDetail?.control?.programmaticRemediation &&
+                        controlDetail?.control?.programmaticRemediation.length >
+                            0) ||
+                    (controlDetail?.control?.guardrailRemediation &&
+                        controlDetail?.control?.guardrailRemediation.length >
+                            0) ? (
+                        <Card className="mb-8 p-8">
                             <Flex
-                                className="w-1/3 h-full"
                                 justifyContent="start"
-                            >
-                                <EaseOfSolutionChart
-                                    isEmpty
-                                    scalability="medium"
-                                    complexity="hard"
-                                    disruptivity="easy"
-                                />
-                            </Flex>
-
-                            <Flex
-                                flexDirection="col"
                                 alignItems="start"
-                                justifyContent="start"
-                                className="h-full w-2/3"
+                                className="gap-12"
                             >
-                                <DrawerPanel
-                                    title={docTitle}
-                                    open={doc.length > 0}
-                                    onClose={() => setDoc('')}
+                                <Flex
+                                    className="w-1/3 h-full"
+                                    justifyContent="start"
                                 >
-                                    <MarkdownPreview
-                                        source={doc}
-                                        className="!bg-transparent"
-                                        wrapperElement={{
-                                            'data-color-mode': 'light',
-                                        }}
-                                        rehypeRewrite={(
-                                            node,
-                                            index,
-                                            parent
-                                        ) => {
-                                            if (
-                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                // @ts-ignore
-                                                node.tagName === 'a' &&
-                                                parent &&
-                                                /^h(1|2|3|4|5|6)/.test(
+                                    <EaseOfSolutionChart
+                                        isEmpty
+                                        scalability="medium"
+                                        complexity="hard"
+                                        disruptivity="easy"
+                                    />
+                                </Flex>
+
+                                <Flex
+                                    flexDirection="col"
+                                    alignItems="start"
+                                    justifyContent="start"
+                                    className="h-full w-2/3"
+                                >
+                                    <DrawerPanel
+                                        title={docTitle}
+                                        open={doc.length > 0}
+                                        onClose={() => setDoc('')}
+                                    >
+                                        <MarkdownPreview
+                                            source={doc}
+                                            className="!bg-transparent"
+                                            wrapperElement={{
+                                                'data-color-mode': 'light',
+                                            }}
+                                            rehypeRewrite={(
+                                                node,
+                                                index,
+                                                parent
+                                            ) => {
+                                                if (
                                                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                                     // @ts-ignore
-                                                    parent.tagName
-                                                )
-                                            ) {
-                                                // eslint-disable-next-line no-param-reassign
-                                                parent.children =
-                                                    parent.children.slice(1)
-                                            }
-                                        }}
-                                    />
-                                </DrawerPanel>
-                                <Text className="font-bold mb-4 text-gray-400">
-                                    Remediation
-                                </Text>
-                                <Flex className="rounded-lg border border-gray-100 relative">
-                                    <Grid
-                                        numItems={2}
-                                        className="w-full h-full"
-                                    >
-                                        <Flex
-                                            className={
-                                                controlDetail?.control
-                                                    ?.manualRemediation &&
-                                                controlDetail?.control
-                                                    ?.manualRemediation.length
-                                                    ? 'cursor-pointer px-6 py-4 h-full gap-3 '
-                                                    : 'grayscale opacity-70 px-6 py-4 h-full gap-3'
-                                            }
-                                            flexDirection="col"
-                                            justifyContent="start"
-                                            alignItems="start"
-                                            onClick={() => {
-                                                if (
+                                                    node.tagName === 'a' &&
+                                                    parent &&
+                                                    /^h(1|2|3|4|5|6)/.test(
+                                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                        // @ts-ignore
+                                                        parent.tagName
+                                                    )
+                                                ) {
+                                                    // eslint-disable-next-line no-param-reassign
+                                                    parent.children =
+                                                        parent.children.slice(1)
+                                                }
+                                            }}
+                                        />
+                                    </DrawerPanel>
+                                    <Text className="font-bold mb-4 text-gray-400">
+                                        Remediation
+                                    </Text>
+                                    <Flex className="rounded-lg border border-gray-100 relative">
+                                        <Grid
+                                            numItems={2}
+                                            className="w-full h-full"
+                                        >
+                                            <Flex
+                                                className={
                                                     controlDetail?.control
                                                         ?.manualRemediation &&
                                                     controlDetail?.control
                                                         ?.manualRemediation
                                                         .length
-                                                ) {
-                                                    setDoc(
+                                                        ? 'cursor-pointer px-6 py-4 h-full gap-3 '
+                                                        : 'grayscale opacity-70 px-6 py-4 h-full gap-3'
+                                                }
+                                                flexDirection="col"
+                                                justifyContent="start"
+                                                alignItems="start"
+                                                onClick={() => {
+                                                    if (
+                                                        controlDetail?.control
+                                                            ?.manualRemediation &&
                                                         controlDetail?.control
                                                             ?.manualRemediation
-                                                    )
-                                                    setDocTitle(
-                                                        'Manual remediation'
-                                                    )
-                                                }
-                                            }}
-                                        >
-                                            <Flex>
-                                                <Flex
-                                                    justifyContent="start"
-                                                    className="w-fit gap-3"
-                                                >
-                                                    <Icon
-                                                        icon={BookOpenIcon}
-                                                        className="p-0 text-gray-900"
-                                                    />
-                                                    <Title className="font-semibold">
-                                                        Manual
-                                                    </Title>
+                                                            .length
+                                                    ) {
+                                                        setDoc(
+                                                            controlDetail
+                                                                ?.control
+                                                                ?.manualRemediation
+                                                        )
+                                                        setDocTitle(
+                                                            'Manual remediation'
+                                                        )
+                                                    }
+                                                }}
+                                            >
+                                                <Flex>
+                                                    <Flex
+                                                        justifyContent="start"
+                                                        className="w-fit gap-3"
+                                                    >
+                                                        <Icon
+                                                            icon={BookOpenIcon}
+                                                            className="p-0 text-gray-900"
+                                                        />
+                                                        <Title className="font-semibold">
+                                                            Manual
+                                                        </Title>
+                                                    </Flex>
+                                                    <ChevronRightIcon className="w-5 text-kaytu-500" />
                                                 </Flex>
-                                                <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                                <Text>
+                                                    Step by Step Guided solution
+                                                    to resolve instances of
+                                                    non-compliance
+                                                </Text>
                                             </Flex>
-                                            <Text>
-                                                Step by Step Guided solution to
-                                                resolve instances of
-                                                non-compliance
-                                            </Text>
-                                        </Flex>
-                                        <Flex
-                                            className={
-                                                controlDetail?.control
-                                                    ?.cliRemediation &&
-                                                controlDetail?.control
-                                                    ?.cliRemediation.length
-                                                    ? 'cursor-pointer px-6 py-4 h-full gap-3 '
-                                                    : 'grayscale opacity-70 px-6 py-4 h-full gap-3'
-                                            }
-                                            flexDirection="col"
-                                            justifyContent="start"
-                                            alignItems="start"
-                                            onClick={() => {
-                                                if (
+                                            <Flex
+                                                className={
                                                     controlDetail?.control
                                                         ?.cliRemediation &&
                                                     controlDetail?.control
                                                         ?.cliRemediation.length
-                                                ) {
-                                                    setDoc(
+                                                        ? 'cursor-pointer px-6 py-4 h-full gap-3 '
+                                                        : 'grayscale opacity-70 px-6 py-4 h-full gap-3'
+                                                }
+                                                flexDirection="col"
+                                                justifyContent="start"
+                                                alignItems="start"
+                                                onClick={() => {
+                                                    if (
+                                                        controlDetail?.control
+                                                            ?.cliRemediation &&
                                                         controlDetail?.control
                                                             ?.cliRemediation
-                                                    )
-                                                    setDocTitle(
-                                                        'Command line (CLI) remediation'
-                                                    )
-                                                }
-                                            }}
-                                        >
-                                            <Flex>
-                                                <Flex
-                                                    justifyContent="start"
-                                                    className="w-fit gap-3"
-                                                >
-                                                    <Icon
-                                                        icon={CommandLineIcon}
-                                                        className="p-0 text-gray-900"
-                                                    />
-                                                    <Title className="font-semibold">
-                                                        Command line (CLI)
-                                                    </Title>
+                                                            .length
+                                                    ) {
+                                                        setDoc(
+                                                            controlDetail
+                                                                ?.control
+                                                                ?.cliRemediation
+                                                        )
+                                                        setDocTitle(
+                                                            'Command line (CLI) remediation'
+                                                        )
+                                                    }
+                                                }}
+                                            >
+                                                <Flex>
+                                                    <Flex
+                                                        justifyContent="start"
+                                                        className="w-fit gap-3"
+                                                    >
+                                                        <Icon
+                                                            icon={
+                                                                CommandLineIcon
+                                                            }
+                                                            className="p-0 text-gray-900"
+                                                        />
+                                                        <Title className="font-semibold">
+                                                            Command line (CLI)
+                                                        </Title>
+                                                    </Flex>
+                                                    <ChevronRightIcon className="w-5 text-kaytu-500" />
                                                 </Flex>
-                                                <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                                <Text>
+                                                    Guided steps to resolve the
+                                                    issue utilizing CLI
+                                                </Text>
                                             </Flex>
-                                            <Text>
-                                                Guided steps to resolve the
-                                                issue utilizing CLI
-                                            </Text>
-                                        </Flex>
-                                        <Flex
-                                            className={
-                                                controlDetail?.control
-                                                    ?.guardrailRemediation &&
-                                                controlDetail?.control
-                                                    ?.guardrailRemediation
-                                                    .length
-                                                    ? 'cursor-pointer px-6 py-4 h-full gap-3 '
-                                                    : 'grayscale opacity-70 px-6 py-4 h-full gap-3'
-                                            }
-                                            flexDirection="col"
-                                            justifyContent="start"
-                                            alignItems="start"
-                                            onClick={() => {
-                                                if (
+                                            <Flex
+                                                className={
                                                     controlDetail?.control
                                                         ?.guardrailRemediation &&
                                                     controlDetail?.control
                                                         ?.guardrailRemediation
                                                         .length
-                                                ) {
-                                                    setDoc(
+                                                        ? 'cursor-pointer px-6 py-4 h-full gap-3 '
+                                                        : 'grayscale opacity-70 px-6 py-4 h-full gap-3'
+                                                }
+                                                flexDirection="col"
+                                                justifyContent="start"
+                                                alignItems="start"
+                                                onClick={() => {
+                                                    if (
+                                                        controlDetail?.control
+                                                            ?.guardrailRemediation &&
                                                         controlDetail?.control
                                                             ?.guardrailRemediation
-                                                    )
-                                                    setDocTitle(
-                                                        'Guard rails remediation'
-                                                    )
-                                                }
-                                            }}
-                                        >
-                                            <Flex>
-                                                <Flex
-                                                    justifyContent="start"
-                                                    className="w-fit gap-3"
-                                                >
-                                                    <Icon
-                                                        icon={Cog8ToothIcon}
-                                                        className="p-0 text-gray-900"
-                                                    />
-                                                    <Title className="font-semibold">
-                                                        Guard rails
-                                                    </Title>
+                                                            .length
+                                                    ) {
+                                                        setDoc(
+                                                            controlDetail
+                                                                ?.control
+                                                                ?.guardrailRemediation
+                                                        )
+                                                        setDocTitle(
+                                                            'Guard rails remediation'
+                                                        )
+                                                    }
+                                                }}
+                                            >
+                                                <Flex>
+                                                    <Flex
+                                                        justifyContent="start"
+                                                        className="w-fit gap-3"
+                                                    >
+                                                        <Icon
+                                                            icon={Cog8ToothIcon}
+                                                            className="p-0 text-gray-900"
+                                                        />
+                                                        <Title className="font-semibold">
+                                                            Guard rails
+                                                        </Title>
+                                                    </Flex>
+                                                    <ChevronRightIcon className="w-5 text-kaytu-500" />
                                                 </Flex>
-                                                <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                                <Text>
+                                                    Resolve and ensure
+                                                    compliance, at scale
+                                                    utilizing solutions where
+                                                    possible
+                                                </Text>
                                             </Flex>
-                                            <Text>
-                                                Resolve and ensure compliance,
-                                                at scale utilizing solutions
-                                                where possible
-                                            </Text>
-                                        </Flex>
-                                        <Flex
-                                            className={
-                                                controlDetail?.control
-                                                    ?.programmaticRemediation &&
-                                                controlDetail?.control
-                                                    ?.programmaticRemediation
-                                                    .length
-                                                    ? 'cursor-pointer px-6 py-4 h-full gap-3 '
-                                                    : 'grayscale opacity-70 px-6 py-4 h-full gap-3'
-                                            }
-                                            flexDirection="col"
-                                            justifyContent="start"
-                                            alignItems="start"
-                                            onClick={() => {
-                                                if (
+                                            <Flex
+                                                className={
                                                     controlDetail?.control
                                                         ?.programmaticRemediation &&
                                                     controlDetail?.control
                                                         ?.programmaticRemediation
                                                         .length
-                                                ) {
-                                                    setDoc(
+                                                        ? 'cursor-pointer px-6 py-4 h-full gap-3 '
+                                                        : 'grayscale opacity-70 px-6 py-4 h-full gap-3'
+                                                }
+                                                flexDirection="col"
+                                                justifyContent="start"
+                                                alignItems="start"
+                                                onClick={() => {
+                                                    if (
+                                                        controlDetail?.control
+                                                            ?.programmaticRemediation &&
                                                         controlDetail?.control
                                                             ?.programmaticRemediation
-                                                    )
-                                                    setDocTitle(
-                                                        'Programmatic remediation'
-                                                    )
-                                                }
-                                            }}
-                                        >
-                                            <Flex>
-                                                <Flex
-                                                    justifyContent="start"
-                                                    className="w-fit gap-3"
-                                                >
-                                                    <Icon
-                                                        icon={CodeBracketIcon}
-                                                        className="p-0 text-gray-900"
-                                                    />
-                                                    <Title className="font-semibold">
-                                                        Programmatic
-                                                    </Title>
+                                                            .length
+                                                    ) {
+                                                        setDoc(
+                                                            controlDetail
+                                                                ?.control
+                                                                ?.programmaticRemediation
+                                                        )
+                                                        setDocTitle(
+                                                            'Programmatic remediation'
+                                                        )
+                                                    }
+                                                }}
+                                            >
+                                                <Flex>
+                                                    <Flex
+                                                        justifyContent="start"
+                                                        className="w-fit gap-3"
+                                                    >
+                                                        <Icon
+                                                            icon={
+                                                                CodeBracketIcon
+                                                            }
+                                                            className="p-0 text-gray-900"
+                                                        />
+                                                        <Title className="font-semibold">
+                                                            Programmatic
+                                                        </Title>
+                                                    </Flex>
+                                                    <ChevronRightIcon className="w-5 text-kaytu-500" />
                                                 </Flex>
-                                                <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                                <Text>
+                                                    Scripts that help you
+                                                    resolve the issue, at scale
+                                                </Text>
                                             </Flex>
-                                            <Text>
-                                                Scripts that help you resolve
-                                                the issue, at scale
-                                            </Text>
-                                        </Flex>
-                                    </Grid>
-                                    <div className="border-t border-gray-100 w-full absolute top-1/2" />
-                                    <div className="border-l border-gray-100 h-full absolute left-1/2" />
+                                        </Grid>
+                                        <div className="border-t border-gray-100 w-full absolute top-1/2" />
+                                        <div className="border-l border-gray-100 h-full absolute left-1/2" />
+                                    </Flex>
                                 </Flex>
                             </Flex>
-                        </Flex>
-                    </Card>
+                        </Card>
+                    ) : null}
 
                     {!hideTabs && (
                         <TabGroup
@@ -689,7 +713,7 @@ export default function ScoreDetails() {
                                     <TabList>
                                         <Tab>Impacted resources</Tab>
                                         <Tab>Impacted accounts</Tab>
-                                        <Tab>Findings</Tab>
+                                        {/* <Tab>Findings</Tab> */}
                                     </TabList>
                                 </div>
                                 <Flex flexDirection="row" className="w-fit">
@@ -725,7 +749,7 @@ export default function ScoreDetails() {
                                         />
                                     )}
                                 </TabPanel>
-                                <TabPanel>
+                                {/* <TabPanel>
                                     {selectedTabIndex === 2 && (
                                         <ControlFindings
                                             onlyFailed={onlyFailed}
@@ -734,7 +758,7 @@ export default function ScoreDetails() {
                                             }
                                         />
                                     )}
-                                </TabPanel>
+                                </TabPanel> */}
                             </TabPanels>
                         </TabGroup>
                     )}
