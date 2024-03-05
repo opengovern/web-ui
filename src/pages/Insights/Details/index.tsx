@@ -1,7 +1,6 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useSetAtom } from 'jotai'
-import { useEffect, useState } from 'react'
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid'
+import { useState } from 'react'
 import {
     Button,
     Card,
@@ -31,6 +30,7 @@ import {
     CodeBracketIcon,
     Cog8ToothIcon,
     BookOpenIcon,
+    PencilIcon,
 } from '@heroicons/react/24/outline'
 import clipboardCopy from 'clipboard-copy'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
@@ -49,12 +49,12 @@ import { severityBadge } from '../../Governance/Controls'
 import { SourceType } from '../../../api/api'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { numberDisplay } from '../../../utilities/numericDisplay'
-import ControlDetail from '../../Governance/Controls/ControlSummary'
 import ControlFindings from '../../Governance/Controls/ControlSummary/Tabs/ControlFindings'
 
 export default function ScoreDetails() {
     const { id, ws } = useParams()
     const { value: selectedConnections } = useFilterState()
+    const navigate = useNavigate()
 
     const [doc, setDoc] = useState('')
     const [docTitle, setDocTitle] = useState('')
@@ -177,6 +177,7 @@ export default function ScoreDetails() {
                                 >
                                     Control ID: {controlDetail?.control?.id}
                                 </Badge>
+
                                 <Badge icon={ClockIcon} color="gray">
                                     Last updated:{' '}
                                     {(controlDetail?.evaluatedAt || 0) <= 0
@@ -185,6 +186,24 @@ export default function ScoreDetails() {
                                               controlDetail?.evaluatedAt
                                           )}
                                 </Badge>
+                                {controlDetail?.control?.query?.parameters?.map(
+                                    (item) => {
+                                        return (
+                                            <Badge
+                                                icon={PencilIcon}
+                                                color="gray"
+                                                className="cursor-pointer"
+                                                onClick={() => {
+                                                    navigate(
+                                                        `/${ws}/settings?sp=parameters`
+                                                    )
+                                                }}
+                                            >
+                                                Parameter: {item.key}
+                                            </Badge>
+                                        )
+                                    }
+                                )}
                             </Flex>
                         </Flex>
                     </Flex>
