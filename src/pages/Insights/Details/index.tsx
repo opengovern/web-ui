@@ -50,6 +50,7 @@ import { SourceType } from '../../../api/api'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import ControlFindings from '../../Governance/Controls/ControlSummary/Tabs/ControlFindings'
+import { useMetadataApiV1QueryParameterList } from '../../../api/metadata.gen'
 
 export default function ScoreDetails() {
     const { id, ws } = useParams()
@@ -69,6 +70,13 @@ export default function ScoreDetails() {
             connectionId: selectedConnections.connections,
         })
 
+    const {
+        response: parameters,
+        isLoading: parametersLoading,
+        isExecuted,
+        sendNow: refresh,
+    } = useMetadataApiV1QueryParameterList()
+
     const costSaving = controlDetail?.costOptimization || 0
 
     const customizableQuery =
@@ -86,7 +94,7 @@ export default function ScoreDetails() {
                 filter
                 filterList={['cloud-account']}
             />
-            {isLoading ? (
+            {isLoading || parametersLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
                 </Flex>
@@ -199,7 +207,15 @@ export default function ScoreDetails() {
                                                     )
                                                 }}
                                             >
-                                                Parameter: {item.key}
+                                                {item.key}:{' '}
+                                                {parameters?.queryParameters
+                                                    ?.filter(
+                                                        (p) =>
+                                                            p.key === item.key
+                                                    )
+                                                    .map(
+                                                        (p) => p.value || ''
+                                                    ) || 'Not defined'}
                                             </Badge>
                                         )
                                     }
