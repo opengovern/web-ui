@@ -254,17 +254,16 @@ const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
             width: 150,
             cellRenderer: (
                 params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-            ) =>
-                params.data && (
-                    <Flex
-                        flexDirection="col"
-                        className="h-full text-gray-900"
-                        justifyContent="center"
-                        alignItems="start"
-                    >
-                        ${params.data.costOptimization?.toFixed(2) || '0'}
-                    </Flex>
-                ),
+            ) => (
+                <Flex
+                    flexDirection="col"
+                    className="h-full text-gray-900"
+                    justifyContent="center"
+                    alignItems="start"
+                >
+                    ${params.value?.toFixed(2) || '0'}
+                </Flex>
+            ),
         })
     }
 
