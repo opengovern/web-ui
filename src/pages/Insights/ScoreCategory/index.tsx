@@ -569,9 +569,11 @@ export default function ScoreCategory() {
                             onRowClicked={(
                                 event: RowClickedEvent<IRecord, any>
                             ) => {
-                                navigateToInsightsDetails(
-                                    event.data?.control?.id || ''
-                                )
+                                if (event.data !== undefined) {
+                                    navigateToInsightsDetails(
+                                        event.data?.control?.id || ''
+                                    )
+                                }
                             }}
                             loading={isLoading(tabIndex)}
                             // rowHeight="lg"
