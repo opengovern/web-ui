@@ -5,16 +5,16 @@ import Findings from './Findings'
 
 export default function Governance() {
     return (
-        <Card>
-            <Flex justifyContent="start" className="gap-2 mb-4">
+        <Card className="border-0 ring-0 !shadow-sm">
+            {/* <Flex justifyContent="start" className="gap-2 mb-4">
                 <Icon icon={ShieldCheckIcon} className="p-0" />
                 <Title className="font-semibold">Security</Title>
-            </Flex>
-            <Grid numItems={3} className="w-full gap-8">
-                <Col numColSpan={2}>
+            </Flex> */}
+            <Grid numItems={2} className="w-full gap-10 px-2">
+                <Compliance />
+                <Col numColSpan={1}>
                     <Findings />
                 </Col>
-                <Compliance />
             </Grid>
         </Card>
     )

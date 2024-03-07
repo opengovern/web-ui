@@ -1,22 +1,21 @@
 import { Col, Flex, Grid } from '@tremor/react'
-import QuickNav from './QuickNav'
 import Governance from './Governance'
-import Query from './Query'
 import Spend from './Spend'
 import TopHeader from '../../components/Layout/Header'
+import ScoreKPIs from './ScoreKPIs'
 
-export default function Home() {
+export default function Overview() {
     const element = document.getElementById('myDIV')?.offsetHeight
     return (
         <>
             <TopHeader datePicker />
             <Grid numItems={6} className="w-full gap-4 h-fit mb-4">
                 <Col numColSpan={6}>
-                    <QuickNav />
+                    <ScoreKPIs />
                 </Col>
             </Grid>
-            <Grid numItems={6} className="w-full gap-4 h-fit">
-                <Col numColSpan={4}>
+            <Grid numItems={6} className="w-full gap-6 h-fit">
+                <Col numColSpan={6}>
                     <Flex
                         flexDirection="col"
                         alignItems="start"
@@ -26,9 +25,6 @@ export default function Home() {
                         <Spend />
                         <Governance />
                     </Flex>
-                </Col>
-                <Col numColSpan={2}>
-                    <Query height={element} />
                 </Col>
             </Grid>
         </>

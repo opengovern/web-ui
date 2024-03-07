@@ -1,6 +1,6 @@
-import { Button, Card, Flex, Text, Title } from '@tremor/react'
+import { Button, Card, Flex, Subtitle, Text, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../../api/compliance.gen'
 import { getErrorMessage } from '../../../../types/apierror'
 import { benchmarkList } from '../../../Governance/Compliance'
@@ -43,15 +43,15 @@ export default function Compliance() {
 
     return (
         <Flex flexDirection="col" alignItems="start" justifyContent="start">
-            <Flex className="mb-4">
-                <Title>Top benchmarks</Title>
+            <Flex className="mb-8">
+                <Title className="text-gray-500">Cloud Compliance</Title>
                 <Button
                     variant="light"
                     icon={ChevronRightIcon}
                     iconPosition="right"
                     onClick={() => navigate(`/${workspace}/compliance`)}
                 >
-                    See all
+                    Show all
                 </Button>
             </Flex>
             {isLoading || getErrorMessage(error).length > 0 ? (
@@ -84,11 +84,11 @@ export default function Compliance() {
                                             `/${workspace}/compliance/${bs.id}`
                                         )
                                     }
-                                    className="p-3 cursor-pointer dark:ring-gray-500"
+                                    className="p-3 cursor-pointer dark:ring-gray-500 hover:shadow-md"
                                 >
-                                    <Text className="font-semibold text-gray-800 mb-2">
+                                    <Subtitle className="font-semibold text-gray-800 mb-2">
                                         {bs.title}
-                                    </Text>
+                                    </Subtitle>
                                     <Text>Security score</Text>
                                     <Title>
                                         {(

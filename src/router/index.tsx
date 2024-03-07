@@ -11,7 +11,7 @@ import Integrations from '../pages/Integrations'
 import ConnectorDetail from '../pages/Integrations/ConnectorDetail'
 import Compliance from '../pages/Governance/Compliance'
 import BenchmarkSummary from '../pages/Governance/Compliance/BenchmarkSummary'
-import Home from '../pages/Home'
+import Overview from '../pages/Overview'
 import Stack from '../pages/Stack'
 import Query from '../pages/Query'
 import Single from '../pages/Assets/Single'
@@ -48,7 +48,7 @@ const authRoutes = [
     {
         key: 'ws name',
         path: '/:ws',
-        element: <Navigate to="home" />,
+        element: <Navigate to="overview" />,
         noAuth: true,
     },
     {
@@ -262,8 +262,8 @@ const authRoutes = [
     },
     {
         key: 'home',
-        path: '/:ws/home',
-        component: Home,
+        path: '/:ws/overview',
+        component: Overview,
     },
     {
         key: 'deployment',
