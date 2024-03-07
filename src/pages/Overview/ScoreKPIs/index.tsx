@@ -173,6 +173,23 @@ export default function ScoreKPIs() {
             <Grid numItems={3} className="gap-4">
                 {isLoading ? (
                     <>
+                        <Flex
+                            flexDirection="col"
+                            className="border px-6 py-3 rounded-lg"
+                            alignItems="start"
+                        >
+                            <Text className="text-gray-500">
+                                <span className="font-bold text-gray-800 mr-1.5">
+                                    SCORE
+                                </span>
+                                is a comprehensive evaluation suite that
+                                assesses your infrastructure against cloud
+                                vendor recommendations, ensuring optimal
+                                alignment with industry standards and best
+                                practices.
+                            </Text>
+                        </Flex>
+
                         {[1, 2, 3, 4, 5].map((i) => (
                             <Flex
                                 alignItems="start"
@@ -195,7 +212,9 @@ export default function ScoreKPIs() {
                                 </Flex>
                             </Flex>
                         ))}
-
+                    </>
+                ) : (
+                    <>
                         <Flex
                             flexDirection="col"
                             className="border px-6 py-3 rounded-lg"
@@ -212,9 +231,7 @@ export default function ScoreKPIs() {
                                 practices.
                             </Text>
                         </Flex>
-                    </>
-                ) : (
-                    <>
+
                         {categories().map((item) => {
                             return (
                                 <ScoreCategoryCard
@@ -248,23 +265,6 @@ export default function ScoreKPIs() {
                                 />
                             )
                         })}
-
-                        <Flex
-                            flexDirection="col"
-                            className="border px-6 py-3 rounded-lg"
-                            alignItems="start"
-                        >
-                            <Text className="text-gray-500">
-                                <span className="font-bold text-gray-800 mr-1.5">
-                                    SCORE
-                                </span>
-                                is a comprehensive evaluation suite that
-                                assesses your infrastructure against cloud
-                                vendor recommendations, ensuring optimal
-                                alignment with industry standards and best
-                                practices.
-                            </Text>
-                        </Flex>
                     </>
                 )}
             </Grid>

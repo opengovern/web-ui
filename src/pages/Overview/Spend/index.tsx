@@ -111,7 +111,7 @@ export default function Spend() {
 
     return (
         <Card className=" relative border-0 ring-0 !shadow-sm">
-            <Flex flexDirection="col" className="gap-6 px-2">
+            <Flex flexDirection="col" className="gap-2 px-2">
                 {/* <Flex justifyContent="start" className="gap-2">
                             <Icon icon={BanknotesIcon} className="p-0" />
                             <Title className="font-semibold">Cloud Spend</Title>
@@ -134,7 +134,7 @@ export default function Spend() {
                     <Flex
                         justifyContent="start"
                         alignItems="baseline"
-                        className="animate-pulse gap-4"
+                        className="animate-pulse gap-4 mb-6"
                     >
                         <div className="h-8 w-36 bg-slate-200 dark:bg-slate-700 rounded" />
                         <div className="h-4 w-20 bg-slate-200 dark:bg-slate-700 rounded" />
@@ -143,7 +143,7 @@ export default function Spend() {
                     <Flex
                         justifyContent="start"
                         alignItems="baseline"
-                        className="gap-4"
+                        className="gap-4 mb-6"
                     >
                         <Metric>
                             {exactPriceDisplay(
