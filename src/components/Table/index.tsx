@@ -16,8 +16,8 @@ import 'ag-grid-enterprise'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import 'ag-grid-community/styles/agGridMaterialFont.css'
-import { ReactNode, useEffect, useRef } from 'react'
-import { Button, Flex, Title } from '@tremor/react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
+import { Button, Flex, Text, TextInput, Title } from '@tremor/react'
 import { ArrowDownTrayIcon } from '@heroicons/react/20/solid'
 import {
     exactPriceDisplay,
@@ -53,7 +53,7 @@ export interface IColumn<TData, TValue> {
     floatingFilter?: boolean
     pivot?: boolean
     hide?: boolean
-    filter?: boolean
+    filter?: any
     filterParams?: any
     sortable?: boolean
     resizable?: boolean
@@ -79,6 +79,7 @@ interface IProps<TData, TValue> {
     fullWidth?: boolean
     fullHeight?: boolean
     rowHeight?: 'md' | 'lg' | 'xl'
+    quickFilter?: boolean
 }
 
 export default function Table<TData = any, TValue = any>({
@@ -99,9 +100,11 @@ export default function Table<TData = any, TValue = any>({
     options,
     loading,
     rowHeight = 'md',
+    quickFilter = false,
 }: IProps<TData, TValue>) {
     const gridRef = useRef<AgGridReact>(null)
     const visibility = useRef<Map<string, boolean> | undefined>(undefined)
+    const [quickFilterValue, setQuickFilterValue] = useState<string>('')
 
     if (visibility.current === undefined) {
         visibility.current = new Map()
@@ -299,6 +302,7 @@ export default function Table<TData = any, TValue = any>({
         suppressCellFocus: true,
         suppressMenuHide: true,
         animateRows: false,
+        quickFilterText: quickFilterValue,
         getRowHeight: () => {
             if (rowHeight === 'md') {
                 return 50
@@ -351,6 +355,10 @@ export default function Table<TData = any, TValue = any>({
         ...options,
     }
 
+    useEffect(() => {
+        gridRef.current?.api?.updateGridOptions(gridOptions)
+    }, [quickFilterValue])
+
     return (
         <Flex
             flexDirection="col"
@@ -382,6 +390,14 @@ export default function Table<TData = any, TValue = any>({
                         </Button>
                     )}
                 </Flex>
+            </Flex>
+            <Flex flexDirection="row" justifyContent="start" className="">
+                <Text>Search: </Text>
+                <TextInput
+                    className="w-72 ml-2"
+                    value={quickFilterValue}
+                    onValueChange={setQuickFilterValue}
+                />
             </Flex>
             <div
                 className={`w-full relative overflow-hidden ${

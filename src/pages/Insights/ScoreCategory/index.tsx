@@ -563,6 +563,7 @@ export default function ScoreCategory() {
                             }}
                             loading={isLoading(tabIndex)}
                             rowHeight="xl"
+                            quickFilter
                         />
                     </Flex>
                 ) : (
