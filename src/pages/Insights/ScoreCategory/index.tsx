@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
     Button,
     Card,
@@ -7,15 +7,11 @@ import {
     TabGroup,
     TabList,
     Text,
-    Icon,
-    Badge,
     Switch,
     TextInput,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import {
-    CheckCircleIcon,
-    XCircleIcon,
     CommandLineIcon,
     BookOpenIcon,
     CodeBracketIcon,
@@ -29,15 +25,9 @@ import {
     RowClickedEvent,
     ValueFormatterParams,
 } from 'ag-grid-community'
-import { useNavigate, useParams } from 'react-router-dom'
-import {
-    useComplianceApiV1BenchmarksControlsDetail,
-    useComplianceApiV1BenchmarksSummaryList,
-} from '../../../api/compliance.gen'
-import {
-    GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
-    SourceType,
-} from '../../../api/api'
+import { useNavigate } from 'react-router-dom'
+import { useComplianceApiV1BenchmarksControlsDetail } from '../../../api/compliance.gen'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../../api/api'
 import TopHeader from '../../../components/Layout/Header'
 import {
     searchAtom,
@@ -86,6 +76,7 @@ const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
             width: 150,
             sortable: true,
             enableRowGroup: true,
+            rowGroup: true,
             isBold: true,
             cellRenderer: (
                 params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
@@ -456,19 +447,31 @@ export default function ScoreCategory() {
             responseZE?.control?.forEach((v) => controls.push(v))
         }
 
-        return controls.map((item) => {
-            const r: IRecord = {
-                serviceName: Object.entries(item.control?.tags || {})
-                    .filter((v) => v[0] === 'score_service_name')
-                    .map((v) => v[1].join(','))
-                    .join('\n'),
-                passedResourcesCount:
-                    (item.totalResourcesCount || 0) -
-                    (item.failedResourcesCount || 0),
-                ...item,
-            }
-            return r
-        })
+        return controls
+            .reduce<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[]
+            >((prev, curr) => {
+                if (
+                    prev.filter((i) => i.control?.id === curr.control?.id)
+                        .length > 0
+                ) {
+                    return prev
+                }
+                return [...prev, curr]
+            }, [])
+            .map((item) => {
+                const r: IRecord = {
+                    serviceName: Object.entries(item.control?.tags || {})
+                        .filter((v) => v[0] === 'score_service_name')
+                        .map((v) => v[1].join(','))
+                        .join('\n'),
+                    passedResourcesCount:
+                        (item.totalResourcesCount || 0) -
+                        (item.failedResourcesCount || 0),
+                    ...item,
+                }
+                return r
+            })
     }
 
     const isLoading = (idx: number) => {
@@ -555,7 +558,7 @@ export default function ScoreCategory() {
                         </Flex>
                         <Table
                             key={`insight_list_${tabIndex}`}
-                            id={`insight_list_${tabIndex}`}
+                            id="insight_list"
                             columns={columns(category)}
                             rowData={responseControls(tabIndex)?.filter((v) => {
                                 return hideZero
@@ -571,7 +574,7 @@ export default function ScoreCategory() {
                                 )
                             }}
                             loading={isLoading(tabIndex)}
-                            rowHeight="xl"
+                            // rowHeight="lg"
                             quickFilter={quickFilterValue}
                         />
                     </Flex>

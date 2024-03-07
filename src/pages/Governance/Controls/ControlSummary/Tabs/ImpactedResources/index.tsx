@@ -206,13 +206,13 @@ const columns = (
     if (isCostOptimization) {
         temp.push({
             field: 'findings',
-            headerName: 'Cost',
+            headerName: 'Potential Savings',
             type: 'number',
             sortable: true,
             filter: true,
             hide: false,
             resizable: true,
-            width: 100,
+            width: 150,
             cellRenderer: (
                 param: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding>
             ) => (
