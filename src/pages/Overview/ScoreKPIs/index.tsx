@@ -175,18 +175,16 @@ export default function ScoreKPIs() {
                     <>
                         <Flex
                             flexDirection="col"
-                            className="border px-6 py-3 rounded-lg"
+                            className="border px-8 py-6 rounded-lg"
                             alignItems="start"
                         >
                             <Text className="text-gray-500">
                                 <span className="font-bold text-gray-800 mr-1.5">
                                     SCORE
                                 </span>
-                                is a comprehensive evaluation suite that
-                                assesses your infrastructure against cloud
-                                vendor recommendations, ensuring optimal
-                                alignment with industry standards and best
-                                practices.
+                                evaluates cloud environments for alignment with
+                                internal policies, vendor recommendations, and
+                                industry standards
                             </Text>
                         </Flex>
 
@@ -217,18 +215,16 @@ export default function ScoreKPIs() {
                     <>
                         <Flex
                             flexDirection="col"
-                            className="border px-6 py-3 rounded-lg"
+                            className="border px-8 py-6 rounded-lg"
                             alignItems="start"
                         >
                             <Text className="text-gray-500">
                                 <span className="font-bold text-gray-800 mr-1.5">
                                     SCORE
                                 </span>
-                                is a comprehensive evaluation suite that
-                                assesses your infrastructure against cloud
-                                vendor recommendations, ensuring optimal
-                                alignment with industry standards and best
-                                practices.
+                                evaluates cloud environments for alignment with
+                                internal policies, vendor recommendations, and
+                                industry standards
                             </Text>
                         </Flex>
 
@@ -259,7 +255,7 @@ export default function ScoreKPIs() {
                                             (prev, curr) => prev + curr,
                                             0
                                         )}
-                                    kpiText="Insufficient Alerting"
+                                    kpiText="Issues"
                                     varient="minimized"
                                     category={item.category}
                                 />
