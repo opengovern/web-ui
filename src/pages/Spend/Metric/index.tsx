@@ -123,7 +123,7 @@ export function SpendMetrics() {
     )
     return (
         <>
-            <TopHeader datePicker filter />
+            <TopHeader datePicker filter datePickerDefault={defaultSpendTime} />
             <Grid numItems={3} className="w-full gap-4">
                 <Col numColSpan={3}>
                     <SpendChart

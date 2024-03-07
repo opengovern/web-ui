@@ -8,8 +8,7 @@ import { Checkbox } from 'pretty-checkbox-react'
 import { ClockIcon } from '@heroicons/react/24/outline'
 import { Flex, Select, SelectItem, Text, Title } from '@tremor/react'
 import {
-    defaultTime,
-    useURLParam,
+    DateRange,
     useUrlDateRangeState,
 } from '../../../../../utilities/urlstate'
 import { RangeCalendar } from '../../DatePicker/Calendar/RangePicker/RangeCalendar'
@@ -31,9 +30,10 @@ export interface IDate {
 
 interface IDatepicker {
     condition: string
+    defaultTime: DateRange
 }
 
-export default function Datepicker({ condition }: IDatepicker) {
+export default function Datepicker({ condition, defaultTime }: IDatepicker) {
     const { value: activeTimeRange, setValue: setActiveTimeRange } =
         useUrlDateRangeState(defaultTime)
     const [startH, setStartH] = useState(activeTimeRange.start.hour())

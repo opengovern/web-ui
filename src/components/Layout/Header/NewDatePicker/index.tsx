@@ -3,18 +3,15 @@ import { Popover, Transition } from '@headlessui/react'
 import { Card, Flex, Text } from '@tremor/react'
 import { CalendarIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
-import {
-    defaultTime,
-    useURLParam,
-    useURLState,
-    useUrlDateRangeState,
-} from '../../../../utilities/urlstate'
-import { IDate } from '../../../../pages/Governance/Findings/Filter/Datepicker'
+import { DateRange, useUrlDateRangeState } from '../../../../utilities/urlstate'
 import { renderDateText } from '../DatePicker'
 import ConditionDropdown from '../../../../pages/Governance/Findings/Filter/ConditionDropdown'
 import Datepicker from './Datepicker'
 
-export default function NewDatePicker() {
+interface INewDatePicker {
+    defaultTime: DateRange
+}
+export default function NewDatePicker({ defaultTime }: INewDatePicker) {
     const [condition, setCondition] = useState('isBetween')
     const { value: activeTimeRange, setValue: setActiveTimeRange } =
         useUrlDateRangeState(defaultTime)
@@ -58,7 +55,10 @@ export default function NewDatePicker() {
                                 isDate
                             />
                         </Flex>
-                        <Datepicker condition={condition} />
+                        <Datepicker
+                            condition={condition}
+                            defaultTime={defaultTime}
+                        />
                     </Card>
                 </Popover.Panel>
             </Transition>

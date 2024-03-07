@@ -41,6 +41,7 @@ export default function SingleSpend() {
                 <>
                     <TopHeader
                         breadCrumb={['Cloud account spend detail']}
+                        datePickerDefault={defaultSpendTime}
                         datePicker
                     />
                     <SingleSpendConnection
@@ -55,6 +56,7 @@ export default function SingleSpend() {
                 <>
                     <TopHeader
                         breadCrumb={['Metric spend detail']}
+                        datePickerDefault={defaultSpendTime}
                         datePicker
                         filter
                     />

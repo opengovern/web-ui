@@ -27,6 +27,7 @@ import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import { renderDateText } from '../../../components/Layout/Header/DatePicker'
 import ChangeDelta from '../../../components/ChangeDelta'
 import {
+    defaultHomepageTime,
     defaultSpendTime,
     searchAtom,
     useFilterState,
@@ -35,7 +36,9 @@ import {
 
 export default function Spend() {
     const workspace = useParams<{ ws: string }>().ws
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultSpendTime)
+    const { value: activeTimeRange } = useUrlDateRangeState(
+        defaultHomepageTime(workspace || '')
+    )
     const { value: selectedConnections } = useFilterState()
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)

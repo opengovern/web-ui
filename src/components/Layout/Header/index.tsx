@@ -9,7 +9,7 @@ import {
     kebabCaseToLabel,
     snakeCaseToLabel,
 } from '../../../utilities/labelMaker'
-import { searchAtom } from '../../../utilities/urlstate'
+import { DateRange, defaultTime, searchAtom } from '../../../utilities/urlstate'
 import NewDatePicker from './NewDatePicker'
 import NewFilter from './NewFilter'
 import { CloudConnect, Id } from '../../../icons/icons'
@@ -18,6 +18,7 @@ interface IHeader {
     filter?: boolean
     filterList?: string[]
     datePicker?: boolean
+    datePickerDefault?: DateRange
     children?: ReactNode
     breadCrumb?: (string | undefined)[]
 }
@@ -27,6 +28,7 @@ export default function TopHeader({
     filterList = ['cloud-account', 'connector'],
     datePicker = false,
     children,
+    datePickerDefault,
     breadCrumb,
 }: IHeader) {
     const navigate = useNavigate()
@@ -148,7 +150,9 @@ export default function TopHeader({
                                     : ''
                             }`}
                         >
-                            <NewDatePicker />
+                            <NewDatePicker
+                                defaultTime={datePickerDefault || defaultTime}
+                            />
                         </Flex>
                     )}
                     {filter && selectedFilters.length < 2 && (

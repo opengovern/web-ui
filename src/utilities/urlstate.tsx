@@ -24,8 +24,23 @@ export const defaultEventTime: DateRange = {
 }
 
 export const defaultSpendTime: DateRange = {
-    start: dayjs.utc().add(-9, 'days'),
-    end: dayjs.utc().add(-2, 'days'),
+    start: dayjs.utc().add(-9, 'days').startOf('day'),
+    end: dayjs.utc().add(-2, 'days').endOf('day'),
+}
+
+export function defaultHomepageTime(wsName: string) {
+    if (wsName === 'genco-olive') {
+        const v: DateRange = {
+            start: dayjs.utc('2023-12-01').startOf('day'),
+            end: dayjs.utc('2024-01-31').endOf('day'),
+        }
+        return v
+    }
+    const v: DateRange = {
+        start: dayjs.utc().add(-9, 'days').startOf('day'),
+        end: dayjs.utc().add(-2, 'days').endOf('day'),
+    }
+    return v
 }
 
 export interface IFilter {
