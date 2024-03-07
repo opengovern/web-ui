@@ -16,7 +16,7 @@ import {
     CubeIcon,
     DocumentChartBarIcon,
     ExclamationCircleIcon,
-    HomeIcon,
+    Squares2X2Icon,
     LightBulbIcon,
     MagnifyingGlassIcon,
     PuzzlePieceIcon,
@@ -101,9 +101,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
 
     const navigation = [
         {
-            name: 'Home',
-            page: 'home',
-            icon: HomeIcon,
+            name: 'Overview',
+            page: 'overview',
+            icon: Squares2X2Icon,
             isPreview: false,
         },
         {

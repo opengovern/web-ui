@@ -1,5 +1,5 @@
 import { Button, Divider, Flex, Text, Title } from '@tremor/react'
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useComplianceApiV1ControlsSummaryList } from '../../../../api/compliance.gen'
 import { TypesFindingSeverity } from '../../../../api/api'
@@ -45,19 +45,19 @@ export default function Findings() {
     return (
         <>
             <Flex>
-                <Title>Findings</Title>
+                <Title className="text-gray-500">Problematic Controls</Title>
                 <Button
                     variant="light"
                     icon={ChevronRightIcon}
                     iconPosition="right"
                     onClick={() => navigate(`/${workspace}/findings`)}
                 >
-                    View details
+                    Show all
                 </Button>
             </Flex>
             <Flex
                 flexDirection="col"
-                className={`mt-1 ${isLoading ? 'animate-pulse' : ''}`}
+                className={`mt-4 ${isLoading ? 'animate-pulse' : ''}`}
             >
                 {isLoading || getErrorMessage(error).length > 0
                     ? [1, 2, 3].map((i, idx, arr) => {
@@ -67,7 +67,7 @@ export default function Findings() {
                                       flexDirection="col"
                                       justifyContent="start"
                                       alignItems="start"
-                                      className="w-full py-4"
+                                      className="w-full py-4 px-4"
                                   >
                                       <div className="h-2 w-72 my-1 bg-slate-200 dark:bg-slate-700 rounded" />
                                       <Flex flexDirection="row">
@@ -85,7 +85,7 @@ export default function Findings() {
                           return (
                               <>
                                   <Flex
-                                      className="py-4 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-md cursor-pointer"
+                                      className="py-4 px-4 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-md cursor-pointer"
                                       onClick={() =>
                                           navigate(
                                               `/${workspace}/findings/${item.control?.id}`

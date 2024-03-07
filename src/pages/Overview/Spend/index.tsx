@@ -1,4 +1,6 @@
 import {
+    Badge,
+    BadgeDelta,
     Button,
     Card,
     Col,
@@ -6,10 +8,12 @@ import {
     Grid,
     Icon,
     Metric,
+    Subtitle,
     Text,
     Title,
 } from '@tremor/react'
-import { BanknotesIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import { BanknotesIcon } from '@heroicons/react/24/outline'
+import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import {
@@ -106,120 +110,86 @@ export default function Spend() {
     const trendStacked = buildTrend(costTrend || [], 'trending', 'daily', 4)
 
     return (
-        <Card className="h-full pb-8 relative">
-            <Flex className="mb-2">
-                <Flex justifyContent="start" className="gap-2">
-                    <Icon icon={BanknotesIcon} className="p-0" />
-                    <Title className="font-semibold">Cloud Spend</Title>
-                </Flex>
-                <Button
-                    variant="light"
-                    icon={ChevronRightIcon}
-                    iconPosition="right"
-                    onClick={() =>
-                        navigate(`/${workspace}/spend?${searchParams}`)
-                    }
-                >
-                    View details
-                </Button>
-            </Flex>
-            <Grid numItems={3} className="gap-8">
-                <Col numColSpan={2} className="mt-2">
-                    <StackedChart
-                        labels={trendStacked.label}
-                        chartData={trendStacked.data}
-                        isCost
-                        chartType="bar"
-                        loading={
-                            costTrendLoading ||
-                            serviceCostLoading ||
-                            servicePrevCostLoading
+        <Card className=" relative border-0 ring-0 !shadow-sm">
+            <Flex flexDirection="col" className="gap-6 px-2">
+                {/* <Flex justifyContent="start" className="gap-2">
+                            <Icon icon={BanknotesIcon} className="p-0" />
+                            <Title className="font-semibold">Cloud Spend</Title>
+                        </Flex> */}
+                <Flex>
+                    <Title className="text-gray-500">Cloud Spend</Title>
+                    <Button
+                        variant="light"
+                        icon={ChevronRightIcon}
+                        iconPosition="right"
+                        onClick={() =>
+                            navigate(`/${workspace}/spend?${searchParams}`)
                         }
-                        error={toErrorMessage(
-                            costTrendError,
-                            serviceCostErr,
-                            servicePrevCostErr
-                        )}
-                    />
-                </Col>
-                <Col>
-                    <Flex
-                        flexDirection="col"
-                        justifyContent="start"
-                        alignItems="start"
-                        className="gap-4 mt-4"
                     >
-                        <Card className="p-3 border-0 ring-0 !shadow-none">
-                            {serviceCostLoading ? (
-                                <div className="animate-pulse">
-                                    <Text className="font-semibold text-gray-800">
-                                        Total spend
-                                    </Text>
-                                    <div className="h-8 w-28 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
-                                    <div className="h-4 w-48 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
-                                </div>
-                            ) : (
-                                <>
-                                    <Text className="font-semibold text-gray-800">
-                                        Total spend
-                                    </Text>
-                                    <Metric className="!text-2xl my-2">
-                                        {exactPriceDisplay(
-                                            serviceCostResponse?.total_cost || 0
-                                        )}
-                                    </Metric>
-                                    <Text>
-                                        {renderDateText(
-                                            activeTimeRange.start,
-                                            activeTimeRange.end.subtract(
-                                                1,
-                                                'day'
-                                            )
-                                        )}
-                                    </Text>
-                                </>
-                            )}
-                        </Card>
-                        <div className="w-full h-[1px] bg-gray-200" />
-                        <Card className="p-3 border-0 ring-0 !shadow-none">
-                            {servicePrevCostLoading || serviceCostLoading ? (
-                                <div className="animate-pulse">
-                                    <Text className="font-semibold text-gray-800">
-                                        Spend trend
-                                    </Text>
-                                    <div className="h-8 w-28 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
-                                    <div className="h-4 w-48 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
-                                </div>
-                            ) : (
-                                <>
-                                    <Text className="font-semibold text-gray-800 mb-2">
-                                        Spend trend
-                                    </Text>
-                                    <ChangeDelta
-                                        change={
-                                            (((serviceCostResponse?.total_cost ||
-                                                0) -
-                                                (servicePrevCostResponse?.total_cost ||
-                                                    0)) /
-                                                (servicePrevCostResponse?.total_cost ||
-                                                    1)) *
-                                            100
-                                        }
-                                        size="xl"
-                                    />
-                                    <Text className="mt-2">
-                                        {`Compared to ${renderDateText(
-                                            prevTimeRange.start,
-                                            prevTimeRange.end
-                                        )}`}
-                                    </Text>
-                                </>
-                            )}
-                        </Card>
+                        View details
+                    </Button>
+                </Flex>
+
+                {serviceCostLoading ? (
+                    <Flex
+                        justifyContent="start"
+                        alignItems="baseline"
+                        className="animate-pulse gap-4"
+                    >
+                        <div className="h-8 w-36 bg-slate-200 dark:bg-slate-700 rounded" />
+                        <div className="h-4 w-20 bg-slate-200 dark:bg-slate-700 rounded" />
                     </Flex>
-                </Col>
-            </Grid>
-            <Flex justifyContent="start" className="gap-4 w-full flex-wrap">
+                ) : (
+                    <Flex
+                        justifyContent="start"
+                        alignItems="baseline"
+                        className="gap-4"
+                    >
+                        <Metric>
+                            {exactPriceDisplay(
+                                serviceCostResponse?.total_cost || 0
+                            )}
+                        </Metric>
+
+                        <ChangeDelta
+                            change={
+                                (((serviceCostResponse?.total_cost || 0) -
+                                    (servicePrevCostResponse?.total_cost ||
+                                        0)) /
+                                    (servicePrevCostResponse?.total_cost ||
+                                        1)) *
+                                100
+                            }
+                            size="sm"
+                            valueInsideBadge
+                        />
+                        {/* <Text className="text-xs mt-2 text-gray-400">
+                                {`Compared to ${renderDateText(
+                                    prevTimeRange.start,
+                                    prevTimeRange.end
+                                )}`}
+                            </Text> */}
+                    </Flex>
+                )}
+
+                <StackedChart
+                    labels={trendStacked.label}
+                    chartData={trendStacked.data}
+                    isCost
+                    chartType="line"
+                    loading={
+                        costTrendLoading ||
+                        serviceCostLoading ||
+                        servicePrevCostLoading
+                    }
+                    error={toErrorMessage(
+                        costTrendError,
+                        serviceCostErr,
+                        servicePrevCostErr
+                    )}
+                />
+            </Flex>
+            {/*            <Flex justifyContent="start" className="gap-4 w-full flex-wrap">
                 {trendStacked.data[0] ? (
                     trendStacked.data[0].map((t, i) => (
                         <div>
@@ -240,7 +210,7 @@ export default function Spend() {
                 ) : (
                     <div className="h-6" />
                 )}
-            </Flex>
+            </Flex> */}
             {toErrorMessage(
                 costTrendError,
                 serviceCostErr,

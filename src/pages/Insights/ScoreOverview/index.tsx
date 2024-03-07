@@ -454,7 +454,7 @@ export default function ScoreOverview() {
                               return (
                                   <ScoreCategoryCard
                                       title={item.title || ''}
-                                      value={SecurityScore(
+                                      percentage={SecurityScore(
                                           item.summary.map(
                                               (c) =>
                                                   c.controlsSeverityStatus
@@ -467,7 +467,7 @@ export default function ScoreOverview() {
                                               (prev, curr) => prev + curr,
                                               0
                                           )}
-                                      passed={item.summary
+                                      value={item.summary
                                           .map(
                                               (c) =>
                                                   c.controlsSeverityStatus
@@ -477,18 +477,9 @@ export default function ScoreOverview() {
                                               (prev, curr) => prev + curr,
                                               0
                                           )}
-                                      total={item.summary
-                                          .map(
-                                              (c) =>
-                                                  c.controlsSeverityStatus
-                                                      ?.total?.total || 0
-                                          )
-                                          .reduce<number>(
-                                              (prev, curr) => prev + curr,
-                                              0
-                                          )}
-                                      change={0}
+                                      kpiText="Insufficient Alerting"
                                       category={item.category}
+                                      varient="default"
                                   />
                               )
                           })}
