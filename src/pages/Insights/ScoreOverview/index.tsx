@@ -477,7 +477,7 @@ export default function ScoreOverview() {
                                               (prev, curr) => prev + curr,
                                               0
                                           )}
-                                      kpiText="Insufficient Alerting"
+                                      kpiText="Issues"
                                       category={item.category}
                                       varient="default"
                                   />
