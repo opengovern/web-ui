@@ -107,6 +107,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             isPreview: false,
         },
         {
+            name: 'SCORE',
+            page: 'score',
+            icon: DocumentChartBarIcon,
+            isPreview: false,
+        },
+        {
             name: 'Assets',
             page: ['assets', 'asset-cloud-accounts', 'asset-metrics'],
             icon: CubeIcon,
@@ -192,12 +198,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     error: findingsErr,
                 },
             ],
-            isPreview: false,
-        },
-        {
-            name: 'SCORE',
-            page: 'score',
-            icon: DocumentChartBarIcon,
             isPreview: false,
         },
         {

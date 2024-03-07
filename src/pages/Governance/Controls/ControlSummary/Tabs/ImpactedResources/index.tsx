@@ -9,16 +9,14 @@ import {
 import { Flex, Text } from '@tremor/react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import Table, { IColumn } from '../../../../../../components/Table'
-import FindingDetail from '../../../../Findings/FindingsWithFailure/Detail'
 import { isDemoAtom, notificationAtom } from '../../../../../../store'
 import {
     Api,
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
     GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,
 } from '../../../../../../api/api'
 import AxiosAPI from '../../../../../../api/ApiConfig'
-import { activeBadge, statusBadge } from '../../../index'
+import { statusBadge } from '../../../index'
 import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
 import { getConnectorIcon } from '../../../../../../components/Cards/ConnectorCard'
 import ResourceFindingDetail from '../../../../Findings/ResourceFindingDetail'
@@ -29,9 +27,14 @@ interface IImpactedResources {
     controlId: string
     onlyFailed?: boolean
     linkPrefix?: string
+    isCostOptimization?: boolean
 }
 
-const columns = (controlID: string, isDemo: boolean) => {
+const columns = (
+    controlID: string,
+    isDemo: boolean,
+    isCostOptimization: boolean
+) => {
     const temp: IColumn<
         GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,
         any
@@ -199,6 +202,30 @@ const columns = (controlID: string, isDemo: boolean) => {
             hide: false,
         },
     ]
+
+    if (isCostOptimization) {
+        temp.push({
+            field: 'findings',
+            headerName: 'Cost',
+            type: 'number',
+            sortable: true,
+            filter: true,
+            hide: false,
+            resizable: true,
+            width: 100,
+            cellRenderer: (
+                param: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding>
+            ) => (
+                <Flex className="h-full">
+                    $
+                    {param.data?.findings
+                        ?.filter((f) => f.controlID === controlID)
+                        .map((f) => f.costOptimization || 0)
+                        .reduce<number>((prev, curr) => prev + curr, 0) || 0}
+                </Flex>
+            ),
+        })
+    }
     return temp
 }
 
@@ -206,6 +233,7 @@ export default function ImpactedResources({
     controlId,
     onlyFailed,
     linkPrefix,
+    isCostOptimization,
 }: IImpactedResources) {
     const isDemo = useAtomValue(isDemoAtom)
     const setNotification = useSetAtom(notificationAtom)
@@ -286,7 +314,11 @@ export default function ImpactedResources({
             <Table
                 fullWidth
                 id="compliance_findings"
-                columns={columns(controlId, isDemo)}
+                columns={columns(
+                    controlId,
+                    isDemo,
+                    isCostOptimization || false
+                )}
                 onCellClicked={(
                     event: RowClickedEvent<
                         GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,

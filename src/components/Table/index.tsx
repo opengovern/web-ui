@@ -79,7 +79,7 @@ interface IProps<TData, TValue> {
     fullWidth?: boolean
     fullHeight?: boolean
     rowHeight?: 'md' | 'lg' | 'xl'
-    quickFilter?: boolean
+    quickFilter?: string
 }
 
 export default function Table<TData = any, TValue = any>({
@@ -100,11 +100,10 @@ export default function Table<TData = any, TValue = any>({
     options,
     loading,
     rowHeight = 'md',
-    quickFilter = false,
+    quickFilter,
 }: IProps<TData, TValue>) {
     const gridRef = useRef<AgGridReact>(null)
     const visibility = useRef<Map<string, boolean> | undefined>(undefined)
-    const [quickFilterValue, setQuickFilterValue] = useState<string>('')
 
     if (visibility.current === undefined) {
         visibility.current = new Map()
@@ -302,7 +301,7 @@ export default function Table<TData = any, TValue = any>({
         suppressCellFocus: true,
         suppressMenuHide: true,
         animateRows: false,
-        quickFilterText: quickFilterValue,
+        quickFilterText: quickFilter,
         getRowHeight: () => {
             if (rowHeight === 'md') {
                 return 50
@@ -357,7 +356,7 @@ export default function Table<TData = any, TValue = any>({
 
     useEffect(() => {
         gridRef.current?.api?.updateGridOptions(gridOptions)
-    }, [quickFilterValue])
+    }, [quickFilter])
 
     return (
         <Flex
@@ -391,14 +390,7 @@ export default function Table<TData = any, TValue = any>({
                     )}
                 </Flex>
             </Flex>
-            <Flex flexDirection="row" justifyContent="start" className="">
-                <Text>Search: </Text>
-                <TextInput
-                    className="w-72 ml-2"
-                    value={quickFilterValue}
-                    onValueChange={setQuickFilterValue}
-                />
-            </Flex>
+
             <div
                 className={`w-full relative overflow-hidden ${
                     localStorage.theme === 'dark'

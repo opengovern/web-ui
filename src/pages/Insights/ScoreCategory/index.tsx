@@ -10,6 +10,7 @@ import {
     Icon,
     Badge,
     Switch,
+    TextInput,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import {
@@ -19,6 +20,7 @@ import {
     BookOpenIcon,
     CodeBracketIcon,
     Cog8ToothIcon,
+    MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline'
 import {
     GridOptions,
@@ -299,6 +301,7 @@ export default function ScoreCategory() {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const [hideZero, setHideZero] = useState(true)
+    const [quickFilterValue, setQuickFilterValue] = useState<string>('')
     const categories = [
         'security',
         'cost_optimization',
@@ -512,28 +515,34 @@ export default function ScoreCategory() {
                 errorZR === undefined &&
                 errorZE === undefined ? (
                     <Flex className="flex flex-col">
+                        <TabGroup
+                            className="mb-6 m-0"
+                            defaultIndex={tabIndex}
+                            tabIndex={tabIndex}
+                            onIndexChange={(i) => setTabIndex(i)}
+                        >
+                            <TabList>
+                                <Tab>All SCORE Insights</Tab>
+                                <Tab>Security</Tab>
+                                <Tab>Cost Optimization</Tab>
+                                <Tab>Operational Excellence</Tab>
+                                <Tab>Reliability</Tab>
+                                <Tab>Efficiency</Tab>
+                            </TabList>
+                        </TabGroup>
+
                         <Flex
                             flexDirection="row"
                             justifyContent="between"
-                            className="mb-2"
+                            className="my-3"
                         >
-                            <div className="w-fit">
-                                <TabGroup
-                                    className="mb-6 m-0"
-                                    defaultIndex={tabIndex}
-                                    tabIndex={tabIndex}
-                                    onIndexChange={(i) => setTabIndex(i)}
-                                >
-                                    <TabList>
-                                        <Tab>All SCORE Insights</Tab>
-                                        <Tab>Security</Tab>
-                                        <Tab>Cost Optimization</Tab>
-                                        <Tab>Operational Excellence</Tab>
-                                        <Tab>Reliability</Tab>
-                                        <Tab>Efficiency</Tab>
-                                    </TabList>
-                                </TabGroup>
-                            </div>
+                            <TextInput
+                                icon={MagnifyingGlassIcon}
+                                value={quickFilterValue}
+                                onValueChange={setQuickFilterValue}
+                                placeholder="Search here..."
+                                className="w-72"
+                            />
                             <Flex flexDirection="row" className="w-fit">
                                 <Text className="mr-2">Hide zero results</Text>
                                 <Switch
@@ -563,7 +572,7 @@ export default function ScoreCategory() {
                             }}
                             loading={isLoading(tabIndex)}
                             rowHeight="xl"
-                            quickFilter
+                            quickFilter={quickFilterValue}
                         />
                     </Flex>
                 ) : (

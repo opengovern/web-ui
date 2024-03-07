@@ -11,6 +11,7 @@ import {
     Button,
 } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { numericDisplay } from '../../../utilities/numericDisplay'
 
 interface IScoreCategoryCard {
     title: string
@@ -81,9 +82,9 @@ export default function ScoreCategoryCard({
 
                     {costOptimization > 0 ? (
                         <Text>
-                            Reduce your cost by{' '}
+                            Wasteful spend of{' '}
                             <span className="text-gray-900">
-                                ${costOptimization.toFixed(2)}
+                                ${numericDisplay(costOptimization)}
                             </span>
                         </Text>
                     ) : (

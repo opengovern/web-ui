@@ -737,6 +737,9 @@ export default function ScoreDetails() {
                                             }
                                             onlyFailed={onlyFailed}
                                             linkPrefix={`/${ws}/score/categories/`}
+                                            isCostOptimization={
+                                                costSaving !== 0
+                                            }
                                         />
                                     )}
                                 </TabPanel>

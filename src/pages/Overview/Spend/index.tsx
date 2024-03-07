@@ -33,8 +33,6 @@ import {
     useUrlDateRangeState,
 } from '../../../utilities/urlstate'
 
-const colors = ['#1E7CE0', '#2ECC71', '#FFA500', '#ee6666', '#73c0de']
-
 export default function Spend() {
     const workspace = useParams<{ ws: string }>().ws
     const { value: activeTimeRange } = useUrlDateRangeState(defaultSpendTime)
@@ -147,7 +145,8 @@ export default function Spend() {
                     >
                         <Metric>
                             {exactPriceDisplay(
-                                serviceCostResponse?.total_cost || 0
+                                serviceCostResponse?.total_cost || 0,
+                                0
                             )}
                         </Metric>
 
