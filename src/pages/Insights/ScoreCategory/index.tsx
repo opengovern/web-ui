@@ -248,6 +248,7 @@ const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
             field: 'costOptimization',
             headerName: 'Cost Optimization',
             type: 'number',
+            aggFunc: 'sum',
             sortable: true,
             hide: false,
             width: 150,
