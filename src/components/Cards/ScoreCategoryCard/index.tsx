@@ -10,7 +10,7 @@ import {
     Subtitle,
     Button,
 } from '@tremor/react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 interface IScoreCategoryCard {
     title: string
@@ -31,6 +31,7 @@ export default function ScoreCategoryCard({
     varient,
     category,
 }: IScoreCategoryCard) {
+    const { ws } = useParams()
     const navigate = useNavigate()
     // const { response, isLoading } =
     //     useComplianceApiV1BenchmarksControlsDetail(controlID)
@@ -47,7 +48,9 @@ export default function ScoreCategoryCard({
     }
     return (
         <Flex
-            onClick={() => navigate(`categories?category=${category}`)}
+            onClick={() =>
+                navigate(`/${ws}/score/categories?category=${category}`)
+            }
             className={` ${
                 varient === 'default'
                     ? 'gap-6 px-8 py-8 rounded-xl'

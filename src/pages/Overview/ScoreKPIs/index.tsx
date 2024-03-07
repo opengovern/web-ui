@@ -172,28 +172,47 @@ export default function ScoreKPIs() {
         <>
             <Grid numItems={3} className="gap-4">
                 {isLoading ? (
-                    [1, 2, 3, 4, 5].map((i) => (
-                        <Flex
-                            alignItems="start"
-                            justifyContent="start"
-                            className="pl-5 pr-8 py-6 rounded-lg bg-white gap-5 shadow-sm hover:shadow-md hover:cursor-pointer"
-                        >
-                            <Flex className="relative w-fit">
-                                <ProgressCircle value={0} size="md">
-                                    <div className="animate-pulse h-8 w-8 my-2 bg-slate-200 dark:bg-slate-700 rounded-full" />
-                                </ProgressCircle>
-                            </Flex>
-
+                    <>
+                        {[1, 2, 3, 4, 5].map((i) => (
                             <Flex
                                 alignItems="start"
-                                flexDirection="col"
-                                className="gap-1.5"
+                                justifyContent="start"
+                                className="pl-5 pr-8 py-6 rounded-lg bg-white gap-5 shadow-sm hover:shadow-md"
                             >
-                                <div className="animate-pulse h-3 w-full my-2 bg-slate-200 dark:bg-slate-700 rounded" />
-                                <div className="animate-pulse h-3 w-full my-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                <Flex className="relative w-fit">
+                                    <ProgressCircle value={0} size="md">
+                                        <div className="animate-pulse h-8 w-8 my-2 bg-slate-200 dark:bg-slate-700 rounded-full" />
+                                    </ProgressCircle>
+                                </Flex>
+
+                                <Flex
+                                    alignItems="start"
+                                    flexDirection="col"
+                                    className="gap-1.5"
+                                >
+                                    <div className="animate-pulse h-3 w-full my-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                    <div className="animate-pulse h-3 w-full my-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                </Flex>
                             </Flex>
+                        ))}
+
+                        <Flex
+                            flexDirection="col"
+                            className="border px-6 py-3 rounded-lg"
+                            alignItems="start"
+                        >
+                            <Text className="text-gray-500">
+                                <span className="font-bold text-gray-800 mr-1.5">
+                                    SCORE
+                                </span>
+                                is a comprehensive evaluation suite that
+                                assesses your infrastructure against cloud
+                                vendor recommendations, ensuring optimal
+                                alignment with industry standards and best
+                                practices.
+                            </Text>
                         </Flex>
-                    ))
+                    </>
                 ) : (
                     <>
                         {categories().map((item) => {
