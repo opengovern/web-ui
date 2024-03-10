@@ -15,7 +15,7 @@ export default function Dashboards() {
             const item = document.getElementById('superset-container')
             if (item !== null) {
                 const myDashboard = embedDashboard({
-                    id: 'e56be509-b2d5-4c64-9515-1b6997ae975b', // given by the Superset embedding UI
+                    id: '91470dee-a079-44ba-b362-0a5af0262fe7', // given by the Superset embedding UI
                     supersetDomain: 'https://ss.kaytu.io',
                     mountPoint: item,
                     fetchGuestToken: () =>
