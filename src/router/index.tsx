@@ -37,6 +37,7 @@ import AssetMetrics from '../pages/Assets/Metric'
 import ScoreOverview from '../pages/Insights/ScoreOverview'
 import ScoreCategory from '../pages/Insights/ScoreCategory'
 import ScoreDetails from '../pages/Insights/Details'
+import Dashboards from '../pages/Dashboards'
 
 const authRoutes = [
     {
@@ -264,6 +265,11 @@ const authRoutes = [
         key: 'home',
         path: '/:ws/overview',
         component: Overview,
+    },
+    {
+        key: 'dashboard',
+        path: '/:ws/dashboard',
+        component: Dashboards,
     },
     {
         key: 'deployment',

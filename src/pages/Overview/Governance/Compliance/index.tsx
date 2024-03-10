@@ -1,9 +1,11 @@
 import { Button, Card, Flex, Subtitle, Text, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
+import { useAtomValue } from 'jotai'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../../api/compliance.gen'
 import { getErrorMessage } from '../../../../types/apierror'
 import { benchmarkList } from '../../../Governance/Compliance'
+import { searchAtom } from '../../../../utilities/urlstate'
 
 const colors = [
     'fuchsia',
@@ -33,6 +35,7 @@ const colors = [
 export default function Compliance() {
     const workspace = useParams<{ ws: string }>().ws
     const navigate = useNavigate()
+    const searchParams = useAtomValue(searchAtom)
 
     const {
         response: benchmarks,
@@ -49,7 +52,10 @@ export default function Compliance() {
                     variant="light"
                     icon={ChevronRightIcon}
                     iconPosition="right"
-                    onClick={() => navigate(`/${workspace}/compliance`)}
+                    onClick={() =>
+                        navigate(`/${workspace}/compliance
+                        ?${searchParams}`)
+                    }
                 >
                     Show all
                 </Button>
@@ -81,7 +87,7 @@ export default function Compliance() {
                                 <Card
                                     onClick={() =>
                                         navigate(
-                                            `/${workspace}/compliance/${bs.id}`
+                                            `/${workspace}/compliance/${bs.id}?${searchParams}`
                                         )
                                     }
                                     className="p-3 cursor-pointer dark:ring-gray-500 hover:shadow-md"
@@ -118,7 +124,7 @@ export default function Compliance() {
                                     <Card
                                         onClick={() =>
                                             navigate(
-                                                `/${workspace}/compliance/${bs.id}`
+                                                `/${workspace}/compliance/${bs.id}?${searchParams}`
                                             )
                                         }
                                         className="p-3 cursor-pointer dark:ring-gray-500"

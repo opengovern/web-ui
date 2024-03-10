@@ -8,7 +8,9 @@ import {
     Metric,
     Icon,
 } from '@tremor/react'
+import { useAtomValue } from 'jotai'
 import { useNavigate, useParams } from 'react-router-dom'
+import { searchAtom } from '../../../utilities/urlstate'
 
 const BoldFirstLetter = (text: string) => {
     if (!text) return null // Return null if text is empty or undefined
@@ -41,6 +43,7 @@ export default function InsightCategoryCard({
 }: IInsightCategoryCard) {
     const navigate = useNavigate()
     const workspace = useParams<{ ws: string }>().ws
+    const searchParams = useAtomValue(searchAtom)
 
     let insightCondition = { text: 'none', color: 'gray' }
 
@@ -82,7 +85,9 @@ export default function InsightCategoryCard({
                     variant="light"
                     className="hidden"
                     onClick={() =>
-                        navigate(`/${workspace}/insights?category=${category}`)
+                        navigate(
+                            `/${workspace}/insights?category=${category}&${searchParams}`
+                        )
                     }
                 >
                     {' '}

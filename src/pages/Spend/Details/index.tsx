@@ -47,7 +47,12 @@ export default function SpendDetails() {
 
     return (
         <>
-            <TopHeader breadCrumb={['Spend detail']} filter datePicker  datePickerDefault={defaultSpendTime}/>
+            <TopHeader
+                breadCrumb={['Spend detail']}
+                filter
+                datePicker
+                datePickerDefault={defaultSpendTime}
+            />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
                     <Tab onClick={() => navigate(`#metrics?${searchParams}`)}>

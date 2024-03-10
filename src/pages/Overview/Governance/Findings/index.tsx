@@ -1,14 +1,17 @@
 import { Button, Divider, Flex, Text, Title } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
 import { useComplianceApiV1ControlsSummaryList } from '../../../../api/compliance.gen'
 import { TypesFindingSeverity } from '../../../../api/api'
 import { severityBadge } from '../../../Governance/Controls'
 import { getErrorMessage } from '../../../../types/apierror'
+import { searchAtom } from '../../../../utilities/urlstate'
 
 export default function Findings() {
     const workspace = useParams<{ ws: string }>().ws
     const navigate = useNavigate()
+    const searchParams = useAtomValue(searchAtom)
     const {
         response,
         isLoading,
@@ -50,7 +53,9 @@ export default function Findings() {
                     variant="light"
                     icon={ChevronRightIcon}
                     iconPosition="right"
-                    onClick={() => navigate(`/${workspace}/findings`)}
+                    onClick={() =>
+                        navigate(`/${workspace}/findings?${searchParams}`)
+                    }
                 >
                     Show all
                 </Button>
@@ -88,7 +93,7 @@ export default function Findings() {
                                       className="py-4 px-4 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-md cursor-pointer"
                                       onClick={() =>
                                           navigate(
-                                              `/${workspace}/findings/${item.control?.id}`
+                                              `/${workspace}/findings/${item.control?.id}?${searchParams}`
                                           )
                                       }
                                   >

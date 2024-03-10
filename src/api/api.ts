@@ -225,6 +225,10 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse {
     token?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiGenerateDashboardTokenResponse {
+    token?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse {
     /**
      * Global Access
@@ -2024,6 +2028,7 @@ export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsMetadataKey {
     MetadataKeyAWSDiscoveryRequiredOnly = 'aws_discovery_required_only',
     MetadataKeyAzureDiscoveryRequiredOnly = 'azure_discovery_required_only',
     MetadataKeyAssetDiscoveryEnabled = 'asset_discovery_enabled',
+    MetadataKeySpendDiscoveryEnabled = 'spend_discovery_enabled',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredentialConfig {
@@ -3400,6 +3405,27 @@ export class Api<
             }),
     }
     auth = {
+        /**
+         * @description Generate dashboard token
+         *
+         * @tags keys
+         * @name ApiV1DashboardsTokenCreate
+         * @summary Generate dashboard token
+         * @request POST:/auth/api/v1/dashboards/token
+         * @secure
+         */
+        apiV1DashboardsTokenCreate: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgAuthApiGenerateDashboardTokenResponse,
+                any
+            >({
+                path: `/auth/api/v1/dashboards/token`,
+                method: 'POST',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
         /**
          * @description Creates workspace key for the defined role with the defined name in the workspace.
          *

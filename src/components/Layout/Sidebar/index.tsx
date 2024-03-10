@@ -1,12 +1,4 @@
-import {
-    Accordion,
-    AccordionBody,
-    AccordionHeader,
-    Badge,
-    Card,
-    Flex,
-    Text,
-} from '@tremor/react'
+import { Badge, Card, Flex, Text } from '@tremor/react'
 import { Link } from 'react-router-dom'
 import {
     BanknotesIcon,
@@ -40,6 +32,7 @@ import { numericDisplay } from '../../../utilities/numericDisplay'
 import Workspaces from './Workspaces'
 import AnimatedAccordion from '../../AnimatedAccordion'
 import { setAuthHeader } from '../../../api/ApiConfig'
+import { searchAtom } from '../../../utilities/urlstate'
 
 const badgeStyle = {
     color: '#fff',
@@ -80,14 +73,13 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         error: connectionsErr,
         sendNow: sendConnections,
     } = useIntegrationApiV1ConnectionsCountList({}, {}, false, workspace)
+    const searchParams = useAtomValue(searchAtom)
 
     useEffect(() => {
         if (isAuthenticated) {
-            console.log('====> authenticated')
             getAccessTokenSilently()
                 .then((accessToken) => {
                     setAuthHeader(accessToken)
-                    console.log('====> get the token', accessToken.slice(0, 5))
                     sendSpend()
                     sendAssets()
                     sendFindings()
@@ -109,6 +101,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         {
             name: 'SCORE',
             page: 'score',
+            icon: DocumentChartBarIcon,
+            isPreview: false,
+        },
+        {
+            name: 'Dashboards',
+            page: 'dashboard',
             icon: DocumentChartBarIcon,
             isPreview: false,
         },
@@ -374,7 +372,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         >
                                             {item.children.map((i) => (
                                                 <Link
-                                                    to={`/${workspace}/${i.page}`}
+                                                    to={`/${workspace}/${i.page}?${searchParams}`}
                                                     className={`my-0.5 py-2 flex rounded-md relative 
                                                     ${
                                                         i.page === currentPage
@@ -467,7 +465,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         {item.children.map(
                                                             (i) => (
                                                                 <Link
-                                                                    to={`/${workspace}/${i.page}`}
+                                                                    to={`/${workspace}/${i.page}?${searchParams}`}
                                                                     className={`my-0.5 py-2 px-4 flex justify-start rounded-md relative 
                                                     ${
                                                         i.page === currentPage
@@ -520,7 +518,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             to={
                                                 Array.isArray(item.page)
                                                     ? ''
-                                                    : `/${workspace}/${item.page}`
+                                                    : `/${workspace}/${item.page}?${searchParams}`
                                             }
                                             className={`w-full relative px-6 py-2 flex items-center gap-2.5 rounded-md
                                                     ${

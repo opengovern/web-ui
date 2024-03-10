@@ -1,9 +1,11 @@
 import { Badge, Card, Flex, Icon, Subtitle, Text, Title } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
 import { SourceType } from '../../../api/api'
+import { searchAtom } from '../../../utilities/urlstate'
 
 interface IConnectorCard {
     connector: string | undefined
@@ -53,12 +55,13 @@ export default function ConnectorCard({
     description,
 }: IConnectorCard) {
     const navigate = useNavigate()
+    const searchParams = useAtomValue(searchAtom)
 
     return (
         <Card
             key={connector}
             className="cursor-pointer"
-            onClick={() => navigate(`${connector}`)}
+            onClick={() => navigate(`${connector}?${searchParams}`)}
         >
             <Flex flexDirection="row" className="mb-3">
                 {getConnectorIcon(connector)}

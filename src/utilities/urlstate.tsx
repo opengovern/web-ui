@@ -1,8 +1,11 @@
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import { atom, useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { SourceType } from '../api/api'
+
+dayjs.extend(utc)
 
 export interface DateRange {
     start: dayjs.Dayjs
@@ -105,15 +108,26 @@ export function useURLState<T>(
     }
 
     const setValue = (v: T) => {
+        const defaultVal = serialize(defaultValue)
         const serialized = serialize(v)
         const newParams = new URLSearchParams()
         currentParams().forEach((value, key) => newParams.append(key, value))
 
         serialized.forEach((value, key) => {
+            const defaultArray = defaultVal.get(key) || []
+
             newParams.delete(key)
-            value.forEach((item) => {
-                newParams.append(key, item)
-            })
+
+            const isDefault =
+                defaultArray.length === value.length &&
+                defaultArray.filter((item) => value.indexOf(item) >= 0)
+                    .length === defaultArray.length
+
+            if (!isDefault) {
+                value.forEach((item) => {
+                    newParams.append(key, item)
+                })
+            }
         })
 
         window.history.pushState({}, '', `?${newParams.toString()}`)

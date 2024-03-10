@@ -1,5 +1,6 @@
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { ChevronRightIcon as ChevronRightIconSolid } from '@heroicons/react/20/solid'
+import { useAtomValue } from 'jotai'
 
 import {
     Flex,
@@ -12,6 +13,7 @@ import {
 } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { numericDisplay } from '../../../utilities/numericDisplay'
+import { searchAtom } from '../../../utilities/urlstate'
 
 interface IScoreCategoryCard {
     title: string
@@ -36,6 +38,7 @@ export default function ScoreCategoryCard({
     const navigate = useNavigate()
     // const { response, isLoading } =
     //     useComplianceApiV1BenchmarksControlsDetail(controlID)
+    const searchParams = useAtomValue(searchAtom)
 
     let color = 'blue'
     if (percentage >= 75) {
@@ -50,7 +53,9 @@ export default function ScoreCategoryCard({
     return (
         <Flex
             onClick={() =>
-                navigate(`/${ws}/score/categories?category=${category}`)
+                navigate(
+                    `/${ws}/score/categories?category=${category}&${searchParams}`
+                )
             }
             className={` ${
                 varient === 'default'

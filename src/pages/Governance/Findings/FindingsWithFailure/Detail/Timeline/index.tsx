@@ -1,8 +1,7 @@
 import { Flex, Icon, Text } from '@tremor/react'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
-import relativeTime from 'dayjs/plugin/relativeTime'
 import dayjs from 'dayjs'
-import { severityBadge } from '../../../../Controls'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent,
@@ -105,21 +104,21 @@ export default function Timeline({ data, isLoading }: ITimeline) {
                             about {dayjs(tl?.evaluatedAt).fromNow()}
                         </Text>
                     </Flex>
-                    <Flex
+                    {/* <Flex
                         flexDirection="col"
                         alignItems="start"
                         className="gap-1 mt-1"
-                    >
-                        {/* <Text className="text-gray-800 truncate max-w-[330px]"> */}
-                        {/*     {tl.controlID} */}
-                        {/* </Text> */}
-                        {/* <Flex className="w-fit gap-4"> */}
-                        {/*     {severityBadge(tl.severity)} */}
-                        {/*     <Text className="pl-4 border-l border-l-gray-200 text-xs"> */}
-                        {/*         Section: */}
-                        {/*     </Text> */}
-                        {/* </Flex> */}
-                    </Flex>
+                    > */}
+                    {/* <Text className="text-gray-800 truncate max-w-[330px]"> */}
+                    {/*     {tl.controlID} */}
+                    {/* </Text> */}
+                    {/* <Flex className="w-fit gap-4"> */}
+                    {/*     {severityBadge(tl.severity)} */}
+                    {/*     <Text className="pl-4 border-l border-l-gray-200 text-xs"> */}
+                    {/*         Section: */}
+                    {/*     </Text> */}
+                    {/* </Flex> */}
+                    {/* </Flex> */}
                 </Flex>
             ))}
         </Flex>
