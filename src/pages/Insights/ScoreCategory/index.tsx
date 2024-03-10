@@ -150,7 +150,7 @@ const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
                     className="h-full gap-1"
                 >
                     <Text className="font-bold ">
-                        {numberDisplay(param.value)} resources
+                        {numberDisplay(param.value, 0)} resources
                     </Text>
                 </Flex>
             ),
@@ -175,7 +175,7 @@ const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
                     className="h-full gap-1"
                 >
                     <Text className="font-bold ">
-                        {numberDisplay(param.value)} resources
+                        {numberDisplay(param.value, 0)} resources
                     </Text>
                 </Flex>
             ),
