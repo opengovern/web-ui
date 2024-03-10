@@ -38,7 +38,10 @@ import {
 import Table, { IColumn } from '../../../components/Table'
 import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
 import { severityBadge } from '../../Governance/Controls'
-import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numberDisplay,
+} from '../../../utilities/numericDisplay'
 
 interface IRecord
     extends GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary {
@@ -146,7 +149,9 @@ const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
                     alignItems="center"
                     className="h-full gap-1"
                 >
-                    <Text className="font-bold ">{param.value} resources</Text>
+                    <Text className="font-bold ">
+                        {numberDisplay(param.value)} resources
+                    </Text>
                 </Flex>
             ),
         },
@@ -169,7 +174,9 @@ const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
                     alignItems="center"
                     className="h-full gap-1"
                 >
-                    <Text className="font-bold ">{param.value} resources</Text>
+                    <Text className="font-bold ">
+                        {numberDisplay(param.value)} resources
+                    </Text>
                 </Flex>
             ),
         },
