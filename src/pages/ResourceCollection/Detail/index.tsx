@@ -40,7 +40,6 @@ import {
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
 } from '../../../api/api'
 import Chart from '../../../components/Chart'
@@ -72,20 +71,20 @@ import {
     useUrlDateRangeState,
 } from '../../../utilities/urlstate'
 
-const pieData = (
-    input:
-        | GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse
-        | undefined
-) => {
-    const data: any[] = []
-    if (input && input.totalChecks) {
-        // eslint-disable-next-line array-callback-return
-        Object.entries(input.totalChecks).map(([key, value]) => {
-            data.push({ name: camelCaseToLabel(key), value })
-        })
-    }
-    return data.reverse()
-}
+// const pieData = (
+//     input:
+//         | GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse
+//         | undefined
+// ) => {
+//     const data: any[] = []
+//     if (input && input.totalChecks) {
+//         // eslint-disable-next-line array-callback-return
+//         Object.entries(input.totalChecks).map(([key, value]) => {
+//             data.push({ name: camelCaseToLabel(key), value })
+//         })
+//     }
+//     return data.reverse()
+// }
 
 const barData = (
     input:
@@ -190,37 +189,37 @@ const complianceColumns: IColumn<any, any>[] = [
     },
 ]
 
-const bmList = (
-    assignmentList:
-        | GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark[]
-        | undefined,
-    summaryList:
-        | GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse
-        | undefined
-) => {
-    const rows = []
-    if (assignmentList && summaryList) {
-        for (let i = 0; i < assignmentList.length; i += 1) {
-            const benchmark = summaryList.benchmarkSummary?.find(
-                (bm) => bm.id === assignmentList[i].benchmarkId?.id
-            )
-            if (assignmentList[i].status) {
-                rows.push({
-                    ...assignmentList[i].benchmarkId,
-                    ...benchmark,
-                    status: 'Assigned',
-                })
-            } else {
-                rows.push({
-                    ...assignmentList[i].benchmarkId,
-                    ...benchmark,
-                    status: 'Not assigned',
-                })
-            }
-        }
-    }
-    return rows
-}
+// const bmList = (
+//     assignmentList:
+//         | GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark[]
+//         | undefined,
+//     summaryList:
+//         | GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse
+//         | undefined
+// ) => {
+//     const rows = []
+//     if (assignmentList && summaryList) {
+//         for (let i = 0; i < assignmentList.length; i += 1) {
+//             const benchmark = summaryList.benchmarkSummary?.find(
+//                 (bm) => bm.id === assignmentList[i].benchmarkId?.id
+//             )
+//             if (assignmentList[i].status) {
+//                 rows.push({
+//                     ...assignmentList[i].benchmarkId,
+//                     ...benchmark,
+//                     status: 'Assigned',
+//                 })
+//             } else {
+//                 rows.push({
+//                     ...assignmentList[i].benchmarkId,
+//                     ...benchmark,
+//                     status: 'Not assigned',
+//                 })
+//             }
+//         }
+//     }
+//     return rows
+// }
 
 export default function ResourceCollectionDetail() {
     const { resourceId } = useParams()
@@ -286,7 +285,7 @@ export default function ResourceCollectionDetail() {
     const { response: landscape, isLoading: landscapeLoading } =
         useInventoryApiV2ResourceCollectionLandscapeDetail(resourceId || '')
 
-    const rows = useMemo(() => bmList(response, complianceKPI), [response])
+    // const rows = useMemo(() => bmList(response, complianceKPI), [response])
 
     return (
         <>
@@ -472,14 +471,14 @@ export default function ResourceCollectionDetail() {
                             </Flex>
                             <TabPanels>
                                 <TabPanel className="mt-0">
-                                    <Chart
+                                    {/* <Chart
                                         labels={[]}
                                         chartType="doughnut"
                                         chartAggregation="trend"
                                         chartData={pieData(complianceKPI)}
                                         loading={complianceKPILoading}
                                         colorful
-                                    />
+                                    /> */}
                                 </TabPanel>
                                 <TabPanel>
                                     <Title className="font-semibold mb-3">
@@ -509,7 +508,7 @@ export default function ResourceCollectionDetail() {
                         />
                     </TabPanel>
                     <TabPanel>
-                        <Table
+                        {/* <Table
                             title={`${detail?.name} benchmarks`}
                             downloadable
                             id="resource_collection_bm"
@@ -529,7 +528,7 @@ export default function ResourceCollectionDetail() {
                                 }
                             }}
                             options={options}
-                        />
+                        /> */}
                     </TabPanel>
                     <TabPanel>
                         <Card>

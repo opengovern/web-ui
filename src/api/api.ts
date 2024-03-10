@@ -225,7 +225,13 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse {
     token?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiDashboard {
+    ID?: string
+    Name?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiGenerateDashboardTokenResponse {
+    dashboards?: GithubComKaytuIoKaytuEnginePkgAuthApiDashboard[]
     token?: string
 }
 
@@ -1080,12 +1086,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsS
     accounts?: GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSummary[]
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse {
-    benchmarkSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary[]
-    totalChecks?: TypesSeverityResult
-    totalConformanceStatusSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatusSummary
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsByFindingIDResponse {
     findingEvents?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent[]
 }
@@ -1276,6 +1276,12 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoin
      * @example 1000
      */
     value?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiListBenchmarksSummaryResponse {
+    benchmarkSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary[]
+    totalChecks?: TypesSeverityResult
+    totalConformanceStatusSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatusSummary
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest {
@@ -3868,7 +3874,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiListBenchmarksSummaryResponse,
                 any
             >({
                 path: `/compliance/api/v1/benchmarks/summary`,
@@ -4290,6 +4296,8 @@ export class Api<
             query?: {
                 /** ConformanceStatus to filter by defaults to all conformanceStatus except passed */
                 conformanceStatus?: ('failed' | 'passed')[]
+                /** StateActive to filter by defaults to true */
+                stateActive?: boolean[]
             },
             params: RequestParams = {}
         ) =>

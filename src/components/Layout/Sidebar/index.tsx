@@ -19,7 +19,7 @@ import { useAtom, useAtomValue } from 'jotai'
 import { Popover, Transition } from '@headlessui/react'
 import { Fragment, useEffect } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
-import { previewAtom, sideBarCollapsedAtom } from '../../../store'
+import { previewAtom, sideBarCollapsedAtom, ssTokenAtom } from '../../../store'
 import { KaytuIcon, KaytuIconBig } from '../../../icons/icons'
 import Utilities from './Utilities'
 import {
@@ -33,6 +33,7 @@ import Workspaces from './Workspaces'
 import AnimatedAccordion from '../../AnimatedAccordion'
 import { setAuthHeader } from '../../../api/ApiConfig'
 import { searchAtom } from '../../../utilities/urlstate'
+import { useAuthApiV1DashboardsTokenCreate } from '../../../api/auth.gen'
 
 const badgeStyle = {
     color: '#fff',
@@ -73,6 +74,30 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         error: connectionsErr,
         sendNow: sendConnections,
     } = useIntegrationApiV1ConnectionsCountList({}, {}, false, workspace)
+    const {
+        response: dashboardToken,
+        isLoading,
+        isExecuted,
+        error: dashboardTokenErr,
+        sendNow: fetchDashboardToken,
+    } = useAuthApiV1DashboardsTokenCreate({}, false, workspace)
+    const [ssToken, setSSToken] = useAtom(ssTokenAtom)
+    useEffect(() => {
+        setSSToken(dashboardToken)
+    }, [isLoading])
+    const dashboardItems = () => {
+        return dashboardToken?.dashboards?.map((d) => {
+            return {
+                name: d.Name,
+                page: `dashboard/${d.ID}`,
+                isPreview: false,
+                isLoading: false,
+                count: undefined,
+                error: false,
+            }
+        })
+    }
+
     const searchParams = useAtomValue(searchAtom)
 
     useEffect(() => {
@@ -84,6 +109,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     sendAssets()
                     sendFindings()
                     sendConnections()
+                    fetchDashboardToken()
                 })
                 .catch((e) => {
                     console.log('====> failed to get token due to', e)
@@ -108,6 +134,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             name: 'Dashboards',
             page: 'dashboard',
             icon: DocumentChartBarIcon,
+            children: dashboardItems(),
             isPreview: false,
         },
         {

@@ -1,25 +1,28 @@
 import { embedDashboard } from '@superset-ui/embedded-sdk'
 import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
 import TopHeader from '../../components/Layout/Header'
-import { useAuthApiV1DashboardsTokenCreate } from '../../api/auth.gen'
+import { ssTokenAtom, workspaceAtom } from '../../store'
 
 export default function Dashboards() {
-    const {
-        response: dashboardToken,
-        isLoading,
-        isExecuted,
-    } = useAuthApiV1DashboardsTokenCreate()
+    const { dashboardId } = useParams()
+    const workspace = useAtomValue(workspaceAtom)
+    const ssToken = useAtomValue(ssTokenAtom)
 
     useEffect(() => {
-        if (isExecuted && !isLoading) {
+        if (
+            (ssToken?.token?.length || 0) > 0 &&
+            (workspace.current?.id?.length || 0) > 0
+        ) {
             const item = document.getElementById('superset-container')
             if (item !== null) {
                 const myDashboard = embedDashboard({
-                    id: '91470dee-a079-44ba-b362-0a5af0262fe7', // given by the Superset embedding UI
-                    supersetDomain: 'https://ss.kaytu.io',
+                    id: dashboardId || '',
+                    supersetDomain: `https://ss-${workspace.current?.id}.kaytu.io`,
                     mountPoint: item,
                     fetchGuestToken: () =>
-                        Promise.resolve(dashboardToken?.token || ''),
+                        Promise.resolve(ssToken?.token || ''),
                     dashboardUiConfig: { hideTitle: true },
                     debug: true,
                 })
@@ -36,11 +39,16 @@ export default function Dashboards() {
                 })
             }
         }
-    }, [isLoading])
+    }, [ssToken, workspace])
+
+    const dashboardTitle = ssToken?.dashboards
+        ?.filter((d) => d.ID === dashboardId)
+        ?.map((d) => d.Name)
+        ?.at(0)
 
     return (
         <>
-            <TopHeader />
+            <TopHeader breadCrumb={[dashboardTitle || 'Dashboard']} />
 
             <div id="superset-container" className="w-full h-full" />
         </>

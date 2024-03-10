@@ -268,7 +268,7 @@ const authRoutes = [
     },
     {
         key: 'dashboard',
-        path: '/:ws/dashboard',
+        path: '/:ws/dashboard/:dashboardId',
         component: Dashboards,
     },
     {
