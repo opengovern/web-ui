@@ -119,6 +119,7 @@ export function useURLState<T>(
             newParams.delete(key)
 
             const isDefault =
+                false &&
                 defaultArray.length === value.length &&
                 defaultArray.filter((item) => value.indexOf(item) >= 0)
                     .length === defaultArray.length

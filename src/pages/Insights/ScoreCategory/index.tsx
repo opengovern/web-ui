@@ -9,6 +9,7 @@ import {
     Text,
     Switch,
     TextInput,
+    Badge,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import {
@@ -37,6 +38,7 @@ import {
 import Table, { IColumn } from '../../../components/Table'
 import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
 import { severityBadge } from '../../Governance/Controls'
+import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 
 interface IRecord
     extends GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary {
@@ -172,6 +174,33 @@ const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
             ),
         },
         {
+            field: 'control.tags',
+            headerName: 'Tags',
+            type: 'string',
+            sortable: false,
+            hide: false,
+            width: 200,
+            cellRenderer: (
+                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
+            ) =>
+                params.data && (
+                    <Flex
+                        flexDirection="col"
+                        className="h-full"
+                        justifyContent="center"
+                        alignItems="start"
+                    >
+                        {Object.entries(params.data?.control?.tags || {})
+                            .filter((i) => i[0] === 'score_tags')
+                            .map((item) =>
+                                item[1].map((i) => {
+                                    return <Badge>{i}</Badge>
+                                })
+                            )}
+                    </Flex>
+                ),
+        },
+        {
             field: 'control.query.parameters',
             headerName: 'Customizable',
             type: 'string',
@@ -261,7 +290,7 @@ const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
                     justifyContent="center"
                     alignItems="start"
                 >
-                    ${params.value?.toFixed(2) || '0'}
+                    {exactPriceDisplay(params.value, 0)}
                 </Flex>
             ),
         })
