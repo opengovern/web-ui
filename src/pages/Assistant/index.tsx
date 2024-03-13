@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import { Button, Card, Flex, Text, TextInput } from '@tremor/react'
+import MarkdownPreview from '@uiw/react-markdown-preview'
 import TopHeader from '../../components/Layout/Header'
 import { ssTokenAtom, workspaceAtom } from '../../store'
 import { useURLParam } from '../../utilities/urlstate'
@@ -19,6 +20,7 @@ export default function Assistant() {
         useAssistantApiV1ThreadCreate(
             {
                 thread_id: threadID,
+                run_id: runID,
                 content,
             },
             {},
@@ -53,13 +55,14 @@ export default function Assistant() {
         threadID !== ''
     )
 
+    const isRunning =
+        thread?.status === 'queued' ||
+        thread?.status === 'in_progress' ||
+        thread?.status === 'requires_action'
+
     useEffect(() => {
         if (threadExecuted && !threadLoading) {
-            if (
-                thread?.status === 'queued' ||
-                thread?.status === 'in_progress' ||
-                thread?.status === 'requires_action'
-            ) {
+            if (isRunning) {
                 setTimeout(() => refresh(), 1000)
             }
         }
@@ -70,18 +73,55 @@ export default function Assistant() {
             <TopHeader />
 
             <Flex flexDirection="col" className="h-full">
-                <Flex flexDirection="col">
-                    {thread?.messages?.map((msg) => {
+                <Flex flexDirection="col" className="space-y-4">
+                    {thread?.messages?.reverse().map((msg) => {
                         return (
                             <Card>
-                                <Text>{msg.content}</Text>
+                                <MarkdownPreview
+                                    source={msg.content}
+                                    className="!bg-transparent"
+                                    wrapperElement={{
+                                        'data-color-mode': 'light',
+                                    }}
+                                    rehypeRewrite={(node, index, parent) => {
+                                        if (
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            node.tagName === 'a' &&
+                                            parent &&
+                                            /^h(1|2|3|4|5|6)/.test(
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                parent.tagName
+                                            )
+                                        ) {
+                                            // eslint-disable-next-line no-param-reassign
+                                            parent.children =
+                                                parent.children.slice(1)
+                                        }
+                                    }}
+                                />
                             </Card>
                         )
                     })}
                 </Flex>
-                <Flex flexDirection="row" justifyContent="between">
-                    <TextInput value={content} onValueChange={setContent} />
-                    <Button onClick={sendNow}>Send</Button>
+                <Flex
+                    flexDirection="row"
+                    justifyContent="between"
+                    className="mt-4"
+                >
+                    <TextInput
+                        value={content}
+                        disabled={isRunning || (isExecuted && isLoading)}
+                        onValueChange={setContent}
+                        className="mr-2"
+                    />
+                    <Button
+                        loading={isRunning || (isExecuted && isLoading)}
+                        onClick={sendNow}
+                    >
+                        Send
+                    </Button>
                 </Flex>
             </Flex>
         </>

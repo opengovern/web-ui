@@ -2537,6 +2537,7 @@ export interface GithubComKaytuIoKaytuEngineServicesAssistantApiEntityMessage {
 
 export interface GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest {
     content?: string
+    run_id?: string
     thread_id?: string
 }
 
