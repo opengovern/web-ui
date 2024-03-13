@@ -225,16 +225,6 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse {
     token?: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgAuthApiDashboard {
-    ID?: string
-    Name?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAuthApiGenerateDashboardTokenResponse {
-    dashboards?: GithubComKaytuIoKaytuEnginePkgAuthApiDashboard[]
-    token?: string
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse {
     /**
      * Global Access
@@ -822,7 +812,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary {
     benchmarks?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark[]
     control?: GithubComKaytuIoKaytuEnginePkgComplianceApiControl
     costOptimization?: number
-    evaluatedAt?: number
+    evaluatedAt?: string
     failedConnectionCount?: number
     failedResourcesCount?: number
     passed?: boolean
@@ -1080,6 +1070,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingsSort {
     resourceTypeID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
     severity?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
     stateActive?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGenerateSupersetDashboardTokenResponse {
+    dashboards?: GithubComKaytuIoKaytuEnginePkgComplianceApiSupersetDashboard[]
+    token?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse {
@@ -1415,6 +1410,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSumma
 export enum GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection {
     SortDirectionAscending = 'asc',
     SortDirectionDescending = 'desc',
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiSupersetDashboard {
+    ID?: string
+    Name?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {
@@ -2526,6 +2526,25 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize {
     SizeLG = 'lg',
 }
 
+export interface GithubComKaytuIoKaytuEngineServicesAssistantApiEntityListMessagesResponse {
+    messages?: GithubComKaytuIoKaytuEngineServicesAssistantApiEntityMessage[]
+    status?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesAssistantApiEntityMessage {
+    content?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest {
+    content?: string
+    thread_id?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageResponse {
+    run_id?: string
+    thread_id?: string
+}
+
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSCredentialConfig {
     accountID?: string
     assumeRoleName?: string
@@ -3410,28 +3429,63 @@ export class Api<
                 ...params,
             }),
     }
-    auth = {
+    assistant = {
         /**
-         * @description Generate dashboard token
+         * @description Send a message [standalone]
          *
-         * @tags keys
-         * @name ApiV1DashboardsTokenCreate
-         * @summary Generate dashboard token
-         * @request POST:/auth/api/v1/dashboards/token
+         * @tags assistant
+         * @name ApiV1ThreadCreate
+         * @summary Send a message [standalone]
+         * @request POST:/assistant/api/v1/thread
          * @secure
          */
-        apiV1DashboardsTokenCreate: (params: RequestParams = {}) =>
+        apiV1ThreadCreate: (
+            request: GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest,
+            params: RequestParams = {}
+        ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiGenerateDashboardTokenResponse,
+                GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageResponse,
                 any
             >({
-                path: `/auth/api/v1/dashboards/token`,
+                path: `/assistant/api/v1/thread`,
                 method: 'POST',
+                body: request,
                 secure: true,
+                type: ContentType.Json,
                 format: 'json',
                 ...params,
             }),
 
+        /**
+         * @description List messages of a thread
+         *
+         * @tags assistant
+         * @name ApiV1ThreadDetail
+         * @summary List messages of a thread
+         * @request GET:/assistant/api/v1/thread/{thread_id}
+         * @secure
+         */
+        apiV1ThreadDetail: (
+            threadId: string,
+            query?: {
+                /** Run ID */
+                run_id?: string
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesAssistantApiEntityListMessagesResponse,
+                any
+            >({
+                path: `/assistant/api/v1/thread/${threadId}`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+    }
+    auth = {
         /**
          * @description Creates workspace key for the defined role with the defined name in the workspace.
          *
@@ -3900,8 +3954,10 @@ export class Api<
             query?: {
                 /** Connection IDs to filter by */
                 connectionId?: string[]
-                /** Connection groups to filter by  */
+                /** Connection groups to filter by */
                 connectionGroup?: string[]
+                /** timestamp for values in epoch seconds */
+                timeAt?: number
             },
             params: RequestParams = {}
         ) =>
@@ -4931,6 +4987,27 @@ export class Api<
                 body: request,
                 secure: true,
                 type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Generate dashboard token
+         *
+         * @tags keys
+         * @name ApiV1SupersetDashboardsTokenCreate
+         * @summary Generate dashboard token
+         * @request POST:/compliance/api/v1/superset/dashboards/token
+         * @secure
+         */
+        apiV1SupersetDashboardsTokenCreate: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGenerateSupersetDashboardTokenResponse,
+                any
+            >({
+                path: `/compliance/api/v1/superset/dashboards/token`,
+                method: 'POST',
+                secure: true,
                 format: 'json',
                 ...params,
             }),

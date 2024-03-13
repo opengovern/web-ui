@@ -38,6 +38,7 @@ import ScoreOverview from '../pages/Insights/ScoreOverview'
 import ScoreCategory from '../pages/Insights/ScoreCategory'
 import ScoreDetails from '../pages/Insights/Details'
 import Dashboards from '../pages/Dashboards'
+import Assistant from '../pages/Assistant'
 
 const authRoutes = [
     {
@@ -270,6 +271,11 @@ const authRoutes = [
         key: 'dashboard',
         path: '/:ws/dashboard/:dashboardId',
         component: Dashboards,
+    },
+    {
+        key: 'assistant',
+        path: '/:ws/assistant',
+        component: Assistant,
     },
     {
         key: 'deployment',

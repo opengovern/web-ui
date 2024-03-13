@@ -26,14 +26,16 @@ import {
     useInventoryApiV2AnalyticsCountList,
     useInventoryApiV2AnalyticsSpendCountList,
 } from '../../../api/inventory.gen'
-import { useComplianceApiV1FindingsCountList } from '../../../api/compliance.gen'
+import {
+    useComplianceApiV1FindingsCountList,
+    useComplianceApiV1SupersetDashboardsTokenCreate,
+} from '../../../api/compliance.gen'
 import { useIntegrationApiV1ConnectionsCountList } from '../../../api/integration.gen'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Workspaces from './Workspaces'
 import AnimatedAccordion from '../../AnimatedAccordion'
 import { setAuthHeader } from '../../../api/ApiConfig'
 import { searchAtom } from '../../../utilities/urlstate'
-import { useAuthApiV1DashboardsTokenCreate } from '../../../api/auth.gen'
 
 const badgeStyle = {
     color: '#fff',
@@ -80,7 +82,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         isExecuted,
         error: dashboardTokenErr,
         sendNow: fetchDashboardToken,
-    } = useAuthApiV1DashboardsTokenCreate({}, false, workspace)
+    } = useComplianceApiV1SupersetDashboardsTokenCreate({}, false, workspace)
     const [ssToken, setSSToken] = useAtom(ssTokenAtom)
     useEffect(() => {
         setSSToken(dashboardToken)
@@ -127,6 +129,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         {
             name: 'SCORE',
             page: 'score',
+            icon: DocumentChartBarIcon,
+            isPreview: false,
+        },
+        {
+            name: 'Assistant',
+            page: 'assistant',
             icon: DocumentChartBarIcon,
             isPreview: false,
         },
