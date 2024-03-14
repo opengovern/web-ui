@@ -67,7 +67,7 @@ export default function Assistant() {
         if (threadExecuted && !threadLoading) {
             ref.current?.scrollIntoView({ behavior: 'smooth' })
             if (isRunning) {
-                setTimeout(() => refresh(), 1000)
+                setTimeout(() => refresh(), 2500)
             }
         }
     }, [threadLoading])
