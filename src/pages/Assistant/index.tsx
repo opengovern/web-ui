@@ -1,5 +1,5 @@
 import { embedDashboard } from '@superset-ui/embedded-sdk'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import { Button, Card, Flex, Text, TextInput } from '@tremor/react'
@@ -16,6 +16,7 @@ export default function Assistant() {
     const [threadID, setThreadID] = useURLParam('threadID', '')
     const [runID, setRunID] = useURLParam('runID', '')
     const [content, setContent] = useState('')
+    const ref = useRef<HTMLDivElement | null>(null)
     const { response, isLoading, isExecuted, sendNow } =
         useAssistantApiV1ThreadCreate(
             {
@@ -36,6 +37,8 @@ export default function Assistant() {
             if (response?.run_id !== undefined) {
                 setRunID(response?.run_id || '')
             }
+
+            setContent('')
         }
     }, [isLoading])
 
@@ -62,11 +65,20 @@ export default function Assistant() {
 
     useEffect(() => {
         if (threadExecuted && !threadLoading) {
+            ref.current?.scrollIntoView({ behavior: 'smooth' })
             if (isRunning) {
                 setTimeout(() => refresh(), 1000)
             }
         }
     }, [threadLoading])
+
+    const msgList = () => {
+        const list = thread?.messages || []
+        console.log('>>>', list)
+        const reversed = [...list].reverse()
+        console.log('<<<', reversed)
+        return reversed
+    }
 
     return (
         <>
@@ -74,7 +86,7 @@ export default function Assistant() {
 
             <Flex flexDirection="col" className="h-full">
                 <Flex flexDirection="col" className="space-y-4">
-                    {thread?.messages?.reverse().map((msg) => {
+                    {msgList().map((msg) => {
                         return (
                             <Card>
                                 <MarkdownPreview
@@ -104,6 +116,12 @@ export default function Assistant() {
                             </Card>
                         )
                     })}
+                    <div
+                        style={{ float: 'left', clear: 'both' }}
+                        ref={(el) => {
+                            ref.current = el
+                        }}
+                    />
                 </Flex>
                 <Flex
                     flexDirection="row"
@@ -115,6 +133,11 @@ export default function Assistant() {
                         disabled={isRunning || (isExecuted && isLoading)}
                         onValueChange={setContent}
                         className="mr-2"
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                sendNow()
+                            }
+                        }}
                     />
                     <Button
                         loading={isRunning || (isExecuted && isLoading)}
