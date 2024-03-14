@@ -19,8 +19,8 @@ export default function Assistant() {
     const { response, isLoading, isExecuted, sendNow } =
         useAssistantApiV1ThreadCreate(
             {
-                thread_id: threadID,
-                run_id: runID,
+                thread_id: threadID.length > 0 ? threadID : undefined,
+                run_id: undefined,
                 content,
             },
             {},
