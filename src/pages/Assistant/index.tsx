@@ -59,9 +59,13 @@ export default function Assistant() {
         thread?.status === 'in_progress' ||
         thread?.status === 'requires_action'
 
+    const lastMsgCount = useRef<number>(0)
     useEffect(() => {
         if (threadExecuted && !threadLoading) {
-            ref.current?.scrollIntoView({ behavior: 'smooth' })
+            if ((thread?.messages || []).length !== lastMsgCount.current) {
+                ref.current?.scrollIntoView({ behavior: 'smooth' })
+                lastMsgCount.current = (thread?.messages || []).length
+            }
             if (isRunning) {
                 setTimeout(() => refresh(), 2500)
             }
