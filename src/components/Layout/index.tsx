@@ -20,7 +20,11 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
         workspace !== 'requestdemo'
 
     return (
-        <Flex className="h-screen overflow-hidden">
+        <Flex
+            flexDirection="row"
+            className="h-screen overflow-hidden"
+            justifyContent="start"
+        >
             {showSidebar && (
                 <Sidebar workspace={workspace} currentPage={current} />
             )}
@@ -28,7 +32,8 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                 <Flex
                     flexDirection="col"
                     alignItems="center"
-                    className="mt-16 bg-gray-100 dark:bg-gray-900 h-screen overflow-y-scroll overflow-x-hidden"
+                    justifyContent="between"
+                    className="bg-gray-100 dark:bg-gray-900 h-screen overflow-y-scroll overflow-x-hidden"
                     id="kaytu-container"
                     onScroll={(e) => {
                         if (onScroll) {
@@ -37,7 +42,7 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                     }}
                     ref={scrollRef}
                 >
-                    <Flex justifyContent="center" className="px-12 h-fit">
+                    <Flex justifyContent="center" className="mt-16 px-12 h-fit">
                         <div className="w-full max-w-7xl py-6">{children}</div>
                     </Flex>
                     <Footer />

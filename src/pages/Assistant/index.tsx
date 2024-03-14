@@ -81,8 +81,7 @@ export default function Assistant() {
     return (
         <>
             <TopHeader />
-
-            <Flex flexDirection="col" className="h-full">
+            <Flex flexDirection="col" justifyContent="start" className="h-full">
                 <Flex flexDirection="col" className="space-y-4">
                     {msgList().map((msg) => {
                         return (

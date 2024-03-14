@@ -4,7 +4,7 @@ export default function Footer() {
     return (
         <Flex
             justifyContent="center"
-            className="px-12 mb-16 py-3 border-t border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm"
+            className="px-12 py-3 border-t border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm"
         >
             <Flex
                 flexDirection="row"
