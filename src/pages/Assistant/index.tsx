@@ -73,6 +73,9 @@ export default function Assistant() {
     }, [threadLoading])
 
     const msgList = () => {
+        if (threadID === '' && runID === '') {
+            return []
+        }
         const list = thread?.messages || []
         const reversed = [...list].reverse()
         return reversed
@@ -154,10 +157,22 @@ export default function Assistant() {
                         className="mr-2"
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
-                                sendNow()
+                                if (!isRunning && !(isExecuted && isLoading)) {
+                                    sendNow()
+                                }
                             }
                         }}
                     />
+                    <Button
+                        variant="secondary"
+                        className="mr-2"
+                        onClick={() => {
+                            setThreadID('')
+                            setRunID('')
+                        }}
+                    >
+                        New Chat
+                    </Button>
                     <Button
                         loading={isRunning || (isExecuted && isLoading)}
                         onClick={sendNow}
