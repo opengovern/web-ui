@@ -2533,6 +2533,7 @@ export interface GithubComKaytuIoKaytuEngineServicesAssistantApiEntityListMessag
 
 export interface GithubComKaytuIoKaytuEngineServicesAssistantApiEntityMessage {
     content?: string
+    role?: string
 }
 
 export interface GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest {

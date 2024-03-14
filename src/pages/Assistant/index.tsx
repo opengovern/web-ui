@@ -2,7 +2,7 @@ import { embedDashboard } from '@superset-ui/embedded-sdk'
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
-import { Button, Card, Flex, Text, TextInput } from '@tremor/react'
+import { Button, Card, Flex, Text, TextInput, Title } from '@tremor/react'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 import TopHeader from '../../components/Layout/Header'
 import { ssTokenAtom, workspaceAtom } from '../../store'
@@ -74,9 +74,7 @@ export default function Assistant() {
 
     const msgList = () => {
         const list = thread?.messages || []
-        console.log('>>>', list)
         const reversed = [...list].reverse()
-        console.log('<<<', reversed)
         return reversed
     }
 
@@ -88,32 +86,54 @@ export default function Assistant() {
                 <Flex flexDirection="col" className="space-y-4">
                     {msgList().map((msg) => {
                         return (
-                            <Card>
-                                <MarkdownPreview
-                                    source={msg.content}
-                                    className="!bg-transparent"
-                                    wrapperElement={{
-                                        'data-color-mode': 'light',
-                                    }}
-                                    rehypeRewrite={(node, index, parent) => {
-                                        if (
-                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                            // @ts-ignore
-                                            node.tagName === 'a' &&
-                                            parent &&
-                                            /^h(1|2|3|4|5|6)/.test(
+                            <Flex
+                                flexDirection="row"
+                                justifyContent={
+                                    msg.role === 'user' ? 'start' : 'end'
+                                }
+                            >
+                                <Card
+                                    className={
+                                        msg.role === 'user'
+                                            ? 'w-fit bg-gray-50'
+                                            : 'w-fit bg-green-50'
+                                    }
+                                >
+                                    <Text className="!font-extrabold !text-sm text-black mb-5">
+                                        {msg.role === 'user'
+                                            ? 'You:'
+                                            : 'Kaytu Assistant:'}
+                                    </Text>
+                                    <MarkdownPreview
+                                        source={msg.content}
+                                        className="!bg-transparent"
+                                        wrapperElement={{
+                                            'data-color-mode': 'light',
+                                        }}
+                                        rehypeRewrite={(
+                                            node,
+                                            index,
+                                            parent
+                                        ) => {
+                                            if (
                                                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                                 // @ts-ignore
-                                                parent.tagName
-                                            )
-                                        ) {
-                                            // eslint-disable-next-line no-param-reassign
-                                            parent.children =
-                                                parent.children.slice(1)
-                                        }
-                                    }}
-                                />
-                            </Card>
+                                                node.tagName === 'a' &&
+                                                parent &&
+                                                /^h(1|2|3|4|5|6)/.test(
+                                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                    // @ts-ignore
+                                                    parent.tagName
+                                                )
+                                            ) {
+                                                // eslint-disable-next-line no-param-reassign
+                                                parent.children =
+                                                    parent.children.slice(1)
+                                            }
+                                        }}
+                                    />
+                                </Card>
+                            </Flex>
                         )
                     })}
                     <div
