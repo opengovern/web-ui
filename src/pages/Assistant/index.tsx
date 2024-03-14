@@ -1,11 +1,7 @@
-import { embedDashboard } from '@superset-ui/embedded-sdk'
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { useAtomValue } from 'jotai'
-import { Button, Card, Flex, Text, TextInput, Title } from '@tremor/react'
+import { Button, Card, Flex, Text, TextInput } from '@tremor/react'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 import TopHeader from '../../components/Layout/Header'
-import { ssTokenAtom, workspaceAtom } from '../../store'
 import { useURLParam } from '../../utilities/urlstate'
 import {
     useAssistantApiV1ThreadCreate,
