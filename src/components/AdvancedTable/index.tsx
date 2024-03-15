@@ -343,6 +343,7 @@ export default function AdvancedTable<TData = any, TValue = any>({
         suppressExcelExport: true,
         alwaysShowHorizontalScroll: true,
         animateRows: false,
+        scrollbarWidth: 8,
         getRowHeight: () => 50,
         onGridReady: (e) => {
             if (onGridReady) {
