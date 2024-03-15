@@ -88,6 +88,15 @@ export default function CloudAccounts({
             >
                 {data ? (
                     data.connections
+                        ?.sort((a, b) => {
+                            if (value?.includes(a.id || '')) {
+                                return -1
+                            }
+                            if (value?.includes(b.id || '')) {
+                                return 1
+                            }
+                            return 0
+                        })
                         ?.filter(
                             (d) =>
                                 d.providerConnectionName

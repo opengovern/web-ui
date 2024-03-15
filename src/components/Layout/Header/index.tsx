@@ -9,10 +9,16 @@ import {
     kebabCaseToLabel,
     snakeCaseToLabel,
 } from '../../../utilities/labelMaker'
-import { DateRange, defaultTime, searchAtom } from '../../../utilities/urlstate'
+import {
+    DateRange,
+    defaultTime,
+    searchAtom,
+    useFilterState,
+} from '../../../utilities/urlstate'
 import NewDatePicker from './NewDatePicker'
 import NewFilter from './NewFilter'
 import { CloudConnect, Id } from '../../../icons/icons'
+import { SourceType } from '../../../api/api'
 
 interface IHeader {
     filter?: boolean
@@ -34,9 +40,25 @@ export default function TopHeader({
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const url = window.location.pathname.split('/')
+    const { value: selectedConnectionFilters } = useFilterState()
+    const defaultFilters = () => {
+        const v: ('connector' | 'cloud-account')[] = []
+
+        if (selectedConnectionFilters.connections.length > 0) {
+            v.push('cloud-account')
+            return v
+        }
+
+        if (selectedConnectionFilters.provider !== SourceType.Nil) {
+            v.push('connector')
+            return v
+        }
+        return v
+    }
+
     const [selectedFilters, setSelectedFilters] = useState<
         ('connector' | 'cloud-account')[]
-    >([])
+    >(defaultFilters())
     const filterOptions = [
         { id: 'connector', name: 'Connector', icon: CloudConnect },
         { id: 'cloud-account', name: 'Cloud Account', icon: Id },
