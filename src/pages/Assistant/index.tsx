@@ -7,6 +7,10 @@ import {
     useAssistantApiV1ThreadCreate,
     useAssistantApiV1ThreadDetail,
 } from '../../api/assistant.gen'
+import {
+    errorHandlingWithErrorMessage,
+    toErrorMessage,
+} from '../../types/apierror'
 
 export default function Assistant() {
     const [threadID, setThreadID] = useURLParam('threadID', '')
@@ -43,6 +47,7 @@ export default function Assistant() {
         isLoading: threadLoading,
         isExecuted: threadExecuted,
         sendNow: refresh,
+        error: err,
     } = useAssistantApiV1ThreadDetail(
         threadID,
         runID !== undefined
@@ -84,7 +89,11 @@ export default function Assistant() {
     return (
         <>
             <TopHeader />
-            <Flex flexDirection="col" justifyContent="start" className="h-full">
+            <Flex
+                flexDirection="col"
+                justifyContent="start"
+                className="relative h-full"
+            >
                 <Flex flexDirection="col" className="space-y-4">
                     {msgList().map((msg) => {
                         return (
@@ -180,6 +189,7 @@ export default function Assistant() {
                         Send
                     </Button>
                 </Flex>
+                {errorHandlingWithErrorMessage(refresh, toErrorMessage(err))}
             </Flex>
         </>
     )
