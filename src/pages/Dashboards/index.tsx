@@ -23,8 +23,10 @@ export default function Dashboards() {
                     mountPoint: item,
                     fetchGuestToken: () =>
                         Promise.resolve(ssToken?.token || ''),
-                    dashboardUiConfig: { hideTitle: true },
-                    debug: true,
+                    dashboardUiConfig: {
+                        hideTitle: true,
+                        hideTab: true,
+                    },
                 })
                 myDashboard.then((data) => {
                     const iframe = document.querySelector(
@@ -32,7 +34,7 @@ export default function Dashboards() {
                     ) as HTMLIFrameElement
                     if (iframe !== null) {
                         iframe.style.width = '100%'
-                        iframe.style.height = '100%'
+                        iframe.style.height = 'fit'
                         iframe.style.minHeight = '700px'
                         iframe.style.border = 'none'
                     }

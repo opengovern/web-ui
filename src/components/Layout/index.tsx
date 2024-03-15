@@ -43,7 +43,13 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                     ref={scrollRef}
                 >
                     <Flex justifyContent="center" className="mt-16 px-12 h-fit">
-                        <div className="w-full max-w-7xl py-6">{children}</div>
+                        <div
+                            className={`w-full ${
+                                current === 'dashboard' ? '' : 'max-w-7xl'
+                            } py-6`}
+                        >
+                            {children}
+                        </div>
                     </Flex>
                     <Footer />
                 </Flex>
