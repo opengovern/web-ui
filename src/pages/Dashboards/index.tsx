@@ -9,6 +9,7 @@ export default function Dashboards() {
     const { dashboardId } = useParams()
     const workspace = useAtomValue(workspaceAtom)
     const ssToken = useAtomValue(ssTokenAtom)
+    const targetHeight = window.screen.height - 300
 
     useEffect(() => {
         if (
@@ -28,6 +29,7 @@ export default function Dashboards() {
                         hideTab: true,
                     },
                 })
+
                 myDashboard.then((data) => {
                     const iframe = document.querySelector(
                         'iframe'
@@ -35,7 +37,7 @@ export default function Dashboards() {
                     if (iframe !== null) {
                         iframe.style.width = '100%'
                         iframe.style.height = 'fit'
-                        iframe.style.minHeight = '700px'
+                        iframe.style.minHeight = `${targetHeight}px`
                         iframe.style.border = 'none'
                     }
                 })
