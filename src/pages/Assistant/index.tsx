@@ -1,6 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
-import { Button, Card, Flex, Text, TextInput } from '@tremor/react'
+import {
+    Button,
+    Card,
+    Flex,
+    Switch,
+    Tab,
+    TabGroup,
+    TabList,
+    Text,
+    TextInput,
+} from '@tremor/react'
 import MarkdownPreview from '@uiw/react-markdown-preview'
+import { Features } from '@headlessui/react/dist/utils/render'
 import TopHeader from '../../components/Layout/Header'
 import { useURLParam } from '../../utilities/urlstate'
 import {
@@ -13,12 +24,27 @@ import {
 } from '../../types/apierror'
 
 export default function Assistant() {
+    const [assistantIdx, setAssistantIdx] = useURLParam(
+        'assistantIdx',
+        0,
+        (v) => String(v),
+        (v) => parseInt(v, 10)
+    )
+    const assistantName = () => {
+        switch (assistantIdx) {
+            case 0:
+                return 'kaytu-redirection-assistant'
+            default:
+                return 'kaytu-r-assistant'
+        }
+    }
     const [threadID, setThreadID] = useURLParam('threadID', '')
     const [runID, setRunID] = useURLParam('runID', '')
     const [content, setContent] = useState('')
     const ref = useRef<HTMLDivElement | null>(null)
     const { response, isLoading, isExecuted, sendNow } =
         useAssistantApiV1ThreadCreate(
+            assistantName(),
             {
                 thread_id: threadID.length > 0 ? threadID : undefined,
                 run_id: undefined,
@@ -50,6 +76,7 @@ export default function Assistant() {
         error: err,
     } = useAssistantApiV1ThreadDetail(
         threadID,
+        assistantName(),
         runID !== undefined
             ? {
                   run_id: runID,
@@ -94,6 +121,18 @@ export default function Assistant() {
                 justifyContent="start"
                 className="relative h-full"
             >
+                <Flex flexDirection="row" className="mb-2">
+                    <TabGroup
+                        defaultIndex={0}
+                        index={assistantIdx}
+                        onIndexChange={setAssistantIdx}
+                    >
+                        <TabList variant="solid" defaultValue="compliance">
+                            <Tab value="compliance">Compliance Assistant</Tab>
+                            <Tab value="query">Query Assistant</Tab>
+                        </TabList>
+                    </TabGroup>
+                </Flex>
                 <Flex flexDirection="col" className="space-y-4">
                     {msgList().map((msg) => {
                         return (

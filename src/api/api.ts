@@ -3438,10 +3438,11 @@ export class Api<
          * @tags assistant
          * @name ApiV1ThreadCreate
          * @summary Send a message [standalone]
-         * @request POST:/assistant/api/v1/thread
+         * @request POST:/assistant/api/v1/{assistant_name}/thread
          * @secure
          */
         apiV1ThreadCreate: (
+            assistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
             request: GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest,
             params: RequestParams = {}
         ) =>
@@ -3449,7 +3450,7 @@ export class Api<
                 GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageResponse,
                 any
             >({
-                path: `/assistant/api/v1/thread`,
+                path: `/assistant/api/v1/${assistantName}/thread`,
                 method: 'POST',
                 body: request,
                 secure: true,
@@ -3464,11 +3465,12 @@ export class Api<
          * @tags assistant
          * @name ApiV1ThreadDetail
          * @summary List messages of a thread
-         * @request GET:/assistant/api/v1/thread/{thread_id}
+         * @request GET:/assistant/api/v1/{assistant_name}/thread/{thread_id}
          * @secure
          */
         apiV1ThreadDetail: (
             threadId: string,
+            assistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
             query?: {
                 /** Run ID */
                 run_id?: string
@@ -3479,7 +3481,7 @@ export class Api<
                 GithubComKaytuIoKaytuEngineServicesAssistantApiEntityListMessagesResponse,
                 any
             >({
-                path: `/assistant/api/v1/thread/${threadId}`,
+                path: `/assistant/api/v1/${assistantName}/thread/${threadId}`,
                 method: 'GET',
                 query: query,
                 secure: true,
@@ -3960,6 +3962,8 @@ export class Api<
                 connectionGroup?: string[]
                 /** timestamp for values in epoch seconds */
                 timeAt?: number
+                /** Key-Value tags in key=value format to filter by */
+                tag?: string[]
             },
             params: RequestParams = {}
         ) =>
@@ -4111,6 +4115,8 @@ export class Api<
                 connectionId?: string[]
                 /** Connection groups to filter by  */
                 connectionGroup?: string[]
+                /** Key-Value tags in key=value format to filter by */
+                tag?: string[]
             },
             params: RequestParams = {}
         ) =>

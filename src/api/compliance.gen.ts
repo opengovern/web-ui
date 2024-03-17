@@ -2,40 +2,40 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiListBenchmarksSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGenerateSupersetDashboardTokenResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsByFindingIDResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFilters,
     GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFilters,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGenerateSupersetDashboardTokenResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingEventsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEventFiltersWithMetadata,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiCountFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiListBenchmarksSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingEventsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
     RequestParams,
 } from './api'
@@ -1155,6 +1155,8 @@ export const useComplianceApiV1BenchmarksControlsDetail = (
         connectionGroup?: string[]
 
         timeAt?: number
+
+        tag?: string[]
     },
     params: RequestParams = {},
     autoExecute = true,
@@ -1185,6 +1187,8 @@ export const useComplianceApiV1BenchmarksControlsDetail = (
                   connectionGroup?: string[]
 
                   timeAt?: number
+
+                  tag?: string[]
               }
             | undefined,
         reqparams: RequestParams
@@ -1285,6 +1289,8 @@ export const useComplianceApiV1BenchmarksControlsDetail = (
                   connectionGroup?: string[]
 
                   timeAt?: number
+
+                  tag?: string[]
               }
             | undefined,
         reqparams: RequestParams
@@ -1873,6 +1879,8 @@ export const useComplianceApiV1ControlsSummaryList = (
         connectionId?: string[]
 
         connectionGroup?: string[]
+
+        tag?: string[]
     },
     params: RequestParams = {},
     autoExecute = true,
@@ -1902,6 +1910,8 @@ export const useComplianceApiV1ControlsSummaryList = (
                   connectionId?: string[]
 
                   connectionGroup?: string[]
+
+                  tag?: string[]
               }
             | undefined,
         reqparams: RequestParams
@@ -1995,6 +2005,8 @@ export const useComplianceApiV1ControlsSummaryList = (
                   connectionId?: string[]
 
                   connectionGroup?: string[]
+
+                  tag?: string[]
               }
             | undefined,
         reqparams: RequestParams

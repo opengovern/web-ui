@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEngineServicesAssistantApiEntityListMessagesResponse,
     GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest,
     GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageResponse,
+    GithubComKaytuIoKaytuEngineServicesAssistantApiEntityListMessagesResponse,
     RequestParams,
 } from './api'
 
@@ -22,6 +22,7 @@ interface IuseAssistantApiV1ThreadCreateState {
  * URL:
  */
 export const useAssistantApiV1ThreadCreate = (
+    assistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
     request: GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest,
     params: RequestParams = {},
     autoExecute = true,
@@ -38,11 +39,12 @@ export const useAssistantApiV1ThreadCreate = (
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([assistantName, request, params, autoExecute])
     )
 
     const sendRequest = (
         abortCtrl: AbortController,
+        reqassistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
         reqrequest: GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest,
         reqparams: RequestParams
     ) => {
@@ -67,7 +69,11 @@ export const useAssistantApiV1ThreadCreate = (
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.assistant
-                .apiV1ThreadCreate(reqrequest, reqparamsSignal)
+                .apiV1ThreadCreate(
+                    reqassistantName,
+                    reqrequest,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -103,8 +109,13 @@ export const useAssistantApiV1ThreadCreate = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (
+        JSON.stringify([assistantName, request, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([assistantName, request, params, autoExecute])
+        )
     }
 
     useEffect(() => {
@@ -112,7 +123,7 @@ export const useAssistantApiV1ThreadCreate = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController, request, params)
+            sendRequest(newController, assistantName, request, params)
         }
     }, [lastInput])
 
@@ -124,17 +135,18 @@ export const useAssistantApiV1ThreadCreate = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController, request, params)
+        sendRequest(newController, assistantName, request, params)
     }
 
     const sendNowWithParams = (
+        reqassistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
         reqrequest: GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest,
         reqparams: RequestParams
     ) => {
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController, reqrequest, reqparams)
+        sendRequest(newController, reqassistantName, reqrequest, reqparams)
     }
 
     return {
@@ -160,6 +172,7 @@ interface IuseAssistantApiV1ThreadDetailState {
  */
 export const useAssistantApiV1ThreadDetail = (
     threadId: string,
+    assistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
     query?: {
         run_id?: string
     },
@@ -178,12 +191,13 @@ export const useAssistantApiV1ThreadDetail = (
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([threadId, query, params, autoExecute])
+        JSON.stringify([threadId, assistantName, query, params, autoExecute])
     )
 
     const sendRequest = (
         abortCtrl: AbortController,
         reqthreadId: string,
+        reqassistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
         reqquery:
             | {
                   run_id?: string
@@ -212,7 +226,12 @@ export const useAssistantApiV1ThreadDetail = (
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.assistant
-                .apiV1ThreadDetail(reqthreadId, reqquery, reqparamsSignal)
+                .apiV1ThreadDetail(
+                    reqthreadId,
+                    reqassistantName,
+                    reqquery,
+                    reqparamsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -248,8 +267,24 @@ export const useAssistantApiV1ThreadDetail = (
         }
     }
 
-    if (JSON.stringify([threadId, query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([threadId, query, params, autoExecute]))
+    if (
+        JSON.stringify([
+            threadId,
+            assistantName,
+            query,
+            params,
+            autoExecute,
+        ]) !== lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([
+                threadId,
+                assistantName,
+                query,
+                params,
+                autoExecute,
+            ])
+        )
     }
 
     useEffect(() => {
@@ -257,7 +292,7 @@ export const useAssistantApiV1ThreadDetail = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController, threadId, query, params)
+            sendRequest(newController, threadId, assistantName, query, params)
         }
     }, [lastInput])
 
@@ -269,11 +304,12 @@ export const useAssistantApiV1ThreadDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController, threadId, query, params)
+        sendRequest(newController, threadId, assistantName, query, params)
     }
 
     const sendNowWithParams = (
         reqthreadId: string,
+        reqassistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
         reqquery:
             | {
                   run_id?: string
@@ -284,7 +320,13 @@ export const useAssistantApiV1ThreadDetail = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController, reqthreadId, reqquery, reqparams)
+        sendRequest(
+            newController,
+            reqthreadId,
+            reqassistantName,
+            reqquery,
+            reqparams
+        )
     }
 
     return {
