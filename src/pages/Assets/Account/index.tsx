@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Grid } from '@tremor/react'
+import { useParams } from 'react-router-dom'
 import {
     ChartLayout,
     Granularity,
@@ -22,7 +23,10 @@ import {
 } from '../../../utilities/urlstate'
 
 export default function AssetAccounts() {
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { ws } = useParams()
+    const { value: activeTimeRange } = useUrlDateRangeState(
+        defaultTime(ws || '')
+    )
     const { value: selectedConnections } = useFilterState()
 
     const [granularity, setGranularity] = useState<Granularity>('daily')

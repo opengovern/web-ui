@@ -172,7 +172,9 @@ export const categoryTrend = (
 
 export function AssetOverview() {
     const workspace = useParams<{ ws: string }>().ws
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { value: activeTimeRange } = useUrlDateRangeState(
+        defaultTime(workspace || '')
+    )
     const { value: selectedConnections } = useFilterState()
     const [granularity, setGranularity] = useState<Granularity>('daily')
 

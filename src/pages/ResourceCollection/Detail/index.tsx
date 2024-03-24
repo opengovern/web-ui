@@ -222,8 +222,11 @@ const complianceColumns: IColumn<any, any>[] = [
 // }
 
 export default function ResourceCollectionDetail() {
+    const { ws } = useParams()
     const { resourceId } = useParams()
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { value: activeTimeRange } = useUrlDateRangeState(
+        defaultTime(ws || '')
+    )
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const [openDrawer, setOpenDrawer] = useState(false)

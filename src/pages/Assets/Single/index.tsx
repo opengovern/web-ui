@@ -7,7 +7,10 @@ import TopHeader from '../../../components/Layout/Header'
 import { defaultTime, useUrlDateRangeState } from '../../../utilities/urlstate'
 
 export default function Single() {
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { ws } = useParams()
+    const { value: activeTimeRange } = useUrlDateRangeState(
+        defaultTime(ws || '')
+    )
     const { id, metric, resourceId } = useParams()
     const urlParams = window.location.pathname.split('/')
 

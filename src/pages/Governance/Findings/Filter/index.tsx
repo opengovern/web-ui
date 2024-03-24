@@ -10,6 +10,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { Fragment, useEffect, useState } from 'react'
 import dayjs from 'dayjs'
+import { useParams } from 'react-router-dom'
 import Provider from './Provider'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
@@ -61,6 +62,7 @@ interface IFilters {
 }
 
 export default function Filter({ onApply, type }: IFilters) {
+    const { ws } = useParams()
     const defConnector = SourceType.Nil
     const [connector, setConnector] = useState<SourceType>(defConnector)
 
@@ -103,9 +105,13 @@ export default function Filter({ onApply, type }: IFilters) {
     const [dateCon, setDateCon] = useState('isBetween')
     const [eventDateCon, setEventDateCon] = useState('isBetween')
     const { value: activeTimeRange, setValue: setActiveTimeRange } =
-        useUrlDateRangeState(defaultFindingsTime)
+        useUrlDateRangeState(defaultFindingsTime(ws || ''))
     const { value: eventTimeRange, setValue: setEventTimeRange } =
-        useUrlDateRangeState(defaultEventTime, 'eventStartDate', 'eventEndDate')
+        useUrlDateRangeState(
+            defaultEventTime(ws || ''),
+            'eventStartDate',
+            'eventEndDate'
+        )
     const [selectedFilters, setSelectedFilters] = useState<string[]>([
         'conformance_status',
     ])

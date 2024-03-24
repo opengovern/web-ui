@@ -20,10 +20,13 @@ import {
 } from '../../../utilities/urlstate'
 
 export default function ConnectorDetail() {
+    const { ws } = useParams()
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const { connector } = useParams()
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { value: activeTimeRange } = useUrlDateRangeState(
+        defaultTime(ws || '')
+    )
 
     const provider = StringToProvider(connector || '')
     const { response: accounts, isLoading: isAccountsLoading } =

@@ -9,7 +9,10 @@ import {
 } from '../../../utilities/urlstate'
 
 export default function SingleSpend() {
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultSpendTime)
+    const { ws } = useParams()
+    const { value: activeTimeRange } = useUrlDateRangeState(
+        defaultSpendTime(ws || '')
+    )
     const { id, metric } = useParams()
     const urlParams = window.location.pathname.split('/')
 
@@ -41,7 +44,7 @@ export default function SingleSpend() {
                 <>
                     <TopHeader
                         breadCrumb={['Cloud account spend detail']}
-                        datePickerDefault={defaultSpendTime}
+                        datePickerDefault={defaultSpendTime(ws || '')}
                         datePicker
                     />
                     <SingleSpendConnection
@@ -56,7 +59,7 @@ export default function SingleSpend() {
                 <>
                     <TopHeader
                         breadCrumb={['Metric spend detail']}
-                        datePickerDefault={defaultSpendTime}
+                        datePickerDefault={defaultSpendTime(ws || '')}
                         datePicker
                         filter
                     />

@@ -7,10 +7,6 @@ import { useDateRangePicker } from 'react-aria'
 import { Checkbox } from 'pretty-checkbox-react'
 import { ClockIcon } from '@heroicons/react/24/outline'
 import { Flex, Select, SelectItem, Text, Title } from '@tremor/react'
-import {
-    defaultFindingsTime,
-    useURLParam,
-} from '../../../../../utilities/urlstate'
 import { renderDateText } from '../../../../../components/Layout/Header/DatePicker'
 import { RangeCalendar } from '../../../../../components/Layout/Header/DatePicker/Calendar/RangePicker/RangeCalendar'
 

@@ -1,5 +1,6 @@
 import { Col, Grid } from '@tremor/react'
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTableList,
@@ -83,7 +84,10 @@ export const accountTrend = (
 }
 
 export function SpendAccounts() {
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultSpendTime)
+    const { ws } = useParams()
+    const { value: activeTimeRange } = useUrlDateRangeState(
+        defaultSpendTime(ws || '')
+    )
     const { value: selectedConnections } = useFilterState()
     const [chartGranularity, setChartGranularity] =
         useState<Granularity>('daily')
@@ -194,7 +198,11 @@ export function SpendAccounts() {
     )
     return (
         <>
-            <TopHeader datePicker filter datePickerDefault={defaultSpendTime} />
+            <TopHeader
+                datePicker
+                filter
+                datePickerDefault={defaultSpendTime(ws || '')}
+            />
             <Grid numItems={3} className="w-full gap-4">
                 <Col numColSpan={3}>
                     <SpendChart

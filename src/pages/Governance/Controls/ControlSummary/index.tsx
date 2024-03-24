@@ -1,5 +1,6 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
+    Badge,
     Button,
     Card,
     Divider,
@@ -25,6 +26,7 @@ import {
     CommandLineIcon,
     DocumentDuplicateIcon,
     InformationCircleIcon,
+    PencilIcon,
     Square2StackIcon,
 } from '@heroicons/react/24/outline'
 import { useSetAtom } from 'jotai/index'
@@ -46,10 +48,12 @@ import DrawerPanel from '../../../../components/DrawerPanel'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import TopHeader from '../../../../components/Layout/Header'
 import ControlFindings from './Tabs/ControlFindings'
+import { useMetadataApiV1QueryParameterList } from '../../../../api/metadata.gen'
 
 export default function ControlDetail() {
     const { controlId, ws } = useParams()
     const setNotification = useSetAtom(notificationAtom)
+    const navigate = useNavigate()
 
     const [doc, setDoc] = useState('')
     const [docTitle, setDocTitle] = useState('')
@@ -57,6 +61,12 @@ export default function ControlDetail() {
 
     const { response: controlDetail, isLoading } =
         useComplianceApiV1ControlsSummaryDetail(String(controlId))
+    const {
+        response: parameters,
+        isLoading: parametersLoading,
+        isExecuted,
+        sendNow: refresh,
+    } = useMetadataApiV1QueryParameterList()
 
     return (
         <>
@@ -71,12 +81,16 @@ export default function ControlDetail() {
                 <Spinner className="mt-56" />
             ) : (
                 <>
-                    <Flex className="mb-6">
+                    <Flex
+                        flexDirection="row"
+                        justifyContent="between"
+                        className="mb-6 w-full"
+                    >
                         <Flex
                             flexDirection="col"
                             alignItems="start"
                             justifyContent="start"
-                            className="gap-2 w-3/4"
+                            className="gap-2 w-2/3"
                         >
                             <Flex className="gap-3 w-fit">
                                 <Title className="font-semibold whitespace-nowrap">
@@ -96,6 +110,37 @@ export default function ControlDetail() {
                                     </Text>
                                 </Card>
                             </div>
+                        </Flex>
+                        <Flex
+                            flexDirection="col"
+                            justifyContent="start"
+                            alignItems="end"
+                            className="w-1/3 space-y-2"
+                        >
+                            {controlDetail?.control?.query?.parameters?.map(
+                                (item) => {
+                                    return (
+                                        <Badge
+                                            icon={PencilIcon}
+                                            color="gray"
+                                            className="cursor-pointer"
+                                            onClick={() => {
+                                                navigate(
+                                                    `/${ws}/settings?sp=parameters`
+                                                )
+                                            }}
+                                        >
+                                            {item.key}:{' '}
+                                            {parameters?.queryParameters
+                                                ?.filter(
+                                                    (p) => p.key === item.key
+                                                )
+                                                .map((p) => p.value || '') ||
+                                                'Not defined'}
+                                        </Badge>
+                                    )
+                                }
+                            )}
                         </Flex>
                     </Flex>
                     <Grid numItems={2} className="h-full w-full gap-4 mb-6">

@@ -77,7 +77,9 @@ const categoryTrend = (
 
 export function SpendOverview() {
     const workspace = useParams<{ ws: string }>().ws
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultSpendTime)
+    const { value: activeTimeRange } = useUrlDateRangeState(
+        defaultSpendTime(workspace || '')
+    )
     const { value: selectedConnections } = useFilterState()
     const [granularity, setGranularity] = useState<Granularity>('daily')
 
@@ -209,7 +211,11 @@ export function SpendOverview() {
     }
     return (
         <>
-            <TopHeader datePicker filter datePickerDefault={defaultSpendTime} />
+            <TopHeader
+                datePicker
+                filter
+                datePickerDefault={defaultSpendTime(workspace || '')}
+            />
             <Grid numItems={3} className="w-full gap-4">
                 <Col numColSpan={3}>
                     <SpendChart

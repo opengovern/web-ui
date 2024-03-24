@@ -11,6 +11,7 @@ import {
     Text,
 } from '@tremor/react'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
+import { useParams } from 'react-router-dom'
 import Spinner from '../../components/Spinner'
 import { getErrorMessage } from '../../types/apierror'
 import { GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeter } from '../../api/api'
@@ -19,7 +20,10 @@ import TopHeader from '../../components/Layout/Header'
 import { defaultTime, useUrlDateRangeState } from '../../utilities/urlstate'
 
 function BillingItems() {
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { ws } = useParams()
+    const { value: activeTimeRange } = useUrlDateRangeState(
+        defaultTime(ws || '')
+    )
 
     const { response, isLoading, error, sendNow } =
         useSubscriptionApiV1MeteringListCreate({
@@ -109,17 +113,17 @@ function BillingItems() {
                                 </Text>
                             </Flex>
                             <List className="mt-1">
-                                {meter[1].map((ws) => (
-                                    <ListItem key={ws.workspaceName}>
+                                {meter[1].map((wsm) => (
+                                    <ListItem key={wsm.workspaceName}>
                                         <Flex
                                             justifyContent="start"
                                             className="truncate space-x-2.5"
                                         >
                                             <Text className="truncate">
-                                                {ws.workspaceName}
+                                                {wsm.workspaceName}
                                             </Text>
                                         </Flex>
-                                        <Text>{ws.value?.toFixed(0)}</Text>
+                                        <Text>{wsm.value?.toFixed(0)}</Text>
                                     </ListItem>
                                 ))}
                             </List>

@@ -1,5 +1,10 @@
 import { Tab, TabGroup, TabList } from '@tremor/react'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import {
+    useLocation,
+    useNavigate,
+    useParams,
+    useSearchParams,
+} from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { checkGranularity } from '../../../utilities/dateComparator'
@@ -11,9 +16,12 @@ import {
 } from '../../../utilities/urlstate'
 
 export default function SpendDetails() {
+    const { ws } = useParams()
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultSpendTime)
+    const { value: activeTimeRange } = useUrlDateRangeState(
+        defaultSpendTime(ws || '')
+    )
 
     const [selectedTab, setSelectedTab] = useState(0)
     const tabs = useLocation().hash
@@ -51,7 +59,7 @@ export default function SpendDetails() {
                 breadCrumb={['Spend detail']}
                 filter
                 datePicker
-                datePickerDefault={defaultSpendTime}
+                datePickerDefault={defaultSpendTime(ws || '')}
             />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">

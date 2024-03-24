@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai'
 import { Button, Card, Flex, Title } from '@tremor/react'
 import { Fragment, ReactNode, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { Popover, Transition } from '@headlessui/react'
 import { PlusIcon } from '@heroicons/react/24/outline'
@@ -37,6 +37,7 @@ export default function TopHeader({
     datePickerDefault,
     breadCrumb,
 }: IHeader) {
+    const { ws } = useParams()
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const url = window.location.pathname.split('/')
@@ -173,7 +174,9 @@ export default function TopHeader({
                             }`}
                         >
                             <NewDatePicker
-                                defaultTime={datePickerDefault || defaultTime}
+                                defaultTime={
+                                    datePickerDefault || defaultTime(ws || '')
+                                }
                             />
                         </Flex>
                     )}

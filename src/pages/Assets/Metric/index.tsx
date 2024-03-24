@@ -1,5 +1,6 @@
 import { Grid } from '@tremor/react'
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import TopHeader from '../../../components/Layout/Header'
 import { toErrorMessage } from '../../../types/apierror'
 import { AssetChart } from '../../../components/Asset/Chart'
@@ -21,7 +22,10 @@ import {
 } from '../../../utilities/urlstate'
 
 export default function AssetMetrics() {
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { ws } = useParams()
+    const { value: activeTimeRange } = useUrlDateRangeState(
+        defaultTime(ws || '')
+    )
     const { value: selectedConnections } = useFilterState()
     const [granularity, setGranularity] = useState<Granularity>('daily')
     const [chartLayout, setChartLayout] = useURLParam<ChartLayout>(

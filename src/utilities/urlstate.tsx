@@ -12,23 +12,59 @@ export interface DateRange {
     end: dayjs.Dayjs
 }
 
-export const defaultTime: DateRange = {
-    start: dayjs.utc().add(-7, 'days').startOf('day'),
-    end: dayjs.utc().endOf('day'),
+export function defaultTime(wsName: string) {
+    if (wsName === 'genco-olive') {
+        const v: DateRange = {
+            start: dayjs.utc('2023-12-01').startOf('day'),
+            end: dayjs.utc('2024-01-31').endOf('day'),
+        }
+        return v
+    }
+    return {
+        start: dayjs.utc().add(-7, 'days').startOf('day'),
+        end: dayjs.utc().endOf('day'),
+    }
 }
 
-export const defaultFindingsTime: DateRange = {
-    start: dayjs.utc().add(-7, 'days').startOf('day'),
-    end: dayjs.utc().endOf('day'),
+export function defaultFindingsTime(wsName: string) {
+    if (wsName === 'genco-olive') {
+        const v: DateRange = {
+            start: dayjs.utc('2023-12-01').startOf('day'),
+            end: dayjs.utc('2024-01-31').endOf('day'),
+        }
+        return v
+    }
+    return {
+        start: dayjs.utc().add(-7, 'days').startOf('day'),
+        end: dayjs.utc().endOf('day'),
+    }
 }
-export const defaultEventTime: DateRange = {
-    start: dayjs.utc().add(-7, 'days').startOf('day'),
-    end: dayjs.utc().endOf('day'),
+export function defaultEventTime(wsName: string) {
+    if (wsName === 'genco-olive') {
+        const v: DateRange = {
+            start: dayjs.utc('2023-12-01').startOf('day'),
+            end: dayjs.utc('2024-01-31').endOf('day'),
+        }
+        return v
+    }
+    return {
+        start: dayjs.utc().add(-7, 'days').startOf('day'),
+        end: dayjs.utc().endOf('day'),
+    }
 }
 
-export const defaultSpendTime: DateRange = {
-    start: dayjs.utc().add(-9, 'days').startOf('day'),
-    end: dayjs.utc().add(-2, 'days').endOf('day'),
+export function defaultSpendTime(wsName: string) {
+    if (wsName === 'genco-olive') {
+        const v: DateRange = {
+            start: dayjs.utc('2023-12-01').startOf('day'),
+            end: dayjs.utc('2024-01-31').endOf('day'),
+        }
+        return v
+    }
+    return {
+        start: dayjs.utc().add(-9, 'days').startOf('day'),
+        end: dayjs.utc().add(-2, 'days').endOf('day'),
+    }
 }
 
 export function defaultHomepageTime(wsName: string) {

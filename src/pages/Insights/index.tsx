@@ -1,5 +1,5 @@
 import { Button, Flex, Grid, Title } from '@tremor/react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import PersonaCard from '../../components/Cards/PersonaCard'
 import { useComplianceApiV1InsightList } from '../../api/compliance.gen'
@@ -15,9 +15,12 @@ import {
 } from '../../utilities/urlstate'
 
 export default function Insights() {
+    const { ws } = useParams()
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { value: activeTimeRange } = useUrlDateRangeState(
+        defaultTime(ws || '')
+    )
     const { value: selectedConnections } = useFilterState()
 
     const query = {

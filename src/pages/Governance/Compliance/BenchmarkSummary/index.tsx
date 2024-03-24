@@ -22,7 +22,10 @@ import SummaryCard from '../../../../components/Cards/SummaryCard'
 import Evaluate from './Evaluate'
 
 export default function BenchmarkSummary() {
-    const { value: activeTimeRange } = useUrlDateRangeState(defaultTime)
+    const { ws } = useParams()
+    const { value: activeTimeRange } = useUrlDateRangeState(
+        defaultTime(ws || '')
+    )
     const { benchmarkId, resourceId } = useParams()
     const { value: selectedConnections } = useFilterState()
     const [assignments, setAssignments] = useState(0)
