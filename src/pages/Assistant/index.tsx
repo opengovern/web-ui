@@ -128,7 +128,7 @@ export default function Assistant() {
                         onIndexChange={setAssistantIdx}
                     >
                         <TabList variant="solid" defaultValue="compliance">
-                            <Tab value="compliance">Compliance Assistant</Tab>
+                            <Tab value="compliance">Asset Assistant</Tab>
                             <Tab value="score">Score Assistant</Tab>
                             <Tab value="query">Query Assistant</Tab>
                         </TabList>
