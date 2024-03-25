@@ -3442,7 +3442,10 @@ export class Api<
          * @secure
          */
         apiV1ThreadCreate: (
-            assistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
+            assistantName:
+                | 'kaytu-r-assistant'
+                | 'kaytu-assets-assistant'
+                | 'kaytu-score-assistant',
             request: GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest,
             params: RequestParams = {}
         ) =>
@@ -3470,7 +3473,10 @@ export class Api<
          */
         apiV1ThreadDetail: (
             threadId: string,
-            assistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
+            assistantName:
+                | 'kaytu-r-assistant'
+                | 'kaytu-assets-assistant'
+                | 'kaytu-score-assistant',
             query?: {
                 /** Run ID */
                 run_id?: string

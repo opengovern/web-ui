@@ -22,7 +22,10 @@ interface IuseAssistantApiV1ThreadCreateState {
  * URL:
  */
 export const useAssistantApiV1ThreadCreate = (
-    assistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
+    assistantName:
+        | 'kaytu-r-assistant'
+        | 'kaytu-assets-assistant'
+        | 'kaytu-score-assistant',
     request: GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest,
     params: RequestParams = {},
     autoExecute = true,
@@ -44,7 +47,10 @@ export const useAssistantApiV1ThreadCreate = (
 
     const sendRequest = (
         abortCtrl: AbortController,
-        reqassistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
+        reqassistantName:
+            | 'kaytu-r-assistant'
+            | 'kaytu-assets-assistant'
+            | 'kaytu-score-assistant',
         reqrequest: GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest,
         reqparams: RequestParams
     ) => {
@@ -139,7 +145,10 @@ export const useAssistantApiV1ThreadCreate = (
     }
 
     const sendNowWithParams = (
-        reqassistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
+        reqassistantName:
+            | 'kaytu-r-assistant'
+            | 'kaytu-assets-assistant'
+            | 'kaytu-score-assistant',
         reqrequest: GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest,
         reqparams: RequestParams
     ) => {
@@ -172,7 +181,10 @@ interface IuseAssistantApiV1ThreadDetailState {
  */
 export const useAssistantApiV1ThreadDetail = (
     threadId: string,
-    assistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
+    assistantName:
+        | 'kaytu-r-assistant'
+        | 'kaytu-assets-assistant'
+        | 'kaytu-score-assistant',
     query?: {
         run_id?: string
     },
@@ -197,7 +209,10 @@ export const useAssistantApiV1ThreadDetail = (
     const sendRequest = (
         abortCtrl: AbortController,
         reqthreadId: string,
-        reqassistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
+        reqassistantName:
+            | 'kaytu-r-assistant'
+            | 'kaytu-assets-assistant'
+            | 'kaytu-score-assistant',
         reqquery:
             | {
                   run_id?: string
@@ -309,7 +324,10 @@ export const useAssistantApiV1ThreadDetail = (
 
     const sendNowWithParams = (
         reqthreadId: string,
-        reqassistantName: 'kaytu-r-assistant' | 'kaytu-redirection-assistant',
+        reqassistantName:
+            | 'kaytu-r-assistant'
+            | 'kaytu-assets-assistant'
+            | 'kaytu-score-assistant',
         reqquery:
             | {
                   run_id?: string
