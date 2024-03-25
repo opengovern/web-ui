@@ -260,7 +260,7 @@ export default function ScoreOverview() {
 
     return (
         <>
-            <TopHeader filter filterList={['cloud-account']} />
+            <TopHeader supportedFilters={['Cloud Account']} />
 
             <Flex alignItems="start" className="gap-20">
                 <Flex flexDirection="col" className="h-full">

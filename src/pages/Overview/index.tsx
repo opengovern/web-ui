@@ -12,7 +12,8 @@ export default function Overview() {
     return (
         <>
             <TopHeader
-                datePicker
+                supportedFilters={['Date']}
+                initialFilters={['Date']}
                 datePickerDefault={defaultHomepageTime(ws || '')}
             />
             <Grid numItems={6} className="w-full gap-4 h-fit mb-4">

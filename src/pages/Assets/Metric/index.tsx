@@ -113,7 +113,10 @@ export default function AssetMetrics() {
     }
     return (
         <>
-            <TopHeader datePicker filter />
+            <TopHeader
+                supportedFilters={['Date', 'Cloud Account', 'Connector']}
+                initialFilters={['Date']}
+            />
             <Grid className="w-full gap-10">
                 <AssetChart
                     trend={trend()}

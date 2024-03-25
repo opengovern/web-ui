@@ -118,8 +118,8 @@ export default function BenchmarkSummary() {
                         ? benchmarkDetail?.title
                         : 'Benchmark summary',
                 ]}
-                filter
-                datePicker
+                supportedFilters={['Date', 'Cloud Account', 'Connector']}
+                initialFilters={['Date']}
             />
             {isLoading ? (
                 <Spinner className="mt-56" />

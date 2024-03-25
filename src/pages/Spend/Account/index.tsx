@@ -199,9 +199,9 @@ export function SpendAccounts() {
     return (
         <>
             <TopHeader
-                datePicker
-                filter
-                datePickerDefault={defaultSpendTime(ws || '')}
+                supportedFilters={['Date', 'Cloud Account', 'Connector']}
+                initialFilters={['Date']}
+                datePickerDefault={activeTimeRange}
             />
             <Grid numItems={3} className="w-full gap-4">
                 <Col numColSpan={3}>
