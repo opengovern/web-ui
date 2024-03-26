@@ -167,10 +167,9 @@ const columns = (
         //     ),
         // },
         {
-            field: 'failedCount',
             headerName: 'Conformance status',
             type: 'string',
-            sortable: true,
+            sortable: false,
             filter: true,
             hide: false,
             resizable: true,
