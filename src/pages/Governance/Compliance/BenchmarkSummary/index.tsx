@@ -26,7 +26,7 @@ export default function BenchmarkSummary() {
     const { value: activeTimeRange } = useUrlDateRangeState(
         defaultTime(ws || '')
     )
-    const { benchmarkId, resourceId } = useParams()
+    const { benchmarkId } = useParams()
     const { value: selectedConnections } = useFilterState()
     const [assignments, setAssignments] = useState(0)
     const [recall, setRecall] = useState(false)
@@ -240,7 +240,7 @@ export default function BenchmarkSummary() {
 
                     <Controls
                         id={String(benchmarkId)}
-                        assignments={assignments}
+                        assignments={trend === null ? 0 : 1}
                     />
                 </>
             )}
