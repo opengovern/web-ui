@@ -81,7 +81,7 @@ export default function StepTwo({ onNext, onBack }: IStep) {
     }
 
     return (
-        <Flex flexDirection="col" style={{ height: 'calc(100% - 46px)' }}>
+        <Flex flexDirection="col" style={{ height: 'calc(100% - 60px)' }}>
             <Flex flexDirection="col" alignItems="start">
                 <Flex justifyContent="start" className="gap-1 mb-6">
                     <Text>2/4.</Text>

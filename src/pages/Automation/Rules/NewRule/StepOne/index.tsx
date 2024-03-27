@@ -85,7 +85,7 @@ export default function StepOne({ onNext, onBack }: IStep) {
     }
 
     const renderControlOption = () => {
-        switch (benchmarkID) {
+        switch (controlID) {
             case '':
                 return <div />
 
