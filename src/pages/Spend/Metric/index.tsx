@@ -130,7 +130,7 @@ export function SpendMetrics() {
             <TopHeader
                 supportedFilters={['Date', 'Cloud Account', 'Connector']}
                 initialFilters={['Date']}
-                datePickerDefault={activeTimeRange}
+                datePickerDefault={defaultSpendTime(ws || '')}
             />
             <Grid numItems={3} className="w-full gap-4">
                 <Col numColSpan={3}>

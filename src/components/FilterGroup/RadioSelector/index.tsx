@@ -7,17 +7,15 @@ import DefaultConditionSelector, {
 
 export interface IRadioSelector {
     title: string
-    values: RadioItem[]
+    radioItems: RadioItem[]
     selectedValue: string | undefined
+    onItemSelected: (item: RadioItem) => void
     supportedConditions: SelectorOptions[]
     selectedCondition: SelectorOptions
-    onValueSelected: (value: RadioItem) => void
-    onConditionChange: (condiiton: SelectorOptions) => void
+    onConditionChange: (condition: SelectorOptions) => void
     onRemove?: () => void
     onReset?: () => void
 }
-
-const defaultSelectorOption: SelectorOptions[] = ['is']
 
 export interface RadioItem {
     title: string
@@ -28,11 +26,11 @@ export interface RadioItem {
 
 export default function RadioSelector({
     title,
-    values,
+    radioItems,
     selectedValue,
     supportedConditions,
     selectedCondition,
-    onValueSelected,
+    onItemSelected,
     onConditionChange,
     onRemove,
     onReset,
@@ -62,22 +60,21 @@ export default function RadioSelector({
             </Flex>
 
             <Flex flexDirection="col" alignItems="start" className="gap-2 my-4">
-                {values &&
-                    values.map((i) => (
-                        <Radio
-                            name={title}
-                            key={`${title}-${i.title}`}
-                            checked={selectedValue === i.title}
-                            onClick={() => onValueSelected(i)}
-                        >
-                            <Flex>
-                                {i.icon && <Icon icon={i.icon} />}
-                                {i.iconAlt}
+                {radioItems.map((i) => (
+                    <Radio
+                        name={title}
+                        key={`${title}-${i.value}`}
+                        checked={selectedValue === i.value}
+                        onClick={() => onItemSelected(i)}
+                    >
+                        <Flex>
+                            {i.icon && <Icon icon={i.icon} />}
+                            {i.iconAlt}
 
-                                <Text>{i.title}</Text>
-                            </Flex>
-                        </Radio>
-                    ))}
+                            <Text>{i.title}</Text>
+                        </Flex>
+                    </Radio>
+                ))}
             </Flex>
 
             {onReset && (

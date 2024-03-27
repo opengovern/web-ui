@@ -1,33 +1,24 @@
-import { getLocalTimeZone, parseDate, today } from '@internationalized/date'
+import { parseDate, today } from '@internationalized/date'
 import dayjs from 'dayjs'
 import { Checkbox } from 'pretty-checkbox-react'
 import { AriaDateRangePickerProps, DateValue } from '@react-aria/datepicker'
 import { useDateRangePickerState } from 'react-stately'
 import { useEffect, useRef, useState } from 'react'
 import { useDateRangePicker } from 'react-aria'
-import {
-    Button,
-    Card,
-    Flex,
-    Icon,
-    Select,
-    Text,
-    SelectItem,
-    Title,
-} from '@tremor/react'
+import { Card, Flex, Text, Title, NumberInput } from '@tremor/react'
 import { ClockIcon } from '@heroicons/react/24/outline'
 import DateConditionSelector, {
     DateSelectorOptions,
 } from '../ConditionSelector/DateConditionSelector'
-import { DateRange, useUrlDateRangeState } from '../../../utilities/urlstate'
+import { DateRange } from '../../../utilities/urlstate'
 import { RangeCalendar } from '../../Layout/Header/DatePicker/Calendar/RangePicker/RangeCalendar'
 
 export interface IDateSelector {
     title: string
-    defaultDate: DateRange
+    value: DateRange
+    onValueChanged: (value: DateRange) => void
     supportedConditions: DateSelectorOptions[]
     selectedCondition: DateSelectorOptions
-    onValueChanged: (value: DateRange) => void
     onConditionChange: (condition: DateSelectorOptions) => void
 }
 
@@ -71,53 +62,35 @@ export const renderDateText = (st: dayjs.Dayjs, en: dayjs.Dayjs) => {
 
 export default function DateSelector({
     title,
-    defaultDate,
+    value,
     supportedConditions,
     selectedCondition,
     onValueChanged,
     onConditionChange,
 }: IDateSelector) {
-    const { value: activeTimeRange, setValue: setActiveTimeRange } =
-        useUrlDateRangeState(defaultDate)
-    const [startH, setStartH] = useState(activeTimeRange.start.hour())
-    const [startM, setStartM] = useState(activeTimeRange.start.minute())
-    const [endH, setEndH] = useState(activeTimeRange.end.hour())
-    const [endM, setEndM] = useState(activeTimeRange.end.minute())
+    const startH = value.start.hour()
+    const startM = value.start.minute()
+    const endH = value.end.hour()
+    const endM = value.end.minute()
+
     const [checked, setChecked] = useState(
         startH !== 0 || startM !== 0 || endH !== 23 || endM !== 59
     )
-    const [val, setVal] = useState({
-        start: activeTimeRange.start,
-        end: activeTimeRange.end,
-    })
-
-    const [condition, setCondition] = useState(selectedCondition)
 
     useEffect(() => {
-        if (checked) {
-            setActiveTimeRange({
-                start: dayjs(val.start)
-                    .startOf('day')
-                    .add(startH, 'hours')
-                    .add(startM, 'minutes'),
-                end: dayjs(val.end)
-                    .startOf('day')
-                    .add(endH, 'hours')
-                    .add(endM, 'minutes'),
-            })
-        } else {
-            setActiveTimeRange({
-                start: dayjs(val.start).startOf('day'),
-                end: dayjs(val.end).endOf('day'),
+        if (!checked) {
+            onValueChanged({
+                start: dayjs(value.start).startOf('day'),
+                end: dayjs(value.end).endOf('day'),
             })
         }
-    }, [val, checked, startH, startM, endH, endM])
+    }, [checked])
 
     const minValue = () => {
         return parseDate('2022-12-01')
     }
     const maxValue = () => {
-        return today(getLocalTimeZone())
+        return today('UTC')
     }
 
     const last7Days = () => {
@@ -192,8 +165,8 @@ export default function DateSelector({
                     <Text>{title}</Text>
                     <DateConditionSelector
                         supportedConditions={supportedConditions}
-                        selectedCondition={condition}
-                        onConditionChange={(i) => setCondition(i)}
+                        selectedCondition={selectedCondition}
+                        onConditionChange={(i) => onConditionChange(i)}
                     />
                 </Flex>
             </Flex>
@@ -203,10 +176,10 @@ export default function DateSelector({
                 alignItems="start"
                 className="gap-2 my-4 overflow-auto"
             >
-                {condition === 'isRelative' ? (
+                {selectedCondition === 'isRelative' ? (
                     <>
                         <Flex
-                            onClick={() => setActiveTimeRange(last7Days())}
+                            onClick={() => onValueChanged(last7Days())}
                             className="mt-4 px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
                         >
                             <Text className="text-gray-800 whitespace-nowrap">
@@ -220,7 +193,7 @@ export default function DateSelector({
                             </Text>
                         </Flex>
                         <Flex
-                            onClick={() => setActiveTimeRange(last30Days())}
+                            onClick={() => onValueChanged(last30Days())}
                             className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
                         >
                             <Text className="text-gray-800 whitespace-nowrap">
@@ -235,7 +208,7 @@ export default function DateSelector({
                         </Flex>
                         <Title className="mt-3">Calender months</Title>
                         <Flex
-                            onClick={() => setActiveTimeRange(thisMonth())}
+                            onClick={() => onValueChanged(thisMonth())}
                             className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
                         >
                             <Text className="text-gray-800 whitespace-nowrap">
@@ -249,7 +222,7 @@ export default function DateSelector({
                             </Text>
                         </Flex>
                         <Flex
-                            onClick={() => setActiveTimeRange(lastMonth())}
+                            onClick={() => onValueChanged(lastMonth())}
                             className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
                         >
                             <Text className="text-gray-800 whitespace-nowrap">
@@ -263,7 +236,7 @@ export default function DateSelector({
                             </Text>
                         </Flex>
                         <Flex
-                            onClick={() => setActiveTimeRange(thisQuarter())}
+                            onClick={() => onValueChanged(thisQuarter())}
                             className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
                         >
                             <Text className="text-gray-800 whitespace-nowrap">
@@ -277,7 +250,7 @@ export default function DateSelector({
                             </Text>
                         </Flex>
                         <Flex
-                            onClick={() => setActiveTimeRange(lastQuarter())}
+                            onClick={() => onValueChanged(lastQuarter())}
                             className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
                         >
                             <Text className="text-gray-800 whitespace-nowrap">
@@ -291,7 +264,7 @@ export default function DateSelector({
                             </Text>
                         </Flex>
                         <Flex
-                            onClick={() => setActiveTimeRange(thisYear())}
+                            onClick={() => onValueChanged(thisYear())}
                             className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
                         >
                             <Text className="text-gray-800 whitespace-nowrap">
@@ -310,14 +283,14 @@ export default function DateSelector({
                         <CustomDatePicker
                             value={{
                                 start: parseDate(
-                                    val.start.format('YYYY-MM-DD')
+                                    value.start.format('YYYY-MM-DD')
                                 ),
-                                end: parseDate(val.end.format('YYYY-MM-DD')),
+                                end: parseDate(value.end.format('YYYY-MM-DD')),
                             }}
-                            onChange={(value) => {
-                                setVal({
-                                    start: dayjs(value.start.toString()),
-                                    end: dayjs(value.end.toString()),
+                            onChange={(v) => {
+                                onValueChanged({
+                                    start: dayjs(v.start.toString()),
+                                    end: dayjs(v.end.toString()).endOf('day'),
                                 })
                             }}
                             minValue={minValue()}
@@ -341,38 +314,38 @@ export default function DateSelector({
                                     <Text className="w-16 whitespace-nowrap">
                                         Start time
                                     </Text>
-                                    <Flex className="gap-2 w-full">
-                                        <Select
+                                    <Flex className="gap-2 w-20">
+                                        <NumberInput
                                             placeholder="HH"
-                                            enableClear={false}
-                                            className="w-full"
-                                            value={startH.toString()}
-                                            onChange={(x) =>
-                                                setStartH(Number(x))
-                                            }
-                                        >
-                                            {[...Array(24)].map((x, i) => (
-                                                <SelectItem value={`${i}`}>
-                                                    {`0${i}`.slice(-2)}
-                                                </SelectItem>
-                                            ))}
-                                        </Select>
+                                            value={startH}
+                                            min={0}
+                                            max={24}
+                                            onValueChange={(x) => {
+                                                onValueChanged({
+                                                    ...value,
+                                                    start: value.start.set(
+                                                        'hour',
+                                                        Number(x)
+                                                    ),
+                                                })
+                                            }}
+                                        />
                                         <Title>:</Title>
-                                        <Select
-                                            placeholder="mm"
-                                            enableClear={false}
-                                            className="w-full"
-                                            value={startM.toString()}
-                                            onChange={(x) =>
-                                                setStartM(Number(x))
-                                            }
-                                        >
-                                            {[...Array(60)].map((x, i) => (
-                                                <SelectItem value={`${i}`}>
-                                                    {`0${i}`.slice(-2)}
-                                                </SelectItem>
-                                            ))}
-                                        </Select>
+                                        <NumberInput
+                                            placeholder="HH"
+                                            value={startM}
+                                            min={0}
+                                            max={60}
+                                            onValueChange={(x) => {
+                                                onValueChanged({
+                                                    ...value,
+                                                    start: value.start.set(
+                                                        'minute',
+                                                        Number(x)
+                                                    ),
+                                                })
+                                            }}
+                                        />
                                     </Flex>
                                 </Flex>
                                 <Flex className="gap-3">
@@ -380,33 +353,37 @@ export default function DateSelector({
                                         End time
                                     </Text>
                                     <Flex className="w-full gap-2">
-                                        <Select
+                                        <NumberInput
                                             placeholder="HH"
-                                            enableClear={false}
-                                            className="w-full"
-                                            value={endH.toString()}
-                                            onChange={(x) => setEndH(Number(x))}
-                                        >
-                                            {[...Array(24)].map((x, i) => (
-                                                <SelectItem value={`${i}`}>
-                                                    {`0${i}`.slice(-2)}
-                                                </SelectItem>
-                                            ))}
-                                        </Select>
+                                            value={endH}
+                                            min={0}
+                                            max={24}
+                                            onValueChange={(x) => {
+                                                onValueChanged({
+                                                    ...value,
+                                                    start: value.end.set(
+                                                        'hour',
+                                                        Number(x)
+                                                    ),
+                                                })
+                                            }}
+                                        />
                                         <Title>:</Title>
-                                        <Select
-                                            placeholder="mm"
-                                            enableClear={false}
-                                            className="w-full"
-                                            value={endM.toString()}
-                                            onChange={(x) => setEndM(Number(x))}
-                                        >
-                                            {[...Array(60)].map((x, i) => (
-                                                <SelectItem value={`${i}`}>
-                                                    {`0${i}`.slice(-2)}
-                                                </SelectItem>
-                                            ))}
-                                        </Select>
+                                        <NumberInput
+                                            placeholder="HH"
+                                            value={endM}
+                                            min={0}
+                                            max={60}
+                                            onValueChange={(x) => {
+                                                onValueChanged({
+                                                    ...value,
+                                                    start: value.end.set(
+                                                        'minute',
+                                                        Number(x)
+                                                    ),
+                                                })
+                                            }}
+                                        />
                                     </Flex>
                                 </Flex>
                             </Flex>

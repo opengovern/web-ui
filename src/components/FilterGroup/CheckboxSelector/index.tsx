@@ -7,15 +7,15 @@ import DefaultConditionSelector, {
 
 export interface ICheckboxSelector {
     title: string
-    values: CheckboxItem[]
+    checkboxItems: CheckboxItem[]
     selectedValues: string[] | undefined
+    onItemSelected: (item: CheckboxItem) => void
     supportedConditions: SelectorOptions[]
     selectedCondition: SelectorOptions
-    onValueSelected: (value: CheckboxItem) => void
     onConditionChange: (condition: SelectorOptions) => void
     onRemove?: () => void
     onReset?: () => void
-    onSearch?: (value: any) => void
+    onSearch?: (value: string) => void
 }
 
 export interface CheckboxItem {
@@ -27,11 +27,11 @@ export interface CheckboxItem {
 
 export default function CheckboxSelector({
     title,
-    values,
+    checkboxItems,
     selectedValues,
     supportedConditions,
     selectedCondition,
-    onValueSelected,
+    onItemSelected,
     onConditionChange,
     onRemove,
     onReset,
@@ -46,6 +46,7 @@ export default function CheckboxSelector({
                     className="gap-2"
                 >
                     <Text>{title}</Text>
+                    {/* TODO */}
                     <DefaultConditionSelector
                         supportedConditions={supportedConditions}
                         selectedCondition={selectedCondition}
@@ -63,7 +64,7 @@ export default function CheckboxSelector({
                 <TextInput
                     icon={MagnifyingGlassIcon}
                     placeholder="Search..."
-                    onChange={(i) => onSearch(i)}
+                    onChange={(i) => onSearch(i.target.value)}
                     className="my-4 -mx-0.5"
                 />
             )}
@@ -73,23 +74,20 @@ export default function CheckboxSelector({
                 alignItems="start"
                 className="gap-2 pr-6 my-4 max-h-[180px] overflow-auto"
             >
-                {values &&
-                    values.map((i) => (
-                        <Checkbox
-                            name={title}
-                            key={`${title}-${i.title}`}
-                            checked={selectedValues?.includes(i.title)}
-                            onClick={() => onValueSelected(i)}
-                        >
-                            <Flex className="w-fit">
-                                {i.icon && <Icon icon={i.icon} />}
-                                {i.iconAlt}
-                                <Text className="whitespace-nowrap">
-                                    {i.title}
-                                </Text>
-                            </Flex>
-                        </Checkbox>
-                    ))}
+                {checkboxItems.map((i) => (
+                    <Checkbox
+                        name={title}
+                        key={`${title}-${i.value}`}
+                        checked={selectedValues?.includes(i.value)}
+                        onClick={() => onItemSelected(i)}
+                    >
+                        <Flex className="w-fit">
+                            {i.icon && <Icon icon={i.icon} />}
+                            {i.iconAlt}
+                            <Text className="whitespace-nowrap">{i.title}</Text>
+                        </Flex>
+                    </Checkbox>
+                ))}
             </Flex>
 
             {onReset && (

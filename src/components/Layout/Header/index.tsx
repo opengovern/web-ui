@@ -7,7 +7,15 @@ import {
     kebabCaseToLabel,
     snakeCaseToLabel,
 } from '../../../utilities/labelMaker'
-import { DateRange, defaultTime, searchAtom } from '../../../utilities/urlstate'
+import {
+    DateRange,
+    defaultTime,
+    searchAtom,
+    useFilterState,
+    useURLParam,
+    useURLState,
+    useUrlDateRangeState,
+} from '../../../utilities/urlstate'
 import FilterGroup, { IFilter } from '../../FilterGroup'
 import {
     CloudAccountFilter,
@@ -16,6 +24,8 @@ import {
     SeverityFilter,
 } from '../../FilterGroup/FilterTypes'
 import { CheckboxItem } from '../../FilterGroup/CheckboxSelector'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
+import { DateSelectorOptions } from '../../FilterGroup/ConditionSelector/DateConditionSelector'
 
 interface IHeader {
     supportedFilters?: string[]
@@ -25,15 +35,6 @@ interface IHeader {
     breadCrumb?: (string | undefined)[]
 }
 
-const cloudAccountsList: CheckboxItem[] = [
-    { title: 'App-Development', value: '0e1757f9-6183-42e0-bcf7' },
-    { title: 'Kaytu-Temp Sandbox', value: '0e1757f9-6183-42e0-bcf7' },
-    { title: 'Sandbox', value: '0e1757f9-6183-42e0-bcf7' },
-    { title: 'Kaytu', value: '0e1757f9-6183-42e0-bcf7' },
-    { title: 'App-Production', value: '0e1757f9-6183-42e0-bcf7' },
-    { title: 'App-Staging', value: '0e1757f9-6183-42e0-bcf7' },
-]
-
 export default function TopHeader({
     supportedFilters = [],
     initialFilters = [],
@@ -42,80 +43,145 @@ export default function TopHeader({
     breadCrumb,
 }: IHeader) {
     const { ws } = useParams()
+    const { value: activeTimeRange, setValue: setActiveTimeRange } =
+        useUrlDateRangeState(datePickerDefault || defaultTime(ws || ''))
+    const [selectedDateCondition, setSelectedDateCondition] =
+        useState<DateSelectorOptions>('isBetween')
     const [addedFilters, setAddedFilters] = useState<string[]>(initialFilters)
-    const [selectedConnectors, setSelectedConnectors] = useState<string>('All')
-    const [selectedSeverities, setSelectedSeverities] = useState<string[]>([
-        'Critical',
-        'High',
-        'Medium',
-        'Low',
-        'None',
-    ])
-    const [selectedCloudAccounts, setSelectedCloudAccounts] = useState<
+    const [selectedConnectors, setSelectedConnectors] = useURLParam<
+        '' | 'AWS' | 'Azure'
+    >('provider', '')
+    const parseConnector = (v: string) => {
+        switch (v) {
+            case 'AWS':
+                return 'AWS'
+            case 'Azure':
+                return 'Azure'
+            default:
+                return ''
+        }
+    }
+    const [selectedSeverities, setSelectedSeverities] = useURLState<string[]>(
+        ['critical', 'high', 'medium', 'low', 'none'],
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('severities', v)
+            return res
+        },
+        (v) => {
+            return v.get('severities') || []
+        }
+    )
+    const [selectedCloudAccounts, setSelectedCloudAccounts] = useURLState<
         string[]
-    >([])
+    >(
+        [],
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('connections', v)
+            return res
+        },
+        (v) => {
+            return v.get('connections') || []
+        }
+    )
+    const [connectionSearch, setConnectionSearch] = useState('')
+    const { response } = useIntegrationApiV1ConnectionsSummariesList({
+        connector: selectedConnectors.length ? [selectedConnectors] : [],
+        pageNumber: 1,
+        pageSize: 10000,
+        needCost: false,
+        needResourceCount: false,
+    })
 
     const filters: IFilter[] = [
         ConnectorFilter(
             selectedConnectors,
-            selectedConnectors !== 'All',
-            (sv) => setSelectedConnectors(sv.title),
-            () =>
-                setAddedFilters(addedFilters.filter((a) => a !== 'Connector')),
-            () => setSelectedConnectors('All'),
-            (i: any) => console.log(i) // onConditionChange
+            selectedConnectors !== '',
+            (sv) => setSelectedConnectors(parseConnector(sv)),
+            () => {
+                setAddedFilters(addedFilters.filter((a) => a !== 'Connector'))
+                setSelectedConnectors('')
+            },
+            () => setSelectedConnectors('')
         ),
 
         SeverityFilter(
             selectedSeverities,
             selectedSeverities.length < 5,
             (sv) => {
-                if (selectedSeverities.includes(sv.title)) {
+                if (selectedSeverities.includes(sv)) {
                     setSelectedSeverities(
-                        selectedSeverities.filter((i) => i !== sv.title)
+                        selectedSeverities.filter((i) => i !== sv)
                     )
-                } else setSelectedSeverities([...selectedSeverities, sv.title])
+                } else setSelectedSeverities([...selectedSeverities, sv])
             },
-            () => setAddedFilters(addedFilters.filter((a) => a !== 'Severity')),
+            () => {
+                setAddedFilters(addedFilters.filter((a) => a !== 'Severity'))
+                setSelectedSeverities([
+                    'critical',
+                    'high',
+                    'medium',
+                    'low',
+                    'none',
+                ])
+            },
             () =>
                 setSelectedSeverities([
-                    'Critical',
-                    'High',
-                    'Medium',
-                    'Low',
-                    'None',
-                ]),
-            (i: any) => console.log(i) // onConditionChange
+                    'critical',
+                    'high',
+                    'medium',
+                    'low',
+                    'none',
+                ])
         ),
 
         CloudAccountFilter(
-            cloudAccountsList,
+            response?.connections
+                ?.filter((v) => {
+                    if (connectionSearch === '') {
+                        return true
+                    }
+                    return (
+                        v.providerConnectionID
+                            ?.toLowerCase()
+                            .includes(connectionSearch.toLowerCase()) ||
+                        v.providerConnectionName
+                            ?.toLowerCase()
+                            .includes(connectionSearch.toLowerCase())
+                    )
+                })
+                .map((c) => {
+                    const vc: CheckboxItem = {
+                        title: c.providerConnectionName || '',
+                        value: c.id || '',
+                    }
+                    return vc
+                }) || [],
+            (sv) => {
+                if (selectedCloudAccounts.includes(sv)) {
+                    setSelectedCloudAccounts(
+                        selectedCloudAccounts.filter((i) => i !== sv)
+                    )
+                } else setSelectedCloudAccounts([...selectedCloudAccounts, sv])
+            },
             selectedCloudAccounts,
             selectedCloudAccounts.length > 0,
-            (sv) => {
-                if (selectedCloudAccounts.includes(sv.title)) {
-                    setSelectedCloudAccounts(
-                        selectedCloudAccounts.filter((i) => i !== sv.title)
-                    )
-                } else
-                    setSelectedCloudAccounts([
-                        ...selectedCloudAccounts,
-                        sv.title,
-                    ])
-            },
-            () =>
+            () => {
                 setAddedFilters(
                     addedFilters.filter((a) => a !== 'Cloud Account')
-                ),
+                )
+                setSelectedCloudAccounts([])
+            },
             () => setSelectedCloudAccounts([]),
-            (i: any) => console.log(i), // onConditionChange
-            (i: any) => console.log(i)
+            (s) => setConnectionSearch(s)
         ),
 
         DateFilter(
-            datePickerDefault || defaultTime(ws || ''),
-            (sv) => console.log(sv),
-            (i) => console.log(i)
+            activeTimeRange,
+            setActiveTimeRange,
+            selectedDateCondition,
+            setSelectedDateCondition
         ),
     ]
 

@@ -44,7 +44,7 @@ export default function SingleSpend() {
                 <>
                     <TopHeader
                         breadCrumb={['Cloud account spend detail']}
-                        datePickerDefault={activeTimeRange}
+                        datePickerDefault={defaultSpendTime(ws || '')}
                         supportedFilters={['Date']}
                         initialFilters={['Date']}
                     />
@@ -60,7 +60,7 @@ export default function SingleSpend() {
                 <>
                     <TopHeader
                         breadCrumb={['Metric spend detail']}
-                        datePickerDefault={activeTimeRange}
+                        datePickerDefault={defaultSpendTime(ws || '')}
                         supportedFilters={[
                             'Date',
                             'Cloud Account',

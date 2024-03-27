@@ -1,29 +1,20 @@
-import { StopIcon } from '@heroicons/react/20/solid'
 import {
     CheckCircleIcon,
     XCircleIcon,
     CloudIcon,
     CalendarIcon,
 } from '@heroicons/react/24/outline'
-import {
-    CloudConnect,
-    Compliance,
-    Control,
-    Id,
-    Lifecycle,
-    Resources,
-    SeverityIcon,
-} from '../../../icons/icons'
+import { CloudConnect, Lifecycle, SeverityIcon } from '../../../icons/icons'
 import CheckboxSelector, { CheckboxItem } from '../CheckboxSelector'
 import RadioSelector, { RadioItem } from '../RadioSelector'
-import { DateRange, useUrlDateRangeState } from '../../../utilities/urlstate'
+import { DateRange } from '../../../utilities/urlstate'
 import DateSelector, { renderDateText } from '../DateSelector'
+import { DateSelectorOptions } from '../ConditionSelector/DateConditionSelector'
 
 export function ConformanceFilter(
-    selectedValues: string,
-    onValueSelected: (sv: RadioItem) => void,
-    onReset: () => void,
-    onConditionChange: (i: any) => void
+    selectedValue: string,
+    onValueSelected: (sv: string) => void,
+    onReset: () => void
 ) {
     const conformanceValues: RadioItem[] = [
         { title: 'All', value: 'all' },
@@ -42,65 +33,63 @@ export function ConformanceFilter(
     return {
         title: 'Conformance Status',
         icon: CheckCircleIcon,
-        values: [selectedValues],
+        values: [selectedValue],
         isValueChanged: true,
         selector: (
             <RadioSelector
                 title="Conformance Status"
-                values={conformanceValues}
-                selectedValue={selectedValues}
-                onValueSelected={onValueSelected}
+                radioItems={conformanceValues}
+                selectedValue={selectedValue}
+                onItemSelected={(t) => onValueSelected(t.value)}
                 supportedConditions={['is']}
                 selectedCondition="is"
                 onReset={onReset}
-                onConditionChange={onConditionChange}
+                onConditionChange={() => ''}
             />
         ),
     }
 }
 
 export function ConnectorFilter(
-    selectedValues: string,
+    selectedValue: string,
     isValueChanged: boolean,
-    onValueSelected: (sv: RadioItem) => void,
+    onValueSelected: (sv: string) => void,
     onRemove: () => void,
-    onReset: () => void,
-    onConditionChange: (i: any) => void
+    onReset: () => void
 ) {
     const connectorValues: RadioItem[] = [
-        { title: 'All', value: 'all' },
-        { title: 'AWS', value: 'aws' },
-        { title: 'Azure', value: 'azure' },
+        { title: 'All', value: '' },
+        { title: 'AWS', value: 'AWS' },
+        { title: 'Azure', value: 'Azure' },
     ]
 
     return {
         title: 'Connector',
         icon: CloudConnect,
-        values: [selectedValues],
+        values: [selectedValue],
         isValueChanged,
         selector: (
             <RadioSelector
                 title="Connector"
-                values={connectorValues}
-                selectedValue={selectedValues}
-                onValueSelected={onValueSelected}
-                supportedConditions={['is', 'isNot']}
+                radioItems={connectorValues}
+                selectedValue={selectedValue}
+                onItemSelected={(t) => onValueSelected(t.value)}
+                supportedConditions={['is']}
                 selectedCondition="is"
                 onRemove={onRemove}
                 onReset={onReset}
-                onConditionChange={onConditionChange}
+                onConditionChange={() => ''}
             />
         ),
     }
 }
 
 export function LifecycleFilter(
-    selectedValues: string,
+    selectedValue: string,
     isValueChanged: boolean,
-    onValueSelected: (sv: RadioItem) => void,
+    onValueSelected: (sv: string) => void,
     onRemove: () => void,
-    onReset: () => void,
-    onConditionChange: (i: any) => void
+    onReset: () => void
 ) {
     const lifecycleValues: RadioItem[] = [
         { title: 'All', value: 'all' },
@@ -111,19 +100,19 @@ export function LifecycleFilter(
     return {
         title: 'Lifecycle',
         icon: Lifecycle,
-        values: [selectedValues],
+        values: [selectedValue],
         isValueChanged,
         selector: (
             <RadioSelector
                 title="Lifecycle"
-                values={lifecycleValues}
-                selectedValue={selectedValues}
-                onValueSelected={onValueSelected}
+                radioItems={lifecycleValues}
+                selectedValue={selectedValue}
+                onItemSelected={(t) => onValueSelected(t.value)}
                 supportedConditions={['is']}
                 selectedCondition="is"
                 onRemove={onRemove}
                 onReset={onReset}
-                onConditionChange={onConditionChange}
+                onConditionChange={() => ''}
             />
         ),
     }
@@ -132,10 +121,9 @@ export function LifecycleFilter(
 export function SeverityFilter(
     selectedValues: string[],
     isValueChanged: boolean,
-    onValueSelected: (sv: CheckboxItem) => void,
+    onValueSelected: (sv: string) => void,
     onRemove: () => void,
-    onReset: () => void,
-    onConditionChange: (i: any) => void
+    onReset: () => void
 ) {
     const severityValues: CheckboxItem[] = [
         {
@@ -198,45 +186,46 @@ export function SeverityFilter(
         selector: (
             <CheckboxSelector
                 title="Severity"
-                values={severityValues}
+                checkboxItems={severityValues}
                 selectedValues={selectedValues}
-                onValueSelected={onValueSelected}
-                supportedConditions={['is', 'isNot']}
+                onItemSelected={(t) => onValueSelected(t.value)}
+                supportedConditions={['is']}
                 selectedCondition="is"
                 onRemove={onRemove}
                 onReset={onReset}
-                onConditionChange={onConditionChange}
+                onConditionChange={() => ''}
             />
         ),
     }
 }
 
 export function CloudAccountFilter(
-    values: CheckboxItem[],
+    items: CheckboxItem[],
+    onValueSelected: (sv: string) => void,
     selectedValues: string[],
     isValueChanged: boolean,
-    onValueSelected: (sv: CheckboxItem) => void,
     onRemove: () => void,
     onReset: () => void,
-    onConditionChange: (i: any) => void,
-    onSearch: (i: any) => void
+    onSearch: (i: string) => void
 ) {
     return {
         title: 'Cloud Account',
         icon: CloudIcon,
-        values: selectedValues,
+        values: items
+            .filter((item) => selectedValues.includes(item.value))
+            .map((item) => item.title),
         isValueChanged,
         selector: (
             <CheckboxSelector
                 title="Cloud Account"
-                values={values}
+                checkboxItems={items}
                 selectedValues={selectedValues}
-                onValueSelected={onValueSelected}
-                supportedConditions={['is', 'isNot']}
+                onItemSelected={(t) => onValueSelected(t.value)}
+                supportedConditions={['is']}
                 selectedCondition="is"
                 onRemove={onRemove}
                 onReset={onReset}
-                onConditionChange={onConditionChange}
+                onConditionChange={() => ''}
                 onSearch={onSearch}
             />
         ),
@@ -245,24 +234,22 @@ export function CloudAccountFilter(
 
 export function DateFilter(
     value: DateRange,
-    onValueSelected: (sv: DateRange) => void,
-    onConditionChange: (i: any) => void
+    onValueChange: (i: DateRange) => void,
+    selectedCondition: DateSelectorOptions,
+    onConditionChange: (i: DateSelectorOptions) => void
 ) {
-    const { value: activeTimeRange, setValue: setActiveTimeRange } =
-        useUrlDateRangeState(value)
-
     return {
         title: 'Date',
         icon: CalendarIcon,
-        values: [renderDateText(activeTimeRange.start, activeTimeRange.end)],
+        values: [renderDateText(value.start, value.end)],
         isValueChanged: true,
         selector: (
             <DateSelector
                 title="Date"
-                defaultDate={value}
+                value={value}
                 supportedConditions={['isBetween', 'isRelative']}
-                selectedCondition="isBetween"
-                onValueChanged={onValueSelected}
+                selectedCondition={selectedCondition}
+                onValueChanged={onValueChange}
                 onConditionChange={onConditionChange}
             />
         ),
