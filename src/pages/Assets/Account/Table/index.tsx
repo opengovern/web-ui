@@ -142,6 +142,7 @@ const rowGenerator = (
         for (let i = 0; i < data.connections.length; i += 1) {
             rows.push({
                 ...data.connections[i],
+                resourceCount: data.connections[i].resourceCount || 0,
                 change_percent:
                     (((data.connections[i].oldResourceCount || 0) -
                         (data.connections[i].resourceCount || 0)) /

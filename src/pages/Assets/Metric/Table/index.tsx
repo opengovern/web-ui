@@ -24,15 +24,22 @@ interface IMetricTable {
     connections: IFilter
 }
 
-export const rowGenerator = (data: any) => {
+export const rowGenerator = (
+    data: GithubComKaytuIoKaytuEnginePkgInventoryApiMetric[]
+) => {
     const rows = []
     if (data) {
         for (let i = 0; i < data.length; i += 1) {
-            if (data[i].tags.category.length > 1) {
-                for (let j = 0; j < data[i].tags.category.length; j += 1) {
+            if ((data[i].tags?.category.length || 0) > 1) {
+                for (
+                    let j = 0;
+                    j < (data[i].tags?.category.length || 0);
+                    j += 1
+                ) {
                     rows.push({
                         ...data[i],
-                        category: data[i].tags.category[j],
+                        count: data[i].count || 0,
+                        category: data[i].tags?.category[j],
                         change_percent:
                             (((data[i].old_count || 0) - (data[i].count || 0)) /
                                 (data[i].count || 1)) *
@@ -44,7 +51,8 @@ export const rowGenerator = (data: any) => {
             } else {
                 rows.push({
                     ...data[i],
-                    category: data[i].tags.category[0],
+                    count: data[i].count || 0,
+                    category: data[i].tags?.category[0],
                     change_percent:
                         (((data[i].old_count || 0) - (data[i].count || 0)) /
                             (data[i].count || 1)) *
@@ -265,11 +273,11 @@ export default function MetricTable({ timeRange, connections }: IMetricTable) {
             title="Metric list"
             downloadable
             columns={defaultColumns}
-            rowData={rowGenerator(resources?.metrics).sort((a, b) => {
-                if (a.category < b.category) {
+            rowData={rowGenerator(resources?.metrics || []).sort((a, b) => {
+                if ((a.category || '') < (b.category || '')) {
                     return -1
                 }
-                if (a.category > b.category) {
+                if ((a.category || '') > (b.category || '')) {
                     return 1
                 }
                 return 0

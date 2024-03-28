@@ -289,7 +289,7 @@ export default function SingleConnection({
                             title="Resources"
                             downloadable
                             id="asset_resource_metrics"
-                            rowData={rowGenerator(metrics?.metrics)}
+                            rowData={rowGenerator(metrics?.metrics || [])}
                             columns={[
                                 ...defaultColumns,
                                 {
