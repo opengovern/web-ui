@@ -19,7 +19,11 @@ export const getConnectorIcon = (
     connector: string | SourceType[] | SourceType | undefined,
     className = ''
 ) => {
-    if (connector !== undefined && connector?.length >= 2) {
+    if (
+        connector !== undefined &&
+        typeof connector !== 'string' &&
+        connector?.length >= 2
+    ) {
         return (
             <img
                 src={AWSAzureIcon}
