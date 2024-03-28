@@ -6,7 +6,7 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid'
 interface IProbs {
     title: string
     icon: any
-    values: string[] | undefined
+    itemsTitles: string[] | undefined
     children: any
     isValueChanged: boolean
     alignment?: 'left' | 'right'
@@ -33,7 +33,7 @@ const valueFormatter = (values: string[]) => {
 export default function FilterSingle({
     title,
     icon,
-    values,
+    itemsTitles,
     children,
     isValueChanged,
     alignment = 'left',
@@ -65,8 +65,8 @@ export default function FilterSingle({
                                     </Text>
                                 )}
                                 {isValueChanged &&
-                                    values &&
-                                    valueFormatter(values)}
+                                    itemsTitles &&
+                                    valueFormatter(itemsTitles)}
                             </Flex>
 
                             <ChevronDownIcon className="ml-1 w-4 text-gray-400" />

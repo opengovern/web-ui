@@ -11,7 +11,6 @@ import {
     DateRange,
     defaultTime,
     searchAtom,
-    useFilterState,
     useURLParam,
     useURLState,
     useUrlDateRangeState,
@@ -43,14 +42,17 @@ export default function TopHeader({
     breadCrumb,
 }: IHeader) {
     const { ws } = useParams()
+
+    const defaultActiveTimeRange = datePickerDefault || defaultTime(ws || '')
     const { value: activeTimeRange, setValue: setActiveTimeRange } =
-        useUrlDateRangeState(datePickerDefault || defaultTime(ws || ''))
+        useUrlDateRangeState(defaultActiveTimeRange)
     const [selectedDateCondition, setSelectedDateCondition] =
         useState<DateSelectorOptions>('isBetween')
-    const [addedFilters, setAddedFilters] = useState<string[]>(initialFilters)
+
+    const defaultSelectedConnectors = ''
     const [selectedConnectors, setSelectedConnectors] = useURLParam<
         '' | 'AWS' | 'Azure'
-    >('provider', '')
+    >('provider', defaultSelectedConnectors)
     const parseConnector = (v: string) => {
         switch (v) {
             case 'AWS':
@@ -61,8 +63,16 @@ export default function TopHeader({
                 return ''
         }
     }
+
+    const defaultSelectedSeverities = [
+        'critical',
+        'high',
+        'medium',
+        'low',
+        'none',
+    ]
     const [selectedSeverities, setSelectedSeverities] = useURLState<string[]>(
-        ['critical', 'high', 'medium', 'low', 'none'],
+        defaultSelectedSeverities,
         (v) => {
             const res = new Map<string, string[]>()
             res.set('severities', v)
@@ -72,10 +82,12 @@ export default function TopHeader({
             return v.get('severities') || []
         }
     )
+
+    const defaultSelectedCloudAccounts: string[] = []
     const [selectedCloudAccounts, setSelectedCloudAccounts] = useURLState<
         string[]
     >(
-        [],
+        defaultSelectedCloudAccounts,
         (v) => {
             const res = new Map<string, string[]>()
             res.set('connections', v)
@@ -84,6 +96,26 @@ export default function TopHeader({
         (v) => {
             return v.get('connections') || []
         }
+    )
+
+    const calcInitialFilters = () => {
+        const resp = initialFilters
+        if (activeTimeRange !== defaultActiveTimeRange) {
+            resp.push('Date')
+        }
+        if (selectedConnectors !== defaultSelectedConnectors) {
+            resp.push('Connector')
+        }
+        if (selectedSeverities !== defaultSelectedSeverities) {
+            resp.push('Severity')
+        }
+        if (selectedCloudAccounts !== defaultSelectedCloudAccounts) {
+            resp.push('Cloud Account')
+        }
+        return resp
+    }
+    const [addedFilters, setAddedFilters] = useState<string[]>(
+        calcInitialFilters()
     )
     const [connectionSearch, setConnectionSearch] = useState('')
     const { response } = useIntegrationApiV1ConnectionsSummariesList({
@@ -101,9 +133,9 @@ export default function TopHeader({
             (sv) => setSelectedConnectors(parseConnector(sv)),
             () => {
                 setAddedFilters(addedFilters.filter((a) => a !== 'Connector'))
-                setSelectedConnectors('')
+                setSelectedConnectors(defaultSelectedConnectors)
             },
-            () => setSelectedConnectors('')
+            () => setSelectedConnectors(defaultSelectedConnectors)
         ),
 
         SeverityFilter(
@@ -118,22 +150,9 @@ export default function TopHeader({
             },
             () => {
                 setAddedFilters(addedFilters.filter((a) => a !== 'Severity'))
-                setSelectedSeverities([
-                    'critical',
-                    'high',
-                    'medium',
-                    'low',
-                    'none',
-                ])
+                setSelectedSeverities(defaultSelectedSeverities)
             },
-            () =>
-                setSelectedSeverities([
-                    'critical',
-                    'high',
-                    'medium',
-                    'low',
-                    'none',
-                ])
+            () => setSelectedSeverities(defaultSelectedSeverities)
         ),
 
         CloudAccountFilter(
@@ -154,6 +173,7 @@ export default function TopHeader({
                 .map((c) => {
                     const vc: CheckboxItem = {
                         title: c.providerConnectionName || '',
+                        titleSecondLine: c.providerConnectionID || '',
                         value: c.id || '',
                     }
                     return vc
@@ -171,9 +191,9 @@ export default function TopHeader({
                 setAddedFilters(
                     addedFilters.filter((a) => a !== 'Cloud Account')
                 )
-                setSelectedCloudAccounts([])
+                setSelectedCloudAccounts(defaultSelectedCloudAccounts)
             },
-            () => setSelectedCloudAccounts([]),
+            () => setSelectedCloudAccounts(defaultSelectedCloudAccounts),
             (s) => setConnectionSearch(s)
         ),
 

@@ -68,7 +68,7 @@ export default function RadioSelector({
                         onClick={() => onItemSelected(i)}
                     >
                         <Flex>
-                            {i.icon && <Icon icon={i.icon} />}
+                            {i.icon}
                             {i.iconAlt}
 
                             <Text>{i.title}</Text>

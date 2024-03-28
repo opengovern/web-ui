@@ -4,7 +4,14 @@ import {
     CloudIcon,
     CalendarIcon,
 } from '@heroicons/react/24/outline'
-import { CloudConnect, Lifecycle, SeverityIcon } from '../../../icons/icons'
+import { Icon } from '@tremor/react'
+import {
+    AWSIcon,
+    AzureIcon,
+    CloudConnect,
+    Lifecycle,
+    SeverityIcon,
+} from '../../../icons/icons'
 import CheckboxSelector, { CheckboxItem } from '../CheckboxSelector'
 import RadioSelector, { RadioItem } from '../RadioSelector'
 import { DateRange } from '../../../utilities/urlstate'
@@ -33,7 +40,9 @@ export function ConformanceFilter(
     return {
         title: 'Conformance Status',
         icon: CheckCircleIcon,
-        values: [selectedValue],
+        itemsTitles: conformanceValues
+            .filter((i) => selectedValue === i.value)
+            .map((i) => i.title),
         isValueChanged: true,
         selector: (
             <RadioSelector
@@ -59,14 +68,36 @@ export function ConnectorFilter(
 ) {
     const connectorValues: RadioItem[] = [
         { title: 'All', value: '' },
-        { title: 'AWS', value: 'AWS' },
-        { title: 'Azure', value: 'Azure' },
+        {
+            title: 'AWS',
+            icon: (
+                <img
+                    src={AWSIcon}
+                    className="w-5 mr-2 rounded-full"
+                    alt="aws"
+                />
+            ),
+            value: 'AWS',
+        },
+        {
+            title: 'Azure',
+            icon: (
+                <img
+                    src={AzureIcon}
+                    className="w-5 mr-2 rounded-full"
+                    alt="azure"
+                />
+            ),
+            value: 'Azure',
+        },
     ]
 
     return {
         title: 'Connector',
         icon: CloudConnect,
-        values: [selectedValue],
+        itemsTitles: connectorValues
+            .filter((i) => selectedValue === i.value)
+            .map((i) => i.title),
         isValueChanged,
         selector: (
             <RadioSelector
@@ -100,7 +131,9 @@ export function LifecycleFilter(
     return {
         title: 'Lifecycle',
         icon: Lifecycle,
-        values: [selectedValue],
+        itemsTitles: lifecycleValues
+            .filter((i) => selectedValue === i.value)
+            .map((i) => i.title),
         isValueChanged,
         selector: (
             <RadioSelector
@@ -181,7 +214,9 @@ export function SeverityFilter(
     return {
         title: 'Severity',
         icon: SeverityIcon,
-        values: selectedValues,
+        itemsTitles: severityValues
+            .filter((i) => selectedValues.includes(i.value))
+            .map((i) => i.title),
         isValueChanged,
         selector: (
             <CheckboxSelector
@@ -211,7 +246,7 @@ export function CloudAccountFilter(
     return {
         title: 'Cloud Account',
         icon: CloudIcon,
-        values: items
+        itemsTitles: items
             .filter((item) => selectedValues.includes(item.value))
             .map((item) => item.title),
         isValueChanged,
@@ -241,7 +276,7 @@ export function DateFilter(
     return {
         title: 'Date',
         icon: CalendarIcon,
-        values: [renderDateText(value.start, value.end)],
+        itemsTitles: [renderDateText(value.start, value.end)],
         isValueChanged: true,
         selector: (
             <DateSelector

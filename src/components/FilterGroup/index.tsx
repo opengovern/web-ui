@@ -15,7 +15,7 @@ interface IFilterGroup {
 export interface IFilter {
     title: string
     icon: any
-    values: string[] | undefined
+    itemsTitles: string[] | undefined
     selector: React.ReactElement
     isValueChanged: boolean
 }
@@ -35,7 +35,7 @@ export default function FilterGroup({
                             <FilterSingle
                                 title={i.title}
                                 icon={i.icon}
-                                values={i.values}
+                                itemsTitles={i.itemsTitles}
                                 isValueChanged={i.isValueChanged}
                                 alignment={alignment}
                             >

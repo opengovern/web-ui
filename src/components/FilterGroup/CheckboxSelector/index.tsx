@@ -20,6 +20,7 @@ export interface ICheckboxSelector {
 
 export interface CheckboxItem {
     title: string
+    titleSecondLine?: string
     icon?: any
     iconAlt?: any
     value: string
@@ -46,7 +47,6 @@ export default function CheckboxSelector({
                     className="gap-2"
                 >
                     <Text>{title}</Text>
-                    {/* TODO */}
                     <DefaultConditionSelector
                         supportedConditions={supportedConditions}
                         selectedCondition={selectedCondition}
@@ -75,18 +75,27 @@ export default function CheckboxSelector({
                 className="gap-2 pr-6 my-4 max-h-[180px] overflow-auto"
             >
                 {checkboxItems.map((i) => (
-                    <Checkbox
-                        name={title}
-                        key={`${title}-${i.value}`}
-                        checked={selectedValues?.includes(i.value)}
-                        onClick={() => onItemSelected(i)}
-                    >
-                        <Flex className="w-fit">
-                            {i.icon && <Icon icon={i.icon} />}
-                            {i.iconAlt}
-                            <Text className="whitespace-nowrap">{i.title}</Text>
-                        </Flex>
-                    </Checkbox>
+                    <Flex flexDirection="col" alignItems="start">
+                        <Checkbox
+                            name={title}
+                            key={`${title}-${i.value}`}
+                            checked={selectedValues?.includes(i.value)}
+                            onClick={() => onItemSelected(i)}
+                        >
+                            <Flex className="w-fit">
+                                {i.icon && <Icon icon={i.icon} />}
+                                {i.iconAlt}
+                                <Text className="text-gray-800 whitespace-nowrap">
+                                    {i.title}
+                                </Text>
+                            </Flex>
+                        </Checkbox>
+                        {i.titleSecondLine && (
+                            <Text className="whitespace-nowrap ml-6 text-gray-500 !text-xs">
+                                {i.titleSecondLine}
+                            </Text>
+                        )}
+                    </Flex>
                 ))}
             </Flex>
 
