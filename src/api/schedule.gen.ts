@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
     GithubComKaytuIoKaytuEnginePkgDescribeApiJobSeqCheckResponse,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
@@ -9,7 +10,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
     GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
     RequestParams,
 } from './api'
 

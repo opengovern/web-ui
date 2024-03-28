@@ -183,7 +183,10 @@ export default function MetricTable({
             | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
             | undefined
     ) => {
-        let columns: IColumn<any, any>[] = []
+        let columns: IColumn<
+            GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
+            any
+        >[] = []
         if (input) {
             const columnNames =
                 input
@@ -202,7 +205,7 @@ export default function MetricTable({
                     const v: IColumn<any, any> = {
                         field: colName,
                         headerName: colName,
-                        type: 'price',
+                        type: 'string',
                         width: 130,
                         aggFunc: 'sum',
                         filter: true,
@@ -210,8 +213,16 @@ export default function MetricTable({
                         resizable: true,
                         suppressMenu: true,
                         columnGroupShow: 'open',
-                        valueFormatter: (param: ValueFormatterParams) =>
-                            exactPriceDisplay(param.value),
+                        valueFormatter: (
+                            param: ValueFormatterParams<
+                                GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
+                                any
+                            >
+                        ) => {
+                            return exactPriceDisplay(
+                                param.value === undefined ? 0 : param.value
+                            )
+                        },
                     }
                     return v
                 })

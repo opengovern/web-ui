@@ -34,6 +34,8 @@ export default function Assistant() {
                 return 'kaytu-assets-assistant'
             case 1:
                 return 'kaytu-score-assistant'
+            case 2:
+                return 'kaytu-compliance-assistant'
             default:
                 return 'kaytu-r-assistant'
         }
@@ -128,8 +130,9 @@ export default function Assistant() {
                         onIndexChange={setAssistantIdx}
                     >
                         <TabList variant="solid" defaultValue="compliance">
-                            <Tab value="compliance">Asset Assistant</Tab>
+                            <Tab value="asset">Asset Assistant</Tab>
                             <Tab value="score">Score Assistant</Tab>
+                            <Tab value="compliance">Compliance Assistant</Tab>
                             <Tab value="query">Query Assistant</Tab>
                         </TabList>
                     </TabGroup>

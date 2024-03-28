@@ -192,7 +192,7 @@ export default function SingleSpendConnection({
                     const v: IColumn<any, any> = {
                         field: colName,
                         headerName: colName,
-                        type: 'price',
+                        type: 'string',
                         width: 130,
                         sortable: true,
                         suppressMenu: true,
@@ -200,7 +200,9 @@ export default function SingleSpendConnection({
                         pivot: false,
                         aggFunc: 'sum',
                         valueFormatter: (param: ValueFormatterParams) =>
-                            exactPriceDisplay(param.value),
+                            exactPriceDisplay(
+                                param.value === undefined ? 0 : param.value
+                            ),
                     }
                     return v
                 })

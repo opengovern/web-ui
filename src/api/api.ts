@@ -1120,6 +1120,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsS
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest {
     /** @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1" */
     kaytuResourceId?: string
+    /** @example "Microsoft.Compute/virtualMachines" */
+    resourceType?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse {
@@ -1336,6 +1338,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding {
     evaluatedAt?: string
     failedCount?: number
     findings?: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding[]
+    id?: string
     kaytuResourceID?: string
     /**
      * Connection ID
@@ -3445,7 +3448,8 @@ export class Api<
             assistantName:
                 | 'kaytu-r-assistant'
                 | 'kaytu-assets-assistant'
-                | 'kaytu-score-assistant',
+                | 'kaytu-score-assistant'
+                | 'kaytu-compliance-assistant',
             request: GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest,
             params: RequestParams = {}
         ) =>
@@ -3476,7 +3480,8 @@ export class Api<
             assistantName:
                 | 'kaytu-r-assistant'
                 | 'kaytu-assets-assistant'
-                | 'kaytu-score-assistant',
+                | 'kaytu-score-assistant'
+                | 'kaytu-compliance-assistant',
             query?: {
                 /** Run ID */
                 run_id?: string
