@@ -1,4 +1,8 @@
-import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
+import {
+    GridOptions,
+    ValueFormatterParams,
+    IAggFuncParams,
+} from 'ag-grid-community'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import {
@@ -388,13 +392,14 @@ export default function MetricTable({
                     headerName: '%',
                     type: 'string',
                     width: 80,
-                    aggFunc: 'sum',
                     filter: true,
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
                     valueFormatter: (param: ValueFormatterParams) =>
-                        `${numberDisplay(param.value)}%`,
+                        param.data === undefined
+                            ? ''
+                            : `${numberDisplay(param.value)}%`,
                 },
             ],
         },
