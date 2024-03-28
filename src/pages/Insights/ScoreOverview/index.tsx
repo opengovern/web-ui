@@ -258,6 +258,7 @@ export default function ScoreOverview() {
             }, dayjs.utc(0))
             ?.format('MMM DD, YYYY kk:mm UTC') || 'Never'
 
+    console.log(categories())
     return (
         <>
             <TopHeader />
@@ -461,12 +462,21 @@ export default function ScoreOverview() {
                                                       ?.total || {}
                                           )
                                       )}
-                                      costOptimization={item.summary
-                                          .map((b) => b.costOptimization || 0)
-                                          .reduce<number>(
-                                              (prev, curr) => prev + curr,
-                                              0
-                                          )}
+                                      costOptimization={
+                                          item.category === 'cost_optimization'
+                                              ? item.summary
+                                                    .map(
+                                                        (b) =>
+                                                            b.costOptimization ||
+                                                            0
+                                                    )
+                                                    .reduce<number>(
+                                                        (prev, curr) =>
+                                                            prev + curr,
+                                                        0
+                                                    )
+                                              : 0
+                                      }
                                       value={item.summary
                                           .map(
                                               (c) =>
