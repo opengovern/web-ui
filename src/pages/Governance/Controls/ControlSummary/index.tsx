@@ -84,13 +84,13 @@ export default function ControlDetail() {
                     <Flex
                         flexDirection="row"
                         justifyContent="between"
-                        className="mb-6 w-full"
+                        className="mb-6 w-full gap-4"
                     >
                         <Flex
                             flexDirection="col"
                             alignItems="start"
                             justifyContent="start"
-                            className="gap-2 w-2/3"
+                            className="gap-2 w-fit"
                         >
                             <Flex className="gap-3 w-fit">
                                 <Title className="font-semibold whitespace-nowrap">
@@ -123,20 +123,24 @@ export default function ControlDetail() {
                                         <Badge
                                             icon={PencilIcon}
                                             color="gray"
-                                            className="cursor-pointer"
+                                            className="cursor-pointer w-fit"
                                             onClick={() => {
                                                 navigate(
                                                     `/${ws}/settings?sp=parameters`
                                                 )
                                             }}
                                         >
-                                            {item.key}:{' '}
-                                            {parameters?.queryParameters
-                                                ?.filter(
-                                                    (p) => p.key === item.key
-                                                )
-                                                .map((p) => p.value || '') ||
-                                                'Not defined'}
+                                            <Text className="max-w-96 truncate ">
+                                                {item.key}:{' '}
+                                                {parameters?.queryParameters
+                                                    ?.filter(
+                                                        (p) =>
+                                                            p.key === item.key
+                                                    )
+                                                    .map(
+                                                        (p) => p.value || ''
+                                                    ) || 'Not defined'}
+                                            </Text>
                                         </Badge>
                                     )
                                 }
@@ -164,8 +168,10 @@ export default function ControlDetail() {
                                         >
                                             <List>
                                                 <ListItem>
-                                                    <Text>Control ID</Text>
-                                                    <Flex className="gap-1 w-fit">
+                                                    <Text className="whitespace-nowrap mr-2">
+                                                        Control ID
+                                                    </Text>
+                                                    <Flex className="gap-1 w-full overflow-hidden">
                                                         <Button
                                                             variant="light"
                                                             onClick={() =>
@@ -184,7 +190,7 @@ export default function ControlDetail() {
                                                                 Square2StackIcon
                                                             }
                                                         />
-                                                        <Text className="text-gray-800">
+                                                        <Text className="text-gray-800 truncate w-full">
                                                             {
                                                                 controlDetail
                                                                     ?.control
