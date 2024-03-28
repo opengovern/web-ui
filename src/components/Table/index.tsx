@@ -2,6 +2,7 @@ import {
     CellClickedEvent,
     ColDef,
     ColGroupDef,
+    ColumnRowGroupChangedEvent,
     GridOptions,
     GridReadyEvent,
     IAggFunc,
@@ -70,6 +71,7 @@ interface IProps<TData, TValue> {
     onGridReady?: (event: GridReadyEvent<TData>) => void
     onCellClicked?: (event: CellClickedEvent<TData>) => void
     onRowClicked?: (event: RowClickedEvent<TData>) => void
+    onColumnRowGroupChanged?: (event: ColumnRowGroupChangedEvent<TData>) => void
     onSortChange?: () => void
     downloadable?: boolean
     title?: string
@@ -91,6 +93,7 @@ export default function Table<TData = any, TValue = any>({
     onGridReady,
     onCellClicked,
     onRowClicked,
+    onColumnRowGroupChanged,
     onSortChange,
     downloadable = false,
     fullWidth = false,
@@ -326,6 +329,7 @@ export default function Table<TData = any, TValue = any>({
         },
         onCellClicked,
         onRowClicked,
+        onColumnRowGroupChanged,
         onColumnVisible: (e) => {
             if (e.column?.getId() && e.visible !== undefined) {
                 visibility.current?.set(e.column?.getId(), e.visible)
