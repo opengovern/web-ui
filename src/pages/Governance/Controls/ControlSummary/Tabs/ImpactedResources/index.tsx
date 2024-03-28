@@ -219,8 +219,16 @@ const columns = (
                     $
                     {param.data?.findings
                         ?.filter((f) => f.controlID === controlID)
+                        .sort((a, b) => {
+                            if ((a.evaluatedAt || 0) === (b.evaluatedAt || 0)) {
+                                return 0
+                            }
+                            return (a.evaluatedAt || 0) < (b.evaluatedAt || 0)
+                                ? 1
+                                : -1
+                        })
                         .map((f) => f.costOptimization || 0)
-                        .reduce<number>((prev, curr) => prev + curr, 0) || 0}
+                        .at(0)}
                 </Flex>
             ),
         })
