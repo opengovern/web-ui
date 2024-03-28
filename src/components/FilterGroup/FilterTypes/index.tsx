@@ -4,13 +4,14 @@ import {
     CloudIcon,
     CalendarIcon,
 } from '@heroicons/react/24/outline'
-import { Icon } from '@tremor/react'
 import {
     AWSIcon,
     AzureIcon,
     CloudConnect,
     Lifecycle,
     SeverityIcon,
+    TagIcon,
+    DocumentBadge,
 } from '../../../icons/icons'
 import CheckboxSelector, { CheckboxItem } from '../CheckboxSelector'
 import RadioSelector, { RadioItem } from '../RadioSelector'
@@ -267,6 +268,68 @@ export function CloudAccountFilter(
     }
 }
 
+export function ServiceNameFilter(
+    items: CheckboxItem[],
+    onValueSelected: (sv: string) => void,
+    selectedValues: string[],
+    isValueChanged: boolean,
+    onRemove: () => void,
+    onReset: () => void
+) {
+    return {
+        title: 'Service Name',
+        icon: DocumentBadge,
+        itemsTitles: items
+            .filter((item) => selectedValues.includes(item.value))
+            .map((item) => item.title),
+        isValueChanged,
+        selector: (
+            <CheckboxSelector
+                title="Service Name"
+                checkboxItems={items}
+                selectedValues={selectedValues}
+                onItemSelected={(t) => onValueSelected(t.value)}
+                supportedConditions={['is']}
+                selectedCondition="is"
+                onRemove={onRemove}
+                onReset={onReset}
+                onConditionChange={() => ''}
+            />
+        ),
+    }
+}
+
+export function ScoreTagFilter(
+    items: CheckboxItem[],
+    onValueSelected: (sv: string) => void,
+    selectedValues: string[],
+    isValueChanged: boolean,
+    onRemove: () => void,
+    onReset: () => void
+) {
+    return {
+        title: 'Tag',
+        icon: TagIcon,
+        itemsTitles: items
+            .filter((item) => selectedValues.includes(item.value))
+            .map((item) => item.title),
+        isValueChanged,
+        selector: (
+            <CheckboxSelector
+                title="Tag"
+                checkboxItems={items}
+                selectedValues={selectedValues}
+                onItemSelected={(t) => onValueSelected(t.value)}
+                supportedConditions={['is']}
+                selectedCondition="is"
+                onRemove={onRemove}
+                onReset={onReset}
+                onConditionChange={() => ''}
+            />
+        ),
+    }
+}
+
 export function DateFilter(
     value: DateRange,
     onValueChange: (i: DateRange) => void,
@@ -286,6 +349,60 @@ export function DateFilter(
                 selectedCondition={selectedCondition}
                 onValueChanged={onValueChange}
                 onConditionChange={onConditionChange}
+            />
+        ),
+    }
+}
+
+export function ScoreCategory(
+    selectedValue: string,
+    isValueChanged: boolean,
+    onValueSelected: (sv: string) => void,
+    onRemove: () => void,
+    onReset: () => void
+) {
+    const categoryValues: RadioItem[] = [
+        { title: 'All SCORE Insights', value: '' },
+        {
+            title: 'Security',
+            value: 'security',
+        },
+        {
+            title: 'Cost Optimization',
+            value: 'cost_optimization',
+        },
+        {
+            title: 'Operational Excellence',
+            value: 'operational_excellence',
+        },
+        {
+            title: 'Reliability',
+            value: 'reliability',
+        },
+        {
+            title: 'Efficiency',
+            value: 'efficiency',
+        },
+    ]
+
+    return {
+        title: 'Score Category',
+        icon: CloudConnect,
+        itemsTitles: categoryValues
+            .filter((i) => selectedValue === i.value)
+            .map((i) => i.title),
+        isValueChanged,
+        selector: (
+            <RadioSelector
+                title="Score Category"
+                radioItems={categoryValues}
+                selectedValue={selectedValue}
+                onItemSelected={(t) => onValueSelected(t.value)}
+                supportedConditions={['is']}
+                selectedCondition="is"
+                onRemove={onRemove}
+                onReset={onReset}
+                onConditionChange={() => ''}
             />
         ),
     }

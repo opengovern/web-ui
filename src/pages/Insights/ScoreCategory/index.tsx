@@ -34,6 +34,7 @@ import {
     searchAtom,
     useFilterState,
     useURLParam,
+    useURLState,
 } from '../../../utilities/urlstate'
 import Table, { IColumn } from '../../../components/Table'
 import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
@@ -46,6 +47,7 @@ import {
 interface IRecord
     extends GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary {
     serviceName: string
+    tags: string[]
     passedResourcesCount?: number
 }
 
@@ -325,6 +327,42 @@ const options: GridOptions = {
 export default function ScoreCategory() {
     const { value: selectedConnections } = useFilterState()
     const [category, setCategory] = useURLParam('category', '')
+    const [selectedServiceNames, setSelectedServiceNames] = useURLState<
+        string[]
+    >(
+        [],
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('serviceNames', v)
+            return res
+        },
+        (v) => {
+            return v.get('serviceNames') || []
+        }
+    )
+    const [selectedScoreTags, setSelectedScoreTags] = useURLState<string[]>(
+        [],
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('tags', v)
+            return res
+        },
+        (v) => {
+            return v.get('tags') || []
+        }
+    )
+    const [selectedSeverities, setSelectedSeverities] = useURLState<string[]>(
+        [],
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('severities', v)
+            return res
+        },
+        (v) => {
+            return v.get('severities') || []
+        }
+    )
+
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const [hideZero, setHideZero] = useState(true)
@@ -338,13 +376,6 @@ export default function ScoreCategory() {
     ]
 
     const tabIndex = category === '' ? 0 : categories.indexOf(category) + 1
-    const setTabIndex = (i: number) => {
-        if (i === 0) {
-            setCategory('')
-        } else {
-            setCategory(categories[i - 1])
-        }
-    }
 
     const {
         response: responseWS,
@@ -501,6 +532,9 @@ export default function ScoreCategory() {
                         .filter((v) => v[0] === 'score_service_name')
                         .map((v) => v[1].join(','))
                         .join('\n'),
+                    tags: Object.entries(item?.control?.tags || {})
+                        .filter((i) => i[0] === 'score_tags')
+                        .flatMap((i) => i[1]),
                     passedResourcesCount:
                         (item.totalResourcesCount || 0) -
                         (item.failedResourcesCount || 0),
@@ -538,9 +572,61 @@ export default function ScoreCategory() {
         }
     }
 
+    const res = responseControls(tabIndex)
+    const resFiltered = res.filter((item) => {
+        if (selectedServiceNames.length > 0) {
+            if (!selectedServiceNames.includes(item.serviceName)) {
+                return false
+            }
+        }
+        if (selectedScoreTags.length > 0) {
+            if (
+                item.tags.filter((t) => selectedScoreTags.includes(t))
+                    .length === 0
+            ) {
+                return false
+            }
+        }
+        if (selectedSeverities.length > 0) {
+            if (!selectedSeverities.includes(item.control?.severity || '')) {
+                return false
+            }
+        }
+        return true
+    })
+    const serviceNames = res
+        .map((v) => v.serviceName)
+        .reduce<string[]>((prev, curr) => {
+            if (prev.includes(curr)) {
+                return prev
+            }
+            return [...prev, curr]
+        }, [])
+    const tags = res
+        .flatMap((v) =>
+            Object.entries(v?.control?.tags || {})
+                .filter((i) => i[0] === 'score_tags')
+                .flatMap((item) => item[1])
+        )
+        .reduce<string[]>((prev, curr) => {
+            if (prev.includes(curr)) {
+                return prev
+            }
+            return [...prev, curr]
+        }, [])
+
     return (
         <>
-            <TopHeader supportedFilters={['Cloud Account']} />
+            <TopHeader
+                serviceNames={serviceNames}
+                tags={tags}
+                supportedFilters={[
+                    'Service Name',
+                    'Severity',
+                    'Tag',
+                    'Score Category',
+                ]}
+            />
 
             <Flex alignItems="start" className="gap-4">
                 {errorWS === undefined &&
@@ -553,28 +639,8 @@ export default function ScoreCategory() {
                 errorZO === undefined &&
                 errorZR === undefined &&
                 errorZE === undefined ? (
-                    <Flex className="flex flex-col">
-                        <TabGroup
-                            className="mb-6 m-0"
-                            defaultIndex={tabIndex}
-                            tabIndex={tabIndex}
-                            onIndexChange={(i) => setTabIndex(i)}
-                        >
-                            <TabList>
-                                <Tab>All SCORE Insights</Tab>
-                                <Tab>Security</Tab>
-                                <Tab>Cost Optimization</Tab>
-                                <Tab>Operational Excellence</Tab>
-                                <Tab>Reliability</Tab>
-                                <Tab>Efficiency</Tab>
-                            </TabList>
-                        </TabGroup>
-
-                        <Flex
-                            flexDirection="row"
-                            justifyContent="between"
-                            className="my-3"
-                        >
+                    <Flex className="flex flex-col space-y-2">
+                        <Flex flexDirection="row" justifyContent="between">
                             <TextInput
                                 icon={MagnifyingGlassIcon}
                                 value={quickFilterValue}
@@ -593,10 +659,10 @@ export default function ScoreCategory() {
                             </Flex>
                         </Flex>
                         <Table
-                            key={`insight_list_${tabIndex}`}
+                            key="insight_list"
                             id="insight_list"
                             columns={columns(category)}
-                            rowData={responseControls(tabIndex)?.filter((v) => {
+                            rowData={resFiltered?.filter((v) => {
                                 return hideZero
                                     ? (v.totalResourcesCount || 0) !== 0
                                     : true

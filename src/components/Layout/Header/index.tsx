@@ -20,6 +20,9 @@ import {
     CloudAccountFilter,
     ConnectorFilter,
     DateFilter,
+    ScoreCategory,
+    ScoreTagFilter,
+    ServiceNameFilter,
     SeverityFilter,
 } from '../../FilterGroup/FilterTypes'
 import { CheckboxItem } from '../../FilterGroup/CheckboxSelector'
@@ -32,6 +35,8 @@ interface IHeader {
     datePickerDefault?: DateRange
     children?: ReactNode
     breadCrumb?: (string | undefined)[]
+    tags?: string[]
+    serviceNames?: string[]
 }
 
 export default function TopHeader({
@@ -40,6 +45,8 @@ export default function TopHeader({
     children,
     datePickerDefault,
     breadCrumb,
+    tags,
+    serviceNames,
 }: IHeader) {
     const { ws } = useParams()
 
@@ -98,6 +105,48 @@ export default function TopHeader({
         }
     )
 
+    const defaultSelectedServiceNames: string[] = []
+    const [selectedServiceNames, setSelectedServiceNames] = useURLState<
+        string[]
+    >(
+        defaultSelectedServiceNames,
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('serviceNames', v)
+            return res
+        },
+        (v) => {
+            return v.get('serviceNames') || []
+        }
+    )
+
+    const defaultSelectedScoreTags: string[] = []
+    const [selectedScoreTags, setSelectedScoreTags] = useURLState<string[]>(
+        defaultSelectedScoreTags,
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('tags', v)
+            return res
+        },
+        (v) => {
+            return v.get('tags') || []
+        }
+    )
+
+    const defaultSelectedScoreCategory = ''
+    const [selectedScoreCategory, setSelectedScoreCategory] =
+        useURLState<string>(
+            defaultSelectedScoreCategory,
+            (v) => {
+                const res = new Map<string, string[]>()
+                res.set('category', [v])
+                return res
+            },
+            (v) => {
+                return (v.get('category') || []).at(0) || ''
+            }
+        )
+
     const calcInitialFilters = () => {
         const resp = initialFilters
         if (activeTimeRange !== defaultActiveTimeRange) {
@@ -112,6 +161,16 @@ export default function TopHeader({
         if (selectedCloudAccounts !== defaultSelectedCloudAccounts) {
             resp.push('Cloud Account')
         }
+        if (selectedServiceNames !== defaultSelectedServiceNames) {
+            resp.push('Service Name')
+        }
+        if (selectedScoreTags !== defaultSelectedScoreTags) {
+            resp.push('Tag')
+        }
+        if (selectedScoreCategory !== defaultSelectedScoreCategory) {
+            resp.push('Score Category')
+        }
+
         return resp
     }
     const [addedFilters, setAddedFilters] = useState<string[]>(
@@ -195,6 +254,67 @@ export default function TopHeader({
             },
             () => setSelectedCloudAccounts(defaultSelectedCloudAccounts),
             (s) => setConnectionSearch(s)
+        ),
+
+        ServiceNameFilter(
+            serviceNames?.map((i) => {
+                return {
+                    title: i,
+                    value: i,
+                }
+            }) || [],
+            (sv) => {
+                if (selectedServiceNames.includes(sv)) {
+                    setSelectedServiceNames(
+                        selectedServiceNames.filter((i) => i !== sv)
+                    )
+                } else setSelectedServiceNames([...selectedServiceNames, sv])
+            },
+            selectedServiceNames,
+            selectedServiceNames.length > 0,
+            () => {
+                setAddedFilters(
+                    addedFilters.filter((a) => a !== 'Service Name')
+                )
+                setSelectedServiceNames(defaultSelectedServiceNames)
+            },
+            () => setSelectedServiceNames(defaultSelectedServiceNames)
+        ),
+
+        ScoreTagFilter(
+            tags?.map((i) => {
+                return {
+                    title: i,
+                    value: i,
+                }
+            }) || [],
+            (sv) => {
+                if (selectedScoreTags.includes(sv)) {
+                    setSelectedScoreTags(
+                        selectedScoreTags.filter((i) => i !== sv)
+                    )
+                } else setSelectedScoreTags([...selectedScoreTags, sv])
+            },
+            selectedScoreTags,
+            selectedScoreTags.length > 0,
+            () => {
+                setAddedFilters(addedFilters.filter((a) => a !== 'Tag'))
+                setSelectedScoreTags(defaultSelectedScoreTags)
+            },
+            () => setSelectedScoreTags(defaultSelectedScoreTags)
+        ),
+
+        ScoreCategory(
+            selectedScoreCategory,
+            selectedScoreCategory.length > 0,
+            setSelectedScoreCategory,
+            () => {
+                setAddedFilters(
+                    addedFilters.filter((a) => a !== 'Score Category')
+                )
+                setSelectedScoreCategory(defaultSelectedScoreCategory)
+            },
+            () => setSelectedScoreCategory(defaultSelectedScoreCategory)
         ),
 
         DateFilter(
