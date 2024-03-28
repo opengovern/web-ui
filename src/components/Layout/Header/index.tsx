@@ -20,6 +20,8 @@ import {
     CloudAccountFilter,
     ConnectorFilter,
     DateFilter,
+    ScoreTagFilter,
+    ServiceNameFilter,
     SeverityFilter,
 } from '../../FilterGroup/FilterTypes'
 import { CheckboxItem } from '../../FilterGroup/CheckboxSelector'
@@ -98,6 +100,34 @@ export default function TopHeader({
         }
     )
 
+    const defaultSelectedServiceNames: string[] = []
+    const [selectedServiceNames, setSelectedServiceNames] = useURLState<
+        string[]
+    >(
+        defaultSelectedServiceNames,
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('servicenames', v) // need to be fixed
+            return res
+        },
+        (v) => {
+            return v.get('servicenames') || [] // need to be fixed
+        }
+    )
+
+    const defaultSelectedScoreTags: string[] = []
+    const [selectedScoreTags, setSelectedScoreTags] = useURLState<string[]>(
+        defaultSelectedScoreTags,
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('tags', v) // need to be fixed
+            return res
+        },
+        (v) => {
+            return v.get('tags') || [] // need to be fixed
+        }
+    )
+
     const calcInitialFilters = () => {
         const resp = initialFilters
         if (activeTimeRange !== defaultActiveTimeRange) {
@@ -112,12 +142,21 @@ export default function TopHeader({
         if (selectedCloudAccounts !== defaultSelectedCloudAccounts) {
             resp.push('Cloud Account')
         }
+        if (selectedServiceNames !== defaultSelectedServiceNames) {
+            resp.push('Service Name')
+        }
+        if (selectedScoreTags !== defaultSelectedScoreTags) {
+            resp.push('Tag')
+        }
+
         return resp
     }
     const [addedFilters, setAddedFilters] = useState<string[]>(
         calcInitialFilters()
     )
     const [connectionSearch, setConnectionSearch] = useState('')
+    const [serviceNameSearch, setServiceNameSearch] = useState('')
+    const [scoreTagSearch, setScoreTagSearch] = useState('')
     const { response } = useIntegrationApiV1ConnectionsSummariesList({
         connector: selectedConnectors.length ? [selectedConnectors] : [],
         pageNumber: 1,
@@ -195,6 +234,89 @@ export default function TopHeader({
             },
             () => setSelectedCloudAccounts(defaultSelectedCloudAccounts),
             (s) => setConnectionSearch(s)
+        ),
+
+        ServiceNameFilter(
+            response?.connections // need to be fixed
+                ?.filter((v) => {
+                    if (serviceNameSearch === '') {
+                        return true
+                    }
+                    return (
+                        v.providerConnectionID
+                            ?.toLowerCase()
+                            .includes(serviceNameSearch.toLowerCase()) ||
+                        v.providerConnectionName
+                            ?.toLowerCase()
+                            .includes(serviceNameSearch.toLowerCase())
+                    )
+                })
+                .map((c) => {
+                    // need to be fixed
+                    const vc: CheckboxItem = {
+                        title: c.providerConnectionName || '',
+                        titleSecondLine: c.providerConnectionID || '',
+                        value: c.id || '',
+                    }
+                    return vc
+                }) || [],
+            (sv) => {
+                if (selectedServiceNames.includes(sv)) {
+                    setSelectedServiceNames(
+                        selectedServiceNames.filter((i) => i !== sv)
+                    )
+                } else setSelectedServiceNames([...selectedServiceNames, sv])
+            },
+            selectedServiceNames,
+            selectedServiceNames.length > 0,
+            () => {
+                setAddedFilters(
+                    addedFilters.filter((a) => a !== 'Service Name')
+                )
+                setSelectedServiceNames(defaultSelectedServiceNames)
+            },
+            () => setSelectedServiceNames(defaultSelectedServiceNames),
+            (s) => setServiceNameSearch(s)
+        ),
+
+        ScoreTagFilter(
+            response?.connections // need to be fixed
+                ?.filter((v) => {
+                    if (scoreTagSearch === '') {
+                        return true
+                    }
+                    return (
+                        v.providerConnectionID
+                            ?.toLowerCase()
+                            .includes(scoreTagSearch.toLowerCase()) ||
+                        v.providerConnectionName
+                            ?.toLowerCase()
+                            .includes(scoreTagSearch.toLowerCase())
+                    )
+                })
+                .map((c) => {
+                    // need to be fixed
+                    const vc: CheckboxItem = {
+                        title: c.providerConnectionName || '',
+                        value: c.id || '',
+                    }
+                    return vc
+                }) || [],
+            (sv) => {
+                if (selectedScoreTags.includes(sv)) {
+                    setSelectedScoreTags(
+                        selectedScoreTags.filter((i) => i !== sv)
+                    )
+                } else setSelectedScoreTags([...selectedScoreTags, sv])
+            },
+            selectedScoreTags,
+            selectedScoreTags.length > 0,
+            () => {
+                setAddedFilters(addedFilters.filter((a) => a !== 'Tag'))
+                setSelectedScoreTags(defaultSelectedScoreTags)
+            },
+            () => setSelectedScoreTags(defaultSelectedScoreTags),
+            (s) => setScoreTagSearch(s)
         ),
 
         DateFilter(

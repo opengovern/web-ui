@@ -540,7 +540,7 @@ export default function ScoreCategory() {
 
     return (
         <>
-            <TopHeader supportedFilters={['Cloud Account']} />
+            <TopHeader supportedFilters={['Service Name', 'Severity', 'Tag']} />
 
             <Flex alignItems="start" className="gap-4">
                 {errorWS === undefined &&

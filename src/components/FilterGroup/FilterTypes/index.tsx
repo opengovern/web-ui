@@ -4,13 +4,14 @@ import {
     CloudIcon,
     CalendarIcon,
 } from '@heroicons/react/24/outline'
-import { Icon } from '@tremor/react'
 import {
     AWSIcon,
     AzureIcon,
     CloudConnect,
     Lifecycle,
     SeverityIcon,
+    TagIcon,
+    DocumentBadge,
 } from '../../../icons/icons'
 import CheckboxSelector, { CheckboxItem } from '../CheckboxSelector'
 import RadioSelector, { RadioItem } from '../RadioSelector'
@@ -253,6 +254,72 @@ export function CloudAccountFilter(
         selector: (
             <CheckboxSelector
                 title="Cloud Account"
+                checkboxItems={items}
+                selectedValues={selectedValues}
+                onItemSelected={(t) => onValueSelected(t.value)}
+                supportedConditions={['is']}
+                selectedCondition="is"
+                onRemove={onRemove}
+                onReset={onReset}
+                onConditionChange={() => ''}
+                onSearch={onSearch}
+            />
+        ),
+    }
+}
+
+export function ServiceNameFilter(
+    items: CheckboxItem[],
+    onValueSelected: (sv: string) => void,
+    selectedValues: string[],
+    isValueChanged: boolean,
+    onRemove: () => void,
+    onReset: () => void,
+    onSearch: (i: string) => void
+) {
+    return {
+        title: 'Service Name',
+        icon: DocumentBadge,
+        itemsTitles: items
+            .filter((item) => selectedValues.includes(item.value))
+            .map((item) => item.title),
+        isValueChanged,
+        selector: (
+            <CheckboxSelector
+                title="Service Name"
+                checkboxItems={items}
+                selectedValues={selectedValues}
+                onItemSelected={(t) => onValueSelected(t.value)}
+                supportedConditions={['is']}
+                selectedCondition="is"
+                onRemove={onRemove}
+                onReset={onReset}
+                onConditionChange={() => ''}
+                onSearch={onSearch}
+            />
+        ),
+    }
+}
+
+export function ScoreTagFilter(
+    items: CheckboxItem[],
+    onValueSelected: (sv: string) => void,
+    selectedValues: string[],
+    isValueChanged: boolean,
+    onRemove: () => void,
+    onReset: () => void,
+    onSearch: (i: string) => void
+) {
+    return {
+        title: 'Tag',
+        icon: TagIcon,
+        itemsTitles: items
+            .filter((item) => selectedValues.includes(item.value))
+            .map((item) => item.title),
+        isValueChanged,
+        selector: (
+            <CheckboxSelector
+                title="Tag"
                 checkboxItems={items}
                 selectedValues={selectedValues}
                 onItemSelected={(t) => onValueSelected(t.value)}
