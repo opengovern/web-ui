@@ -300,7 +300,10 @@ export function AssetOverview() {
     }
     return (
         <>
-            <TopHeader datePicker filter />
+            <TopHeader
+                supportedFilters={['Date', 'Cloud Account', 'Connector']}
+                initialFilters={['Date']}
+            />
             <Grid numItems={3} className="w-full gap-4">
                 <Col numColSpan={3}>
                     <AssetChart

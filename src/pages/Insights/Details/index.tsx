@@ -93,8 +93,7 @@ export default function ScoreDetails() {
                 breadCrumb={[
                     !isLoading ? controlDetail?.control?.title : 'Score detail',
                 ]}
-                filter
-                filterList={['cloud-account']}
+                supportedFilters={['Cloud Account']}
             />
             {isLoading || parametersLoading ? (
                 <Flex justifyContent="center" className="mt-56">

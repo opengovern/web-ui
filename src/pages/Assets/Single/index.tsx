@@ -41,7 +41,8 @@ export default function Single() {
             return (
                 <>
                     <TopHeader
-                        datePicker
+                        supportedFilters={['Date']}
+                        initialFilters={['Date']}
                         breadCrumb={['Cloud account detail']}
                     />
                     <SingleConnection
@@ -56,8 +57,12 @@ export default function Single() {
             return (
                 <>
                     <TopHeader
-                        datePicker
-                        filter
+                        supportedFilters={[
+                            'Date',
+                            'Cloud Account',
+                            'Connector',
+                        ]}
+                        initialFilters={['Date']}
                         breadCrumb={['Metric detail']}
                     />
                     <SingleMetric

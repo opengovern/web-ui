@@ -296,7 +296,8 @@ export default function ResourceCollectionDetail() {
                 breadCrumb={[
                     detail ? detail.name : 'Resource collection detail',
                 ]}
-                datePicker
+                supportedFilters={['Date']}
+                initialFilters={['Date']}
             />
             <Flex alignItems="end" className="mb-4">
                 <Flex flexDirection="col" alignItems="start">
