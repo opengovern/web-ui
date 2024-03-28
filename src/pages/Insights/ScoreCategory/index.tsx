@@ -3,9 +3,6 @@ import {
     Button,
     Card,
     Flex,
-    Tab,
-    TabGroup,
-    TabList,
     Text,
     Switch,
     TextInput,
@@ -51,7 +48,10 @@ interface IRecord
     passedResourcesCount?: number
 }
 
-const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
+const columns: (
+    category: string,
+    groupByServiceName: boolean
+) => IColumn<IRecord, any>[] = (category, groupByServiceName) => {
     const fixedColumns: IColumn<IRecord, any>[] = [
         {
             headerName: 'Title',
@@ -83,7 +83,7 @@ const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
             width: 150,
             sortable: true,
             enableRowGroup: true,
-            rowGroup: true,
+            rowGroup: groupByServiceName,
             isBold: true,
             cellRenderer: (
                 params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
@@ -310,15 +310,6 @@ const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
 
 const options: GridOptions = {
     rowGroupPanelShow: 'always',
-    // enableGroupEdit: true,
-    // groupAllowUnbalanced: true,
-    // autoGroupColumnDef: {
-    //     width: 200,
-    //     sortable: true,
-    //     filter: true,
-    //     resizable: true,
-    // },
-
     // eslint-disable-next-line consistent-return
     isRowSelectable: (param) =>
         param.data?.totalResultValue || param.data?.oldTotalResultValue,
@@ -367,6 +358,7 @@ export default function ScoreCategory() {
     const searchParams = useAtomValue(searchAtom)
     const [hideZero, setHideZero] = useState(true)
     const [quickFilterValue, setQuickFilterValue] = useState<string>('')
+    const [isGrouped, setIsGrouped] = useState<boolean>(true)
     const categories = [
         'security',
         'cost_optimization',
@@ -661,13 +653,20 @@ export default function ScoreCategory() {
                         <Table
                             key="insight_list"
                             id="insight_list"
-                            columns={columns(category)}
+                            columns={columns(category, isGrouped)}
                             rowData={resFiltered?.filter((v) => {
                                 return hideZero
                                     ? (v.totalResourcesCount || 0) !== 0
                                     : true
                             })}
                             options={options}
+                            onColumnRowGroupChanged={(e) => {
+                                if (
+                                    e.column?.isRowGroupActive() !== undefined
+                                ) {
+                                    setIsGrouped(e.column?.isRowGroupActive())
+                                }
+                            }}
                             onRowClicked={(
                                 event: RowClickedEvent<IRecord, any>
                             ) => {
