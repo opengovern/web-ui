@@ -20,6 +20,7 @@ import {
     CloudAccountFilter,
     ConnectorFilter,
     DateFilter,
+    ScoreCategory,
     ScoreTagFilter,
     ServiceNameFilter,
     SeverityFilter,
@@ -34,6 +35,8 @@ interface IHeader {
     datePickerDefault?: DateRange
     children?: ReactNode
     breadCrumb?: (string | undefined)[]
+    tags?: string[]
+    serviceNames?: string[]
 }
 
 export default function TopHeader({
@@ -42,6 +45,8 @@ export default function TopHeader({
     children,
     datePickerDefault,
     breadCrumb,
+    tags,
+    serviceNames,
 }: IHeader) {
     const { ws } = useParams()
 
@@ -107,11 +112,11 @@ export default function TopHeader({
         defaultSelectedServiceNames,
         (v) => {
             const res = new Map<string, string[]>()
-            res.set('servicenames', v) // need to be fixed
+            res.set('serviceNames', v)
             return res
         },
         (v) => {
-            return v.get('servicenames') || [] // need to be fixed
+            return v.get('serviceNames') || []
         }
     )
 
@@ -120,13 +125,27 @@ export default function TopHeader({
         defaultSelectedScoreTags,
         (v) => {
             const res = new Map<string, string[]>()
-            res.set('tags', v) // need to be fixed
+            res.set('tags', v)
             return res
         },
         (v) => {
-            return v.get('tags') || [] // need to be fixed
+            return v.get('tags') || []
         }
     )
+
+    const defaultSelectedScoreCategory = ''
+    const [selectedScoreCategory, setSelectedScoreCategory] =
+        useURLState<string>(
+            defaultSelectedScoreCategory,
+            (v) => {
+                const res = new Map<string, string[]>()
+                res.set('category', [v])
+                return res
+            },
+            (v) => {
+                return (v.get('category') || []).at(0) || ''
+            }
+        )
 
     const calcInitialFilters = () => {
         const resp = initialFilters
@@ -148,6 +167,9 @@ export default function TopHeader({
         if (selectedScoreTags !== defaultSelectedScoreTags) {
             resp.push('Tag')
         }
+        if (selectedScoreCategory !== defaultSelectedScoreCategory) {
+            resp.push('Score Category')
+        }
 
         return resp
     }
@@ -155,8 +177,6 @@ export default function TopHeader({
         calcInitialFilters()
     )
     const [connectionSearch, setConnectionSearch] = useState('')
-    const [serviceNameSearch, setServiceNameSearch] = useState('')
-    const [scoreTagSearch, setScoreTagSearch] = useState('')
     const { response } = useIntegrationApiV1ConnectionsSummariesList({
         connector: selectedConnectors.length ? [selectedConnectors] : [],
         pageNumber: 1,
@@ -237,29 +257,12 @@ export default function TopHeader({
         ),
 
         ServiceNameFilter(
-            response?.connections // need to be fixed
-                ?.filter((v) => {
-                    if (serviceNameSearch === '') {
-                        return true
-                    }
-                    return (
-                        v.providerConnectionID
-                            ?.toLowerCase()
-                            .includes(serviceNameSearch.toLowerCase()) ||
-                        v.providerConnectionName
-                            ?.toLowerCase()
-                            .includes(serviceNameSearch.toLowerCase())
-                    )
-                })
-                .map((c) => {
-                    // need to be fixed
-                    const vc: CheckboxItem = {
-                        title: c.providerConnectionName || '',
-                        titleSecondLine: c.providerConnectionID || '',
-                        value: c.id || '',
-                    }
-                    return vc
-                }) || [],
+            serviceNames?.map((i) => {
+                return {
+                    title: i,
+                    value: i,
+                }
+            }) || [],
             (sv) => {
                 if (selectedServiceNames.includes(sv)) {
                     setSelectedServiceNames(
@@ -275,33 +278,16 @@ export default function TopHeader({
                 )
                 setSelectedServiceNames(defaultSelectedServiceNames)
             },
-            () => setSelectedServiceNames(defaultSelectedServiceNames),
-            (s) => setServiceNameSearch(s)
+            () => setSelectedServiceNames(defaultSelectedServiceNames)
         ),
 
         ScoreTagFilter(
-            response?.connections // need to be fixed
-                ?.filter((v) => {
-                    if (scoreTagSearch === '') {
-                        return true
-                    }
-                    return (
-                        v.providerConnectionID
-                            ?.toLowerCase()
-                            .includes(scoreTagSearch.toLowerCase()) ||
-                        v.providerConnectionName
-                            ?.toLowerCase()
-                            .includes(scoreTagSearch.toLowerCase())
-                    )
-                })
-                .map((c) => {
-                    // need to be fixed
-                    const vc: CheckboxItem = {
-                        title: c.providerConnectionName || '',
-                        value: c.id || '',
-                    }
-                    return vc
-                }) || [],
+            tags?.map((i) => {
+                return {
+                    title: i,
+                    value: i,
+                }
+            }) || [],
             (sv) => {
                 if (selectedScoreTags.includes(sv)) {
                     setSelectedScoreTags(
@@ -315,8 +301,20 @@ export default function TopHeader({
                 setAddedFilters(addedFilters.filter((a) => a !== 'Tag'))
                 setSelectedScoreTags(defaultSelectedScoreTags)
             },
-            () => setSelectedScoreTags(defaultSelectedScoreTags),
-            (s) => setScoreTagSearch(s)
+            () => setSelectedScoreTags(defaultSelectedScoreTags)
+        ),
+
+        ScoreCategory(
+            selectedScoreCategory,
+            selectedScoreCategory.length > 0,
+            setSelectedScoreCategory,
+            () => {
+                setAddedFilters(
+                    addedFilters.filter((a) => a !== 'Score Category')
+                )
+                setSelectedScoreCategory(defaultSelectedScoreCategory)
+            },
+            () => setSelectedScoreCategory(defaultSelectedScoreCategory)
         ),
 
         DateFilter(

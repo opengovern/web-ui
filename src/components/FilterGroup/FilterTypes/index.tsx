@@ -274,8 +274,7 @@ export function ServiceNameFilter(
     selectedValues: string[],
     isValueChanged: boolean,
     onRemove: () => void,
-    onReset: () => void,
-    onSearch: (i: string) => void
+    onReset: () => void
 ) {
     return {
         title: 'Service Name',
@@ -295,7 +294,6 @@ export function ServiceNameFilter(
                 onRemove={onRemove}
                 onReset={onReset}
                 onConditionChange={() => ''}
-                onSearch={onSearch}
             />
         ),
     }
@@ -307,8 +305,7 @@ export function ScoreTagFilter(
     selectedValues: string[],
     isValueChanged: boolean,
     onRemove: () => void,
-    onReset: () => void,
-    onSearch: (i: string) => void
+    onReset: () => void
 ) {
     return {
         title: 'Tag',
@@ -328,7 +325,6 @@ export function ScoreTagFilter(
                 onRemove={onRemove}
                 onReset={onReset}
                 onConditionChange={() => ''}
-                onSearch={onSearch}
             />
         ),
     }
@@ -353,6 +349,60 @@ export function DateFilter(
                 selectedCondition={selectedCondition}
                 onValueChanged={onValueChange}
                 onConditionChange={onConditionChange}
+            />
+        ),
+    }
+}
+
+export function ScoreCategory(
+    selectedValue: string,
+    isValueChanged: boolean,
+    onValueSelected: (sv: string) => void,
+    onRemove: () => void,
+    onReset: () => void
+) {
+    const categoryValues: RadioItem[] = [
+        { title: 'All SCORE Insights', value: '' },
+        {
+            title: 'Security',
+            value: 'security',
+        },
+        {
+            title: 'Cost Optimization',
+            value: 'cost_optimization',
+        },
+        {
+            title: 'Operational Excellence',
+            value: 'operational_excellence',
+        },
+        {
+            title: 'Reliability',
+            value: 'reliability',
+        },
+        {
+            title: 'Efficiency',
+            value: 'efficiency',
+        },
+    ]
+
+    return {
+        title: 'Score Category',
+        icon: CloudConnect,
+        itemsTitles: categoryValues
+            .filter((i) => selectedValue === i.value)
+            .map((i) => i.title),
+        isValueChanged,
+        selector: (
+            <RadioSelector
+                title="Score Category"
+                radioItems={categoryValues}
+                selectedValue={selectedValue}
+                onItemSelected={(t) => onValueSelected(t.value)}
+                supportedConditions={['is']}
+                selectedCondition="is"
+                onRemove={onRemove}
+                onReset={onReset}
+                onConditionChange={() => ''}
             />
         ),
     }
