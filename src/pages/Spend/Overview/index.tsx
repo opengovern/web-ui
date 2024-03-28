@@ -280,7 +280,7 @@ export function SpendOverview() {
                     // isClickable={false}
                 />
                 <ListCard
-                    title="Top Metrics"
+                    title="Top Inventory"
                     keyColumnTitle="Metric Name"
                     valueColumnTitle="Spend"
                     loading={serviceCostLoading}
