@@ -50,6 +50,7 @@ import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import TopHeader from '../../../../components/Layout/Header'
 import ControlFindings from './Tabs/ControlFindings'
 import { useMetadataApiV1QueryParameterList } from '../../../../api/metadata.gen'
+import { toErrorMessage } from '../../../../types/apierror'
 
 export default function ControlDetail() {
     const { controlId, ws } = useParams()
@@ -60,12 +61,17 @@ export default function ControlDetail() {
     const [docTitle, setDocTitle] = useState('')
     const setQuery = useSetAtom(queryAtom)
 
-    const { response: controlDetail, isLoading } =
-        useComplianceApiV1ControlsSummaryDetail(String(controlId))
+    const {
+        response: controlDetail,
+        isLoading,
+        error: controlDetailError,
+        sendNow: refreshControlDetail,
+    } = useComplianceApiV1ControlsSummaryDetail(String(controlId))
     const {
         response: parameters,
         isLoading: parametersLoading,
         isExecuted,
+        error: parametersError,
         sendNow: refresh,
     } = useMetadataApiV1QueryParameterList()
     const [onlyFailed, setOnlyFailed] = useState(true)
@@ -173,7 +179,12 @@ export default function ControlDetail() {
                                                     <Text className="whitespace-nowrap mr-2">
                                                         Control ID
                                                     </Text>
-                                                    <Flex className="gap-1 w-full overflow-hidden">
+                                                    <Flex
+                                                        flexDirection="row"
+                                                        className="gap-1 w-full overflow-hidden"
+                                                        justifyContent="end"
+                                                        alignItems="end"
+                                                    >
                                                         <Button
                                                             variant="light"
                                                             onClick={() =>
@@ -192,7 +203,7 @@ export default function ControlDetail() {
                                                                 Square2StackIcon
                                                             }
                                                         />
-                                                        <Text className="text-gray-800 truncate w-full">
+                                                        <Text className="text-gray-800 truncate w-fit max-w-full">
                                                             {
                                                                 controlDetail
                                                                     ?.control
@@ -201,36 +212,42 @@ export default function ControlDetail() {
                                                         </Text>
                                                     </Flex>
                                                 </ListItem>
-                                                <ListItem>
-                                                    <Text>Resource type</Text>
-                                                    <Flex className="gap-1 w-fit">
-                                                        <Button
-                                                            variant="light"
-                                                            onClick={() =>
-                                                                clipboardCopy(
-                                                                    `Resource type: ${controlDetail?.resourceType?.resource_type}`
-                                                                ).then(() =>
-                                                                    setNotification(
-                                                                        {
-                                                                            text: 'Resource type copied to clipboard',
-                                                                            type: 'info',
-                                                                        }
-                                                                    )
-                                                                )
-                                                            }
-                                                            icon={
-                                                                Square2StackIcon
-                                                            }
-                                                        />
-                                                        <Text className="text-gray-800">
-                                                            {
-                                                                controlDetail
-                                                                    ?.resourceType
-                                                                    ?.resource_type
-                                                            }
+                                                {controlDetail?.resourceType
+                                                    ?.resource_type && (
+                                                    <ListItem>
+                                                        <Text>
+                                                            Resource type
                                                         </Text>
-                                                    </Flex>
-                                                </ListItem>
+                                                        <Flex className="gap-1 w-fit">
+                                                            <Button
+                                                                variant="light"
+                                                                onClick={() =>
+                                                                    clipboardCopy(
+                                                                        `Resource type: ${controlDetail?.resourceType?.resource_type}`
+                                                                    ).then(() =>
+                                                                        setNotification(
+                                                                            {
+                                                                                text: 'Resource type copied to clipboard',
+                                                                                type: 'info',
+                                                                            }
+                                                                        )
+                                                                    )
+                                                                }
+                                                                icon={
+                                                                    Square2StackIcon
+                                                                }
+                                                            />
+                                                            <Text className="text-gray-800">
+                                                                {
+                                                                    controlDetail
+                                                                        ?.resourceType
+                                                                        ?.resource_type
+                                                                }
+                                                            </Text>
+                                                        </Flex>
+                                                    </ListItem>
+                                                )}
+
                                                 <ListItem>
                                                     <Text>
                                                         # of impacted resources
@@ -645,6 +662,36 @@ export default function ControlDetail() {
                             </TabPanel>
                         </TabPanels>
                     </TabGroup>
+                    {toErrorMessage(controlDetailError) && (
+                        <Flex
+                            flexDirection="col"
+                            justifyContent="between"
+                            className="absolute top-0 w-full left-0 h-full backdrop-blur"
+                        >
+                            <Flex
+                                flexDirection="col"
+                                justifyContent="center"
+                                alignItems="center"
+                            >
+                                <Title className="mt-6">
+                                    Failed to load component
+                                </Title>
+                                <Text className="mt-2">
+                                    {toErrorMessage(controlDetailError)}
+                                </Text>
+                            </Flex>
+                            <Button
+                                variant="secondary"
+                                className="mb-6"
+                                color="slate"
+                                onClick={() => {
+                                    refreshControlDetail()
+                                }}
+                            >
+                                Try Again
+                            </Button>
+                        </Flex>
+                    )}
                 </>
             )}
         </>
