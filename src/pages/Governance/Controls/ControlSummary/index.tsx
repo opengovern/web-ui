@@ -91,17 +91,18 @@ export default function ControlDetail() {
                 <>
                     <Flex
                         flexDirection="row"
+                        alignItems="start"
                         justifyContent="between"
-                        className="mb-6 w-full gap-4"
+                        className="mb-6 w-full gap-6"
                     >
                         <Flex
                             flexDirection="col"
                             alignItems="start"
                             justifyContent="start"
-                            className="gap-2 w-fit"
+                            className="gap-2 w-full"
                         >
-                            <Flex className="gap-3 w-fit">
-                                <Title className="font-semibold whitespace-nowrap">
+                            <Flex className="gap-3 w-fit" alignItems="start">
+                                <Title className="font-semibold ">
                                     {controlDetail?.control?.title}
                                 </Title>
                                 {severityBadge(
