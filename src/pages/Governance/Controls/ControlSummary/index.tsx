@@ -9,6 +9,7 @@ import {
     Icon,
     List,
     ListItem,
+    Switch,
     Tab,
     TabGroup,
     TabList,
@@ -67,6 +68,7 @@ export default function ControlDetail() {
         isExecuted,
         sendNow: refresh,
     } = useMetadataApiV1QueryParameterList()
+    const [onlyFailed, setOnlyFailed] = useState(true)
 
     return (
         <>
@@ -579,29 +581,48 @@ export default function ControlDetail() {
                         </Flex>
                     </Grid>
                     <TabGroup>
-                        <TabList>
-                            <Tab>Impacted resources</Tab>
-                            <Tab>Impacted accounts</Tab>
-                            <Tab
-                                disabled={
-                                    controlDetail?.control?.explanation
-                                        ?.length === 0 &&
-                                    controlDetail?.control?.nonComplianceCost
-                                        ?.length === 0 &&
-                                    controlDetail?.control?.usefulExample
-                                        ?.length === 0
-                                }
-                            >
-                                Control information
-                            </Tab>
-                            <Tab>Benchmarks</Tab>
-                            <Tab>Findings</Tab>
-                        </TabList>
+                        <Flex
+                            flexDirection="row"
+                            justifyContent="between"
+                            className="mb-2"
+                        >
+                            <div className="w-fit">
+                                <TabList>
+                                    <Tab>Impacted resources</Tab>
+                                    <Tab>Impacted accounts</Tab>
+                                    <Tab
+                                        disabled={
+                                            controlDetail?.control?.explanation
+                                                ?.length === 0 &&
+                                            controlDetail?.control
+                                                ?.nonComplianceCost?.length ===
+                                                0 &&
+                                            controlDetail?.control
+                                                ?.usefulExample?.length === 0
+                                        }
+                                    >
+                                        Control information
+                                    </Tab>
+                                    <Tab>Benchmarks</Tab>
+                                    <Tab>Findings</Tab>
+                                </TabList>
+                            </div>
+                            <Flex flexDirection="row" className="w-fit">
+                                <Text className="mr-2">Show failing only</Text>
+                                <Switch
+                                    id="switch"
+                                    name="switch"
+                                    checked={onlyFailed}
+                                    onChange={setOnlyFailed}
+                                />
+                            </Flex>
+                        </Flex>
                         <TabPanels>
                             <TabPanel>
                                 <ImpactedResources
                                     controlId={controlDetail?.control?.id || ''}
                                     linkPrefix={`/${ws}/score/categories/`}
+                                    onlyFailed={onlyFailed}
                                 />
                             </TabPanel>
                             <TabPanel>
