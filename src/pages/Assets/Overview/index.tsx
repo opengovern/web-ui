@@ -369,7 +369,7 @@ export function AssetOverview() {
                 </Col>
                 <Col numColSpan={1} className="h-full">
                     <ListCard
-                        title="Top Metric"
+                        title="Top Inventory"
                         keyColumnTitle="Metric Name"
                         valueColumnTitle="Resources"
                         loading={serviceLoading}
