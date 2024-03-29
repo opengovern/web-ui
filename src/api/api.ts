@@ -770,8 +770,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatusSum
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControl {
     /** @example "To enable multi-factor authentication for a user, run the following command..." */
     cliRemediation?: string
-    /** @example "Azure" */
-    connector?: SourceType
+    /** @example ["Azure"] */
+    connector?: SourceType[]
     /** @example "2020-01-01T00:00:00Z" */
     createdAt?: string
     /** @example "Enable multi-factor authentication for all user credentials who have write access to Azure resources. These include roles like 'Service Co-Administrators', 'Subscription Owners', 'Contributors'." */
@@ -1295,8 +1295,9 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindings
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
-    /** @example "Azure" */
-    connector?: SourceType
+    Global?: boolean
+    /** @example ["Azure"] */
+    connector?: SourceType[]
     /** @example "2023-06-07T14:00:15.677558Z" */
     createdAt?: string
     /** @example "steampipe-v0.5" */
@@ -1386,6 +1387,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingFilte
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsSort {
+    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
     failedCount?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
     kaytuResourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
     resourceLocation?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection

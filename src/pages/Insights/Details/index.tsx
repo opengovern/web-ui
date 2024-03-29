@@ -384,8 +384,9 @@ export default function ScoreDetails() {
                         <SummaryCard
                             // connector={controlDetail?.control?.connector}
                             title={`${
-                                controlDetail?.control?.connector ===
-                                SourceType.CloudAWS
+                                controlDetail?.control?.connector?.includes(
+                                    SourceType.CloudAWS
+                                )
                                     ? 'Impacted AWS Accounts'
                                     : 'Impacted Azure Subscriptions'
                             }`}
