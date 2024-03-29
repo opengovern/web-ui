@@ -358,7 +358,7 @@ export default function ScoreCategory() {
     const searchParams = useAtomValue(searchAtom)
     const [hideZero, setHideZero] = useState(true)
     const [quickFilterValue, setQuickFilterValue] = useState<string>('')
-    const [isGrouped, setIsGrouped] = useState<boolean>(true)
+    const [isGrouped, setIsGrouped] = useState<boolean>(false)
     const categories = [
         'security',
         'cost_optimization',
@@ -374,18 +374,28 @@ export default function ScoreCategory() {
         isLoading: isLoadingWS,
         error: errorWS,
         sendNow: sendNowWS,
-    } = useComplianceApiV1BenchmarksControlsDetail('aws_score_security', {
-        connectionId: selectedConnections.connections,
-    })
+    } = useComplianceApiV1BenchmarksControlsDetail(
+        'aws_score_security',
+        {
+            connectionId: selectedConnections.connections,
+        },
+        {},
+        tabIndex === 0 || tabIndex === 1
+    )
 
     const {
         response: responseZS,
         isLoading: isLoadingZS,
         error: errorZS,
         sendNow: sendNowZS,
-    } = useComplianceApiV1BenchmarksControlsDetail('azure_score_security', {
-        connectionId: selectedConnections.connections,
-    })
+    } = useComplianceApiV1BenchmarksControlsDetail(
+        'azure_score_security',
+        {
+            connectionId: selectedConnections.connections,
+        },
+        {},
+        tabIndex === 0 || tabIndex === 1
+    )
 
     const {
         response: responseWC,
@@ -396,7 +406,9 @@ export default function ScoreCategory() {
         'aws_score_cost_optimization',
         {
             connectionId: selectedConnections.connections,
-        }
+        },
+        {},
+        tabIndex === 0 || tabIndex === 2
     )
 
     const {
@@ -408,7 +420,9 @@ export default function ScoreCategory() {
         'azure_score_cost_optimization',
         {
             connectionId: selectedConnections.connections,
-        }
+        },
+        {},
+        tabIndex === 0 || tabIndex === 2
     )
 
     const {
@@ -420,7 +434,9 @@ export default function ScoreCategory() {
         'aws_score_operational_excellence',
         {
             connectionId: selectedConnections.connections,
-        }
+        },
+        {},
+        tabIndex === 0 || tabIndex === 3
     )
 
     const {
@@ -432,7 +448,9 @@ export default function ScoreCategory() {
         'azure_score_operational_excellence',
         {
             connectionId: selectedConnections.connections,
-        }
+        },
+        {},
+        tabIndex === 0 || tabIndex === 3
     )
 
     const {
@@ -440,18 +458,28 @@ export default function ScoreCategory() {
         isLoading: isLoadingWR,
         error: errorWR,
         sendNow: sendNowWR,
-    } = useComplianceApiV1BenchmarksControlsDetail('aws_score_reliability', {
-        connectionId: selectedConnections.connections,
-    })
+    } = useComplianceApiV1BenchmarksControlsDetail(
+        'aws_score_reliability',
+        {
+            connectionId: selectedConnections.connections,
+        },
+        {},
+        tabIndex === 0 || tabIndex === 4
+    )
 
     const {
         response: responseZR,
         isLoading: isLoadingZR,
         error: errorZR,
         sendNow: sendNowZR,
-    } = useComplianceApiV1BenchmarksControlsDetail('azure_score_reliability', {
-        connectionId: selectedConnections.connections,
-    })
+    } = useComplianceApiV1BenchmarksControlsDetail(
+        'azure_score_reliability',
+        {
+            connectionId: selectedConnections.connections,
+        },
+        {},
+        tabIndex === 0 || tabIndex === 4
+    )
 
     const {
         response: responseWE,
@@ -462,7 +490,9 @@ export default function ScoreCategory() {
         'aws_score_performance_efficiency',
         {
             connectionId: selectedConnections.connections,
-        }
+        },
+        {},
+        tabIndex === 0 || tabIndex === 5
     )
 
     const {
@@ -474,7 +504,9 @@ export default function ScoreCategory() {
         'azure_score_performance_efficiency',
         {
             connectionId: selectedConnections.connections,
-        }
+        },
+        {},
+        tabIndex === 0 || tabIndex === 5
     )
 
     const navigateToInsightsDetails = (id: string) => {
