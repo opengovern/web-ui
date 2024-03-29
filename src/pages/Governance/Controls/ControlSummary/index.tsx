@@ -74,7 +74,7 @@ export default function ControlDetail() {
         error: parametersError,
         sendNow: refresh,
     } = useMetadataApiV1QueryParameterList()
-    const [onlyFailed, setOnlyFailed] = useState(true)
+    const [onlyFailed, setOnlyFailed] = useState(false)
 
     return (
         <>

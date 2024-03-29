@@ -85,7 +85,7 @@ export default function ScoreDetails() {
         (controlDetail?.control?.query?.parameters?.length || 0) > 0 ||
         (controlDetail?.control?.query?.queryToExecute || '').includes('{{')
 
-    const [onlyFailed, setOnlyFailed] = useState(true)
+    const [onlyFailed, setOnlyFailed] = useState(false)
 
     return (
         <>
