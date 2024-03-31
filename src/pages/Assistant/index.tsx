@@ -207,214 +207,232 @@ export default function Assistant() {
                 </Flex>
             )}
 
-            <Grid numItems={10} className="gap-x-6 h-fit">
-                <Col numColSpan={2} />
-                <Col numColSpan={6}>
-                    {msgList().length === 0 ? (
-                        <Flex
-                            flexDirection="col"
-                            justifyContent={
-                                msgList().length === 0 ? 'start' : 'end'
-                            }
-                            className="space-y-4 h-full"
-                        >
+            <div
+                className="w-full overflow-y-scroll"
+                style={{
+                    height: 'calc(100vh - 120px)',
+                    maxHeight: 'calc(100vh - 120px)',
+                }}
+            >
+                <Grid numItems={10} className="gap-x-6 h-fit">
+                    <Col numColSpan={2} />
+                    <Col numColSpan={6}>
+                        {msgList().length === 0 ? (
                             <Flex
                                 flexDirection="col"
-                                className="gap-12 pt-40 h-full w-full"
+                                justifyContent={
+                                    msgList().length === 0 ? 'start' : 'end'
+                                }
+                                className="space-y-4 h-full"
                             >
-                                <Flex flexDirection="col" className="h-fit">
-                                    <img
-                                        src={AssistantImage}
-                                        alt="K"
-                                        className="w-[200px]"
-                                    />
-                                    <Title className="text-gray-400">
-                                        {assistantIdx !== 0
-                                            ? 'How can I help you'
-                                            : 'Choose your Assistant'}
-                                    </Title>
-                                </Flex>
                                 <Flex
                                     flexDirection="col"
-                                    justifyContent={
-                                        assistantIdx === 0 ? 'start' : 'end'
-                                    }
-                                    className="h-full w-full"
+                                    className="gap-12 pt-40 h-full w-full"
                                 >
-                                    {assistantIdx === 0 ? (
-                                        <Grid numItems={2} className="gap-4">
-                                            {assisstantDetails.map((item) => (
-                                                <Flex
-                                                    className="gap-6 px-6 py-5 rounded-xl cursor-pointer shadow-sm hover:shadow-lg bg-white"
-                                                    onClick={() => {
-                                                        setAssistantIdx(
-                                                            item.idx
-                                                        )
-                                                        // setAssistantSelected(true)
-                                                    }}
-                                                >
-                                                    <Flex
-                                                        flexDirection="col"
-                                                        alignItems="start"
-                                                        className="gap-2"
-                                                    >
-                                                        <Title>
-                                                            {item.title}
-                                                        </Title>
-                                                        <Text>
-                                                            {item.description}
-                                                        </Text>
-                                                    </Flex>
-                                                    <ChevronRightIcon className="w-6 text-gray-500" />
-                                                </Flex>
-                                            ))}
-                                        </Grid>
-                                    ) : (
-                                        <Grid
-                                            numItems={2}
-                                            className="gap-4 w-full"
-                                        >
-                                            {examplePropmts.map((item) => (
-                                                <Flex
-                                                    className="gap-6 px-4 py-4 border border-gray-300 rounded-xl cursor-pointer hover:bg-gray-200"
-                                                    onClick={() => {
-                                                        setContent(item)
-                                                        sendNow()
-                                                    }}
-                                                >
-                                                    <Flex
-                                                        flexDirection="col"
-                                                        alignItems="start"
-                                                        className="gap-2"
-                                                    >
-                                                        <Text className="text-gray-600">
-                                                            {item}
-                                                        </Text>
-                                                    </Flex>
-                                                </Flex>
-                                            ))}
-                                        </Grid>
-                                    )}
-                                </Flex>
-                            </Flex>
-                        </Flex>
-                    ) : (
-                        <Flex
-                            flexDirection="col"
-                            justifyContent="end"
-                            className="space-y-4 h-full"
-                        >
-                            {msgList().map((msg) => {
-                                return (
+                                    <Flex flexDirection="col" className="h-fit">
+                                        <img
+                                            src={AssistantImage}
+                                            alt="K"
+                                            className="w-[200px]"
+                                        />
+                                        <Title className="text-gray-400">
+                                            {assistantIdx !== 0
+                                                ? 'How can I help you'
+                                                : 'Choose your Assistant'}
+                                        </Title>
+                                    </Flex>
                                     <Flex
                                         flexDirection="col"
-                                        alignItems={
-                                            msg.role === 'user'
-                                                ? 'end'
-                                                : 'start'
+                                        justifyContent={
+                                            assistantIdx === 0 ? 'start' : 'end'
                                         }
+                                        className="h-full w-full"
                                     >
-                                        <Card
-                                            className={
-                                                msg.role === 'user'
-                                                    ? 'w-fit bg-blue-50 !shadow-lg !rounded-2xl ring-blue-100 relative'
-                                                    : 'w-fit bg-white !shadow-lg !rounded-2xl ring-gray-200 relative'
-                                            }
-                                        >
-                                            {user && msg.role === 'user' ? (
-                                                <img
-                                                    className="absolute h-10 w-10 -right-16 bottom-0 rounded-full !shadow-lg bg-gray-50 border border-gray-200"
-                                                    src={user.picture}
-                                                    alt=""
-                                                />
-                                            ) : (
-                                                <Flex
-                                                    justifyContent="center"
-                                                    className="absolute h-10 w-10 -left-16 bottom-0 rounded-full !shadow-lg bg-gray-50 border border-gray-200"
-                                                >
-                                                    K
-                                                </Flex>
-                                            )}
-
-                                            <Text className="!font-extrabold !text-base text-gray-900 mb-4">
-                                                {msg.role === 'user'
-                                                    ? 'You'
-                                                    : 'Kaytu Assistant'}
-                                            </Text>
-                                            <MarkdownPreview
-                                                source={msg.content}
-                                                className="!bg-transparent"
-                                                wrapperElement={{
-                                                    'data-color-mode': 'light',
-                                                }}
-                                                rehypeRewrite={(
-                                                    node,
-                                                    index,
-                                                    parent
-                                                ) => {
-                                                    if (
-                                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                        // @ts-ignore
-                                                        node.tagName === 'a' &&
-                                                        parent &&
-                                                        /^h(1|2|3|4|5|6)/.test(
-                                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                            // @ts-ignore
-                                                            parent.tagName
-                                                        )
-                                                    ) {
-                                                        // eslint-disable-next-line no-param-reassign
-                                                        parent.children =
-                                                            parent.children.slice(
-                                                                1
-                                                            )
-                                                    }
-                                                }}
-                                            />
-                                        </Card>
-                                        {msg.role !== 'user' && (
-                                            <Flex
-                                                justifyContent="start"
-                                                className="mt-6 gap-4"
+                                        {assistantIdx === 0 ? (
+                                            <Grid
+                                                numItems={2}
+                                                className="gap-4"
                                             >
-                                                <Button
-                                                    variant="secondary"
-                                                    icon={ArrowPathIcon}
-                                                    className="shadow-none border-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-200"
-                                                >
-                                                    Retry
-                                                </Button>
-                                                <Button
-                                                    variant="secondary"
-                                                    icon={HandThumbUpIcon}
-                                                    className="shadow-none border-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-200"
-                                                >
-                                                    Like
-                                                </Button>
-                                                <Button
-                                                    variant="secondary"
-                                                    icon={HandThumbDownIcon}
-                                                    className="shadow-none border-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-200"
-                                                >
-                                                    Dislike
-                                                </Button>
-                                            </Flex>
+                                                {assisstantDetails.map(
+                                                    (item) => (
+                                                        <Flex
+                                                            className="gap-6 px-6 py-5 rounded-xl cursor-pointer shadow-sm hover:shadow-lg bg-white"
+                                                            onClick={() => {
+                                                                setAssistantIdx(
+                                                                    item.idx
+                                                                )
+                                                                // setAssistantSelected(true)
+                                                            }}
+                                                        >
+                                                            <Flex
+                                                                flexDirection="col"
+                                                                alignItems="start"
+                                                                className="gap-2"
+                                                            >
+                                                                <Title>
+                                                                    {item.title}
+                                                                </Title>
+                                                                <Text>
+                                                                    {
+                                                                        item.description
+                                                                    }
+                                                                </Text>
+                                                            </Flex>
+                                                            <ChevronRightIcon className="w-6 text-gray-500" />
+                                                        </Flex>
+                                                    )
+                                                )}
+                                            </Grid>
+                                        ) : (
+                                            <Grid
+                                                numItems={2}
+                                                className="gap-4 w-full"
+                                            >
+                                                {examplePropmts.map((item) => (
+                                                    <Flex
+                                                        className="gap-6 px-4 py-4 border border-gray-300 rounded-xl cursor-pointer hover:bg-gray-200"
+                                                        onClick={() => {
+                                                            setContent(item)
+                                                            sendNow()
+                                                        }}
+                                                    >
+                                                        <Flex
+                                                            flexDirection="col"
+                                                            alignItems="start"
+                                                            className="gap-2"
+                                                        >
+                                                            <Text className="text-gray-600">
+                                                                {item}
+                                                            </Text>
+                                                        </Flex>
+                                                    </Flex>
+                                                ))}
+                                            </Grid>
                                         )}
                                     </Flex>
-                                )
-                            })}
-                        </Flex>
-                    )}
+                                </Flex>
+                            </Flex>
+                        ) : (
+                            <Flex
+                                flexDirection="col"
+                                justifyContent="end"
+                                className="space-y-4 h-full"
+                            >
+                                {msgList().map((msg) => {
+                                    return (
+                                        <Flex
+                                            flexDirection="col"
+                                            alignItems={
+                                                msg.role === 'user'
+                                                    ? 'end'
+                                                    : 'start'
+                                            }
+                                        >
+                                            <Card
+                                                className={
+                                                    msg.role === 'user'
+                                                        ? 'w-fit bg-blue-50 !shadow-lg !rounded-2xl ring-blue-100 relative'
+                                                        : 'w-fit bg-white !shadow-lg !rounded-2xl ring-gray-200 relative'
+                                                }
+                                            >
+                                                {user && msg.role === 'user' ? (
+                                                    <img
+                                                        className="absolute h-10 w-10 -right-16 bottom-0 rounded-full !shadow-lg bg-gray-50 border border-gray-200"
+                                                        src={user.picture}
+                                                        alt=""
+                                                    />
+                                                ) : (
+                                                    <Flex
+                                                        justifyContent="center"
+                                                        className="absolute h-10 w-10 -left-16 bottom-0 rounded-full !shadow-lg bg-gray-50 border border-gray-200"
+                                                    >
+                                                        K
+                                                    </Flex>
+                                                )}
 
-                    {/* <div
+                                                <Text className="!font-extrabold !text-base text-gray-900 mb-4">
+                                                    {msg.role === 'user'
+                                                        ? 'You'
+                                                        : 'Kaytu Assistant'}
+                                                </Text>
+                                                <MarkdownPreview
+                                                    source={msg.content}
+                                                    className="!bg-transparent"
+                                                    wrapperElement={{
+                                                        'data-color-mode':
+                                                            'light',
+                                                    }}
+                                                    rehypeRewrite={(
+                                                        node,
+                                                        index,
+                                                        parent
+                                                    ) => {
+                                                        if (
+                                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                            // @ts-ignore
+                                                            node.tagName ===
+                                                                'a' &&
+                                                            parent &&
+                                                            /^h(1|2|3|4|5|6)/.test(
+                                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                                // @ts-ignore
+                                                                parent.tagName
+                                                            )
+                                                        ) {
+                                                            // eslint-disable-next-line no-param-reassign
+                                                            parent.children =
+                                                                parent.children.slice(
+                                                                    1
+                                                                )
+                                                        }
+                                                    }}
+                                                />
+                                            </Card>
+                                            {msg.role !== 'user' && (
+                                                <Flex
+                                                    justifyContent="start"
+                                                    className="mt-6 gap-4"
+                                                >
+                                                    <Button
+                                                        variant="secondary"
+                                                        icon={ArrowPathIcon}
+                                                        className="shadow-none border-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-200"
+                                                    >
+                                                        Retry
+                                                    </Button>
+                                                    <Button
+                                                        variant="secondary"
+                                                        icon={HandThumbUpIcon}
+                                                        className="shadow-none border-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-200"
+                                                    >
+                                                        Like
+                                                    </Button>
+                                                    <Button
+                                                        variant="secondary"
+                                                        icon={HandThumbDownIcon}
+                                                        className="shadow-none border-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-200"
+                                                    >
+                                                        Dislike
+                                                    </Button>
+                                                </Flex>
+                                            )}
+                                        </Flex>
+                                    )
+                                })}
+                            </Flex>
+                        )}
+
+                        {/* <div
                         style={{ float: 'left', clear: 'both' }}
                         ref={(el) => {
                             ref.current = el
                         }}
                     /> */}
-                </Col>
-                <Col numColSpan={2} />
-            </Grid>
+                    </Col>
+                    <Col numColSpan={2} />
+                </Grid>
+            </div>
+
             <Grid numItems={10} className="gap-x-6 mt-4 w-full">
                 <Col numColSpan={2} />
                 <Col numColSpan={6}>

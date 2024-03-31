@@ -49,8 +49,10 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                 >
                     <Flex
                         justifyContent="center"
-                        className={`px-12 ${
-                            current === 'assistant' ? 'h-fit' : 'mt-16 h-fit' // temp solution h-fit
+                        className={`${
+                            current === 'assistant'
+                                ? 'h-fit'
+                                : 'px-12 mt-16 h-fit' // temp solution h-fit
                         } `}
                     >
                         <div
