@@ -110,24 +110,19 @@ export default function Evaluate({
         }
     }
 
+    const isLoading =
+        benchmarkDetail?.lastJobStatus !== 'FAILED' &&
+        benchmarkDetail?.lastJobStatus !== 'SUCCEEDED' &&
+        (benchmarkDetail?.lastJobStatus || '') !== ''
+
     return (
         <>
             <Button
                 icon={ArrowPathRoundedSquareIcon}
                 onClick={() => setOpen(true)}
-                loading={
-                    !(
-                        benchmarkDetail?.lastJobStatus === 'FAILED' ||
-                        benchmarkDetail?.lastJobStatus === 'SUCCEEDED' ||
-                        (benchmarkDetail?.lastJobStatus || '') === ''
-                    )
-                }
+                loading={isLoading}
             >
-                {benchmarkDetail?.lastJobStatus === 'FAILED' ||
-                benchmarkDetail?.lastJobStatus === 'SUCCEEDED' ||
-                (benchmarkDetail?.lastJobStatus || '') === ''
-                    ? 'Evaluate now'
-                    : 'Evaluating'}
+                {isLoading ? 'Evaluating' : 'Evaluate now'}
             </Button>
             <DrawerPanel
                 open={open}

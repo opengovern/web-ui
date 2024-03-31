@@ -212,8 +212,8 @@ export function SpendOverview() {
     return (
         <>
             <TopHeader
-                datePicker
-                filter
+                supportedFilters={['Date', 'Cloud Account', 'Connector']}
+                initialFilters={['Date']}
                 datePickerDefault={defaultSpendTime(workspace || '')}
             />
             <Grid numItems={3} className="w-full gap-4">
@@ -280,7 +280,7 @@ export function SpendOverview() {
                     // isClickable={false}
                 />
                 <ListCard
-                    title="Top Metrics"
+                    title="Top Services"
                     keyColumnTitle="Metric Name"
                     valueColumnTitle="Spend"
                     loading={serviceCostLoading}

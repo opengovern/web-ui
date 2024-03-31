@@ -2,6 +2,7 @@ import {
     CellClickedEvent,
     ColDef,
     ColGroupDef,
+    ColumnRowGroupChangedEvent,
     GridOptions,
     GridReadyEvent,
     IAggFunc,
@@ -45,6 +46,7 @@ export interface IColumn<TData, TValue> {
     valueFormatter?: string | ValueFormatterFunc<TData, TValue>
     comparator?: any
     cellRenderer?: any
+    cellRendererParams?: any
     rowGroup?: boolean
     enableRowGroup?: boolean
     pinned?: boolean
@@ -70,6 +72,7 @@ interface IProps<TData, TValue> {
     onGridReady?: (event: GridReadyEvent<TData>) => void
     onCellClicked?: (event: CellClickedEvent<TData>) => void
     onRowClicked?: (event: RowClickedEvent<TData>) => void
+    onColumnRowGroupChanged?: (event: ColumnRowGroupChangedEvent<TData>) => void
     onSortChange?: () => void
     downloadable?: boolean
     title?: string
@@ -80,6 +83,10 @@ interface IProps<TData, TValue> {
     fullHeight?: boolean
     rowHeight?: 'md' | 'lg' | 'xl'
     quickFilter?: string
+    masterDetail?: boolean
+    detailCellRenderer?: any
+    detailCellRendererParams?: any
+    detailRowHeight?: number
 }
 
 export default function Table<TData = any, TValue = any>({
@@ -91,6 +98,7 @@ export default function Table<TData = any, TValue = any>({
     onGridReady,
     onCellClicked,
     onRowClicked,
+    onColumnRowGroupChanged,
     onSortChange,
     downloadable = false,
     fullWidth = false,
@@ -101,6 +109,10 @@ export default function Table<TData = any, TValue = any>({
     loading,
     rowHeight = 'md',
     quickFilter,
+    masterDetail,
+    detailCellRenderer,
+    detailCellRendererParams,
+    detailRowHeight,
 }: IProps<TData, TValue>) {
     const gridRef = useRef<AgGridReact>(null)
     const visibility = useRef<Map<string, boolean> | undefined>(undefined)
@@ -152,6 +164,7 @@ export default function Table<TData = any, TValue = any>({
                 enableRowGroup: item.enableRowGroup || false,
                 hide: item.hide || false,
                 cellRenderer: item.cellRenderer,
+                cellRendererParams: item.cellRendererParams,
                 flex: item.width ? 0 : item.flex || 1,
                 pinned: item.pinned || false,
                 aggFunc: item.aggFunc,
@@ -295,6 +308,10 @@ export default function Table<TData = any, TValue = any>({
         }),
         pagination: true,
         paginationPageSize: 25,
+        masterDetail,
+        detailCellRenderer,
+        detailCellRendererParams,
+        detailRowHeight,
         rowSelection: 'multiple',
         suppressExcelExport: true,
         alwaysShowHorizontalScroll: true,
@@ -326,6 +343,7 @@ export default function Table<TData = any, TValue = any>({
         },
         onCellClicked,
         onRowClicked,
+        onColumnRowGroupChanged,
         onColumnVisible: (e) => {
             if (e.column?.getId() && e.visible !== undefined) {
                 visibility.current?.set(e.column?.getId(), e.visible)

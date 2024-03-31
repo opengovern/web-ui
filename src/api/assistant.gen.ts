@@ -25,7 +25,8 @@ export const useAssistantApiV1ThreadCreate = (
     assistantName:
         | 'kaytu-r-assistant'
         | 'kaytu-assets-assistant'
-        | 'kaytu-score-assistant',
+        | 'kaytu-score-assistant'
+        | 'kaytu-compliance-assistant',
     request: GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest,
     params: RequestParams = {},
     autoExecute = true,
@@ -50,7 +51,8 @@ export const useAssistantApiV1ThreadCreate = (
         reqassistantName:
             | 'kaytu-r-assistant'
             | 'kaytu-assets-assistant'
-            | 'kaytu-score-assistant',
+            | 'kaytu-score-assistant'
+            | 'kaytu-compliance-assistant',
         reqrequest: GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest,
         reqparams: RequestParams
     ) => {
@@ -148,7 +150,8 @@ export const useAssistantApiV1ThreadCreate = (
         reqassistantName:
             | 'kaytu-r-assistant'
             | 'kaytu-assets-assistant'
-            | 'kaytu-score-assistant',
+            | 'kaytu-score-assistant'
+            | 'kaytu-compliance-assistant',
         reqrequest: GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest,
         reqparams: RequestParams
     ) => {
@@ -184,7 +187,8 @@ export const useAssistantApiV1ThreadDetail = (
     assistantName:
         | 'kaytu-r-assistant'
         | 'kaytu-assets-assistant'
-        | 'kaytu-score-assistant',
+        | 'kaytu-score-assistant'
+        | 'kaytu-compliance-assistant',
     query?: {
         run_id?: string
     },
@@ -212,7 +216,8 @@ export const useAssistantApiV1ThreadDetail = (
         reqassistantName:
             | 'kaytu-r-assistant'
             | 'kaytu-assets-assistant'
-            | 'kaytu-score-assistant',
+            | 'kaytu-score-assistant'
+            | 'kaytu-compliance-assistant',
         reqquery:
             | {
                   run_id?: string
@@ -327,7 +332,8 @@ export const useAssistantApiV1ThreadDetail = (
         reqassistantName:
             | 'kaytu-r-assistant'
             | 'kaytu-assets-assistant'
-            | 'kaytu-score-assistant',
+            | 'kaytu-score-assistant'
+            | 'kaytu-compliance-assistant',
         reqquery:
             | {
                   run_id?: string

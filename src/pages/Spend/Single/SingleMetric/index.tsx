@@ -321,7 +321,9 @@ export default function SingleSpendMetric({
                         pivot: false,
                         aggFunc: 'sum',
                         valueFormatter: (param) =>
-                            exactPriceDisplay(param.value),
+                            exactPriceDisplay(
+                                param.value === undefined ? 0 : param.value
+                            ),
                     }
                     return v
                 })

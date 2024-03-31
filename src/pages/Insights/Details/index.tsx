@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useSetAtom } from 'jotai'
 import { useState } from 'react'
 import {
@@ -16,7 +16,6 @@ import {
     Icon,
     TabPanels,
     TabPanel,
-    Switch,
 } from '@tremor/react'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 import Editor from 'react-simple-code-editor'
@@ -36,10 +35,7 @@ import clipboardCopy from 'clipboard-copy'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { notificationAtom, queryAtom } from '../../../store'
 import { dateTimeDisplay } from '../../../utilities/dateDisplay'
-import {
-    useComplianceApiV1AssignmentsBenchmarkDetail,
-    useComplianceApiV1ControlsSummaryDetail,
-} from '../../../api/compliance.gen'
+import { useComplianceApiV1ControlsSummaryDetail } from '../../../api/compliance.gen'
 import Spinner from '../../../components/Spinner'
 import Modal from '../../../components/Modal'
 import TopHeader from '../../../components/Layout/Header'
@@ -49,7 +45,10 @@ import EaseOfSolutionChart from '../../../components/EaseOfSolutionChart'
 import ImpactedResources from '../../Governance/Controls/ControlSummary/Tabs/ImpactedResources'
 import ImpactedAccounts from '../../Governance/Controls/ControlSummary/Tabs/ImpactedAccounts'
 import { severityBadge } from '../../Governance/Controls'
-import { SourceType } from '../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
+    SourceType,
+} from '../../../api/api'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import { useMetadataApiV1QueryParameterList } from '../../../api/metadata.gen'
@@ -85,7 +84,27 @@ export default function ScoreDetails() {
         (controlDetail?.control?.query?.parameters?.length || 0) > 0 ||
         (controlDetail?.control?.query?.queryToExecute || '').includes('{{')
 
-    const [onlyFailed, setOnlyFailed] = useState(true)
+    const [conformanceFilter, setConformanceFilter] = useState<
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+        | undefined
+    >(undefined)
+    const conformanceFilterIdx = () => {
+        if (
+            conformanceFilter?.length === 1 &&
+            conformanceFilter[0] ===
+                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed
+        ) {
+            return 1
+        }
+        if (
+            conformanceFilter?.length === 1 &&
+            conformanceFilter[0] ===
+                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed
+        ) {
+            return 2
+        }
+        return 0
+    }
 
     return (
         <>
@@ -93,8 +112,7 @@ export default function ScoreDetails() {
                 breadCrumb={[
                     !isLoading ? controlDetail?.control?.title : 'Score detail',
                 ]}
-                filter
-                filterList={['cloud-account']}
+                supportedFilters={['Cloud Account']}
             />
             {isLoading || parametersLoading ? (
                 <Flex justifyContent="center" className="mt-56">
@@ -385,8 +403,9 @@ export default function ScoreDetails() {
                         <SummaryCard
                             // connector={controlDetail?.control?.connector}
                             title={`${
-                                controlDetail?.control?.connector ===
-                                SourceType.CloudAWS
+                                controlDetail?.control?.connector?.includes(
+                                    SourceType.CloudAWS
+                                )
                                     ? 'Impacted AWS Accounts'
                                     : 'Impacted Azure Subscriptions'
                             }`}
@@ -717,15 +736,37 @@ export default function ScoreDetails() {
                                     </TabList>
                                 </div>
                                 <Flex flexDirection="row" className="w-fit">
-                                    <Text className="mr-2">
-                                        Show failing only
+                                    <Text className="mr-2 w-fit">
+                                        Confomance Status filter:
                                     </Text>
-                                    <Switch
-                                        id="switch"
-                                        name="switch"
-                                        checked={onlyFailed}
-                                        onChange={setOnlyFailed}
-                                    />
+                                    <TabGroup
+                                        tabIndex={conformanceFilterIdx()}
+                                        className="w-fit"
+                                        onIndexChange={(tabIndex) => {
+                                            switch (tabIndex) {
+                                                case 1:
+                                                    setConformanceFilter([
+                                                        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+                                                    ])
+                                                    break
+                                                case 2:
+                                                    setConformanceFilter([
+                                                        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
+                                                    ])
+                                                    break
+                                                default:
+                                                    setConformanceFilter(
+                                                        undefined
+                                                    )
+                                            }
+                                        }}
+                                    >
+                                        <TabList variant="solid">
+                                            <Tab value="1">All</Tab>
+                                            <Tab value="2">Failed</Tab>
+                                            <Tab value="3">Passed</Tab>
+                                        </TabList>
+                                    </TabGroup>
                                 </Flex>
                             </Flex>
                             <TabPanels>
@@ -735,7 +776,9 @@ export default function ScoreDetails() {
                                             controlId={
                                                 controlDetail?.control?.id || ''
                                             }
-                                            onlyFailed={onlyFailed}
+                                            conformanceFilter={
+                                                conformanceFilter
+                                            }
                                             linkPrefix={`/${ws}/score/categories/`}
                                             isCostOptimization={
                                                 costSaving !== 0

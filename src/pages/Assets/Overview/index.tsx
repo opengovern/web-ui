@@ -300,7 +300,10 @@ export function AssetOverview() {
     }
     return (
         <>
-            <TopHeader datePicker filter />
+            <TopHeader
+                supportedFilters={['Date', 'Cloud Account', 'Connector']}
+                initialFilters={['Date']}
+            />
             <Grid numItems={3} className="w-full gap-4">
                 <Col numColSpan={3}>
                     <AssetChart
@@ -366,7 +369,7 @@ export function AssetOverview() {
                 </Col>
                 <Col numColSpan={1} className="h-full">
                     <ListCard
-                        title="Top Metric"
+                        title="Top Inventory"
                         keyColumnTitle="Metric Name"
                         valueColumnTitle="Resources"
                         loading={serviceLoading}

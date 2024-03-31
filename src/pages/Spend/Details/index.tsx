@@ -57,8 +57,8 @@ export default function SpendDetails() {
         <>
             <TopHeader
                 breadCrumb={['Spend detail']}
-                filter
-                datePicker
+                supportedFilters={['Date', 'Cloud Account', 'Connector']}
+                initialFilters={['Date']}
                 datePickerDefault={defaultSpendTime(ws || '')}
             />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>

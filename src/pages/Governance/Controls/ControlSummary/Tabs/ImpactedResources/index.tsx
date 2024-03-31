@@ -25,7 +25,7 @@ let sortKey: any[] = []
 
 interface IImpactedResources {
     controlId: string
-    onlyFailed?: boolean
+    conformanceFilter?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
     linkPrefix?: string
     isCostOptimization?: boolean
 }
@@ -170,23 +170,37 @@ const columns = (
             field: 'failedCount',
             headerName: 'Conformance status',
             type: 'string',
-            sortable: true,
+            sortable: false,
             filter: true,
             hide: false,
             resizable: true,
             width: 160,
             cellRenderer: (
                 param: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding>
-            ) => (
-                <Flex className="h-full">
-                    {statusBadge(
-                        param.data?.findings
-                            ?.filter((f) => f.controlID === controlID)
-                            .map((f) => f.conformanceStatus)
-                            .at(0)
-                    )}
-                </Flex>
-            ),
+            ) => {
+                return (
+                    <Flex className="h-full">
+                        {statusBadge(
+                            param.data?.findings
+                                ?.filter((f) => f.controlID === controlID)
+                                .sort((a, b) => {
+                                    if (
+                                        (a.evaluatedAt || 0) ===
+                                        (b.evaluatedAt || 0)
+                                    ) {
+                                        return 0
+                                    }
+                                    return (a.evaluatedAt || 0) <
+                                        (b.evaluatedAt || 0)
+                                        ? 1
+                                        : -1
+                                })
+                                .map((f) => f.conformanceStatus)
+                                .at(0)
+                        )}
+                    </Flex>
+                )
+            },
         },
         {
             field: 'evaluatedAt',
@@ -215,15 +229,29 @@ const columns = (
             width: 150,
             cellRenderer: (
                 param: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding>
-            ) => (
-                <Flex className="h-full">
-                    $
-                    {param.data?.findings
-                        ?.filter((f) => f.controlID === controlID)
-                        .map((f) => f.costOptimization || 0)
-                        .reduce<number>((prev, curr) => prev + curr, 0) || 0}
-                </Flex>
-            ),
+            ) => {
+                return (
+                    <Flex className="h-full">
+                        $
+                        {param.data?.findings
+                            ?.filter((f) => f.controlID === controlID)
+                            .sort((a, b) => {
+                                if (
+                                    (a.evaluatedAt || 0) ===
+                                    (b.evaluatedAt || 0)
+                                ) {
+                                    return 0
+                                }
+                                return (a.evaluatedAt || 0) <
+                                    (b.evaluatedAt || 0)
+                                    ? 1
+                                    : -1
+                            })
+                            .map((f) => f.costOptimization || 0)
+                            .at(0)}
+                    </Flex>
+                )
+            },
         })
     }
     return temp
@@ -231,7 +259,7 @@ const columns = (
 
 export default function ImpactedResources({
     controlId,
-    onlyFailed,
+    conformanceFilter,
     linkPrefix,
     isCostOptimization,
 }: IImpactedResources) {
@@ -249,28 +277,38 @@ export default function ImpactedResources({
             getRows: (params: IServerSideGetRowsParams) => {
                 const api = new Api()
                 api.instance = AxiosAPI
+                let sort = params.request.sortModel.length
+                    ? [
+                          {
+                              [params.request.sortModel[0].colId]:
+                                  params.request.sortModel[0].sort,
+                          },
+                      ]
+                    : []
+
+                if (
+                    params.request.sortModel.length &&
+                    params.request.sortModel[0].colId === 'failedCount'
+                ) {
+                    sort = [
+                        {
+                            conformanceStatus: params.request.sortModel[0].sort,
+                        },
+                    ]
+                }
                 api.compliance
                     .apiV1ResourceFindingsCreate({
                         filters: {
                             controlID: [controlId || ''],
                             conformanceStatus:
-                                onlyFailed === true
+                                conformanceFilter === undefined
                                     ? [
-                                          GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
-                                      ]
-                                    : [
                                           GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
                                           GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
-                                      ],
+                                      ]
+                                    : conformanceFilter,
                         },
-                        sort: params.request.sortModel.length
-                            ? [
-                                  {
-                                      [params.request.sortModel[0].colId]:
-                                          params.request.sortModel[0].sort,
-                                  },
-                              ]
-                            : [],
+                        sort,
                         limit: 100,
                         afterSortKey:
                             params.request.startRow === 0 || sortKey.length < 1
@@ -301,7 +339,7 @@ export default function ImpactedResources({
         }
     }
 
-    const serverSideRows = useMemo(() => ssr(), [onlyFailed])
+    const serverSideRows = useMemo(() => ssr(), [conformanceFilter])
 
     return (
         <>

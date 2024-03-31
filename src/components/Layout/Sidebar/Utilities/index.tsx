@@ -22,14 +22,15 @@ export default function Utilities({ isCollapsed, workspace }: IUtilities) {
             <JobsMenu isCollapsed={isCollapsed} workspace={workspace} />
             <CLIMenu isCollapsed={isCollapsed} />
             <Link
-                to="https://kaytu.io/docs"
-                target="_blank"
+                to={`/${workspace}/assistant`}
                 className={`w-full px-6 py-2 mb-3 flex items-center rounded-md gap-2.5 text-gray-50 hover:bg-kaytu-800 ${
                     isCollapsed ? '!p-2' : ''
                 }`}
             >
                 <ChatBubbleLeftEllipsisIcon className="h-5 w-5 stroke-2 text-gray-400" />
-                {!isCollapsed && <Text className="text-inherit">Support</Text>}
+                {!isCollapsed && (
+                    <Text className="text-inherit">Assistant</Text>
+                )}
             </Link>
             <Profile isCollapsed={isCollapsed} />
         </Flex>

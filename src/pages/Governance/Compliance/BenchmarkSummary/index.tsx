@@ -26,7 +26,7 @@ export default function BenchmarkSummary() {
     const { value: activeTimeRange } = useUrlDateRangeState(
         defaultTime(ws || '')
     )
-    const { benchmarkId, resourceId } = useParams()
+    const { benchmarkId } = useParams()
     const { value: selectedConnections } = useFilterState()
     const [assignments, setAssignments] = useState(0)
     const [recall, setRecall] = useState(false)
@@ -49,7 +49,6 @@ export default function BenchmarkSummary() {
         isLoading,
         sendNow: updateDetail,
     } = useComplianceApiV1BenchmarksSummaryDetail(String(benchmarkId))
-    const [selectedAccounts, setSelectedAccounts] = useState<string[]>([])
     const { sendNowWithParams: triggerEvaluate, isExecuted } =
         useScheduleApiV1ComplianceTriggerUpdate(
             {
@@ -118,8 +117,8 @@ export default function BenchmarkSummary() {
                         ? benchmarkDetail?.title
                         : 'Benchmark summary',
                 ]}
-                filter
-                datePicker
+                supportedFilters={['Date', 'Cloud Account', 'Connector']}
+                initialFilters={['Date']}
             />
             {isLoading ? (
                 <Spinner className="mt-56" />
@@ -156,7 +155,6 @@ export default function BenchmarkSummary() {
                                 benchmarkDetail={benchmarkDetail}
                                 assignmentsCount={assignments}
                                 onEvaluate={(c) => {
-                                    setSelectedAccounts(() => c)
                                     triggerEvaluate(
                                         {
                                             benchmark_id: [benchmarkId || ''],
@@ -240,7 +238,7 @@ export default function BenchmarkSummary() {
 
                     <Controls
                         id={String(benchmarkId)}
-                        assignments={assignments}
+                        assignments={trend === null ? 0 : 1}
                     />
                 </>
             )}

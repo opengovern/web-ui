@@ -21,7 +21,7 @@ export function defaultTime(wsName: string) {
         return v
     }
     return {
-        start: dayjs.utc().add(-7, 'days').startOf('day'),
+        start: dayjs.utc().add(-60, 'days').startOf('day'),
         end: dayjs.utc().endOf('day'),
     }
 }
@@ -62,7 +62,7 @@ export function defaultSpendTime(wsName: string) {
         return v
     }
     return {
-        start: dayjs.utc().add(-9, 'days').startOf('day'),
+        start: dayjs.utc().add(-60, 'days').startOf('day'),
         end: dayjs.utc().add(-2, 'days').endOf('day'),
     }
 }
@@ -76,7 +76,7 @@ export function defaultHomepageTime(wsName: string) {
         return v
     }
     const v: DateRange = {
-        start: dayjs.utc().add(-9, 'days').startOf('day'),
+        start: dayjs.utc().add(-60, 'days').startOf('day'),
         end: dayjs.utc().add(-2, 'days').endOf('day'),
     }
     return v

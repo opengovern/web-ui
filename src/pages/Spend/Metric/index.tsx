@@ -128,8 +128,8 @@ export function SpendMetrics() {
     return (
         <>
             <TopHeader
-                datePicker
-                filter
+                supportedFilters={['Date', 'Cloud Account', 'Connector']}
+                initialFilters={['Date']}
                 datePickerDefault={defaultSpendTime(ws || '')}
             />
             <Grid numItems={3} className="w-full gap-4">

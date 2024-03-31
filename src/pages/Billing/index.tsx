@@ -138,7 +138,7 @@ function BillingItems() {
 export default function Billing() {
     return (
         <>
-            <TopHeader datePicker />
+            <TopHeader supportedFilters={['Date']} initialFilters={['Date']} />
             <Grid numItems={4} className="gap-4">
                 <BillingItems />
             </Grid>

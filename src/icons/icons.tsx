@@ -1,6 +1,7 @@
 export { default as AzureIcon } from './AzureIcon.png'
 export { default as AWSIcon } from './AWSIcon.png'
 export { default as AssistantImage } from './AssistantImage.png'
+export { default as AWSAzureIcon } from './AWSAzureIcon.png'
 
 export { ReactComponent as CisIcon } from './cis.svg'
 export { ReactComponent as HipaaIcon } from './hipaa.svg'
@@ -30,3 +31,5 @@ export { ReactComponent as ArrowUpFill } from './Iconly/Arrow-Up-Fill.svg'
 export { ReactComponent as ArrowLeftFill } from './Iconly/Arrow-Left-Fill.svg'
 export { ReactComponent as ArrowRightFill } from './Iconly/Arrow-Right-Fill.svg'
 export { ReactComponent as AssistantProfileIcon } from './assistant-profile-icon.svg'
+export { ReactComponent as TagIcon } from './Iconly/Tag.svg'
+export { ReactComponent as DocumentBadge } from './Iconly/Document-Badge.svg'

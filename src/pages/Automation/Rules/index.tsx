@@ -202,6 +202,11 @@ export default function Rules() {
                                             label: 'Score (%)',
                                             datatype: 'number',
                                         },
+                                        {
+                                            name: 'failure',
+                                            label: 'Failure',
+                                            datatype: 'boolean',
+                                        },
                                     ]}
                                     operators={[
                                         { name: '<', label: '<' },

@@ -1,11 +1,8 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import {
     Button,
     Card,
     Flex,
-    Tab,
-    TabGroup,
-    TabList,
     Text,
     Switch,
     TextInput,
@@ -18,6 +15,8 @@ import {
     CodeBracketIcon,
     Cog8ToothIcon,
     MagnifyingGlassIcon,
+    ChevronDownIcon,
+    ChevronRightIcon,
 } from '@heroicons/react/24/outline'
 import {
     GridOptions,
@@ -26,7 +25,7 @@ import {
     RowClickedEvent,
     ValueFormatterParams,
 } from 'ag-grid-community'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useComplianceApiV1BenchmarksControlsDetail } from '../../../api/compliance.gen'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../../api/api'
 import TopHeader from '../../../components/Layout/Header'
@@ -34,6 +33,7 @@ import {
     searchAtom,
     useFilterState,
     useURLParam,
+    useURLState,
 } from '../../../utilities/urlstate'
 import Table, { IColumn } from '../../../components/Table'
 import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
@@ -46,33 +46,65 @@ import {
 interface IRecord
     extends GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary {
     serviceName: string
+    tags: string[]
     passedResourcesCount?: number
 }
 
-const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
+interface IDetailCellRenderer {
+    data: IRecord
+}
+
+const DetailCellRenderer = ({ data }: IDetailCellRenderer) => {
+    const searchParams = useAtomValue(searchAtom)
+    return (
+        <Flex
+            flexDirection="row"
+            className="w-full h-full"
+            alignItems="center"
+            justifyContent="between"
+        >
+            <Text className="ml-12 truncate">{data.control?.description}</Text>
+            <Link
+                className="mr-2"
+                to={`${data?.control?.id || ''}?${searchParams}`}
+            >
+                <Button size="xs">Open</Button>
+            </Link>
+        </Flex>
+    )
+}
+
+const columns: (
+    category: string,
+    groupByServiceName: boolean
+) => IColumn<IRecord, any>[] = (category, groupByServiceName) => {
     const fixedColumns: IColumn<IRecord, any>[] = [
         {
             headerName: 'Title',
             field: 'control.title',
             type: 'custom',
+            cellRenderer: 'agGroupCellRenderer',
+            cellRendererParams: {
+                suppressDoubleClickExpand: true,
+                innerRenderer: (
+                    params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
+                ) => (
+                    <Flex
+                        flexDirection="row"
+                        alignItems="center"
+                        justifyContent="start"
+                        className="gap-2 h-full"
+                    >
+                        {getConnectorIcon(params.data?.control?.connector)}
+                        <Text className="text-gray-800 mb-0.5 font-bold truncate">
+                            {params.value}
+                        </Text>
+                    </Flex>
+                ),
+            },
             flex: 1,
             sortable: true,
             isBold: true,
-            cellRenderer: (
-                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-            ) => (
-                <Flex
-                    flexDirection="row"
-                    alignItems="center"
-                    justifyContent="start"
-                    className="gap-2 h-full"
-                >
-                    {getConnectorIcon(params.data?.control?.connector)}
-                    <Text className="text-gray-800 mb-0.5 font-bold">
-                        {params.value}
-                    </Text>
-                </Flex>
-            ),
         },
         {
             field: 'serviceName',
@@ -81,7 +113,7 @@ const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
             width: 150,
             sortable: true,
             enableRowGroup: true,
-            rowGroup: true,
+            rowGroup: groupByServiceName,
             isBold: true,
             cellRenderer: (
                 params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
@@ -308,15 +340,6 @@ const columns: (category: string) => IColumn<IRecord, any>[] = (category) => {
 
 const options: GridOptions = {
     rowGroupPanelShow: 'always',
-    // enableGroupEdit: true,
-    // groupAllowUnbalanced: true,
-    // autoGroupColumnDef: {
-    //     width: 200,
-    //     sortable: true,
-    //     filter: true,
-    //     resizable: true,
-    // },
-
     // eslint-disable-next-line consistent-return
     isRowSelectable: (param) =>
         param.data?.totalResultValue || param.data?.oldTotalResultValue,
@@ -325,10 +348,48 @@ const options: GridOptions = {
 export default function ScoreCategory() {
     const { value: selectedConnections } = useFilterState()
     const [category, setCategory] = useURLParam('category', '')
+    const detailCellRenderer = useCallback(DetailCellRenderer, [])
+    const [selectedServiceNames, setSelectedServiceNames] = useURLState<
+        string[]
+    >(
+        [],
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('serviceNames', v)
+            return res
+        },
+        (v) => {
+            return v.get('serviceNames') || []
+        }
+    )
+    const [selectedScoreTags, setSelectedScoreTags] = useURLState<string[]>(
+        [],
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('tags', v)
+            return res
+        },
+        (v) => {
+            return v.get('tags') || []
+        }
+    )
+    const [selectedSeverities, setSelectedSeverities] = useURLState<string[]>(
+        [],
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('severities', v)
+            return res
+        },
+        (v) => {
+            return v.get('severities') || []
+        }
+    )
+
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const [hideZero, setHideZero] = useState(true)
     const [quickFilterValue, setQuickFilterValue] = useState<string>('')
+    const [isGrouped, setIsGrouped] = useState<boolean>(false)
     const categories = [
         'security',
         'cost_optimization',
@@ -338,31 +399,34 @@ export default function ScoreCategory() {
     ]
 
     const tabIndex = category === '' ? 0 : categories.indexOf(category) + 1
-    const setTabIndex = (i: number) => {
-        if (i === 0) {
-            setCategory('')
-        } else {
-            setCategory(categories[i - 1])
-        }
-    }
 
     const {
         response: responseWS,
         isLoading: isLoadingWS,
         error: errorWS,
         sendNow: sendNowWS,
-    } = useComplianceApiV1BenchmarksControlsDetail('aws_score_security', {
-        connectionId: selectedConnections.connections,
-    })
+    } = useComplianceApiV1BenchmarksControlsDetail(
+        'aws_score_security',
+        {
+            connectionId: selectedConnections.connections,
+        },
+        {},
+        tabIndex === 0 || tabIndex === 1
+    )
 
     const {
         response: responseZS,
         isLoading: isLoadingZS,
         error: errorZS,
         sendNow: sendNowZS,
-    } = useComplianceApiV1BenchmarksControlsDetail('azure_score_security', {
-        connectionId: selectedConnections.connections,
-    })
+    } = useComplianceApiV1BenchmarksControlsDetail(
+        'azure_score_security',
+        {
+            connectionId: selectedConnections.connections,
+        },
+        {},
+        tabIndex === 0 || tabIndex === 1
+    )
 
     const {
         response: responseWC,
@@ -373,7 +437,9 @@ export default function ScoreCategory() {
         'aws_score_cost_optimization',
         {
             connectionId: selectedConnections.connections,
-        }
+        },
+        {},
+        tabIndex === 0 || tabIndex === 2
     )
 
     const {
@@ -385,7 +451,9 @@ export default function ScoreCategory() {
         'azure_score_cost_optimization',
         {
             connectionId: selectedConnections.connections,
-        }
+        },
+        {},
+        tabIndex === 0 || tabIndex === 2
     )
 
     const {
@@ -397,7 +465,9 @@ export default function ScoreCategory() {
         'aws_score_operational_excellence',
         {
             connectionId: selectedConnections.connections,
-        }
+        },
+        {},
+        tabIndex === 0 || tabIndex === 3
     )
 
     const {
@@ -409,7 +479,9 @@ export default function ScoreCategory() {
         'azure_score_operational_excellence',
         {
             connectionId: selectedConnections.connections,
-        }
+        },
+        {},
+        tabIndex === 0 || tabIndex === 3
     )
 
     const {
@@ -417,18 +489,28 @@ export default function ScoreCategory() {
         isLoading: isLoadingWR,
         error: errorWR,
         sendNow: sendNowWR,
-    } = useComplianceApiV1BenchmarksControlsDetail('aws_score_reliability', {
-        connectionId: selectedConnections.connections,
-    })
+    } = useComplianceApiV1BenchmarksControlsDetail(
+        'aws_score_reliability',
+        {
+            connectionId: selectedConnections.connections,
+        },
+        {},
+        tabIndex === 0 || tabIndex === 4
+    )
 
     const {
         response: responseZR,
         isLoading: isLoadingZR,
         error: errorZR,
         sendNow: sendNowZR,
-    } = useComplianceApiV1BenchmarksControlsDetail('azure_score_reliability', {
-        connectionId: selectedConnections.connections,
-    })
+    } = useComplianceApiV1BenchmarksControlsDetail(
+        'azure_score_reliability',
+        {
+            connectionId: selectedConnections.connections,
+        },
+        {},
+        tabIndex === 0 || tabIndex === 4
+    )
 
     const {
         response: responseWE,
@@ -439,7 +521,9 @@ export default function ScoreCategory() {
         'aws_score_performance_efficiency',
         {
             connectionId: selectedConnections.connections,
-        }
+        },
+        {},
+        tabIndex === 0 || tabIndex === 5
     )
 
     const {
@@ -451,7 +535,9 @@ export default function ScoreCategory() {
         'azure_score_performance_efficiency',
         {
             connectionId: selectedConnections.connections,
-        }
+        },
+        {},
+        tabIndex === 0 || tabIndex === 5
     )
 
     const navigateToInsightsDetails = (id: string) => {
@@ -501,6 +587,9 @@ export default function ScoreCategory() {
                         .filter((v) => v[0] === 'score_service_name')
                         .map((v) => v[1].join(','))
                         .join('\n'),
+                    tags: Object.entries(item?.control?.tags || {})
+                        .filter((i) => i[0] === 'score_tags')
+                        .flatMap((i) => i[1]),
                     passedResourcesCount:
                         (item.totalResourcesCount || 0) -
                         (item.failedResourcesCount || 0),
@@ -538,9 +627,61 @@ export default function ScoreCategory() {
         }
     }
 
+    const res = responseControls(tabIndex)
+    const resFiltered = res.filter((item) => {
+        if (selectedServiceNames.length > 0) {
+            if (!selectedServiceNames.includes(item.serviceName)) {
+                return false
+            }
+        }
+        if (selectedScoreTags.length > 0) {
+            if (
+                item.tags.filter((t) => selectedScoreTags.includes(t))
+                    .length === 0
+            ) {
+                return false
+            }
+        }
+        if (selectedSeverities.length > 0) {
+            if (!selectedSeverities.includes(item.control?.severity || '')) {
+                return false
+            }
+        }
+        return true
+    })
+    const serviceNames = res
+        .map((v) => v.serviceName)
+        .reduce<string[]>((prev, curr) => {
+            if (prev.includes(curr)) {
+                return prev
+            }
+            return [...prev, curr]
+        }, [])
+    const tags = res
+        .flatMap((v) =>
+            Object.entries(v?.control?.tags || {})
+                .filter((i) => i[0] === 'score_tags')
+                .flatMap((item) => item[1])
+        )
+        .reduce<string[]>((prev, curr) => {
+            if (prev.includes(curr)) {
+                return prev
+            }
+            return [...prev, curr]
+        }, [])
+
     return (
         <>
-            <TopHeader filter filterList={['cloud-account']} />
+            <TopHeader
+                serviceNames={serviceNames}
+                tags={tags}
+                supportedFilters={[
+                    'Service Name',
+                    'Severity',
+                    'Tag',
+                    'Score Category',
+                ]}
+            />
 
             <Flex alignItems="start" className="gap-4">
                 {errorWS === undefined &&
@@ -553,28 +694,8 @@ export default function ScoreCategory() {
                 errorZO === undefined &&
                 errorZR === undefined &&
                 errorZE === undefined ? (
-                    <Flex className="flex flex-col">
-                        <TabGroup
-                            className="mb-6 m-0"
-                            defaultIndex={tabIndex}
-                            tabIndex={tabIndex}
-                            onIndexChange={(i) => setTabIndex(i)}
-                        >
-                            <TabList>
-                                <Tab>All SCORE Insights</Tab>
-                                <Tab>Security</Tab>
-                                <Tab>Cost Optimization</Tab>
-                                <Tab>Operational Excellence</Tab>
-                                <Tab>Reliability</Tab>
-                                <Tab>Efficiency</Tab>
-                            </TabList>
-                        </TabGroup>
-
-                        <Flex
-                            flexDirection="row"
-                            justifyContent="between"
-                            className="my-3"
-                        >
+                    <Flex className="flex flex-col space-y-2">
+                        <Flex flexDirection="row" justifyContent="between">
                             <TextInput
                                 icon={MagnifyingGlassIcon}
                                 value={quickFilterValue}
@@ -593,23 +714,33 @@ export default function ScoreCategory() {
                             </Flex>
                         </Flex>
                         <Table
-                            key={`insight_list_${tabIndex}`}
+                            key="insight_list"
                             id="insight_list"
-                            columns={columns(category)}
-                            rowData={responseControls(tabIndex)?.filter((v) => {
+                            masterDetail
+                            detailCellRenderer={detailCellRenderer}
+                            columns={columns(category, isGrouped)}
+                            rowData={resFiltered?.filter((v) => {
                                 return hideZero
                                     ? (v.totalResourcesCount || 0) !== 0
                                     : true
                             })}
                             options={options}
+                            onColumnRowGroupChanged={(e) => {
+                                if (
+                                    e.column?.isRowGroupActive() !== undefined
+                                ) {
+                                    setIsGrouped(e.column?.isRowGroupActive())
+                                }
+                            }}
                             onRowClicked={(
                                 event: RowClickedEvent<IRecord, any>
                             ) => {
-                                if (event.data !== undefined) {
-                                    navigateToInsightsDetails(
-                                        event.data?.control?.id || ''
+                                if (!event.node.expanded) {
+                                    event.api.forEachNode((node) =>
+                                        node.setExpanded(false)
                                     )
                                 }
+                                event.node.setExpanded(!event.node.expanded)
                             }}
                             loading={isLoading(tabIndex)}
                             // rowHeight="lg"

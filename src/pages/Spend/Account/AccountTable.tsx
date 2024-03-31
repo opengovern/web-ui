@@ -233,7 +233,7 @@ export default function AccountTable({
                     const v: IColumn<any, any> = {
                         field: colName,
                         headerName: colName,
-                        type: 'price',
+                        type: 'string',
                         width: 130,
                         sortable: true,
                         suppressMenu: true,
@@ -242,7 +242,9 @@ export default function AccountTable({
                         aggFunc: 'sum',
                         columnGroupShow: 'open',
                         valueFormatter: (param: ValueFormatterParams) =>
-                            exactPriceDisplay(param.value),
+                            exactPriceDisplay(
+                                param.value === undefined ? 0 : param.value
+                            ),
                     }
                     return v
                 })

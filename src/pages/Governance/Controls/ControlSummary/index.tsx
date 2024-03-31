@@ -9,6 +9,7 @@ import {
     Icon,
     List,
     ListItem,
+    Switch,
     Tab,
     TabGroup,
     TabList,
@@ -49,6 +50,8 @@ import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import TopHeader from '../../../../components/Layout/Header'
 import ControlFindings from './Tabs/ControlFindings'
 import { useMetadataApiV1QueryParameterList } from '../../../../api/metadata.gen'
+import { toErrorMessage } from '../../../../types/apierror'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus } from '../../../../api/api'
 
 export default function ControlDetail() {
     const { controlId, ws } = useParams()
@@ -59,14 +62,40 @@ export default function ControlDetail() {
     const [docTitle, setDocTitle] = useState('')
     const setQuery = useSetAtom(queryAtom)
 
-    const { response: controlDetail, isLoading } =
-        useComplianceApiV1ControlsSummaryDetail(String(controlId))
+    const {
+        response: controlDetail,
+        isLoading,
+        error: controlDetailError,
+        sendNow: refreshControlDetail,
+    } = useComplianceApiV1ControlsSummaryDetail(String(controlId))
     const {
         response: parameters,
         isLoading: parametersLoading,
         isExecuted,
+        error: parametersError,
         sendNow: refresh,
     } = useMetadataApiV1QueryParameterList()
+    const [conformanceFilter, setConformanceFilter] = useState<
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+        | undefined
+    >(undefined)
+    const conformanceFilterIdx = () => {
+        if (
+            conformanceFilter?.length === 1 &&
+            conformanceFilter[0] ===
+                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed
+        ) {
+            return 1
+        }
+        if (
+            conformanceFilter?.length === 1 &&
+            conformanceFilter[0] ===
+                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed
+        ) {
+            return 2
+        }
+        return 0
+    }
 
     return (
         <>
@@ -83,17 +112,18 @@ export default function ControlDetail() {
                 <>
                     <Flex
                         flexDirection="row"
+                        alignItems="start"
                         justifyContent="between"
-                        className="mb-6 w-full"
+                        className="mb-6 w-full gap-6"
                     >
                         <Flex
                             flexDirection="col"
                             alignItems="start"
                             justifyContent="start"
-                            className="gap-2 w-2/3"
+                            className="gap-2 w-full"
                         >
-                            <Flex className="gap-3 w-fit">
-                                <Title className="font-semibold whitespace-nowrap">
+                            <Flex className="gap-3 w-fit" alignItems="start">
+                                <Title className="font-semibold ">
                                     {controlDetail?.control?.title}
                                 </Title>
                                 {severityBadge(
@@ -123,20 +153,24 @@ export default function ControlDetail() {
                                         <Badge
                                             icon={PencilIcon}
                                             color="gray"
-                                            className="cursor-pointer"
+                                            className="cursor-pointer w-fit"
                                             onClick={() => {
                                                 navigate(
                                                     `/${ws}/settings?sp=parameters`
                                                 )
                                             }}
                                         >
-                                            {item.key}:{' '}
-                                            {parameters?.queryParameters
-                                                ?.filter(
-                                                    (p) => p.key === item.key
-                                                )
-                                                .map((p) => p.value || '') ||
-                                                'Not defined'}
+                                            <Text className="max-w-96 truncate ">
+                                                {item.key}:{' '}
+                                                {parameters?.queryParameters
+                                                    ?.filter(
+                                                        (p) =>
+                                                            p.key === item.key
+                                                    )
+                                                    .map(
+                                                        (p) => p.value || ''
+                                                    ) || 'Not defined'}
+                                            </Text>
                                         </Badge>
                                     )
                                 }
@@ -164,8 +198,15 @@ export default function ControlDetail() {
                                         >
                                             <List>
                                                 <ListItem>
-                                                    <Text>Control ID</Text>
-                                                    <Flex className="gap-1 w-fit">
+                                                    <Text className="whitespace-nowrap mr-2">
+                                                        Control ID
+                                                    </Text>
+                                                    <Flex
+                                                        flexDirection="row"
+                                                        className="gap-1 w-full overflow-hidden"
+                                                        justifyContent="end"
+                                                        alignItems="end"
+                                                    >
                                                         <Button
                                                             variant="light"
                                                             onClick={() =>
@@ -184,7 +225,7 @@ export default function ControlDetail() {
                                                                 Square2StackIcon
                                                             }
                                                         />
-                                                        <Text className="text-gray-800">
+                                                        <Text className="text-gray-800 truncate w-fit max-w-full">
                                                             {
                                                                 controlDetail
                                                                     ?.control
@@ -193,36 +234,42 @@ export default function ControlDetail() {
                                                         </Text>
                                                     </Flex>
                                                 </ListItem>
-                                                <ListItem>
-                                                    <Text>Resource type</Text>
-                                                    <Flex className="gap-1 w-fit">
-                                                        <Button
-                                                            variant="light"
-                                                            onClick={() =>
-                                                                clipboardCopy(
-                                                                    `Resource type: ${controlDetail?.resourceType?.resource_type}`
-                                                                ).then(() =>
-                                                                    setNotification(
-                                                                        {
-                                                                            text: 'Resource type copied to clipboard',
-                                                                            type: 'info',
-                                                                        }
-                                                                    )
-                                                                )
-                                                            }
-                                                            icon={
-                                                                Square2StackIcon
-                                                            }
-                                                        />
-                                                        <Text className="text-gray-800">
-                                                            {
-                                                                controlDetail
-                                                                    ?.resourceType
-                                                                    ?.resource_type
-                                                            }
+                                                {controlDetail?.resourceType
+                                                    ?.resource_type && (
+                                                    <ListItem>
+                                                        <Text>
+                                                            Resource type
                                                         </Text>
-                                                    </Flex>
-                                                </ListItem>
+                                                        <Flex className="gap-1 w-fit">
+                                                            <Button
+                                                                variant="light"
+                                                                onClick={() =>
+                                                                    clipboardCopy(
+                                                                        `Resource type: ${controlDetail?.resourceType?.resource_type}`
+                                                                    ).then(() =>
+                                                                        setNotification(
+                                                                            {
+                                                                                text: 'Resource type copied to clipboard',
+                                                                                type: 'info',
+                                                                            }
+                                                                        )
+                                                                    )
+                                                                }
+                                                                icon={
+                                                                    Square2StackIcon
+                                                                }
+                                                            />
+                                                            <Text className="text-gray-800">
+                                                                {
+                                                                    controlDetail
+                                                                        ?.resourceType
+                                                                        ?.resource_type
+                                                                }
+                                                            </Text>
+                                                        </Flex>
+                                                    </ListItem>
+                                                )}
+
                                                 <ListItem>
                                                     <Text>
                                                         # of impacted resources
@@ -573,29 +620,70 @@ export default function ControlDetail() {
                         </Flex>
                     </Grid>
                     <TabGroup>
-                        <TabList>
-                            <Tab>Impacted resources</Tab>
-                            <Tab>Impacted accounts</Tab>
-                            <Tab
-                                disabled={
-                                    controlDetail?.control?.explanation
-                                        ?.length === 0 &&
-                                    controlDetail?.control?.nonComplianceCost
-                                        ?.length === 0 &&
-                                    controlDetail?.control?.usefulExample
-                                        ?.length === 0
-                                }
-                            >
-                                Control information
-                            </Tab>
-                            <Tab>Benchmarks</Tab>
-                            <Tab>Findings</Tab>
-                        </TabList>
+                        <Flex
+                            flexDirection="row"
+                            justifyContent="between"
+                            className="mb-2"
+                        >
+                            <div className="w-fit">
+                                <TabList>
+                                    <Tab>Impacted resources</Tab>
+                                    <Tab>Impacted accounts</Tab>
+                                    <Tab
+                                        disabled={
+                                            controlDetail?.control?.explanation
+                                                ?.length === 0 &&
+                                            controlDetail?.control
+                                                ?.nonComplianceCost?.length ===
+                                                0 &&
+                                            controlDetail?.control
+                                                ?.usefulExample?.length === 0
+                                        }
+                                    >
+                                        Control information
+                                    </Tab>
+                                    <Tab>Benchmarks</Tab>
+                                    <Tab>Findings</Tab>
+                                </TabList>
+                            </div>
+                            <Flex flexDirection="row" className="w-fit">
+                                <Text className="mr-2 w-fit">
+                                    Confomance Status filter:
+                                </Text>
+                                <TabGroup
+                                    tabIndex={conformanceFilterIdx()}
+                                    className="w-fit"
+                                    onIndexChange={(tabIndex) => {
+                                        switch (tabIndex) {
+                                            case 1:
+                                                setConformanceFilter([
+                                                    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+                                                ])
+                                                break
+                                            case 2:
+                                                setConformanceFilter([
+                                                    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
+                                                ])
+                                                break
+                                            default:
+                                                setConformanceFilter(undefined)
+                                        }
+                                    }}
+                                >
+                                    <TabList variant="solid">
+                                        <Tab value="1">All</Tab>
+                                        <Tab value="2">Failed</Tab>
+                                        <Tab value="3">Passed</Tab>
+                                    </TabList>
+                                </TabGroup>
+                            </Flex>
+                        </Flex>
                         <TabPanels>
                             <TabPanel>
                                 <ImpactedResources
                                     controlId={controlDetail?.control?.id || ''}
                                     linkPrefix={`/${ws}/score/categories/`}
+                                    conformanceFilter={conformanceFilter}
                                 />
                             </TabPanel>
                             <TabPanel>
@@ -618,6 +706,36 @@ export default function ControlDetail() {
                             </TabPanel>
                         </TabPanels>
                     </TabGroup>
+                    {toErrorMessage(controlDetailError) && (
+                        <Flex
+                            flexDirection="col"
+                            justifyContent="between"
+                            className="absolute top-0 w-full left-0 h-full backdrop-blur"
+                        >
+                            <Flex
+                                flexDirection="col"
+                                justifyContent="center"
+                                alignItems="center"
+                            >
+                                <Title className="mt-6">
+                                    Failed to load component
+                                </Title>
+                                <Text className="mt-2">
+                                    {toErrorMessage(controlDetailError)}
+                                </Text>
+                            </Flex>
+                            <Button
+                                variant="secondary"
+                                className="mb-6"
+                                color="slate"
+                                onClick={() => {
+                                    refreshControlDetail()
+                                }}
+                            >
+                                Try Again
+                            </Button>
+                        </Flex>
+                    )}
                 </>
             )}
         </>

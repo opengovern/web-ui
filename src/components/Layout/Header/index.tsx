@@ -1,10 +1,8 @@
 import { useAtomValue } from 'jotai'
-import { Button, Card, Flex, Title } from '@tremor/react'
-import { Fragment, ReactNode, useState } from 'react'
+import { Button, Flex, Title } from '@tremor/react'
+import { ReactNode, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
-import { Popover, Transition } from '@headlessui/react'
-import { PlusIcon } from '@heroicons/react/24/outline'
 import {
     kebabCaseToLabel,
     snakeCaseToLabel,
@@ -13,59 +11,327 @@ import {
     DateRange,
     defaultTime,
     searchAtom,
-    useFilterState,
+    useURLParam,
+    useURLState,
+    useUrlDateRangeState,
 } from '../../../utilities/urlstate'
-import NewDatePicker from './NewDatePicker'
-import NewFilter from './NewFilter'
-import { CloudConnect, Id } from '../../../icons/icons'
-import { SourceType } from '../../../api/api'
+import FilterGroup, { IFilter } from '../../FilterGroup'
+import {
+    CloudAccountFilter,
+    ConnectorFilter,
+    DateFilter,
+    ScoreCategory,
+    ScoreTagFilter,
+    ServiceNameFilter,
+    SeverityFilter,
+} from '../../FilterGroup/FilterTypes'
+import { CheckboxItem } from '../../FilterGroup/CheckboxSelector'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
+import { DateSelectorOptions } from '../../FilterGroup/ConditionSelector/DateConditionSelector'
 
 interface IHeader {
-    filter?: boolean
-    filterList?: string[]
-    datePicker?: boolean
+    supportedFilters?: string[]
+    initialFilters?: string[]
     datePickerDefault?: DateRange
     children?: ReactNode
     breadCrumb?: (string | undefined)[]
+    tags?: string[]
+    serviceNames?: string[]
 }
 
 export default function TopHeader({
-    filter = false,
-    filterList = ['cloud-account', 'connector'],
-    datePicker = false,
+    supportedFilters = [],
+    initialFilters = [],
     children,
     datePickerDefault,
     breadCrumb,
+    tags,
+    serviceNames,
 }: IHeader) {
     const { ws } = useParams()
+
+    const defaultActiveTimeRange = datePickerDefault || defaultTime(ws || '')
+    const { value: activeTimeRange, setValue: setActiveTimeRange } =
+        useUrlDateRangeState(defaultActiveTimeRange)
+    const [selectedDateCondition, setSelectedDateCondition] =
+        useState<DateSelectorOptions>('isBetween')
+
+    const defaultSelectedConnectors = ''
+    const [selectedConnectors, setSelectedConnectors] = useURLParam<
+        '' | 'AWS' | 'Azure'
+    >('provider', defaultSelectedConnectors)
+    const parseConnector = (v: string) => {
+        switch (v) {
+            case 'AWS':
+                return 'AWS'
+            case 'Azure':
+                return 'Azure'
+            default:
+                return ''
+        }
+    }
+
+    const defaultSelectedSeverities = [
+        'critical',
+        'high',
+        'medium',
+        'low',
+        'none',
+    ]
+    const [selectedSeverities, setSelectedSeverities] = useURLState<string[]>(
+        defaultSelectedSeverities,
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('severities', v)
+            return res
+        },
+        (v) => {
+            return v.get('severities') || []
+        }
+    )
+
+    const defaultSelectedCloudAccounts: string[] = []
+    const [selectedCloudAccounts, setSelectedCloudAccounts] = useURLState<
+        string[]
+    >(
+        defaultSelectedCloudAccounts,
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('connections', v)
+            return res
+        },
+        (v) => {
+            return v.get('connections') || []
+        }
+    )
+
+    const defaultSelectedServiceNames: string[] = []
+    const [selectedServiceNames, setSelectedServiceNames] = useURLState<
+        string[]
+    >(
+        defaultSelectedServiceNames,
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('serviceNames', v)
+            return res
+        },
+        (v) => {
+            return v.get('serviceNames') || []
+        }
+    )
+
+    const defaultSelectedScoreTags: string[] = []
+    const [selectedScoreTags, setSelectedScoreTags] = useURLState<string[]>(
+        defaultSelectedScoreTags,
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('tags', v)
+            return res
+        },
+        (v) => {
+            return v.get('tags') || []
+        }
+    )
+
+    const defaultSelectedScoreCategory = ''
+    const [selectedScoreCategory, setSelectedScoreCategory] =
+        useURLState<string>(
+            defaultSelectedScoreCategory,
+            (v) => {
+                const res = new Map<string, string[]>()
+                res.set('category', [v])
+                return res
+            },
+            (v) => {
+                return (v.get('category') || []).at(0) || ''
+            }
+        )
+
+    const calcInitialFilters = () => {
+        const resp = initialFilters
+        if (activeTimeRange !== defaultActiveTimeRange) {
+            resp.push('Date')
+        }
+        if (selectedConnectors !== defaultSelectedConnectors) {
+            resp.push('Connector')
+        }
+        if (selectedSeverities !== defaultSelectedSeverities) {
+            resp.push('Severity')
+        }
+        if (selectedCloudAccounts !== defaultSelectedCloudAccounts) {
+            resp.push('Cloud Account')
+        }
+        if (selectedServiceNames !== defaultSelectedServiceNames) {
+            resp.push('Service Name')
+        }
+        if (selectedScoreTags !== defaultSelectedScoreTags) {
+            resp.push('Tag')
+        }
+        if (selectedScoreCategory !== defaultSelectedScoreCategory) {
+            resp.push('Score Category')
+        }
+
+        return resp
+    }
+    const [addedFilters, setAddedFilters] = useState<string[]>(
+        calcInitialFilters()
+    )
+    const [connectionSearch, setConnectionSearch] = useState('')
+    const { response } = useIntegrationApiV1ConnectionsSummariesList({
+        connector: selectedConnectors.length ? [selectedConnectors] : [],
+        pageNumber: 1,
+        pageSize: 10000,
+        needCost: false,
+        needResourceCount: false,
+    })
+
+    const filters: IFilter[] = [
+        ConnectorFilter(
+            selectedConnectors,
+            selectedConnectors !== '',
+            (sv) => setSelectedConnectors(parseConnector(sv)),
+            () => {
+                setAddedFilters(addedFilters.filter((a) => a !== 'Connector'))
+                setSelectedConnectors(defaultSelectedConnectors)
+            },
+            () => setSelectedConnectors(defaultSelectedConnectors)
+        ),
+
+        SeverityFilter(
+            selectedSeverities,
+            selectedSeverities.length < 5,
+            (sv) => {
+                if (selectedSeverities.includes(sv)) {
+                    setSelectedSeverities(
+                        selectedSeverities.filter((i) => i !== sv)
+                    )
+                } else setSelectedSeverities([...selectedSeverities, sv])
+            },
+            () => {
+                setAddedFilters(addedFilters.filter((a) => a !== 'Severity'))
+                setSelectedSeverities(defaultSelectedSeverities)
+            },
+            () => setSelectedSeverities(defaultSelectedSeverities)
+        ),
+
+        CloudAccountFilter(
+            response?.connections
+                ?.filter((v) => {
+                    if (connectionSearch === '') {
+                        return true
+                    }
+                    return (
+                        v.providerConnectionID
+                            ?.toLowerCase()
+                            .includes(connectionSearch.toLowerCase()) ||
+                        v.providerConnectionName
+                            ?.toLowerCase()
+                            .includes(connectionSearch.toLowerCase())
+                    )
+                })
+                .map((c) => {
+                    const vc: CheckboxItem = {
+                        title: c.providerConnectionName || '',
+                        titleSecondLine: c.providerConnectionID || '',
+                        value: c.id || '',
+                    }
+                    return vc
+                }) || [],
+            (sv) => {
+                if (selectedCloudAccounts.includes(sv)) {
+                    setSelectedCloudAccounts(
+                        selectedCloudAccounts.filter((i) => i !== sv)
+                    )
+                } else setSelectedCloudAccounts([...selectedCloudAccounts, sv])
+            },
+            selectedCloudAccounts,
+            selectedCloudAccounts.length > 0,
+            () => {
+                setAddedFilters(
+                    addedFilters.filter((a) => a !== 'Cloud Account')
+                )
+                setSelectedCloudAccounts(defaultSelectedCloudAccounts)
+            },
+            () => setSelectedCloudAccounts(defaultSelectedCloudAccounts),
+            (s) => setConnectionSearch(s)
+        ),
+
+        ServiceNameFilter(
+            serviceNames?.map((i) => {
+                return {
+                    title: i,
+                    value: i,
+                }
+            }) || [],
+            (sv) => {
+                if (selectedServiceNames.includes(sv)) {
+                    setSelectedServiceNames(
+                        selectedServiceNames.filter((i) => i !== sv)
+                    )
+                } else setSelectedServiceNames([...selectedServiceNames, sv])
+            },
+            selectedServiceNames,
+            selectedServiceNames.length > 0,
+            () => {
+                setAddedFilters(
+                    addedFilters.filter((a) => a !== 'Service Name')
+                )
+                setSelectedServiceNames(defaultSelectedServiceNames)
+            },
+            () => setSelectedServiceNames(defaultSelectedServiceNames)
+        ),
+
+        ScoreTagFilter(
+            tags?.map((i) => {
+                return {
+                    title: i,
+                    value: i,
+                }
+            }) || [],
+            (sv) => {
+                if (selectedScoreTags.includes(sv)) {
+                    setSelectedScoreTags(
+                        selectedScoreTags.filter((i) => i !== sv)
+                    )
+                } else setSelectedScoreTags([...selectedScoreTags, sv])
+            },
+            selectedScoreTags,
+            selectedScoreTags.length > 0,
+            () => {
+                setAddedFilters(addedFilters.filter((a) => a !== 'Tag'))
+                setSelectedScoreTags(defaultSelectedScoreTags)
+            },
+            () => setSelectedScoreTags(defaultSelectedScoreTags)
+        ),
+
+        ScoreCategory(
+            selectedScoreCategory,
+            selectedScoreCategory.length > 0,
+            setSelectedScoreCategory,
+            () => {
+                setAddedFilters(
+                    addedFilters.filter((a) => a !== 'Score Category')
+                )
+                setSelectedScoreCategory(defaultSelectedScoreCategory)
+            },
+            () => setSelectedScoreCategory(defaultSelectedScoreCategory)
+        ),
+
+        DateFilter(
+            activeTimeRange,
+            setActiveTimeRange,
+            selectedDateCondition,
+            setSelectedDateCondition
+        ),
+    ]
+
+    const activeFilters = filters.filter((v) => {
+        return supportedFilters?.includes(v.title)
+    })
+
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const url = window.location.pathname.split('/')
-    const { value: selectedConnectionFilters } = useFilterState()
-    const defaultFilters = () => {
-        const v: ('connector' | 'cloud-account')[] = []
-
-        if (selectedConnectionFilters.connections.length > 0) {
-            v.push('cloud-account')
-            return v
-        }
-
-        if (selectedConnectionFilters.provider !== SourceType.Nil) {
-            v.push('connector')
-            return v
-        }
-        return v
-    }
-
-    const [selectedFilters, setSelectedFilters] = useState<
-        ('connector' | 'cloud-account')[]
-    >(defaultFilters())
-    const filterOptions = [
-        { id: 'connector', name: 'Connector', icon: CloudConnect },
-        { id: 'cloud-account', name: 'Cloud Account', icon: Id },
-    ].filter((v) => {
-        return filterList.includes(v.id)
-    })
 
     const mainPage = () => {
         if (url[1] === 'billing') {
@@ -105,7 +371,7 @@ export default function TopHeader({
         <div className="px-12 z-10 absolute top-0 left-0 w-full flex h-16 items-center justify-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm">
             <Flex className="max-w-7xl">
                 {subPages().length > 0 ? (
-                    <Flex justifyContent="start">
+                    <Flex justifyContent="start" className="w-fit">
                         <Button
                             onClick={() =>
                                 navigate(
@@ -157,96 +423,17 @@ export default function TopHeader({
                         {mainPage()}
                     </Title>
                 )}
-                <Flex className="gap-3" justifyContent="end">
+                <Flex className="gap-3 w-fit">
                     {children}
-                    {filter && (
-                        <NewFilter
-                            selectedFilter={selectedFilters}
-                            setSelectedFilter={setSelectedFilters}
-                        />
-                    )}
-                    {datePicker && (
-                        <Flex
-                            className={`w-fit h-full ${
-                                filter && selectedFilters.length > 0
-                                    ? ' pl-3 border-l border-l-gray-200'
-                                    : ''
-                            }`}
-                        >
-                            <NewDatePicker
-                                defaultTime={
-                                    datePickerDefault || defaultTime(ws || '')
-                                }
-                            />
-                        </Flex>
-                    )}
-                    {filter && selectedFilters.length < 2 && (
-                        <Flex className="w-fit pl-3 border-l border-l-gray-200 h-full">
-                            <Popover className="relative border-0">
-                                <Popover.Button>
-                                    <Button
-                                        variant="light"
-                                        icon={PlusIcon}
-                                        className="pt-1"
-                                    >
-                                        Add Filter
-                                    </Button>
-                                </Popover.Button>
-                                <Transition
-                                    as={Fragment}
-                                    enter="transition ease-out duration-200"
-                                    enterFrom="opacity-0 translate-y-1"
-                                    enterTo="opacity-100 translate-y-0"
-                                    leave="transition ease-in duration-150"
-                                    leaveFrom="opacity-100 translate-y-0"
-                                    leaveTo="opacity-0 translate-y-1"
-                                >
-                                    <Popover.Panel className="absolute z-50 top-full right-0">
-                                        <Card className="mt-2 p-4 w-64">
-                                            <Flex
-                                                flexDirection="col"
-                                                justifyContent="start"
-                                                alignItems="start"
-                                                className="gap-1.5 max-h-[200px] overflow-y-scroll no-scroll max-w-full"
-                                            >
-                                                {filterOptions
-                                                    .filter(
-                                                        (f) =>
-                                                            !selectedFilters.includes(
-                                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                                // @ts-ignore
-                                                                f.id
-                                                            )
-                                                    )
-                                                    .map((f) => (
-                                                        <Button
-                                                            icon={f.icon}
-                                                            color="slate"
-                                                            variant="light"
-                                                            className="w-full pl-1 flex justify-start"
-                                                            onClick={() => {
-                                                                setSelectedFilters(
-                                                                    [
-                                                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                                        // @ts-ignore
-                                                                        ...selectedFilters,
-                                                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                                        // @ts-ignore
-                                                                        f.id,
-                                                                    ]
-                                                                )
-                                                            }}
-                                                        >
-                                                            {f.name}
-                                                        </Button>
-                                                    ))}
-                                            </Flex>
-                                        </Card>
-                                    </Popover.Panel>
-                                </Transition>
-                            </Popover>
-                        </Flex>
-                    )}
+
+                    <FilterGroup
+                        filterList={activeFilters}
+                        addedFilters={addedFilters}
+                        onFilterAdded={(i) =>
+                            setAddedFilters([i, ...addedFilters])
+                        }
+                        alignment="right"
+                    />
                 </Flex>
             </Flex>
         </div>

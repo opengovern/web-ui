@@ -50,7 +50,10 @@ export default function Insights() {
 
     return (
         <>
-            <TopHeader datePicker filter />
+            <TopHeader
+                supportedFilters={['Date', 'Cloud Account', 'Connector']}
+                initialFilters={['Date']}
+            />
             <Title className="font-semibold mb-4">Personas</Title>
             <Grid numItems={9} className="w-full gap-4 mb-12">
                 <PersonaCard type="Engineer" />

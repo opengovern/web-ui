@@ -133,19 +133,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             isPreview: false,
         },
         {
-            name: 'Assistant',
-            page: 'assistant',
-            icon: DocumentChartBarIcon,
-            isPreview: false,
-        },
-        {
-            name: 'Dashboards',
-            page: 'dashboard',
-            icon: DocumentChartBarIcon,
-            children: dashboardItems(),
-            isPreview: false,
-        },
-        {
             name: 'Assets',
             page: ['assets', 'asset-cloud-accounts', 'asset-metrics'],
             icon: CubeIcon,
@@ -284,6 +271,13 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             name: 'Settings',
             page: 'settings',
             icon: Cog6ToothIcon,
+            isPreview: false,
+        },
+        {
+            name: 'Dashboards',
+            page: 'dashboard',
+            icon: DocumentChartBarIcon,
+            children: dashboardItems(),
             isPreview: false,
         },
     ]

@@ -3,7 +3,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import { numericDisplay } from '../../../utilities/numericDisplay'
-import { AWSIcon, AzureIcon } from '../../../icons/icons'
+import { AWSAzureIcon, AWSIcon, AzureIcon } from '../../../icons/icons'
 import { SourceType } from '../../../api/api'
 import { searchAtom } from '../../../utilities/urlstate'
 
@@ -19,6 +19,19 @@ export const getConnectorIcon = (
     connector: string | SourceType[] | SourceType | undefined,
     className = ''
 ) => {
+    if (
+        connector !== undefined &&
+        typeof connector !== 'string' &&
+        connector?.length >= 2
+    ) {
+        return (
+            <img
+                src={AWSAzureIcon}
+                alt="connector"
+                className="min-w-[36px] w-9 h-9 rounded-full"
+            />
+        )
+    }
     return (
         <Flex className={`w-9 h-9 gap-1 ${className}`}>
             {typeof connector === 'string' ? (
