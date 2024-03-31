@@ -30,51 +30,35 @@ import {
 } from '../../types/apierror'
 import { AssistantImage } from '../../icons/icons'
 
+type assistantType =
+    | 'kaytu-r-assistant'
+    | 'kaytu-assets-assistant'
+    | 'kaytu-score-assistant'
+    | 'none'
+
 export default function Assistant() {
-    const [assistantIdx, setAssistantIdx] = useURLParam(
-        'assistantIdx',
-        0,
-        (v) => String(v),
-        (v) => parseInt(v, 10)
-    )
-    const assistantName = () => {
-        switch (assistantIdx) {
-            case 1:
-                return 'kaytu-assets-assistant'
-            case 2:
-                return 'kaytu-score-assistant'
-            case 3:
-                return 'kaytu-assets-assistant'
-            case 4:
-                return 'kaytu-score-assistant'
-            default:
-                return 'kaytu-r-assistant'
-        }
-    }
-    const assisstantDetails = [
+    const [selectedAssistant, setSelectedAssistant] =
+        useURLParam<assistantType>('assistant', 'none')
+
+    const assisstantDetails: {
+        title: string
+        name: assistantType
+        description: string
+    }[] = [
         {
-            title: 'Cloud Inventory',
-            name: 'kaytu-assets-assistant',
-            description: 'to find thing about cloud inventory',
-            idx: 4,
-        },
-        {
-            title: 'Spend',
-            name: 'kaytu-assets-assistant',
+            title: 'Query',
+            name: 'kaytu-r-assistant',
             description: 'to find thing about Spend',
-            idx: 3,
         },
         {
             title: 'SCORE',
             name: 'kaytu-score-assistant',
             description: 'to find thing about SCORE',
-            idx: 2,
         },
         {
-            title: 'Compliance',
+            title: 'Assets',
             name: 'kaytu-assets-assistant',
             description: 'to find thing about Compliance',
-            idx: 1,
         },
     ]
 
@@ -91,7 +75,9 @@ export default function Assistant() {
     const ref = useRef<HTMLDivElement | null>(null)
     const { response, isLoading, isExecuted, sendNow } =
         useAssistantApiV1ThreadCreate(
-            assistantName(),
+            selectedAssistant !== 'none'
+                ? selectedAssistant
+                : 'kaytu-r-assistant',
             {
                 thread_id: threadID.length > 0 ? threadID : undefined,
                 run_id: undefined,
@@ -123,7 +109,7 @@ export default function Assistant() {
         error: err,
     } = useAssistantApiV1ThreadDetail(
         threadID,
-        assistantName(),
+        selectedAssistant !== 'none' ? selectedAssistant : 'kaytu-r-assistant',
         runID !== undefined
             ? {
                   run_id: runID,
@@ -159,14 +145,9 @@ export default function Assistant() {
         const reversed = [...list].reverse()
         return reversed
     }
-    const findAssistantIndex = (value: string) => {
-        const a = assisstantDetails.find((o) => o.name === value)
-        if (a !== undefined) return a.idx
-        return 0
-    }
 
     const { user, logout } = useAuth0()
-    console.log(assistantIdx)
+
     return (
         <Flex
             flexDirection="col"
@@ -174,7 +155,7 @@ export default function Assistant() {
             className="relative h-full"
             alignItems="stretch"
         >
-            {assistantIdx !== 0 && msgList().length === 0 && (
+            {selectedAssistant !== 'none' && msgList().length === 0 && (
                 <Flex
                     flexDirection="col"
                     alignItems="start"
@@ -182,14 +163,14 @@ export default function Assistant() {
                 >
                     <Text className="text-gray-400 ml-1">Assistant</Text>
                     <Select
-                        defaultValue={assistantName()}
+                        defaultValue={selectedAssistant}
                         placeholder={
                             assisstantDetails.find(
-                                (o) => o.idx === assistantIdx
+                                (o) => o.name === selectedAssistant
                             )?.title
                         }
                         onValueChange={(value) =>
-                            setAssistantIdx(findAssistantIndex(value))
+                            setSelectedAssistant(value as assistantType)
                         }
                         className="w-full"
                     >
@@ -231,7 +212,7 @@ export default function Assistant() {
                                             className="w-[200px]"
                                         />
                                         <Title className="text-gray-400">
-                                            {assistantIdx !== 0
+                                            {selectedAssistant !== 'none'
                                                 ? 'How can I help you'
                                                 : 'Choose your Assistant'}
                                         </Title>
@@ -239,11 +220,13 @@ export default function Assistant() {
                                     <Flex
                                         flexDirection="col"
                                         justifyContent={
-                                            assistantIdx === 0 ? 'start' : 'end'
+                                            selectedAssistant === 'none'
+                                                ? 'start'
+                                                : 'end'
                                         }
                                         className="h-full w-full"
                                     >
-                                        {assistantIdx === 0 ? (
+                                        {selectedAssistant === 'none' ? (
                                             <Grid
                                                 numItems={2}
                                                 className="gap-4"
@@ -253,10 +236,9 @@ export default function Assistant() {
                                                         <Flex
                                                             className="gap-6 px-6 py-5 rounded-xl cursor-pointer shadow-sm hover:shadow-lg bg-white"
                                                             onClick={() => {
-                                                                setAssistantIdx(
-                                                                    item.idx
+                                                                setSelectedAssistant(
+                                                                    item.name
                                                                 )
-                                                                // setAssistantSelected(true)
                                                             }}
                                                         >
                                                             <Flex
@@ -431,7 +413,7 @@ export default function Assistant() {
             <Grid numItems={10} className="gap-x-6 mt-0 pr-4 w-full">
                 <Col numColSpan={2} />
                 <Col numColSpan={6}>
-                    {assistantIdx !== 0 && (
+                    {selectedAssistant !== 'none' && (
                         <Flex
                             flexDirection="row"
                             justifyContent="between"

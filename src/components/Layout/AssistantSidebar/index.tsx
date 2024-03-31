@@ -37,7 +37,10 @@ export default function AssistantSidebar({
 }: IAssistantSidebar) {
     const [threadID, setThreadID] = useURLParam('threadID', '')
     const [runID, setRunID] = useURLParam('runID', '')
-    const [assistantIdx, setAssistantIdx] = useURLParam('assistantIdx', 0)
+    const [selectedaAssistant, setSelectedAssistant] = useURLParam(
+        'assistant',
+        'none'
+    )
 
     const navigate = useNavigate()
     const { isAuthenticated, getAccessTokenSilently } = useAuth0()
@@ -109,7 +112,7 @@ export default function AssistantSidebar({
                         onClick={() => {
                             setThreadID('')
                             setRunID('')
-                            setAssistantIdx(0)
+                            setSelectedAssistant('none')
                         }}
                     >
                         {collapsed ? '' : 'New Topic'}
