@@ -38,7 +38,9 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                     flexDirection="col"
                     alignItems="center"
                     justifyContent="between"
-                    className="bg-gray-100 dark:bg-gray-900 h-screen overflow-y-scroll overflow-x-hidden"
+                    className={`bg-gray-100 dark:bg-gray-900 h-screen ${
+                        current === 'assistant' ? '' : 'overflow-y-scroll'
+                    } overflow-x-hidden`}
                     id="kaytu-container"
                     onScroll={(e) => {
                         if (onScroll) {
@@ -52,13 +54,17 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                         className={`${
                             current === 'assistant'
                                 ? 'h-fit'
-                                : 'px-12 mt-16 h-fit' // temp solution h-fit
+                                : 'px-12 mt-16 h-fit'
                         } `}
                     >
                         <div
                             className={`w-full ${
                                 current === 'dashboard' ? '' : 'max-w-7xl'
-                            } ${current === 'assistant' ? 'h-full' : ''}`}
+                            } ${
+                                current === 'assistant'
+                                    ? 'w-full max-w-full'
+                                    : ''
+                            }`}
                         >
                             {children}
                         </div>

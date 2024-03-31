@@ -5,13 +5,8 @@ import {
     Col,
     Flex,
     Grid,
-    Icon,
     Select,
     SelectItem,
-    Subtitle,
-    Tab,
-    TabGroup,
-    TabList,
     Text,
     TextInput,
     Title,
@@ -183,7 +178,7 @@ export default function Assistant() {
                 <Flex
                     flexDirection="col"
                     alignItems="start"
-                    className="w-48 gap-1 absolute"
+                    className="w-48 gap-1.5 absolute top-6 left-12"
                 >
                     <Text className="text-gray-400 ml-1">Assistant</Text>
                     <Select
@@ -208,13 +203,13 @@ export default function Assistant() {
             )}
 
             <div
-                className="w-full overflow-y-scroll"
+                className="w-full overflow-y-scroll py-10"
                 style={{
-                    height: 'calc(100vh - 120px)',
-                    maxHeight: 'calc(100vh - 120px)',
+                    height: 'calc(100vh - 100px)',
+                    maxHeight: 'calc(100vh - 100px)',
                 }}
             >
-                <Grid numItems={10} className="gap-x-6 h-fit">
+                <Grid numItems={10} className="gap-x-6 h-full">
                     <Col numColSpan={2} />
                     <Col numColSpan={6}>
                         {msgList().length === 0 ? (
@@ -433,7 +428,7 @@ export default function Assistant() {
                 </Grid>
             </div>
 
-            <Grid numItems={10} className="gap-x-6 mt-4 w-full">
+            <Grid numItems={10} className="gap-x-6 mt-0 pr-4 w-full">
                 <Col numColSpan={2} />
                 <Col numColSpan={6}>
                     {assistantIdx !== 0 && (
