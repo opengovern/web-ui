@@ -51,6 +51,7 @@ import TopHeader from '../../../../components/Layout/Header'
 import ControlFindings from './Tabs/ControlFindings'
 import { useMetadataApiV1QueryParameterList } from '../../../../api/metadata.gen'
 import { toErrorMessage } from '../../../../types/apierror'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus } from '../../../../api/api'
 
 export default function ControlDetail() {
     const { controlId, ws } = useParams()
@@ -74,7 +75,27 @@ export default function ControlDetail() {
         error: parametersError,
         sendNow: refresh,
     } = useMetadataApiV1QueryParameterList()
-    const [onlyFailed, setOnlyFailed] = useState(false)
+    const [conformanceFilter, setConformanceFilter] = useState<
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
+        | undefined
+    >(undefined)
+    const conformanceFilterIdx = () => {
+        if (
+            conformanceFilter?.length === 1 &&
+            conformanceFilter[0] ===
+                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed
+        ) {
+            return 1
+        }
+        if (
+            conformanceFilter?.length === 1 &&
+            conformanceFilter[0] ===
+                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed
+        ) {
+            return 2
+        }
+        return 0
+    }
 
     return (
         <>
@@ -626,13 +647,35 @@ export default function ControlDetail() {
                                 </TabList>
                             </div>
                             <Flex flexDirection="row" className="w-fit">
-                                <Text className="mr-2">Show failing only</Text>
-                                <Switch
-                                    id="switch"
-                                    name="switch"
-                                    checked={onlyFailed}
-                                    onChange={setOnlyFailed}
-                                />
+                                <Text className="mr-2 w-fit">
+                                    Confomance Status filter:
+                                </Text>
+                                <TabGroup
+                                    tabIndex={conformanceFilterIdx()}
+                                    className="w-fit"
+                                    onIndexChange={(tabIndex) => {
+                                        switch (tabIndex) {
+                                            case 1:
+                                                setConformanceFilter([
+                                                    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+                                                ])
+                                                break
+                                            case 2:
+                                                setConformanceFilter([
+                                                    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
+                                                ])
+                                                break
+                                            default:
+                                                setConformanceFilter(undefined)
+                                        }
+                                    }}
+                                >
+                                    <TabList variant="solid">
+                                        <Tab value="1">All</Tab>
+                                        <Tab value="2">Failed</Tab>
+                                        <Tab value="3">Passed</Tab>
+                                    </TabList>
+                                </TabGroup>
                             </Flex>
                         </Flex>
                         <TabPanels>
@@ -640,7 +683,7 @@ export default function ControlDetail() {
                                 <ImpactedResources
                                     controlId={controlDetail?.control?.id || ''}
                                     linkPrefix={`/${ws}/score/categories/`}
-                                    onlyFailed={onlyFailed}
+                                    conformanceFilter={conformanceFilter}
                                 />
                             </TabPanel>
                             <TabPanel>

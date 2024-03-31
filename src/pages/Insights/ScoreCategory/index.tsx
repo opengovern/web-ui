@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import {
     Button,
     Card,
@@ -15,6 +15,8 @@ import {
     CodeBracketIcon,
     Cog8ToothIcon,
     MagnifyingGlassIcon,
+    ChevronDownIcon,
+    ChevronRightIcon,
 } from '@heroicons/react/24/outline'
 import {
     GridOptions,
@@ -23,7 +25,7 @@ import {
     RowClickedEvent,
     ValueFormatterParams,
 } from 'ag-grid-community'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useComplianceApiV1BenchmarksControlsDetail } from '../../../api/compliance.gen'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../../api/api'
 import TopHeader from '../../../components/Layout/Header'
@@ -48,6 +50,30 @@ interface IRecord
     passedResourcesCount?: number
 }
 
+interface IDetailCellRenderer {
+    data: IRecord
+}
+
+const DetailCellRenderer = ({ data }: IDetailCellRenderer) => {
+    const searchParams = useAtomValue(searchAtom)
+    return (
+        <Flex
+            flexDirection="row"
+            className="w-full h-full"
+            alignItems="center"
+            justifyContent="between"
+        >
+            <Text className="ml-12 truncate">{data.control?.description}</Text>
+            <Link
+                className="mr-2"
+                to={`${data?.control?.id || ''}?${searchParams}`}
+            >
+                <Button size="xs">Open</Button>
+            </Link>
+        </Flex>
+    )
+}
+
 const columns: (
     category: string,
     groupByServiceName: boolean
@@ -57,24 +83,28 @@ const columns: (
             headerName: 'Title',
             field: 'control.title',
             type: 'custom',
+            cellRenderer: 'agGroupCellRenderer',
+            cellRendererParams: {
+                suppressDoubleClickExpand: true,
+                innerRenderer: (
+                    params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
+                ) => (
+                    <Flex
+                        flexDirection="row"
+                        alignItems="center"
+                        justifyContent="start"
+                        className="gap-2 h-full"
+                    >
+                        {getConnectorIcon(params.data?.control?.connector)}
+                        <Text className="text-gray-800 mb-0.5 font-bold truncate">
+                            {params.value}
+                        </Text>
+                    </Flex>
+                ),
+            },
             flex: 1,
             sortable: true,
             isBold: true,
-            cellRenderer: (
-                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-            ) => (
-                <Flex
-                    flexDirection="row"
-                    alignItems="center"
-                    justifyContent="start"
-                    className="gap-2 h-full"
-                >
-                    {getConnectorIcon(params.data?.control?.connector)}
-                    <Text className="text-gray-800 mb-0.5 font-bold">
-                        {params.value}
-                    </Text>
-                </Flex>
-            ),
         },
         {
             field: 'serviceName',
@@ -318,6 +348,7 @@ const options: GridOptions = {
 export default function ScoreCategory() {
     const { value: selectedConnections } = useFilterState()
     const [category, setCategory] = useURLParam('category', '')
+    const detailCellRenderer = useCallback(DetailCellRenderer, [])
     const [selectedServiceNames, setSelectedServiceNames] = useURLState<
         string[]
     >(
@@ -685,6 +716,8 @@ export default function ScoreCategory() {
                         <Table
                             key="insight_list"
                             id="insight_list"
+                            masterDetail
+                            detailCellRenderer={detailCellRenderer}
                             columns={columns(category, isGrouped)}
                             rowData={resFiltered?.filter((v) => {
                                 return hideZero
@@ -702,11 +735,12 @@ export default function ScoreCategory() {
                             onRowClicked={(
                                 event: RowClickedEvent<IRecord, any>
                             ) => {
-                                if (event.data !== undefined) {
-                                    navigateToInsightsDetails(
-                                        event.data?.control?.id || ''
+                                if (!event.node.expanded) {
+                                    event.api.forEachNode((node) =>
+                                        node.setExpanded(false)
                                     )
                                 }
+                                event.node.setExpanded(!event.node.expanded)
                             }}
                             loading={isLoading(tabIndex)}
                             // rowHeight="lg"

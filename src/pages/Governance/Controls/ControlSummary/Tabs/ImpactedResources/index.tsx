@@ -25,7 +25,7 @@ let sortKey: any[] = []
 
 interface IImpactedResources {
     controlId: string
-    onlyFailed?: boolean
+    conformanceFilter?: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
     linkPrefix?: string
     isCostOptimization?: boolean
 }
@@ -259,7 +259,7 @@ const columns = (
 
 export default function ImpactedResources({
     controlId,
-    onlyFailed,
+    conformanceFilter,
     linkPrefix,
     isCostOptimization,
 }: IImpactedResources) {
@@ -301,14 +301,12 @@ export default function ImpactedResources({
                         filters: {
                             controlID: [controlId || ''],
                             conformanceStatus:
-                                onlyFailed === true
+                                conformanceFilter === undefined
                                     ? [
-                                          GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
-                                      ]
-                                    : [
                                           GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
                                           GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
-                                      ],
+                                      ]
+                                    : conformanceFilter,
                         },
                         sort,
                         limit: 100,
@@ -341,7 +339,7 @@ export default function ImpactedResources({
         }
     }
 
-    const serverSideRows = useMemo(() => ssr(), [onlyFailed])
+    const serverSideRows = useMemo(() => ssr(), [conformanceFilter])
 
     return (
         <>
