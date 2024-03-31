@@ -7,6 +7,7 @@ import {
     Grid,
     Select,
     SelectItem,
+    Subtitle,
     Text,
     TextInput,
     Title,
@@ -28,12 +29,13 @@ import {
     errorHandlingWithErrorMessage,
     toErrorMessage,
 } from '../../types/apierror'
-import { AssistantImage } from '../../icons/icons'
+import { AssistantImage, AssistantProfileIcon } from '../../icons/icons'
 
 type assistantType =
     | 'kaytu-r-assistant'
     | 'kaytu-assets-assistant'
     | 'kaytu-score-assistant'
+    | 'kaytu-compliance-assistant'
     | 'none'
 
 export default function Assistant() {
@@ -48,7 +50,7 @@ export default function Assistant() {
         {
             title: 'Query',
             name: 'kaytu-r-assistant',
-            description: 'to find thing about Spend',
+            description: 'to ask things about Query',
         },
         {
             title: 'SCORE',
@@ -56,8 +58,13 @@ export default function Assistant() {
             description: 'to find thing about SCORE',
         },
         {
-            title: 'Assets',
+            title: 'Cloud Inventory',
             name: 'kaytu-assets-assistant',
+            description: 'to find thing about Assets',
+        },
+        {
+            title: 'Compliance',
+            name: 'kaytu-compliance-assistant',
             description: 'to find thing about Compliance',
         },
     ]
@@ -155,31 +162,41 @@ export default function Assistant() {
             className="relative h-full"
             alignItems="stretch"
         >
-            {selectedAssistant !== 'none' && msgList().length === 0 && (
+            {selectedAssistant !== 'none' && (
                 <Flex
                     flexDirection="col"
                     alignItems="start"
                     className="w-48 gap-1.5 absolute top-6 left-12"
                 >
                     <Text className="text-gray-400 ml-1">Assistant</Text>
-                    <Select
-                        defaultValue={selectedAssistant}
-                        placeholder={
-                            assisstantDetails.find(
-                                (o) => o.name === selectedAssistant
-                            )?.title
-                        }
-                        onValueChange={(value) =>
-                            setSelectedAssistant(value as assistantType)
-                        }
-                        className="w-full"
-                    >
-                        {assisstantDetails.map((item) => (
-                            <SelectItem value={item.name}>
-                                {item.title}
-                            </SelectItem>
-                        ))}
-                    </Select>
+                    {msgList().length === 0 ? (
+                        <Select
+                            defaultValue={selectedAssistant}
+                            placeholder={
+                                assisstantDetails.find(
+                                    (o) => o.name === selectedAssistant
+                                )?.title
+                            }
+                            onValueChange={(value) =>
+                                setSelectedAssistant(value as assistantType)
+                            }
+                            className="w-full"
+                        >
+                            {assisstantDetails.map((item) => (
+                                <SelectItem value={item.name}>
+                                    {item.title}
+                                </SelectItem>
+                            ))}
+                        </Select>
+                    ) : (
+                        <Text className="text-gray-800 ml-1">
+                            {
+                                assisstantDetails.find(
+                                    (o) => o.name === selectedAssistant
+                                )?.title
+                            }
+                        </Text>
+                    )}
                 </Flex>
             )}
 
@@ -293,7 +310,7 @@ export default function Assistant() {
                             <Flex
                                 flexDirection="col"
                                 justifyContent="end"
-                                className="space-y-4 h-full"
+                                className="space-y-4 h-full pb-10"
                             >
                                 {msgList().map((msg) => {
                                     return (
@@ -323,7 +340,7 @@ export default function Assistant() {
                                                         justifyContent="center"
                                                         className="absolute h-10 w-10 -left-16 bottom-0 rounded-full !shadow-lg bg-gray-50 border border-gray-200"
                                                     >
-                                                        K
+                                                        <AssistantProfileIcon />
                                                     </Flex>
                                                 )}
 
