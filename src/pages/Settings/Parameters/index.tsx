@@ -108,7 +108,7 @@ export default function SettingsParameters() {
                 i === idx
                     ? {
                           key: v.key,
-                          value: newValue,
+                          value: newValue.trim(),
                       }
                     : v
             )
