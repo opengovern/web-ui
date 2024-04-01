@@ -1,16 +1,15 @@
-import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import { Card, Flex, Text } from '@tremor/react'
 import {
     ICellRendererParams,
     RowClickedEvent,
     ValueFormatterParams,
+    IServerSideGetRowsParams,
 } from 'ag-grid-community'
 import { useMemo, useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai/index'
 import {
     Api,
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
     GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,
     SourceType,
     TypesFindingSeverity,
@@ -18,11 +17,8 @@ import {
 import AxiosAPI from '../../../../api/ApiConfig'
 import { isDemoAtom, notificationAtom } from '../../../../store'
 import Table, { IColumn } from '../../../../components/Table'
-import FindingDetail from '../FindingsWithFailure/Detail'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
-import { DateRange, useURLParam } from '../../../../utilities/urlstate'
-import { useComplianceApiV1FindingsSingleDetail } from '../../../../api/compliance.gen'
 import ResourceFindingDetail from '../ResourceFindingDetail'
 
 const columns = (isDemo: boolean) => {

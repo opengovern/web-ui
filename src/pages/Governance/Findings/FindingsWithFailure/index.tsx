@@ -4,9 +4,9 @@ import {
     ICellRendererParams,
     RowClickedEvent,
     ValueFormatterParams,
+    IServerSideGetRowsParams,
 } from 'ag-grid-community'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import { isDemoAtom, notificationAtom } from '../../../../store'
 import Table, { IColumn } from '../../../../components/Table'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'

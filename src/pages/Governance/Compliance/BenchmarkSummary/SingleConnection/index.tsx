@@ -22,8 +22,8 @@ import {
     IServerSideDatasource,
     RowClickedEvent,
     SortModelItem,
+    IServerSideGetRowsParams,
 } from 'ag-grid-community'
-import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../../api/integration.gen'
 import Spinner from '../../../../../components/Spinner'
 import { dateTimeDisplay } from '../../../../../utilities/dateDisplay'

@@ -1,10 +1,10 @@
-import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import { useMemo, useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai/index'
 import {
     ICellRendererParams,
     RowClickedEvent,
     ValueFormatterParams,
+    IServerSideGetRowsParams,
 } from 'ag-grid-community'
 import { Flex, Text } from '@tremor/react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
