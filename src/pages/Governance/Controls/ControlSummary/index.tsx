@@ -21,6 +21,7 @@ import {
 import {
     BookOpenIcon,
     ChevronRightIcon,
+    ClockIcon,
     CodeBracketIcon,
     CodeBracketSquareIcon,
     Cog8ToothIcon,
@@ -141,26 +142,59 @@ export default function ControlDetail() {
                                 </Card>
                             </div>
                         </Flex>
+
                         <Flex
                             flexDirection="col"
-                            justifyContent="start"
                             alignItems="end"
-                            className="w-1/3 space-y-2"
+                            justifyContent="start"
+                            className="w-1/3 gap-2"
                         >
+                            <Flex
+                                flexDirection="row"
+                                justifyContent="start"
+                                className="hover:cursor-pointer max-w-full w-fit bg-gray-200 border-gray-300 rounded-lg border px-1"
+                                onClick={() => {
+                                    clipboardCopy(
+                                        controlDetail?.control?.id || ''
+                                    )
+                                }}
+                            >
+                                <Square2StackIcon className="min-w-4 w-4 mr-1" />
+                                <Text className="truncate">
+                                    Control ID: {controlDetail?.control?.id}
+                                </Text>
+                            </Flex>
+                            <Flex
+                                flexDirection="row"
+                                justifyContent="start"
+                                className="max-w-full w-fit bg-gray-200 border-gray-300 rounded-lg border px-1"
+                            >
+                                <ClockIcon className="min-w-4 w-4 mr-1" />
+                                <Text className="truncate">
+                                    Last updated:{' '}
+                                    {(controlDetail?.evaluatedAt || 0) <= 0
+                                        ? 'Never'
+                                        : dateTimeDisplay(
+                                              controlDetail?.evaluatedAt
+                                          )}
+                                </Text>
+                            </Flex>
+
                             {controlDetail?.control?.query?.parameters?.map(
                                 (item) => {
                                     return (
-                                        <Badge
-                                            icon={PencilIcon}
-                                            color="gray"
-                                            className="cursor-pointer w-fit"
+                                        <Flex
+                                            flexDirection="row"
+                                            justifyContent="start"
+                                            className="hover:cursor-pointer max-w-full w-fit bg-gray-200 border-gray-300 rounded-lg border px-1"
                                             onClick={() => {
                                                 navigate(
-                                                    `/${ws}/settings?sp=parameters`
+                                                    `/${ws}/settings?sp=parameters&key=${item.key}`
                                                 )
                                             }}
                                         >
-                                            <Text className="max-w-96 truncate ">
+                                            <PencilIcon className="min-w-4 w-4 mr-1" />
+                                            <Text className="truncate">
                                                 {item.key}:{' '}
                                                 {parameters?.queryParameters
                                                     ?.filter(
@@ -171,7 +205,7 @@ export default function ControlDetail() {
                                                         (p) => p.value || ''
                                                     ) || 'Not defined'}
                                             </Text>
-                                        </Badge>
+                                        </Flex>
                                     )
                                 }
                             )}

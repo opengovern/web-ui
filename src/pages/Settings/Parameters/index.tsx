@@ -7,13 +7,14 @@ import {
 } from '@heroicons/react/24/solid'
 import { useEffect, useState } from 'react'
 import { Button, Card, Divider, Flex, TextInput, Title } from '@tremor/react'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import {
     useMetadataApiV1QueryParameterCreate,
     useMetadataApiV1QueryParameterList,
 } from '../../../api/metadata.gen'
 import { getErrorMessage } from '../../../types/apierror'
 import { notificationAtom } from '../../../store'
+import { searchAtom, useURLParam } from '../../../utilities/urlstate'
 
 interface IParam {
     key: string
@@ -67,6 +68,18 @@ export default function SettingsParameters() {
             }) || []
         )
     }, [parameters])
+    const [keyParam] = useURLParam('key', '')
+
+    useEffect(() => {
+        if (keyParam.length > 0) {
+            const elem = document.getElementById(keyParam)
+            elem?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'center',
+            })
+        }
+    }, [params])
 
     const updateKey = (newKey: string, idx: number) => {
         setParams(
@@ -118,14 +131,21 @@ export default function SettingsParameters() {
                         <Flex flexDirection="row" className="mb-4">
                             <KeyIcon className="w-10 mr-3" />
                             <TextInput
+                                id={p.key}
                                 value={p.key}
                                 onValueChange={(e) => updateKey(String(e), idx)}
+                                className={
+                                    keyParam === p.key ? 'border-red-500' : ''
+                                }
                             />
                             <ArrowRightCircleIcon className="w-10 mx-3" />
                             <TextInput
                                 value={p.value}
                                 onValueChange={(e) =>
                                     updateValue(String(e), idx)
+                                }
+                                className={
+                                    keyParam === p.key ? 'border-red-500' : ''
                                 }
                             />
                             <TrashIcon
