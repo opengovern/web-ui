@@ -7,19 +7,26 @@ import {
     Grid,
     Select,
     SelectItem,
-    Subtitle,
     Text,
     TextInput,
     Title,
+    Accordion,
+    AccordionBody,
+    AccordionHeader,
+    List,
+    ListItem,
 } from '@tremor/react'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 import {
     ArrowPathIcon,
+    ArrowTopRightOnSquareIcon,
     ChevronRightIcon,
     HandThumbDownIcon,
     HandThumbUpIcon,
 } from '@heroicons/react/24/outline'
+
 import { useAuth0 } from '@auth0/auth0-react'
+import { useNavigate } from 'react-router-dom'
 import { useURLParam } from '../../utilities/urlstate'
 import {
     useAssistantApiV1ThreadCreate,
@@ -39,6 +46,7 @@ type assistantType =
     | 'none'
 
 export default function Assistant() {
+    const navigate = useNavigate()
     const [selectedAssistant, setSelectedAssistant] =
         useURLParam<assistantType>('assistant', 'none')
 
@@ -74,6 +82,20 @@ export default function Assistant() {
         'This is question number 2 and you can click on this to ask Kaytu assistant',
         'This is question number 3 and you can click on this to ask Kaytu assistant',
         'This is question number 4 and you can click on this to ask Kaytu assistant',
+    ]
+
+    const referencesList: {
+        title: string
+        link: string
+    }[] = [
+        {
+            title: 'Account Spend',
+            link: '',
+        },
+        {
+            title: 'Total Spend',
+            link: '',
+        },
     ]
 
     const [threadID, setThreadID] = useURLParam('threadID', '')
@@ -381,6 +403,51 @@ export default function Assistant() {
                                                         }
                                                     }}
                                                 />
+                                                {msg.role !== 'user' && (
+                                                    <Flex
+                                                        flexDirection="col"
+                                                        alignItems="start"
+                                                        className="mt-8 gap-2 w-full "
+                                                    >
+                                                        <hr className="w-full" />
+
+                                                        <Accordion className="w-full border-0 -ml-3">
+                                                            <AccordionHeader className="w-fit">
+                                                                <Text className="!font-extrabold !text-base text-gray-900">
+                                                                    References
+                                                                </Text>
+                                                            </AccordionHeader>
+                                                            <AccordionBody>
+                                                                <Flex
+                                                                    flexDirection="col"
+                                                                    alignItems="start"
+                                                                    className="gap-4 mt-2"
+                                                                >
+                                                                    {referencesList.map(
+                                                                        (i) => (
+                                                                            <Button
+                                                                                variant="light"
+                                                                                onClick={() =>
+                                                                                    navigate(
+                                                                                        `/${i.link}`
+                                                                                    )
+                                                                                }
+                                                                                icon={
+                                                                                    ArrowTopRightOnSquareIcon
+                                                                                }
+                                                                                iconPosition="right"
+                                                                            >
+                                                                                {
+                                                                                    i.title
+                                                                                }
+                                                                            </Button>
+                                                                        )
+                                                                    )}
+                                                                </Flex>
+                                                            </AccordionBody>
+                                                        </Accordion>
+                                                    </Flex>
+                                                )}
                                             </Card>
                                             {msg.role !== 'user' && (
                                                 <Flex
