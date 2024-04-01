@@ -6,7 +6,15 @@ import {
     TrashIcon,
 } from '@heroicons/react/24/solid'
 import { useEffect, useState } from 'react'
-import { Button, Card, Divider, Flex, TextInput, Title } from '@tremor/react'
+import {
+    Button,
+    Card,
+    Divider,
+    Flex,
+    TextInput,
+    Textarea,
+    Title,
+} from '@tremor/react'
 import { useAtom, useAtomValue } from 'jotai'
 import {
     useMetadataApiV1QueryParameterCreate,
@@ -139,11 +147,12 @@ export default function SettingsParameters() {
                                 }
                             />
                             <ArrowRightCircleIcon className="w-10 mx-3" />
-                            <TextInput
+                            <Textarea
                                 value={p.value}
                                 onValueChange={(e) =>
                                     updateValue(String(e), idx)
                                 }
+                                rows={1}
                                 className={
                                     keyParam === p.key ? 'border-red-500' : ''
                                 }
