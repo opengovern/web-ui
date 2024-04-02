@@ -28,22 +28,25 @@ export default function FilterGroup({
 }: IFilterGroup) {
     return (
         <Flex justifyContent="start" className="gap-4">
-            <Flex className="w-fit flex-wrap gap-2" justifyContent="start">
-                {filterList.map(
-                    (i) =>
-                        addedFilters.includes(i.title) && (
-                            <FilterSingle
-                                title={i.title}
-                                icon={i.icon}
-                                itemsTitles={i.itemsTitles}
-                                isValueChanged={i.isValueChanged}
-                                alignment={alignment}
-                            >
-                                {i.selector}
-                            </FilterSingle>
-                        )
-                )}
-            </Flex>
+            {addedFilters.length > 0 && (
+                <Flex className="w-fit flex-wrap gap-2" justifyContent="start">
+                    {filterList.map(
+                        (i) =>
+                            addedFilters.includes(i.title) && (
+                                <FilterSingle
+                                    title={i.title}
+                                    icon={i.icon}
+                                    itemsTitles={i.itemsTitles}
+                                    isValueChanged={i.isValueChanged}
+                                    alignment={alignment}
+                                >
+                                    {i.selector}
+                                </FilterSingle>
+                            )
+                    )}
+                </Flex>
+            )}
+
             {filterList.filter((f) => !addedFilters.includes(f.title)).length >
                 0 && (
                 <Popover className="relative border-0">

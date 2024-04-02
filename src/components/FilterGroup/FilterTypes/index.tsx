@@ -3,6 +3,11 @@ import {
     XCircleIcon,
     CloudIcon,
     CalendarIcon,
+    DocumentCheckIcon,
+    ShieldCheckIcon,
+    PuzzlePieceIcon,
+    EyeIcon,
+    CubeIcon,
 } from '@heroicons/react/24/outline'
 import {
     AWSIcon,
@@ -12,6 +17,8 @@ import {
     SeverityIcon,
     TagIcon,
     DocumentBadge,
+    EntraIDIcon,
+    AWSAzureIcon,
 } from '../../../icons/icons'
 import CheckboxSelector, { CheckboxItem } from '../CheckboxSelector'
 import RadioSelector, { RadioItem } from '../RadioSelector'
@@ -68,7 +75,10 @@ export function ConnectorFilter(
     onReset: () => void
 ) {
     const connectorValues: RadioItem[] = [
-        { title: 'All', value: '' },
+        {
+            title: 'All',
+            value: '',
+        },
         {
             title: 'AWS',
             icon: (
@@ -90,6 +100,17 @@ export function ConnectorFilter(
                 />
             ),
             value: 'Azure',
+        },
+        {
+            title: 'Entra ID',
+            icon: (
+                <img
+                    src={EntraIDIcon}
+                    className="w-5 mr-2 rounded-full"
+                    alt="entra id"
+                />
+            ),
+            value: 'EntraID',
         },
     ]
 
@@ -387,7 +408,7 @@ export function ScoreCategory(
 
     return {
         title: 'Score Category',
-        icon: CloudConnect,
+        icon: PuzzlePieceIcon,
         itemsTitles: categoryValues
             .filter((i) => selectedValue === i.value)
             .map((i) => i.title),
@@ -397,6 +418,140 @@ export function ScoreCategory(
                 title="Score Category"
                 radioItems={categoryValues}
                 selectedValue={selectedValue}
+                onItemSelected={(t) => onValueSelected(t.value)}
+                supportedConditions={['is']}
+                selectedCondition="is"
+                onRemove={onRemove}
+                onReset={onReset}
+                onConditionChange={() => ''}
+            />
+        ),
+    }
+}
+
+export function BenchmarkStateFilter(
+    selectedValue: string,
+    isValueChanged: boolean,
+    onValueSelected: (sv: any) => void,
+    onReset: () => void
+) {
+    const benchmarkStateValues: RadioItem[] = [
+        { title: 'All', value: '' },
+        {
+            title: 'Active',
+            value: 'active',
+        },
+        {
+            title: 'Not Active',
+            value: 'notactive',
+        },
+    ]
+
+    return {
+        title: 'State',
+        icon: ShieldCheckIcon,
+        itemsTitles: benchmarkStateValues
+            .filter((i) => selectedValue === i.value)
+            .map((i) => i.title),
+        isValueChanged,
+        selector: (
+            <RadioSelector
+                title="State"
+                radioItems={benchmarkStateValues}
+                selectedValue={selectedValue}
+                onItemSelected={(t) => onValueSelected(t.value)}
+                supportedConditions={['is']}
+                selectedCondition="is"
+                onReset={onReset}
+                onConditionChange={() => ''}
+            />
+        ),
+    }
+}
+
+export function BenchmarkAuditTrackingFilter(
+    selectedValue: string,
+    isValueChanged: boolean,
+    onValueSelected: (sv: any) => void,
+    onRemove: () => void,
+    onReset: () => void
+) {
+    const benchmarkAuditTrackingValues: RadioItem[] = [
+        {
+            title: 'Enabled',
+            value: 'enabled',
+        },
+        {
+            title: 'Disabled',
+            value: 'disabled',
+        },
+    ]
+
+    return {
+        title: 'Audit Tracking',
+        icon: EyeIcon,
+        itemsTitles: benchmarkAuditTrackingValues
+            .filter((i) => selectedValue === i.value)
+            .map((i) => i.title),
+        isValueChanged,
+        selector: (
+            <RadioSelector
+                title="Audit Tracking"
+                radioItems={benchmarkAuditTrackingValues}
+                selectedValue={selectedValue}
+                onItemSelected={(t) => onValueSelected(t.value)}
+                supportedConditions={['is']}
+                selectedCondition="is"
+                onRemove={onRemove}
+                onReset={onReset}
+                onConditionChange={() => ''}
+            />
+        ),
+    }
+}
+
+export function BenchmarkFrameworkFilter(
+    selectedValues: string[],
+    isValueChanged: boolean,
+    onValueSelected: (sv: string) => void,
+    onRemove: () => void,
+    onReset: () => void
+) {
+    const benchmarkFrameworkValues: CheckboxItem[] = [
+        {
+            title: 'Service Best Practices',
+            value: 'bestpractices',
+        },
+        {
+            title: 'SOC',
+            value: 'soc',
+        },
+        {
+            title: 'CISA',
+            value: 'cisa',
+        },
+        {
+            title: 'DoD',
+            value: 'dod',
+        },
+        {
+            title: 'Privacy',
+            value: 'privacy',
+        },
+    ]
+
+    return {
+        title: 'Framework',
+        icon: CubeIcon,
+        itemsTitles: benchmarkFrameworkValues
+            .filter((i) => selectedValues.includes(i.value))
+            .map((i) => i.title),
+        isValueChanged,
+        selector: (
+            <CheckboxSelector
+                title="Framework"
+                checkboxItems={benchmarkFrameworkValues}
+                selectedValues={selectedValues}
                 onItemSelected={(t) => onValueSelected(t.value)}
                 supportedConditions={['is']}
                 selectedCondition="is"

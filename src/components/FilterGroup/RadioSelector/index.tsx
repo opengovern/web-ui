@@ -71,7 +71,9 @@ export default function RadioSelector({
                             {i.icon}
                             {i.iconAlt}
 
-                            <Text>{i.title}</Text>
+                            <Text className="text-gray-700 whitespace-nowrap">
+                                {i.title}
+                            </Text>
                         </Flex>
                     </Radio>
                 ))}
