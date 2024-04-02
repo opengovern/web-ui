@@ -23,6 +23,11 @@ import {
     ScoreCategory,
     ServiceNameFilter,
 } from '../../../components/FilterGroup/FilterTypes'
+import {
+    errorHandling,
+    errorHandlingWithErrorMessage,
+    toErrorMessage,
+} from '../../../types/apierror'
 
 export const benchmarkList = (ben: any) => {
     const connected: any[] = []
@@ -454,6 +459,7 @@ export default function Compliance() {
                 ? bm?.tags?.service?.includes(selectedProvider)
                 : bm
         )
+
     return (
         <>
             <TopHeader />
@@ -479,67 +485,53 @@ export default function Compliance() {
                     {isLoading ? (
                         <Spinner className="my-56" />
                     ) : // eslint-disable-next-line no-nested-ternary
-                    error === undefined ? (
-                        index === 1 ? (
-                            <Grid className="w-full gap-4">
-                                {active.map(
-                                    (
-                                        bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
-                                    ) => (
-                                        <ComplianceListCard benchmark={bm} />
-                                    )
-                                )}
-                            </Grid>
-                        ) : (
-                            <Grid numItems={3} className="w-full gap-4">
-                                {active.map(
-                                    (
-                                        bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
-                                    ) => (
-                                        <ComplianceCard benchmark={bm} />
-                                    )
-                                )}
-                            </Grid>
-                        )
+                    index === 1 ? (
+                        <Grid className="w-full gap-4">
+                            {active.map(
+                                (
+                                    bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                                ) => (
+                                    <ComplianceListCard benchmark={bm} />
+                                )
+                            )}
+                        </Grid>
                     ) : (
-                        <Button onClick={() => sendNow()}>Retry</Button>
+                        <Grid numItems={3} className="w-full gap-4">
+                            {active.map(
+                                (
+                                    bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                                ) => (
+                                    <ComplianceCard benchmark={bm} />
+                                )
+                            )}
+                        </Grid>
                     )}
                 </div>
             )}
-            {(selectedState === '' || selectedState === 'not-active') && (
-                <>
-                    {/* <Text className="mb-3">Not active ({inactive.length})</Text> */}
-                    {/* eslint-disable-next-line no-nested-ternary */}
-                    {isLoading ? (
-                        <Spinner className="mt-56" />
-                    ) : // eslint-disable-next-line no-nested-ternary
-                    error === undefined ? (
-                        index === 1 ? (
-                            <Grid className="w-full gap-4">
-                                {inactive.map(
-                                    (
-                                        bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
-                                    ) => (
-                                        <ComplianceListCard benchmark={bm} />
-                                    )
-                                )}
-                            </Grid>
-                        ) : (
-                            <Grid numItems={3} className="w-full gap-4">
-                                {inactive.map(
-                                    (
-                                        bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
-                                    ) => (
-                                        <ComplianceCard benchmark={bm} />
-                                    )
-                                )}
-                            </Grid>
-                        )
-                    ) : (
-                        <Button onClick={() => sendNow()}>Retry</Button>
-                    )}
-                </>
-            )}
+            {(selectedState === '' || selectedState === 'not-active') &&
+                (index === 1 ? (
+                    <Grid className="w-full gap-4">
+                        {inactive.map(
+                            (
+                                bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                            ) => (
+                                <ComplianceListCard benchmark={bm} />
+                            )
+                        )}
+                    </Grid>
+                ) : (
+                    <Grid numItems={3} className="w-full gap-4">
+                        {inactive.map(
+                            (
+                                bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                            ) => (
+                                <ComplianceCard benchmark={bm} />
+                            )
+                        )}
+                    </Grid>
+                ))}
+
+            {errorHandling(sendNow, error)}
         </>
     )
 }
