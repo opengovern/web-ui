@@ -63,7 +63,7 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                             } ${
                                 current === 'assistant'
                                     ? 'w-full max-w-full'
-                                    : ''
+                                    : 'py-6'
                             }`}
                         >
                             {children}
