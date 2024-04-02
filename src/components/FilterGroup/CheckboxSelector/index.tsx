@@ -85,7 +85,7 @@ export default function CheckboxSelector({
                             <Flex className="w-fit">
                                 {i.icon && <Icon icon={i.icon} />}
                                 {i.iconAlt}
-                                <Text className="text-gray-800 whitespace-nowrap">
+                                <Text className="text-gray-700 whitespace-nowrap">
                                     {i.title}
                                 </Text>
                             </Flex>

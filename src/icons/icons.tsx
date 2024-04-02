@@ -1,6 +1,7 @@
 export { default as AzureIcon } from './AzureIcon.png'
 export { default as AWSIcon } from './AWSIcon.png'
 export { default as AWSAzureIcon } from './AWSAzureIcon.png'
+export { default as EntraIDIcon } from './EntraIDIcon.png'
 
 export { ReactComponent as CisIcon } from './cis.svg'
 export { ReactComponent as HipaaIcon } from './hipaa.svg'

@@ -13,6 +13,16 @@ import { IColumn } from '../../../components/Table'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import ComplianceListCard from '../../../components/Cards/ComplianceListCard'
 import TopHeader from '../../../components/Layout/Header'
+import FilterGroup, { IFilter } from '../../../components/FilterGroup'
+import { useURLParam, useURLState } from '../../../utilities/urlstate'
+import {
+    BenchmarkAuditTrackingFilter,
+    BenchmarkFrameworkFilter,
+    BenchmarkStateFilter,
+    ConnectorFilter,
+    ScoreCategory,
+    ServiceNameFilter,
+} from '../../../components/FilterGroup/FilterTypes'
 
 export const benchmarkList = (ben: any) => {
     const connected: any[] = []
@@ -223,6 +233,199 @@ const notActiveColumns: IColumn<any, any>[] = [
 ]
 
 export default function Compliance() {
+    // New filter variables :
+    const defaultSelectedConnectors = ''
+    const [selectedConnectors, setSelectedConnectors] = useURLParam<
+        '' | 'AWS' | 'Azure' | 'EntraID'
+    >('provider', defaultSelectedConnectors)
+    const parseConnector = (v: string) => {
+        switch (v) {
+            case 'AWS':
+                return 'AWS'
+            case 'Azure':
+                return 'Azure'
+            case 'EntraID':
+                return 'EntraID'
+            default:
+                return ''
+        }
+    }
+
+    const defaultSelectedBenchmarkState = ''
+    const [selectedBenchmarkState, setSelectedBenchmarkState] = useURLParam<
+        '' | 'active' | 'notactive'
+    >('benchmarkstate', defaultSelectedBenchmarkState)
+    const parseState = (v: string) => {
+        switch (v) {
+            case 'active':
+                return 'active'
+            case 'notactive':
+                return 'notactive'
+            default:
+                return ''
+        }
+    }
+
+    const defaultSelectedAuditTracking = 'enabled'
+    const [selectedAuditTracking, setSelectedAuditTracking] = useURLParam<
+        'enabled' | 'disabled'
+    >('audittracking', defaultSelectedAuditTracking)
+    const parseAuditTracking = (v: string) => {
+        switch (v) {
+            case 'disabled':
+                return 'disabled'
+            default:
+                return 'enabled'
+        }
+    }
+
+    const defaultSelectedScoreCategory = ''
+    const [selectedScoreCategory, setSelectedScoreCategory] =
+        useURLState<string>(
+            defaultSelectedScoreCategory,
+            (v) => {
+                const res = new Map<string, string[]>()
+                res.set('category', [v])
+                return res
+            },
+            (v) => {
+                return (v.get('category') || []).at(0) || ''
+            }
+        )
+
+    const defaultSelectedFramework: string[] = []
+    const [selectedFrameworks, setSelectedFrameworks] = useURLState<string[]>(
+        defaultSelectedFramework,
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('frameworks', v)
+            return res
+        },
+        (v) => {
+            return v.get('frameworks') || []
+        }
+    )
+
+    const defaultSelectedServiceNames: string[] = []
+    const [selectedServiceNames, setSelectedServiceNames] = useURLState<
+        string[]
+    >(
+        defaultSelectedServiceNames,
+        (v) => {
+            const res = new Map<string, string[]>()
+            res.set('serviceNames', v)
+            return res
+        },
+        (v) => {
+            return v.get('serviceNames') || []
+        }
+    )
+    const serviceNames: string[] = []
+
+    const calcInitialFilters = () => {
+        const resp = ['State', 'Connector', 'Score Category']
+
+        if (selectedAuditTracking !== defaultSelectedAuditTracking) {
+            resp.push('Audit Tracking')
+        }
+        if (selectedFrameworks !== defaultSelectedFramework) {
+            resp.push('Framework')
+        }
+        return resp
+    }
+    const [addedFilters, setAddedFilters] = useState<string[]>(
+        calcInitialFilters()
+    )
+
+    const filters: IFilter[] = [
+        ConnectorFilter(
+            selectedConnectors,
+            selectedConnectors !== '',
+            (sv) => setSelectedConnectors(parseConnector(sv)),
+            () => {
+                setAddedFilters(addedFilters.filter((a) => a !== 'Connector'))
+                setSelectedConnectors(defaultSelectedConnectors)
+            },
+            () => setSelectedConnectors(defaultSelectedConnectors)
+        ),
+
+        ScoreCategory(
+            selectedScoreCategory,
+            selectedScoreCategory.length > 0,
+            setSelectedScoreCategory,
+            () => {
+                setAddedFilters(
+                    addedFilters.filter((a) => a !== 'Score Category')
+                )
+                setSelectedScoreCategory(defaultSelectedScoreCategory)
+            },
+            () => setSelectedScoreCategory(defaultSelectedScoreCategory)
+        ),
+
+        BenchmarkStateFilter(
+            selectedBenchmarkState,
+            selectedBenchmarkState !== defaultSelectedBenchmarkState,
+            (sv) => setSelectedBenchmarkState(parseState(sv)),
+            () => setSelectedBenchmarkState(defaultSelectedBenchmarkState)
+        ),
+
+        BenchmarkAuditTrackingFilter(
+            selectedAuditTracking,
+            selectedAuditTracking !== defaultSelectedAuditTracking,
+            (sv) => setSelectedAuditTracking(parseAuditTracking(sv)),
+            () => {
+                setAddedFilters(
+                    addedFilters.filter((a) => a !== 'Audit Tracking')
+                )
+                setSelectedAuditTracking(defaultSelectedAuditTracking)
+            },
+            () => setSelectedAuditTracking(defaultSelectedAuditTracking)
+        ),
+
+        BenchmarkFrameworkFilter(
+            selectedFrameworks,
+            selectedFrameworks.length > 0,
+            (sv) => {
+                if (selectedFrameworks.includes(sv)) {
+                    setSelectedFrameworks(
+                        selectedFrameworks.filter((i) => i !== sv)
+                    )
+                } else setSelectedFrameworks([...selectedFrameworks, sv])
+            },
+            () => {
+                setAddedFilters(addedFilters.filter((a) => a !== 'Framework'))
+                setSelectedFrameworks(defaultSelectedFramework)
+            },
+            () => setSelectedFrameworks(defaultSelectedFramework)
+        ),
+
+        ServiceNameFilter(
+            serviceNames?.map((i) => {
+                return {
+                    title: i,
+                    value: i,
+                }
+            }) || [],
+            (sv) => {
+                if (selectedServiceNames.includes(sv)) {
+                    setSelectedServiceNames(
+                        selectedServiceNames.filter((i) => i !== sv)
+                    )
+                } else setSelectedServiceNames([...selectedServiceNames, sv])
+            },
+            selectedServiceNames,
+            selectedServiceNames.length > 0,
+            () => {
+                setAddedFilters(
+                    addedFilters.filter((a) => a !== 'Service Name')
+                )
+                setSelectedServiceNames(defaultSelectedServiceNames)
+            },
+            () => setSelectedServiceNames(defaultSelectedServiceNames)
+        ),
+    ]
+    // End of new filter variables
+
     const [selectedProvider, setSelectedProvider] = useState('')
     const [selectedState, setSelectedState] = useState('')
     const [index, setIndex] = useState(1)
@@ -233,24 +436,6 @@ export default function Compliance() {
         error,
         sendNow,
     } = useComplianceApiV1BenchmarksSummaryList()
-    // const [stateIndex, setStateIndex] = useState(0)
-    //
-    // useEffect(() => {
-    //     switch (selectedState) {
-    //         case '':
-    //             setStateIndex(0)
-    //             break
-    //         case 'active':
-    //             setStateIndex(1)
-    //             break
-    //         case 'not-active':
-    //             setStateIndex(2)
-    //             break
-    //         default:
-    //             setStateIndex(0)
-    //             break
-    //     }
-    // }, [selectedState])
 
     const active = benchmarkList(benchmarks?.benchmarkSummary).connected.filter(
         (bm) =>
@@ -273,36 +458,23 @@ export default function Compliance() {
         <>
             <TopHeader />
             <Flex className="mb-4">
-                <Flex className="gap-3 w-fit">
-                    <Icon icon={ShieldCheckIcon} variant="shadow" />
+                <Flex className="gap-2 w-fit">
+                    <Icon icon={ShieldCheckIcon} />
                     <Title>Benchmark list</Title>
                 </Flex>
-                {/* <TabGroup index={stateIndex} className="w-fit">
-                    <TabList variant="solid" className="px-0">
-                        <Tab
-                            className="px-4 py-2"
-                            onClick={() => setSelectedState('')}
-                        >
-                            All
-                        </Tab>
-                        <Tab
-                            className="px-4 py-2"
-                            onClick={() => setSelectedState('active')}
-                        >
-                            Active
-                        </Tab>
-                        <Tab
-                            className="px-4 py-2"
-                            onClick={() => setSelectedState('not-active')}
-                        >
-                            Not active
-                        </Tab>
-                    </TabList>
-                </TabGroup> */}
             </Flex>
+            <Flex className="mb-6">
+                <FilterGroup
+                    filterList={filters}
+                    addedFilters={addedFilters}
+                    onFilterAdded={(i) => setAddedFilters([...addedFilters, i])}
+                    alignment="left"
+                />
+            </Flex>
+
             {(selectedState === '' || selectedState === 'active') && (
                 <div className="mb-6">
-                    <Text className="mb-3">Active ({active.length})</Text>
+                    {/* <Text className="mb-3">Active ({active.length})</Text> */}
                     {/* eslint-disable-next-line no-nested-ternary */}
                     {isLoading ? (
                         <Spinner className="my-56" />
@@ -336,7 +508,7 @@ export default function Compliance() {
             )}
             {(selectedState === '' || selectedState === 'not-active') && (
                 <>
-                    <Text className="mb-3">Not active ({inactive.length})</Text>
+                    {/* <Text className="mb-3">Not active ({inactive.length})</Text> */}
                     {/* eslint-disable-next-line no-nested-ternary */}
                     {isLoading ? (
                         <Spinner className="mt-56" />
