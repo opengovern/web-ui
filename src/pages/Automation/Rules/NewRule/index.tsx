@@ -18,7 +18,8 @@ export default function NewRule({ open, onClose, selectedRule }: INewRule) {
     const [currentStep, setCurrentStep] = useState(1)
     const [event, setEvent] = useState('')
     const [compliance, setCompliance] = useState('')
-    const [condition, setCondition] = useState('')
+    const [control, setControl] = useState('')
+    const [condition, setCondition] = useState<any>({})
     const [actionId, setActionId] = useState<string | number>('')
     const [metadata, setMetadata] = useState<any>({})
     const [scope, setScope] = useState<any>({})
@@ -30,11 +31,9 @@ export default function NewRule({ open, onClose, selectedRule }: INewRule) {
                 benchmark_id: compliance,
             },
             metadata,
-            operator: {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                condition,
-            },
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            condition,
             scope,
         },
         {},
@@ -56,9 +55,10 @@ export default function NewRule({ open, onClose, selectedRule }: INewRule) {
             case 1:
                 return (
                     <StepOne
-                        onNext={(e, c) => {
+                        onNext={(e, b, c) => {
                             setEvent(e)
-                            setCompliance(c)
+                            setCompliance(b)
+                            setControl(c)
                             setCurrentStep(2)
                         }}
                         onBack={onClose}

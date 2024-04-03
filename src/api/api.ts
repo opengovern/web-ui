@@ -62,16 +62,13 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiAction {
     url?: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiConditionStruct {
-    condition_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiConditionType
-    operator?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct[]
-}
-
-export enum GithubComKaytuIoKaytuEnginePkgAlertingApiConditionType {
-    ConditionAnd = 'AND',
-    ConditionAndLowerCase = 'and',
-    ConditionOr = 'OR',
-    ConditionOrLowerCase = 'or',
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiCondition {
+    combinator?: string
+    field?: string
+    not?: boolean
+    operator?: string
+    rules?: GithubComKaytuIoKaytuEnginePkgAlertingApiCondition[]
+    value?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq {
@@ -84,9 +81,9 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq {
 
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest {
     action_id?: number
+    condition?: GithubComKaytuIoKaytuEnginePkgAlertingApiCondition
     event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
     metadata?: GithubComKaytuIoKaytuEnginePkgAlertingApiMetadata
-    operator?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct
     scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
 }
 
@@ -114,27 +111,12 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiMetadata {
     name?: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct {
-    condition?: GithubComKaytuIoKaytuEnginePkgAlertingApiConditionStruct
-    operator_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorType
-    value?: number
-}
-
-export enum GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorType {
-    OperatorGreaterThan = 'GreaterThan',
-    OperatorLessThan = 'LessThan',
-    OperatorLessThanOrEqual = 'LessThanOrEqual',
-    OperatorGreaterThanOrEqual = 'GreaterThanOrEqual',
-    OperatorEqual = 'Equal',
-    OperatorDoesNotEqual = 'DoesNotEqual',
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiRule {
     action_id?: number
+    condition?: GithubComKaytuIoKaytuEnginePkgAlertingApiCondition
     event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
     id?: number
     metadata?: GithubComKaytuIoKaytuEnginePkgAlertingApiMetadata
-    operator?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct
     scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
     trigger_status?: string
 }
@@ -169,9 +151,9 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest {
 
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest {
     action_id?: number
+    condition?: GithubComKaytuIoKaytuEnginePkgAlertingApiCondition
     event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
     metadata?: GithubComKaytuIoKaytuEnginePkgAlertingApiMetadata
-    operator?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct
     scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
 }
 

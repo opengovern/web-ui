@@ -16,7 +16,7 @@ import {
     Title,
 } from '@tremor/react'
 import 'react-querybuilder/dist/query-builder.css'
-import { QueryBuilder, RuleGroupType } from 'react-querybuilder'
+import { QueryBuilder, RuleGroupType, RuleType } from 'react-querybuilder'
 import { useEffect, useState } from 'react'
 import {
     MagnifyingGlassIcon,
@@ -30,7 +30,7 @@ import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../../api/
 
 interface IStep {
     onNext: (
-        query: string,
+        query: any,
         scope: {
             connection_group?: string
             connection_id?: string
@@ -39,8 +39,14 @@ interface IStep {
     onBack: () => void
 }
 
+type IConditions = 'and' | 'or'
+type IField = 'score'
+type IOperations = '>' | '<'
+
 export default function StepTwo({ onNext, onBack }: IStep) {
-    const [query, setQuery] = useState<RuleGroupType>({
+    const [query, setQuery] = useState<
+        RuleGroupType<RuleType<IField, IOperations, string>, IConditions>
+    >({
         combinator: 'and',
         rules: [{ field: 'score', operator: '<', value: '80' }],
     })
@@ -67,18 +73,6 @@ export default function StepTwo({ onNext, onBack }: IStep) {
         setConnections('')
         setConnectionGroup('')
     }, [selectedIndex, hasScope])
-
-    const queryCreator = () => {
-        let temp = JSON.stringify(query)
-        temp = temp.replaceAll('combinator', 'condition_type')
-        temp = temp.replaceAll('operator', 'operator_type')
-        temp = temp.replaceAll('rules', 'operator')
-
-        const re = /value":\s*"([-\d.]+)"/i
-        temp = temp.replace(re, 'value": $1')
-
-        return JSON.parse(temp)
-    }
 
     return (
         <Flex flexDirection="col" style={{ height: 'calc(100% - 60px)' }}>
@@ -245,7 +239,7 @@ export default function StepTwo({ onNext, onBack }: IStep) {
                 </Button>
                 <Button
                     onClick={() =>
-                        onNext(queryCreator(), {
+                        onNext(query, {
                             ...(connections.id && {
                                 connection_id: connections.id
                                     ? connections.id

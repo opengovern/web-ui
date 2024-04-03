@@ -83,20 +83,6 @@ export default function Rules() {
     const [selectedRow, setSelectedRow] = useState<
         GithubComKaytuIoKaytuEnginePkgAlertingApiRule | undefined
     >(undefined)
-    const queryCreator = (query: any) => {
-        if (query) {
-            let temp = JSON.stringify(query)
-            temp = temp.replaceAll('condition_type', 'combinator')
-            temp = temp.replaceAll('operator', 'rules')
-            temp = temp.replaceAll('operator_type', 'operator')
-
-            const re = /value":\s*"([-\d.]+)"/i
-            temp = temp.replace(re, 'value": $1')
-
-            return JSON.parse(temp)
-        }
-        return {}
-    }
 
     const { response: rules, isLoading } = useAlertingApiV1RuleListList()
     const {
@@ -105,6 +91,7 @@ export default function Rules() {
         sendNow: deleteNow,
     } = useAlertingApiV1RuleDeleteDelete(String(selectedRow?.id), {}, false)
 
+    console.log(selectedRow?.condition)
     return (
         <>
             <TopHeader />
@@ -137,6 +124,7 @@ export default function Rules() {
                 rowData={rules}
                 loading={isLoading}
                 onRowClicked={(event: RowClickedEvent) => {
+                    console.log(event.data)
                     setSelectedRow(event.data)
                     setOpenDetail(true)
                 }}
@@ -212,9 +200,9 @@ export default function Rules() {
                                         { name: '<', label: '<' },
                                         { name: '>', label: '>' },
                                     ]}
-                                    query={queryCreator(
-                                        selectedRow?.operator?.condition
-                                    )}
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore
+                                    query={selectedRow?.condition}
                                     disabled
                                 />
                             </Flex>
