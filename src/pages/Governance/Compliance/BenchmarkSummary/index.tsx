@@ -172,6 +172,28 @@ export default function BenchmarkSummary() {
                     ) : (
                         <Grid numItems={4} className="w-full gap-4 mb-4">
                             <SummaryCard
+                                title="Security Score"
+                                metric={
+                                    ((benchmarkKPIEnd?.controlsSeverityStatus
+                                        ?.total?.passed || 0) /
+                                        (benchmarkKPIEnd?.controlsSeverityStatus
+                                            ?.total?.total || 1)) *
+                                        100 || 0
+                                }
+                                metricPrev={
+                                    ((benchmarkKPIStart?.controlsSeverityStatus
+                                        ?.total?.passed || 0) /
+                                        (benchmarkKPIStart
+                                            ?.controlsSeverityStatus?.total
+                                            ?.total || 1)) *
+                                        100 || 0
+                                }
+                                loading={
+                                    benchmarkKPIEndLoading ||
+                                    benchmarkKPIStartLoading
+                                }
+                            />
+                            <SummaryCard
                                 title="Issues"
                                 metric={
                                     benchmarkKPIEnd?.conformanceStatusSummary
@@ -217,11 +239,11 @@ export default function BenchmarkSummary() {
                                 }
                             />
 
-                            <SummaryCard
+                            {/* <SummaryCard
                                 title="Events"
                                 metric={events?.count}
                                 loading={eventsLoading}
-                            />
+                            /> */}
                         </Grid>
                     )}
                     {trend === null ? (
