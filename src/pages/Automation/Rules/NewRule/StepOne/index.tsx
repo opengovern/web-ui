@@ -4,7 +4,6 @@ import {
     useComplianceApiV1BenchmarksControlsDetail,
     useComplianceApiV1BenchmarksSummaryList,
 } from '../../../../../api/compliance.gen'
-import { benchmarkList } from '../../../../Governance/Compliance'
 import Spinner from '../../../../../components/Spinner'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
@@ -67,10 +66,11 @@ export default function StepOne({ onNext, onBack }: IStep) {
                                     value={benchmarkID}
                                     onValueChange={setBenchmarkID}
                                 >
-                                    {benchmarkList(
-                                        benchmarks?.benchmarkSummary
-                                    ).connected.map((b) => (
-                                        <SelectItem key={b.id} value={b.id}>
+                                    {benchmarks?.benchmarkSummary?.map((b) => (
+                                        <SelectItem
+                                            key={b.id}
+                                            value={b.id || ''}
+                                        >
                                             <Text>{b.title}</Text>
                                         </SelectItem>
                                     ))}

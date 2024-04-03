@@ -14,16 +14,8 @@ interface IConnectorCard {
     count: number | string | undefined
     description: string | undefined
 }
-
-export const getConnectorIcon = (
-    connector: string | SourceType[] | SourceType | undefined,
-    className = ''
-) => {
-    if (
-        connector !== undefined &&
-        typeof connector !== 'string' &&
-        connector?.length >= 2
-    ) {
+export const getConnectorsIcon = (connector: SourceType[], className = '') => {
+    if (connector?.length >= 2) {
         return (
             <img
                 src={AWSAzureIcon}
@@ -32,23 +24,49 @@ export const getConnectorIcon = (
             />
         )
     }
+
+    const connectorIcon = () => {
+        if (connector[0] === SourceType.CloudAzure) {
+            return AzureIcon
+        }
+        if (connector[0] === SourceType.CloudAWS) {
+            return AWSIcon
+        }
+        return undefined
+    }
+
     return (
         <Flex className={`w-9 h-9 gap-1 ${className}`}>
-            {typeof connector === 'string' ? (
-                <img
-                    src={connector === 'Azure' ? AzureIcon : AWSIcon}
-                    alt="connector"
-                    className="min-w-[36px] w-9 h-9 rounded-full"
-                />
-            ) : (
-                connector?.map((c) => (
-                    <img
-                        src={c === 'Azure' ? AzureIcon : AWSIcon}
-                        alt="connector"
-                        className="min-w-[36px] w-9 h-9 rounded-full"
-                    />
-                ))
-            )}
+            <img
+                src={connectorIcon()}
+                alt="connector"
+                className="min-w-[36px] w-9 h-9 rounded-full"
+            />
+        </Flex>
+    )
+}
+
+export const getConnectorIcon = (
+    connector: string | SourceType[] | SourceType | undefined,
+    className = ''
+) => {
+    const connectorIcon = () => {
+        if (String(connector).toLowerCase() === 'azure') {
+            return AzureIcon
+        }
+        if (String(connector).toLowerCase() === 'aws') {
+            return AWSIcon
+        }
+        return undefined
+    }
+
+    return (
+        <Flex className={`w-9 h-9 gap-1 ${className}`}>
+            <img
+                src={connectorIcon()}
+                alt="connector"
+                className="min-w-[36px] w-9 h-9 rounded-full"
+            />
         </Flex>
     )
 }

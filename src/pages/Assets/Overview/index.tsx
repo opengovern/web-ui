@@ -96,7 +96,7 @@ export const topCategories = (
         data: {
             name: string | undefined
             value: number | undefined
-            connector: SourceType | undefined
+            connector: SourceType[]
             id: string | undefined
             kaytuId: string | undefined
         }[]
@@ -110,7 +110,7 @@ export const topCategories = (
                 kaytuId: item[0],
                 name: item[0],
                 value: item[1].count,
-                connector: SourceType.Nil,
+                connector: [],
                 id: item[0],
             })
         }

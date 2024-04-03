@@ -15,7 +15,7 @@ import { useAtomValue } from 'jotai'
 import { SourceType } from '../../../api/api'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
-import { getConnectorIcon } from '../ConnectorCard'
+import { getConnectorIcon, getConnectorsIcon } from '../ConnectorCard'
 import { isDemoAtom } from '../../../store'
 import { errorHandlingWithErrorMessage } from '../../../types/apierror'
 import { searchAtom } from '../../../utilities/urlstate'
@@ -31,7 +31,7 @@ interface ITopListCard {
         data: {
             name: string | undefined
             value: number | undefined
-            connector?: SourceType[] | SourceType | undefined
+            connector?: SourceType[]
             id?: string | undefined
         }[]
         total: number | undefined
@@ -47,7 +47,7 @@ interface ITopListCard {
 interface Item {
     name: string | undefined
     value: number | undefined
-    connector?: SourceType[] | SourceType | undefined
+    connector?: SourceType[]
     id?: string | undefined
     kaytuId?: string | undefined
 }
@@ -122,7 +122,11 @@ export default function ListCard({
                                         isClickable
                                             ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900'
                                             : ''
-                                    } ${item.connector ? '' : 'py-3'}`}
+                                    } ${
+                                        (item.connector?.length || 0) > 0
+                                            ? ''
+                                            : 'py-3'
+                                    }`}
                                     onClick={() =>
                                         isClickable
                                             ? navigate(
@@ -146,14 +150,9 @@ export default function ListCard({
                                             justifyContent="start"
                                             className="w-4/5"
                                         >
-                                            {item.connector &&
-                                                (item.connector[0].length > 1
-                                                    ? getConnectorIcon(
-                                                          item.connector[0]
-                                                      )
-                                                    : getConnectorIcon(
-                                                          String(item.connector)
-                                                      ))}
+                                            {getConnectorsIcon(
+                                                item.connector || []
+                                            )}
                                             <Text
                                                 className={
                                                     type === 'account' && isDemo

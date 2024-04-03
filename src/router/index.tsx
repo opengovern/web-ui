@@ -16,7 +16,6 @@ import Stack from '../pages/Stack'
 import Query from '../pages/Query'
 import Single from '../pages/Assets/Single'
 import SingleSpend from '../pages/Spend/Single'
-import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
 import Rules from '../pages/Automation/Rules'
 import Alerts from '../pages/Automation/Alerts'
 import SingleComplianceConnection from '../pages/Governance/Compliance/BenchmarkSummary/SingleConnection'
@@ -241,11 +240,6 @@ const authRoutes = [
         key: 'benchmark single connection',
         path: '/:ws/compliance/:benchmarkId/:connectionId',
         component: SingleComplianceConnection,
-    },
-    {
-        key: 'service advisor',
-        path: '/:ws/service-advisor',
-        component: ServiceAdvisor,
     },
     {
         key: 'findings control',

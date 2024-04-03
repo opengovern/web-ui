@@ -16,7 +16,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/solid'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
 import { benchmarkChecks } from '../ComplianceCard'
 import SummaryCard from '../SummaryCard'
-import { getConnectorIcon } from '../ConnectorCard'
+import { getConnectorIcon, getConnectorsIcon } from '../ConnectorCard'
 import SeverityBar from '../../SeverityBar'
 import { searchAtom } from '../../../utilities/urlstate'
 import { isDemoAtom } from '../../../store'
@@ -31,16 +31,6 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const isDemo = useAtomValue(isDemoAtom)
-
-    const connector = () => {
-        if (benchmark?.tags?.plugin) {
-            if (benchmark?.tags?.plugin[0] === 'azure') {
-                return 'Azure'
-            }
-            return 'AWS'
-        }
-        return undefined
-    }
 
     return (
         <Card
@@ -60,7 +50,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                                   />
                               </div>
                           ))
-                        : getConnectorIcon(connector())}
+                        : getConnectorsIcon(benchmark?.connectors || [])}
                     <Title className="truncate">{benchmark?.title}</Title>
                 </Flex>
                 <Button

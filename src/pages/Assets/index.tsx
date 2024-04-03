@@ -122,7 +122,7 @@ export const topAccounts = (
         data: {
             name: string | undefined
             value: number | undefined
-            connector: SourceType | undefined
+            connector: SourceType[]
             id: string | undefined
             kaytuId: string | undefined
         }[]
@@ -134,7 +134,7 @@ export const topAccounts = (
                 kaytuId: input.connections[i].id,
                 name: input.connections[i].providerConnectionName,
                 value: input.connections[i].resourceCount,
-                connector: input.connections[i].connector,
+                connector: [input.connections[i].connector || SourceType.Nil],
                 id: input.connections[i].providerConnectionID,
             })
         }
