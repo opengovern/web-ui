@@ -188,6 +188,7 @@ export default function BenchmarkSummary() {
                                             ?.total || 1)) *
                                         100 || 0
                                 }
+                                isPercent
                                 loading={
                                     benchmarkKPIEndLoading ||
                                     benchmarkKPIStartLoading
