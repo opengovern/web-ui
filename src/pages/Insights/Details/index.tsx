@@ -1,6 +1,6 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useSetAtom } from 'jotai'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     Button,
     Card,
@@ -35,7 +35,10 @@ import clipboardCopy from 'clipboard-copy'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { notificationAtom, queryAtom } from '../../../store'
 import { dateTimeDisplay } from '../../../utilities/dateDisplay'
-import { useComplianceApiV1ControlsSummaryDetail } from '../../../api/compliance.gen'
+import {
+    useComplianceApiV1BenchmarksSummaryDetail,
+    useComplianceApiV1ControlsSummaryDetail,
+} from '../../../api/compliance.gen'
 import Spinner from '../../../components/Spinner'
 import Modal from '../../../components/Modal'
 import TopHeader from '../../../components/Layout/Header'
@@ -52,6 +55,10 @@ import {
 import DrawerPanel from '../../../components/DrawerPanel'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import { useMetadataApiV1QueryParameterList } from '../../../api/metadata.gen'
+import {
+    useScheduleApiV1ComplianceReEvaluateUpdate,
+    useScheduleApiV1ComplianceTriggerUpdate,
+} from '../../../api/schedule.gen'
 
 export default function ScoreDetails() {
     const { id, ws } = useParams()
@@ -77,6 +84,50 @@ export default function ScoreDetails() {
         isExecuted,
         sendNow: refresh,
     } = useMetadataApiV1QueryParameterList()
+
+    const benchmarkID = controlDetail?.benchmarks?.at(0)?.id || ''
+
+    const {
+        error: reevaluateError,
+        isLoading: isReevaluateLoading,
+        isExecuted: isReevaluateExecuted,
+        sendNow: ReEvaluate,
+    } = useScheduleApiV1ComplianceTriggerUpdate(
+        {
+            benchmark_id: [benchmarkID],
+            connection_id: [],
+        },
+        {},
+        false
+    )
+
+    const {
+        response: benchmarkDetail,
+        isLoading: benchmarkDetailsLoading,
+        isExecuted: benchmarkDetailsExecuted,
+        sendNow: refreshBenchmark,
+    } = useComplianceApiV1BenchmarksSummaryDetail(
+        benchmarkID,
+        {},
+        {},
+        benchmarkID !== ''
+    )
+
+    useEffect(() => {
+        if (isReevaluateExecuted && !isReevaluateLoading) {
+            refreshBenchmark()
+        }
+    }, [isReevaluateLoading])
+
+    const isJobRunning =
+        benchmarkDetail?.lastJobStatus !== 'FAILED' &&
+        benchmarkDetail?.lastJobStatus !== 'SUCCEEDED' &&
+        (benchmarkDetail?.lastJobStatus || '') !== ''
+
+    const reEvaluateButtonLoading =
+        (isReevaluateExecuted && isReevaluateLoading) ||
+        (benchmarkDetailsExecuted && benchmarkDetailsLoading) ||
+        (benchmarkDetailsExecuted && isJobRunning)
 
     const costSaving = controlDetail?.costOptimization || 0
 
@@ -183,6 +234,25 @@ export default function ScoreDetails() {
                                         {customizableQuery
                                             ? 'Show Customizable Query'
                                             : 'Show Query'}
+                                    </Button>
+                                    <div className="border-l h-4 border-gray-300" />
+                                    <Button
+                                        color="orange"
+                                        variant="light"
+                                        disabled={reEvaluateButtonLoading}
+                                        onClick={() => {
+                                            ReEvaluate()
+                                        }}
+                                    >
+                                        <Flex flexDirection="row">
+                                            {reEvaluateButtonLoading && (
+                                                <Spinner
+                                                    className="w-6 h-6"
+                                                    color="fill-orange-600"
+                                                />
+                                            )}
+                                            Re-evaluate
+                                        </Flex>
                                     </Button>
                                 </Flex>
                             </Flex>
