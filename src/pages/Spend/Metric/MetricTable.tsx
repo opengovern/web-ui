@@ -2,16 +2,20 @@ import {
     GridOptions,
     ValueFormatterParams,
     IAggFuncParams,
+    ICellRendererParams,
 } from 'ag-grid-community'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import {
+    ArrowTrendingDownIcon,
+    ArrowTrendingUpIcon,
     CloudIcon,
     CurrencyDollarIcon,
     ListBulletIcon,
     Squares2X2Icon,
 } from '@heroicons/react/24/outline'
 import dayjs, { Dayjs } from 'dayjs'
+import { Flex, Text } from '@tremor/react'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../api/api'
 import AdvancedTable, { IColumn } from '../../../components/AdvancedTable'
 import {
@@ -166,8 +170,8 @@ export const gridOptions: GridOptions = {
         },
     },
     enableRangeSelection: true,
-    groupIncludeFooter: true,
-    groupIncludeTotalFooter: true,
+    // groupIncludeFooter: true,
+    // groupIncludeTotalFooter: true,
 }
 
 export default function MetricTable({
@@ -310,7 +314,7 @@ export default function MetricTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    width: 80,
+                    width: 100,
                     valueFormatter: (param: ValueFormatterParams) =>
                         exactPriceDisplay(param.value),
                 },
@@ -348,7 +352,7 @@ export default function MetricTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    width: 200,
+                    width: 100,
                     valueFormatter: (param: ValueFormatterParams) =>
                         exactPriceDisplay(param.value),
                 },
@@ -361,7 +365,7 @@ export default function MetricTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    width: 120,
+                    width: 100,
                     valueFormatter: (param: ValueFormatterParams) =>
                         `${numberDisplay(param.value)}%`,
                 },
@@ -375,6 +379,52 @@ export default function MetricTable({
             pinned: true,
             children: [
                 {
+                    field: 'changePercent',
+                    headerName: '%',
+                    type: 'string',
+                    width: 100,
+                    filter: true,
+                    sortable: true,
+                    resizable: true,
+                    suppressMenu: true,
+                    // eslint-disable-next-line react/no-unstable-nested-components
+                    cellRenderer: (
+                        param: ICellRendererParams<
+                            GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
+                            any
+                        >
+                    ) => {
+                        return (
+                            <Flex
+                                flexDirection="row"
+                                justifyContent="start"
+                                alignItems="center"
+                                className={`h-full w-full space-x-1 ${
+                                    param.value > 0
+                                        ? 'text-green-600'
+                                        : 'text-red-600'
+                                }`}
+                            >
+                                {param.value > 0 ? (
+                                    <ArrowTrendingUpIcon className="w-4" />
+                                ) : (
+                                    <ArrowTrendingDownIcon className="w-4" />
+                                )}
+
+                                <Text
+                                    className={
+                                        param.value > 0
+                                            ? 'text-green-600'
+                                            : 'text-red-600'
+                                    }
+                                >
+                                    {numberDisplay(param.value, 0)}%
+                                </Text>
+                            </Flex>
+                        )
+                    },
+                },
+                {
                     field: 'change',
                     headerName: 'Delta',
                     type: 'string',
@@ -386,20 +436,6 @@ export default function MetricTable({
                     suppressMenu: true,
                     valueFormatter: (param: ValueFormatterParams) =>
                         exactPriceDisplay(param.value),
-                },
-                {
-                    field: 'changePercent',
-                    headerName: '%',
-                    type: 'string',
-                    width: 80,
-                    filter: true,
-                    sortable: true,
-                    resizable: true,
-                    suppressMenu: true,
-                    valueFormatter: (param: ValueFormatterParams) =>
-                        param.data === undefined
-                            ? ''
-                            : `${numberDisplay(param.value)}%`,
                 },
             ],
         },

@@ -340,6 +340,7 @@ export default function AdvancedTable<TData = any, TValue = any>({
         pagination: true,
         paginationPageSize: 10,
         rowSelection: 'multiple',
+        pinnedTopRowData: pinnedRow,
         suppressExcelExport: true,
         alwaysShowHorizontalScroll: true,
         animateRows: false,

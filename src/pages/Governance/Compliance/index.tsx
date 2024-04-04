@@ -11,10 +11,8 @@ import TopHeader from '../../../components/Layout/Header'
 import FilterGroup, { IFilter } from '../../../components/FilterGroup'
 import { useURLParam, useURLState } from '../../../utilities/urlstate'
 import {
-    BenchmarkFrameworkFilter,
     BenchmarkStateFilter,
     ConnectorFilter,
-    ScoreCategory,
 } from '../../../components/FilterGroup/FilterTypes'
 import { errorHandling } from '../../../types/apierror'
 import RadioSelector, {

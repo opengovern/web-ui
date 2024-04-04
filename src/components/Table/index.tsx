@@ -190,7 +190,10 @@ export default function Table<TData = any, TValue = any>({
 
             if (item.type === 'string') {
                 v.cellDataType = 'text'
-                if (item.cellRenderer === undefined) {
+                if (
+                    item.cellRenderer === undefined &&
+                    item.valueFormatter === undefined
+                ) {
                     v.cellRenderer = (params: ICellRendererParams<TData>) => (
                         <Flex
                             className={`${item.isBold ? ' text-gray-900' : ''}`}

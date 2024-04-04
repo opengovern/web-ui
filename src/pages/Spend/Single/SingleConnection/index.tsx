@@ -41,10 +41,7 @@ import {
     checkGranularity,
     generateItems,
 } from '../../../../utilities/dateComparator'
-import {
-    exactPriceDisplay,
-    numberDisplay,
-} from '../../../../utilities/numericDisplay'
+import { numberDisplay } from '../../../../utilities/numericDisplay'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { capitalizeFirstLetter } from '../../../../utilities/labelMaker'
 import {
@@ -200,8 +197,9 @@ export default function SingleSpendConnection({
                         pivot: false,
                         aggFunc: 'sum',
                         valueFormatter: (param: ValueFormatterParams) =>
-                            exactPriceDisplay(
-                                param.value === undefined ? 0 : param.value
+                            numberDisplay(
+                                param.value === undefined ? 0 : param.value,
+                                2
                             ),
                     }
                     return v

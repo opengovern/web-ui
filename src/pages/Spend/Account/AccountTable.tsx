@@ -1,4 +1,8 @@
-import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
+import {
+    GridOptions,
+    ICellRendererParams,
+    ValueFormatterParams,
+} from 'ag-grid-community'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import {
@@ -6,9 +10,11 @@ import {
     ListBulletIcon,
     ArrowTrendingUpIcon,
     CloudIcon,
+    ArrowTrendingDownIcon,
 } from '@heroicons/react/24/outline'
 import dayjs, { Dayjs } from 'dayjs'
 import { useAtomValue } from 'jotai'
+import { Flex, Text } from '@tremor/react'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../api/api'
 import AdvancedTable, { IColumn } from '../../../components/AdvancedTable'
 import {
@@ -193,8 +199,8 @@ const gridOptions: GridOptions = {
         },
     },
     enableRangeSelection: true,
-    groupIncludeFooter: true,
-    groupIncludeTotalFooter: true,
+    // groupIncludeFooter: true,
+    // groupIncludeTotalFooter: true,
     maintainColumnOrder: true,
 }
 
@@ -216,7 +222,10 @@ export default function AccountTable({
             | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
             | undefined
     ) => {
-        let columns: IColumn<any, any>[] = []
+        let columns: IColumn<
+            GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
+            any
+        >[] = []
         if (input) {
             const columnNames =
                 input?.flatMap((row) => {
@@ -345,7 +354,7 @@ export default function AccountTable({
                     field: 'totalCost',
                     headerName: 'Spend',
                     type: 'price',
-                    width: 90,
+                    width: 100,
                     aggFunc: 'sum',
                     filter: true,
                     sortable: true,
@@ -380,7 +389,7 @@ export default function AccountTable({
                     field: 'prevTotalCost',
                     headerName: 'Spend',
                     type: 'string',
-                    width: 200,
+                    width: 100,
                     aggFunc: 'sum',
                     filter: true,
                     sortable: true,
@@ -393,7 +402,7 @@ export default function AccountTable({
                     field: 'prevPercent',
                     headerName: '% of Total',
                     type: 'string',
-                    width: 120,
+                    width: 100,
                     aggFunc: 'sum',
                     filter: true,
                     sortable: true,
@@ -409,10 +418,57 @@ export default function AccountTable({
             type: 'string',
             children: [
                 {
+                    field: 'changePercent',
+                    headerName: '%',
+                    type: 'string',
+                    width: 100,
+                    aggFunc: 'sum',
+                    filter: true,
+                    sortable: true,
+                    resizable: true,
+                    suppressMenu: true,
+                    // eslint-disable-next-line react/no-unstable-nested-components
+                    cellRenderer: (
+                        param: ICellRendererParams<
+                            GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
+                            any
+                        >
+                    ) => {
+                        return (
+                            <Flex
+                                flexDirection="row"
+                                justifyContent="start"
+                                alignItems="center"
+                                className={`h-full w-full space-x-1 ${
+                                    param.value > 0
+                                        ? 'text-green-600'
+                                        : 'text-red-600'
+                                }`}
+                            >
+                                {param.value > 0 ? (
+                                    <ArrowTrendingUpIcon className="w-4" />
+                                ) : (
+                                    <ArrowTrendingDownIcon className="w-4" />
+                                )}
+
+                                <Text
+                                    className={
+                                        param.value > 0
+                                            ? 'text-green-600'
+                                            : 'text-red-600'
+                                    }
+                                >
+                                    {numberDisplay(param.value, 0)}%
+                                </Text>
+                            </Flex>
+                        )
+                    },
+                },
+                {
                     field: 'change',
                     headerName: 'Delta',
                     type: 'string',
-                    width: 90,
+                    width: 100,
                     aggFunc: 'sum',
                     filter: true,
                     sortable: true,
@@ -420,19 +476,6 @@ export default function AccountTable({
                     suppressMenu: true,
                     valueFormatter: (param: ValueFormatterParams) =>
                         exactPriceDisplay(param.value),
-                },
-                {
-                    field: 'changePercent',
-                    headerName: '%',
-                    type: 'string',
-                    width: 90,
-                    aggFunc: 'sum',
-                    filter: true,
-                    sortable: true,
-                    resizable: true,
-                    suppressMenu: true,
-                    valueFormatter: (param: ValueFormatterParams) =>
-                        `${numberDisplay(param.value)}%`,
                 },
             ],
         },
