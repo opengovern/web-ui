@@ -202,6 +202,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             page: ['compliance', 'findings'],
             children: [
                 {
+                    name: 'Overview',
+                    page: 'security-overview',
+                    isPreview: false,
+                    isLoading: false,
+                    count: undefined,
+                    error: false,
+                },
+                {
                     name: 'Compliance',
                     page: 'compliance',
                     isPreview: false,
