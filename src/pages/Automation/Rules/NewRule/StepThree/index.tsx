@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react'
 import {
     useAlertingApiV1ActionCreateCreate,
     useAlertingApiV1ActionJiraCreate,
+    useAlertingApiV1ActionListList,
     useAlertingApiV1ActionSlackCreate,
 } from '../../../../../api/alerting.gen'
 
@@ -20,6 +21,8 @@ interface IStep {
 }
 
 export default function StepThree({ onNext, onBack }: IStep) {
+    const [existingAlert, setExistingAlert] = useState('')
+
     const [alert, setAlert] = useState('')
     const [method, setMethod] = useState('')
     const [url, setUrl] = useState('')
@@ -73,6 +76,12 @@ export default function StepThree({ onNext, onBack }: IStep) {
         {},
         false
     )
+
+    const {
+        response: actionList,
+        isLoading: actionListLoading,
+        isExecuted: actionListExecuted,
+    } = useAlertingApiV1ActionListList()
 
     const createAction = () => {
         switch (alert) {
@@ -273,24 +282,51 @@ export default function StepThree({ onNext, onBack }: IStep) {
                     <Text>3/4.</Text>
                     <Text className="text-gray-800 font-semibold">Action</Text>
                 </Flex>
+                <Text>Choose from existing Actions:</Text>
                 <Flex>
-                    <Text className="text-gray-800">Alert type</Text>
-                    <Select
-                        enableClear={false}
-                        className="w-2/3"
-                        value={alert}
-                        onValueChange={setAlert}
-                    >
-                        <SelectItem value="webhook">
-                            <Text>Webhook</Text>
-                        </SelectItem>
-                        <SelectItem value="slack">
-                            <Text>Slack</Text>
-                        </SelectItem>
-                        <SelectItem value="jira">
-                            <Text>Jira Task</Text>
-                        </SelectItem>
-                    </Select>
+                    <Text className="text-gray-800 w-1/3">Alert Name</Text>
+                    <div className="w-2/3">
+                        <Select
+                            enableClear
+                            className="my-1"
+                            value={existingAlert}
+                            onValueChange={(v) => {
+                                setExistingAlert(v)
+                                setAlert('')
+                            }}
+                        >
+                            {actionList?.map((v) => {
+                                return (
+                                    <SelectItem value={(v.id || 0).toString()}>
+                                        <Text>{v.name || v.url}</Text>
+                                    </SelectItem>
+                                )
+                            })}
+                        </Select>
+                    </div>
+                </Flex>
+                <Text className="mt-3">Or create a new Action:</Text>
+                <Flex>
+                    <Text className="text-gray-800 w-1/3">Alert type</Text>
+                    <div className="w-2/3">
+                        <Select
+                            enableClear={false}
+                            className="w-full"
+                            value={alert}
+                            onValueChange={setAlert}
+                            disabled={existingAlert !== ''}
+                        >
+                            <SelectItem value="webhook">
+                                <Text>Webhook</Text>
+                            </SelectItem>
+                            <SelectItem value="slack">
+                                <Text>Slack</Text>
+                            </SelectItem>
+                            <SelectItem value="jira">
+                                <Text>Jira Task</Text>
+                            </SelectItem>
+                        </Select>
+                    </div>
                 </Flex>
                 {renderOption()}
             </Flex>

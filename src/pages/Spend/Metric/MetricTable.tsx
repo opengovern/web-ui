@@ -314,23 +314,23 @@ export default function MetricTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    width: 100,
+                    width: 200,
                     valueFormatter: (param: ValueFormatterParams) =>
                         exactPriceDisplay(param.value),
                 },
-                {
-                    field: 'percent',
-                    headerName: '% of Total',
-                    type: 'string',
-                    aggFunc: 'sum',
-                    filter: true,
-                    sortable: true,
-                    resizable: true,
-                    suppressMenu: true,
-                    width: 100,
-                    valueFormatter: (param: ValueFormatterParams) =>
-                        `${numberDisplay(param.value)}%`,
-                },
+                // {
+                //     field: 'percent',
+                //     headerName: '% of Total',
+                //     type: 'string',
+                //     aggFunc: 'sum',
+                //     filter: true,
+                //     sortable: true,
+                //     resizable: true,
+                //     suppressMenu: true,
+                //     width: 100,
+                //     valueFormatter: (param: ValueFormatterParams) =>
+                //         `${numberDisplay(param.value)}%`,
+                // },
             ],
         },
         {
@@ -352,23 +352,23 @@ export default function MetricTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    width: 100,
+                    width: 200,
                     valueFormatter: (param: ValueFormatterParams) =>
                         exactPriceDisplay(param.value),
                 },
-                {
-                    field: 'prevPercent',
-                    headerName: '% of Total',
-                    type: 'string',
-                    aggFunc: 'sum',
-                    filter: true,
-                    sortable: true,
-                    resizable: true,
-                    suppressMenu: true,
-                    width: 100,
-                    valueFormatter: (param: ValueFormatterParams) =>
-                        `${numberDisplay(param.value)}%`,
-                },
+                // {
+                //     field: 'prevPercent',
+                //     headerName: '% of Total',
+                //     type: 'string',
+                //     aggFunc: 'sum',
+                //     filter: true,
+                //     sortable: true,
+                //     resizable: true,
+                //     suppressMenu: true,
+                //     width: 100,
+                //     valueFormatter: (param: ValueFormatterParams) =>
+                //         `${numberDisplay(param.value)}%`,
+                // },
             ],
         },
         {
@@ -382,7 +382,7 @@ export default function MetricTable({
                     field: 'changePercent',
                     headerName: '%',
                     type: 'string',
-                    width: 100,
+                    width: 110,
                     filter: true,
                     sortable: true,
                     resizable: true,
@@ -418,7 +418,12 @@ export default function MetricTable({
                                             : 'text-red-600'
                                     }
                                 >
-                                    {numberDisplay(param.value, 0)}%
+                                    {Math.abs(param.value) > 1000 ? '+' : ''}
+                                    {numberDisplay(
+                                        Math.min(1000, Math.abs(param.value)),
+                                        0
+                                    )}
+                                    %
                                 </Text>
                             </Flex>
                         )
@@ -434,8 +439,42 @@ export default function MetricTable({
                     sortable: true,
                     resizable: true,
                     suppressMenu: true,
-                    valueFormatter: (param: ValueFormatterParams) =>
-                        exactPriceDisplay(param.value),
+                    // eslint-disable-next-line react/no-unstable-nested-components
+                    cellRenderer: (
+                        param: ICellRendererParams<
+                            GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
+                            any
+                        >
+                    ) => {
+                        return (
+                            <Flex
+                                flexDirection="row"
+                                justifyContent="start"
+                                alignItems="center"
+                                className={`h-full w-full space-x-1 ${
+                                    param.value > 0
+                                        ? 'text-green-600'
+                                        : 'text-red-600'
+                                }`}
+                            >
+                                {param.value > 0 ? (
+                                    <ArrowTrendingUpIcon className="w-4" />
+                                ) : (
+                                    <ArrowTrendingDownIcon className="w-4" />
+                                )}
+
+                                <Text
+                                    className={
+                                        param.value > 0
+                                            ? 'text-green-600'
+                                            : 'text-red-600'
+                                    }
+                                >
+                                    ${numberDisplay(Math.abs(param.value), 0)}
+                                </Text>
+                            </Flex>
+                        )
+                    },
                 },
             ],
         },

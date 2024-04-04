@@ -110,7 +110,7 @@ export const topCategories = (
                 kaytuId: item[0],
                 name: item[0],
                 value: item[1].count,
-                connector: [],
+                connector: [SourceType.CloudAWS, SourceType.CloudAzure],
                 id: item[0],
             })
         }

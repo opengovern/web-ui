@@ -77,6 +77,7 @@ export const topCategories = (
         data: {
             name: string | undefined
             value: number | undefined
+            connector: SourceType[]
         }[]
         total: number | undefined
     } = { data: [], total: 0 }
@@ -86,6 +87,7 @@ export const topCategories = (
             top.data.push({
                 name: arr[i][0],
                 value: arr[i][1],
+                connector: [SourceType.CloudAWS, SourceType.CloudAzure],
             })
         }
         top.data.sort((a, b) => {

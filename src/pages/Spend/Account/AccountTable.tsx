@@ -354,7 +354,7 @@ export default function AccountTable({
                     field: 'totalCost',
                     headerName: 'Spend',
                     type: 'price',
-                    width: 100,
+                    width: 200,
                     aggFunc: 'sum',
                     filter: true,
                     sortable: true,
@@ -363,19 +363,19 @@ export default function AccountTable({
                     valueFormatter: (param: ValueFormatterParams) =>
                         exactPriceDisplay(param.value),
                 },
-                {
-                    field: 'percent',
-                    headerName: '% of Total',
-                    type: 'string',
-                    width: 100,
-                    aggFunc: 'sum',
-                    filter: true,
-                    sortable: true,
-                    resizable: true,
-                    suppressMenu: true,
-                    valueFormatter: (param: ValueFormatterParams) =>
-                        `${numberDisplay(param.value)}%`,
-                },
+                // {
+                //     field: 'percent',
+                //     headerName: '% of Total',
+                //     type: 'string',
+                //     width: 100,
+                //     aggFunc: 'sum',
+                //     filter: true,
+                //     sortable: true,
+                //     resizable: true,
+                //     suppressMenu: true,
+                //     valueFormatter: (param: ValueFormatterParams) =>
+                //         `${numberDisplay(param.value)}%`,
+                // },
             ],
         },
         {
@@ -389,7 +389,7 @@ export default function AccountTable({
                     field: 'prevTotalCost',
                     headerName: 'Spend',
                     type: 'string',
-                    width: 100,
+                    width: 200,
                     aggFunc: 'sum',
                     filter: true,
                     sortable: true,
@@ -398,19 +398,19 @@ export default function AccountTable({
                     valueFormatter: (param: ValueFormatterParams) =>
                         exactPriceDisplay(param.value),
                 },
-                {
-                    field: 'prevPercent',
-                    headerName: '% of Total',
-                    type: 'string',
-                    width: 100,
-                    aggFunc: 'sum',
-                    filter: true,
-                    sortable: true,
-                    resizable: true,
-                    suppressMenu: true,
-                    valueFormatter: (param: ValueFormatterParams) =>
-                        `${numberDisplay(param.value)}%`,
-                },
+                // {
+                //     field: 'prevPercent',
+                //     headerName: '% of Total',
+                //     type: 'string',
+                //     width: 100,
+                //     aggFunc: 'sum',
+                //     filter: true,
+                //     sortable: true,
+                //     resizable: true,
+                //     suppressMenu: true,
+                //     valueFormatter: (param: ValueFormatterParams) =>
+                //         `${numberDisplay(param.value)}%`,
+                // },
             ],
         },
         {
@@ -420,6 +420,58 @@ export default function AccountTable({
                 {
                     field: 'changePercent',
                     headerName: '%',
+                    type: 'string',
+                    width: 110,
+                    aggFunc: 'sum',
+                    filter: true,
+                    sortable: true,
+                    resizable: true,
+                    suppressMenu: true,
+                    // eslint-disable-next-line react/no-unstable-nested-components
+                    cellRenderer: (
+                        param: ICellRendererParams<
+                            GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
+                            any
+                        >
+                    ) => {
+                        return (
+                            <Flex
+                                flexDirection="row"
+                                justifyContent="start"
+                                alignItems="center"
+                                className={`h-full w-full space-x-1 ${
+                                    param.value > 0
+                                        ? 'text-green-600'
+                                        : 'text-red-600'
+                                }`}
+                            >
+                                {param.value > 0 ? (
+                                    <ArrowTrendingUpIcon className="w-4" />
+                                ) : (
+                                    <ArrowTrendingDownIcon className="w-4" />
+                                )}
+
+                                <Text
+                                    className={
+                                        param.value > 0
+                                            ? 'text-green-600'
+                                            : 'text-red-600'
+                                    }
+                                >
+                                    {Math.abs(param.value) > 1000 ? '+' : ''}
+                                    {numberDisplay(
+                                        Math.min(1000, Math.abs(param.value)),
+                                        0
+                                    )}
+                                    %
+                                </Text>
+                            </Flex>
+                        )
+                    },
+                },
+                {
+                    field: 'change',
+                    headerName: 'Delta',
                     type: 'string',
                     width: 100,
                     aggFunc: 'sum',
@@ -458,24 +510,11 @@ export default function AccountTable({
                                             : 'text-red-600'
                                     }
                                 >
-                                    {numberDisplay(param.value, 0)}%
+                                    ${numberDisplay(Math.abs(param.value), 0)}
                                 </Text>
                             </Flex>
                         )
                     },
-                },
-                {
-                    field: 'change',
-                    headerName: 'Delta',
-                    type: 'string',
-                    width: 100,
-                    aggFunc: 'sum',
-                    filter: true,
-                    sortable: true,
-                    resizable: true,
-                    suppressMenu: true,
-                    valueFormatter: (param: ValueFormatterParams) =>
-                        exactPriceDisplay(param.value),
                 },
             ],
         },
