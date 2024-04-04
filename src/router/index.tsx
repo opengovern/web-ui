@@ -38,6 +38,7 @@ import ScoreCategory from '../pages/Insights/ScoreCategory'
 import ScoreDetails from '../pages/Insights/Details'
 import Dashboards from '../pages/Dashboards'
 import Assistant from '../pages/Assistant'
+import SecurityOverview from '../pages/Governance/Overview'
 
 const authRoutes = [
     {
@@ -220,6 +221,11 @@ const authRoutes = [
         key: 'settings page',
         path: '/:ws/settings',
         component: Settings,
+    },
+    {
+        key: 'security overview',
+        path: '/:ws/security-overview',
+        component: SecurityOverview,
     },
     {
         key: 'compliance',
