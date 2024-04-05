@@ -40,7 +40,7 @@ interface IStep {
 }
 
 type IConditions = 'and' | 'or'
-type IField = 'score'
+type IField = 'security_score'
 type IOperations = '>' | '<'
 
 export default function StepTwo({ onNext, onBack }: IStep) {
@@ -48,7 +48,7 @@ export default function StepTwo({ onNext, onBack }: IStep) {
         RuleGroupType<RuleType<IField, IOperations, string>, IConditions>
     >({
         combinator: 'and',
-        rules: [{ field: 'score', operator: '<', value: '80' }],
+        rules: [{ field: 'security_score', operator: '<', value: '80' }],
     })
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [connectionGroup, setConnectionGroup] = useState('')
@@ -86,7 +86,7 @@ export default function StepTwo({ onNext, onBack }: IStep) {
                 <QueryBuilder
                     fields={[
                         {
-                            name: 'score',
+                            name: 'security_score',
                             label: 'Score (%)',
                             datatype: 'number',
                         },
