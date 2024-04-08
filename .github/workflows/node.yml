@@ -100,5 +100,3 @@ jobs:
         tags: |
           ${{ vars.AZURE_DOCKER_REGISTRY }}/kaytu-frontend:${{ steps.tag_version.outputs.new_tag }}-${{ github.event.inputs.deployTo == '' && 'dev' || github.event.inputs.deployTo }}
         file: deploy/Dockerfile
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
