@@ -1,16 +1,14 @@
 import { Col, Grid } from '@tremor/react'
-import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import ListCard from '../../../components/Cards/ListCard'
 import {
-    useInventoryApiV2AnalyticsSpendCompositionList,
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTableList,
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../api/inventory.gen'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
-import { topAccounts, topCategories, topServices } from '..'
+import { topAccounts, topServices } from '..'
 import { SpendChart } from '../../../components/Spend/Chart'
 import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
 import {
@@ -158,30 +156,6 @@ export function SpendOverview() {
         sendNow: refreshAccountCost,
     } = useIntegrationApiV1ConnectionsSummariesList(query)
 
-    const {
-        response: composition,
-        isLoading: compositionLoading,
-        error: compositionError,
-        sendNow: refreshComposition,
-    } = useInventoryApiV2AnalyticsSpendCompositionList({
-        top: 5,
-        ...(selectedConnections.provider && {
-            connector: [selectedConnections.provider],
-        }),
-        ...(selectedConnections.connections && {
-            connectionId: selectedConnections.connections,
-        }),
-        ...(selectedConnections.connectionGroup && {
-            connectionGroup: selectedConnections.connectionGroup,
-        }),
-        ...(activeTimeRange.start && {
-            endTime: activeTimeRange.end.unix(),
-        }),
-        ...(activeTimeRange.start && {
-            startTime: activeTimeRange.start.unix(),
-        }),
-    })
-
     const { response: responseChart, isLoading: isLoadingChart } =
         useInventoryApiV2AnalyticsSpendTableList({
             startTime: activeTimeRange.start.unix(),
@@ -216,8 +190,8 @@ export function SpendOverview() {
                 initialFilters={['Date']}
                 datePickerDefault={defaultSpendTime(workspace || '')}
             />
-            <Grid numItems={3} className="w-full gap-4">
-                <Col numColSpan={3}>
+            <Grid numItems={2} className="w-full gap-4">
+                <Col numColSpan={2}>
                     <SpendChart
                         costTrend={trend()}
                         title="Total spend"
@@ -253,24 +227,13 @@ export function SpendOverview() {
                     />
                 </Col>
                 <ListCard
-                    title="Top Spend Categories"
-                    keyColumnTitle="Category"
-                    valueColumnTitle="Spend"
-                    loading={compositionLoading}
-                    items={topCategories(composition)}
-                    url={`/${workspace}/spend-metrics?groupby=category`}
-                    type="service"
-                    isPrice
-                    error={getErrorMessage(compositionError)}
-                    onRefresh={refreshComposition}
-                    isClickable={false}
-                />
-                <ListCard
                     title="Top Cloud Accounts"
-                    keyColumnTitle="Account Names"
-                    valueColumnTitle="Spend"
+                    showColumnsTitle={false}
+                    firstTabTitle="Spend"
+                    secondTabTitle="Variance"
                     loading={accountCostLoading}
                     items={topAccounts(accountCostResponse)}
+                    secondTabItems={topServices(serviceCostResponse)}
                     url={`/${workspace}/spend-accounts`}
                     type="account"
                     isPrice
@@ -281,10 +244,12 @@ export function SpendOverview() {
                 />
                 <ListCard
                     title="Top Services"
-                    keyColumnTitle="Metric Name"
-                    valueColumnTitle="Spend"
+                    showColumnsTitle={false}
+                    firstTabTitle="Spend"
+                    secondTabTitle="Variance"
                     loading={serviceCostLoading}
                     items={topServices(serviceCostResponse)}
+                    secondTabItems={topServices(serviceCostResponse)}
                     url={`/${workspace}/spend-metrics`}
                     type="service"
                     // linkPrefix="metrics/"

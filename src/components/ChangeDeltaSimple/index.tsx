@@ -62,7 +62,7 @@ export default function BadgeDeltaSimple({
                     isDelta ? '' : '%'
                 }`}</Text>
             </Flex>
-            <Text>{children}</Text>
+            {children && <Text>{children}</Text>}
         </Flex>
     )
 }
