@@ -378,7 +378,7 @@ export function DateFilter(
 export function ProductFilter(onRemove: () => void) {
     return {
         title: 'Product',
-        icon: TagIcon,
+        icon: DocumentBadge,
         itemsTitles: ['All'],
         isValueChanged: true,
         selector: (
@@ -404,7 +404,7 @@ export function ProductFilter(onRemove: () => void) {
 export function EnvironmentFilter(onRemove: () => void) {
     return {
         title: 'Environment',
-        icon: TagIcon,
+        icon: DocumentBadge,
         itemsTitles: ['All'],
         isValueChanged: true,
         selector: (
