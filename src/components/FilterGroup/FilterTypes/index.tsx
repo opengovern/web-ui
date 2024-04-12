@@ -375,6 +375,57 @@ export function DateFilter(
     }
 }
 
+export function ProductFilter(onRemove: () => void) {
+    return {
+        title: 'Product',
+        icon: TagIcon,
+        itemsTitles: ['All'],
+        isValueChanged: true,
+        selector: (
+            <RadioSelector
+                title="Product"
+                radioItems={[
+                    {
+                        title: 'All',
+                        value: '',
+                    },
+                ]}
+                selectedValue=""
+                onItemSelected={(t) => 1}
+                supportedConditions={['is']}
+                selectedCondition="is"
+                onRemove={onRemove}
+                onConditionChange={() => ''}
+            />
+        ),
+    }
+}
+
+export function EnvironmentFilter(onRemove: () => void) {
+    return {
+        title: 'Environment',
+        icon: TagIcon,
+        itemsTitles: ['All'],
+        isValueChanged: true,
+        selector: (
+            <RadioSelector
+                title="Environment"
+                radioItems={[
+                    {
+                        title: 'All',
+                        value: '',
+                    },
+                ]}
+                selectedValue=""
+                onItemSelected={(t) => 1}
+                supportedConditions={['is']}
+                selectedCondition="is"
+                onRemove={onRemove}
+                onConditionChange={() => ''}
+            />
+        ),
+    }
+}
 export function ScoreCategory(
     selectedValue: string,
     isValueChanged: boolean,

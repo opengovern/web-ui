@@ -20,6 +20,8 @@ import {
     CloudAccountFilter,
     ConnectorFilter,
     DateFilter,
+    EnvironmentFilter,
+    ProductFilter,
     ScoreCategory,
     ScoreTagFilter,
     ServiceNameFilter,
@@ -323,6 +325,21 @@ export default function TopHeader({
             selectedDateCondition,
             setSelectedDateCondition
         ),
+
+        ProductFilter(() => {
+            setAddedFilters(addedFilters.filter((a) => a !== 'Product'))
+        }),
+
+        EnvironmentFilter(() => {
+            setAddedFilters(addedFilters.filter((a) => a !== 'Environment'))
+        }),
+
+        // EnvironmentFilter(
+        //     activeTimeRange,
+        //     setActiveTimeRange,
+        //     selectedDateCondition,
+        //     setSelectedDateCondition
+        // ),
     ]
 
     const activeFilters = filters.filter((v) => {
