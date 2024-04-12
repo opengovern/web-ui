@@ -136,12 +136,34 @@ export function SpendOverview() {
         granularity,
     })
 
+    const [serviceSort, setServiceSort] = useState<
+        'dimension' | 'cost' | 'growth' | 'growth_rate'
+    >('cost')
     const {
         response: serviceCostResponse,
         isLoading: serviceCostLoading,
         error: serviceCostErr,
         sendNow: serviceCostRefresh,
-    } = useInventoryApiV2AnalyticsSpendMetricList(query)
+    } = useInventoryApiV2AnalyticsSpendMetricList({
+        ...(selectedConnections.provider !== '' && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
+        }),
+        ...(activeTimeRange.start && {
+            startTime: activeTimeRange.start.unix(),
+        }),
+        ...(activeTimeRange.end && {
+            endTime: activeTimeRange.end.unix(),
+        }),
+        pageSize: 5,
+        pageNumber: 1,
+        sortBy: serviceSort,
+    })
     const {
         response: servicePrevCostResponse,
         isLoading: servicePrevCostLoading,
@@ -149,12 +171,41 @@ export function SpendOverview() {
         sendNow: serviceCostPrevRefresh,
     } = useInventoryApiV2AnalyticsSpendMetricList(prevQuery)
 
+    const [accountSort, setAccountSort] = useState<
+        | 'onboard_date'
+        | 'resource_count'
+        | 'cost'
+        | 'growth'
+        | 'growth_rate'
+        | 'cost_growth'
+        | 'cost_growth_rate'
+    >('cost')
     const {
         response: accountCostResponse,
         isLoading: accountCostLoading,
         error: accountCostError,
         sendNow: refreshAccountCost,
-    } = useIntegrationApiV1ConnectionsSummariesList(query)
+    } = useIntegrationApiV1ConnectionsSummariesList({
+        ...(selectedConnections.provider !== '' && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
+        }),
+        ...(activeTimeRange.start && {
+            startTime: activeTimeRange.start.unix(),
+        }),
+        ...(activeTimeRange.end && {
+            endTime: activeTimeRange.end.unix(),
+        }),
+        pageSize: 5,
+        pageNumber: 1,
+        needCost: true,
+        sortBy: accountSort,
+    })
 
     const { response: responseChart, isLoading: isLoadingChart } =
         useInventoryApiV2AnalyticsSpendTableList({
@@ -229,11 +280,17 @@ export function SpendOverview() {
                 <ListCard
                     title="Top Cloud Accounts"
                     showColumnsTitle={false}
-                    firstTabTitle="Spend"
-                    secondTabTitle="Variance"
+                    tabs={['Spend', 'Variance']}
+                    onTabChange={(tabIdx) => {
+                        setAccountSort(
+                            tabIdx === 0 ? 'cost' : 'cost_growth_rate'
+                        )
+                    }}
                     loading={accountCostLoading}
-                    items={topAccounts(accountCostResponse)}
-                    secondTabItems={topServices(serviceCostResponse)}
+                    items={topAccounts(
+                        accountCostResponse,
+                        accountSort === 'cost_growth_rate'
+                    )}
                     url={`/${workspace}/spend-accounts`}
                     type="account"
                     isPrice
@@ -245,11 +302,15 @@ export function SpendOverview() {
                 <ListCard
                     title="Top Services"
                     showColumnsTitle={false}
-                    firstTabTitle="Spend"
-                    secondTabTitle="Variance"
+                    tabs={['Spend', 'Variance']}
+                    onTabChange={(tabIdx) => {
+                        setServiceSort(tabIdx === 0 ? 'cost' : 'growth_rate')
+                    }}
                     loading={serviceCostLoading}
-                    items={topServices(serviceCostResponse)}
-                    secondTabItems={topServices(serviceCostResponse)}
+                    items={topServices(
+                        serviceCostResponse,
+                        serviceSort === 'growth_rate'
+                    )}
                     url={`/${workspace}/spend-metrics`}
                     type="service"
                     // linkPrefix="metrics/"

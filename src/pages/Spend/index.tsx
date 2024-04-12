@@ -13,12 +13,14 @@ import { SpendOverview } from './Overview'
 export const topServices = (
     input:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse
-        | undefined
+        | undefined,
+    addRateChange: boolean
 ) => {
     const top: {
         data: {
             name: string | undefined
             value: number | undefined
+            valueRateChange?: number | undefined
             connector: SourceType[] | undefined
             kaytuId: string | undefined
         }[]
@@ -29,6 +31,12 @@ export const topServices = (
             top.data.push({
                 name: input.metrics[i].cost_dimension_name,
                 value: input.metrics[i].total_cost,
+                valueRateChange: addRateChange
+                    ? (((input.metrics[i].daily_cost_at_end_time || 0) -
+                          (input.metrics[i].daily_cost_at_start_time || 0)) /
+                          (input.metrics[i].daily_cost_at_start_time || 1)) *
+                      100.0
+                    : undefined,
                 connector: input.metrics[i].connector,
                 kaytuId: input.metrics[i].cost_dimension_id,
             })
@@ -41,12 +49,14 @@ export const topServices = (
 export const topAccounts = (
     input:
         | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse
-        | undefined
+        | undefined,
+    addRateChange: boolean
 ) => {
     const top: {
         data: {
             name: string | undefined
             value: number | undefined
+            valueRateChange?: number | undefined
             connector: SourceType[]
             id: string | undefined
             kaytuId: string | undefined
@@ -58,6 +68,12 @@ export const topAccounts = (
             top.data.push({
                 name: input.connections[i].providerConnectionName,
                 value: input.connections[i].cost,
+                valueRateChange: addRateChange
+                    ? (((input.connections[i].dailyCostAtEndTime || 0) -
+                          (input.connections[i].dailyCostAtStartTime || 0)) /
+                          (input.connections[i].dailyCostAtStartTime || 1)) *
+                      100.0
+                    : undefined,
                 connector: [input.connections[i].connector || SourceType.Nil],
                 id: input.connections[i].providerConnectionID,
                 kaytuId: input.connections[i].id,
