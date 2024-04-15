@@ -10,8 +10,6 @@ const apiHostname = () => {
             return 'https://api.kaytu.sh'
         case 'app.kaytu.dev':
             return 'https://api.kaytu.dev'
-        case 'app.kaytu.sh':
-            return 'https://api.kaytu.sh'
         default:
             return 'https://api.kaytu.io'
     }
