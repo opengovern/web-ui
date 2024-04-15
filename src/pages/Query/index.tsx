@@ -153,6 +153,7 @@ export default function Query() {
     const isDemo = useAtomValue(isDemoAtom)
     const [pageSize, setPageSize] = useState(1000)
     const [autoRun, setAutoRun] = useState(false)
+    const [engine, setEngine] = useState('odysseus-sql')
 
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2AnalyticsCategoriesList()
@@ -167,6 +168,7 @@ export default function Query() {
     } = useInventoryApiV1QueryRunCreate(
         {
             page: { no: 1, size: pageSize },
+            engine,
             query: code,
         },
         {},
@@ -412,6 +414,35 @@ export default function Query() {
                                                     }
                                                 >
                                                     10,000
+                                                </SelectItem>
+                                            </Select>
+                                            <Text className="mr-2 w-fit">
+                                                Engine:
+                                            </Text>
+                                            <Select
+                                                enableClear={false}
+                                                className="w-56"
+                                                value={engine}
+                                            >
+                                                <SelectItem
+                                                    value="odysseus-sql"
+                                                    onClick={() =>
+                                                        setEngine(
+                                                            'odysseus-sql'
+                                                        )
+                                                    }
+                                                >
+                                                    Odysseus SQL
+                                                </SelectItem>
+                                                <SelectItem
+                                                    value="odysseus-rego"
+                                                    onClick={() =>
+                                                        setEngine(
+                                                            'odysseus-rego'
+                                                        )
+                                                    }
+                                                >
+                                                    Odysseus Rego
                                                 </SelectItem>
                                             </Select>
                                         </Flex>
