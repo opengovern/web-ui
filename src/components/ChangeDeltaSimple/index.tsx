@@ -5,6 +5,7 @@ import { numberDisplay } from '../../utilities/numericDisplay'
 
 interface IChangeDelta {
     change: string | number | undefined
+    maxChange?: number
     isDelta?: boolean
     children?: any
 }
@@ -39,10 +40,25 @@ const properties = (
 
 export default function BadgeDeltaSimple({
     change,
+    maxChange,
     isDelta,
     children,
 }: IChangeDelta) {
     const property = properties(change, isDelta)
+    const ch = () => {
+        const v = Math.abs(Number(change))
+        if (maxChange !== undefined) {
+            return Math.min(v, maxChange)
+        }
+        return v
+    }
+    const showPlus = () => {
+        const v = Math.abs(Number(change))
+        if (maxChange !== undefined) {
+            return v > maxChange
+        }
+        return false
+    }
     return (
         <Flex
             alignItems="center"
@@ -55,14 +71,11 @@ export default function BadgeDeltaSimple({
                     icon={property.icon}
                     className="-mr-1"
                 />
-                <Text
-                    className="w-fit"
-                    color={property.color}
-                >{`${numberDisplay(Math.abs(Number(change)), 0)} ${
-                    isDelta ? '' : '%'
-                }`}</Text>
+                <Text className="w-fit" color={property.color}>{`${
+                    showPlus() ? '+' : ''
+                }${numberDisplay(ch(), 0)} ${isDelta ? '' : '%'}`}</Text>
             </Flex>
-            <Text>{children}</Text>
+            {children && <Text>{children}</Text>}
         </Flex>
     )
 }

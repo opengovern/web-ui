@@ -1,16 +1,14 @@
 import { Col, Grid } from '@tremor/react'
-import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import ListCard from '../../../components/Cards/ListCard'
 import {
-    useInventoryApiV2AnalyticsSpendCompositionList,
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTableList,
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../api/inventory.gen'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
-import { topAccounts, topCategories, topServices } from '..'
+import { topAccounts, topServices } from '..'
 import { SpendChart } from '../../../components/Spend/Chart'
 import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
 import {
@@ -138,34 +136,16 @@ export function SpendOverview() {
         granularity,
     })
 
+    const [serviceSort, setServiceSort] = useState<
+        'dimension' | 'cost' | 'growth' | 'growth_rate'
+    >('cost')
     const {
         response: serviceCostResponse,
         isLoading: serviceCostLoading,
         error: serviceCostErr,
         sendNow: serviceCostRefresh,
-    } = useInventoryApiV2AnalyticsSpendMetricList(query)
-    const {
-        response: servicePrevCostResponse,
-        isLoading: servicePrevCostLoading,
-        error: servicePrevCostErr,
-        sendNow: serviceCostPrevRefresh,
-    } = useInventoryApiV2AnalyticsSpendMetricList(prevQuery)
-
-    const {
-        response: accountCostResponse,
-        isLoading: accountCostLoading,
-        error: accountCostError,
-        sendNow: refreshAccountCost,
-    } = useIntegrationApiV1ConnectionsSummariesList(query)
-
-    const {
-        response: composition,
-        isLoading: compositionLoading,
-        error: compositionError,
-        sendNow: refreshComposition,
-    } = useInventoryApiV2AnalyticsSpendCompositionList({
-        top: 5,
-        ...(selectedConnections.provider && {
+    } = useInventoryApiV2AnalyticsSpendMetricList({
+        ...(selectedConnections.provider !== '' && {
             connector: [selectedConnections.provider],
         }),
         ...(selectedConnections.connections && {
@@ -175,11 +155,56 @@ export function SpendOverview() {
             connectionGroup: selectedConnections.connectionGroup,
         }),
         ...(activeTimeRange.start && {
+            startTime: activeTimeRange.start.unix(),
+        }),
+        ...(activeTimeRange.end && {
             endTime: activeTimeRange.end.unix(),
+        }),
+        pageSize: 5,
+        pageNumber: 1,
+        sortBy: serviceSort,
+    })
+    const {
+        response: servicePrevCostResponse,
+        isLoading: servicePrevCostLoading,
+        error: servicePrevCostErr,
+        sendNow: serviceCostPrevRefresh,
+    } = useInventoryApiV2AnalyticsSpendMetricList(prevQuery)
+
+    const [accountSort, setAccountSort] = useState<
+        | 'onboard_date'
+        | 'resource_count'
+        | 'cost'
+        | 'growth'
+        | 'growth_rate'
+        | 'cost_growth'
+        | 'cost_growth_rate'
+    >('cost')
+    const {
+        response: accountCostResponse,
+        isLoading: accountCostLoading,
+        error: accountCostError,
+        sendNow: refreshAccountCost,
+    } = useIntegrationApiV1ConnectionsSummariesList({
+        ...(selectedConnections.provider !== '' && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
         }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
         }),
+        ...(activeTimeRange.end && {
+            endTime: activeTimeRange.end.unix(),
+        }),
+        pageSize: 5,
+        pageNumber: 1,
+        needCost: true,
+        sortBy: accountSort,
     })
 
     const { response: responseChart, isLoading: isLoadingChart } =
@@ -216,8 +241,8 @@ export function SpendOverview() {
                 initialFilters={['Date']}
                 datePickerDefault={defaultSpendTime(workspace || '')}
             />
-            <Grid numItems={3} className="w-full gap-4">
-                <Col numColSpan={3}>
+            <Grid numItems={2} className="w-full gap-4">
+                <Col numColSpan={2}>
                     <SpendChart
                         costTrend={trend()}
                         title="Total spend"
@@ -253,24 +278,19 @@ export function SpendOverview() {
                     />
                 </Col>
                 <ListCard
-                    title="Top Spend Categories"
-                    keyColumnTitle="Category"
-                    valueColumnTitle="Spend"
-                    loading={compositionLoading}
-                    items={topCategories(composition)}
-                    url={`/${workspace}/spend-metrics?groupby=category`}
-                    type="service"
-                    isPrice
-                    error={getErrorMessage(compositionError)}
-                    onRefresh={refreshComposition}
-                    isClickable={false}
-                />
-                <ListCard
                     title="Top Cloud Accounts"
-                    keyColumnTitle="Account Names"
-                    valueColumnTitle="Spend"
+                    showColumnsTitle={false}
+                    tabs={['Spend', 'Variance']}
+                    onTabChange={(tabIdx) => {
+                        setAccountSort(
+                            tabIdx === 0 ? 'cost' : 'cost_growth_rate'
+                        )
+                    }}
                     loading={accountCostLoading}
-                    items={topAccounts(accountCostResponse)}
+                    items={topAccounts(
+                        accountCostResponse,
+                        accountSort === 'cost_growth_rate'
+                    )}
                     url={`/${workspace}/spend-accounts`}
                     type="account"
                     isPrice
@@ -281,10 +301,16 @@ export function SpendOverview() {
                 />
                 <ListCard
                     title="Top Services"
-                    keyColumnTitle="Metric Name"
-                    valueColumnTitle="Spend"
+                    showColumnsTitle={false}
+                    tabs={['Spend', 'Variance']}
+                    onTabChange={(tabIdx) => {
+                        setServiceSort(tabIdx === 0 ? 'cost' : 'growth_rate')
+                    }}
                     loading={serviceCostLoading}
-                    items={topServices(serviceCostResponse)}
+                    items={topServices(
+                        serviceCostResponse,
+                        serviceSort === 'growth_rate'
+                    )}
                     url={`/${workspace}/spend-metrics`}
                     type="service"
                     // linkPrefix="metrics/"

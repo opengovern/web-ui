@@ -341,6 +341,7 @@ export function AssetOverview() {
                 <Col numColSpan={1}>
                     <ListCard
                         title="Top Categories"
+                        showColumnsTitle
                         keyColumnTitle="Category"
                         valueColumnTitle="Resources"
                         loading={compositionLoading}
@@ -355,6 +356,7 @@ export function AssetOverview() {
                 <Col numColSpan={1} className="h-full">
                     <ListCard
                         title="Top Cloud Accounts"
+                        showColumnsTitle
                         keyColumnTitle="Account Name"
                         valueColumnTitle="Resources"
                         loading={accountsLoading}
@@ -370,6 +372,7 @@ export function AssetOverview() {
                 <Col numColSpan={1} className="h-full">
                     <ListCard
                         title="Top Inventory"
+                        showColumnsTitle
                         keyColumnTitle="Metric Name"
                         valueColumnTitle="Resources"
                         loading={serviceLoading}
