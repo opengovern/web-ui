@@ -7,9 +7,7 @@ const apiHostname = () => {
         case 'localhost':
         case '127.0.0.1':
         case 'app.kaytu.sh':
-            return 'https://api.kaytu.sh'
         case 'app.kaytu.dev':
-            return 'https://api.kaytu.dev'
         default:
             return 'https://api.kaytu.io'
     }
