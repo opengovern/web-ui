@@ -17,7 +17,6 @@ import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-enterprise'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
-import 'ag-grid-community/styles/agGridMaterialFont.css'
 import {
     ReactNode,
     useEffect,
