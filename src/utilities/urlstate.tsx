@@ -15,7 +15,7 @@ export interface DateRange {
 export function defaultTime(wsName: string) {
     if (wsName === 'genco-olive') {
         const v: DateRange = {
-            start: dayjs.utc('2023-01-07').startOf('day'),
+            start: dayjs.utc('2024-01-07').startOf('day'),
             end: dayjs.utc('2024-01-14').endOf('day'),
         }
         return v
@@ -29,7 +29,7 @@ export function defaultTime(wsName: string) {
 export function defaultFindingsTime(wsName: string) {
     if (wsName === 'genco-olive') {
         const v: DateRange = {
-            start: dayjs.utc('2023-01-07').startOf('day'),
+            start: dayjs.utc('2024-01-07').startOf('day'),
             end: dayjs.utc('2024-01-14').endOf('day'),
         }
         return v
@@ -42,7 +42,7 @@ export function defaultFindingsTime(wsName: string) {
 export function defaultEventTime(wsName: string) {
     if (wsName === 'genco-olive') {
         const v: DateRange = {
-            start: dayjs.utc('2023-01-07').startOf('day'),
+            start: dayjs.utc('2024-01-07').startOf('day'),
             end: dayjs.utc('2024-01-14').endOf('day'),
         }
         return v
@@ -56,7 +56,7 @@ export function defaultEventTime(wsName: string) {
 export function defaultSpendTime(wsName: string) {
     if (wsName === 'genco-olive') {
         const v: DateRange = {
-            start: dayjs.utc('2023-01-07').startOf('day'),
+            start: dayjs.utc('2024-01-07').startOf('day'),
             end: dayjs.utc('2024-01-14').endOf('day'),
         }
         return v
@@ -70,7 +70,7 @@ export function defaultSpendTime(wsName: string) {
 export function defaultHomepageTime(wsName: string) {
     if (wsName === 'genco-olive') {
         const v: DateRange = {
-            start: dayjs.utc('2023-01-07').startOf('day'),
+            start: dayjs.utc('2024-01-07').startOf('day'),
             end: dayjs.utc('2024-01-14').endOf('day'),
         }
         return v
