@@ -7,6 +7,7 @@ import WorkspaceCard from '../../components/Cards/WorkspaceCard'
 import Spinner from '../../components/Spinner'
 import TopHeader from '../../components/Layout/Header'
 import { KaytuIcon } from '../../icons/icons'
+import Controls from '../Governance/Controls'
 
 export default function Workspaces() {
     const navigate = useNavigate()
@@ -27,49 +28,49 @@ export default function Workspaces() {
         }
     }, [isLoading])
 
-    if (workspaces?.length === 0) {
-        return (
-            <Flex flexDirection="col">
-                <Card className="w-1/2 pt-12 pb-16 mt-40">
-                    <Flex
-                        flexDirection="col"
-                        justifyContent="start"
-                        alignItems="center"
-                    >
-                        <KaytuIcon className="w-14 h-14 mb-6" />
-                        <Title className="font-bold text-2xl mb-3">
-                            Welcome
-                        </Title>
-                        <Text>
-                            Your account doesn’t have access to any
-                            organizations or workspaces.
-                        </Text>
-                        <Text className="mb-6">
-                            If you wish to try our platform, please{' '}
-                            <b>Request a no-cost trial access.</b>
-                        </Text>
-                        <a
-                            href="https://kaytu.io/bookademo/"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            <Button variant="secondary">
-                                Request Free Trial
-                            </Button>
-                        </a>
-                    </Flex>
-                </Card>
-                <Text className="mt-8 text-gray-400">
-                    If you think this is an error or you’ve lost access to an
-                    Organization,
-                </Text>
-                <Text className="text-gray-400">
-                    please send an email to{' '}
-                    <b className="text-gray-600">support@kaytu.io</b>
-                </Text>
-            </Flex>
-        )
-    }
+    // if (workspaces?.length === 0) {
+    //     return (
+    //         <Flex flexDirection="col">
+    //             <Card className="w-1/2 pt-12 pb-16 mt-40">
+    //                 <Flex
+    //                     flexDirection="col"
+    //                     justifyContent="start"
+    //                     alignItems="center"
+    //                 >
+    //                     <KaytuIcon className="w-14 h-14 mb-6" />
+    //                     <Title className="font-bold text-2xl mb-3">
+    //                         Welcome
+    //                     </Title>
+    //                     <Text>
+    //                         Your account doesn’t have access to any
+    //                         organizations or workspaces.
+    //                     </Text>
+    //                     <Text className="mb-6">
+    //                         If you wish to try our platform, please{' '}
+    //                         <b>Request a no-cost trial access.</b>
+    //                     </Text>
+    //                     <a
+    //                         href="https://kaytu.io/bookademo/"
+    //                         target="_blank"
+    //                         rel="noreferrer"
+    //                     >
+    //                         <Button variant="secondary">
+    //                             Request Free Trial
+    //                         </Button>
+    //                     </a>
+    //                 </Flex>
+    //             </Card>
+    //             <Text className="mt-8 text-gray-400">
+    //                 If you think this is an error or you’ve lost access to an
+    //                 Organization,
+    //             </Text>
+    //             <Text className="text-gray-400">
+    //                 please send an email to{' '}
+    //                 <b className="text-gray-600">support@kaytu.io</b>
+    //             </Text>
+    //         </Flex>
+    //     )
+    // }
 
     return (
         <>
@@ -79,12 +80,12 @@ export default function Workspaces() {
                         <Button variant="secondary" onClick={refreshList}>
                             <ArrowPathIcon className="h-5 text-kaytu-500" />
                         </Button>
-                        <Button
+                        {/* <Button
                             variant="secondary"
                             onClick={() => navigate(`/new-ws`)}
                         >
                             Add new Kaytu workspace
-                        </Button>
+                        </Button> */}
                     </Flex>
                 )}
             </TopHeader>

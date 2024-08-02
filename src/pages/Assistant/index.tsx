@@ -25,7 +25,6 @@ import {
     HandThumbUpIcon,
 } from '@heroicons/react/24/outline'
 
-import { useAuth0 } from '@auth0/auth0-react'
 import { useNavigate } from 'react-router-dom'
 import { useURLParam } from '../../utilities/urlstate'
 import {
@@ -37,6 +36,7 @@ import {
     toErrorMessage,
 } from '../../types/apierror'
 import { AssistantImage, AssistantProfileIcon } from '../../icons/icons'
+import { useAuth } from '../../utilities/auth'
 
 type assistantType =
     | 'kaytu-r-assistant'
@@ -175,7 +175,7 @@ export default function Assistant() {
         return reversed
     }
 
-    const { user, logout } = useAuth0()
+    const { user, logout } = useAuth()
 
     return (
         <Flex

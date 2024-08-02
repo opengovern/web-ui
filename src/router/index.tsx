@@ -2,7 +2,6 @@ import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import Assets from '../pages/Assets'
 import NotFound from '../pages/Errors'
-import { AuthenticationGuard } from '../components/Auth0/authentication-guard'
 import { CallbackPage } from '../pages/Callback'
 import Settings from '../pages/Settings'
 import Workspaces from '../pages/Workspaces'
@@ -75,257 +74,257 @@ const authRoutes = [
     {
         key: 'workspaces',
         path: '/workspaces',
-        component: Workspaces,
+        element: <Workspaces />,
     },
     {
         key: 'billing',
         path: '/billing',
-        component: Billing,
+        element: <Billing />,
     },
     {
         key: 'assets',
         path: '/:ws/assets',
-        component: Assets,
+        element: <Assets />,
     },
     {
         key: 'assets single',
         path: '/:ws/assets/:id',
-        component: Single,
+        element: <Single />,
     },
     {
         key: 'assets single metric',
         path: '/:ws/assets/:id/:metric',
-        component: Single,
+        element: <Single />,
     },
     {
         key: 'assets single metric',
         path: '/:ws/asset-cloud-account/:id/:metric',
-        component: Single,
+        element: <Single />,
     },
     {
         key: 'assets account detail',
         path: '/:ws/asset-cloud-accounts',
-        component: AssetAccounts,
+        element: <AssetAccounts />,
     },
     {
         key: 'assets account detail single',
         path: '/:ws/asset-cloud-accounts/:id/:metric',
-        component: Single,
+        element: <Single />,
     },
     {
         key: 'assets account detail single',
         path: '/:ws/asset-cloud-accounts/:id',
-        component: Single,
+        element: <Single />,
     },
     {
         key: 'assets metric detail',
         path: '/:ws/asset-metrics',
-        component: AssetMetrics,
+        element: <AssetMetrics />,
     },
     {
         key: 'assets single 2',
         path: '/:ws/asset-metrics/:id',
-        component: Single,
+        element: <Single />,
     },
     {
         key: 'assets single metric 2',
         path: '/:ws/asset-metrics/:id/:metric',
-        component: Single,
+        element: <Single />,
     },
     {
         key: 'spend',
         path: '/:ws/spend',
-        component: SpendOverview,
+        element: <SpendOverview />,
     },
     {
         key: 'spend single 1',
         path: '/:ws/spend/:id',
-        component: SingleSpend,
+        element: <SingleSpend />,
     },
     {
         key: 'spend single metric 1',
         path: '/:ws/spend/:id/:metric',
-        component: SingleSpend,
+        element: <SingleSpend />,
     },
     {
         key: 'spend',
         path: '/:ws/spend-metrics',
-        component: SpendMetrics,
+        element: <SpendMetrics />,
     },
     {
         key: 'spend',
         path: '/:ws/spend-accounts',
-        component: SpendAccounts,
+        element: <SpendAccounts />,
     },
     {
         key: 'spend single',
         path: '/:ws/spend-accounts/:id',
-        component: SingleSpend,
+        element: <SingleSpend />,
     },
     {
         key: 'spend single metric',
         path: '/:ws/spend-accounts/:id/:metric',
-        component: SingleSpend,
+        element: <SingleSpend />,
     },
     {
         key: 'spend single',
         path: '/:ws/spend-metrics/:id',
-        component: SingleSpend,
+        element: <SingleSpend />,
     },
     {
         key: 'spend single metric',
         path: '/:ws/spend-metrics/:id/:metric',
-        component: SingleSpend,
+        element: <SingleSpend />,
     },
     {
         key: 'spend single 2',
         path: '/:ws/spend/spend-details/:id',
-        component: SingleSpend,
+        element: <SingleSpend />,
     },
     {
         key: 'spend single metric 2',
         path: '/:ws/spend/spend-details/:id/:metric',
-        component: SingleSpend,
+        element: <SingleSpend />,
     },
     {
         key: 'score',
         path: '/:ws/score',
-        component: ScoreOverview,
+        element: <ScoreOverview />,
     },
     {
         key: 'score category',
         path: '/:ws/score/:category',
-        component: ScoreCategory,
+        element: <ScoreCategory />,
     },
     {
         key: 'score details',
         path: '/:ws/score/:category/:id',
-        component: ScoreDetails,
+        element: <ScoreDetails />,
     },
     {
         key: 'integrations',
         path: '/:ws/integrations',
-        component: Integrations,
+        element: <Integrations />,
     },
     {
         key: 'connector detail',
         path: '/:ws/integrations/:connector',
-        component: ConnectorDetail,
+        element: <ConnectorDetail />,
     },
     {
         key: 'connector resource types',
         path: '/:ws/integrations/:connector/resourcetypes',
-        component: ConnectorResourceTypes,
+        element: <ConnectorResourceTypes />,
     },
     {
         key: 'settings page',
         path: '/:ws/settings',
-        component: Settings,
+        element: <Settings />,
     },
     {
         key: 'security overview',
         path: '/:ws/security-overview',
-        component: SecurityOverview,
+        element: <SecurityOverview />,
     },
     {
         key: 'compliance',
         path: '/:ws/compliance',
-        component: Compliance,
+        element: <Compliance />,
     },
     {
         key: 'benchmark summary',
         path: '/:ws/compliance/:benchmarkId',
-        component: BenchmarkSummary,
+        element: <BenchmarkSummary />,
     },
     {
         key: 'benchmark summary',
         path: '/:ws/compliance/:benchmarkId/:controlId',
-        component: ControlDetail,
+        element: <ControlDetail />,
     },
     {
         key: 'benchmark single connection',
         path: '/:ws/compliance/:benchmarkId/:connectionId',
-        component: SingleComplianceConnection,
+        element: <SingleComplianceConnection />,
     },
     {
         key: 'findings control',
         path: '/:ws/findings',
-        component: Findings,
+        element: <Findings />,
     },
     {
         key: 'findings',
         path: '/:ws/findings/:controlId',
-        component: ControlDetail,
+        element: <ControlDetail />,
     },
     {
         key: 'service advisor summary',
         path: '/:ws/service-advisor/:id',
-        component: BenchmarkSummary,
+        element: <BenchmarkSummary />,
     },
     {
         key: 'home',
         path: '/:ws/overview',
-        component: Overview,
+        element: <Overview />,
     },
     {
         key: 'dashboard',
         path: '/:ws/dashboard/:dashboardId',
-        component: Dashboards,
+        element: <Dashboards />,
     },
     {
         key: 'assistant',
         path: '/:ws/assistant',
-        component: Assistant,
+        element: <Assistant />,
     },
     {
         key: 'deployment',
         path: '/:ws/deployment',
-        component: Stack,
+        element: <Stack />,
     },
     {
         key: 'query',
         path: '/:ws/query',
-        component: Query,
+        element: <Query />,
     },
     {
         key: 'rules',
         path: '/:ws/rules',
-        component: Rules,
+        element: <Rules />,
     },
     {
         key: 'bootstrap',
         path: '/:ws/bootstrap',
-        component: Boostrap,
+        element: <Boostrap />,
     },
     {
         key: 'new-ws',
         path: '/new-ws',
-        component: Boostrap,
+        element: <Boostrap />,
     },
     {
         key: 'alerts',
         path: '/:ws/alerts',
-        component: Alerts,
+        element: <Alerts />,
     },
     {
         key: 'resource collection',
         path: '/:ws/resource-collection',
-        component: ResourceCollection,
+        element: <ResourceCollection />,
     },
     {
         key: 'resource collection detail',
         path: '/:ws/resource-collection/:resourceId',
-        component: ResourceCollectionDetail,
+        element: <ResourceCollectionDetail />,
     },
     {
         key: 'benchmark summary',
         path: '/:ws/resource-collection/:resourceId/:id',
-        component: BenchmarkSummary,
+        element: <BenchmarkSummary />,
     },
     {
         key: 'benchmark single connection',
         path: '/:ws/resource-collection/:resourceId/:id/:connection',
-        component: SingleComplianceConnection,
+        element: <SingleComplianceConnection />,
     },
     // {
     //     key: 'resource collection assets metrics',
@@ -335,17 +334,17 @@ const authRoutes = [
     {
         key: 'resource collection assets single 2',
         path: '/:ws/resource-collection/:resourceId/assets-details/:id',
-        component: Single,
+        element: <Single />,
     },
     {
         key: 'resource collection assets single metric 2',
         path: '/:ws/resource-collection/:resourceId/assets-details/:id/:metric',
-        component: Single,
+        element: <Single />,
     },
     {
         key: 'request a demo',
         path: '/requestdemo',
-        component: RequestDemo,
+        element: <RequestDemo />,
     },
 ]
 
@@ -366,17 +365,7 @@ export default function Router() {
                     <Route
                         key={route.key}
                         path={route.path}
-                        element={
-                            route.noAuth ? (
-                                route.element
-                            ) : (
-                                <AuthenticationGuard
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    component={route.component}
-                                />
-                            )
-                        }
+                        element={route.element}
                     />
                 ))}
             </Routes>

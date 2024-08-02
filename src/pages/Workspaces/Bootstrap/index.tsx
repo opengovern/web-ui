@@ -45,7 +45,7 @@ export default function Boostrap() {
         {
             name,
             organization_id: -1,
-            tier,
+            tier: 'FREE',
         },
         {},
         false

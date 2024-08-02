@@ -150,12 +150,18 @@ export default function Settings() {
 
     const getRole = () => {
         if (decodedToken) {
-            if (curWorkspace?.id)
-                return (
-                    decodedToken['https://app.kaytu.io/workspaceAccess'][
-                        curWorkspace.id
-                    ] || 'viewer'
-                )
+            if (curWorkspace?.id) {
+                if (curWorkspace?.name === 'main') {
+                    return 'admin'
+                }
+                if (decodedToken['https://app.kaytu.io/workspaceAccess']) {
+                    return (
+                        decodedToken['https://app.kaytu.io/workspaceAccess'][
+                            curWorkspace.id
+                        ] || 'viewer'
+                    )
+                }
+            }
         }
         return 'viewer'
     }

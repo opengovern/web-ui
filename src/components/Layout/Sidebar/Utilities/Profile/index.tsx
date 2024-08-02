@@ -1,4 +1,3 @@
-import { useAuth0 } from '@auth0/auth0-react'
 import { Card, Flex, Tab, TabGroup, TabList, Text } from '@tremor/react'
 import {
     ArrowTopRightOnSquareIcon,
@@ -12,6 +11,7 @@ import { workspaceAtom } from '../../../../../store'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from '../../../../../api/api'
 import { applyTheme, currentTheme } from '../../../../../utilities/theme'
 import { useAuthApiV1UserPreferencesUpdate } from '../../../../../api/auth.gen'
+import { useAuth } from '../../../../../utilities/auth'
 
 interface IProfile {
     isCollapsed: boolean
@@ -19,7 +19,7 @@ interface IProfile {
 
 export default function Profile({ isCollapsed }: IProfile) {
     const navigate = useNavigate()
-    const { user, logout } = useAuth0()
+    const { user, logout } = useAuth()
 
     const workspace = useAtomValue(workspaceAtom)
 

@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import dayjs from 'dayjs'
-import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 import jwtDecode from 'jwt-decode'
@@ -13,6 +12,7 @@ import { colorBlindModeAtom, tokenAtom } from './store'
 import { applyTheme, parseTheme } from './utilities/theme'
 import { Auth0AppMetadata } from './types/appMetadata'
 import { KaytuIcon } from './icons/icons'
+import { useAuth } from './utilities/auth'
 
 // Sentry.init({
 //     dsn: 'https://f1ec1f17fb784a12af5cd4f7ddf29d09@sen.kaytu.io/2',
@@ -50,7 +50,7 @@ export default function App() {
         isAuthenticated,
         getAccessTokenSilently,
         getIdTokenClaims,
-    } = useAuth0()
+    } = useAuth()
     const [token, setToken] = useAtom(tokenAtom)
     const [accessTokenLoading, setAccessTokenLoading] = useState<boolean>(false)
     const [colorBlindMode, setColorBlindMode] = useAtom(colorBlindModeAtom)

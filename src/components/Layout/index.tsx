@@ -19,7 +19,10 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
         workspace !== 'workspaces' &&
         workspace !== 'billing' &&
         workspace !== 'requestdemo' &&
-        current !== 'assistant'
+        current !== 'assistant' &&
+        workspace !== 'new-ws' &&
+        current !== 'bootstrap' &&
+        workspace !== 'callback'
 
     return (
         <Flex

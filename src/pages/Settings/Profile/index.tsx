@@ -8,7 +8,6 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useState } from 'react'
 import { useAtom, useAtomValue } from 'jotai'
 import jwtDecode from 'jwt-decode'
@@ -18,9 +17,10 @@ import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from '../../../api/api'
 import { colorBlindModeAtom, isDemoAtom, tokenAtom } from '../../../store'
 import { applyTheme, currentTheme, parseTheme } from '../../../utilities/theme'
 import { Auth0AppMetadata } from '../../../types/appMetadata'
+import { useAuth } from '../../../utilities/auth'
 
 export default function SettingsProfile() {
-    const { user } = useAuth0()
+    const { user } = useAuth()
     const token = useAtomValue(tokenAtom)
     const [colorBlindMode, setColorBlindMode] = useAtom(colorBlindModeAtom)
     const [isDemo, setIsDemo] = useAtom(isDemoAtom)

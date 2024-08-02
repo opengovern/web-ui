@@ -8,7 +8,6 @@ import {
 import { PlusIcon } from '@heroicons/react/20/solid'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
-import { useAuth0 } from '@auth0/auth0-react'
 import { useNavigate } from 'react-router-dom'
 import { previewAtom, sideBarCollapsedAtom, ssTokenAtom } from '../../../store'
 import { KaytuIcon, KaytuIconBig } from '../../../icons/icons'
@@ -17,6 +16,7 @@ import { useComplianceApiV1SupersetDashboardsTokenCreate } from '../../../api/co
 import Workspaces from '../Sidebar/Workspaces'
 import { setAuthHeader } from '../../../api/ApiConfig'
 import { useURLParam } from '../../../utilities/urlstate'
+import { useAuth } from '../../../utilities/auth'
 
 interface IAssistantSidebar {
     workspace: string | undefined
@@ -43,7 +43,7 @@ export default function AssistantSidebar({
     )
 
     const navigate = useNavigate()
-    const { isAuthenticated, getAccessTokenSilently } = useAuth0()
+    const { isAuthenticated, getAccessTokenSilently } = useAuth()
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
     const [selectedTopic, setSelectedTopic] = useState<string>(history[0].title)
 

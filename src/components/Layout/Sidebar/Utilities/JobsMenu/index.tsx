@@ -11,7 +11,6 @@ import {
 } from '@heroicons/react/24/outline'
 import { BarList, Button, Card, Color, Flex, Text, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useAuth0 } from '@auth0/auth0-react'
 import {
     GithubComKaytuIoKaytuEnginePkgDescribeApiJobSummary,
     GithubComKaytuIoKaytuEnginePkgDescribeApiJobType,
@@ -19,6 +18,7 @@ import {
 import { numberDisplay } from '../../../../../utilities/numericDisplay'
 import { useScheduleApiV1JobsCreate } from '../../../../../api/schedule.gen'
 import Spinner from '../../../../Spinner'
+import { useAuth } from '../../../../../utilities/auth'
 
 interface IJobCategoryItem {
     title: string
@@ -204,7 +204,7 @@ interface IJobsMenu {
 }
 
 export default function JobsMenu({ isCollapsed, workspace }: IJobsMenu) {
-    const { isAuthenticated, getAccessTokenSilently } = useAuth0()
+    const { isAuthenticated, getAccessTokenSilently } = useAuth()
     const navigate = useNavigate()
 
     const {

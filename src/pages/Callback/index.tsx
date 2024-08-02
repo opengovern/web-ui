@@ -1,7 +1,11 @@
-import { useAuth0 } from '@auth0/auth0-react'
+import { useAuth } from '../../utilities/auth'
 
 export const CallbackPage = () => {
-    const { error } = useAuth0()
+    const { error, isAuthenticated } = useAuth()
+    if (isAuthenticated) {
+        window.location.href = '/'
+        return null
+    }
 
     if (error) {
         return <span>{error.message}</span>

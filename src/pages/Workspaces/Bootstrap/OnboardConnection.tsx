@@ -176,12 +176,12 @@ export function OnboardConnection({
                         <Button
                             onClick={doDone}
                             loading={isLoading}
-                            disabled={
-                                allConnectionCount === 0 ||
-                                allConnectionCount <
-                                    (statusResponse?.minRequiredConnections ||
-                                        0)
-                            }
+                            // disabled={
+                            //     allConnectionCount === 0 ||
+                            //     allConnectionCount <
+                            //         (statusResponse?.minRequiredConnections ||
+                            //             0)
+                            // }
                         >
                             Finish
                         </Button>

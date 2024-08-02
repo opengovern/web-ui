@@ -9,6 +9,7 @@ declare global {
             REACT_APP_AUTH0_DOMAIN: string
             REACT_APP_AUTH0_AUDIENCE: string
             REACT_APP_BASE_URL: string
+            REACT_APP_AUTH_BASE_URL: string
         }
     }
 }

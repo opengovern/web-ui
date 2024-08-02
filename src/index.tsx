@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { Auth0ProviderWithNavigate } from './auth0-provider-with-navigate'
+import { AuthProviderWithNavigate } from './auth-provider-with-navigate'
 
 if (
     localStorage.theme === 'dark' ||
@@ -23,9 +24,9 @@ root.render(
     <React.StrictMode>
         <JotaiProvider>
             <BrowserRouter>
-                <Auth0ProviderWithNavigate>
+                <AuthProviderWithNavigate>
                     <App />
-                </Auth0ProviderWithNavigate>
+                </AuthProviderWithNavigate>
             </BrowserRouter>
         </JotaiProvider>
     </React.StrictMode>

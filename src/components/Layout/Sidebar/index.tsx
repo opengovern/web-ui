@@ -1,5 +1,5 @@
 import { Badge, Card, Flex, Text } from '@tremor/react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
     BanknotesIcon,
     ChevronLeftIcon,
@@ -18,7 +18,6 @@ import {
 import { useAtom, useAtomValue } from 'jotai'
 import { Popover, Transition } from '@headlessui/react'
 import { Fragment, useEffect } from 'react'
-import { useAuth0 } from '@auth0/auth0-react'
 import { previewAtom, sideBarCollapsedAtom, ssTokenAtom } from '../../../store'
 import { KaytuIcon, KaytuIconBig } from '../../../icons/icons'
 import Utilities from './Utilities'
@@ -36,6 +35,7 @@ import Workspaces from './Workspaces'
 import AnimatedAccordion from '../../AnimatedAccordion'
 import { setAuthHeader } from '../../../api/ApiConfig'
 import { searchAtom } from '../../../utilities/urlstate'
+import { useAuth } from '../../../utilities/auth'
 
 const badgeStyle = {
     color: '#fff',
@@ -49,7 +49,8 @@ interface ISidebar {
 }
 
 export default function Sidebar({ workspace, currentPage }: ISidebar) {
-    const { isAuthenticated, getAccessTokenSilently } = useAuth0()
+    const navigate = useNavigate()
+    const { isAuthenticated, getAccessTokenSilently } = useAuth()
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
     const preview = useAtomValue(previewAtom)
     const {
@@ -119,176 +120,200 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         }
     }, [isAuthenticated, workspace])
 
-    const navigation = [
-        {
-            name: 'Overview',
-            page: 'overview',
-            icon: Squares2X2Icon,
-            isPreview: false,
-        },
-        {
-            name: 'SCORE',
-            page: 'score',
-            icon: DocumentChartBarIcon,
-            isPreview: false,
-        },
-        {
-            name: 'Assets',
-            page: ['assets', 'asset-cloud-accounts', 'asset-metrics'],
-            icon: CubeIcon,
-            children: [
+    const navigation = () => {
+        if (connectionCount?.count === 0) {
+            if (currentPage !== 'integrations' && currentPage !== 'settings') {
+                navigate(`${workspace}/integrations`)
+            }
+            return [
                 {
-                    name: 'Summary',
-                    page: 'assets',
+                    name: 'Integrations',
+                    page: 'integrations',
+                    icon: PuzzlePieceIcon,
+                    isLoading: connectionsIsLoading,
+                    count: numericDisplay(connectionCount?.count) || 0,
+                    error: connectionsErr,
                     isPreview: false,
-                    isLoading: false,
-                    count: undefined,
-                    error: false,
                 },
                 {
-                    name: 'Cloud Accounts',
-                    page: 'asset-cloud-accounts',
+                    name: 'Settings',
+                    page: 'settings',
+                    icon: Cog6ToothIcon,
                     isPreview: false,
-                    isLoading: assetsIsLoading,
-                    count: numericDisplay(assetCount?.connectionCount) || 0,
-                    error: assetCountErr,
                 },
-                {
-                    name: 'Inventory',
-                    page: 'asset-metrics',
-                    isPreview: false,
-                    isLoading: assetsIsLoading,
-                    count: numericDisplay(assetCount?.metricCount) || 0,
-                    error: assetCountErr,
-                },
-            ],
-            isPreview: false,
-        },
-        {
-            name: 'Spend',
-            page: ['spend', 'spend-accounts', 'spend-metrics'],
-            icon: BanknotesIcon,
-            children: [
-                {
-                    name: 'Summary',
-                    page: 'spend',
-                    isPreview: false,
-                    isLoading: false,
-                    count: undefined,
-                    error: false,
-                },
-                {
-                    name: 'Cloud Accounts',
-                    page: 'spend-accounts',
-                    isPreview: false,
-                    isLoading: spendCountIsLoading,
-                    count: numericDisplay(spendCount?.connectionCount) || 0,
-                    error: spendCountErr,
-                },
-                {
-                    name: 'Services',
-                    page: 'spend-metrics',
-                    isPreview: false,
-                    isLoading: spendCountIsLoading,
-                    count: numericDisplay(spendCount?.metricCount) || 0,
-                    error: spendCountErr,
-                },
-            ],
-            isPreview: false,
-        },
-        {
-            name: 'Security',
-            icon: ShieldCheckIcon,
-            page: ['compliance', 'findings'],
-            children: [
-                {
-                    name: 'Overview',
-                    page: 'security-overview',
-                    isPreview: false,
-                    isLoading: false,
-                    count: undefined,
-                    error: false,
-                },
-                {
-                    name: 'Compliance',
-                    page: 'compliance',
-                    isPreview: false,
-                    isLoading: false,
-                    count: undefined,
-                    error: false,
-                },
-                {
-                    name: 'Findings',
-                    page: 'findings',
-                    isPreview: false,
-                    isLoading: findingsIsLoading,
-                    count: numericDisplay(findingsCount?.count) || 0,
-                    error: findingsErr,
-                },
-            ],
-            isPreview: false,
-        },
-        {
-            name: 'Query',
-            page: 'query',
-            icon: MagnifyingGlassIcon,
-            isPreview: false,
-        },
-        {
-            name: 'Resource Collection',
-            page: 'resource-collection',
-            icon: RectangleStackIcon,
-            isPreview: true,
-        },
-        {
-            name: 'Automation',
-            icon: LightBulbIcon,
-            page: ['rules, alerts'],
-            children: [
-                {
-                    name: 'Rules',
-                    page: 'rules',
-                    selected: 'rules',
-                    isPreview: false,
-                    isLoading: false,
-                    count: undefined,
-                    error: false,
-                },
-                {
-                    name: 'Alerts',
-                    page: 'alerts',
-                    selected: 'alerts',
-                    isPreview: false,
-                    isLoading: false,
-                    count: undefined,
-                    error: false,
-                },
-            ],
-            isPreview: true,
-        },
-        {
-            name: 'Integrations',
-            page: 'integrations',
-            icon: PuzzlePieceIcon,
-            isLoading: connectionsIsLoading,
-            count: numericDisplay(connectionCount?.count) || 0,
-            error: connectionsErr,
-            isPreview: false,
-        },
-        {
-            name: 'Settings',
-            page: 'settings',
-            icon: Cog6ToothIcon,
-            isPreview: false,
-        },
-        {
-            name: 'Dashboards',
-            page: 'dashboard',
-            icon: DocumentChartBarIcon,
-            children: dashboardItems(),
-            isPreview: false,
-        },
-    ]
+            ]
+        }
+        return [
+            {
+                name: 'Overview',
+                page: 'overview',
+                icon: Squares2X2Icon,
+                isPreview: false,
+            },
+            {
+                name: 'SCORE',
+                page: 'score',
+                icon: DocumentChartBarIcon,
+                isPreview: false,
+            },
+            {
+                name: 'Assets',
+                page: ['assets', 'asset-cloud-accounts', 'asset-metrics'],
+                icon: CubeIcon,
+                children: [
+                    {
+                        name: 'Summary',
+                        page: 'assets',
+                        isPreview: false,
+                        isLoading: false,
+                        count: undefined,
+                        error: false,
+                    },
+                    {
+                        name: 'Cloud Accounts',
+                        page: 'asset-cloud-accounts',
+                        isPreview: false,
+                        isLoading: assetsIsLoading,
+                        count: numericDisplay(assetCount?.connectionCount) || 0,
+                        error: assetCountErr,
+                    },
+                    {
+                        name: 'Inventory',
+                        page: 'asset-metrics',
+                        isPreview: false,
+                        isLoading: assetsIsLoading,
+                        count: numericDisplay(assetCount?.metricCount) || 0,
+                        error: assetCountErr,
+                    },
+                ],
+                isPreview: false,
+            },
+            {
+                name: 'Spend',
+                page: ['spend', 'spend-accounts', 'spend-metrics'],
+                icon: BanknotesIcon,
+                children: [
+                    {
+                        name: 'Summary',
+                        page: 'spend',
+                        isPreview: false,
+                        isLoading: false,
+                        count: undefined,
+                        error: false,
+                    },
+                    {
+                        name: 'Cloud Accounts',
+                        page: 'spend-accounts',
+                        isPreview: false,
+                        isLoading: spendCountIsLoading,
+                        count: numericDisplay(spendCount?.connectionCount) || 0,
+                        error: spendCountErr,
+                    },
+                    {
+                        name: 'Services',
+                        page: 'spend-metrics',
+                        isPreview: false,
+                        isLoading: spendCountIsLoading,
+                        count: numericDisplay(spendCount?.metricCount) || 0,
+                        error: spendCountErr,
+                    },
+                ],
+                isPreview: false,
+            },
+            {
+                name: 'Security',
+                icon: ShieldCheckIcon,
+                page: ['compliance', 'findings'],
+                children: [
+                    {
+                        name: 'Overview',
+                        page: 'security-overview',
+                        isPreview: false,
+                        isLoading: false,
+                        count: undefined,
+                        error: false,
+                    },
+                    {
+                        name: 'Compliance',
+                        page: 'compliance',
+                        isPreview: false,
+                        isLoading: false,
+                        count: undefined,
+                        error: false,
+                    },
+                    {
+                        name: 'Findings',
+                        page: 'findings',
+                        isPreview: false,
+                        isLoading: findingsIsLoading,
+                        count: numericDisplay(findingsCount?.count) || 0,
+                        error: findingsErr,
+                    },
+                ],
+                isPreview: false,
+            },
+            {
+                name: 'Query',
+                page: 'query',
+                icon: MagnifyingGlassIcon,
+                isPreview: false,
+            },
+            {
+                name: 'Resource Collection',
+                page: 'resource-collection',
+                icon: RectangleStackIcon,
+                isPreview: true,
+            },
+            {
+                name: 'Automation',
+                icon: LightBulbIcon,
+                page: ['rules, alerts'],
+                children: [
+                    {
+                        name: 'Rules',
+                        page: 'rules',
+                        selected: 'rules',
+                        isPreview: false,
+                        isLoading: false,
+                        count: undefined,
+                        error: false,
+                    },
+                    {
+                        name: 'Alerts',
+                        page: 'alerts',
+                        selected: 'alerts',
+                        isPreview: false,
+                        isLoading: false,
+                        count: undefined,
+                        error: false,
+                    },
+                ],
+                isPreview: true,
+            },
+            {
+                name: 'Integrations',
+                page: 'integrations',
+                icon: PuzzlePieceIcon,
+                isLoading: connectionsIsLoading,
+                count: numericDisplay(connectionCount?.count) || 0,
+                error: connectionsErr,
+                isPreview: false,
+            },
+            {
+                name: 'Settings',
+                page: 'settings',
+                icon: Cog6ToothIcon,
+                isPreview: false,
+            },
+            {
+                name: 'Dashboards',
+                page: 'dashboard',
+                icon: DocumentChartBarIcon,
+                children: dashboardItems(),
+                isPreview: false,
+            },
+        ]
+    }
 
     return (
         <Flex
@@ -345,7 +370,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                 }}
                             />
                         )}
-                        {navigation
+                        {navigation()
                             .filter((item) =>
                                 preview === 'true'
                                     ? item
@@ -410,7 +435,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             {item.children.map((i) => (
                                                 <Link
                                                     to={`/${workspace}/${i.page}?${searchParams}`}
-                                                    className={`my-0.5 py-2 flex rounded-md relative 
+                                                    className={`my-0.5 py-2 flex rounded-md relative
                                                     ${
                                                         i.page === currentPage
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
@@ -503,7 +528,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             (i) => (
                                                                 <Link
                                                                     to={`/${workspace}/${i.page}?${searchParams}`}
-                                                                    className={`my-0.5 py-2 px-4 flex justify-start rounded-md relative 
+                                                                    className={`my-0.5 py-2 px-4 flex justify-start rounded-md relative
                                                     ${
                                                         i.page === currentPage
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'

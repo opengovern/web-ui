@@ -13,4 +13,4 @@ WORKDIR /usr/share/nginx/html
 # Fire up nginx
 EXPOSE 7298
 #CMD ["nginx", "-g", "daemon off;"]
-CMD ["/bin/sh", "-c", "runtime-env-cra --config-name=./env-config.js && nginx -g \"daemon off;\""]
+CMD ["/bin/sh", "-c", "runtime-env-cra && nginx -g \"daemon off;\""]
