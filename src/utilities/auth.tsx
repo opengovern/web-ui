@@ -77,7 +77,7 @@ export function useAuth() {
                     error: '',
                 })
 
-                const callback = `${window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL}/callback`
+                const callback = `${window.location.origin}/callback`
                 const url = `${window.__RUNTIME_CONFIG__.REACT_APP_AUTH_BASE_URL}/dex/token`
                 const headers = new Headers()
                 headers.append(

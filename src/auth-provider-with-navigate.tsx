@@ -27,7 +27,7 @@ export const AuthProviderWithNavigate = ({
         }
 
         if (!isAuthenticated && page[1] !== 'callback') {
-            const callback = `${window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL}/callback`
+            const callback = `${window.location.origin}/callback`
 
             const searchParams = new URLSearchParams()
             searchParams.append('client_id', 'public-client')
