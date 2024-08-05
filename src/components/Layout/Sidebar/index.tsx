@@ -121,7 +121,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     }, [isAuthenticated, workspace])
 
     const navigation = () => {
-        if (connectionCount?.count === 0) {
+        if ((connectionCount?.count || 0) === 0) {
             if (currentPage !== 'integrations' && currentPage !== 'settings') {
                 navigate(`${workspace}/integrations`)
             }

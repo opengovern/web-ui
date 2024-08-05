@@ -34,7 +34,10 @@ export default function Integrations() {
                 </Flex>
             ) : (
                 <Grid numItemsMd={2} numItemsLg={3} className="gap-4 mt-6">
-                    {responseConnectors?.map((connector) => (
+                    {(Array.isArray(responseConnectors)
+                        ? responseConnectors
+                        : []
+                    )?.map((connector) => (
                         <ConnectorCard
                             connector={connector.name}
                             title={connector.label}
