@@ -47,30 +47,30 @@ export default function AssistantSidebar({
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
     const [selectedTopic, setSelectedTopic] = useState<string>(history[0].title)
 
-    const {
-        response: dashboardToken,
-        isLoading,
-        isExecuted,
-        error: dashboardTokenErr,
-        sendNow: fetchDashboardToken,
-    } = useComplianceApiV1SupersetDashboardsTokenCreate({}, false, workspace)
-    const [ssToken, setSSToken] = useAtom(ssTokenAtom)
-    useEffect(() => {
-        setSSToken(dashboardToken)
-    }, [isLoading])
+    // const {
+    //     response: dashboardToken,
+    //     isLoading,
+    //     isExecuted,
+    //     error: dashboardTokenErr,
+    //     sendNow: fetchDashboardToken,
+    // } = useComplianceApiV1SupersetDashboardsTokenCreate({}, false, workspace)
+    // const [ssToken, setSSToken] = useAtom(ssTokenAtom)
+    // useEffect(() => {
+    //     setSSToken(dashboardToken)
+    // }, [isLoading])
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            getAccessTokenSilently()
-                .then((accessToken) => {
-                    setAuthHeader(accessToken)
-                    fetchDashboardToken()
-                })
-                .catch((e) => {
-                    console.log('====> failed to get token due to', e)
-                })
-        }
-    }, [isAuthenticated, workspace])
+    // useEffect(() => {
+    //     if (isAuthenticated) {
+    //         getAccessTokenSilently()
+    //             .then((accessToken) => {
+    //                 setAuthHeader(accessToken)
+    //                 fetchDashboardToken()
+    //             })
+    //             .catch((e) => {
+    //                 console.log('====> failed to get token due to', e)
+    //             })
+    //     }
+    // }, [isAuthenticated, workspace])
 
     return (
         <Flex

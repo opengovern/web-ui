@@ -76,7 +76,7 @@ const extractTrend = (
     trend: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[],
     granularity: 'monthly' | 'daily' | 'yearly'
 ) => {
-    return trend.map((item) => {
+    return trend?.map((item) => {
         const label =
             granularity === 'monthly'
                 ? monthDisplay(item?.date)
@@ -125,7 +125,7 @@ export const buildTrend = (
 
     const orderMap = new Map(order.map((obj) => [obj.label, obj.value]))
 
-    trend = trend.map((v) => {
+    trend = trend?.map((v) => {
         return {
             ...v,
             stackedValues: makeUnique(
@@ -160,7 +160,7 @@ export const buildTrend = (
         }, [])
     }
 
-    trend = trend.map((v) => {
+    trend = trend?.map((v) => {
         return {
             ...v,
             stackedValues: v.stackedValues.sort((a, b) => {
@@ -175,8 +175,8 @@ export const buildTrend = (
     })
 
     return {
-        label: trend.map((v) => v.date),
-        data: trend.map((v) => v.stackedValues),
-        flag: trend.map((v) => v.flag),
+        label: trend?.map((v) => v.date),
+        data: trend?.map((v) => v.stackedValues),
+        flag: trend?.map((v) => v.flag),
     }
 }

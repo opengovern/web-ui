@@ -108,7 +108,13 @@ export default function Spend() {
         error: servicePrevCostErr,
         sendNow: serviceCostPrevRefresh,
     } = useInventoryApiV2AnalyticsSpendMetricList(prevQuery)
-    const trendStacked = buildTrend(costTrend || [], 'trending', 'daily', 4)
+    const trendStacked = Array.isArray(costTrend)
+        ? buildTrend(costTrend || [], 'trending', 'daily', 4)
+        : {
+              label: [],
+              data: [],
+              flag: [],
+          }
 
     return (
         <Card className=" relative border-0 ring-0 !shadow-sm">

@@ -77,29 +77,29 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         error: connectionsErr,
         sendNow: sendConnections,
     } = useIntegrationApiV1ConnectionsCountList({}, {}, false, workspace)
-    const {
-        response: dashboardToken,
-        isLoading,
-        isExecuted,
-        error: dashboardTokenErr,
-        sendNow: fetchDashboardToken,
-    } = useComplianceApiV1SupersetDashboardsTokenCreate({}, false, workspace)
-    const [ssToken, setSSToken] = useAtom(ssTokenAtom)
-    useEffect(() => {
-        setSSToken(dashboardToken)
-    }, [isLoading])
-    const dashboardItems = () => {
-        return dashboardToken?.dashboards?.map((d) => {
-            return {
-                name: d.Name,
-                page: `dashboard/${d.ID}`,
-                isPreview: false,
-                isLoading: false,
-                count: undefined,
-                error: false,
-            }
-        })
-    }
+    // const {
+    //     response: dashboardToken,
+    //     isLoading,
+    //     isExecuted,
+    //     error: dashboardTokenErr,
+    //     sendNow: fetchDashboardToken,
+    // } = useComplianceApiV1SupersetDashboardsTokenCreate({}, false, workspace)
+    // const [ssToken, setSSToken] = useAtom(ssTokenAtom)
+    // useEffect(() => {
+    //     setSSToken(dashboardToken)
+    // }, [isLoading])
+    // const dashboardItems = () => {
+    //     return dashboardToken?.dashboards?.map((d) => {
+    //         return {
+    //             name: d.Name,
+    //             page: `dashboard/${d.ID}`,
+    //             isPreview: false,
+    //             isLoading: false,
+    //             count: undefined,
+    //             error: false,
+    //         }
+    //     })
+    // }
 
     const searchParams = useAtomValue(searchAtom)
 
@@ -112,7 +112,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     sendAssets()
                     sendFindings()
                     sendConnections()
-                    fetchDashboardToken()
+                    // fetchDashboardToken()
                 })
                 .catch((e) => {
                     console.log('====> failed to get token due to', e)
@@ -305,13 +305,13 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 icon: Cog6ToothIcon,
                 isPreview: false,
             },
-            {
-                name: 'Dashboards',
-                page: 'dashboard',
-                icon: DocumentChartBarIcon,
-                children: dashboardItems(),
-                isPreview: false,
-            },
+            // {
+            //     name: 'Dashboards',
+            //     page: 'dashboard',
+            //     icon: DocumentChartBarIcon,
+            //     children: dashboardItems(),
+            //     isPreview: false,
+            // },
         ]
     }
 

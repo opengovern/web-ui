@@ -19,29 +19,32 @@ export default function Findings() {
         sendNow: refresh,
     } = useComplianceApiV1ControlsSummaryList()
 
-    const critical =
-        response?.filter(
-            (item) =>
-                item.control?.severity ===
-                    TypesFindingSeverity.FindingSeverityCritical &&
-                item.passed === false
-        ) || []
+    const critical = Array.isArray(response)
+        ? response?.filter(
+              (item) =>
+                  item.control?.severity ===
+                      TypesFindingSeverity.FindingSeverityCritical &&
+                  item.passed === false
+          ) || []
+        : []
 
-    const high =
-        response?.filter(
-            (item) =>
-                item.control?.severity ===
-                    TypesFindingSeverity.FindingSeverityHigh &&
-                item.passed === false
-        ) || []
+    const high = Array.isArray(response)
+        ? response?.filter(
+              (item) =>
+                  item.control?.severity ===
+                      TypesFindingSeverity.FindingSeverityHigh &&
+                  item.passed === false
+          ) || []
+        : []
 
-    const medium =
-        response?.filter(
-            (item) =>
-                item.control?.severity ===
-                    TypesFindingSeverity.FindingSeverityMedium &&
-                item.passed === false
-        ) || []
+    const medium = Array.isArray(response)
+        ? response?.filter(
+              (item) =>
+                  item.control?.severity ===
+                      TypesFindingSeverity.FindingSeverityMedium &&
+                  item.passed === false
+          ) || []
+        : []
 
     const controls = critical.concat(high).concat(medium).slice(0, 3)
 
