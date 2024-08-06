@@ -38,6 +38,7 @@ import ScoreDetails from '../pages/Insights/Details'
 import Dashboards from '../pages/Dashboards'
 import Assistant from '../pages/Assistant'
 import SecurityOverview from '../pages/Governance/Overview'
+import WorkloadOptimizer from '../pages/WorkloadOptimizer'
 
 const authRoutes = [
     {
@@ -70,11 +71,15 @@ const authRoutes = [
         element: <NotFound />,
         noAuth: true,
     },
-
     {
         key: 'workspaces',
         path: '/ws/workspaces',
         element: <Workspaces />,
+    },
+    {
+        key: 'workload optimizer',
+        path: '/ws/:ws/workload-optimizer',
+        element: <WorkloadOptimizer />,
     },
     {
         key: 'billing',

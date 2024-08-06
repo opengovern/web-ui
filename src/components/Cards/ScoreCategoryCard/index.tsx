@@ -61,7 +61,7 @@ export default function ScoreCategoryCard({
                 varient === 'default'
                     ? 'gap-6 px-8 py-8 rounded-xl'
                     : 'pl-5 pr-4 py-6 rounded-lg'
-            } bg-white shadow-sm hover:shadow-lg hover:cursor-pointer`}
+            } bg-white dark:bg-kaytu-950 shadow-sm hover:shadow-lg hover:cursor-pointer`}
             alignItems={varient === 'default' ? 'center' : 'start'}
         >
             <Flex className="relative w-fit">

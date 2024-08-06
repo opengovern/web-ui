@@ -50,6 +50,18 @@ interface ISidebar {
     currentPage: string
 }
 
+interface ISidebarItem {
+    name: string
+    page: string | string[]
+    icon?: any
+    isLoading?: boolean
+    count?: number | string
+    error?: any
+    isPreview?: boolean
+    children?: ISidebarItem[]
+    selected?: string
+}
+
 export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const navigate = useNavigate()
     const { isAuthenticated, getAccessTokenSilently } = useAuth()
@@ -123,7 +135,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         }
     }, [isAuthenticated, workspace])
 
-    const navigation = () => {
+    const navigation: () => ISidebarItem[] = () => {
         if (
             connectionsIsExecuted &&
             !connectionsIsLoading &&

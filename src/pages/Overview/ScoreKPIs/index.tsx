@@ -219,7 +219,7 @@ export default function ScoreKPIs() {
                             alignItems="start"
                         >
                             <Text className="text-gray-500">
-                                <span className="font-bold text-gray-800 mr-1.5">
+                                <span className="font-bold text-gray-800 dark:text-gray-100 mr-1.5">
                                     SCORE
                                 </span>
                                 evaluates cloud environments for alignment with
