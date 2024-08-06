@@ -84,8 +84,7 @@ export default function Compliance() {
                     icon={ChevronRightIcon}
                     iconPosition="right"
                     onClick={() =>
-                        navigate(`/ws/${workspace}/compliance
-                        ?${searchParams}`)
+                        navigate(`/ws/${workspace}/compliance?${searchParams}`)
                     }
                 >
                     Show all
