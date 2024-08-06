@@ -217,11 +217,19 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         count: numericDisplay(spendCount?.metricCount) || 0,
                         error: spendCountErr,
                     },
+                    {
+                        name: 'Workload Optimizer',
+                        page: 'workload-optimizer',
+                        isPreview: false,
+                        isLoading: true,
+                        count: 0,
+                        error: spendCountErr,
+                    },
                 ],
                 isPreview: false,
             },
             {
-                name: 'Security',
+                name: 'Compliance',
                 icon: ShieldCheckIcon,
                 page: ['compliance', 'findings'],
                 children: [
@@ -234,7 +242,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         error: false,
                     },
                     {
-                        name: 'Compliance',
+                        name: 'Policies',
                         page: 'compliance',
                         isPreview: false,
                         isLoading: false,
