@@ -14,6 +14,8 @@ import {
     PuzzlePieceIcon,
     RectangleStackIcon,
     ShieldCheckIcon,
+    ClipboardDocumentCheckIcon,
+    DocumentMagnifyingGlassIcon,
 } from '@heroicons/react/24/outline'
 import { useAtom, useAtomValue } from 'jotai'
 import { Popover, Transition } from '@headlessui/react'
@@ -231,34 +233,29 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             {
                 name: 'Compliance',
                 icon: ShieldCheckIcon,
-                page: ['compliance', 'findings'],
-                children: [
-                    {
-                        name: 'Overview',
-                        page: 'security-overview',
-                        isPreview: false,
-                        isLoading: false,
-                        count: undefined,
-                        error: false,
-                    },
-                    {
-                        name: 'Policies',
-                        page: 'compliance',
-                        isPreview: false,
-                        isLoading: false,
-                        count: undefined,
-                        error: false,
-                    },
-                    {
-                        name: 'Findings',
-                        page: 'findings',
-                        isPreview: false,
-                        isLoading: findingsIsLoading,
-                        count: numericDisplay(findingsCount?.count) || 0,
-                        error: findingsErr,
-                    },
-                ],
+                page: 'security-overview',
                 isPreview: false,
+                isLoading: false,
+                count: undefined,
+                error: false,
+            },
+            {
+                name: 'Policies',
+                icon: ClipboardDocumentCheckIcon,
+                page: 'compliance',
+                isPreview: false,
+                isLoading: false,
+                count: undefined,
+                error: false,
+            },
+            {
+                name: 'Findings',
+                icon: DocumentMagnifyingGlassIcon,
+                page: 'findings',
+                isPreview: false,
+                isLoading: findingsIsLoading,
+                count: numericDisplay(findingsCount?.count) || 0,
+                error: findingsErr,
             },
             {
                 name: 'Query',
