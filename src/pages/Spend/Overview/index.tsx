@@ -291,7 +291,7 @@ export function SpendOverview() {
                         accountCostResponse,
                         accountSort === 'cost_growth_rate'
                     )}
-                    url={`/${workspace}/spend-accounts`}
+                    url={`/ws/${workspace}/spend-accounts`}
                     type="account"
                     isPrice
                     // linkPrefix="accounts/"
@@ -311,7 +311,7 @@ export function SpendOverview() {
                         serviceCostResponse,
                         serviceSort === 'growth_rate'
                     )}
-                    url={`/${workspace}/spend-metrics`}
+                    url={`/ws/${workspace}/spend-metrics`}
                     type="service"
                     // linkPrefix="metrics/"
                     isPrice

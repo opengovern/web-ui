@@ -86,7 +86,7 @@ export default function InsightCategoryCard({
                     className="hidden"
                     onClick={() =>
                         navigate(
-                            `/${workspace}/insights?category=${category}&${searchParams}`
+                            `/ws/${workspace}/insights?category=${category}&${searchParams}`
                         )
                     }
                 >

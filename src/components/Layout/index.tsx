@@ -13,6 +13,9 @@ type IProps = {
 
 export default function Layout({ children, onScroll, scrollRef }: IProps) {
     const url = window.location.pathname.split('/')
+    if (url[1] === 'ws') {
+        url.shift()
+    }
     const current = url[2]
     const workspace = url[1]
     const showSidebar =

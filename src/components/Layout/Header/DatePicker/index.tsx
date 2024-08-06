@@ -49,6 +49,9 @@ export const renderDateText = (st: dayjs.Dayjs, en: dayjs.Dayjs) => {
 export function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
     const { ws } = useParams()
     const url = window.location.pathname.split('/')
+    if (url[1] === 'ws') {
+        url.shift()
+    }
     const isSpend =
         url && url[2] ? url[2].includes('spend') || url[2] === 'home' : false
     const state = useDateRangePickerState(props)
@@ -299,6 +302,10 @@ export function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
 export default function DateRangePicker() {
     const { ws } = useParams()
     const url = window.location.pathname.split('/')
+    if (url[1] === 'ws') {
+        url.shift()
+    }
+
     const isSpend =
         url && url[2] ? url[2].includes('spend') || url[2] === 'home' : false
     const currentWorkspace = useAtomValue(workspaceAtom)

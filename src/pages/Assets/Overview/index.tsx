@@ -346,7 +346,7 @@ export function AssetOverview() {
                         valueColumnTitle="Resources"
                         loading={compositionLoading}
                         items={topCategories(composition)}
-                        url={`/${workspace}/asset-metrics?groupby=category`}
+                        url={`/ws/${workspace}/asset-metrics?groupby=category`}
                         type="service"
                         error={getErrorMessage(compositionError)}
                         onRefresh={compositionRefresh}
@@ -361,7 +361,7 @@ export function AssetOverview() {
                         valueColumnTitle="Resources"
                         loading={accountsLoading}
                         items={topAccounts(accountsResponse)}
-                        url={`/${workspace}/asset-cloud-accounts`}
+                        url={`/ws/${workspace}/asset-cloud-accounts`}
                         type="account"
                         // linkPrefix="accounts/"
                         error={getErrorMessage(accountsError)}
@@ -377,7 +377,7 @@ export function AssetOverview() {
                         valueColumnTitle="Resources"
                         loading={serviceLoading}
                         items={topServices(serviceResponse)}
-                        url={`/${workspace}/asset-metrics`}
+                        url={`/ws/${workspace}/asset-metrics`}
                         type="service"
                         // linkPrefix="metrics/"
                         error={getErrorMessage(serviceErr)}

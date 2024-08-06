@@ -54,7 +54,7 @@ export default function ScoreCategoryCard({
         <Flex
             onClick={() =>
                 navigate(
-                    `/${ws}/score/categories?category=${category}&${searchParams}`
+                    `/ws/${ws}/score/categories?category=${category}&${searchParams}`
                 )
             }
             className={` ${

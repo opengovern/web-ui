@@ -189,7 +189,7 @@ export default function ControlDetail() {
                                             className="hover:cursor-pointer max-w-full w-fit bg-gray-200 border-gray-300 rounded-lg border px-1"
                                             onClick={() => {
                                                 navigate(
-                                                    `/${ws}/settings?sp=parameters&key=${item.key}`
+                                                    `/ws/${ws}/settings?sp=parameters&key=${item.key}`
                                                 )
                                             }}
                                         >
@@ -418,7 +418,9 @@ export default function ControlDetail() {
                                                         )
                                                     }}
                                                 >
-                                                    <Link to={`/${ws}/query`}>
+                                                    <Link
+                                                        to={`/ws/${ws}/query`}
+                                                    >
                                                         Open in Query
                                                     </Link>
                                                 </Button>
@@ -716,7 +718,7 @@ export default function ControlDetail() {
                             <TabPanel>
                                 <ImpactedResources
                                     controlId={controlDetail?.control?.id || ''}
-                                    linkPrefix={`/${ws}/score/categories/`}
+                                    linkPrefix={`/ws/${ws}/score/categories/`}
                                     conformanceFilter={conformanceFilter}
                                 />
                             </TabPanel>

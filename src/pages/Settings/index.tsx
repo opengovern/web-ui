@@ -193,7 +193,7 @@ export default function Settings() {
                                         </Flex>
                                         {item.children.map((child: any) => (
                                             <Link
-                                                to={`/${workspace}/settings?sp=${child.page}`}
+                                                to={`/ws/${workspace}/settings?sp=${child.page}`}
                                                 className={`${
                                                     child.page ===
                                                         currentSubPage ||

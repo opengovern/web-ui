@@ -20,7 +20,11 @@ interface IWorkspaces {
 export default function Workspaces({ isCollapsed }: IWorkspaces) {
     const navigate = useNavigate()
     const [workspace, setWorkspace] = useAtom(workspaceAtom)
-    const wsName = window.location.pathname.split('/')[1]
+    const url = window.location.pathname.split('/')
+    if (url[1] === 'ws') {
+        url.shift()
+    }
+    const wsName = url[1]
 
     const {
         response: workspaceInfo,
@@ -63,7 +67,7 @@ export default function Workspaces({ isCollapsed }: IWorkspaces) {
                 id="workspace"
                 onClick={() =>
                     workspace.list.length === 1
-                        ? navigate('/workspaces')
+                        ? navigate('/ws/workspaces')
                         : undefined
                 }
             >
@@ -117,7 +121,9 @@ export default function Workspaces({ isCollapsed }: IWorkspaces) {
                                 .filter((ws) => ws.status === 'PROVISIONED')
                                 .map((ws) => (
                                     <Flex
-                                        onClick={() => navigate(`/${ws.name}`)}
+                                        onClick={() =>
+                                            navigate(`/ws/${ws.name}`)
+                                        }
                                         justifyContent="start"
                                         className={`py-1 px-2 gap-2 my-1 rounded-md cursor-pointer ${
                                             wsName === ws.name
@@ -144,7 +150,7 @@ export default function Workspaces({ isCollapsed }: IWorkspaces) {
                                 ))}
                         </div>
                         <Flex
-                            onClick={() => navigate('/workspaces')}
+                            onClick={() => navigate('/ws/workspaces')}
                             className="p-2 text-gray-300 rounded-md cursor-pointer hover:text-gray-50 hover:bg-kaytu-800"
                         >
                             <Text className="text-inherit font-semibold">

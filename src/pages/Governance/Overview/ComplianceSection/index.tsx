@@ -90,7 +90,7 @@ export default function Compliance() {
                         icon={ChevronRightIcon}
                         iconPosition="right"
                         onClick={() =>
-                            navigate(`/${workspace}/compliance
+                            navigate(`/ws/${workspace}/compliance
                         ?${searchParams}`)
                         }
                     >
@@ -126,7 +126,7 @@ export default function Compliance() {
                                     <Card
                                         onClick={() =>
                                             navigate(
-                                                `/${workspace}/compliance/${bs.id}?${searchParams}`
+                                                `/ws/${workspace}/compliance/${bs.id}?${searchParams}`
                                             )
                                         }
                                         className="p-3 cursor-pointer dark:ring-gray-500 hover:shadow-md"

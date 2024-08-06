@@ -201,7 +201,7 @@ export function Status({ workspaceName }: IStatus) {
                     onClick={() => {
                         // we shouldn't use useNavigate because we need to make sure
                         // an auth token refresh happens before entring the workspace
-                        window.location.href = `/${workspaceName}`
+                        window.location.href = `/ws/${workspaceName}`
                     }}
                 >
                     Access the workspace

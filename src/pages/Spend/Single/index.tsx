@@ -15,6 +15,9 @@ export default function SingleSpend() {
     )
     const { id, metric } = useParams()
     const urlParams = window.location.pathname.split('/')
+    if (urlParams[1] === 'ws') {
+        urlParams.shift()
+    }
 
     const idGenerator = () => {
         if (metric) {

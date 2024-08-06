@@ -452,7 +452,7 @@ export default function SingleSpendMetric({
                                 setQuery(modalData)
                             }}
                         >
-                            <Link to={`/${ws}/query`}>Open in Query</Link>
+                            <Link to={`/ws/${ws}/query`}>Open in Query</Link>
                         </Button>
                         <Button onClick={() => setModalData('')}>Close</Button>
                     </Flex>

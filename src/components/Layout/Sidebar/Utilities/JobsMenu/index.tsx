@@ -50,6 +50,10 @@ const checkStatus = (v: string, arr: string[]) => {
 function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
     const navigate = useNavigate()
     const url = window.location.pathname.split('/')
+    if (url[1] === 'ws') {
+        url.shift()
+    }
+
     const workspace = url[1]
 
     const result = () => {
@@ -188,7 +192,7 @@ function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
                     color={color}
                     onClick={(e) => {
                         navigate(
-                            `/${workspace}/settings?sp=jobs&type=${jobType}`
+                            `/ws/${workspace}/settings?sp=jobs&type=${jobType}`
                         )
                     }}
                     // valueFormatter={dataFormatter}
@@ -275,7 +279,9 @@ export default function JobsMenu({ isCollapsed, workspace }: IJobsMenu) {
                                 icon={ChevronRightIcon}
                                 iconPosition="right"
                                 onClick={() =>
-                                    navigate(`/${workspace}/settings?sp=jobs`)
+                                    navigate(
+                                        `/ws/${workspace}/settings?sp=jobs`
+                                    )
                                 }
                             >
                                 See all

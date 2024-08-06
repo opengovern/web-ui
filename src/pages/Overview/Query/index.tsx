@@ -144,7 +144,7 @@ export default function Query({ height }: IQuery) {
                                       className="my-3"
                                       onClick={() => {
                                           setRunQuery(q?.query || '')
-                                          navigate(`/${workspace}/query`)
+                                          navigate(`/ws/${workspace}/query`)
                                       }}
                                   >
                                       Run Query

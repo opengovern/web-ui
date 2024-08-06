@@ -55,7 +55,7 @@ export default function Boostrap() {
         if (createWorkspaceIsExecuted && !createWorkspaceIsLoading) {
             if (!createWorkspaceError) {
                 if (currentWorkspace === undefined) {
-                    navigate(`/${name}/bootstrap`)
+                    navigate(`/ws/${name}/bootstrap`)
                 } else {
                     setStep(3)
                 }

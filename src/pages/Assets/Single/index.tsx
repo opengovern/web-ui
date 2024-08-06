@@ -13,6 +13,9 @@ export default function Single() {
     )
     const { id, metric, resourceId } = useParams()
     const urlParams = window.location.pathname.split('/')
+    if (urlParams[1] === 'ws') {
+        urlParams.shift()
+    }
 
     const idGenerator = () => {
         if (metric) {

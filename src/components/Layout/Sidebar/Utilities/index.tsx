@@ -22,7 +22,7 @@ export default function Utilities({ isCollapsed, workspace }: IUtilities) {
             <JobsMenu isCollapsed={isCollapsed} workspace={workspace} />
             <CLIMenu isCollapsed={isCollapsed} />
             <Link
-                to={`/${workspace}/assistant`}
+                to={`/ws/${workspace}/assistant`}
                 className={`w-full px-6 py-2 mb-3 flex items-center rounded-md gap-2.5 text-gray-50 hover:bg-kaytu-800 ${
                     isCollapsed ? '!p-2' : ''
                 }`}

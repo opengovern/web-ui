@@ -130,7 +130,7 @@ export default function Spend() {
                         icon={ChevronRightIcon}
                         iconPosition="right"
                         onClick={() =>
-                            navigate(`/${workspace}/spend?${searchParams}`)
+                            navigate(`/ws/${workspace}/spend?${searchParams}`)
                         }
                     >
                         View details

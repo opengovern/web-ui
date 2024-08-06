@@ -23,7 +23,7 @@ export default function Workspaces() {
     useEffect(() => {
         if (isExecuted && !isLoading) {
             if (workspaces?.length === 1 && searchParams.has('onLogin')) {
-                window.location.href = `/${workspaces.at(0)?.name}`
+                window.location.href = `/ws/${workspaces.at(0)?.name}`
             }
         }
     }, [isLoading])
@@ -82,7 +82,7 @@ export default function Workspaces() {
                         </Button>
                         {/* <Button
                             variant="secondary"
-                            onClick={() => navigate(`/new-ws`)}
+                            onClick={() => navigate(`/ws/new-ws`)}
                         >
                             Add new Kaytu workspace
                         </Button> */}

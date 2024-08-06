@@ -75,6 +75,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     } = useComplianceApiV1FindingsCountList({}, {}, false, workspace)
     const {
         response: connectionCount,
+        isExecuted: connectionsIsExecuted,
         isLoading: connectionsIsLoading,
         error: connectionsErr,
         sendNow: sendConnections,
@@ -123,9 +124,13 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     }, [isAuthenticated, workspace])
 
     const navigation = () => {
-        if ((connectionCount?.count || 0) === 0) {
+        if (
+            connectionsIsExecuted &&
+            !connectionsIsLoading &&
+            (connectionCount?.count || 0) === 0
+        ) {
             if (currentPage !== 'integrations' && currentPage !== 'settings') {
-                navigate(`${workspace}/integrations`)
+                navigate(`/ws/${workspace}/integrations`)
             }
             return [
                 {
@@ -222,22 +227,13 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     {
                         name: 'Workload Optimizer',
                         page: 'workload-optimizer',
-                        isPreview: false,
-                        isLoading: true,
-                        count: 0,
+                        isPreview: true,
+                        isLoading: false,
+                        count: undefined,
                         error: spendCountErr,
                     },
                 ],
                 isPreview: false,
-            },
-            {
-                name: 'Compliance',
-                icon: ShieldCheckIcon,
-                page: 'security-overview',
-                isPreview: false,
-                isLoading: false,
-                count: undefined,
-                error: false,
             },
             {
                 name: 'Policies',
@@ -256,6 +252,15 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 isLoading: findingsIsLoading,
                 count: numericDisplay(findingsCount?.count) || 0,
                 error: findingsErr,
+            },
+            {
+                name: 'Compliance',
+                icon: ShieldCheckIcon,
+                page: 'security-overview',
+                isPreview: false,
+                isLoading: false,
+                count: undefined,
+                error: false,
             },
             {
                 name: 'Query',
@@ -439,7 +444,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         >
                                             {item.children.map((i) => (
                                                 <Link
-                                                    to={`/${workspace}/${i.page}?${searchParams}`}
+                                                    to={`/ws/${workspace}/${i.page}?${searchParams}`}
                                                     className={`my-0.5 py-2 flex rounded-md relative
                                                     ${
                                                         i.page === currentPage
@@ -532,7 +537,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         {item.children.map(
                                                             (i) => (
                                                                 <Link
-                                                                    to={`/${workspace}/${i.page}?${searchParams}`}
+                                                                    to={`/ws/${workspace}/${i.page}?${searchParams}`}
                                                                     className={`my-0.5 py-2 px-4 flex justify-start rounded-md relative
                                                     ${
                                                         i.page === currentPage
@@ -585,7 +590,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             to={
                                                 Array.isArray(item.page)
                                                     ? ''
-                                                    : `/${workspace}/${item.page}?${searchParams}`
+                                                    : `/ws/${workspace}/${item.page}?${searchParams}`
                                             }
                                             className={`w-full relative px-6 py-2 flex items-center gap-2.5 rounded-md
                                                     ${

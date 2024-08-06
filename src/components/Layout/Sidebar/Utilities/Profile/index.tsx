@@ -126,7 +126,7 @@ export default function Profile({ isCollapsed }: IProfile) {
                             <Flex
                                 onClick={() =>
                                     navigate(
-                                        `/${workspace.current?.name}/settings?sp=profile`
+                                        `/ws/${workspace.current?.name}/settings?sp=profile`
                                     )
                                 }
                                 className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-kaytu-800"
@@ -136,7 +136,7 @@ export default function Profile({ isCollapsed }: IProfile) {
                                 </Text>
                             </Flex>
                             <Flex
-                                onClick={() => navigate(`/billing`)}
+                                onClick={() => navigate(`/ws/billing`)}
                                 className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-kaytu-800"
                             >
                                 <Text className="text-inherit">Billing</Text>

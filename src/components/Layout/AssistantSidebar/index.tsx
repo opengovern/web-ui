@@ -91,7 +91,7 @@ export default function AssistantSidebar({
                     <Flex justifyContent="start" className="gap-4 mb-4">
                         <ArrowLeftIcon
                             className="w-6 text-gray-300 cursor-pointer"
-                            onClick={() => navigate(`/${workspace}`)}
+                            onClick={() => navigate(`/ws/${workspace}`)}
                         />
 
                         {collapsed ? (
@@ -99,7 +99,7 @@ export default function AssistantSidebar({
                         ) : (
                             <KaytuIconBig
                                 className="cursor-pointer"
-                                onClick={() => navigate(`/${workspace}`)}
+                                onClick={() => navigate(`/ws/${workspace}`)}
                             />
                         )}
                     </Flex>

@@ -303,7 +303,7 @@ export default function ScoreDetails() {
                                                 className="hover:cursor-pointer max-w-full w-fit bg-gray-200 border-gray-300 rounded-lg border px-1"
                                                 onClick={() => {
                                                     navigate(
-                                                        `/${ws}/settings?sp=parameters&key=${item.key}`
+                                                        `/ws/${ws}/settings?sp=parameters&key=${item.key}`
                                                     )
                                                 }}
                                             >
@@ -360,7 +360,7 @@ export default function ScoreDetails() {
                                     }
                                 )}
                                 <Link
-                                    to={`/${ws}/settings?sp=parameters`}
+                                    to={`/ws/${ws}/settings?sp=parameters`}
                                     className="text-kaytu-500 cursor-pointer"
                                 >
                                     <Text className="text-kaytu-500">
@@ -392,7 +392,7 @@ export default function ScoreDetails() {
                                         setQuery(modalData)
                                     }}
                                 >
-                                    <Link to={`/${ws}/query`}>
+                                    <Link to={`/ws/${ws}/query`}>
                                         Open in Query
                                     </Link>
                                 </Button>
@@ -863,7 +863,7 @@ export default function ScoreDetails() {
                                             conformanceFilter={
                                                 conformanceFilter
                                             }
-                                            linkPrefix={`/${ws}/score/categories/`}
+                                            linkPrefix={`/ws/${ws}/score/categories/`}
                                             isCostOptimization={
                                                 costSaving !== 0
                                             }

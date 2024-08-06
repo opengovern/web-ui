@@ -15,11 +15,11 @@ const navList = [
         description: 'Discover and query cloud assets across multiple clouds.',
         icon: CubeIcon,
         children: [
-            { name: 'Overview', link: '/:ws/assets' },
-            { name: 'Asset metrics', link: '/:ws/asset-metrics' },
+            { name: 'Overview', link: '/ws/:ws/assets' },
+            { name: 'Asset metrics', link: '/ws/:ws/asset-metrics' },
             {
                 name: 'Cloud account details',
-                link: '/:ws/asset-cloud-accounts',
+                link: '/ws/:ws/asset-cloud-accounts',
             },
         ],
     },
@@ -28,9 +28,9 @@ const navList = [
         description: 'Understand cloud spend, reduce wastage.',
         icon: BanknotesIcon,
         children: [
-            { name: 'Summary', link: '/:ws/spend' },
-            { name: 'Spend metrics', link: '/:ws/spend-metrics' },
-            { name: 'Spend by accounts', link: '/:ws/spend-accounts' },
+            { name: 'Summary', link: '/ws/:ws/spend' },
+            { name: 'Spend metrics', link: '/ws/:ws/spend-metrics' },
+            { name: 'Spend by accounts', link: '/ws/:ws/spend-accounts' },
         ],
     },
     {
@@ -38,8 +38,8 @@ const navList = [
         description: 'Audit cloud configurations against benchmarks.',
         icon: ShieldCheckIcon,
         children: [
-            { name: 'Compliance benchmarks', link: '/:ws/compliance' },
-            { name: 'Security findings', link: '/:ws/findings' },
+            { name: 'Compliance benchmarks', link: '/ws/:ws/compliance' },
+            { name: 'Security findings', link: '/ws/:ws/findings' },
         ],
     },
     {
@@ -48,8 +48,8 @@ const navList = [
             'Connect your cloud environments and tools to Kaytu to gain insights.',
         icon: PuzzlePieceIcon,
         children: [
-            { name: 'AWS accounts', link: '/:ws/integrations/AWS' },
-            { name: 'Azure subscriptions', link: '/:ws/integrations/Azure' },
+            { name: 'AWS accounts', link: '/ws/:ws/integrations/AWS' },
+            { name: 'Azure subscriptions', link: '/ws/:ws/integrations/Azure' },
         ],
     },
     // {

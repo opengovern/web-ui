@@ -349,6 +349,9 @@ export default function TopHeader({
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const url = window.location.pathname.split('/')
+    if (url[1] === 'ws') {
+        url.shift()
+    }
 
     const mainPage = () => {
         if (url[1] === 'billing') {

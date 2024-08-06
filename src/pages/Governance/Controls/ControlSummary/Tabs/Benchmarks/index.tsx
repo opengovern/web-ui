@@ -24,7 +24,7 @@ export default function Benchmarks({ benchmarks }: IBenchmarks) {
                     className="w-full py-4 cursor-pointer"
                     onClick={() =>
                         navigate(
-                            `/${workspace}/compliance/${bm.id}?${searchParams}`
+                            `/ws/${workspace}/compliance/${bm.id}?${searchParams}`
                         )
                     }
                 >

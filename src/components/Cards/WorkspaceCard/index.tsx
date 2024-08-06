@@ -142,7 +142,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                         onClick={() => {
                             // we shouldn't use useNavigate because we need to make sure
                             // an auth token refresh happens before entring the workspace
-                            window.location.href = `/${workspace.name}`
+                            window.location.href = `/ws/${workspace.name}`
                         }}
                     >
                         Access
@@ -168,7 +168,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                         icon={ArrowSmallRightIcon}
                         iconPosition="right"
                         onClick={() => {
-                            navigate(`/${workspace.name}/bootstrap`)
+                            navigate(`/ws/${workspace.name}/bootstrap`)
                         }}
                     >
                         Bootstrap
