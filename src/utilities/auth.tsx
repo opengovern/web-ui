@@ -1,4 +1,6 @@
+import dayjs from 'dayjs'
 import { atom, useAtom } from 'jotai'
+import jwtDecode, { JwtPayload } from 'jwt-decode'
 
 interface IAuthModel {
     token: string
@@ -8,7 +10,7 @@ interface IAuthModel {
     resp: any
 }
 
-const sessionAuth = sessionStorage.getItem('kaytu_auth')
+const sessionAuth = localStorage.getItem('kaytu_auth')
 const sessionAuthModel =
     sessionAuth && sessionAuth.length > 0
         ? (JSON.parse(sessionAuth) as IAuthModel)
@@ -25,10 +27,18 @@ const authAtom = atom<IAuthModel>(
 
 export function useAuth() {
     const [auth, setAuth] = useAtom(authAtom)
+    const decodedToken =
+        auth.token === undefined || auth.token === ''
+            ? undefined
+            : jwtDecode<JwtPayload>(auth.token)
 
     return {
         isLoading: auth.isLoading,
-        isAuthenticated: auth.isSuccessful,
+        isAuthenticated:
+            auth.isSuccessful &&
+            auth.token !== undefined &&
+            auth.token !== '' &&
+            dayjs.unix(decodedToken?.exp || 0).isAfter(dayjs()),
         getAccessTokenSilently: () => {
             if (auth.isSuccessful) {
                 return Promise.resolve(auth.token)
@@ -62,7 +72,7 @@ export function useAuth() {
                 resp: {},
             }
             setAuth(newAuth)
-            sessionStorage.setItem('kaytu_auth', JSON.stringify(newAuth))
+            localStorage.setItem('kaytu_auth', JSON.stringify(newAuth))
         },
         loginWithCode: (code: string) => {
             if (code.length === 0) {
@@ -116,7 +126,7 @@ export function useAuth() {
                             resp: data,
                         }
                         setAuth(newAuth)
-                        sessionStorage.setItem(
+                        localStorage.setItem(
                             'kaytu_auth',
                             JSON.stringify(newAuth)
                         )
