@@ -36,6 +36,8 @@ export const AuthProviderWithNavigate = ({
             searchParams.append('response_type', 'code')
             searchParams.toString()
 
+            sessionStorage.setItem('callbackURL', window.location.href)
+
             window.location.href = `${
                 window.__RUNTIME_CONFIG__.REACT_APP_AUTH_BASE_URL
             }/dex/auth?${searchParams.toString()}`

@@ -6,7 +6,10 @@ export const CallbackPage = () => {
 
     const { error, isAuthenticated } = useAuth()
     if (isAuthenticated) {
-        window.location.href = '/'
+        const c = sessionStorage.getItem('callbackURL')
+
+        window.location.href =
+            c === null || c === undefined || c === '' ? '/' : c
         return null
     }
 
