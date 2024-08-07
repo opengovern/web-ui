@@ -52,7 +52,7 @@ export default function App() {
         getIdTokenClaims,
     } = useAuth()
     const [token, setToken] = useAtom(tokenAtom)
-    const [accessTokenLoading, setAccessTokenLoading] = useState<boolean>(false)
+    const [accessTokenLoading, setAccessTokenLoading] = useState<boolean>(true)
     const [colorBlindMode, setColorBlindMode] = useAtom(colorBlindModeAtom)
     const [expire, setExpire] = useState<number>(0)
     const [showExpired, setShowExpired] = useState<boolean>(false)
@@ -75,38 +75,35 @@ export default function App() {
 
     useEffect(() => {
         if (isAuthenticated && token === '') {
-            if (!accessTokenLoading) {
-                setAccessTokenLoading(true)
-                getIdTokenClaims().then((v) => {
-                    setExpire(v?.exp || 0)
+            getIdTokenClaims().then((v) => {
+                setExpire(v?.exp || 0)
+            })
+            getAccessTokenSilently()
+                .then((accessToken) => {
+                    setToken(accessToken)
+                    setAuthHeader(accessToken)
+                    setAccessTokenLoading(false)
+                    const decodedToken =
+                        accessToken === undefined || accessToken === ''
+                            ? undefined
+                            : jwtDecode<Auth0AppMetadata>(accessToken)
+                    if (decodedToken !== undefined) {
+                        applyTheme(
+                            parseTheme(
+                                decodedToken['https://app.kaytu.io/theme']
+                            )
+                        )
+                        setColorBlindMode(
+                            decodedToken[
+                                'https://app.kaytu.io/colorBlindMode'
+                            ] || false
+                        )
+                    }
                 })
-                getAccessTokenSilently()
-                    .then((accessToken) => {
-                        setToken(accessToken)
-                        setAuthHeader(accessToken)
-                        setAccessTokenLoading(false)
-                        const decodedToken =
-                            accessToken === undefined || accessToken === ''
-                                ? undefined
-                                : jwtDecode<Auth0AppMetadata>(accessToken)
-                        if (decodedToken !== undefined) {
-                            applyTheme(
-                                parseTheme(
-                                    decodedToken['https://app.kaytu.io/theme']
-                                )
-                            )
-                            setColorBlindMode(
-                                decodedToken[
-                                    'https://app.kaytu.io/colorBlindMode'
-                                ] || false
-                            )
-                        }
-                    })
-                    .catch((err) => {
-                        console.error(err)
-                        setAccessTokenLoading(false)
-                    })
-            }
+                .catch((err) => {
+                    console.error(err)
+                    setAccessTokenLoading(false)
+                })
         }
     }, [isAuthenticated])
 
