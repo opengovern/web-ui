@@ -84,7 +84,7 @@ export default function SettingsProfile() {
             )}
             <Title className="font-semibold">Profile Information</Title>
             <Flex flexDirection="col">
-                <Divider className="my-1 py-1" />
+                {/* <Divider className="my-1 py-1" />
                 <Flex flexDirection="row" justifyContent="between">
                     <Text className="w-1/2">First Name</Text>
                     <Text className="w-1/2 text-gray-800">
@@ -102,7 +102,7 @@ export default function SettingsProfile() {
                 <Flex flexDirection="row" justifyContent="between">
                     <Text className="w-1/2">Email</Text>
                     <Text className="w-1/2 text-gray-800">{user?.email}</Text>
-                </Flex>
+                </Flex> */}
                 <Divider className="my-1 py-1" />
                 <Flex flexDirection="row" justifyContent="between">
                     <Text className="w-1/2">Member Since</Text>
@@ -151,7 +151,7 @@ export default function SettingsProfile() {
                         <SelectItem value="false">Disabled</SelectItem>
                     </Select>
                 </Flex>
-                <Divider className="my-1 py-1" />
+                {/* <Divider className="my-1 py-1" />
                 <Flex flexDirection="row" justifyContent="between">
                     <Text className="w-1/2">Demo mode</Text>
                     <Select
@@ -165,7 +165,7 @@ export default function SettingsProfile() {
                         <SelectItem value="true">True</SelectItem>
                         <SelectItem value="false">False</SelectItem>
                     </Select>
-                </Flex>
+                </Flex> */}
                 <Flex flexDirection="row" justifyContent="end" className="mt-2">
                     <Button
                         loading={isExecuted && isLoading}

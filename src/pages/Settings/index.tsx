@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react'
+import { Children, useEffect, useState } from 'react'
 import { Flex } from '@tremor/react'
 import {
     AdjustmentsVerticalIcon,
     BugAntIcon,
+    Cog8ToothIcon,
+    DocumentTextIcon,
     FolderIcon,
     UserIcon,
+    UsersIcon,
 } from '@heroicons/react/24/outline'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { useAtom, useAtomValue } from 'jotai'
@@ -24,31 +27,25 @@ import SettingsParameters from './Parameters'
 
 const navigation = [
     {
-        name: 'Workspace',
-        icon: FolderIcon,
+        name: 'Summary',
+        icon: DocumentTextIcon,
         role: ['admin', 'editor', 'viewer'],
-        children: [
-            {
-                name: 'Summary',
-                page: 'summary',
-                role: ['admin', 'editor', 'viewer'],
-            },
-            {
-                name: 'Members',
-                page: 'members',
-                role: ['admin'],
-            },
-            {
-                name: 'API Keys',
-                page: 'apikeys',
-                role: ['admin'],
-            },
-            {
-                name: 'Customization',
-                page: 'customization',
-                role: ['admin'],
-            },
-        ],
+        page: 'summary',
+        children: [],
+    },
+    {
+        name: 'Authentication',
+        page: 'members',
+        icon: UsersIcon,
+        role: ['admin'],
+        children: [],
+    },
+    {
+        name: 'Customization',
+        page: 'customization',
+        icon: AdjustmentsVerticalIcon,
+        role: ['admin'],
+        children: [],
     },
     // {
     //     name: 'Organization',
@@ -63,40 +60,33 @@ const navigation = [
     //     ],
     // },
     {
-        name: 'Debug',
+        name: 'Jobs',
         icon: BugAntIcon,
+        page: 'jobs',
         role: ['admin', 'editor', 'viewer'],
-        children: [
-            {
-                name: 'Jobs',
-                page: 'jobs',
-                role: ['admin', 'editor', 'viewer'],
-            },
-        ],
+        children: [],
     },
     {
         name: 'Metadata',
         icon: AdjustmentsVerticalIcon,
-        role: ['admin', 'editor', 'viewer'],
-        children: [
-            {
-                name: 'Parameters',
-                page: 'parameters',
-                role: ['admin'],
-            },
-        ],
+        page: 'parameters',
+        role: ['admin'],
+        children: [],
+        // role: ['admin', 'editor', 'viewer'],
+        // children: [
+        //     {
+        //         name: 'Parameters',
+        //         page: 'parameters',
+        //         role: ['admin'],
+        //     },
+        // ],
     },
     {
-        name: 'Personal',
+        name: 'Profile',
         icon: UserIcon,
+        page: 'profile',
         role: ['admin', 'editor', 'viewer'],
-        children: [
-            {
-                name: 'Profile',
-                page: 'profile',
-                role: ['admin', 'editor', 'viewer'],
-            },
-        ],
+        children: [],
     },
 ]
 
@@ -119,9 +109,9 @@ export default function Settings() {
             case 'members':
                 setSelectedTab(<SettingsMembers />)
                 break
-            case 'apikeys':
-                setSelectedTab(<SettingsWorkspaceAPIKeys />)
-                break
+            // case 'apikeys':
+            //     setSelectedTab(<SettingsWorkspaceAPIKeys />)
+            //     break
             case 'org':
                 setSelectedTab(<SettingsOrganization />)
                 break
@@ -169,6 +159,35 @@ export default function Settings() {
                                 ) {
                                     return null
                                 }
+
+                                if (item.children.length === 0) {
+                                    return (
+                                        <li key={item.name}>
+                                            <Link
+                                                to={`/ws/${workspace}/settings?sp=${item.page}`}
+                                                className={`${
+                                                    item.page ===
+                                                        currentSubPage ||
+                                                    (!currentSubPage &&
+                                                        item.page === 'summary')
+                                                        ? 'bg-kaytu-100 dark:bg-kaytu-800  rounded-lg text-gray-800 dark:text-gray-100'
+                                                        : 'text-gray-600 dark:text-gray-300'
+                                                } group flex gap-x-3 pt-2 pb-0 px-2 -ml-2 font-medium`}
+                                            >
+                                                <Flex
+                                                    justifyContent="start"
+                                                    className="text-gray-800 dark:text-gray-100 font-semibold group gap-x-3 mb-2"
+                                                >
+                                                    {item.icon && (
+                                                        <item.icon className="h-5 w-5 shrink-0" />
+                                                    )}
+                                                    {item.name}
+                                                </Flex>
+                                            </Link>
+                                        </li>
+                                    )
+                                }
+
                                 return (
                                     <li key={item.name}>
                                         <Flex

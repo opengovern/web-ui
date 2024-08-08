@@ -1,8 +1,4 @@
-import { Flex, Text } from '@tremor/react'
-import { Link } from 'react-router-dom'
-import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline'
-import JobsMenu from './JobsMenu'
-import CLIMenu from './CLIMenu'
+import { Flex } from '@tremor/react'
 import Profile from './Profile'
 
 interface IUtilities {
@@ -16,11 +12,11 @@ export default function Utilities({ isCollapsed, workspace }: IUtilities) {
             flexDirection="col"
             alignItems="start"
             justifyContent="start"
-            className="p-2 gap-0.5 border-t border-t-gray-700 h-fit min-h-fit"
+            className="p-2 gap-0.5  border-t-gray-700 h-fit min-h-fit"
         >
-            {!isCollapsed && <Text className="my-2 !text-xs">UTILITIES</Text>}
+            {/* {!isCollapsed && <Text className="my-2 !text-xs">UTILITIES</Text>}
             <JobsMenu isCollapsed={isCollapsed} workspace={workspace} />
-            <CLIMenu isCollapsed={isCollapsed} />
+            <CLIMenu isCollapsed={isCollapsed} /> */}
             <Profile isCollapsed={isCollapsed} />
         </Flex>
     )

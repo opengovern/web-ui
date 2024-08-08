@@ -32,7 +32,11 @@ export const workspaceAtom = atom<{
         | undefined
 }>({ list: [], current: undefined })
 export const previewAtom = atom(
-    localStorage.preview === 'true' ? 'true' : 'false'
+    localStorage.preview === 'true' ||
+        localStorage.preview === null ||
+        localStorage.preview === undefined
+        ? 'true'
+        : 'false'
 )
 export const runQueryAtom = atom('')
 

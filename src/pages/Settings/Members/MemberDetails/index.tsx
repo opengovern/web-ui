@@ -233,6 +233,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                             </div>
                         </Flex>
                     </ListItem>
+                    {/*
                     <ListItem key="item" className="py-4">
                         <Flex
                             justifyContent="between"
@@ -288,6 +289,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                             </Flex>
                         </Flex>
                     </ListItem>
+                    */}
                 </List>
                 <Flex justifyContent="end" className="truncate space-x-4">
                     <Button
