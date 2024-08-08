@@ -3,16 +3,16 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
-import jwtDecode from 'jwt-decode'
 import { Button, Card, Flex, Text, Title } from '@tremor/react'
 import Router from './router'
 import Spinner from './components/Spinner'
 import { setAuthHeader } from './api/ApiConfig'
-import { colorBlindModeAtom, tokenAtom } from './store'
-import { applyTheme, parseTheme } from './utilities/theme'
-import { Auth0AppMetadata } from './types/appMetadata'
+import { colorBlindModeAtom, meAtom, tokenAtom } from './store'
+import { applyTheme } from './utilities/theme'
 import { KaytuIcon } from './icons/icons'
 import { useAuth } from './utilities/auth'
+import { useAuthApiV1MeList, useAuthApiV1UserDetail } from './api/auth.gen'
+import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from './api/api'
 
 // Sentry.init({
 //     dsn: 'https://f1ec1f17fb784a12af5cd4f7ddf29d09@sen.kaytu.io/2',
@@ -52,10 +52,18 @@ export default function App() {
         getIdTokenClaims,
     } = useAuth()
     const [token, setToken] = useAtom(tokenAtom)
+    const [me, setMe] = useAtom(meAtom)
     const [accessTokenLoading, setAccessTokenLoading] = useState<boolean>(true)
     const [colorBlindMode, setColorBlindMode] = useAtom(colorBlindModeAtom)
     const [expire, setExpire] = useState<number>(0)
     const [showExpired, setShowExpired] = useState<boolean>(false)
+    const {
+        response: meResponse,
+        isExecuted: meIsExecuted,
+        isLoading: meIsLoading,
+        error: meError,
+        sendNow: getMe,
+    } = useAuthApiV1MeList({}, false)
 
     const checkExpire = () => {
         if (expire !== 0) {
@@ -74,6 +82,17 @@ export default function App() {
     }, [expire])
 
     useEffect(() => {
+        if (meIsExecuted && !meIsLoading) {
+            setMe(meResponse)
+            applyTheme(
+                meResponse?.theme ||
+                    GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeSystem
+            )
+            setColorBlindMode(meResponse?.colorBlindMode || false)
+        }
+    }, [meIsLoading])
+
+    useEffect(() => {
         if (isAuthenticated && token === '') {
             getIdTokenClaims().then((v) => {
                 setExpire(v?.exp || 0)
@@ -83,22 +102,7 @@ export default function App() {
                     setToken(accessToken)
                     setAuthHeader(accessToken)
                     setAccessTokenLoading(false)
-                    const decodedToken =
-                        accessToken === undefined || accessToken === ''
-                            ? undefined
-                            : jwtDecode<Auth0AppMetadata>(accessToken)
-                    if (decodedToken !== undefined) {
-                        applyTheme(
-                            parseTheme(
-                                decodedToken['https://app.kaytu.io/theme']
-                            )
-                        )
-                        setColorBlindMode(
-                            decodedToken[
-                                'https://app.kaytu.io/colorBlindMode'
-                            ] || false
-                        )
-                    }
+                    getMe()
                 })
                 .catch((err) => {
                     console.error(err)
@@ -107,7 +111,7 @@ export default function App() {
         }
     }, [isAuthenticated])
 
-    return isLoading || accessTokenLoading ? (
+    return isLoading || accessTokenLoading || meIsLoading ? (
         <Flex
             justifyContent="center"
             alignItems="center"

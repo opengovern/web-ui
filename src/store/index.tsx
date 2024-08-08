@@ -2,7 +2,7 @@ import { atom } from 'jotai'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import {
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGenerateSupersetDashboardTokenResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetMeResponse,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
 } from '../api/api'
 
@@ -37,8 +37,5 @@ export const previewAtom = atom(
 export const runQueryAtom = atom('')
 
 export const tokenAtom = atom<string>('')
-export const ssTokenAtom = atom<
-    | GithubComKaytuIoKaytuEnginePkgComplianceApiGenerateSupersetDashboardTokenResponse
-    | undefined
->(undefined)
 export const colorBlindModeAtom = atom<boolean>(false)
+export const meAtom = atom<GithubComKaytuIoKaytuEnginePkgAuthApiGetMeResponse>()

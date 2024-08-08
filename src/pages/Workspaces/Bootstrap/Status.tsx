@@ -139,9 +139,6 @@ export function Status({ workspaceName }: IStatus) {
     const complianceDone = statusResponse?.complianceStatus?.done || 0
     const complianceTotal = statusResponse?.complianceStatus?.total || 0
 
-    const insightDone = statusResponse?.insightsStatus?.done || 0
-    const insightTotal = statusResponse?.insightsStatus?.total || 0
-
     const finished =
         wsCreateDone !== 0 &&
         wsCreateDone === wsCreateTotal &&
@@ -150,9 +147,7 @@ export function Status({ workspaceName }: IStatus) {
         analyticsDone !== 0 &&
         analyticsDone === analyticsTotal &&
         complianceDone !== 0 &&
-        complianceDone === complianceTotal &&
-        insightDone !== 0 &&
-        insightDone === insightTotal
+        complianceDone === complianceTotal
 
     return (
         <Flex justifyContent="start" className="h-full" alignItems="start">
@@ -183,11 +178,6 @@ export function Status({ workspaceName }: IStatus) {
                     finishedJobs={complianceDone}
                     totalJobs={complianceTotal}
                     text="Evaluating Compliances"
-                />
-                <Node
-                    finishedJobs={insightDone}
-                    totalJobs={insightTotal}
-                    text="Gathering Insights"
                 />
                 <Node done={finished} text="Finishing Up" />
                 <Button

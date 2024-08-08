@@ -10,28 +10,22 @@ import {
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { useAtom, useAtomValue } from 'jotai'
-import jwtDecode from 'jwt-decode'
 import dayjs from 'dayjs'
 import { useAuthApiV1UserPreferencesUpdate } from '../../../api/auth.gen'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from '../../../api/api'
-import { colorBlindModeAtom, isDemoAtom, tokenAtom } from '../../../store'
+import { colorBlindModeAtom, isDemoAtom, meAtom } from '../../../store'
 import { applyTheme, currentTheme, parseTheme } from '../../../utilities/theme'
-import { Auth0AppMetadata } from '../../../types/appMetadata'
 import { useAuth } from '../../../utilities/auth'
 
 export default function SettingsProfile() {
     const { user } = useAuth()
-    const token = useAtomValue(tokenAtom)
     const [colorBlindMode, setColorBlindMode] = useAtom(colorBlindModeAtom)
     const [isDemo, setIsDemo] = useAtom(isDemoAtom)
 
-    const decodedToken =
-        token === undefined || token === ''
-            ? undefined
-            : jwtDecode<Auth0AppMetadata>(token)
+    const [me, setMe] = useAtom(meAtom)
 
-    const memberSince = decodedToken?.['https://app.kaytu.io/memberSince']
-    const lastLogin = decodedToken?.['https://app.kaytu.io/userLastLogin']
+    const memberSince = me?.memberSince
+    const lastLogin = me?.lastLogin
 
     const [enableColorBlindMode, setEnableColorBlindMode] =
         useState<boolean>(colorBlindMode)

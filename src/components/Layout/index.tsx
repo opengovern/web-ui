@@ -3,7 +3,6 @@ import { ReactNode, UIEvent } from 'react'
 import Footer from './Footer'
 import Sidebar from './Sidebar'
 import Notification from '../Notification'
-import AssistantSidebar from './AssistantSidebar'
 
 type IProps = {
     children: ReactNode
@@ -22,7 +21,6 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
         workspace !== 'workspaces' &&
         workspace !== 'billing' &&
         workspace !== 'requestdemo' &&
-        current !== 'assistant' &&
         workspace !== 'new-ws' &&
         current !== 'bootstrap' &&
         workspace !== 'callback'
@@ -35,9 +33,6 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
         >
             {showSidebar && (
                 <Sidebar workspace={workspace} currentPage={current} />
-            )}
-            {current === 'assistant' && (
-                <AssistantSidebar workspace={workspace} currentPage={current} />
             )}
             <div className="z-10 w-full h-full relative">
                 <Flex

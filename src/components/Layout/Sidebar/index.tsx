@@ -20,17 +20,14 @@ import {
 import { useAtom, useAtomValue } from 'jotai'
 import { Popover, Transition } from '@headlessui/react'
 import { Fragment, useEffect } from 'react'
-import { previewAtom, sideBarCollapsedAtom, ssTokenAtom } from '../../../store'
+import { previewAtom, sideBarCollapsedAtom } from '../../../store'
 import { KaytuIcon, KaytuIconBig } from '../../../icons/icons'
 import Utilities from './Utilities'
 import {
     useInventoryApiV2AnalyticsCountList,
     useInventoryApiV2AnalyticsSpendCountList,
 } from '../../../api/inventory.gen'
-import {
-    useComplianceApiV1FindingsCountList,
-    useComplianceApiV1SupersetDashboardsTokenCreate,
-} from '../../../api/compliance.gen'
+import { useComplianceApiV1FindingsCountList } from '../../../api/compliance.gen'
 import { useIntegrationApiV1ConnectionsCountList } from '../../../api/integration.gen'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Workspaces from './Workspaces'
@@ -92,29 +89,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         error: connectionsErr,
         sendNow: sendConnections,
     } = useIntegrationApiV1ConnectionsCountList({}, {}, false, workspace)
-    // const {
-    //     response: dashboardToken,
-    //     isLoading,
-    //     isExecuted,
-    //     error: dashboardTokenErr,
-    //     sendNow: fetchDashboardToken,
-    // } = useComplianceApiV1SupersetDashboardsTokenCreate({}, false, workspace)
-    // const [ssToken, setSSToken] = useAtom(ssTokenAtom)
-    // useEffect(() => {
-    //     setSSToken(dashboardToken)
-    // }, [isLoading])
-    // const dashboardItems = () => {
-    //     return dashboardToken?.dashboards?.map((d) => {
-    //         return {
-    //             name: d.Name,
-    //             page: `dashboard/${d.ID}`,
-    //             isPreview: false,
-    //             isLoading: false,
-    //             count: undefined,
-    //             error: false,
-    //         }
-    //     })
-    // }
 
     const searchParams = useAtomValue(searchAtom)
 
@@ -287,32 +261,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 isPreview: true,
             },
             {
-                name: 'Automation',
-                icon: LightBulbIcon,
-                page: ['rules, alerts'],
-                children: [
-                    {
-                        name: 'Rules',
-                        page: 'rules',
-                        selected: 'rules',
-                        isPreview: false,
-                        isLoading: false,
-                        count: undefined,
-                        error: false,
-                    },
-                    {
-                        name: 'Alerts',
-                        page: 'alerts',
-                        selected: 'alerts',
-                        isPreview: false,
-                        isLoading: false,
-                        count: undefined,
-                        error: false,
-                    },
-                ],
-                isPreview: true,
-            },
-            {
                 name: 'Integrations',
                 page: 'integrations',
                 icon: PuzzlePieceIcon,
@@ -327,13 +275,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 icon: Cog6ToothIcon,
                 isPreview: false,
             },
-            // {
-            //     name: 'Dashboards',
-            //     page: 'dashboard',
-            //     icon: DocumentChartBarIcon,
-            //     children: dashboardItems(),
-            //     isPreview: false,
-            // },
         ]
     }
 

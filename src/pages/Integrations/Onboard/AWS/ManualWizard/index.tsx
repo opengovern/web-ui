@@ -91,7 +91,6 @@ export default function ManualWizard({
                 accountID: awsConf.accountID,
                 assumeRoleName: awsConf.assumeRoleName,
                 externalId: awsConf.externalId,
-                healthCheckPolicies: undefined,
             },
         },
         {},

@@ -53,110 +53,6 @@ export interface EsTag {
     value?: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiAction {
-    body?: string
-    headers?: Record<string, string>
-    id?: number
-    method?: string
-    name?: string
-    url?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiCondition {
-    combinator?: string
-    field?: string
-    not?: boolean
-    operator?: string
-    rules?: GithubComKaytuIoKaytuEnginePkgAlertingApiCondition[]
-    value?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq {
-    body?: string
-    headers?: Record<string, string>
-    method?: string
-    name?: string
-    url?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest {
-    action_id?: number
-    condition?: GithubComKaytuIoKaytuEnginePkgAlertingApiCondition
-    event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
-    metadata?: GithubComKaytuIoKaytuEnginePkgAlertingApiMetadata
-    scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiEventType {
-    benchmark_id?: string
-    insight_id?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse {
-    action_id?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs {
-    atlassian_api_token?: string
-    atlassian_domain?: string
-    email?: string
-    issue_type_id?: string
-    name?: string
-    project_id?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiMetadata {
-    description?: string
-    label?: string[]
-    name?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiRule {
-    action_id?: number
-    condition?: GithubComKaytuIoKaytuEnginePkgAlertingApiCondition
-    event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
-    id?: number
-    metadata?: GithubComKaytuIoKaytuEnginePkgAlertingApiMetadata
-    scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
-    trigger_status?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiScope {
-    connection_group?: string
-    connection_id?: string
-    connector?: SourceType
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs {
-    channel_name?: string
-    name?: string
-    slack_url?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers {
-    action?: GithubComKaytuIoKaytuEnginePkgAlertingApiAction
-    response_status?: number
-    rule?: GithubComKaytuIoKaytuEnginePkgAlertingApiRule
-    triggered_at?: string
-    value?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest {
-    body?: string
-    headers?: Record<string, string>
-    method?: string
-    name?: string
-    url?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest {
-    action_id?: number
-    condition?: GithubComKaytuIoKaytuEnginePkgAlertingApiCondition
-    event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
-    metadata?: GithubComKaytuIoKaytuEnginePkgAlertingApiMetadata
-    scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
-}
-
 export enum GithubComKaytuIoKaytuEnginePkgAnalyticsDbMetricType {
     MetricTypeAssets = 'assets',
     MetricTypeSpend = 'spend',
@@ -205,6 +101,59 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse {
     roleName?: 'admin' | 'editor' | 'viewer'
     /** Token of the key */
     token?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiGetMeResponse {
+    /**
+     * Is the user blocked or not
+     * @example false
+     */
+    blocked?: boolean
+    colorBlindMode?: boolean
+    /**
+     * Creation timestamp in UTC
+     * @example "2023-03-31T09:36:09.855Z"
+     */
+    createdAt?: string
+    /**
+     * Email address of the user
+     * @example "johndoe@example.com"
+     */
+    email?: string
+    /**
+     * Is email verified or not
+     * @example true
+     */
+    emailVerified?: boolean
+    /**
+     * Last activity timestamp in UTC
+     * @example "2023-04-21T08:53:09.928Z"
+     */
+    lastActivity?: string
+    lastLogin?: string
+    memberSince?: string
+    /**
+     * Name of the role
+     * @example "admin"
+     */
+    roleName?: 'admin' | 'editor' | 'viewer'
+    /**
+     * Invite status
+     * @example "accepted"
+     */
+    status?: 'accepted' | 'pending'
+    theme?: GithubComKaytuIoKaytuEnginePkgAuthApiTheme
+    /**
+     * Unique identifier for the user
+     * @example "auth|123456789"
+     */
+    userId?: string
+    /**
+     * Username
+     * @example "John Doe"
+     */
+    userName?: string
+    workspaceAccess?: Record<string, string>
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse {
@@ -339,14 +288,6 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest {
      * @example "auth|123456789"
      */
     userId: string
-}
-
-export enum GithubComKaytuIoKaytuEnginePkgAuthApiRole {
-    InternalRole = 'internal',
-    KaytuAdminRole = 'kaytu-admin',
-    AdminRole = 'admin',
-    EditorRole = 'editor',
-    ViewerRole = 'viewer',
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgAuthApiTheme {
@@ -1054,11 +995,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingsSort {
     stateActive?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGenerateSupersetDashboardTokenResponse {
-    dashboards?: GithubComKaytuIoKaytuEnginePkgComplianceApiSupersetDashboard[]
-    token?: string
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse {
     accounts?: GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSummary[]
 }
@@ -1116,145 +1052,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse 
     records?: GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord[]
     /** @example 100 */
     totalCount?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsight {
-    /**
-     * Cloud Provider
-     * @example "Azure"
-     */
-    connector?: SourceType
-    /**
-     * Description
-     * @example "List clusters that have role-based access control (RBAC) disabled"
-     */
-    description?: string
-    /** @example true */
-    enabled?: boolean
-    /** Old Total Result Date */
-    firstOldResultDate?: string
-    /**
-     * Insight ID
-     * @example 23
-     */
-    id?: number
-    /** @example false */
-    internal?: boolean
-    /** Links */
-    links?: string[]
-    /** Logo URL */
-    logoURL?: string
-    /**
-     * Long Title
-     * @example "List clusters that have role-based access control (RBAC) disabled"
-     */
-    longTitle?: string
-    /**
-     * Number of Old Total Result Value
-     * @example 0
-     */
-    oldTotalResultValue?: number
-    /** Query */
-    query?: GithubComKaytuIoKaytuEnginePkgComplianceApiQuery
-    /** Insight Results */
-    result?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightResult[]
-    /**
-     * Short Title
-     * @example "Clusters with no RBAC"
-     */
-    shortTitle?: string
-    /** Tags */
-    tags?: Record<string, string[]>
-    /**
-     * Number of Total Result Value
-     * @example 10
-     */
-    totalResultValue?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightConnection {
-    connection_id?: string
-    original_id?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightDetail {
-    headers?: string[]
-    rows?: any[][]
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup {
-    /** @example ["[\"Azure\""," \"AWS\"]"] */
-    connectors?: SourceType[]
-    /** @example "List clusters that have role-based access control (RBAC) disabled" */
-    description?: string
-    /** @example "2023-04-21T08:53:09.928Z" */
-    firstOldResultDate?: string
-    /** @example 23 */
-    id?: number
-    insights?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[]
-    /** @example "https://kaytu.io/logo.png" */
-    logoURL?: string
-    /** @example "List clusters that have role-based access control (RBAC) disabled" */
-    longTitle?: string
-    /** @example 0 */
-    oldTotalResultValue?: number
-    /** @example "Clusters with no RBAC" */
-    shortTitle?: string
-    tags?: Record<string, string[]>
-    /** @example 10 */
-    totalResultValue?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightResult {
-    /**
-     * Connection ID
-     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
-     */
-    connectionID?: string
-    /** Connections */
-    connections?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightConnection[]
-    /** Insight Details */
-    details?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightDetail
-    /**
-     * Time of Execution
-     * @example "2023-04-21T08:53:09.928Z"
-     */
-    executedAt?: string
-    /**
-     * Insight ID
-     * @example 23
-     */
-    insightID?: number
-    /**
-     * Job ID
-     * @example 1
-     */
-    jobID?: number
-    /** Locations */
-    locations?: string[]
-    /**
-     * Result
-     * @example 1000
-     */
-    result?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint {
-    /**
-     * Connection Count
-     * @example 10
-     */
-    connectionCount?: number
-    /**
-     * Time
-     * @example 1686346668
-     */
-    timestamp?: number
-    /**
-     * Resource Count
-     * @example 1000
-     */
-    value?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiListBenchmarksSummaryResponse {
@@ -1399,11 +1196,6 @@ export enum GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection {
     SortDirectionDescending = 'desc',
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiSupersetDashboard {
-    ID?: string
-    Name?: string
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {
     connection?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
     control?: GithubComKaytuIoKaytuEnginePkgComplianceApiControl
@@ -1445,7 +1237,6 @@ export enum GithubComKaytuIoKaytuEnginePkgDescribeApiJobType {
     JobTypeDiscovery = 'discovery',
     JobTypeAnalytics = 'analytics',
     JobTypeCompliance = 'compliance',
-    JobTypeInsight = 'insight',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes {
@@ -1730,13 +1521,6 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType {
      * @example 100
      */
     count?: number
-    /** List of Insights that support this Resource Type - Metadata (GET only) */
-    insights?: number[]
-    /**
-     * Number of Insights that use this Resource Type - Metadata
-     * @min 0
-     */
-    insights_count?: number
     /**
      * Logo URI
      * @example "https://kaytu.io/logo.png"
@@ -1784,10 +1568,12 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendData
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest {
+    account_id?: string
     engine?: string
     page: GithubComKaytuIoKaytuEnginePkgInventoryApiPage
     query?: string
     sorts?: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQuerySortItem[]
+    source_id?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse {
@@ -1902,7 +1688,6 @@ export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsMetadataKey {
     MetadataKeyFullDiscoveryJobInterval = 'full_discovery_job_interval',
     MetadataKeyCostDiscoveryJobInterval = 'cost_discovery_job_interval',
     MetadataKeyHealthCheckJobInterval = 'health_check_job_interval',
-    MetadataKeyInsightJobInterval = 'insight_job_interval',
     MetadataKeyMetricsJobInterval = 'metrics_job_interval',
     MetadataKeyComplianceJobInterval = 'compliance_job_interval',
     MetadataKeyDataRetention = 'data_retention_duration',
@@ -1923,7 +1708,6 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredentialConfig {
     accountId?: string
     assumeAdminRoleName?: string
     assumeRoleName?: string
-    assumeRolePolicyName?: string
     externalId?: string
     regions?: string[]
     secretKey: string
@@ -2277,10 +2061,11 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiV2AWSCredentialV2Config {
+    accessKey?: string
     accountID?: string
     assumeRoleName?: string
     externalId?: string
-    healthCheckPolicies?: string[]
+    secretKey?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Request {
@@ -2310,7 +2095,6 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusRespon
     complianceStatus?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapProgress
     connection_count?: Record<string, number>
     discoveryStatus?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapProgress
-    insightsStatus?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapProgress
     maxConnections?: number
     minRequiredConnections?: number
     workspaceCreationStatus?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapProgress
@@ -2407,32 +2191,12 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize {
     SizeLG = 'lg',
 }
 
-export interface GithubComKaytuIoKaytuEngineServicesAssistantApiEntityListMessagesResponse {
-    messages?: GithubComKaytuIoKaytuEngineServicesAssistantApiEntityMessage[]
-    status?: string
-}
-
-export interface GithubComKaytuIoKaytuEngineServicesAssistantApiEntityMessage {
-    content?: string
-    role?: string
-}
-
-export interface GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest {
-    content?: string
-    run_id?: string
-    thread_id?: string
-}
-
-export interface GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageResponse {
-    run_id?: string
-    thread_id?: string
-}
-
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSCredentialConfig {
+    accessKey?: string
     accountID?: string
     assumeRoleName?: string
     externalId?: string
-    healthCheckPolicies?: string[]
+    secretKey?: string
 }
 
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAzureCredentialConfig {
@@ -2763,34 +2527,196 @@ export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAz
     name?: string
 }
 
-export interface GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersRequest {
-    end_time_epoch_millis?: number
-    start_time_epoch_millis?: number
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsClusterWastageRequest {
+    cliVersion?: string
+    cluster?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRdsCluster
+    identification?: Record<string, string>
+    instances?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRds[]
+    loading?: boolean
+    metrics?: Record<string, Record<string, TypesDatapoint[]>>
+    preferences?: Record<string, string>
+    region?: string
+    requestId?: string
 }
 
-export interface GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersResponse {
-    meters?: GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeter[]
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsClusterWastageResponse {
+    rightSizing?: Record<
+        string,
+        GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRdsRightsizingRecommendation
+    >
 }
 
-export interface GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeter {
-    isTotal?: boolean
-    type?: GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeterType
-    value?: number
-    workspaceName?: string
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRds {
+    availabilityZone?: string
+    backupRetentionPeriod?: number
+    clusterType?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRdsClusterType
+    engine?: string
+    engineVersion?: string
+    hashedInstanceId?: string
+    instanceType?: string
+    licenseModel?: string
+    performanceInsightsEnabled?: boolean
+    performanceInsightsRetentionPeriod?: number
+    storageIops?: number
+    storageSize?: number
+    storageThroughput?: number
+    storageType?: string
 }
 
-export enum GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeterType {
-    MeterTypeInventoryDiscoveryJobCount = 'InventoryDiscoveryJobCount',
-    MeterTypeCostDiscoveryJobCount = 'CostDiscoveryJobCount',
-    MeterTypeMetricEvaluationCount = 'MetricEvaluationCount',
-    MeterTypeInsightEvaluationCount = 'InsightEvaluationCount',
-    MeterTypeBenchmarkEvaluationCount = 'BenchmarkEvaluationCount',
-    MeterTypeTotalFindings = 'TotalFindings',
-    MeterTypeTotalResource = 'TotalResource',
-    MeterTypeTotalUsers = 'TotalUsers',
-    MeterTypeTotalApiKeys = 'TotalApiKeys',
-    MeterTypeTotalRules = 'TotalRules',
-    MeterTypeAlertCount = 'AlertCount',
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRdsCluster {
+    engine?: string
+    hashedClusterId?: string
+}
+
+export enum GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRdsClusterType {
+    AwsRdsClusterTypeSingleInstance = 'Single-AZ',
+    AwsRdsClusterTypeMultiAzOneInstance = 'Multi-AZ',
+    AwsRdsClusterTypeMultiAzTwoInstance = 'Multi-AZ (readable standbys)',
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRdsRightsizingRecommendation {
+    current?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityRightsizingAwsRds
+    description?: string
+    freeMemoryBytes?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityUsage
+    freeStorageBytes?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityUsage
+    networkThroughputBytes?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityUsage
+    recommended?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityRightsizingAwsRds
+    storageIops?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityUsage
+    storageThroughputBytes?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityUsage
+    vCPU?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityUsage
+    volumeBytesUsed?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityUsage
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRdsWastageRequest {
+    cliVersion?: string
+    identification?: Record<string, string>
+    instance?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRds
+    loading?: boolean
+    metrics?: Record<string, TypesDatapoint[]>
+    preferences?: Record<string, string>
+    region?: string
+    requestId?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRdsWastageResponse {
+    rightSizing?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRdsRightsizingRecommendation
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityEBSVolumeRecommendation {
+    current?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityRightsizingEBSVolume
+    description?: string
+    iops?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityUsage
+    recommended?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityRightsizingEBSVolume
+    throughput?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityUsage
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityEC2Instance {
+    coreCount?: number
+    ebsOptimized?: boolean
+    hashedInstanceId?: string
+    instanceLifecycle?: string
+    instanceType?: string
+    monitoring?: string
+    placement?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityEC2Placement
+    platform?: string
+    state?: string
+    tenancy?: string
+    threadsPerCore?: number
+    usageOperation?: string
+}
+
+export type GithubComKaytuIoKaytuEngineServicesWastageApiEntityEC2InstanceWastageRequest =
+    object
+
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityEC2InstanceWastageResponse {
+    rightSizing?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityRightSizingRecommendation
+    volumes?: Record<
+        string,
+        GithubComKaytuIoKaytuEngineServicesWastageApiEntityEBSVolumeRecommendation
+    >
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityEC2Placement {
+    availabilityZone?: string
+    hashedHostId?: string
+    tenancy?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityEC2Volume {
+    availabilityZone?: string
+    hashedVolumeId?: string
+    iops?: number
+    size?: number
+    throughput?: number
+    volumeType?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityRightSizingRecommendation {
+    current?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityRightsizingEC2Instance
+    description?: string
+    ebsBandwidth?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityUsage
+    ebsIops?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityUsage
+    memory?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityUsage
+    networkThroughput?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityUsage
+    recommended?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityRightsizingEC2Instance
+    vCPU?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityUsage
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityRightsizingAwsRds {
+    architecture?: string
+    clusterType?: GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRdsClusterType
+    computeCost?: number
+    computeCostComponents?: Record<string, number>
+    cost?: number
+    costComponents?: Record<string, number>
+    engine?: string
+    engineVersion?: string
+    instanceType?: string
+    memoryGb?: number
+    processor?: string
+    region?: string
+    storageCost?: number
+    storageCostComponents?: Record<string, number>
+    storageIops?: number
+    storageSize?: number
+    storageThroughput?: number
+    storageType?: string
+    vCPU?: number
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityRightsizingEBSVolume {
+    baselineIOPS?: number
+    baselineThroughput?: number
+    cost?: number
+    costComponents?: Record<string, number>
+    provisionedIOPS?: number
+    provisionedThroughput?: number
+    tier?: string
+    volumeSize?: number
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityRightsizingEC2Instance {
+    architecture?: string
+    cost?: number
+    costComponents?: Record<string, number>
+    ebsBandwidth?: string
+    ebsIops?: string
+    enaSupported?: string
+    instanceType?: string
+    license?: string
+    licensePrice?: number
+    memory?: number
+    networkThroughput?: string
+    processor?: string
+    region?: string
+    vCPU?: number
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesWastageApiEntityUsage {
+    avg?: number
+    last?: TypesDatapoint
+    max?: number
+    min?: number
 }
 
 export interface KaytuResourceCollectionFilter {
@@ -2828,6 +2754,8 @@ export enum SourceType {
     CloudAWS = 'AWS',
     CloudAzure = 'Azure',
 }
+
+export type TypesDatapoint = object
 
 export enum TypesFindingSeverity {
     FindingSeverityNone = 'none',
@@ -3035,349 +2963,6 @@ export class HttpClient<SecurityDataType = unknown> {
 export class Api<
     SecurityDataType extends unknown
 > extends HttpClient<SecurityDataType> {
-    ai = {
-        /**
-         * No description
-         *
-         * @tags resource
-         * @name ApiV1GptRunCreate
-         * @summary Runs the query on KaytuGPT and returns the generated query
-         * @request POST:/ai/api/v1/gpt/run
-         * @secure
-         */
-        apiV1GptRunCreate: (query: string, params: RequestParams = {}) =>
-            this.request<Record<string, string[]>, any>({
-                path: `/ai/api/v1/gpt/run`,
-                method: 'POST',
-                body: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-    }
-    alerting = {
-        /**
-         * @description create an action by the specified input
-         *
-         * @tags alerting
-         * @name ApiV1ActionCreateCreate
-         * @summary Create action
-         * @request POST:/alerting/api/v1/action/create
-         * @secure
-         */
-        apiV1ActionCreateCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
-            params: RequestParams = {}
-        ) =>
-            this.request<number, any>({
-                path: `/alerting/api/v1/action/create`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * @description Deleting a single action for the given action id
-         *
-         * @tags alerting
-         * @name ApiV1ActionDeleteDelete
-         * @summary Delete action
-         * @request DELETE:/alerting/api/v1/action/delete/{actionId}
-         * @secure
-         */
-        apiV1ActionDeleteDelete: (
-            actionId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<string, any>({
-                path: `/alerting/api/v1/action/delete/${actionId}`,
-                method: 'DELETE',
-                secure: true,
-                ...params,
-            }),
-
-        /**
-         * @description Create action with jira url and header and body
-         *
-         * @tags alerting
-         * @name ApiV1ActionJiraCreate
-         * @summary Create Jira Action
-         * @request POST:/alerting/api/v1/action/jira
-         * @secure
-         */
-        apiV1ActionJiraCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
-                any
-            >({
-                path: `/alerting/api/v1/action/jira`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * @description returns list of all actions
-         *
-         * @tags alerting
-         * @name ApiV1ActionListList
-         * @summary List actions
-         * @request GET:/alerting/api/v1/action/list
-         * @secure
-         */
-        apiV1ActionListList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAlertingApiAction[],
-                any
-            >({
-                path: `/alerting/api/v1/action/list`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Create action with slack url and body
-         *
-         * @tags alerting
-         * @name ApiV1ActionSlackCreate
-         * @summary Create Slack Action
-         * @request POST:/alerting/api/v1/action/slack
-         * @secure
-         */
-        apiV1ActionSlackCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
-                any
-            >({
-                path: `/alerting/api/v1/action/slack`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * @description Retrieving an action by the specified input
-         *
-         * @tags alerting
-         * @name ApiV1ActionUpdateUpdate
-         * @summary Update action
-         * @request PUT:/alerting/api/v1/action/update/{actionId}
-         * @secure
-         */
-        apiV1ActionUpdateUpdate: (
-            actionId: string,
-            request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<string, any>({
-                path: `/alerting/api/v1/action/update/${actionId}`,
-                method: 'PUT',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * @description create a rule by the specified input
-         *
-         * @tags alerting
-         * @name ApiV1RuleCreateCreate
-         * @summary Create rule
-         * @request POST:/alerting/api/v1/rule/create
-         * @secure
-         */
-        apiV1RuleCreateCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<number, any>({
-                path: `/alerting/api/v1/rule/create`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * @description Deleting a single rule for the given rule id
-         *
-         * @tags alerting
-         * @name ApiV1RuleDeleteDelete
-         * @summary Delete rule
-         * @request DELETE:/alerting/api/v1/rule/delete/{ruleId}
-         * @secure
-         */
-        apiV1RuleDeleteDelete: (ruleId: string, params: RequestParams = {}) =>
-            this.request<string, any>({
-                path: `/alerting/api/v1/rule/delete/${ruleId}`,
-                method: 'DELETE',
-                secure: true,
-                ...params,
-            }),
-
-        /**
-         * @description returns list of all rules
-         *
-         * @tags alerting
-         * @name ApiV1RuleListList
-         * @summary List rules
-         * @request GET:/alerting/api/v1/rule/list
-         * @secure
-         */
-        apiV1RuleListList: (params: RequestParams = {}) =>
-            this.request<GithubComKaytuIoKaytuEnginePkgAlertingApiRule[], any>({
-                path: `/alerting/api/v1/rule/list`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieving a rule by the specified input
-         *
-         * @tags alerting
-         * @name ApiV1RuleUpdateUpdate
-         * @summary Update rule
-         * @request PUT:/alerting/api/v1/rule/update/{ruleId}
-         * @secure
-         */
-        apiV1RuleUpdateUpdate: (
-            ruleId: string,
-            request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<string, any>({
-                path: `/alerting/api/v1/rule/update/${ruleId}`,
-                method: 'PUT',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * @description Trigger one rule manually
-         *
-         * @tags alerting
-         * @name ApiV1RuleTriggerDetail
-         * @summary Trigger one rule
-         * @request GET:/alerting/api/v1/rule/{ruleId}/trigger
-         * @secure
-         */
-        apiV1RuleTriggerDetail: (ruleId: string, params: RequestParams = {}) =>
-            this.request<string, any>({
-                path: `/alerting/api/v1/rule/${ruleId}/trigger`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description returns list of all the triggers
-         *
-         * @tags alerting
-         * @name ApiV1TriggerListList
-         * @summary List triggers
-         * @request GET:/alerting/api/v1/trigger/list
-         * @secure
-         */
-        apiV1TriggerListList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers[],
-                any
-            >({
-                path: `/alerting/api/v1/trigger/list`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-    }
-    assistant = {
-        /**
-         * @description Send a message [standalone]
-         *
-         * @tags assistant
-         * @name ApiV1ThreadCreate
-         * @summary Send a message [standalone]
-         * @request POST:/assistant/api/v1/{assistant_name}/thread
-         * @secure
-         */
-        apiV1ThreadCreate: (
-            assistantName:
-                | 'kaytu-r-assistant'
-                | 'kaytu-assets-assistant'
-                | 'kaytu-score-assistant'
-                | 'kaytu-compliance-assistant',
-            request: GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEngineServicesAssistantApiEntitySendMessageResponse,
-                any
-            >({
-                path: `/assistant/api/v1/${assistantName}/thread`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description List messages of a thread
-         *
-         * @tags assistant
-         * @name ApiV1ThreadDetail
-         * @summary List messages of a thread
-         * @request GET:/assistant/api/v1/{assistant_name}/thread/{thread_id}
-         * @secure
-         */
-        apiV1ThreadDetail: (
-            threadId: string,
-            assistantName:
-                | 'kaytu-r-assistant'
-                | 'kaytu-assets-assistant'
-                | 'kaytu-score-assistant'
-                | 'kaytu-compliance-assistant',
-            query?: {
-                /** Run ID */
-                run_id?: string
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEngineServicesAssistantApiEntityListMessagesResponse,
-                any
-            >({
-                path: `/assistant/api/v1/${assistantName}/thread/${threadId}`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-    }
     auth = {
         /**
          * @description Creates workspace key for the defined role with the defined name in the workspace.
@@ -3437,6 +3022,27 @@ export class Api<
                 any
             >({
                 path: `/auth/api/v1/keys`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Returns my user details
+         *
+         * @tags users
+         * @name ApiV1MeList
+         * @summary Get Me
+         * @request GET:/auth/api/v1/me
+         * @secure
+         */
+        apiV1MeList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgAuthApiGetMeResponse,
+                any
+            >({
+                path: `/auth/api/v1/me`,
                 method: 'GET',
                 secure: true,
                 format: 'json',
@@ -4543,263 +4149,6 @@ export class Api<
             }),
 
         /**
-         * @description Retrieving list of insights based on specified filters. Provides details of insights, including results during the specified time period for the specified connection. Returns "all:provider" job results if connectionId is not defined.
-         *
-         * @tags insights
-         * @name ApiV1InsightList
-         * @summary List insights
-         * @request GET:/compliance/api/v1/insight
-         * @secure
-         */
-        apiV1InsightList: (
-            query?: {
-                /** Key-Value tags in key=value format to filter by */
-                tag?: string[]
-                /** filter insights by connector */
-                connector?: ('' | 'AWS' | 'Azure')[]
-                /** filter the result by source id */
-                connectionId?: string[]
-                /** filter the result by connection group  */
-                connectionGroup?: string[]
-                /** Resource collection IDs to filter by */
-                resourceCollection?: string[]
-                /** unix seconds for the start time of the trend */
-                startTime?: number
-                /** unix seconds for the end time of the trend */
-                endTime?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[],
-                any
-            >({
-                path: `/compliance/api/v1/insight`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieving list of insight groups based on specified filters. The API provides details of insights, including results during the specified time period for the specified connection. Returns "all:provider" job results if connectionId is not defined.
-         *
-         * @tags insights
-         * @name ApiV1InsightGroupList
-         * @summary List insight groups
-         * @request GET:/compliance/api/v1/insight/group
-         * @secure
-         */
-        apiV1InsightGroupList: (
-            query?: {
-                /** Key-Value tags in key=value format to filter by */
-                tag?: string[]
-                /** filter insights by connector */
-                connector?: ('' | 'AWS' | 'Azure')[]
-                /** filter the result by source id */
-                connectionId?: string[]
-                /** filter the result by connection group */
-                connectionGroup?: string[]
-                /** Resource collection IDs to filter by */
-                resourceCollection?: string[]
-                /** unix seconds for the start time of the trend */
-                startTime?: number
-                /** unix seconds for the end time of the trend */
-                endTime?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup[],
-                any
-            >({
-                path: `/compliance/api/v1/insight/group`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieving the specified insight group with ID. Returns "all:provider" job results if connectionId is not defined.
-         *
-         * @tags insights
-         * @name ApiV1InsightGroupDetail
-         * @summary Get insight group
-         * @request GET:/compliance/api/v1/insight/group/{insightGroupId}
-         * @secure
-         */
-        apiV1InsightGroupDetail: (
-            insightGroupId: string,
-            query?: {
-                /** filter the result by source id */
-                connectionId?: string[]
-                /** filter the result by connection group */
-                connectionGroup?: string[]
-                /** Resource collection IDs to filter by */
-                resourceCollection?: string[]
-                /** unix seconds for the start time of the trend */
-                startTime?: number
-                /** unix seconds for the end time of the trend */
-                endTime?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-                any
-            >({
-                path: `/compliance/api/v1/insight/group/${insightGroupId}`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieving insight group results datapoints for a specified connection during a specified time period. Returns "all:provider" job results if connectionId is not defined.
-         *
-         * @tags insights
-         * @name ApiV1InsightGroupTrendDetail
-         * @summary Get insight group trend
-         * @request GET:/compliance/api/v1/insight/group/{insightGroupId}/trend
-         * @secure
-         */
-        apiV1InsightGroupTrendDetail: (
-            insightGroupId: string,
-            query?: {
-                /** filter the result by source id */
-                connectionId?: string[]
-                /** filter the result by connection group */
-                connectionGroup?: string[]
-                /** Resource collection IDs to filter by */
-                resourceCollection?: string[]
-                /** unix seconds for the start time of the trend */
-                startTime?: number
-                /** unix seconds for the end time of the trend */
-                endTime?: number
-                /** number of datapoints to return */
-                datapointCount?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[],
-                any
-            >({
-                path: `/compliance/api/v1/insight/group/${insightGroupId}/trend`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieving the specified insight with ID. Provides details of the insight, including results during the specified time period for the specified connection. Returns "all:provider" job results if connectionId is not defined.
-         *
-         * @tags insights
-         * @name ApiV1InsightDetail
-         * @summary Get insight
-         * @request GET:/compliance/api/v1/insight/{insightId}
-         * @secure
-         */
-        apiV1InsightDetail: (
-            insightId: string,
-            query?: {
-                /** filter the result by source id */
-                connectionId?: string[]
-                /** filter the result by connection group */
-                connectionGroup?: string[]
-                /** Resource collection IDs to filter by */
-                resourceCollection?: string[]
-                /** unix seconds for the start time of the trend */
-                startTime?: number
-                /** unix seconds for the end time of the trend */
-                endTime?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-                any
-            >({
-                path: `/compliance/api/v1/insight/${insightId}`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieving insight results datapoints for a specified connection during a specified time period. Returns "all:provider" job results if connectionId is not defined.
-         *
-         * @tags insights
-         * @name ApiV1InsightTrendDetail
-         * @summary Get insight trend
-         * @request GET:/compliance/api/v1/insight/{insightId}/trend
-         * @secure
-         */
-        apiV1InsightTrendDetail: (
-            insightId: string,
-            query?: {
-                /** filter the result by source id */
-                connectionId?: string[]
-                /** filter the result by connection group */
-                connectionGroup?: string[]
-                /** Resource collection IDs to filter by */
-                resourceCollection?: string[]
-                /** unix seconds for the start time of the trend */
-                startTime?: number
-                /** unix seconds for the end time of the trend */
-                endTime?: number
-                /** number of datapoints to return */
-                datapointCount?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[],
-                any
-            >({
-                path: `/compliance/api/v1/insight/${insightId}/trend`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieving insight metadata by id
-         *
-         * @tags insights
-         * @name ApiV1MetadataInsightDetail
-         * @summary Get insight metadata
-         * @request GET:/compliance/api/v1/metadata/insight/{insightId}
-         * @secure
-         */
-        apiV1MetadataInsightDetail: (
-            insightId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-                any
-            >({
-                path: `/compliance/api/v1/metadata/insight/${insightId}`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
          * @description Retrieving a list of compliance tag keys with their possible values.
          *
          * @tags compliance
@@ -4811,25 +4160,6 @@ export class Api<
         apiV1MetadataTagComplianceList: (params: RequestParams = {}) =>
             this.request<Record<string, string[]>, any>({
                 path: `/compliance/api/v1/metadata/tag/compliance`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieving a list of insights tag keys with their possible values.
-         *
-         * @tags insights
-         * @name ApiV1MetadataTagInsightList
-         * @summary List insights tag keys
-         * @request GET:/compliance/api/v1/metadata/tag/insight
-         * @secure
-         */
-        apiV1MetadataTagInsightList: (params: RequestParams = {}) =>
-            this.request<Record<string, string[]>, any>({
-                path: `/compliance/api/v1/metadata/tag/insight`,
                 method: 'GET',
                 secure: true,
                 type: ContentType.Json,
@@ -4884,27 +4214,6 @@ export class Api<
                 body: request,
                 secure: true,
                 type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Generate dashboard token
-         *
-         * @tags keys
-         * @name ApiV1SupersetDashboardsTokenCreate
-         * @summary Generate dashboard token
-         * @request POST:/compliance/api/v1/superset/dashboards/token
-         * @secure
-         */
-        apiV1SupersetDashboardsTokenCreate: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGenerateSupersetDashboardTokenResponse,
-                any
-            >({
-                path: `/compliance/api/v1/superset/dashboards/token`,
-                method: 'POST',
-                secure: true,
                 format: 'json',
                 ...params,
             }),
@@ -6974,27 +6283,6 @@ export class Api<
             }),
 
         /**
-         * @description Triggers a insight job to run immediately for the given insight
-         *
-         * @tags describe
-         * @name ApiV1InsightTriggerUpdate
-         * @summary Triggers insight job
-         * @request PUT:/schedule/api/v1/insight/trigger/{insight_id}
-         * @secure
-         */
-        apiV1InsightTriggerUpdate: (
-            insightId: number,
-            params: RequestParams = {}
-        ) =>
-            this.request<number[], any>({
-                path: `/schedule/api/v1/insight/trigger/${insightId}`,
-                method: 'PUT',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
          * No description
          *
          * @tags scheduler
@@ -7020,25 +6308,77 @@ export class Api<
                 ...params,
             }),
     }
-    subscription = {
+    wastage = {
         /**
-         * No description
+         * @description List wastage in AWS RDS
          *
-         * @tags subscription
-         * @name ApiV1MeteringListCreate
-         * @summary Get meters
-         * @request POST:/subscription/api/v1/metering/list
+         * @tags wastage
+         * @name ApiV1WastageAwsRdsCreate
+         * @summary List wastage in AWS RDS
+         * @request POST:/wastage/api/v1/wastage/aws-rds
          * @secure
          */
-        apiV1MeteringListCreate: (
-            request: GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersRequest,
+        apiV1WastageAwsRdsCreate: (
+            request: GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRdsWastageRequest,
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersResponse,
+                GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRdsWastageResponse,
                 any
             >({
-                path: `/subscription/api/v1/metering/list`,
+                path: `/wastage/api/v1/wastage/aws-rds`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description List wastage in AWS RDS Cluster
+         *
+         * @tags wastage
+         * @name ApiV1WastageAwsRdsClusterCreate
+         * @summary List wastage in AWS RDS Cluster
+         * @request POST:/wastage/api/v1/wastage/aws-rds-cluster
+         * @secure
+         */
+        apiV1WastageAwsRdsClusterCreate: (
+            request: GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsClusterWastageRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsClusterWastageResponse,
+                any
+            >({
+                path: `/wastage/api/v1/wastage/aws-rds-cluster`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description List wastage in EC2 Instances
+         *
+         * @tags wastage
+         * @name ApiV1WastageEc2InstanceCreate
+         * @summary List wastage in EC2 Instances
+         * @request POST:/wastage/api/v1/wastage/ec2-instance
+         * @secure
+         */
+        apiV1WastageEc2InstanceCreate: (
+            request: GithubComKaytuIoKaytuEngineServicesWastageApiEntityEC2InstanceWastageRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesWastageApiEntityEC2InstanceWastageResponse,
+                any
+            >({
+                path: `/wastage/api/v1/wastage/ec2-instance`,
                 method: 'POST',
                 body: request,
                 secure: true,

@@ -15,15 +15,12 @@ import Stack from '../pages/Stack'
 import Query from '../pages/Query'
 import Single from '../pages/Assets/Single'
 import SingleSpend from '../pages/Spend/Single'
-import Rules from '../pages/Automation/Rules'
-import Alerts from '../pages/Automation/Alerts'
 import SingleComplianceConnection from '../pages/Governance/Compliance/BenchmarkSummary/SingleConnection'
 import Boostrap from '../pages/Workspaces/Bootstrap'
 import ResourceCollection from '../pages/ResourceCollection'
 import ResourceCollectionDetail from '../pages/ResourceCollection/Detail'
 import ControlDetail from '../pages/Governance/Controls/ControlSummary'
 import ConnectorResourceTypes from '../pages/Integrations/ConnectorDetail/ResourceTypes'
-import Billing from '../pages/Billing'
 import Findings from '../pages/Governance/Findings'
 import { SpendOverview } from '../pages/Spend/Overview'
 import { SpendMetrics } from '../pages/Spend/Metric'
@@ -35,8 +32,6 @@ import AssetMetrics from '../pages/Assets/Metric'
 import ScoreOverview from '../pages/Insights/ScoreOverview'
 import ScoreCategory from '../pages/Insights/ScoreCategory'
 import ScoreDetails from '../pages/Insights/Details'
-import Dashboards from '../pages/Dashboards'
-import Assistant from '../pages/Assistant'
 import SecurityOverview from '../pages/Governance/Overview'
 import WorkloadOptimizer from '../pages/WorkloadOptimizer'
 
@@ -80,11 +75,6 @@ const authRoutes = [
         key: 'workload optimizer',
         path: '/ws/:ws/workload-optimizer',
         element: <WorkloadOptimizer />,
-    },
-    {
-        key: 'billing',
-        path: '/ws/billing',
-        element: <Billing />,
     },
     {
         key: 'assets',
@@ -272,16 +262,6 @@ const authRoutes = [
         element: <Overview />,
     },
     {
-        key: 'dashboard',
-        path: '/ws/:ws/dashboard/:dashboardId',
-        element: <Dashboards />,
-    },
-    {
-        key: 'assistant',
-        path: '/ws/:ws/assistant',
-        element: <Assistant />,
-    },
-    {
         key: 'deployment',
         path: '/ws/:ws/deployment',
         element: <Stack />,
@@ -292,11 +272,6 @@ const authRoutes = [
         element: <Query />,
     },
     {
-        key: 'rules',
-        path: '/ws/:ws/rules',
-        element: <Rules />,
-    },
-    {
         key: 'bootstrap',
         path: '/ws/:ws/bootstrap',
         element: <Boostrap />,
@@ -305,11 +280,6 @@ const authRoutes = [
         key: 'new-ws',
         path: '/ws/new-ws',
         element: <Boostrap />,
-    },
-    {
-        key: 'alerts',
-        path: '/ws/:ws/alerts',
-        element: <Alerts />,
     },
     {
         key: 'resource collection',

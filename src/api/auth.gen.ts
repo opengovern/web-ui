@@ -2,17 +2,18 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+    GithubComKaytuIoKaytuEnginePkgAuthApiChangeUserPreferencesRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
     GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiChangeUserPreferencesRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetMeResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
     RequestParams,
 } from './api'
 
@@ -345,6 +346,138 @@ export const useAuthApiV1KeysList = (
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.auth
                 .apiV1KeysList(reqparamsSignal)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController, params)
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, params)
+    }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
+}
+
+interface IuseAuthApiV1MeListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgAuthApiGetMeResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+/**
+ * URL:
+ */
+export const useAuthApiV1MeList = (
+    params: RequestParams = {},
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    const [state, setState] = useState<IuseAuthApiV1MeListState>({
+        isLoading: true,
+        isExecuted: false,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, autoExecute])
+    )
+
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            if (overwriteWorkspace) {
+                setWorkspace(overwriteWorkspace)
+            } else if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
+            api.auth
+                .apiV1MeList(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,

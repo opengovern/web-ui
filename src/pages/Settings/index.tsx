@@ -7,8 +7,7 @@ import {
     UserIcon,
 } from '@heroicons/react/24/outline'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
-import jwtDecode from 'jwt-decode'
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import SettingsEntitlement from './Entitlement'
 import SettingsMembers from './Members'
 import SettingsWorkspaceAPIKeys from './APIKeys'
@@ -16,7 +15,7 @@ import SettingsProfile from './Profile'
 import SettingsOrganization from './Organization'
 import { useWorkspaceApiV1WorkspaceCurrentList } from '../../api/workspace.gen'
 
-import { tokenAtom } from '../../store'
+import { meAtom, tokenAtom } from '../../store'
 import SettingsJobs from './Jobs'
 import SettingsCustomization from './Customization'
 import { Auth0AppMetadata } from '../../types/appMetadata'
@@ -103,11 +102,7 @@ const navigation = [
 
 export default function Settings() {
     const [selectedTab, setSelectedTab] = useState(<SettingsEntitlement />)
-    const token = useAtomValue(tokenAtom)
-    const decodedToken =
-        token === undefined || token === ''
-            ? undefined
-            : jwtDecode<Auth0AppMetadata>(token)
+    const [me, setMe] = useAtom(meAtom)
 
     const { response: curWorkspace, isLoading } =
         useWorkspaceApiV1WorkspaceCurrentList()
@@ -149,18 +144,12 @@ export default function Settings() {
     }, [currentSubPage])
 
     const getRole = () => {
-        if (decodedToken) {
-            if (curWorkspace?.id) {
-                if (curWorkspace?.name === 'main') {
-                    return 'admin'
-                }
-                if (decodedToken['https://app.kaytu.io/workspaceAccess']) {
-                    return (
-                        decodedToken['https://app.kaytu.io/workspaceAccess'][
-                            curWorkspace.id
-                        ] || 'viewer'
-                    )
-                }
+        if (curWorkspace?.id) {
+            if (curWorkspace?.name === 'main') {
+                return 'admin'
+            }
+            if (me?.workspaceAccess) {
+                return me?.workspaceAccess[curWorkspace.id] || 'viewer'
             }
         }
         return 'viewer'
