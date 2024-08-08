@@ -19,6 +19,7 @@ import RadioSelector, {
     RadioItem,
 } from '../../../components/FilterGroup/RadioSelector'
 import { benchmarkChecks } from '../../../components/Cards/ComplianceCard'
+import Spinner from '../../../components/Spinner'
 
 export default function Compliance() {
     const defaultSelectedConnectors = ''
@@ -276,15 +277,20 @@ export default function Compliance() {
                     alignment="left"
                 />
             </Flex>
-            <Grid className="w-full gap-4">
-                {filtered?.map(
-                    (
-                        bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
-                    ) => (
-                        <ComplianceListCard benchmark={bm} />
-                    )
-                )}
-            </Grid>
+            {isLoading ? (
+                <Spinner />
+            ) : (
+                <Grid className="w-full gap-4">
+                    {filtered?.map(
+                        (
+                            bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                        ) => (
+                            <ComplianceListCard benchmark={bm} />
+                        )
+                    )}
+                </Grid>
+            )}
+
             {errorHandling(sendNow, error)}
         </>
     )
