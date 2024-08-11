@@ -3,6 +3,7 @@ import { Button, Card, Flex, Text, TextInput, Title } from '@tremor/react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from './utilities/auth'
 import { KaytuDarkIconBig, KaytuIconBig } from './icons/icons'
+import { authHostname } from './api/ApiConfig'
 
 interface IAuthProviderWithNavigate {
     children?: React.ReactNode
@@ -38,9 +39,7 @@ export const AuthProviderWithNavigate = ({
 
             sessionStorage.setItem('callbackURL', window.location.href)
 
-            window.location.href = `${
-                window.__RUNTIME_CONFIG__.REACT_APP_AUTH_BASE_URL
-            }/dex/auth?${searchParams.toString()}`
+            window.location.href = `${authHostname()}/dex/auth?${searchParams.toString()}`
         }
     }, [])
 

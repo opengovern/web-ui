@@ -2,8 +2,17 @@ import axios from 'axios'
 import { isDemo } from '../utilities/demo'
 
 const { hostname } = window.location
+export const authHostname = () => {
+    if (window.location.origin === 'http://localhost:3000') {
+        return window.__RUNTIME_CONFIG__.REACT_APP_AUTH_BASE_URL
+    }
+    return window.location.origin
+}
 const apiHostname = () => {
-    return window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+    if (window.location.origin === 'http://localhost:3000') {
+        return window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+    }
+    return window.location.origin
 }
 const instance = axios.create({
     baseURL: `${apiHostname()}${'/kaytu/'}`,

@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { atom, useAtom } from 'jotai'
-import jwtDecode, { JwtPayload } from 'jwt-decode'
+import jwtDecode from 'jwt-decode'
+import { authHostname } from '../api/ApiConfig'
 
 interface IAuthModel {
     token: string
@@ -25,6 +26,17 @@ const authAtom = atom<IAuthModel>(
     }
 )
 
+interface JwtPayload {
+    iss?: string
+    sub?: string
+    aud?: string[] | string
+    exp?: number
+    nbf?: number
+    iat?: number
+    jti?: string
+    email?: string
+}
+
 export function useAuth() {
     const [auth, setAuth] = useAtom(authAtom)
     const decodedToken =
@@ -48,7 +60,7 @@ export function useAuth() {
         getIdTokenClaims: () => {
             if (auth.isSuccessful) {
                 return Promise.resolve({
-                    exp: 0,
+                    exp: decodedToken?.exp,
                 })
             }
             return Promise.reject(Error('not authenticated'))
@@ -60,7 +72,7 @@ export function useAuth() {
             given_name: '', // TODO-Saleh
             family_name: '',
             name: '',
-            email: '',
+            email: decodedToken?.email,
             picture: '',
         },
         logout: () => {
@@ -88,7 +100,7 @@ export function useAuth() {
                 })
 
                 const callback = `${window.location.origin}/callback`
-                const url = `${window.__RUNTIME_CONFIG__.REACT_APP_AUTH_BASE_URL}/dex/token`
+                const url = `${authHostname()}/dex/token`
                 const headers = new Headers()
                 headers.append(
                     'Content-Type',

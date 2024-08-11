@@ -6,6 +6,7 @@ import {
     Cog8ToothIcon,
     DocumentTextIcon,
     FolderIcon,
+    KeyIcon,
     UserIcon,
     UsersIcon,
 } from '@heroicons/react/24/outline'
@@ -37,6 +38,13 @@ const navigation = [
         name: 'Authentication',
         page: 'members',
         icon: UsersIcon,
+        role: ['admin'],
+        children: [],
+    },
+    {
+        name: 'API Keys',
+        page: 'apikeys',
+        icon: KeyIcon,
         role: ['admin'],
         children: [],
     },
@@ -109,9 +117,9 @@ export default function Settings() {
             case 'members':
                 setSelectedTab(<SettingsMembers />)
                 break
-            // case 'apikeys':
-            //     setSelectedTab(<SettingsWorkspaceAPIKeys />)
-            //     break
+            case 'apikeys':
+                setSelectedTab(<SettingsWorkspaceAPIKeys />)
+                break
             case 'org':
                 setSelectedTab(<SettingsOrganization />)
                 break
