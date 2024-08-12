@@ -35,7 +35,6 @@ code {
 }
 
 .ag-theme-alpine {
-    font-family: 'Lato', sans-serif !important;
     --ag-row-border-color: #e5e7eb !important;
     --ag-border-color: #e5e7eb !important;
     --ag-header-background-color: #fff !important;
@@ -44,7 +43,6 @@ code {
     --ag-control-panel-background-color: #f9fafb !important;
     --ag-chip-background-color: #e5e7eb !important;
     --ag-foreground-color: #6b7280 !important;
-    --ag-icon-font-family: 'agGridMaterial' !important;
 }
 
 .ag-header-cell-menu-button {
@@ -54,7 +52,6 @@ code {
 .ag-theme-alpine-dark {
     --ag-background-color: #1f2937 !important;
     --ag-foreground-color: #6b7280 !important;
-    --ag-icon-font-family: 'agGridMaterial' !important;
     --ag-border-color: #374151 !important;
     --ag-header-background-color: #1f2937 !important;
     color-scheme: dark;
