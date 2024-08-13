@@ -347,7 +347,7 @@ const options: GridOptions = {
 
 export default function ScoreCategory() {
     const { value: selectedConnections } = useFilterState()
-    const [category, setCategory] = useURLParam('category', '')
+    const [category, setCategory] = useURLParam('score_category', '')
     const detailCellRenderer = useCallback(DetailCellRenderer, [])
     const [selectedServiceNames, setSelectedServiceNames] = useURLState<
         string[]

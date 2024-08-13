@@ -321,12 +321,15 @@ export default function ImpactedResources({
                             rowCount: resp.data.totalCount || 0,
                         })
 
+                        console.log('count:', resp.data.totalCount)
+
                         sortKey =
                             resp.data.resourceFindings?.at(
                                 (resp.data.resourceFindings?.length || 0) - 1
                             )?.sortKey || []
                     })
                     .catch((err) => {
+                        console.log('err:', err)
                         if (
                             err.message !==
                             "Cannot read properties of null (reading 'NaN')"

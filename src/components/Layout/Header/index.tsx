@@ -141,11 +141,11 @@ export default function TopHeader({
             defaultSelectedScoreCategory,
             (v) => {
                 const res = new Map<string, string[]>()
-                res.set('category', [v])
+                res.set('score_category', [v])
                 return res
             },
             (v) => {
-                return (v.get('category') || []).at(0) || ''
+                return (v.get('score_category') || []).at(0) || ''
             }
         )
 

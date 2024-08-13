@@ -5,8 +5,10 @@ import { on } from 'events'
 import { CliOrManualPage } from './CLIorManual'
 import { OrgOrSinglePage } from './OrgOrSingle'
 import CLIWizard from './CLIWizard'
-import ManualWizard from './ManualWizard'
+import { Credential } from './Credentials'
 import DrawerPanel from '../../../../components/DrawerPanel'
+import { Screen1 } from './Screen1'
+import { Finish } from './Finish'
 
 interface IOnboardDrawer {
     open: boolean
@@ -19,51 +21,39 @@ export default function OnboardDrawer({
     onClose,
     bootstrapMode,
 }: IOnboardDrawer) {
-    const [cliOrManual, setCliOrManual] = useState<string | undefined>(
-        undefined
-    )
-    const [orgOrSingle, setOrgOrSingle] = useState<
-        'organization' | 'single' | undefined
-    >(undefined)
+    const [isOrg, setIsOrg] = useState<boolean | undefined>(undefined)
+    const [onboarded, setOnboarded] = useState<boolean>(false)
 
     const close = () => {
-        setCliOrManual(undefined)
-        setOrgOrSingle(undefined)
+        setIsOrg(undefined)
+        setOnboarded(false)
         onClose()
     }
 
     const render = () => {
-        if (cliOrManual === undefined) {
-            return <CliOrManualPage onClose={close} onNext={setCliOrManual} />
-        }
-        if (orgOrSingle === undefined) {
+        if (isOrg === undefined) {
             return (
-                <OrgOrSinglePage
-                    total={cliOrManual === 'cli' ? 4 : 5}
-                    onPrev={() => setCliOrManual(undefined)}
-                    onNext={setOrgOrSingle}
-                />
-            )
-        }
-
-        if (cliOrManual === 'cli') {
-            return (
-                <CLIWizard
-                    bootstrapMode={bootstrapMode}
-                    orgOrSingle={orgOrSingle}
-                    onPrev={() => setOrgOrSingle(undefined)}
+                <Screen1
                     onClose={close}
+                    onNext={(isOrgVar) => {
+                        console.log('isOrg set')
+                        setIsOrg(isOrgVar)
+                    }}
                 />
             )
         }
-        return (
-            <ManualWizard
-                bootstrapMode={bootstrapMode}
-                orgOrSingle={orgOrSingle}
-                onPrev={() => setOrgOrSingle(undefined)}
-                onClose={close}
-            />
-        )
+        if (!onboarded) {
+            return (
+                <Credential
+                    isOrg={isOrg}
+                    onClose={close}
+                    onNext={() => {
+                        setOnboarded(true)
+                    }}
+                />
+            )
+        }
+        return <Finish bootstrapMode={false} onClose={close} />
     }
 
     return (
