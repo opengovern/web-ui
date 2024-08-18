@@ -27,26 +27,49 @@ export default function Integrations() {
                     loading={metricsLoading}
                 />
             </Grid>
-            <Title className="font-semibold">Connectors</Title>
             {connectorsLoading ? (
                 <Flex className="mt-36">
                     <Spinner />
                 </Flex>
             ) : (
-                <Grid numItemsMd={2} numItemsLg={3} className="gap-4 mt-6">
-                    {(Array.isArray(responseConnectors)
-                        ? responseConnectors
-                        : []
-                    )?.map((connector) => (
-                        <ConnectorCard
-                            connector={connector.name}
-                            title={connector.label}
-                            status={connector.status}
-                            count={connector.connection_count}
-                            description={connector.description}
-                        />
-                    ))}
-                </Grid>
+                <>
+                    <Title className="font-semibold">Installed</Title>
+                    <Grid numItemsMd={2} numItemsLg={3} className="gap-4 mt-6">
+                        {(Array.isArray(responseConnectors)
+                            ? responseConnectors
+                            : []
+                        )
+                            ?.filter((f) => (f.connection_count || 0) > 0)
+                            .map((connector) => (
+                                <ConnectorCard
+                                    connector={connector.name}
+                                    title={connector.label}
+                                    status={connector.status}
+                                    count={connector.connection_count}
+                                    description={connector.description}
+                                    tier={connector.tier}
+                                />
+                            ))}
+                    </Grid>
+                    <Title className="font-semibold mt-8">Available</Title>
+                    <Grid numItemsMd={2} numItemsLg={3} className="gap-4 mt-6">
+                        {(Array.isArray(responseConnectors)
+                            ? responseConnectors
+                            : []
+                        )
+                            ?.filter((f) => (f.connection_count || 0) === 0)
+                            .map((connector) => (
+                                <ConnectorCard
+                                    connector={connector.name}
+                                    title={connector.label}
+                                    status={connector.status}
+                                    count={connector.connection_count}
+                                    description={connector.description}
+                                    tier={connector.tier}
+                                />
+                            ))}
+                    </Grid>
+                </>
             )}
         </>
     )

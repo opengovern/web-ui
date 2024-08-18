@@ -1,18 +1,31 @@
-import { Badge, Card, Flex, Icon, Subtitle, Text, Title } from '@tremor/react'
+import {
+    Badge,
+    Button,
+    Card,
+    Flex,
+    Icon,
+    Subtitle,
+    Text,
+    Title,
+} from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { AWSAzureIcon, AWSIcon, AzureIcon } from '../../../icons/icons'
-import { SourceType } from '../../../api/api'
+import {
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier,
+    SourceType,
+} from '../../../api/api'
 import { searchAtom } from '../../../utilities/urlstate'
 
 interface IConnectorCard {
     connector: string | undefined
     title: string | undefined
     status: string | undefined
-    count: number | string | undefined
+    count: number | undefined
     description: string | undefined
+    tier?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier
 }
 export const getConnectorsIcon = (connector: SourceType[], className = '') => {
     if (connector?.length >= 2) {
@@ -78,15 +91,40 @@ const getBadgeColor = (status: string | undefined) => {
     return 'rose'
 }
 
+const getTierBadgeColor = (
+    tier?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier
+) => {
+    if (
+        tier ===
+        GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier.TierCommunity
+    ) {
+        return 'emerald'
+    }
+    return 'yellow'
+}
 export default function ConnectorCard({
     connector,
     title,
     status,
     count,
     description,
+    tier,
 }: IConnectorCard) {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
+
+    const button = () => {
+        if (status === 'enabled' && (count || 0) > 0) {
+            return <Button className="w-full mt-10">Manage</Button>
+        }
+        if (
+            tier ===
+            GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier.TierCommunity
+        ) {
+            return <Button className="w-full mt-10">Connect</Button>
+        }
+        return <Button className="w-full mt-10">Install</Button>
+    }
 
     return (
         <Card
@@ -96,21 +134,33 @@ export default function ConnectorCard({
         >
             <Flex flexDirection="row" className="mb-3">
                 {getConnectorIcon(connector)}
+                {/* <Badge color={getTierBadgeColor(tier)}>
+                    {tier ===
+                    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier.TierCommunity ? (
+                        <Text color="emerald">Community</Text>
+                    ) : (
+                        <Text color="emerald">Enterprise</Text>
+                    )}
+                </Badge>
                 <Badge color={getBadgeColor(status)}>
                     {status === 'enabled' ? (
                         <Text color="emerald">Active</Text>
                     ) : (
                         <Text color="rose">InActive</Text>
                     )}
-                </Badge>
+                </Badge> */}
             </Flex>
             <Flex flexDirection="row" className="mb-1">
                 <Title className="font-semibold">{title}</Title>
-                <Title className="font-semibold">{numericDisplay(count)}</Title>
+                {(count || 0) !== 0 && (
+                    <Title className="font-semibold">
+                        {numericDisplay(count)}
+                    </Title>
+                )}
             </Flex>
             <Subtitle>{description}</Subtitle>
             <Flex flexDirection="row" justifyContent="end">
-                <Icon color="blue" icon={ChevronRightIcon} />
+                {button()}
             </Flex>
         </Card>
     )

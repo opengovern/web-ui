@@ -133,11 +133,6 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiGetMeResponse {
     lastLogin?: string
     memberSince?: string
     /**
-     * Name of the role
-     * @example "admin"
-     */
-    roleName?: 'admin' | 'editor' | 'viewer'
-    /**
      * Invite status
      * @example "accepted"
      */
@@ -2339,6 +2334,7 @@ export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnecto
     /** @example "enabled" */
     status?: SourceConnectorStatus
     tags?: Record<string, any>
+    tier?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier
 }
 
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCountConnectionsResponse {
@@ -2515,6 +2511,11 @@ export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCred
      * @example 5
      */
     totalCredentialCount?: number
+}
+
+export enum GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier {
+    TierCommunity = 'Community',
+    TierEnterprise = 'Enterprise',
 }
 
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest {
