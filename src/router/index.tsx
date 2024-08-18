@@ -34,6 +34,7 @@ import ScoreCategory from '../pages/Insights/ScoreCategory'
 import ScoreDetails from '../pages/Insights/Details'
 import SecurityOverview from '../pages/Governance/Overview'
 import WorkloadOptimizer from '../pages/WorkloadOptimizer'
+import RequestAccess from '../pages/Integrations/RequestAccess'
 
 const authRoutes = [
     {
@@ -200,6 +201,11 @@ const authRoutes = [
         key: 'integrations',
         path: '/ws/:ws/integrations',
         element: <Integrations />,
+    },
+    {
+        key: 'request-access',
+        path: '/ws/:ws/request-access',
+        element: <RequestAccess />,
     },
     {
         key: 'connector detail',

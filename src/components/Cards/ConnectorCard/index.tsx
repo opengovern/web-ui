@@ -100,7 +100,7 @@ const getTierBadgeColor = (
     ) {
         return 'emerald'
     }
-    return 'yellow'
+    return 'violet'
 }
 export default function ConnectorCard({
     connector,
@@ -126,14 +126,37 @@ export default function ConnectorCard({
         return <Button className="w-full mt-10">Install</Button>
     }
 
+    const onClick = () => {
+        if (status === 'enabled' && (count || 0) > 0) {
+            navigate(`${connector}?${searchParams}`)
+            return
+        }
+        if (
+            tier ===
+            GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier.TierCommunity
+        ) {
+            navigate(`${connector}?${searchParams}`)
+            return
+        }
+        navigate(`${connector}/../../request-access`) // it's a hack!
+    }
+
     return (
         <Card
             key={connector}
             className="cursor-pointer"
-            onClick={() => navigate(`${connector}?${searchParams}`)}
+            onClick={() => onClick()}
         >
             <Flex flexDirection="row" className="mb-3">
                 {getConnectorIcon(connector)}
+                <Badge color={getTierBadgeColor(tier)}>
+                    {tier ===
+                    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier.TierCommunity ? (
+                        <Text color="emerald">Community</Text>
+                    ) : (
+                        <Text color="violet">Enterprise</Text>
+                    )}
+                </Badge>
                 {/* <Badge color={getTierBadgeColor(tier)}>
                     {tier ===
                     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier.TierCommunity ? (
