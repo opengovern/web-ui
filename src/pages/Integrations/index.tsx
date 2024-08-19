@@ -17,7 +17,7 @@ export default function Integrations() {
     return (
         <>
             <TopHeader />
-            <Grid numItems={3} className="gap-4 mb-10">
+            {/* <Grid numItems={3} className="gap-4 mb-10">
                 <OnboardCard
                     title="Active Accounts"
                     active={topMetrics?.connectionsEnabled}
@@ -26,7 +26,7 @@ export default function Integrations() {
                     unhealthy={topMetrics?.unhealthyConnections}
                     loading={metricsLoading}
                 />
-            </Grid>
+            </Grid> */}
             {connectorsLoading ? (
                 <Flex className="mt-36">
                     <Spinner />
@@ -48,6 +48,7 @@ export default function Integrations() {
                                     count={connector.connection_count}
                                     description={connector.description}
                                     tier={connector.tier}
+                                    logo={connector.logo}
                                 />
                             ))}
                     </Grid>
@@ -66,6 +67,7 @@ export default function Integrations() {
                                     count={connector.connection_count}
                                     description={connector.description}
                                     tier={connector.tier}
+                                    logo={connector.logo}
                                 />
                             ))}
                     </Grid>

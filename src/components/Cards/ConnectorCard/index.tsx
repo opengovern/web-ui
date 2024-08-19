@@ -26,6 +26,7 @@ interface IConnectorCard {
     count: number | undefined
     description: string | undefined
     tier?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier
+    logo?: string
 }
 export const getConnectorsIcon = (connector: SourceType[], className = '') => {
     if (connector?.length >= 2) {
@@ -109,6 +110,7 @@ export default function ConnectorCard({
     count,
     description,
     tier,
+    logo,
 }: IConnectorCard) {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
@@ -138,7 +140,7 @@ export default function ConnectorCard({
             navigate(`${connector}?${searchParams}`)
             return
         }
-        navigate(`${connector}/../../request-access`) // it's a hack!
+        navigate(`${connector}/../../request-access?connector=${connector}`) // it's a hack!
     }
 
     return (
@@ -148,7 +150,17 @@ export default function ConnectorCard({
             onClick={() => onClick()}
         >
             <Flex flexDirection="row" className="mb-3">
-                {getConnectorIcon(connector)}
+                {logo === undefined ? (
+                    getConnectorIcon(connector)
+                ) : (
+                    <Flex className="w-9 h-9 gap-1">
+                        <img
+                            src={logo}
+                            alt="Connector Logo"
+                            className="min-w-[36px] w-9 h-9 rounded-full"
+                        />
+                    </Flex>
+                )}
                 <Badge color={getTierBadgeColor(tier)}>
                     {tier ===
                     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier.TierCommunity ? (

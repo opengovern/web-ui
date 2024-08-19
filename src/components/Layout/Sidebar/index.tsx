@@ -506,4 +506,125 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                                             className="absolute right-2 top-1.5"
                                                                             style={
                                                                                 badgeStyle
-             
+                                                                            }
+                                                                        >
+                                                                            {/* eslint-disable-next-line no-nested-ternary */}
+                                                                            {i.isLoading ? (
+                                                                                <div className="animate-pulse h-1 w-4 my-2 bg-gray-700 rounded-md" />
+                                                                            ) : i.error ? (
+                                                                                <ExclamationCircleIcon className="h-5" />
+                                                                            ) : (
+                                                                                i.count
+                                                                            )}
+                                                                        </Badge>
+                                                                    )}
+                                                                    {i.isPreview && (
+                                                                        <Badge
+                                                                            className="absolute right-2 top-1.5"
+                                                                            style={
+                                                                                badgeStyle
+                                                                            }
+                                                                        >
+                                                                            Preview
+                                                                        </Badge>
+                                                                    )}
+                                                                </Link>
+                                                            )
+                                                        )}
+                                                    </Card>
+                                                </Popover.Panel>
+                                            </Transition>
+                                        </Popover>
+                                    </div>
+                                ) : (
+                                    <div className="w-full my-1">
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                        <Link
+                                            to={
+                                                Array.isArray(item.page)
+                                                    ? ''
+                                                    : `/ws/${workspace}/${item.page}?${searchParams}`
+                                            }
+                                            className={`w-full relative px-6 py-2 flex items-center gap-2.5 rounded-md
+                                                        ${
+                                                            item.page ===
+                                                                currentPage ||
+                                                            (collapsed &&
+                                                                item.page.includes(
+                                                                    currentPage
+                                                                ))
+                                                                ? 'bg-kaytu-500 text-gray-200 font-semibold'
+                                                                : 'text-gray-50 hover:bg-kaytu-800'
+                                                        }
+                                                        ${
+                                                            collapsed
+                                                                ? '!p-2'
+                                                                : ''
+                                                        }`}
+                                        >
+                                            <div className="group relative">
+                                                <item.icon
+                                                    className={`h-5 w-5 stroke-2 ${
+                                                        item.page ===
+                                                            currentPage ||
+                                                        (collapsed &&
+                                                            item.page.includes(
+                                                                currentPage
+                                                            ))
+                                                            ? 'text-gray-200'
+                                                            : 'text-gray-400'
+                                                    }`}
+                                                />
+                                                {collapsed && (
+                                                    <div
+                                                        className="absolute z-50 scale-0 transition-all rounded p-2 shadow-md bg-kaytu-950 group-hover:scale-100"
+                                                        style={{
+                                                            left: '43px',
+                                                            top: '-8px',
+                                                        }}
+                                                    >
+                                                        <Text className="text-white">
+                                                            {item.name}
+                                                        </Text>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {!collapsed && (
+                                                <Text className="text-inherit">
+                                                    {item.name}
+                                                </Text>
+                                            )}
+                                            {item.count && !collapsed && (
+                                                <Badge
+                                                    className="absolute right-2 top-1.5"
+                                                    style={badgeStyle}
+                                                >
+                                                    {/* eslint-disable-next-line no-nested-ternary */}
+                                                    {item.isLoading ? (
+                                                        <div className="animate-pulse h-1 w-4 my-2 bg-gray-700 rounded-md" />
+                                                    ) : item.error ? (
+                                                        <ExclamationCircleIcon className="h-5" />
+                                                    ) : (
+                                                        item.count
+                                                    )}
+                                                </Badge>
+                                            )}
+                                            {item.isPreview && !collapsed && (
+                                                <Badge
+                                                    className="absolute right-2 top-1.5"
+                                                    style={badgeStyle}
+                                                >
+                                                    Preview
+                                                </Badge>
+                                            )}
+                                        </Link>
+                                    </div>
+                                )
+                            )}
+                    </div>
+                </Flex>
+                <Utilities isCollapsed={collapsed} workspace={workspace} />
+            </Flex>
+        </Flex>
+    )
+}
