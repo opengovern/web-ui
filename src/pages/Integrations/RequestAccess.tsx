@@ -8,12 +8,14 @@ export default function RequestAccess() {
     return (
         <>
             <TopHeader />
-            <Text>
+            <Text className="text-black text-2xl w-full text-center">
                 {searchParams.get('connector')} and 50+ others are available for
                 Enterprise Users. Get a 30-day obligation trial now.
             </Text>
             <iframe
                 title="Try enterprise"
+                width="100%"
+                style={{ height: 'calc(100vh - 200px)' }}
                 src="https://cal.com/team/kaytu-inc/try-enterprise"
             />
         </>
