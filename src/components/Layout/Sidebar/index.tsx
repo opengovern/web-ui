@@ -16,6 +16,7 @@ import {
     ShieldCheckIcon,
     ClipboardDocumentCheckIcon,
     DocumentMagnifyingGlassIcon,
+    ArrowUpCircleIcon,
 } from '@heroicons/react/24/outline'
 import { useAtom, useAtomValue } from 'jotai'
 import { Popover, Transition } from '@headlessui/react'
@@ -210,14 +211,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         count: numericDisplay(spendCount?.metricCount) || 0,
                         error: spendCountErr,
                     },
-                    {
-                        name: 'Workload Optimizer',
-                        page: 'workload-optimizer',
-                        isPreview: true,
-                        isLoading: false,
-                        count: undefined,
-                        error: spendCountErr,
-                    },
                 ],
                 isPreview: false,
             },
@@ -255,12 +248,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 isPreview: false,
             },
             {
-                name: 'Resource Collection',
-                page: 'resource-collection',
-                icon: RectangleStackIcon,
-                isPreview: true,
-            },
-            {
                 name: 'Integrations',
                 page: 'integrations',
                 icon: PuzzlePieceIcon,
@@ -268,6 +255,33 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 count: numericDisplay(connectionCount?.count) || 0,
                 error: connectionsErr,
                 isPreview: false,
+            },
+            {
+                name: 'Enterprise Features',
+                page: ['workload-optimizer', 'resource-collection'],
+                icon: ArrowUpCircleIcon,
+                children: [
+                    {
+                        name: 'Workload Optimizer',
+                        page: 'workload-optimizer',
+                        isPreview: true,
+                        isLoading: false,
+                        count: undefined,
+                        error: spendCountErr,
+                    },
+                    {
+                        name: 'Stacks',
+                        page: 'resource-collection',
+                        icon: RectangleStackIcon,
+                        isPreview: true,
+                    },
+                    {
+                        name: 'Dashboards',
+                        page: 'resource-collection',
+                        icon: RectangleStackIcon,
+                        isPreview: true,
+                    },
+                ],
             },
             {
                 name: 'Settings',
@@ -304,12 +318,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         />
                     )}
                 </Flex>
-                <Flex
+                {/* <Flex
                     justifyContent="center"
                     className={collapsed ? 'p-0' : 'p-2'}
                 >
                     <Workspaces isCollapsed={collapsed} />
-                </Flex>
+                </Flex> */}
                 <Flex
                     flexDirection="col"
                     justifyContent="between"
@@ -424,12 +438,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         </Badge>
                                                     )}
                                                     {i.isPreview && (
-                                                        <Badge
-                                                            className="absolute right-2 top-1.5"
-                                                            style={badgeStyle}
-                                                        >
-                                                            Preview
-                                                        </Badge>
+                                                        <div className="absolute right-2 top-1.5">
+                                                            <ArrowUpCircleIcon
+                                                                height={18}
+                                                                color="orange"
+                                                            />
+                                                        </div>
                                                     )}
                                                 </Link>
                                             ))}

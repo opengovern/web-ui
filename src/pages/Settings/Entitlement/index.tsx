@@ -20,6 +20,7 @@ import Spinner from '../../../components/Spinner'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { useAuthApiV1UserDetail } from '../../../api/auth.gen'
 import { dateDisplay } from '../../../utilities/dateDisplay'
+import { GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier } from '../../../api/api'
 
 export default function SettingsEntitlement() {
     const workspace = useParams<{ ws: string }>().ws
@@ -55,23 +56,31 @@ export default function SettingsEntitlement() {
     )
     const hostsPercentage = Math.ceil((noOfHosts / maxHosts) * 100.0)
 
+    const wsTier = (v?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier) => {
+        switch (v) {
+            // case GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier.TierEnterprise:
+            //     return 'Enterprise'
+            default:
+                return 'Community'
+        }
+    }
     const wsDetails = [
-        {
-            title: 'Workspace ID',
-            value: currentWorkspace?.id,
-        },
-        {
-            title: 'Displayed name',
-            value: currentWorkspace?.name,
-        },
+        // {
+        //     title: 'Workspace ID',
+        //     value: currentWorkspace?.id,
+        // },
+        // {
+        //     title: 'Displayed name',
+        //     value: currentWorkspace?.name,
+        // },
         // {
         //     title: 'URL',
         //     value: currentWorkspace?.,
         // },
-        {
-            title: 'Workspace owner',
-            value: ownerResp?.userName,
-        },
+        // {
+        //     title: 'Workspace owner',
+        //     value: ownerResp?.userName,
+        // },
         {
             title: 'Workspace version',
             value: currentWorkspace?.version,
@@ -83,8 +92,8 @@ export default function SettingsEntitlement() {
             ),
         },
         {
-            title: 'Workspace tier',
-            value: currentWorkspace?.tier,
+            title: 'Edition',
+            value: wsTier(currentWorkspace?.tier),
         },
     ]
 
@@ -94,7 +103,7 @@ export default function SettingsEntitlement() {
         </Flex>
     ) : (
         <Flex flexDirection="col">
-            <Grid numItemsSm={2} numItemsLg={4} className="gap-4 w-full">
+            <Grid numItemsSm={2} numItemsLg={3} className="gap-4 w-full">
                 <Card key="activeUsers">
                     <Text>Active users</Text>
                     <Metric>{numericDisplay(currentUsers)}</Metric>
@@ -125,7 +134,7 @@ export default function SettingsEntitlement() {
                     </Flex>
                     <ProgressBar value={resourcesPercentage} className="mt-2" />
                 </Card>
-                <Card key="hosts">
+                {/* <Card key="hosts">
                     <Text>Hosts</Text>
                     <Metric>{numericDisplay(noOfHosts)}</Metric>
                     <Flex className="mt-3">
@@ -133,7 +142,7 @@ export default function SettingsEntitlement() {
                         <Text>{numericDisplay(maxHosts)} Allowed</Text>
                     </Flex>
                     <ProgressBar value={hostsPercentage} className="mt-2" />
-                </Card>
+                </Card> */}
             </Grid>
             <Card key="summary" className="mt-4 w-full">
                 <Title className="font-semibold">Summary</Title>
