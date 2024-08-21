@@ -150,7 +150,7 @@ export default function ConnectorCard({
             onClick={() => onClick()}
         >
             <Flex flexDirection="row" className="mb-3">
-                {logo === undefined ? (
+                {logo === undefined || logo === '' ? (
                     <LinkIcon className="w-9 h-9 gap-1" />
                 ) : (
                     <Flex className="w-9 h-9 gap-1">
