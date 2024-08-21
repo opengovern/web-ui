@@ -199,7 +199,9 @@ export default function SettingsCustomization() {
         isLoading: loadingCustomizationEnabled,
     } = useMetadataApiV1MetadataDetail('customization_enabled')
     const isCustomizationEnabled =
-        ConvertToBoolean(customizationEnabled?.value || 'false') || false
+        ConvertToBoolean(
+            (customizationEnabled?.value || 'false').toLowerCase()
+        ) || false
 
     const [preview, setPreview] = useAtom(previewAtom)
 
