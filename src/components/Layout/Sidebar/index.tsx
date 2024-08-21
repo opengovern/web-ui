@@ -271,7 +271,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     },
                     {
                         name: 'Stacks',
-                        page: 'resource-collection',
+                        page: 'stacks',
                         icon: RectangleStackIcon,
                         isPreview: true,
                     },
@@ -381,16 +381,31 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         justifyContent="start"
                                                         className="h-full gap-2.5"
                                                     >
-                                                        <item.icon
-                                                            className={`h-5 w-5 stroke-2 ${
-                                                                collapsed &&
-                                                                item.page.includes(
-                                                                    currentPage
-                                                                )
-                                                                    ? 'text-gray-200'
-                                                                    : 'text-gray-400'
-                                                            }`}
-                                                        />
+                                                        {item.name ===
+                                                        'Enterprise Features' ? (
+                                                            <item.icon
+                                                                className={`h-5 w-5 stroke-2 ${
+                                                                    collapsed &&
+                                                                    item.page.includes(
+                                                                        currentPage
+                                                                    )
+                                                                        ? 'text-orange-200'
+                                                                        : 'text-orange-400'
+                                                                }`}
+                                                            />
+                                                        ) : (
+                                                            <item.icon
+                                                                className={`h-5 w-5 stroke-2 ${
+                                                                    collapsed &&
+                                                                    item.page.includes(
+                                                                        currentPage
+                                                                    )
+                                                                        ? 'text-gray-200'
+                                                                        : 'text-gray-400'
+                                                                }`}
+                                                            />
+                                                        )}
+
                                                         <Text className="text-inherit">
                                                             {item.name}
                                                         </Text>
@@ -411,7 +426,11 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         >
                                             {item.children.map((i) => (
                                                 <Link
-                                                    to={`/ws/${workspace}/${i.page}?${searchParams}`}
+                                                    to={
+                                                        i.page.includes('?')
+                                                            ? `/ws/${workspace}/${i.page}`
+                                                            : `/ws/${workspace}/${i.page}?${searchParams}`
+                                                    }
                                                     className={`my-0.5 py-2 flex rounded-md relative
                                                     ${
                                                         i.page === currentPage

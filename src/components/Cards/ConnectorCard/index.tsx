@@ -8,7 +8,7 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { ChevronRightIcon, LinkIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import { numericDisplay } from '../../../utilities/numericDisplay'
@@ -151,7 +151,7 @@ export default function ConnectorCard({
         >
             <Flex flexDirection="row" className="mb-3">
                 {logo === undefined ? (
-                    getConnectorIcon(connector)
+                    <LinkIcon className="w-9 h-9 gap-1" />
                 ) : (
                     <Flex className="w-9 h-9 gap-1">
                         <img

@@ -75,7 +75,12 @@ const authRoutes = [
     {
         key: 'workload optimizer',
         path: '/ws/:ws/workload-optimizer',
-        element: <WorkloadOptimizer />,
+        element: <RequestAccess />,
+    },
+    {
+        key: 'stacks',
+        path: '/ws/:ws/stacks',
+        element: <RequestAccess />,
     },
     {
         key: 'assets',
