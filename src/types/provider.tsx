@@ -9,7 +9,7 @@ export function StringToProvider(str: string) {
         case 'azure':
             v = 'Azure'
             break
-        case 'azuread':
+        case 'entraid':
             v = 'Azure'
             break
         default:
@@ -32,7 +32,7 @@ export function ConnectorToCredentialType(
     switch (str.toLowerCase()) {
         case 'azure':
             return ['manual-azure-spn', 'auto-azure']
-        case 'azuread':
+        case 'entraid':
             return ['manual-azure-entra-id']
         default:
             return undefined
