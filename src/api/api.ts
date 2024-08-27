@@ -7033,6 +7033,23 @@ export class Api<
     }
     schedule = {
         /**
+         * @description Triggers an analytics job to run immediately
+         *
+         * @tags describe
+         * @name ApiV1AnalyticsTriggerUpdate
+         * @summary TriggerAnalyticsJob
+         * @request PUT:/schedule/api/v1/analytics/trigger
+         * @secure
+         */
+        apiV1AnalyticsTriggerUpdate: (params: RequestParams = {}) =>
+            this.request<void, any>({
+                path: `/schedule/api/v1/analytics/trigger`,
+                method: 'PUT',
+                secure: true,
+                ...params,
+            }),
+
+        /**
          * @description Get re-evaluate job for the given connection and control
          *
          * @tags describe

@@ -34,7 +34,7 @@ export default function Integrations() {
             ) : (
                 <>
                     <Title className="font-semibold">Installed</Title>
-                    <Grid numItemsMd={2} numItemsLg={3} className="gap-4 mt-6">
+                    <Grid numItemsMd={2} numItemsLg={3} className="gap-14 mt-6">
                         {(Array.isArray(responseConnectors)
                             ? responseConnectors
                             : []
@@ -56,7 +56,7 @@ export default function Integrations() {
                             ))}
                     </Grid>
                     <Title className="font-semibold mt-8">Available</Title>
-                    <Grid numItemsMd={2} numItemsLg={3} className="gap-8 mt-6">
+                    <Grid numItemsMd={2} numItemsLg={3} className="gap-14 mt-6">
                         {(Array.isArray(responseConnectors)
                             ? responseConnectors
                             : []

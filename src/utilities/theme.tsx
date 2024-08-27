@@ -13,7 +13,7 @@ export const parseTheme = (v: string) => {
 
 export const currentTheme = () => {
     if (!('theme' in localStorage)) {
-        return GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeSystem
+        return GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeLight
     }
 
     return parseTheme(localStorage.theme)

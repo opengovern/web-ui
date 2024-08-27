@@ -22,6 +22,7 @@ import { getErrorMessage } from '../../../types/apierror'
 import { notificationAtom, previewAtom } from '../../../store'
 import { ConvertToBoolean } from '../../../utilities/bool'
 import { useComplianceApiV1QueriesSyncList } from '../../../api/compliance.gen'
+import { useScheduleApiV1AnalyticsTriggerUpdate } from '../../../api/schedule.gen'
 
 interface ITextMetric {
     title: string
@@ -224,6 +225,12 @@ export default function SettingsCustomization() {
         sendNow: runSync,
     } = useComplianceApiV1QueriesSyncList({}, {}, false)
 
+    const {
+        isLoading: triggerLoading,
+        isExecuted: triggerExecuted,
+        sendNow: trigger,
+    } = useScheduleApiV1AnalyticsTriggerUpdate({}, false)
+
     useEffect(() => {
         if (syncExecuted && !syncLoading) {
             const err = getErrorMessage(syncError)
@@ -355,6 +362,21 @@ export default function SettingsCustomization() {
                         <Tab>Off</Tab>
                     </TabList>
                 </TabGroup>
+            </Flex>
+            <Flex
+                flexDirection="row"
+                justifyContent="between"
+                className="w-full mt-4"
+            >
+                <Text className="font-normal">Trigger metrics job</Text>
+                <Button
+                    disabled={triggerLoading && triggerExecuted}
+                    loading={triggerLoading && triggerExecuted}
+                    variant="secondary"
+                    onClick={trigger}
+                >
+                    Trigger
+                </Button>
             </Flex>
         </Card>
     )
