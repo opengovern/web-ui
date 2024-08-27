@@ -6,7 +6,10 @@ import AWSTabs from './AWS/Tabs'
 import AWSSummary from './AWS/Summary'
 import AzureSummary from './Azure/Summary'
 import AzureTabs from './Azure/Tabs'
-import { StringToProvider } from '../../../types/provider'
+import {
+    ConnectorToCredentialType,
+    StringToProvider,
+} from '../../../types/provider'
 import {
     useIntegrationApiV1ConnectionsSummariesList,
     useIntegrationApiV1ConnectorsMetricsList,
@@ -18,6 +21,8 @@ import {
     searchAtom,
     useUrlDateRangeState,
 } from '../../../utilities/urlstate'
+import EntraIDTabs from './EntraID/Tabs'
+import EntraIDSummary from './EntraID/Summary'
 
 export default function ConnectorDetail() {
     const { ws } = useParams()
@@ -29,6 +34,7 @@ export default function ConnectorDetail() {
     )
 
     const provider = StringToProvider(connector || '')
+    const credentialType = ConnectorToCredentialType(connector || '')
     const { response: accounts, isLoading: isAccountsLoading } =
         useIntegrationApiV1ConnectionsSummariesList({
             ...(provider !== '' && {
@@ -38,15 +44,74 @@ export default function ConnectorDetail() {
             endTime: activeTimeRange.end.unix(),
             pageSize: 10000,
             pageNumber: 1,
+            credentialType,
         })
     const { response: credentials, isLoading: isCredentialLoading } =
         useIntegrationApiV1CredentialsList({
             connector: provider,
+            credentialType,
         })
     const { response: topMetrics, isLoading: metricsLoading } =
         useIntegrationApiV1ConnectorsMetricsList({
             connector: provider !== '' ? [provider] : [],
+            credentialType,
         })
+
+    const connectorUI = () => {
+        if (connector === 'AWS') {
+            return (
+                <>
+                    <AWSSummary
+                        metrics={topMetrics}
+                        metricsLoading={metricsLoading}
+                        credential={credentials}
+                        credentialLoading={isCredentialLoading}
+                    />
+                    <AWSTabs
+                        accounts={accounts?.connections || []}
+                        organizations={credentials?.credentials || []}
+                        loading={isAccountsLoading}
+                    />
+                </>
+            )
+        }
+        if (connector === 'Azure') {
+            return (
+                <>
+                    <AzureSummary
+                        principalsSummary={credentials}
+                        metrics={topMetrics}
+                        metricsLoading={metricsLoading}
+                        principalsLoading={isCredentialLoading}
+                        subscriptionsSummary={accounts}
+                        subscriptionsLoading={isAccountsLoading}
+                    />
+                    <AzureTabs
+                        principals={credentials?.credentials || []}
+                        subscriptions={accounts?.connections || []}
+                        loading={isAccountsLoading}
+                    />
+                </>
+            )
+        }
+        return (
+            <>
+                <EntraIDSummary
+                    principalsSummary={credentials}
+                    metrics={topMetrics}
+                    metricsLoading={metricsLoading}
+                    principalsLoading={isCredentialLoading}
+                    subscriptionsSummary={accounts}
+                    subscriptionsLoading={isAccountsLoading}
+                />
+                <EntraIDTabs
+                    principals={credentials?.credentials || []}
+                    directories={accounts?.connections || []}
+                    loading={isAccountsLoading}
+                />
+            </>
+        )
+    }
 
     return (
         <>
@@ -63,37 +128,7 @@ export default function ConnectorDetail() {
                         <Cog8ToothIcon className="w-6" />
                     </Button>
                 </Flex>
-                {connector === 'AWS' ? (
-                    <>
-                        <AWSSummary
-                            metrics={topMetrics}
-                            metricsLoading={metricsLoading}
-                            credential={credentials}
-                            credentialLoading={isCredentialLoading}
-                        />
-                        <AWSTabs
-                            accounts={accounts?.connections || []}
-                            organizations={credentials?.credentials || []}
-                            loading={isAccountsLoading}
-                        />
-                    </>
-                ) : (
-                    <>
-                        <AzureSummary
-                            principalsSummary={credentials}
-                            metrics={topMetrics}
-                            metricsLoading={metricsLoading}
-                            principalsLoading={isCredentialLoading}
-                            subscriptionsSummary={accounts}
-                            subscriptionsLoading={isAccountsLoading}
-                        />
-                        <AzureTabs
-                            principals={credentials?.credentials || []}
-                            subscriptions={accounts?.connections || []}
-                            loading={isAccountsLoading}
-                        />
-                    </>
-                )}
+                {connectorUI()}
             </Flex>
         </>
     )
