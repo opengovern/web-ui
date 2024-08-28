@@ -196,7 +196,7 @@ export default function AccountInfo({
                             <Flex>
                                 <Text>Health reason</Text>
                                 <Text className="text-black">
-                                    {healthResponse?.healthReason}
+                                    {data?.healthReason}
                                 </Text>
                             </Flex>
                             <Divider />
