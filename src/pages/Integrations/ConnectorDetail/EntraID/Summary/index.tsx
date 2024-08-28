@@ -43,11 +43,6 @@ export default function EntraIDSummary({
                 metric={principalsSummary?.totalCredentialCount}
                 loading={principalsLoading}
             />
-            <SummaryCard
-                title="Billing Accounts"
-                metric={subscriptionsSummary?.totalCost}
-                loading={subscriptionsLoading}
-            />
         </Grid>
     )
 }

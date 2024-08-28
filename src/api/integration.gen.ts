@@ -2,20 +2,20 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCountConnectionsResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
     RequestParams,
 } from './api'
 

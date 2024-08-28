@@ -13,6 +13,7 @@ import {
     Title,
 } from '@tremor/react'
 import { useAtom, useSetAtom } from 'jotai'
+import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import {
     useMetadataApiV1MetadataCreate,
     useMetadataApiV1MetadataDetail,
@@ -22,7 +23,10 @@ import { getErrorMessage } from '../../../types/apierror'
 import { notificationAtom, previewAtom } from '../../../store'
 import { ConvertToBoolean } from '../../../utilities/bool'
 import { useComplianceApiV1QueriesSyncList } from '../../../api/compliance.gen'
-import { useScheduleApiV1AnalyticsTriggerUpdate } from '../../../api/schedule.gen'
+import {
+    useScheduleApiV1AnalyticsTriggerUpdate,
+    useScheduleApiV1DescribeTriggerUpdate,
+} from '../../../api/schedule.gen'
 
 interface ITextMetric {
     title: string
@@ -231,6 +235,12 @@ export default function SettingsCustomization() {
         sendNow: trigger,
     } = useScheduleApiV1AnalyticsTriggerUpdate({}, false)
 
+    const {
+        isLoading: describeLoading,
+        isExecuted: describeExecuted,
+        sendNowWithParams: describeTrigger,
+    } = useScheduleApiV1DescribeTriggerUpdate('', {}, {}, false)
+
     useEffect(() => {
         if (syncExecuted && !syncLoading) {
             const err = getErrorMessage(syncError)
@@ -260,42 +270,102 @@ export default function SettingsCustomization() {
             </Title>
 
             <Flex flexDirection="col" className="mt-4">
-                <NumberMetric
-                    metricId="describe_job_interval"
-                    title="Fast Discovery Interval (Hours)"
-                    min={1}
-                    max={120}
-                />
-                <NumberMetric
-                    metricId="full_discovery_job_interval"
-                    title="Full Discovery Interval (Hours)"
-                    min={1}
-                    max={120}
-                />
-                <NumberMetric
-                    metricId="cost_discovery_job_interval"
-                    title="Spend Discovery Interval (Hours)"
-                    min={24}
-                    max={120}
-                />
-                <NumberMetric
-                    metricId="insight_job_interval"
-                    title="Insight Job Interval (Hours)"
-                    min={4}
-                    max={120}
-                />
-                <NumberMetric
-                    metricId="metrics_job_interval"
-                    title="Metrics Job Interval (Hours)"
-                    min={4}
-                    max={120}
-                />
-                <NumberMetric
-                    metricId="compliance_job_interval"
-                    title="Compliance Job Interval (Hours)"
-                    min={24}
-                    max={120}
-                />
+                <Flex
+                    flexDirection="row"
+                    alignItems="start"
+                    justifyContent="start"
+                >
+                    <NumberMetric
+                        metricId="describe_job_interval"
+                        title="Fast Discovery Interval (Hours)"
+                        min={1}
+                        max={120}
+                    />
+                    <Button
+                        variant="secondary"
+                        className="ml-2"
+                        icon={ArrowPathIcon}
+                        disabled={describeExecuted && describeLoading}
+                        loading={describeExecuted && describeLoading}
+                        onClick={() =>
+                            describeTrigger('all', { force_full: false }, {})
+                        }
+                    >
+                        Run now
+                    </Button>
+                </Flex>
+                <Flex
+                    flexDirection="row"
+                    alignItems="start"
+                    justifyContent="start"
+                >
+                    <NumberMetric
+                        metricId="full_discovery_job_interval"
+                        title="Full Discovery Interval (Hours)"
+                        min={1}
+                        max={120}
+                    />
+                    <Button
+                        variant="secondary"
+                        className="ml-2"
+                        icon={ArrowPathIcon}
+                        disabled={describeExecuted && describeLoading}
+                        loading={describeExecuted && describeLoading}
+                        onClick={() =>
+                            describeTrigger('all', { force_full: true }, {})
+                        }
+                    >
+                        Run now
+                    </Button>
+                </Flex>
+                <Flex
+                    flexDirection="row"
+                    alignItems="start"
+                    justifyContent="start"
+                    className="pr-[118px]"
+                >
+                    <NumberMetric
+                        metricId="cost_discovery_job_interval"
+                        title="Spend Discovery Interval (Hours)"
+                        min={24}
+                        max={120}
+                    />
+                </Flex>
+                <Flex
+                    flexDirection="row"
+                    alignItems="start"
+                    justifyContent="start"
+                >
+                    <NumberMetric
+                        metricId="metrics_job_interval"
+                        title="Metrics Job Interval (Hours)"
+                        min={4}
+                        max={120}
+                    />
+                    <Button
+                        className="ml-2"
+                        icon={ArrowPathIcon}
+                        disabled={triggerLoading && triggerExecuted}
+                        loading={triggerLoading && triggerExecuted}
+                        variant="secondary"
+                        onClick={trigger}
+                    >
+                        Run now
+                    </Button>
+                </Flex>
+                <Flex
+                    flexDirection="row"
+                    alignItems="start"
+                    justifyContent="start"
+                    className="pr-[118px]"
+                >
+                    <NumberMetric
+                        metricId="compliance_job_interval"
+                        title="Compliance Job Interval (Hours)"
+                        min={24}
+                        max={120}
+                    />
+                </Flex>
             </Flex>
 
             <Title className="font-semibold mt-8">Git Repositories</Title>
@@ -307,7 +377,12 @@ export default function SettingsCustomization() {
                     </Text>
                 </div>
             </Flex>
-            <Flex flexDirection="col" className="mt-4" alignItems="end">
+            <Flex
+                flexDirection="row"
+                className="mt-4"
+                alignItems="start"
+                justifyContent="start"
+            >
                 <TextMetric
                     metricId="analytics_git_url"
                     title="Configuration Git URL"
@@ -318,6 +393,7 @@ export default function SettingsCustomization() {
                 />
                 <Button
                     variant="secondary"
+                    className="ml-2"
                     loading={syncExecuted && syncLoading}
                     onClick={() => runSync()}
                 >
@@ -362,21 +438,6 @@ export default function SettingsCustomization() {
                         <Tab>Off</Tab>
                     </TabList>
                 </TabGroup>
-            </Flex>
-            <Flex
-                flexDirection="row"
-                justifyContent="between"
-                className="w-full mt-4"
-            >
-                <Text className="font-normal">Trigger metrics job</Text>
-                <Button
-                    disabled={triggerLoading && triggerExecuted}
-                    loading={triggerLoading && triggerExecuted}
-                    variant="secondary"
-                    onClick={trigger}
-                >
-                    Trigger
-                </Button>
             </Flex>
         </Card>
     )

@@ -1,6 +1,8 @@
 import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from '../api/api'
 
-export const parseTheme = (v: string) => {
+export const parseTheme = (
+    v: string
+): GithubComKaytuIoKaytuEnginePkgAuthApiTheme => {
     switch (v) {
         case 'light':
             return GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeLight

@@ -37,6 +37,7 @@ interface JwtPayload {
     email?: string
 }
 
+let authLoading = false
 export function useAuth() {
     const [auth, setAuth] = useAtom(authAtom)
     const decodedToken =
@@ -85,13 +86,19 @@ export function useAuth() {
             }
             setAuth(newAuth)
             localStorage.setItem('kaytu_auth', JSON.stringify(newAuth))
+            window.location.href = '/'
         },
         loginWithCode: (code: string) => {
             if (code.length === 0) {
                 return Promise.resolve()
             }
 
-            const getToken = async () => {
+            if (authLoading) {
+                return Promise.resolve()
+            }
+            authLoading = true
+
+            const getToken = async (retryCount: number) => {
                 setAuth({
                     ...auth,
                     isLoading: true,
@@ -123,12 +130,19 @@ export function useAuth() {
 
                     const data = await response.json()
                     if (data.error) {
-                        setAuth({
-                            ...auth,
-                            isLoading: false,
-                            isSuccessful: false,
-                            error: data.error_description,
-                        })
+                        if (retryCount < 3) {
+                            getToken(retryCount + 1)
+                        } else {
+                            console.log(
+                                `Failed to fetch token due to ${data.error}`
+                            )
+                            setAuth({
+                                ...auth,
+                                isLoading: false,
+                                isSuccessful: false,
+                                error: data.error_description,
+                            })
+                        }
                     } else {
                         const newAuth = {
                             token: data.access_token,
@@ -144,16 +158,23 @@ export function useAuth() {
                         )
                     }
                 } catch (error) {
-                    setAuth({
-                        ...auth,
-                        isLoading: false,
-                        isSuccessful: false,
-                        error: `Failed to fetch token due to ${error}`,
-                    })
+                    if (retryCount < 3) {
+                        getToken(retryCount + 1)
+                    } else {
+                        console.log(`Failed to fetch token due to ${error}`)
+                        setAuth({
+                            ...auth,
+                            isLoading: false,
+                            isSuccessful: false,
+                            error: `Failed to fetch token due to ${error}`,
+                        })
+                    }
                 }
             }
 
-            return getToken()
+            return getToken(0).finally(() => {
+                authLoading = false
+            })
         },
     }
 }

@@ -89,7 +89,7 @@ const columns = (isDemo: boolean) => {
             headerName: 'Account Type',
             field: 'type',
             type: 'string',
-            rowGroup: true,
+            rowGroup: false,
             enableRowGroup: true,
             sortable: true,
             hide: true,
@@ -144,26 +144,6 @@ const columns = (isDemo: boolean) => {
 
                 return <Badge color={color}>{text}</Badge>
             },
-        },
-        {
-            field: 'spendDiscovery',
-            type: 'string',
-            headerName: 'Spend Management',
-            enableRowGroup: true,
-            sortable: true,
-            filter: true,
-            resizable: true,
-            flex: 1,
-        },
-        {
-            field: 'assetDiscovery',
-            type: 'string',
-            headerName: 'Asset Discovery',
-            enableRowGroup: true,
-            sortable: true,
-            filter: true,
-            resizable: true,
-            flex: 1,
         },
         {
             field: 'credentialID',

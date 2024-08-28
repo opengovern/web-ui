@@ -1068,6 +1068,8 @@ interface IuseScheduleApiV1DescribeTriggerUpdateState {
 export const useScheduleApiV1DescribeTriggerUpdate = (
     connectionId: string,
     query?: {
+        force_full?: boolean
+
         resource_type?: string[]
     },
     params: RequestParams = {},
@@ -1094,6 +1096,8 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
         reqconnectionId: string,
         reqquery:
             | {
+                  force_full?: boolean
+
                   resource_type?: string[]
               }
             | undefined,
@@ -1190,6 +1194,8 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
         reqconnectionId: string,
         reqquery:
             | {
+                  force_full?: boolean
+
                   resource_type?: string[]
               }
             | undefined,

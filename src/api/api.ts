@@ -7216,6 +7216,8 @@ export class Api<
         apiV1DescribeTriggerUpdate: (
             connectionId: string,
             query?: {
+                /** Force full discovery */
+                force_full?: boolean
                 /** Resource Type */
                 resource_type?: string[]
             },

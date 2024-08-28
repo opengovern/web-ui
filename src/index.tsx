@@ -8,16 +8,31 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { Auth0ProviderWithNavigate } from './auth0-provider-with-navigate'
 import { AuthProviderWithNavigate } from './auth-provider-with-navigate'
+import { applyTheme, currentTheme } from './utilities/theme'
+import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from './api/api'
 
+const currentThemeValue = currentTheme()
 if (
-    localStorage.theme === 'dark' ||
-    (!('theme' in localStorage) &&
+    currentThemeValue ===
+        GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeDark ||
+    (currentThemeValue ===
+        GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeSystem &&
         window.matchMedia('(prefers-color-scheme:dark)').matches)
 ) {
     document.documentElement.classList.add('dark')
 } else {
     document.documentElement.classList.remove('dark')
 }
+
+// if (
+//     localStorage.theme === 'dark' /* ||
+//     (!('theme' in localStorage) &&
+//         window.matchMedia('(prefers-color-scheme:dark)').matches) */
+// ) {
+//     document.documentElement.classList.add('dark')
+// } else {
+//     document.documentElement.classList.remove('dark')
+// }
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(

@@ -86,14 +86,14 @@ export default function SettingsMembers() {
             <Card key="summary">
                 <Flex>
                     <Title className="font-semibold">All members</Title>
-                    <Button
+                    {/* <Button
                         className="float-right"
                         onClick={() => {
                             openInviteMember()
                         }}
                     >
                         Invite member
-                    </Button>
+                    </Button> */}
                 </Flex>
                 <List className="mt-4">
                     <ListItem>

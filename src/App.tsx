@@ -86,7 +86,7 @@ export default function App() {
             setMe(meResponse)
             applyTheme(
                 meResponse?.theme ||
-                    GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeSystem
+                    GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeLight
             )
             setColorBlindMode(meResponse?.colorBlindMode || false)
         }

@@ -151,7 +151,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 isPreview: false,
             },
             {
-                name: 'Assets',
+                name: 'Infrastructure',
                 page: ['assets', 'asset-cloud-accounts', 'asset-metrics'],
                 icon: CubeIcon,
                 children: [
@@ -172,7 +172,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         error: assetCountErr,
                     },
                     {
-                        name: 'Inventory',
+                        name: 'Cloud Services',
                         page: 'asset-metrics',
                         isPreview: false,
                         isLoading: assetsIsLoading,
@@ -233,7 +233,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 error: findingsErr,
             },
             {
-                name: 'Compliance',
+                name: 'Security',
                 icon: ShieldCheckIcon,
                 page: 'security-overview',
                 isPreview: false,
@@ -257,31 +257,25 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 isPreview: false,
             },
             {
-                name: 'Enterprise Features',
-                page: ['workload-optimizer', 'resource-collection'],
+                name: 'Workload Optimizer',
+                page: 'workload-optimizer',
                 icon: ArrowUpCircleIcon,
-                children: [
-                    {
-                        name: 'Workload Optimizer',
-                        page: 'workload-optimizer',
-                        isPreview: true,
-                        isLoading: false,
-                        count: undefined,
-                        error: spendCountErr,
-                    },
-                    {
-                        name: 'Stacks',
-                        page: 'stacks',
-                        icon: RectangleStackIcon,
-                        isPreview: true,
-                    },
-                    {
-                        name: 'Dashboards',
-                        page: 'resource-collection',
-                        icon: RectangleStackIcon,
-                        isPreview: true,
-                    },
-                ],
+                isPreview: true,
+                isLoading: false,
+                count: undefined,
+                error: spendCountErr,
+            },
+            {
+                name: 'Stacks',
+                page: 'stacks',
+                icon: RectangleStackIcon,
+                isPreview: true,
+            },
+            {
+                name: 'Dashboards',
+                page: 'resource-collection',
+                icon: ArrowUpCircleIcon,
+                isPreview: true,
             },
             {
                 name: 'Settings',
@@ -381,8 +375,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         justifyContent="start"
                                                         className="h-full gap-2.5"
                                                     >
-                                                        {item.name ===
-                                                        'Enterprise Features' ? (
+                                                        {item.isPreview ===
+                                                        true ? (
                                                             <item.icon
                                                                 className={`h-5 w-5 stroke-2 ${
                                                                     collapsed &&
@@ -596,18 +590,33 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         }`}
                                         >
                                             <div className="group relative">
-                                                <item.icon
-                                                    className={`h-5 w-5 stroke-2 ${
-                                                        item.page ===
-                                                            currentPage ||
-                                                        (collapsed &&
-                                                            item.page.includes(
-                                                                currentPage
-                                                            ))
-                                                            ? 'text-gray-200'
-                                                            : 'text-gray-400'
-                                                    }`}
-                                                />
+                                                {item.isPreview === true ? (
+                                                    <item.icon
+                                                        className={`h-5 w-5 stroke-2 ${
+                                                            item.page ===
+                                                                currentPage ||
+                                                            (collapsed &&
+                                                                item.page.includes(
+                                                                    currentPage
+                                                                ))
+                                                                ? 'text-orange-200'
+                                                                : 'text-orange-400'
+                                                        }`}
+                                                    />
+                                                ) : (
+                                                    <item.icon
+                                                        className={`h-5 w-5 stroke-2 ${
+                                                            item.page ===
+                                                                currentPage ||
+                                                            (collapsed &&
+                                                                item.page.includes(
+                                                                    currentPage
+                                                                ))
+                                                                ? 'text-gray-200'
+                                                                : 'text-gray-400'
+                                                        }`}
+                                                    />
+                                                )}
                                                 {collapsed && (
                                                     <div
                                                         className="absolute z-50 scale-0 transition-all rounded p-2 shadow-md bg-kaytu-950 group-hover:scale-100"
@@ -640,14 +649,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     ) : (
                                                         item.count
                                                     )}
-                                                </Badge>
-                                            )}
-                                            {item.isPreview && !collapsed && (
-                                                <Badge
-                                                    className="absolute right-2 top-1.5"
-                                                    style={badgeStyle}
-                                                >
-                                                    Preview
                                                 </Badge>
                                             )}
                                         </Link>
