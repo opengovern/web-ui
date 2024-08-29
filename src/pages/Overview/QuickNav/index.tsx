@@ -11,15 +11,18 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 const navList = [
     {
-        title: 'Assets',
+        title: 'Infrastructure',
         description: 'Discover and query cloud assets across multiple clouds.',
         icon: CubeIcon,
         children: [
-            { name: 'Overview', link: '/ws/:ws/assets' },
-            { name: 'Asset metrics', link: '/ws/:ws/asset-metrics' },
+            { name: 'Overview', link: '/ws/:ws/infrastructure' },
+            {
+                name: 'Infrastructure metrics',
+                link: '/ws/:ws/infrastructure-metrics',
+            },
             {
                 name: 'Cloud account details',
-                link: '/ws/:ws/asset-cloud-accounts',
+                link: '/ws/:ws/infrastructure-cloud-accounts',
             },
         ],
     },
@@ -38,7 +41,7 @@ const navList = [
         description: 'Audit cloud configurations against benchmarks.',
         icon: ShieldCheckIcon,
         children: [
-            { name: 'Compliance benchmarks', link: '/ws/:ws/compliance' },
+            { name: 'Benchmarks', link: '/ws/:ws/policies' },
             { name: 'Security findings', link: '/ws/:ws/findings' },
         ],
     },

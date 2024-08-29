@@ -11,11 +11,20 @@ import {
 import ResourcesWithFailure from './ResourcesWithFailure'
 import ControlsWithFailure from './ControlsWithFailure'
 import FailingCloudAccounts from './FailingCloudAccounts'
-import { DateRange } from '../../../utilities/urlstate'
+import {
+    DateRange,
+    useURLParam,
+    useURLState,
+} from '../../../utilities/urlstate'
 import Events from './Events'
 
 export default function Findings() {
-    const [tab, setTab] = useState(0)
+    const [tab, setTab] = useURLParam<number>(
+        'tab',
+        0,
+        (v) => String(v),
+        (v) => parseInt(v, 10)
+    )
     const [selectedGroup, setSelectedGroup] = useState<
         'findings' | 'resources' | 'controls' | 'accounts' | 'events'
     >('findings')
@@ -81,11 +90,11 @@ export default function Findings() {
             <TopHeader />
             <TabGroup index={tab} onIndexChange={setTab}>
                 <TabList>
-                    <Tab>Findings</Tab>
-                    <Tab>Resources</Tab>
-                    <Tab>Events</Tab>
-                    <Tab>Accounts</Tab>
-                    <Tab>Controls</Tab>
+                    <Tab>All Findings</Tab>
+                    <Tab>Resource Summary</Tab>
+                    <Tab>Drift Events</Tab>
+                    <Tab>Account Posture</Tab>
+                    <Tab>Control Summary</Tab>
                 </TabList>
                 <Filter type={selectedGroup} onApply={(e) => setQuery(e)} />
                 <TabPanels className="mt-4">

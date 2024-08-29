@@ -152,12 +152,16 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             },
             {
                 name: 'Infrastructure',
-                page: ['assets', 'asset-cloud-accounts', 'asset-metrics'],
+                page: [
+                    'infrastructure',
+                    'infrastructure-cloud-accounts',
+                    'infrastructure-metrics',
+                ],
                 icon: CubeIcon,
                 children: [
                     {
                         name: 'Summary',
-                        page: 'assets',
+                        page: 'infrastructure',
                         isPreview: false,
                         isLoading: false,
                         count: undefined,
@@ -165,7 +169,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     },
                     {
                         name: 'Cloud Accounts',
-                        page: 'asset-cloud-accounts',
+                        page: 'infrastructure-cloud-accounts',
                         isPreview: false,
                         isLoading: assetsIsLoading,
                         count: numericDisplay(assetCount?.connectionCount) || 0,
@@ -173,7 +177,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     },
                     {
                         name: 'Cloud Services',
-                        page: 'asset-metrics',
+                        page: 'infrastructure-metrics',
                         isPreview: false,
                         isLoading: assetsIsLoading,
                         count: numericDisplay(assetCount?.metricCount) || 0,
@@ -217,7 +221,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             {
                 name: 'Policies',
                 icon: ClipboardDocumentCheckIcon,
-                page: 'compliance',
+                page: 'policies',
                 isPreview: false,
                 isLoading: false,
                 count: undefined,
@@ -227,10 +231,31 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 name: 'Findings',
                 icon: DocumentMagnifyingGlassIcon,
                 page: 'findings',
-                isPreview: false,
-                isLoading: findingsIsLoading,
-                count: numericDisplay(findingsCount?.count) || 0,
-                error: findingsErr,
+                children: [
+                    {
+                        name: 'All Findings',
+                        page: 'findings?tab=0',
+                        isLoading: findingsIsLoading,
+                        count: numericDisplay(findingsCount?.count) || 0,
+                        error: findingsErr,
+                    },
+                    {
+                        name: 'Resource Summary',
+                        page: 'findings?tab=1',
+                    },
+                    {
+                        name: 'Drift Events',
+                        page: 'findings?tab=2',
+                    },
+                    {
+                        name: 'Account Posture',
+                        page: 'findings?tab=3',
+                    },
+                    {
+                        name: 'Control Summary',
+                        page: 'findings?tab=4',
+                    },
+                ],
             },
             {
                 name: 'Security',

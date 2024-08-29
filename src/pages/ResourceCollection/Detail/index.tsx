@@ -470,7 +470,7 @@ export default function ResourceCollectionDetail() {
                                 <Title className="font-semibold">KPI</Title>
                                 <TabList className="w-1/2">
                                     <Tab>Compliance</Tab>
-                                    <Tab>Assets</Tab>
+                                    <Tab>Infrastructure</Tab>
                                 </TabList>
                             </Flex>
                             <TabPanels>
@@ -502,7 +502,7 @@ export default function ResourceCollectionDetail() {
                 <TabList className="mb-3">
                     <Tab>Landscape</Tab>
                     <Tab>Compliance</Tab>
-                    <Tab>Assets</Tab>
+                    <Tab>Infrastructure</Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
@@ -541,7 +541,7 @@ export default function ResourceCollectionDetail() {
                                     <SummaryCard
                                         title="Resources"
                                         metric={accountInfo?.totalResourceCount}
-                                        url="assets-details#cloud-accounts"
+                                        url="infrastructure-details#cloud-accounts"
                                         loading={accountInfoLoading}
                                         border={false}
                                     />

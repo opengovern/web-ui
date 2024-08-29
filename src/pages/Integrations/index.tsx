@@ -39,7 +39,13 @@ export default function Integrations() {
                             ? responseConnectors
                             : []
                         )
-                            ?.filter((f) => (f.connection_count || 0) > 0)
+                            ?.filter(
+                                (f) =>
+                                    (f.connection_count || 0) > 0 ||
+                                    f.name === 'AWS' ||
+                                    f.name === 'Azure' ||
+                                    f.name === 'EntraID'
+                            )
                             .sort((a, b) =>
                                 (a.label || '') > (b.label || '') ? 1 : -1
                             )

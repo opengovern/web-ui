@@ -39,7 +39,7 @@ export default function Compliance() {
         }
     }
 
-    const defaultSelectedBenchmarkState = ''
+    const defaultSelectedBenchmarkState = 'active'
     const [selectedBenchmarkState, setSelectedBenchmarkState] = useURLParam<
         '' | 'active' | 'notactive'
     >('benchmarkstate', defaultSelectedBenchmarkState)
@@ -81,7 +81,7 @@ export default function Compliance() {
     )
 
     const calcInitialFilters = () => {
-        const resp = ['State', 'Connector', 'Score Category']
+        const resp = ['State', 'Connector', 'Category']
 
         if (selectedFrameworks !== defaultSelectedFramework) {
             resp.push('Framework')
@@ -139,7 +139,7 @@ export default function Compliance() {
     const filters: IFilter[] = [
         ConnectorFilter(
             selectedConnectors,
-            selectedConnectors !== '',
+            true,
             (sv) => setSelectedConnectors(parseConnector(sv)),
             () => {
                 setAddedFilters(addedFilters.filter((a) => a !== 'Connector'))
@@ -154,7 +154,7 @@ export default function Compliance() {
             itemsTitles: categoryValues
                 .filter((i) => selectedCategory === i.value)
                 .map((i) => i.title),
-            isValueChanged: selectedCategory.length > 0,
+            isValueChanged: true,
             selector: (
                 <RadioSelector
                     title="Category"
@@ -177,7 +177,7 @@ export default function Compliance() {
 
         BenchmarkStateFilter(
             selectedBenchmarkState,
-            selectedBenchmarkState !== defaultSelectedBenchmarkState,
+            true,
             (sv) => setSelectedBenchmarkState(parseState(sv)),
             () => setSelectedBenchmarkState(defaultSelectedBenchmarkState)
         ),

@@ -112,7 +112,7 @@ export const columns = (isDemo: boolean) => {
             type: 'string',
             enableRowGroup: false,
             sortable: false,
-            hide: true,
+            hide: false,
             filter: true,
             resizable: true,
             flex: 1,
@@ -192,7 +192,7 @@ export const columns = (isDemo: boolean) => {
             sortable: true,
             // rowGroup: true,
             filter: true,
-            hide: true,
+            hide: false,
             resizable: true,
             width: 100,
             cellRenderer: (
@@ -251,7 +251,7 @@ export const columns = (isDemo: boolean) => {
                     {dateTimeDisplay(param.value)}
                 </Flex>
             ),
-            hide: true,
+            hide: false,
         },
     ]
     return temp

@@ -124,9 +124,11 @@ export default function ListCard({
                                     <Text className="w-20 text-right font-medium text-gray-400 dark:text-gray-500">
                                         {valueColumnTitle}
                                     </Text>
-                                    <Text className="w-20 text-right font-medium text-gray-400 dark:text-gray-500">
-                                        {changeColumnTitle}
-                                    </Text>
+                                    {changeColumnTitle && (
+                                        <Text className="w-20 text-right font-medium text-gray-400 dark:text-gray-500">
+                                            {changeColumnTitle}
+                                        </Text>
+                                    )}
                                 </Flex>
                             </Flex>
                         )}

@@ -78,13 +78,13 @@ export default function Compliance() {
     return (
         <Flex flexDirection="col" alignItems="start" justifyContent="start">
             <Flex className="mb-8">
-                <Title className="text-gray-500">Cloud Compliance</Title>
+                <Title className="text-gray-500">Benchmarks</Title>
                 <Button
                     variant="light"
                     icon={ChevronRightIcon}
                     iconPosition="right"
                     onClick={() =>
-                        navigate(`/ws/${workspace}/compliance?${searchParams}`)
+                        navigate(`/ws/${workspace}/policies?${searchParams}`)
                     }
                 >
                     Show all
@@ -117,7 +117,7 @@ export default function Compliance() {
                                 <Card
                                     onClick={() =>
                                         navigate(
-                                            `/ws/${workspace}/compliance/${bs.id}?${searchParams}`
+                                            `/ws/${workspace}/policies/${bs.id}?${searchParams}`
                                         )
                                     }
                                     className="p-3 cursor-pointer dark:ring-gray-500 hover:shadow-md"
@@ -169,7 +169,7 @@ export default function Compliance() {
                                     <Card
                                         onClick={() =>
                                             navigate(
-                                                `/ws/${workspace}/compliance/${bs.id}?${searchParams}`
+                                                `/ws/${workspace}/policies/${bs.id}?${searchParams}`
                                             )
                                         }
                                         className="p-3 cursor-pointer dark:ring-gray-500"

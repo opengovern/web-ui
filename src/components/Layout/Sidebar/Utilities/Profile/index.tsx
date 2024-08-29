@@ -66,7 +66,7 @@ export default function Profile({ isCollapsed }: IProfile) {
     }, [index])
 
     return (
-        <Popover className="relative z-50 border-0 w-full">
+        <Popover className="relative asb z-50 border-0 w-full">
             <Popover.Button
                 className={`p-3 w-full cursor-pointer ${
                     isCollapsed ? '!p-1' : 'border-t border-t-gray-700'
@@ -97,9 +97,7 @@ export default function Profile({ isCollapsed }: IProfile) {
                             </Flex>
                         )}
                     </Flex>
-                    {!isCollapsed && (
-                        <Bars2Icon className="h-6 w-6 stroke-2 text-gray-400" />
-                    )}
+                    <Bars2Icon className="h-6 w-6 stroke-2 text-gray-400" />
                 </Flex>
             </Popover.Button>
             <Transition
@@ -123,7 +121,7 @@ export default function Profile({ isCollapsed }: IProfile) {
                             className="pb-2 mb-1 border-b border-b-gray-700"
                         >
                             <Text className="mb-1">ACCOUNT</Text>
-                            <Flex
+                            {/* <Flex
                                 onClick={() =>
                                     navigate(
                                         `/ws/${workspace.current?.name}/settings?sp=profile`
@@ -134,7 +132,7 @@ export default function Profile({ isCollapsed }: IProfile) {
                                 <Text className="text-inherit">
                                     Profile info
                                 </Text>
-                            </Flex>
+                            </Flex> */}
                             {/* <Flex
                                 onClick={() => navigate(`/ws/billing`)}
                                 className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-kaytu-800"

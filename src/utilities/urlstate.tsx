@@ -76,7 +76,7 @@ export function defaultHomepageTime(wsName: string) {
         return v
     }
     const v: DateRange = {
-        start: dayjs.utc().add(-30, 'days').startOf('day'),
+        start: dayjs.utc().add(-7, 'days').startOf('day'),
         end: dayjs.utc().endOf('day'),
     }
     return v

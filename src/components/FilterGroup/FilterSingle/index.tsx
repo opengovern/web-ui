@@ -12,21 +12,19 @@ interface IProbs {
     alignment?: 'left' | 'right'
 }
 
-const valueFormatter = (values: string[]) => {
+const valueFormatter = (values: string[], color = 'text-gray-700') => {
     if (values.length >= 2) {
         return (
             <>
-                <Text className=" text-gray-700 font-bold max-w-44 truncate">
+                <Text className={`${color} font-bold max-w-44 truncate`}>
                     {values.at(0)}
                 </Text>
-                <Text className="text-gray-500">{`+${values.length - 1}`}</Text>
+                <Text className={color}>{`+${values.length - 1}`}</Text>
             </>
         )
     }
     return (
-        <Text className=" text-gray-700 font-bold max-w-48 truncate">
-            {values}
-        </Text>
+        <Text className={`${color} font-bold max-w-48 truncate`}>{values}</Text>
     )
 }
 
@@ -45,28 +43,59 @@ export default function FilterSingle({
                     <Popover.Button
                         className={`border ${
                             isValueChanged
-                                ? 'border-gray-400'
+                                ? 'border-kaytu-500 bg-kaytu-50'
                                 : 'border-gray-300'
                         } ${
                             open ? 'shadow border-gray-400' : ''
-                        } py-1.5 px-3 rounded-full`}
+                        } py-1.5 px-3 rounded`}
                     >
                         <Flex className="w-fit gap-2">
                             <Icon
                                 icon={icon}
                                 size="sm"
-                                className="p-0 text-gray-500"
+                                className={`p-0 ${
+                                    isValueChanged
+                                        ? 'text-kaytu-500'
+                                        : 'text-gray-500'
+                                }`}
                             />
                             <Flex className="w-fit gap-1.5">
-                                <Text>{title}</Text>
+                                <Text
+                                    className={
+                                        isValueChanged
+                                            ? 'text-kaytu-500'
+                                            : 'text-gray-300'
+                                    }
+                                >
+                                    {title}
+                                </Text>
                                 {isValueChanged && (
-                                    <Text className="text-gray-300">
+                                    <Text
+                                        className={
+                                            isValueChanged
+                                                ? 'text-kaytu-500'
+                                                : 'text-gray-300'
+                                        }
+                                    >
                                         {' | '}
                                     </Text>
                                 )}
-                                {isValueChanged &&
-                                    itemsTitles &&
-                                    valueFormatter(itemsTitles)}
+                                <span
+                                    className={
+                                        isValueChanged
+                                            ? 'text-kaytu-500'
+                                            : 'text-gray-300'
+                                    }
+                                >
+                                    {isValueChanged &&
+                                        itemsTitles &&
+                                        valueFormatter(
+                                            itemsTitles,
+                                            isValueChanged
+                                                ? 'text-kaytu-500'
+                                                : 'text-gray-700'
+                                        )}
+                                </span>
                             </Flex>
 
                             <ChevronDownIcon className="ml-1 w-4 text-gray-400" />

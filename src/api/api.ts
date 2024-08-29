@@ -1719,7 +1719,6 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredentialConfig {
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredentialConfig {
     clientId: string
     clientSecret: string
-    credentialType?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredentialType
     objectId: string
     secretId: string
     subscriptionId?: string
@@ -2337,7 +2336,7 @@ export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnecto
      */
     maxConnectionLimit?: number
     /** @example "Azure" */
-    name?: SourceType
+    name?: string
     /** @example "This is a short Description for this connector" */
     shortDescription?: string
     /** @example "enabled" */
@@ -2452,7 +2451,6 @@ export enum GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredentialTyp
     CredentialTypeAutoAws = 'auto-aws',
     CredentialTypeManualAwsOrganization = 'manual-aws-org',
     CredentialTypeManualAzureSpn = 'manual-azure-spn',
-    CredentialTypeManualAzureEntraId = 'manual-azure-entra-id',
 }
 
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse {
@@ -5234,7 +5232,6 @@ export class Api<
                     | 'auto-aws'
                     | 'manual-aws-org'
                     | 'manual-azure-spn'
-                    | 'manual-azure-entra-id'
                 )[]
                 /** lifecycle state filter */
                 lifecycleState?:
@@ -5398,7 +5395,6 @@ export class Api<
                     | 'auto-aws'
                     | 'manual-aws-org'
                     | 'manual-azure-spn'
-                    | 'manual-azure-entra-id'
                 )[]
             },
             params: RequestParams = {}
@@ -5456,7 +5452,6 @@ export class Api<
                     | 'auto-aws'
                     | 'manual-aws-org'
                     | 'manual-azure-spn'
-                    | 'manual-azure-entra-id'
                 )[]
                 /**
                  * page size
@@ -7118,9 +7113,9 @@ export class Api<
          */
         apiV1ComplianceTriggerUpdate: (
             query: {
-                /** Benchmark ID */
+                /** Benchmark IDs leave empty for everything */
                 benchmark_id: string[]
-                /** Connection ID */
+                /** Connection IDs leave empty for default (enabled connections) */
                 connection_id?: string[]
             },
             params: RequestParams = {}

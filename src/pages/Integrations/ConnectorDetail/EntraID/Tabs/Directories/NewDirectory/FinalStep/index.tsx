@@ -1,118 +1,42 @@
-import { Bold, Button, Flex } from '@tremor/react'
-import { ColDef, GridOptions } from 'ag-grid-community'
-import { AgGridReact } from 'ag-grid-react'
-import { useRef } from 'react'
-import {
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
-} from '../../../../../../../../api/api'
+import { Bold, Button, Divider, Flex, Text } from '@tremor/react'
+import { GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse } from '../../../../../../../../api/api'
 
 interface IStep {
+    data: {
+        tenId: string
+        secId: string
+        appId: string
+        objectId: string
+        clientSecret: string
+        subscriptionId: string
+    }
+    health: string
     onNext: () => void
-    subscriptions: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
 }
 
-const columns: ColDef[] = [
-    {
-        field: 'providerConnectionName',
-        headerName: 'Name',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'providerConnectionID',
-        headerName: 'ID',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'lifecycleState',
-        headerName: 'State',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'id',
-        headerName: 'Kaytu Connection ID',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-    {
-        field: 'lastInventory',
-        headerName: 'Last Inventory',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-    {
-        field: 'onboardDate',
-        headerName: 'Onboard Date',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-]
-
-export default function FinalStep({ onNext, subscriptions }: IStep) {
-    const gridRef = useRef<AgGridReact>(null)
-
-    const gridOptions: GridOptions = {
-        columnDefs: columns,
-        pagination: true,
-        rowSelection: 'multiple',
-        animateRows: true,
-        alwaysShowHorizontalScroll: true,
-        paginationPageSize: 10,
-        getRowHeight: (params) => 50,
-        sideBar: {
-            toolPanels: [
-                {
-                    id: 'columns',
-                    labelDefault: 'Columns',
-                    labelKey: 'columns',
-                    iconKey: 'columns',
-                    toolPanel: 'agColumnsToolPanel',
-                },
-                {
-                    id: 'filters',
-                    labelDefault: 'Table Filters',
-                    labelKey: 'filters',
-                    iconKey: 'filter',
-                    toolPanel: 'agFiltersToolPanel',
-                },
-            ],
-            defaultToolPanel: '',
-        },
-    }
+export default function FinalStep({ data, health, onNext }: IStep) {
     return (
         <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" alignItems="start">
-                <Bold className="my-6">Discovered EntraID Directories</Bold>
-                <div className="ag-theme-alpine w-full">
-                    <AgGridReact
-                        ref={gridRef}
-                        domLayout="autoHeight"
-                        gridOptions={gridOptions}
-                        rowData={subscriptions}
-                    />
-                </div>
+                <Bold className="my-6">See detail</Bold>
+                <Text className="mb-3">SPN Detail & Health</Text>
+                <Flex flexDirection="row">
+                    <Text>Application ID</Text>
+                    <Text>{data.appId}</Text>
+                </Flex>
+                <Divider />
+                <Flex flexDirection="row">
+                    <Text>Tenant ID</Text>
+                    <Text>{data.tenId}</Text>
+                </Flex>
+                <Flex flexDirection="row">
+                    <Text>SPN health</Text>
+                    <Text>{health}</Text>
+                </Flex>
             </Flex>
             <Flex flexDirection="row" justifyContent="end">
                 <Button onClick={() => onNext()} className="ml-3">
-                    Done
+                    Confirm
                 </Button>
             </Flex>
         </Flex>

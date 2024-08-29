@@ -116,10 +116,6 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
             title: 'Last Activity',
             value: lastActivity(),
         },
-        {
-            title: 'Status',
-            value: <Badge>{user.status}</Badge>,
-        },
     ]
 
     const roleItems = [

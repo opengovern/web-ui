@@ -1,49 +1,31 @@
 import {
-    Accordion,
-    AccordionBody,
-    AccordionHeader,
     Badge,
     Button,
     Divider,
     Flex,
     Text,
+    TextInput,
     Title,
 } from '@tremor/react'
-import { useEffect } from 'react'
-import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
+import { useEffect, useState } from 'react'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../api/api'
-import { useScheduleApiV1DescribeTriggerUpdate } from '../../../../../../../api/schedule.gen'
-import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
-import Tag from '../../../../../../../components/Tag'
-import { snakeCaseToLabel } from '../../../../../../../utilities/labelMaker'
 import {
-    useIntegrationApiV1ConnectionsAzureHealthcheckDetail,
-    useIntegrationApiV1ConnectionsDelete,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
+} from '../../../../../../../api/api'
+import { dateDisplay } from '../../../../../../../utilities/dateDisplay'
+import {
+    useIntegrationApiV1CredentialDelete,
+    useIntegrationApiV1CredentialsAzureAutoonboardCreate,
 } from '../../../../../../../api/integration.gen'
 
-interface IDirectoryInfo {
-    data: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
+interface IPriInfo {
+    data:
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential
+        | undefined
     open: boolean
     onClose: () => void
     isDemo: boolean
-}
-
-function getBadgeText(status: string) {
-    switch (status) {
-        case 'NOT_ONBOARD':
-            return 'Not Onboarded'
-        case 'IN_PROGRESS':
-            return 'In Progress'
-        case 'ONBOARD':
-            return 'Onboarded'
-        case 'UNHEALTHY':
-            return 'Unhealthy'
-        case 'DISCOVERED':
-            return 'Discovered'
-        default:
-            return 'Archived'
-    }
 }
 
 export default function DirectoryInfo({
@@ -51,49 +33,33 @@ export default function DirectoryInfo({
     open,
     onClose,
     isDemo,
-}: IDirectoryInfo) {
+}: IPriInfo) {
+    const [id, setId] = useState('')
+    const [eid, seteId] = useState(false)
+    const [value, setValue] = useState('')
+    const [evalue, seteValue] = useState(false)
+
     const {
         isExecuted: isDeleteExecuted,
         isLoading: isDeleteLoading,
         sendNow: deleteNow,
-    } = useIntegrationApiV1ConnectionsDelete(data?.id || '', {}, false)
-
-    const {
-        response: healthResponse,
-        isExecuted: isHealthCheckExecuted,
-        isLoading: isHealthCheckLoading,
-        sendNow: runHealthCheckNow,
-    } = useIntegrationApiV1ConnectionsAzureHealthcheckDetail(
-        data?.id || '',
-        {},
-        {},
-        false
-    )
+    } = useIntegrationApiV1CredentialDelete(data?.id || '', {}, false)
 
     const {
         isExecuted: isDiscoverExecuted,
         isLoading: isDiscoverLoading,
         sendNow: discoverNow,
-    } = useScheduleApiV1DescribeTriggerUpdate(
+    } = useIntegrationApiV1CredentialsAzureAutoonboardCreate(
         data?.id || '',
-        {
-            resource_type: data?.id ? [data?.id] : [''],
-        },
         {},
         false
     )
 
-    useEffect(() => {
-        if (isDeleteExecuted && !isDeleteLoading) {
-            onClose()
-        }
-    }, [isDeleteLoading])
-
-    useEffect(() => {
-        if (isHealthCheckExecuted && !isHealthCheckLoading) {
-            onClose()
-        }
-    }, [isHealthCheckExecuted])
+    // useEffect(() => {
+    //     if (isDeleteExecuted && !isDeleteLoading) {
+    //         onClose()
+    //     }
+    // }, [isDeleteLoading])
 
     useEffect(() => {
         if (isDiscoverExecuted && !isDiscoverLoading) {
@@ -101,20 +67,15 @@ export default function DirectoryInfo({
         }
     }, [isDiscoverLoading])
 
-    const buttonsDisabled =
-        (isDeleteExecuted && isDeleteLoading) ||
-        (isHealthCheckExecuted && isHealthCheckLoading) ||
-        (isDiscoverExecuted && isDiscoverLoading)
-
     return (
         <DrawerPanel
-            title="Azure Subscription"
+            title="Service Principal"
             open={open}
             onClose={() => onClose()}
         >
             <Flex flexDirection="col" className="h-full">
                 <Flex flexDirection="col" alignItems="start">
-                    <Title>Summary</Title>
+                    <Title>SPN info</Title>
                     <Divider />
                     <Flex>
                         <Text>Name</Text>
@@ -123,192 +84,187 @@ export default function DirectoryInfo({
                                 isDemo ? 'blur-sm text-black' : 'text-black'
                             }
                         >
-                            {data?.providerConnectionName}
+                            {data?.name}
                         </Text>
                     </Flex>
                     <Divider />
                     <Flex>
-                        <Text>ID</Text>
+                        <Text>Application ID</Text>
                         <Text
                             className={
                                 isDemo ? 'blur-sm text-black' : 'text-black'
                             }
                         >
-                            {data?.providerConnectionID}
+                            {data?.metadata?.organization_master_account_email}
                         </Text>
                     </Flex>
                     <Divider />
                     <Flex>
-                        <Text>Health state</Text>
-                        <Flex className="w-fit gap-4">
-                            <Button
-                                loading={
-                                    isHealthCheckExecuted &&
-                                    isHealthCheckLoading
-                                }
-                                variant="light"
-                                disabled={buttonsDisabled}
-                                onClick={runHealthCheckNow}
-                                icon={ArrowPathRoundedSquareIcon}
-                            >
-                                Trigger health check
-                            </Button>
-                            {healthResponse ? (
-                                <Badge
-                                    color={
-                                        healthResponse?.healthState ===
-                                        'healthy'
-                                            ? 'emerald'
-                                            : 'rose'
-                                    }
-                                >
-                                    {healthResponse?.healthState}
-                                </Badge>
-                            ) : (
-                                <Badge
-                                    color={
-                                        data?.healthState === 'healthy'
-                                            ? 'emerald'
-                                            : 'rose'
-                                    }
-                                >
-                                    {data?.healthState}
-                                </Badge>
-                            )}
-                        </Flex>
+                        <Text>Object ID</Text>
+                        <Text
+                            className={
+                                isDemo ? 'blur-sm text-black' : 'text-black'
+                            }
+                        >
+                            {data?.metadata?.object_id}
+                        </Text>
                     </Flex>
                     <Divider />
-                    {data?.healthState === 'unhealthy' && (
-                        <>
-                            <Flex>
-                                <Text>Health reason</Text>
-                                <Text className="text-black">
-                                    {data?.healthReason}
-                                </Text>
-                            </Flex>
-                            <Divider />
-                        </>
-                    )}
-                    <Flex className="mb-6">
-                        <Text>Lifecycle state</Text>
+                    <Flex>
+                        <Text>Directory ID</Text>
+                        <Text
+                            className={
+                                isDemo ? 'blur-sm text-black' : 'text-black'
+                            }
+                        >
+                            {data?.metadata?.organization_master_account_email}
+                        </Text>
+                    </Flex>
+                    <Divider />
+                    <Flex>
+                        <Text>State</Text>
                         <Badge
                             color={
-                                data?.lifecycleState === 'ONBOARD'
+                                data?.healthStatus === 'healthy'
                                     ? 'green'
                                     : 'rose'
                             }
                         >
-                            {getBadgeText(data?.lifecycleState || '')}
+                            {data?.healthStatus}
                         </Badge>
                     </Flex>
-                    <Accordion className="w-full p-0 !rounded-none border-b-0 border-x-0 border-t-gray-200">
-                        <AccordionHeader className="w-full p-0 py-6 border-0">
-                            <Title>Additional details</Title>
-                        </AccordionHeader>
-                        <AccordionBody className="w-full p-0 border-0">
-                            <Flex
-                                flexDirection="col"
-                                alignItems="start"
-                                className="border-t border-t-gray-200 py-6"
-                            >
-                                <Flex>
-                                    <Text>Subscription Type</Text>
-                                    <Text
-                                        className={
-                                            isDemo
-                                                ? 'blur-sm text-black'
-                                                : 'text-black'
-                                        }
+                    <Divider />
+                    <Flex>
+                        <Text>Last health check</Text>
+                        <Text
+                            className={
+                                isDemo ? 'blur-sm text-black' : 'text-black'
+                            }
+                        >
+                            {dateDisplay(data?.lastHealthCheckTime)}
+                        </Text>
+                    </Flex>
+                    <Divider />
+                    <Flex
+                        flexDirection={eid ? 'col' : 'row'}
+                        alignItems={eid ? 'start' : 'center'}
+                    >
+                        <Text className="whitespace-nowrap">Secret ID</Text>
+                        {eid ? (
+                            <>
+                                <TextInput
+                                    className="w-full my-3"
+                                    value={id}
+                                    onChange={(e) => setId(e.target.value)}
+                                />
+                                <Flex justifyContent="end">
+                                    <Button
+                                        variant="secondary"
+                                        onClick={() => seteId(false)}
                                     >
-                                        {snakeCaseToLabel(
-                                            data?.credentialType || ''
-                                        )}
-                                    </Text>
+                                        Cancel
+                                    </Button>
+                                    <Button className="ml-3">Save</Button>
                                 </Flex>
-                                <Divider />
-                                <Flex>
-                                    <Text>Last inventory</Text>
-                                    <Text
-                                        className={
-                                            isDemo
-                                                ? 'blur-sm text-black'
-                                                : 'text-black'
-                                        }
-                                    >
-                                        {dateTimeDisplay(data?.lastInventory)}
-                                    </Text>
-                                </Flex>
-                                <Divider />
-                                <Flex>
-                                    <Text>Last health check</Text>
-                                    <Text
-                                        className={
-                                            isDemo
-                                                ? 'blur-sm text-black'
-                                                : 'text-black'
-                                        }
-                                    >
-                                        {dateTimeDisplay(
-                                            data?.lastHealthCheckTime
-                                        )}
-                                    </Text>
-                                </Flex>
-                                <Divider />
-                                <Flex>
-                                    <Text>Onboard date</Text>
-                                    <Text
-                                        className={
-                                            isDemo
-                                                ? 'blur-sm text-black'
-                                                : 'text-black'
-                                        }
-                                    >
-                                        {dateTimeDisplay(data?.onboardDate)}
-                                    </Text>
-                                </Flex>
-                                {data?.metadata?.subscription_tags && (
-                                    <>
-                                        <Divider />
-                                        <Flex alignItems="start">
-                                            <Text className="w-fit">Tags</Text>
-                                            <Flex
-                                                justifyContent="end"
-                                                className="max-w-full flex-wrap gap-2"
-                                            >
-                                                {Object.entries(
-                                                    data?.metadata
-                                                        ?.subscription_tags
-                                                ).map(([name, value]) => (
-                                                    <Tag
-                                                        text={`${name}: ${value}`}
-                                                        isDemo={isDemo}
-                                                    />
-                                                ))}
-                                            </Flex>
-                                        </Flex>
-                                    </>
-                                )}
+                            </>
+                        ) : (
+                            <Flex justifyContent="end">
+                                <Text
+                                    className={
+                                        isDemo
+                                            ? 'blur-sm text-black'
+                                            : 'text-black'
+                                    }
+                                >
+                                    {data?.metadata?.secret_id}
+                                </Text>
+                                <Button
+                                    variant="light"
+                                    className="ml-3"
+                                    onClick={() => {
+                                        setId(data?.metadata?.secret_id)
+                                        seteId(true)
+                                    }}
+                                >
+                                    Edit
+                                </Button>
                             </Flex>
-                        </AccordionBody>
-                    </Accordion>
+                        )}
+                    </Flex>
+                    <Divider />
+                    <Flex
+                        flexDirection={evalue ? 'col' : 'row'}
+                        alignItems={evalue ? 'start' : 'center'}
+                    >
+                        <Text className="whitespace-nowrap">Secret value</Text>
+                        {evalue ? (
+                            <>
+                                <TextInput
+                                    className="w-full my-3"
+                                    value={value}
+                                    onChange={(e) => setValue(e.target.value)}
+                                />
+                                <Flex justifyContent="end">
+                                    <Button
+                                        variant="secondary"
+                                        onClick={() => seteValue(false)}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button className="ml-3">Save</Button>
+                                </Flex>
+                            </>
+                        ) : (
+                            <Flex justifyContent="end">
+                                <Text
+                                    className={
+                                        isDemo
+                                            ? 'blur-sm text-black'
+                                            : 'text-black'
+                                    }
+                                >
+                                    *****************
+                                </Text>
+                                <Button
+                                    variant="light"
+                                    className="ml-3"
+                                    onClick={() => seteValue(true)}
+                                >
+                                    Edit
+                                </Button>
+                            </Flex>
+                        )}
+                    </Flex>
+                    <Divider />
+                    <Flex>
+                        <Text>Number of subscriptions</Text>
+                        <Text
+                            className={
+                                isDemo ? 'blur-sm text-black' : 'text-black'
+                            }
+                        >
+                            {data?.total_connections}
+                        </Text>
+                    </Flex>
                 </Flex>
-                <Flex justifyContent="end">
+                <Flex justifyContent="end" className="my-6">
                     <Button
                         variant="secondary"
                         color="rose"
-                        loading={isDeleteExecuted && isDeleteLoading}
-                        disabled={buttonsDisabled}
-                        onClick={deleteNow}
+                        // loading={isDeleteExecuted && isDeleteLoading}
+                        disabled={isDiscoverExecuted && isDiscoverLoading}
+                        // onClick={deleteNow}
                     >
                         Delete
                     </Button>
+
                     <Button
                         className="ml-3"
                         loading={isDiscoverExecuted && isDiscoverLoading}
-                        disabled={buttonsDisabled}
+                        // disabled={isDeleteExecuted && isDeleteLoading}
                         onClick={discoverNow}
                     >
-                        Trigger Discovery
+                        Discover New Subscriptions
                     </Button>
                 </Flex>
             </Flex>

@@ -29,8 +29,8 @@ export default function Overview() {
                         className="gap-4"
                         id="myDIV"
                     >
-                        <Spend />
                         <Governance />
+                        <Spend />
                     </Flex>
                 </Col>
             </Grid>

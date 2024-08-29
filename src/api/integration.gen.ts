@@ -2,20 +2,20 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCountConnectionsResponse,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount,
     RequestParams,
 } from './api'
 
@@ -335,7 +335,6 @@ export const useIntegrationApiV1ConnectionsSummariesList = (
             | 'auto-aws'
             | 'manual-aws-org'
             | 'manual-azure-spn'
-            | 'manual-azure-entra-id'
         )[]
 
         lifecycleState?:
@@ -406,7 +405,6 @@ export const useIntegrationApiV1ConnectionsSummariesList = (
                       | 'auto-aws'
                       | 'manual-aws-org'
                       | 'manual-azure-spn'
-                      | 'manual-azure-entra-id'
                   )[]
 
                   lifecycleState?:
@@ -541,7 +539,6 @@ export const useIntegrationApiV1ConnectionsSummariesList = (
                       | 'auto-aws'
                       | 'manual-aws-org'
                       | 'manual-azure-spn'
-                      | 'manual-azure-entra-id'
                   )[]
 
                   lifecycleState?:
@@ -1183,7 +1180,6 @@ export const useIntegrationApiV1ConnectorsMetricsList = (
             | 'auto-aws'
             | 'manual-aws-org'
             | 'manual-azure-spn'
-            | 'manual-azure-entra-id'
         )[]
     },
     params: RequestParams = {},
@@ -1216,7 +1212,6 @@ export const useIntegrationApiV1ConnectorsMetricsList = (
                       | 'auto-aws'
                       | 'manual-aws-org'
                       | 'manual-azure-spn'
-                      | 'manual-azure-entra-id'
                   )[]
               }
             | undefined,
@@ -1313,7 +1308,6 @@ export const useIntegrationApiV1ConnectorsMetricsList = (
                       | 'auto-aws'
                       | 'manual-aws-org'
                       | 'manual-azure-spn'
-                      | 'manual-azure-entra-id'
                   )[]
               }
             | undefined,
@@ -1495,7 +1489,6 @@ export const useIntegrationApiV1CredentialsList = (
             | 'auto-aws'
             | 'manual-aws-org'
             | 'manual-azure-spn'
-            | 'manual-azure-entra-id'
         )[]
 
         pageSize?: number
@@ -1534,7 +1527,6 @@ export const useIntegrationApiV1CredentialsList = (
                       | 'auto-aws'
                       | 'manual-aws-org'
                       | 'manual-azure-spn'
-                      | 'manual-azure-entra-id'
                   )[]
 
                   pageSize?: number
@@ -1637,7 +1629,6 @@ export const useIntegrationApiV1CredentialsList = (
                       | 'auto-aws'
                       | 'manual-aws-org'
                       | 'manual-azure-spn'
-                      | 'manual-azure-entra-id'
                   )[]
 
                   pageSize?: number

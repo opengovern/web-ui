@@ -149,7 +149,7 @@ export default function Query() {
     const [selectedRow, setSelectedRow] = useState({})
     const [openDrawer, setOpenDrawer] = useState(false)
     const [openSearch, setOpenSearch] = useState(true)
-    const [showEditor, setShowEditor] = useState(false)
+    const [showEditor, setShowEditor] = useState(true)
     const isDemo = useAtomValue(isDemoAtom)
     const [pageSize, setPageSize] = useState(1000)
     const [autoRun, setAutoRun] = useState(false)

@@ -44,17 +44,14 @@ export default function ConnectorDetail() {
             endTime: activeTimeRange.end.unix(),
             pageSize: 10000,
             pageNumber: 1,
-            credentialType,
         })
     const { response: credentials, isLoading: isCredentialLoading } =
         useIntegrationApiV1CredentialsList({
             connector: provider,
-            credentialType,
         })
     const { response: topMetrics, isLoading: metricsLoading } =
         useIntegrationApiV1ConnectorsMetricsList({
             connector: provider !== '' ? [provider] : [],
-            credentialType,
         })
 
     const connectorUI = () => {
@@ -105,8 +102,7 @@ export default function ConnectorDetail() {
                     subscriptionsLoading={isAccountsLoading}
                 />
                 <EntraIDTabs
-                    principals={credentials?.credentials || []}
-                    directories={accounts?.connections || []}
+                    directories={credentials?.credentials || []}
                     loading={isAccountsLoading}
                 />
             </>
