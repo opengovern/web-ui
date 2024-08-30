@@ -25,6 +25,7 @@ import { ConvertToBoolean } from '../../../utilities/bool'
 import { useComplianceApiV1QueriesSyncList } from '../../../api/compliance.gen'
 import {
     useScheduleApiV1AnalyticsTriggerUpdate,
+    useScheduleApiV1ComplianceTriggerUpdate,
     useScheduleApiV1DescribeTriggerUpdate,
 } from '../../../api/schedule.gen'
 
@@ -241,6 +242,16 @@ export default function SettingsCustomization() {
         sendNowWithParams: describeTrigger,
     } = useScheduleApiV1DescribeTriggerUpdate('', {}, {}, false)
 
+    const {
+        isLoading: complianceLoading,
+        isExecuted: complianceExecuted,
+        sendNow: complianceTrigger,
+    } = useScheduleApiV1ComplianceTriggerUpdate(
+        { benchmark_id: [], connection_id: [] },
+        {},
+        false
+    )
+
     useEffect(() => {
         if (syncExecuted && !syncLoading) {
             const err = getErrorMessage(syncError)
@@ -357,7 +368,6 @@ export default function SettingsCustomization() {
                     flexDirection="row"
                     alignItems="start"
                     justifyContent="start"
-                    className="pr-[118px]"
                 >
                     <NumberMetric
                         metricId="compliance_job_interval"
@@ -365,6 +375,16 @@ export default function SettingsCustomization() {
                         min={24}
                         max={120}
                     />
+                    <Button
+                        variant="secondary"
+                        className="ml-2"
+                        icon={ArrowPathIcon}
+                        disabled={complianceExecuted && complianceLoading}
+                        loading={complianceExecuted && complianceLoading}
+                        onClick={() => complianceTrigger()}
+                    >
+                        Run now
+                    </Button>
                 </Flex>
             </Flex>
 

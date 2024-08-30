@@ -93,6 +93,31 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
 
     const searchParams = useAtomValue(searchAtom)
 
+    const isCurrentPage = (page: string | string[] | undefined): boolean => {
+        if (Array.isArray(page)) {
+            return page.map((p) => isCurrentPage(p)).includes(true)
+        }
+
+        if (page?.includes('?')) {
+            const pageParams = new URLSearchParams(
+                page?.substring(page?.indexOf('?'))
+            )
+
+            const locUrl = new URL(window.location.href)
+            const locParams = new URLSearchParams(locUrl.search)
+
+            let ok = true
+            pageParams.forEach((value, key) => {
+                if (locParams.get(key) !== value) {
+                    ok = false
+                }
+            })
+            return ok
+        }
+
+        return currentPage === page
+    }
+
     useEffect(() => {
         if (isAuthenticated) {
             getAccessTokenSilently()
@@ -352,7 +377,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         className={`w-full p-2 ${
                             collapsed ? '' : 'overflow-y-scroll'
                         } h-full no-scrollbar`}
-                        style={{ maxHeight: 'calc(100vh - 200px)' }}
+                        style={{ maxHeight: 'calc(100vh - 130px)' }}
                     >
                         {!collapsed && (
                             <Text className="my-2 !text-xs">OVERVIEW</Text>
@@ -382,10 +407,10 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                 // @ts-ignore
                                                 item.children.filter(
                                                     (c: any) =>
-                                                        c.page ===
-                                                            currentPage ||
-                                                        c.selected ===
-                                                            currentPage
+                                                        isCurrentPage(c.page) ||
+                                                        isCurrentPage(
+                                                            c.selected
+                                                        )
                                                 ).length > 0
                                             }
                                             header={
@@ -405,8 +430,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             <item.icon
                                                                 className={`h-5 w-5 stroke-2 ${
                                                                     collapsed &&
-                                                                    item.page.includes(
-                                                                        currentPage
+                                                                    isCurrentPage(
+                                                                        item.page
                                                                     )
                                                                         ? 'text-orange-200'
                                                                         : 'text-orange-400'
@@ -416,8 +441,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             <item.icon
                                                                 className={`h-5 w-5 stroke-2 ${
                                                                     collapsed &&
-                                                                    item.page.includes(
-                                                                        currentPage
+                                                                    isCurrentPage(
+                                                                        item.page
                                                                     )
                                                                         ? 'text-gray-200'
                                                                         : 'text-gray-400'
@@ -452,7 +477,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     }
                                                     className={`my-0.5 py-2 flex rounded-md relative
                                                     ${
-                                                        i.page === currentPage
+                                                        isCurrentPage(i.page)
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
                                                             : 'text-gray-50 hover:bg-kaytu-800'
                                                     }`}
@@ -495,17 +520,15 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     <div
                                                         className={`w-full rounded-md p-2
                                                     ${
-                                                        item.page.includes(
-                                                            currentPage
-                                                        )
+                                                        isCurrentPage(item.page)
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
                                                             : 'text-gray-50 hover:bg-kaytu-800'
                                                     }`}
                                                     >
                                                         <item.icon
                                                             className={`h-5 w-5 stroke-2 ${
-                                                                item.page.includes(
-                                                                    currentPage
+                                                                isCurrentPage(
+                                                                    item.page
                                                                 )
                                                                     ? 'text-gray-200'
                                                                     : 'text-gray-400'
@@ -542,10 +565,16 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         {item.children.map(
                                                             (i) => (
                                                                 <Link
-                                                                    to={`/ws/${workspace}/${i.page}?${searchParams}`}
+                                                                    to={
+                                                                        i.page.includes(
+                                                                            '?'
+                                                                        )
+                                                                            ? `/ws/${workspace}/${i.page}`
+                                                                            : `/ws/${workspace}/${i.page}?${searchParams}`
+                                                                    }
                                                                     className={`my-0.5 py-2 px-4 flex justify-start rounded-md relative
                                                     ${
-                                                        i.page === currentPage
+                                                        isCurrentPage(i.page)
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
                                                             : 'text-gray-50 hover:bg-kaytu-800'
                                                     }`}
@@ -599,11 +628,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             }
                                             className={`w-full relative px-6 py-2 flex items-center gap-2.5 rounded-md
                                                         ${
-                                                            item.page ===
-                                                                currentPage ||
+                                                            isCurrentPage(
+                                                                item.page
+                                                            ) ||
                                                             (collapsed &&
-                                                                item.page.includes(
-                                                                    currentPage
+                                                                isCurrentPage(
+                                                                    item.page
                                                                 ))
                                                                 ? 'bg-kaytu-500 text-gray-200 font-semibold'
                                                                 : 'text-gray-50 hover:bg-kaytu-800'
@@ -618,11 +648,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                 {item.isPreview === true ? (
                                                     <item.icon
                                                         className={`h-5 w-5 stroke-2 ${
-                                                            item.page ===
-                                                                currentPage ||
+                                                            isCurrentPage(
+                                                                item.page
+                                                            ) ||
                                                             (collapsed &&
-                                                                item.page.includes(
-                                                                    currentPage
+                                                                isCurrentPage(
+                                                                    item.page
                                                                 ))
                                                                 ? 'text-orange-200'
                                                                 : 'text-orange-400'
@@ -631,11 +662,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                 ) : (
                                                     <item.icon
                                                         className={`h-5 w-5 stroke-2 ${
-                                                            item.page ===
-                                                                currentPage ||
+                                                            isCurrentPage(
+                                                                item.page
+                                                            ) ||
                                                             (collapsed &&
-                                                                item.page.includes(
-                                                                    currentPage
+                                                                isCurrentPage(
+                                                                    item.page
                                                                 ))
                                                                 ? 'text-gray-200'
                                                                 : 'text-gray-400'

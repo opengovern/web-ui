@@ -25,6 +25,12 @@ import SettingsCustomization from './Customization'
 import { Auth0AppMetadata } from '../../types/appMetadata'
 import TopHeader from '../../components/Layout/Header'
 import SettingsParameters from './Parameters'
+import {
+    useAuthApiV1MeList,
+    useAuthApiV1WorkspaceRoleBindingsList,
+} from '../../api/auth.gen'
+import { recordToMap } from '../../utilities/record'
+import { ApiRole } from '../../api/api'
 
 const navigation = [
     {
@@ -143,9 +149,6 @@ export default function Settings() {
 
     const getRole = () => {
         if (curWorkspace?.id) {
-            if (curWorkspace?.name === 'main') {
-                return 'admin'
-            }
             if (me?.workspaceAccess) {
                 return me?.workspaceAccess[curWorkspace.id] || 'viewer'
             }
