@@ -112,7 +112,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     ok = false
                 }
             })
-            return ok
+            return currentPage === page?.substring(0, page?.indexOf('?')) && ok
         }
 
         return currentPage === page
