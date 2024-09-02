@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgMetadataApiSetQueryParameterRequest,
     GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
     GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
     GithubComKaytuIoKaytuEnginePkgMetadataApiListQueryParametersResponse,
+    GithubComKaytuIoKaytuEnginePkgMetadataApiSetQueryParameterRequest,
     RequestParams,
 } from './api'
 

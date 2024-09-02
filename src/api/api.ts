@@ -7215,6 +7215,8 @@ export class Api<
                 force_full?: boolean
                 /** Resource Type */
                 resource_type?: string[]
+                /** Cost discovery */
+                cost_discovery?: boolean
             },
             params: RequestParams = {}
         ) =>

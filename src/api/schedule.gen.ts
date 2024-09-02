@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiJobSeqCheckResponse,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiJobSeqCheckResponse,
     RequestParams,
 } from './api'
 
@@ -1071,6 +1071,8 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
         force_full?: boolean
 
         resource_type?: string[]
+
+        cost_discovery?: boolean
     },
     params: RequestParams = {},
     autoExecute = true,
@@ -1099,6 +1101,8 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
                   force_full?: boolean
 
                   resource_type?: string[]
+
+                  cost_discovery?: boolean
               }
             | undefined,
         reqparams: RequestParams
@@ -1197,6 +1201,8 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
                   force_full?: boolean
 
                   resource_type?: string[]
+
+                  cost_discovery?: boolean
               }
             | undefined,
         reqparams: RequestParams

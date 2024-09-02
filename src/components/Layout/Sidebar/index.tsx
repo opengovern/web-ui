@@ -9,7 +9,6 @@ import {
     DocumentChartBarIcon,
     ExclamationCircleIcon,
     Squares2X2Icon,
-    LightBulbIcon,
     MagnifyingGlassIcon,
     PuzzlePieceIcon,
     RectangleStackIcon,
@@ -31,7 +30,6 @@ import {
 import { useComplianceApiV1FindingsCountList } from '../../../api/compliance.gen'
 import { useIntegrationApiV1ConnectionsCountList } from '../../../api/integration.gen'
 import { numericDisplay } from '../../../utilities/numericDisplay'
-import Workspaces from './Workspaces'
 import AnimatedAccordion from '../../AnimatedAccordion'
 import { setAuthHeader } from '../../../api/ApiConfig'
 import { searchAtom } from '../../../utilities/urlstate'

@@ -333,7 +333,6 @@ export default function SettingsCustomization() {
                     flexDirection="row"
                     alignItems="start"
                     justifyContent="start"
-                    className="pr-[118px]"
                 >
                     <NumberMetric
                         metricId="cost_discovery_job_interval"
@@ -341,6 +340,18 @@ export default function SettingsCustomization() {
                         min={24}
                         max={120}
                     />
+                    <Button
+                        variant="secondary"
+                        className="ml-2"
+                        icon={ArrowPathIcon}
+                        disabled={describeExecuted && describeLoading}
+                        loading={describeExecuted && describeLoading}
+                        onClick={() =>
+                            describeTrigger('all', { cost_discovery: true }, {})
+                        }
+                    >
+                        Run now
+                    </Button>
                 </Flex>
                 <Flex
                     flexDirection="row"
