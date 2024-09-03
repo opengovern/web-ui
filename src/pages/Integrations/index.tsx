@@ -1,19 +1,35 @@
-import { Flex, Grid, Title } from '@tremor/react'
+import { Button, Flex, Grid, Text, Title } from '@tremor/react'
+import { useState } from 'react'
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import ConnectorCard from '../../components/Cards/ConnectorCard'
 import Spinner from '../../components/Spinner'
-import OnboardCard from '../../components/Cards/OnboardCard'
-import {
-    useIntegrationApiV1ConnectorsList,
-    useIntegrationApiV1ConnectorsMetricsList,
-} from '../../api/integration.gen'
+import { useIntegrationApiV1ConnectorsList } from '../../api/integration.gen'
 import TopHeader from '../../components/Layout/Header'
 
 export default function Integrations() {
-    const { response: topMetrics, isLoading: metricsLoading } =
-        useIntegrationApiV1ConnectorsMetricsList()
+    const [pageNo, setPageNo] = useState<number>(0)
     const { response: responseConnectors, isLoading: connectorsLoading } =
         useIntegrationApiV1ConnectorsList()
 
+    const connectorList = (
+        Array.isArray(responseConnectors) ? responseConnectors : []
+    ).sort((a, b) => ((a.label || '') > (b.label || '') ? 1 : -1))
+
+    const availableConnectors = connectorList?.filter(
+        (f) => (f.connection_count || 0) === 0
+    )
+    const installedConnectors = connectorList?.filter(
+        (f) =>
+            (f.connection_count || 0) > 0 ||
+            f.name === 'AWS' ||
+            f.name === 'Azure' ||
+            f.name === 'EntraID'
+    )
+    const totalPages = availableConnectors.length / 9
+    const availableConnectorsPage = availableConnectors.slice(
+        pageNo * 9,
+        (pageNo + 1) * 9
+    )
     return (
         <>
             <TopHeader />
@@ -35,54 +51,67 @@ export default function Integrations() {
                 <>
                     <Title className="font-semibold">Installed</Title>
                     <Grid numItemsMd={2} numItemsLg={3} className="gap-14 mt-6">
-                        {(Array.isArray(responseConnectors)
-                            ? responseConnectors
-                            : []
-                        )
-                            ?.filter(
-                                (f) =>
-                                    (f.connection_count || 0) > 0 ||
-                                    f.name === 'AWS' ||
-                                    f.name === 'Azure' ||
-                                    f.name === 'EntraID'
-                            )
-                            .sort((a, b) =>
-                                (a.label || '') > (b.label || '') ? 1 : -1
-                            )
-                            .map((connector) => (
-                                <ConnectorCard
-                                    connector={connector.name}
-                                    title={connector.label}
-                                    status={connector.status}
-                                    count={connector.connection_count}
-                                    description={connector.description}
-                                    tier={connector.tier}
-                                    logo={connector.logo}
-                                />
-                            ))}
+                        {installedConnectors.map((connector) => (
+                            <ConnectorCard
+                                connector={connector.name}
+                                title={connector.label}
+                                status={connector.status}
+                                count={connector.connection_count}
+                                description={connector.description}
+                                tier={connector.tier}
+                                logo={connector.logo}
+                            />
+                        ))}
                     </Grid>
                     <Title className="font-semibold mt-8">Available</Title>
                     <Grid numItemsMd={2} numItemsLg={3} className="gap-14 mt-6">
-                        {(Array.isArray(responseConnectors)
-                            ? responseConnectors
-                            : []
-                        )
-                            ?.filter((f) => (f.connection_count || 0) === 0)
-                            .sort((a, b) =>
-                                (a.label || '') > (b.label || '') ? 1 : -1
-                            )
-                            .map((connector) => (
-                                <ConnectorCard
-                                    connector={connector.name}
-                                    title={connector.label}
-                                    status={connector.status}
-                                    count={connector.connection_count}
-                                    description={connector.description}
-                                    tier={connector.tier}
-                                    logo={connector.logo}
-                                />
-                            ))}
+                        {availableConnectorsPage.map((connector) => (
+                            <ConnectorCard
+                                connector={connector.name}
+                                title={connector.label}
+                                status={connector.status}
+                                count={connector.connection_count}
+                                description={connector.description}
+                                tier={connector.tier}
+                                logo={connector.logo}
+                            />
+                        ))}
                     </Grid>
+                    <Flex
+                        flexDirection="row"
+                        alignItems="center"
+                        justifyContent="center"
+                        className="mt-4 space-x-4"
+                    >
+                        <Text className="font-normal">
+                            Page{' '}
+                            <span className="font-extrabold text-black">
+                                {pageNo + 1}
+                            </span>{' '}
+                            out of{' '}
+                            <span className="font-extrabold text-black">
+                                {totalPages}
+                            </span>
+                        </Text>
+                        <Flex flexDirection="row" className="w-fit">
+                            <Button
+                                variant="light"
+                                disabled={pageNo === 0}
+                                onClick={() => setPageNo(pageNo - 1)}
+                                className="px-2 py-2 !text-3xl bg-white border border-gray-300 rounded-l-full"
+                            >
+                                <ChevronLeftIcon className="h-4 w-6 text-black" />
+                            </Button>
+                            <Button
+                                variant="light"
+                                disabled={pageNo >= totalPages - 1}
+                                onClick={() => setPageNo(pageNo + 1)}
+                                className="px-2 py-2 !text-3xl bg-white border border-gray-300 rounded-r-full"
+                            >
+                                <ChevronRightIcon className="h-4 w-6 text-black" />
+                            </Button>
+                        </Flex>
+                    </Flex>
                 </>
             )}
         </>
