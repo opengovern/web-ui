@@ -82,7 +82,7 @@ export default function SettingsEntitlement() {
         //     value: ownerResp?.userName,
         // },
         {
-            title: 'Workspace version',
+            title: 'Version',
             value: currentWorkspace?.version,
         },
         {

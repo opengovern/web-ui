@@ -148,6 +148,9 @@ export default function BenchmarkSummary() {
                                 id={benchmarkDetail?.id}
                                 response={(e) => setAssignments(e)}
                                 autoAssign={benchmarkDetail?.autoAssign}
+                                tracksDriftEvents={
+                                    benchmarkDetail?.tracksDriftEvents
+                                }
                                 isAutoResponse={(x) => setRecall(true)}
                             />
                             <Evaluate

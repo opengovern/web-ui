@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsClusterWastageResponse,
-    GithubComKaytuIoKaytuEngineServicesWastageApiEntityEC2InstanceWastageRequest,
-    GithubComKaytuIoKaytuEngineServicesWastageApiEntityEC2InstanceWastageResponse,
     GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRdsWastageRequest,
     GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsRdsWastageResponse,
     GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsClusterWastageRequest,
+    GithubComKaytuIoKaytuEngineServicesWastageApiEntityAwsClusterWastageResponse,
+    GithubComKaytuIoKaytuEngineServicesWastageApiEntityEC2InstanceWastageRequest,
+    GithubComKaytuIoKaytuEngineServicesWastageApiEntityEC2InstanceWastageResponse,
     RequestParams,
 } from './api'
 

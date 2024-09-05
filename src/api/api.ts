@@ -430,11 +430,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark {
      * @example true
      */
     autoAssign?: boolean
-    /**
-     * Whether the benchmark is baseline or not
-     * @example true
-     */
-    baseline?: boolean
     /** Benchmark category */
     category?: string
     /**
@@ -468,22 +463,12 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark {
      */
     documentURI?: string
     /**
-     * Whether the benchmark is enabled or not
-     * @example true
-     */
-    enabled?: boolean
-    /**
      * Benchmark ID
      * @example "azure_cis_v140"
      */
     id?: string
     /** Benchmark logo URI */
     logoURI?: string
-    /**
-     * Whether the benchmark is managed or not
-     * @example true
-     */
-    managed?: boolean
     /**
      * Benchmark display code
      * @example "CIS 1.4.0"
@@ -496,6 +481,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark {
      * @example "Azure CIS v1.4.0"
      */
     title?: string
+    /**
+     * Whether the benchmark tracks drift events or not
+     * @example true
+     */
+    tracksDriftEvents?: boolean
     /**
      * Benchmark last update date
      * @example "2020-01-01T00:00:00Z"
@@ -573,11 +563,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      * @example true
      */
     autoAssign?: boolean
-    /**
-     * Whether the benchmark is baseline or not
-     * @example true
-     */
-    baseline?: boolean
     /** Benchmark category */
     category?: string
     checks?: TypesSeverityResult
@@ -615,11 +600,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      * @example "benchmarks/azure_cis_v140.md"
      */
     documentURI?: string
-    /**
-     * Whether the benchmark is enabled or not
-     * @example true
-     */
-    enabled?: boolean
     /** @example "2020-01-01T00:00:00Z" */
     evaluatedAt?: string
     /**
@@ -631,11 +611,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
     lastJobStatus?: string
     /** Benchmark logo URI */
     logoURI?: string
-    /**
-     * Whether the benchmark is managed or not
-     * @example true
-     */
-    managed?: boolean
     /**
      * Benchmark display code
      * @example "CIS 1.4.0"
@@ -650,6 +625,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      */
     title?: string
     topConnections?: GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord[]
+    /**
+     * Whether the benchmark tracks drift events or not
+     * @example true
+     */
+    tracksDriftEvents?: boolean
     /**
      * Benchmark last update date
      * @example "2020-01-01T00:00:00Z"
@@ -4439,6 +4419,32 @@ export class Api<
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Changes benchmark settings.
+         *
+         * @tags compliance
+         * @name ApiV1BenchmarksSettingsCreate
+         * @summary change benchmark settings
+         * @request POST:/compliance/api/v1/benchmarks/{benchmark_id}/settings
+         * @secure
+         */
+        apiV1BenchmarksSettingsCreate: (
+            benchmarkId?: string,
+            query?: {
+                /** tracksDriftEvents */
+                tracksDriftEvents?: boolean
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/compliance/api/v1/benchmarks/${benchmarkId}/settings`,
+                method: 'POST',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
                 ...params,
             }),
 

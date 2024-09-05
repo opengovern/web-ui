@@ -96,9 +96,7 @@ export default function APIKeyRecord({ item, refresh }: APIKeyRecordProps) {
                         <Spinner />
                     </Flex>
                 ) : (
-                    <Text className="text-base w-1/4">
-                        {response?.userName}
-                    </Text>
+                    <Text className="text-base w-1/4">{response?.email}</Text>
                 )}
 
                 <Flex

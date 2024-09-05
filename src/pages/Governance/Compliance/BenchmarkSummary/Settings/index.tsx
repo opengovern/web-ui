@@ -10,6 +10,7 @@ import {
     useComplianceApiV1AssignmentsBenchmarkDetail,
     useComplianceApiV1AssignmentsConnectionCreate,
     useComplianceApiV1AssignmentsConnectionDelete,
+    useComplianceApiV1BenchmarksSettingsCreate,
 } from '../../../../../api/compliance.gen'
 import Spinner from '../../../../../components/Spinner'
 
@@ -17,6 +18,7 @@ interface ISettings {
     id: string | undefined
     response: (x: number) => void
     autoAssign: boolean | undefined
+    tracksDriftEvents: boolean | undefined
     isAutoResponse: (x: boolean) => void
 }
 
@@ -83,6 +85,7 @@ export default function Settings({
     id,
     response,
     autoAssign,
+    tracksDriftEvents,
     isAutoResponse,
 }: ISettings) {
     const [open, setOpen] = useState(false)
@@ -140,6 +143,9 @@ export default function Settings({
         isLoading,
         sendNow: refreshList,
     } = useComplianceApiV1AssignmentsBenchmarkDetail(String(id), {}, false)
+
+    const { sendNowWithParams: changeSettings } =
+        useComplianceApiV1BenchmarksSettingsCreate(String(id), {}, {}, false)
 
     useEffect(() => {
         if (id && !assignments) {
@@ -292,6 +298,17 @@ export default function Settings({
                         </Table>
                     </Flex>
                 )}
+                <Flex className="w-full gap-2 mt-4" justifyContent="between">
+                    <Text className="text-gray-800 whitespace-nowrap">
+                        Maintain Detailed audit trails of Drifts Events
+                    </Text>
+                    <Switch
+                        checked={tracksDriftEvents}
+                        onChange={(e) =>
+                            changeSettings(id, { tracksDriftEvents: e }, {})
+                        }
+                    />
+                </Flex>
             </DrawerPanel>
         </>
     )
