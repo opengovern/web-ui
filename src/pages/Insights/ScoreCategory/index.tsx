@@ -692,7 +692,12 @@ export default function ScoreCategory() {
                     'Tag',
                     'Score Category',
                 ]}
-                initialFilters={['Score Category', 'Cloud Account', 'Product']}
+                initialFilters={[
+                    'Score Category',
+                    'Cloud Account',
+                    'Product',
+                    'Tag',
+                ]}
             />
 
             <Flex alignItems="start" className="gap-4">
