@@ -20,6 +20,7 @@ interface ISettings {
     autoAssign: boolean | undefined
     tracksDriftEvents: boolean | undefined
     isAutoResponse: (x: boolean) => void
+    reload: () => void
 }
 
 const columns: (isDemo: boolean) => IColumn<any, any>[] = (isDemo) => [
@@ -87,6 +88,7 @@ export default function Settings({
     autoAssign,
     tracksDriftEvents,
     isAutoResponse,
+    reload,
 }: ISettings) {
     const [open, setOpen] = useState(false)
     const [firstLoading, setFirstLoading] = useState<boolean>(true)
@@ -144,8 +146,17 @@ export default function Settings({
         sendNow: refreshList,
     } = useComplianceApiV1AssignmentsBenchmarkDetail(String(id), {}, false)
 
-    const { sendNowWithParams: changeSettings } =
-        useComplianceApiV1BenchmarksSettingsCreate(String(id), {}, {}, false)
+    const {
+        isLoading: changeSettingsLoading,
+        isExecuted: changeSettingsExecuted,
+        sendNowWithParams: changeSettings,
+    } = useComplianceApiV1BenchmarksSettingsCreate(String(id), {}, {}, false)
+
+    useEffect(() => {
+        if (!changeSettingsLoading) {
+            reload()
+        }
+    }, [changeSettingsLoading])
 
     useEffect(() => {
         if (id && !assignments) {
@@ -302,12 +313,16 @@ export default function Settings({
                     <Text className="text-gray-800 whitespace-nowrap">
                         Maintain Detailed audit trails of Drifts Events
                     </Text>
-                    <Switch
-                        checked={tracksDriftEvents}
-                        onChange={(e) =>
-                            changeSettings(id, { tracksDriftEvents: e }, {})
-                        }
-                    />
+                    {changeSettingsLoading && changeSettingsExecuted ? (
+                        <Spinner />
+                    ) : (
+                        <Switch
+                            checked={tracksDriftEvents}
+                            onChange={(e) =>
+                                changeSettings(id, { tracksDriftEvents: e }, {})
+                            }
+                        />
+                    )}
                 </Flex>
             </DrawerPanel>
         </>

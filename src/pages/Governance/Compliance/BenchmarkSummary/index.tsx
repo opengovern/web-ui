@@ -82,15 +82,6 @@ export default function BenchmarkSummary() {
             (benchmarkKPIStart?.conformanceStatusSummary?.failed || 0) +
             (benchmarkKPIStart?.conformanceStatusSummary?.passed || 0) ===
         0
-    const {
-        response: events,
-        isLoading: eventsLoading,
-        sendNow: eventsSend,
-    } = useComplianceApiV1FindingEventsCountList({
-        benchmarkID: benchmarkId ? [benchmarkId] : undefined,
-        startTime: activeTimeRange.start.unix(),
-        endTime: activeTimeRange.end.unix(),
-    })
 
     const {
         response: trend,
@@ -152,6 +143,7 @@ export default function BenchmarkSummary() {
                                     benchmarkDetail?.tracksDriftEvents
                                 }
                                 isAutoResponse={(x) => setRecall(true)}
+                                reload={() => updateDetail()}
                             />
                             <Evaluate
                                 id={benchmarkDetail?.id}

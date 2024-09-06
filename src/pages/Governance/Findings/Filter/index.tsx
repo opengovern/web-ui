@@ -114,6 +114,15 @@ export default function Filter({ onApply, type }: IFilters) {
         )
     const [selectedFilters, setSelectedFilters] = useState<string[]>([
         'conformance_status',
+        'provider',
+        'lifecycle',
+        'severity',
+        'connection',
+        'control',
+        'benchmark',
+        'resource',
+        'date',
+        'eventDate',
     ])
 
     useEffect(() => {

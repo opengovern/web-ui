@@ -76,8 +76,9 @@ const DetailCellRenderer = ({ data }: IDetailCellRenderer) => {
 
 const columns: (
     category: string,
-    groupByServiceName: boolean
-) => IColumn<IRecord, any>[] = (category, groupByServiceName) => {
+    groupByServiceName: boolean,
+    addTagFilter: (tag: string) => void
+) => IColumn<IRecord, any>[] = (category, groupByServiceName, addTagFilter) => {
     const fixedColumns: IColumn<IRecord, any>[] = [
         {
             headerName: 'Title',
@@ -233,7 +234,14 @@ const columns: (
                             .filter((i) => i[0] === 'score_tags')
                             .map((item) =>
                                 item[1].map((i) => {
-                                    return <Badge>{i}</Badge>
+                                    return (
+                                        <Badge
+                                            className="cursor-pointer"
+                                            onClick={() => addTagFilter(i)}
+                                        >
+                                            {i}
+                                        </Badge>
+                                    )
                                 })
                             )}
                     </Flex>
@@ -684,12 +692,7 @@ export default function ScoreCategory() {
                     'Tag',
                     'Score Category',
                 ]}
-                initialFilters={[
-                    'Score Category',
-                    'Cloud Account',
-                    'Product',
-                    'Environment',
-                ]}
+                initialFilters={['Score Category', 'Cloud Account', 'Product']}
             />
 
             <Flex alignItems="start" className="gap-4">
@@ -727,7 +730,12 @@ export default function ScoreCategory() {
                             id="insight_list"
                             masterDetail
                             detailCellRenderer={detailCellRenderer}
-                            columns={columns(category, isGrouped)}
+                            columns={columns(category, isGrouped, (tag) => {
+                                setSelectedScoreTags([
+                                    ...selectedScoreTags,
+                                    tag,
+                                ])
+                            })}
                             rowData={resFiltered?.filter((v) => {
                                 return hideZero
                                     ? (v.totalResourcesCount || 0) !== 0
