@@ -86,6 +86,17 @@ export default function SettingsEntitlement() {
             value: currentWorkspace?.version,
         },
         {
+            title: 'License',
+            value: (
+                <a
+                    href="https://github.com/elastic/eui/blob/main/licenses/ELASTIC-LICENSE-2.0.md"
+                    className="text-blue-600 underline"
+                >
+                    Elastic License V2
+                </a>
+            ),
+        },
+        {
             title: 'Creation date',
             value: dateDisplay(
                 currentWorkspace?.createdAt || Date.now().toString()

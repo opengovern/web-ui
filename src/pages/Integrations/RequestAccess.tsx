@@ -13,6 +13,9 @@ export default function RequestAccess() {
         if (window.location.href.indexOf('stacks') > 0) {
             return `Dynamically group infrastructure, code repos, and entities as Apps & Environments for targeted governance.`
         }
+        if (window.location.href.indexOf('dashboard') > 0) {
+            return `Create custom dashboards for teams, functions, and roles—In-App or through BI tools like PowerBI, Tableau, Looker, or Grafana.`
+        }
         return `${searchParams.get(
             'connector'
         )} and 50+ others are available for Enterprise Users. Get a 30-day obligation trial now.`

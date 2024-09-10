@@ -83,6 +83,11 @@ const authRoutes = [
         element: <RequestAccess />,
     },
     {
+        key: 'dashboards',
+        path: '/ws/:ws/dashboards',
+        element: <RequestAccess />,
+    },
+    {
         key: 'infrastructure',
         path: '/ws/:ws/infrastructure',
         element: <Assets />,

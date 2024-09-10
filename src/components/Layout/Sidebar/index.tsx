@@ -280,15 +280,15 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     },
                 ],
             },
-            {
-                name: 'Security',
-                icon: ShieldCheckIcon,
-                page: 'security-overview',
-                isPreview: false,
-                isLoading: false,
-                count: undefined,
-                error: false,
-            },
+            // {
+            //     name: 'Security',
+            //     icon: ShieldCheckIcon,
+            //     page: 'security-overview',
+            //     isPreview: false,
+            //     isLoading: false,
+            //     count: undefined,
+            //     error: false,
+            // },
             {
                 name: 'Query',
                 page: 'query',
@@ -321,7 +321,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             },
             {
                 name: 'Dashboards',
-                page: 'resource-collection',
+                page: 'dashboards',
                 icon: ArrowUpCircleIcon,
                 isPreview: true,
             },
