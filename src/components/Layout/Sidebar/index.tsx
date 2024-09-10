@@ -323,7 +323,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             {
                 name: 'Dashboards',
                 page: 'dashboards',
-                icon: PresentationChartBar,
+                icon: PresentationChartBarIcon,
                 isPreview: true,
             },
             {
