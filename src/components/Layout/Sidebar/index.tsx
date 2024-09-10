@@ -16,6 +16,7 @@ import {
     ClipboardDocumentCheckIcon,
     DocumentMagnifyingGlassIcon,
     ArrowUpCircleIcon,
+    PresentationChartBarIcon
 } from '@heroicons/react/24/outline'
 import { useAtom, useAtomValue } from 'jotai'
 import { Popover, Transition } from '@headlessui/react'
@@ -322,7 +323,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             {
                 name: 'Dashboards',
                 page: 'dashboards',
-                icon: ArrowUpCircleIcon,
+                icon: PresentationChartBar,
                 isPreview: true,
             },
             {
