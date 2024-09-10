@@ -16,7 +16,7 @@ import {
     ClipboardDocumentCheckIcon,
     DocumentMagnifyingGlassIcon,
     ArrowUpCircleIcon,
-    PresentationChartBarIcon
+    PresentationChartBarIcon,
 } from '@heroicons/react/24/outline'
 import { useAtom, useAtomValue } from 'jotai'
 import { Popover, Transition } from '@headlessui/react'
