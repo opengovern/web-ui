@@ -36,6 +36,7 @@ import SecurityOverview from '../pages/Governance/Overview'
 import WorkloadOptimizer from '../pages/WorkloadOptimizer'
 import RequestAccess from '../pages/Integrations/RequestAccess'
 import SettingsJobs from '../pages/Settings/Jobs'
+import Invetory from '../pages/Inventory'
 
 const authRoutes = [
     {
@@ -342,6 +343,11 @@ const authRoutes = [
         key: 'request a demo',
         path: '/ws/requestdemo',
         element: <RequestDemo />,
+    },
+    {
+        key: 'All inventory',
+        path: '/ws/:ws/inventory/all-queries',
+        element: <Invetory />,
     },
 ]
 

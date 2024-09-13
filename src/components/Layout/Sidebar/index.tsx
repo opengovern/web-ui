@@ -17,6 +17,7 @@ import {
     DocumentMagnifyingGlassIcon,
     ArrowUpCircleIcon,
     PresentationChartBarIcon,
+    CubeTransparentIcon,
 } from '@heroicons/react/24/outline'
 import { useAtom, useAtomValue } from 'jotai'
 import { Popover, Transition } from '@headlessui/react'
@@ -182,6 +183,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 name: 'SCORE',
                 page: 'score',
                 icon: DocumentChartBarIcon,
+                isPreview: false,
+            },
+            {
+                name: 'All Inventory',
+                page: 'inventory/all-queries',
+                icon: CubeIcon,
                 isPreview: false,
             },
             {
