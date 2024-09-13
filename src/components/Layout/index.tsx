@@ -15,7 +15,12 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
     if (url[1] === 'ws') {
         url.shift()
     }
-    const current = url[2]
+    let current = url[2]
+    if (url.length > 3) {
+        for (let i = 3; i < url.length; i += 1) {
+            current += `/${url[i]}`
+        }
+    }
     const workspace = url[1]
     const showSidebar =
         workspace !== 'workspaces' &&

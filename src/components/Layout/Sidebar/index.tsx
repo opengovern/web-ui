@@ -93,6 +93,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const searchParams = useAtomValue(searchAtom)
 
     const isCurrentPage = (page: string | string[] | undefined): boolean => {
+        // console.log(page)
         if (Array.isArray(page)) {
             return page.map((p) => isCurrentPage(p)).includes(true)
         }
@@ -113,7 +114,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             })
             return currentPage === page?.substring(0, page?.indexOf('?')) && ok
         }
-
+        console.log(currentPage, 'current')
+        console.log(page)
         return currentPage === page
     }
 
