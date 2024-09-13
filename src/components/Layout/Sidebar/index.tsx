@@ -93,7 +93,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const searchParams = useAtomValue(searchAtom)
 
     const isCurrentPage = (page: string | string[] | undefined): boolean => {
-        // console.log(page)
         if (Array.isArray(page)) {
             return page.map((p) => isCurrentPage(p)).includes(true)
         }
@@ -114,11 +113,20 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             })
             return currentPage === page?.substring(0, page?.indexOf('?')) && ok
         }
-        console.log(currentPage, 'current')
-        console.log(page)
         return currentPage === page
     }
-
+    const findPage = (page: string | string[]): string => {
+        if (page.includes('?')) {
+            return `/ws/${workspace}/${page}`
+        }
+        if (searchParams) {
+            return `/ws/${workspace}/${page}?${searchParams}`
+        }
+        if (page.includes('/')) {
+            return `/ws/${workspace}/${page}`
+        }
+        return `/ws/${workspace}/${page}?${searchParams}`
+    }
     useEffect(() => {
         if (isAuthenticated) {
             getAccessTokenSilently()
@@ -481,11 +489,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         >
                                             {item.children.map((i) => (
                                                 <Link
-                                                    to={
-                                                        i.page.includes('?')
-                                                            ? `/ws/${workspace}/${i.page}`
-                                                            : `/ws/${workspace}/${i.page}?${searchParams}`
-                                                    }
+                                                    to={findPage(i.page)}
                                                     className={`my-0.5 py-2 flex rounded-md relative
                                                     ${
                                                         isCurrentPage(i.page)
@@ -576,13 +580,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         {item.children.map(
                                                             (i) => (
                                                                 <Link
-                                                                    to={
-                                                                        i.page.includes(
-                                                                            '?'
-                                                                        )
-                                                                            ? `/ws/${workspace}/${i.page}`
-                                                                            : `/ws/${workspace}/${i.page}?${searchParams}`
-                                                                    }
+                                                                    to={findPage(
+                                                                        i.page
+                                                                    )}
                                                                     className={`my-0.5 py-2 px-4 flex justify-start rounded-md relative
                                                     ${
                                                         isCurrentPage(i.page)
