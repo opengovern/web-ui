@@ -331,6 +331,16 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 page: 'settings',
                 icon: Cog6ToothIcon,
                 isPreview: false,
+                children: [
+                    {
+                        name: 'All Settings',
+                        page: 'settings',
+                    },
+                    {
+                        name: 'Jobs',
+                        page: 'settings/jobs',
+                    },
+                ],
             },
         ]
     }

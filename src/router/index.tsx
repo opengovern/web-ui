@@ -35,6 +35,7 @@ import ScoreDetails from '../pages/Insights/Details'
 import SecurityOverview from '../pages/Governance/Overview'
 import WorkloadOptimizer from '../pages/WorkloadOptimizer'
 import RequestAccess from '../pages/Integrations/RequestAccess'
+import SettingsJobs from '../pages/Settings/Jobs'
 
 const authRoutes = [
     {
@@ -231,6 +232,11 @@ const authRoutes = [
         key: 'settings page',
         path: '/ws/:ws/settings',
         element: <Settings />,
+    },
+    {
+        key: 'settings Jobs',
+        path: '/ws/:ws/settings/jobs',
+        element: <SettingsJobs />,
     },
     {
         key: 'security overview',

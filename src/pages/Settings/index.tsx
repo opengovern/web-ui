@@ -73,13 +73,13 @@ const navigation = [
     //         },
     //     ],
     // },
-    {
-        name: 'Jobs',
-        icon: BugAntIcon,
-        page: 'jobs',
-        role: ['admin', 'editor', 'viewer'],
-        children: [],
-    },
+    // {
+    //     name: 'Jobs',
+    //     icon: BugAntIcon,
+    //     page: 'jobs',
+    //     role: ['admin', 'editor', 'viewer'],
+    //     children: [],
+    // },
     {
         name: 'Metadata',
         icon: AdjustmentsVerticalIcon,
