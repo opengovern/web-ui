@@ -1589,6 +1589,20 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem {
     /** Title */
     title?: string
 }
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2 {
+    /** Category (Tags[category]) */
+    category?: string
+    /** Provider */
+    connectors?: SourceType[]
+    /** Query Id */
+    id?: string
+    /** Query */
+    query?: string
+    /** Tags */
+    tags?: Record<string, string>
+    /** Title */
+    title?: string
+}
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQuerySortItem {
     direction?: 'asc' | 'desc'
@@ -5673,6 +5687,31 @@ export class Api<
                 any
             >({
                 path: `/inventory/api/v1/query`,
+                method: 'GET',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+        /**
+         * @description Retrieving list of smart queries by specified filters
+         *
+         * @tags smart_query
+         * @name ApiV2QueryList
+         * @summary List smart queries
+         * @request GET:/inventory/api/v2/queries
+         * @secure
+         */
+        apiV2QueryList: (
+            request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem[],
+                any
+            >({
+                path: `/inventory/api/v2/queries`,
                 method: 'GET',
                 body: request,
                 secure: true,

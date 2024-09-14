@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
     Accordion,
     AccordionBody,
@@ -25,6 +26,8 @@ import {
 import AxiosAPI from '../../../api/ApiConfig'
 import { useScheduleApiV1JobsCreate } from '../../../api/schedule.gen'
 import DrawerPanel from '../../../components/DrawerPanel'
+import KFilter from '../../../components/Filter'
+import { CloudIcon } from '@heroicons/react/24/outline'
 
 const columns = () => {
     const temp: IColumn<any, any>[] = [
@@ -46,18 +49,9 @@ const columns = () => {
             filter: false,
             suppressMenu: true,
             resizable: true,
-            hide: true,
+            hide: false,
         },
-        {
-            field: 'updatedAt',
-            headerName: 'Updated At',
-            type: 'date',
-            sortable: true,
-            filter: false,
-            suppressMenu: true,
-            resizable: true,
-            hide: true,
-        },
+
         {
             field: 'type',
             headerName: 'Job Type',
@@ -95,6 +89,7 @@ const columns = () => {
             filter: false,
             resizable: true,
             suppressMenu: true,
+            hide: true,
         },
         {
             field: 'title',
@@ -103,8 +98,9 @@ const columns = () => {
             sortable: false,
             filter: false,
             resizable: true,
-            suppressMenu: true,
+            suppressMenu: false,
         },
+
         {
             field: 'status',
             headerName: 'Status',
@@ -169,6 +165,16 @@ const columns = () => {
             },
         },
         {
+            field: 'updatedAt',
+            headerName: 'Updated At',
+            type: 'date',
+            sortable: true,
+            filter: false,
+            suppressMenu: true,
+            resizable: true,
+            hide: false,
+        },
+        {
             field: 'failureReason',
             headerName: 'Failure Reason',
             type: 'string',
@@ -200,19 +206,27 @@ const jobTypes = [
         value: 'analytics',
     },
 ]
-
+interface Option {
+    label: string | undefined
+    value: string | undefined
+}
 export default function SettingsJobs() {
     const [open, setOpen] = useState(false)
     const [clickedJob, setClickedJob] =
         useState<GithubComKaytuIoKaytuEnginePkgDescribeApiJob>()
     const [searchParams, setSearchParams] = useSearchParams()
-    const [jobTypeFilter, setJobTypeFilter] = useState<string>(
-        searchParams.get('type') || ''
+    const [jobTypeFilter, setJobTypeFilter] = useState<string[] | undefined>(
+        // @ts-ignore
+        searchParams?.get('type') && searchParams?.get('type') !== null
+            ? [searchParams.get('type')]
+            : []
     )
-    const [statusFilter, setStatusFilter] = useState<string>(
-        searchParams.get('status') || ''
-    )
-    const [allStatuses, setAllStatuses] = useState<string[]>([])
+    const [statusFilter, setStatusFilter] = useState<
+        string[] | undefined
+        // @ts-ignore
+    >(searchParams.get('status') ? [searchParams.get('status')] : [])
+    const [allStatuses, setAllStatuses] = useState<Option[]>([])
+
     const { response } = useScheduleApiV1JobsCreate({
         hours: 24,
         pageStart: 0,
@@ -222,25 +236,56 @@ export default function SettingsJobs() {
     useEffect(() => {
         setAllStatuses(
             response?.summaries
-                ?.map((v) => v.status || '')
+                ?.map((v) => {
+                    return { label: v.status, value: v.status }
+                })
                 .filter(
                     (thing, i, arr) => arr.findIndex((t) => t === thing) === i
                 ) || []
         )
     }, [response])
-
+    const arrayToString = (arr: string[],title: string) => {
+        let temp = ``
+        arr.map((item, index) => {
+            if (index == 0) {
+                temp += arr[index]
+            } else {
+                temp += `&${title}=${arr[index]}`
+            }
+        })
+        console.log(temp)
+        return temp
+    }
     useEffect(() => {
         if (
             searchParams.get('type') !== jobTypeFilter ||
             searchParams.get('status') !== statusFilter
         ) {
             if (jobTypeFilter !== '') {
-                searchParams.set('type', jobTypeFilter)
+                if (typeof jobTypeFilter === 'string') {
+                    searchParams.set('type', jobTypeFilter)
+                } else {
+                    if (jobTypeFilter && jobTypeFilter?.length > 0) {
+                        searchParams.set(
+                            'type',
+                            arrayToString(jobTypeFilter, 'type')
+                        )
+                    }
+                }
             } else {
                 searchParams.delete('type')
             }
             if (statusFilter !== '') {
-                searchParams.set('status', statusFilter)
+                if (typeof statusFilter === 'string') {
+                    searchParams.set('type', statusFilter)
+                } else {
+                    if (statusFilter && statusFilter?.length > 0) {
+                        searchParams.set(
+                            'type',
+                            arrayToString(statusFilter, 'type')
+                        )
+                    }
+                }
             } else {
                 searchParams.delete('status')
             }
@@ -262,9 +307,8 @@ export default function SettingsJobs() {
                         sortOrder: params.request.sortModel
                             .at(0)
                             ?.sort?.toUpperCase(),
-                        statusFilter: statusFilter === '' ? [] : [statusFilter],
-                        typeFilters:
-                            jobTypeFilter === '' ? [] : [jobTypeFilter],
+                        statusFilter: statusFilter,
+                        typeFilters: jobTypeFilter,
                     })
                     .then((resp) => {
                         params.success({
@@ -301,10 +345,39 @@ export default function SettingsJobs() {
     ]
 
     return (
-        <Card>
-            <Title className="font-semibold mb-5">Jobs</Title>
-            <Flex alignItems="start">
-                <Card className="sticky top-6 min-w-[200px] max-w-[200px]">
+        <Flex flexDirection="col">
+            <Flex
+                flexDirection="row"
+                alignItems="start"
+                justifyContent="start"
+                className="gap-2"
+            >
+                <KFilter
+                    options={jobTypes}
+                    type="multi"
+                    selectedItems={jobTypeFilter}
+                    onChange={(values: string[] ) => {
+                        setJobTypeFilter(values);
+                    }}
+                    label="Job Types"
+                    icon={CloudIcon}
+                />
+                <KFilter
+                    options={allStatuses}
+                    type="multi"
+                    selectedItems={statusFilter}
+                    onChange={(values: string[]) => {
+                        setStatusFilter(values)
+                    }}
+                    label="Job Status"
+                    icon={CloudIcon}
+                />
+            </Flex>
+            <Card className="mt-4">
+                <Title className="font-semibold mb-5">Jobs</Title>
+
+                <Flex alignItems="start">
+                    {/* <Card className="sticky top-6 min-w-[200px] max-w-[200px]">
                     <Accordion
                         defaultOpen
                         className="border-0 rounded-none bg-transparent mb-1"
@@ -371,46 +444,47 @@ export default function SettingsJobs() {
                             </Flex>
                         </AccordionBody>
                     </Accordion>
-                </Card>
-                <Flex className="pl-4">
-                    <Table
-                        id="jobs"
-                        columns={columns()}
-                        serverSideDatasource={serverSideRows}
-                        onCellClicked={(event) => {
-                            setClickedJob(event.data)
-                            setOpen(true)
-                        }}
-                        options={{
-                            rowModelType: 'serverSide',
-                            serverSideDatasource: serverSideRows,
-                        }}
-                    />
+                </Card> */}
+                    <Flex className="pl-4">
+                        <Table
+                            id="jobs"
+                            columns={columns()}
+                            serverSideDatasource={serverSideRows}
+                            onCellClicked={(event) => {
+                                setClickedJob(event.data)
+                                setOpen(true)
+                            }}
+                            options={{
+                                rowModelType: 'serverSide',
+                                serverSideDatasource: serverSideRows,
+                            }}
+                        />
+                    </Flex>
                 </Flex>
-            </Flex>
-            <DrawerPanel
-                open={open}
-                onClose={() => setOpen(false)}
-                title="Job Details"
-            >
-                <Flex flexDirection="col">
-                    {clickedJobDetails.map((item) => {
-                        return (
-                            <Flex
-                                flexDirection="row"
-                                justifyContent="between"
-                                alignItems="start"
-                                className="mt-2"
-                            >
-                                <Text className="w-56 font-bold">
-                                    {item.title}
-                                </Text>
-                                <Text className="w-full">{item.value}</Text>
-                            </Flex>
-                        )
-                    })}
-                </Flex>
-            </DrawerPanel>
-        </Card>
+                <DrawerPanel
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    title="Job Details"
+                >
+                    <Flex flexDirection="col">
+                        {clickedJobDetails.map((item) => {
+                            return (
+                                <Flex
+                                    flexDirection="row"
+                                    justifyContent="between"
+                                    alignItems="start"
+                                    className="mt-2"
+                                >
+                                    <Text className="w-56 font-bold">
+                                        {item.title}
+                                    </Text>
+                                    <Text className="w-full">{item.value}</Text>
+                                </Flex>
+                            )
+                        })}
+                    </Flex>
+                </DrawerPanel>
+            </Card>
+        </Flex>
     )
 }

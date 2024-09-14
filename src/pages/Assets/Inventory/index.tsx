@@ -43,23 +43,23 @@ import {
     useInventoryApiV1QueryList,
     useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsCategoriesList,
-} from '../../api/inventory.gen'
-import Spinner from '../../components/Spinner'
-import { getErrorMessage } from '../../types/apierror'
-import DrawerPanel from '../../components/DrawerPanel'
-import { RenderObject } from '../../components/RenderObject'
-import Table, { IColumn } from '../../components/Table'
+    useInventoryApiV2QueryList,
+} from '../../../api/inventory.gen'
+import Spinner from '../../../components/Spinner'
+import { getErrorMessage } from '../../../types/apierror'
+import DrawerPanel from '../../../components/DrawerPanel'
+import { RenderObject } from '../../../components/RenderObject'
+import Table, { IColumn } from '../../../components/Table'
 import ResourceFindingDetail from './ResourceFindingDetail'
 
 import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
-} from '../../api/api'
-import { isDemoAtom, queryAtom, runQueryAtom } from '../../store'
-import { snakeCaseToLabel } from '../../utilities/labelMaker'
-import { numberDisplay } from '../../utilities/numericDisplay'
-import TopHeader from '../../components/Layout/Header'
-import Filter from './Filter'
+} from '../../../api/api'
+import { isDemoAtom, queryAtom, runQueryAtom } from '../../../store'
+import { snakeCaseToLabel } from '../../../utilities/labelMaker'
+import { numberDisplay } from '../../../utilities/numericDisplay'
+import TopHeader from '../../../components/Layout/Header'
 
 export const getTable = (
     headers: string[] | undefined,
@@ -153,22 +153,22 @@ const columns: IColumn<
         sortable: true,
         resizable: false,
     },
-    {
-        type: 'string',
-        width: 130,
-        resizable: false,
-        sortable: false,
-        cellRenderer: (params: any) => (
-            <Flex
-                justifyContent="center"
-                alignItems="center"
-                className="h-full"
-            >
-                <PlayCircleIcon className="h-5 text-kaytu-500 mr-1" />
-                <Text className="text-kaytu-500">Run query</Text>
-            </Flex>
-        ),
-    },
+    // {
+    //     type: 'string',
+    //     width: 130,
+    //     resizable: false,
+    //     sortable: false,
+    //     cellRenderer: (params: any) => (
+    //         <Flex
+    //             justifyContent="center"
+    //             alignItems="center"
+    //             className="h-full"
+    //         >
+    //             <PlayCircleIcon className="h-5 text-kaytu-500 mr-1" />
+    //             <Text className="text-kaytu-500">Run query</Text>
+    //         </Flex>
+    //     ),
+    // },
 ]
 
 export default function Invetory() {
@@ -180,71 +180,21 @@ export default function Invetory() {
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedRow, setSelectedRow] = useState({})
     const [openDrawer, setOpenDrawer] = useState(false)
-    const [openSlider, setOpenSlider] = useState(true)
+    const [openSlider, setOpenSlider] = useState(false)
     const [openSearch, setOpenSearch] = useState(true)
     const [showEditor, setShowEditor] = useState(true)
     const isDemo = useAtomValue(isDemoAtom)
     const [pageSize, setPageSize] = useState(1000)
     const [autoRun, setAutoRun] = useState(false)
     const [engine, setEngine] = useState('odysseus-sql')
-    const [selectedGroup, setSelectedGroup] = useState<
-        'findings' | 'resources' | 'controls' | 'accounts' | 'events'
-    >('findings')
+   
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2AnalyticsCategoriesList()
     const { response: queries, isLoading: queryLoading } =
-        useInventoryApiV1QueryList({})
-    const {
-        response: queryResponse,
-        isLoading,
-        isExecuted,
-        sendNow,
-        error,
-    } = useInventoryApiV1QueryRunCreate(
-        {
-            page: { no: 1, size: pageSize },
-            engine,
-            query: code,
-        },
-        {},
-        autoRun
-    )
-
-    useEffect(() => {
-        if (isExecuted && !isLoading && code.trim().length > 0) {
-            sendNow()
-        }
-    }, [pageSize])
-
-    useEffect(() => {
-        if (autoRun) {
-            setAutoRun(false)
-        }
-        if (queryResponse?.query?.length) {
-            setSelectedIndex(2)
-        } else setSelectedIndex(0)
-    }, [queryResponse])
-
-    useEffect(() => {
-        if (!loaded && code.length > 0) {
-            sendNow()
-            setLoaded(true)
-        }
-    }, [])
-
-    useEffect(() => {
-        if (code.length) setShowEditor(true)
-    }, [code])
-
-    useEffect(() => {
-        if (runQuery.length > 0) {
-            setCode(runQuery)
-            setShowEditor(true)
-            setRunQuery('')
-            setAutoRun(true)
-        }
-    }, [runQuery])
-
+        useInventoryApiV2QueryList({})
+    
+   
+    
     const recordToArray = (record?: Record<string, string[]> | undefined) => {
         if (record === undefined) {
             return []
@@ -258,18 +208,7 @@ export default function Invetory() {
         })
     }
 
-    const memoColumns = useMemo(
-        () =>
-            getTable(queryResponse?.headers, queryResponse?.result, isDemo)
-                .columns,
-        [queryResponse, isDemo]
-    )
-    const memoCount = useMemo(
-        () =>
-            getTable(queryResponse?.headers, queryResponse?.result, isDemo)
-                .count,
-        [queryResponse, isDemo]
-    )
+ 
 
     return (
         <>
@@ -278,7 +217,7 @@ export default function Invetory() {
                 <Spinner className="mt-56" />
             ) : (
                 <Flex alignItems="start">
-                    <DrawerPanel
+                    {/* <DrawerPanel
                         open={openDrawer}
                         onClose={() => setOpenDrawer(false)}
                     >
@@ -369,7 +308,7 @@ export default function Invetory() {
                                 </Flex>
                             </Button>
                         </Flex>
-                    )}
+                    )} */}
                     <Flex flexDirection="col" className="w-full pl-6">
                         {/* <Transition.Root show={showEditor} as={Fragment}>
                             <Transition.Child
@@ -562,7 +501,7 @@ export default function Invetory() {
                                 </Flex>
                             </Transition.Child>
                         </Transition.Root> */}
-                        <Flex flexDirection="row" className="gap-4">
+                        {/* <Flex flexDirection="row" className="gap-4">
                             <Card
                                 onClick={() => {
                                     console.log('salam')
@@ -593,46 +532,18 @@ export default function Invetory() {
                                     KPI
                                 </Subtitle>
                             </Card>
-                        </Flex>
-                        <Filter
-                            type={selectedGroup}
-                            onApply={(e) => {
-                                console.log(e)
-                            }}
-                        />
+                        </Flex> */}
+                    
 
-                        <Flex className="mt-4">
+                        <Flex className="">
                             <Table
                                 id="inventory_queries"
                                 columns={columns}
-                                rowData={queries
-                                    ?.filter((q) => q.tags?.popular)
-                                    .sort((a, b) => {
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        if (a.title < b.title) {
-                                            return -1
-                                        }
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        if (a.title > b.title) {
-                                            return 1
-                                        }
-                                        return 0
-                                    })}
+                                rowData={queries}
                                 loading={queryLoading}
-                                // onRowClicked={(e) => {
-                                //     setCode(
-                                //         `-- ${e.data?.title}\n\n${e.data?.query}` ||
-                                //             ''
-                                //     )
-                                //     document
-                                //         .getElementById('kaytu-container')
-                                //         ?.scrollTo({
-                                //             top: 0,
-                                //             behavior: 'smooth',
-                                //         })
-                                // }}
+                                onRowClicked={(e) => {
+                                   setOpenSlider(true)
+                                }}
                             />
                         </Flex>
                     </Flex>

@@ -117,16 +117,17 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         return currentPage === page
     }
     const findPage = (page: string | string[]): string => {
-        if (page.includes('?')) {
-            return `/ws/${workspace}/${page}`
-        }
-        if (searchParams) {
-            return `/ws/${workspace}/${page}?${searchParams}`
-        }
-        if (page.includes('/')) {
-            return `/ws/${workspace}/${page}`
-        }
-        return `/ws/${workspace}/${page}?${searchParams}`
+        return `/ws/${workspace}/${page}`
+        // if (page.includes('?')) {
+        //     return `/ws/${workspace}/${page}`
+        // }
+        // // if (searchParams) {
+        // //     return `/ws/${workspace}/${page}?${searchParams}`
+        // // }
+        // if (page.includes('/')) {
+        //     return `/ws/${workspace}/${page}`
+        // }
+        // return `/ws/${workspace}/${page}?${searchParams}`
     }
     useEffect(() => {
         if (isAuthenticated) {
@@ -186,20 +187,23 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 isPreview: false,
             },
             {
-                name: 'All Inventory',
-                page: 'inventory/all-queries',
-                icon: CubeIcon,
-                isPreview: false,
-            },
-            {
                 name: 'Infrastructure',
                 page: [
                     'infrastructure',
                     'infrastructure-cloud-accounts',
                     'infrastructure-metrics',
+                    'inventory/all-queries',
                 ],
                 icon: CubeIcon,
                 children: [
+                    {
+                        name: 'All Inventory',
+                        page: 'inventory/all-queries',
+                        isPreview: false,
+                        isLoading: false,
+                        count: undefined,
+                        error: false,
+                    },
                     {
                         name: 'Summary',
                         page: 'infrastructure',

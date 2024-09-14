@@ -20,17 +20,17 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
     GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,
-} from '../../../api/api'
-import DrawerPanel from '../../../components/DrawerPanel'
-import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
-import SummaryCard from '../../../components/Cards/SummaryCard'
-import { useComplianceApiV1FindingsResourceCreate } from '../../../api/compliance.gen'
-import Spinner from '../../../components/Spinner'
+} from '../../../../api/api'
+import DrawerPanel from '../../../../components/DrawerPanel'
+import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
+import SummaryCard from '../../../../components/Cards/SummaryCard'
+import { useComplianceApiV1FindingsResourceCreate } from '../../../../api/compliance.gen'
+import Spinner from '../../../../components/Spinner'
 // import { severityBadge } from '../Controls'
-import { isDemoAtom, notificationAtom } from '../../../store'
+import { isDemoAtom, notificationAtom } from '../../../../store'
 // import Timeline from '../FindingsWithFailure/Detail/Timeline'
-import { searchAtom } from '../../../utilities/urlstate'
-import { dateTimeDisplay } from '../../../utilities/dateDisplay'
+import { searchAtom } from '../../../../utilities/urlstate'
+import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 
 interface IResourceFindingDetail {
     resourceFinding:

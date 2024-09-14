@@ -36,7 +36,7 @@ import SecurityOverview from '../pages/Governance/Overview'
 import WorkloadOptimizer from '../pages/WorkloadOptimizer'
 import RequestAccess from '../pages/Integrations/RequestAccess'
 import SettingsJobs from '../pages/Settings/Jobs'
-import Invetory from '../pages/Inventory'
+import Invetory from '../pages/Assets/Inventory'
 
 const authRoutes = [
     {
