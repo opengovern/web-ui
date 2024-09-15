@@ -300,26 +300,26 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 children: [
                     {
                         name: 'All Findings',
-                        page: 'findings?tab=0',
+                        page: 'findings',
                         isLoading: findingsIsLoading,
                         count: numericDisplay(findingsCount?.count) || 0,
                         error: findingsErr,
                     },
                     {
                         name: 'Resource Summary',
-                        page: 'findings?tab=1',
+                        page: 'findings/resource-summery',
                     },
                     {
                         name: 'Drift Events',
-                        page: 'findings?tab=2',
+                        page: 'findings/drift-events',
                     },
                     {
                         name: 'Account Posture',
-                        page: 'findings?tab=3',
+                        page: 'findings/account-posture',
                     },
                     {
                         name: 'Control Summary',
-                        page: 'findings?tab=4',
+                        page: 'findings/control-summery',
                     },
                 ],
             },
@@ -333,22 +333,22 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             //     error: false,
             // },
             {
-                name: 'Query',
+                name: 'Search',
                 page: ['query', 'query/all-queries'],
                 icon: MagnifyingGlassIcon,
                 isPreview: false,
                 children: [
                     {
-                        name: 'All Queries',
-                        page: 'query/all-queries',
+                        name: ' Query',
+                        page: 'query',
                         isPreview: false,
                         isLoading: false,
                         count: undefined,
                         error: false,
                     },
                     {
-                        name: ' Query',
-                        page: 'query',
+                        name: 'All Queries',
+                        page: 'query/all-queries',
                         isPreview: false,
                         isLoading: false,
                         count: undefined,

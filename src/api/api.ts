@@ -4238,7 +4238,7 @@ export class Api<
          * @description API for get new control list
          *
          * @tags compliance control
-         * @name ApiV2 Control list
+         * @name ApiV3Control list
          * @summary Get control lists
          * @request POST:/compliance/api/v2/controls
          * @secure
@@ -4251,7 +4251,7 @@ export class Api<
                 GithubComKaytuIoKaytuEnginePkgControlApiListV2Response,
                 any
             >({
-                path: `/compliance/api/v2/controls`,
+                path: `/compliance/api/v3/controls`,
                 method: 'POST',
                 secure: true,
                 body: request,
@@ -5791,7 +5791,7 @@ export class Api<
                 GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2Response,
                 any
             >({
-                path: `/inventory/api/v2/queries`,
+                path: `/inventory/api/v3/queries`,
                 method: 'GET',
                 query: request,
                 secure: true,

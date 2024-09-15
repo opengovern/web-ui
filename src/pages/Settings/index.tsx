@@ -22,7 +22,6 @@ import { useWorkspaceApiV1WorkspaceCurrentList } from '../../api/workspace.gen'
 import { meAtom, tokenAtom } from '../../store'
 import SettingsJobs from './Jobs'
 import SettingsCustomization from './Customization'
-import { Auth0AppMetadata } from '../../types/appMetadata'
 import TopHeader from '../../components/Layout/Header'
 import SettingsParameters from './Parameters'
 import {

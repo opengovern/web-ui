@@ -1,4 +1,4 @@
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
+import { Flex, Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import FindingsWithFailure from './FindingsWithFailure'
 import TopHeader from '../../../components/Layout/Header'
@@ -17,14 +17,10 @@ import {
     useURLState,
 } from '../../../utilities/urlstate'
 import Events from './Events'
+import Spinner from '../../../components/Spinner'
 
 export default function Findings() {
-    const [tab, setTab] = useURLParam<number>(
-        'tab',
-        0,
-        (v) => String(v),
-        (v) => parseInt(v, 10)
-    )
+    const [tab, setTab] = useState<number>(0);
     const [selectedGroup, setSelectedGroup] = useState<
         'findings' | 'resources' | 'controls' | 'accounts' | 'events'
     >('findings')
@@ -50,6 +46,43 @@ export default function Findings() {
                 break
         }
     }, [tab])
+    useEffect(() => {
+        const url = window.location.pathname.split('/')[4]
+        console.log(url,"url")
+        switch (url) {
+            case 'resource-summery':
+                setTab(1)
+                break
+            case 'drift-events':
+                setTab(2)
+                break
+            case 'account-posture':
+                setTab(3)
+                break
+            case 'control-summery':
+                setTab(4)
+                break
+            default:
+                setTab(0)
+                break
+        }
+    }, [window.location.pathname])
+    const findComponent = () => {
+        switch (tab) {
+            case 0:
+                return <FindingsWithFailure query={query} />
+            case 1:
+                return <ResourcesWithFailure query={query} />
+            case 2:
+               return <Events query={query} />
+            case 3:
+               return <FailingCloudAccounts query={query} />
+            case 4:
+                return <ControlsWithFailure query={query} />
+            default:
+                return <Spinner/>
+        }
+    }
 
     const [query, setQuery] = useState<{
         connector: SourceType
@@ -88,33 +121,8 @@ export default function Findings() {
     return (
         <>
             <TopHeader />
-            <TabGroup index={tab} onIndexChange={setTab}>
-                <TabList>
-                    <Tab>All Findings</Tab>
-                    <Tab>Resource Summary</Tab>
-                    <Tab>Drift Events</Tab>
-                    <Tab>Account Posture</Tab>
-                    <Tab>Control Summary</Tab>
-                </TabList>
-                <Filter type={selectedGroup} onApply={(e) => setQuery(e)} />
-                <TabPanels className="mt-4">
-                    <TabPanel>
-                        <FindingsWithFailure query={query} />
-                    </TabPanel>
-                    <TabPanel>
-                        <ResourcesWithFailure query={query} />
-                    </TabPanel>
-                    <TabPanel>
-                        <Events query={query} />
-                    </TabPanel>
-                    <TabPanel>
-                        <FailingCloudAccounts query={query} />
-                    </TabPanel>
-                    <TabPanel>
-                        <ControlsWithFailure query={query} />
-                    </TabPanel>
-                </TabPanels>
-            </TabGroup>
+            <Filter type={selectedGroup} onApply={(e) => setQuery(e)} />
+            <Flex className="mt-2">{findComponent()}</Flex>
         </>
     )
 }
