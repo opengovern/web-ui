@@ -55,6 +55,9 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
     Api,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2,
+    GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem,
+    GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItemQuery,
+    GithubComKaytuIoKaytuEnginePkgControlApiListV2,
 } from '../../../../api/api'
 import { isDemoAtom, queryAtom, runQueryAtom } from '../../../../store'
 import AxiosAPI from '../../../../api/ApiConfig'
@@ -63,6 +66,7 @@ import { snakeCaseToLabel } from '../../../../utilities/labelMaker'
 import { numberDisplay } from '../../../../utilities/numericDisplay'
 import TopHeader from '../../../../components/Layout/Header'
 import QueryDetail from './QueryDetail'
+import Filter from './Filter'
 
 export const getTable = (
     headers: string[] | undefined,
@@ -118,7 +122,7 @@ export const getTable = (
 }
 
 const columns: IColumn<
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2,
+    GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem,
     any
 >[] = [
     {
@@ -136,26 +140,45 @@ const columns: IColumn<
         resizable: false,
     },
     {
-        field: 'connectors',
+        field: 'connector',
         headerName: 'Connector',
         type: 'string',
         sortable: true,
         resizable: false,
-        cellRenderer: (params: any) => (
-             params.value.map(
-                            (item: string, index: number) => {
-                                return `${item} `
-                            }
-                        )
-        ),
+        cellRenderer: (params: any) =>
+            params.value.map((item: string, index: number) => {
+                return `${item} `
+            }),
     },
-    // {
-    //     field: 'connectors',
-    //     headerName: 'Service',
-    //     type: 'string',
-    //     sortable: true,
-    //     resizable: false,
-    // },
+    {
+        field: 'query',
+        headerName: 'Primary Table',
+        type: 'string',
+        sortable: true,
+        resizable: false,
+        cellRenderer: (params: any) =>
+            params.value?.primary_table,
+    },
+    {
+        field: 'severity',
+        headerName: 'Severity',
+        type: 'string',
+        sortable: true,
+        resizable: false,
+    },
+    {
+        field: 'query.parameters',
+        headerName: 'Has Parametrs',
+        type: 'string',
+        sortable: true,
+        resizable: false,
+        cellRenderer: (params: any) => {
+            return <>{params.value.length > 0 ? 'True' : 'False'}</>
+        }
+
+        
+    },
+
     // {
     //     field: 'connectors',
     //     headerName: 'Primary Table',
@@ -189,7 +212,7 @@ export default function AllControls() {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedRow, setSelectedRow] =
-        useState<GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2>({})
+        useState<GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem>()
     const [openDrawer, setOpenDrawer] = useState(false)
     const [openSlider, setOpenSlider] = useState(false)
     const [openSearch, setOpenSearch] = useState(true)
@@ -198,7 +221,8 @@ export default function AllControls() {
     const [pageSize, setPageSize] = useState(1000)
     const [autoRun, setAutoRun] = useState(false)
     const [engine, setEngine] = useState('odysseus-sql')
-   
+    const [query, setQuery] =
+        useState < GithubComKaytuIoKaytuEnginePkgControlApiListV2>()
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2AnalyticsCategoriesList()
     // const { response: queries, isLoading: queryLoading } =
@@ -229,16 +253,28 @@ export default function AllControls() {
                 // setLoading(true)
                  const api = new Api()
                  api.instance = AxiosAPI
-                 api.inventory
-                     .apiV2QueryList({
-                         title_filter: '',
-                         cursor: params.request.startRow ? Math.floor(params.request.startRow/25) : 0,
-                         per_page: 25,
-                     })
+                 let body = {
+                     connector: query?.connector,
+                     severity: query?.severity,
+                     cursor: params.request.startRow
+                         ? Math.floor(params.request.startRow / 25)
+                         : 0,
+                     per_page: 25,
+                 }
+                 if(!body.connector){
+                    delete body["connector"]
+                 }
+                 else{
+                    // @ts-ignore
+                    body["connector"] = [body?.connector]
+                 }
+                 
+                 api.compliance
+                     .apiV2ControlList(body)
                      .then((resp) => {
                          params.success({
                              rowData: resp.data.items || [],
-                             rowCount: 100,
+                             rowCount: resp.data.total_count,
                          })
                          setLoading(false)
                      })
@@ -578,19 +614,23 @@ export default function AllControls() {
                                 </Subtitle>
                             </Card>
                         </Flex> */}
+                        {/* <Filter
+                            type={'findings'}
+                            // @ts-ignore
+                            onApply={(e) => setQuery(e)}
+                        /> */}
 
-                        <Flex className="">
+                        <Flex className=" mt-2">
                             <Table
                                 id="inventory_queries"
                                 columns={columns}
                                 serverSideDatasource={serverSideRows}
                                 loading={loading}
                                 onRowClicked={(e) => {
-                                    if(e.data){
-                                        setSelectedRow(e?.data)
-
-                                    }
-                                    setOpenSlider(true)
+                                    // if (e.data) {
+                                    //     setSelectedRow(e?.data)
+                                    // }
+                                    // setOpenSlider(true)
                                 }}
                                 options={{
                                     rowModelType: 'serverSide',
@@ -601,13 +641,14 @@ export default function AllControls() {
                     </Flex>
                 </Flex>
             )}
-            <QueryDetail
+            {/**  <QueryDetail
                 // type="resource"
                 query={selectedRow}
                 open={openSlider}
                 onClose={() => setOpenSlider(false)}
                 onRefresh={() => window.location.reload()}
             />
+            */}
         </>
     )
 }

@@ -1381,6 +1381,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2 {
     title_filter?: string;
     cursor: number;
     per_page: number;
+    connector? : string[];
 }
 
 
@@ -2757,6 +2758,44 @@ export interface KaytuResourceCollectionFilter {
     resource_types?: string[]
     tags?: Record<string, string>
 }
+export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2 {
+    /** Specifies the Title */
+    title_filter?: string
+    cursor: number
+    per_page: number
+    primary_table? : string;
+    severity? : string;
+    findingSummery? : boolean
+    connector? : string[];
+
+}
+export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2Response {
+    items: GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem[]
+    total_count: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem {
+    id: string
+    title: string
+    description: string
+    connector: string[]
+    severity: string
+    tags: GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItemTags
+    query: GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItemQuery
+    findings_summary: null
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItemQuery {
+    primary_table: string
+    list_of_tables: string[]
+    parameters: any[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItemTags {
+    score_service_name: string[]
+    score_tags: string[]
+}
+
 
 export enum SourceAssetDiscoveryMethodType {
     AssetDiscoveryMethodTypeScheduled = 'scheduled',
@@ -4191,6 +4230,31 @@ export class Api<
                 path: `/compliance/api/v1/ai/control/${controlId}/remediation`,
                 method: 'POST',
                 secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+        /**
+         * @description API for get new control list
+         *
+         * @tags compliance control
+         * @name ApiV2 Control list
+         * @summary Get control lists
+         * @request POST:/compliance/api/v2/controls
+         * @secure
+         */
+        apiV2ControlList: (
+            request: GithubComKaytuIoKaytuEnginePkgControlApiListV2,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgControlApiListV2Response,
+                any
+            >({
+                path: `/compliance/api/v2/controls`,
+                method: 'POST',
+                secure: true,
+                body: request,
                 type: ContentType.Json,
                 format: 'json',
                 ...params,

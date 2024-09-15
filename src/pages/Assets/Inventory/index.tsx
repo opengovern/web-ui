@@ -55,6 +55,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
     Api,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2,
 } from '../../../api/api'
 import { isDemoAtom, queryAtom, runQueryAtom } from '../../../store'
 import AxiosAPI from '../../../api/ApiConfig'
@@ -63,6 +64,7 @@ import { snakeCaseToLabel } from '../../../utilities/labelMaker'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import TopHeader from '../../../components/Layout/Header'
 import QueryDetail from './QueryDetail'
+import Filter from './Filter'
 
 export const getTable = (
     headers: string[] | undefined,
@@ -193,6 +195,8 @@ export default function Invetory() {
     const [openDrawer, setOpenDrawer] = useState(false)
     const [openSlider, setOpenSlider] = useState(false)
     const [openSearch, setOpenSearch] = useState(true)
+        const [query, setQuery] =
+            useState<GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2>()
     const [showEditor, setShowEditor] = useState(true)
     const isDemo = useAtomValue(isDemoAtom)
     const [pageSize, setPageSize] = useState(1000)
@@ -229,12 +233,22 @@ export default function Invetory() {
                 // setLoading(true)
                  const api = new Api()
                  api.instance = AxiosAPI
+                 let body = {
+                     title_filter: '',
+                     connectors: query?.connector,
+                     cursor: params.request.startRow
+                         ? Math.floor(params.request.startRow / 25)
+                         : 0,
+                     per_page: 25,
+                 }
+                  if (!body.connectors) {
+                      delete body['connectors']
+                  } else {
+                      // @ts-ignore
+                      body['connector'] = [body?.connector]
+                  }
                  api.inventory
-                     .apiV2QueryList({
-                         title_filter: '',
-                         cursor: params.request.startRow ? Math.floor(params.request.startRow/25) : 0,
-                         per_page: 25,
-                     })
+                     .apiV2QueryList(body)
                      .then((resp) => {
                          params.success({
                              rowData: resp.data.items || [],
@@ -578,17 +592,21 @@ export default function Invetory() {
                                 </Subtitle>
                             </Card>
                         </Flex> */}
+                        {/* <Filter
+                            type={'findings'}
+                            // @ts-ignore
+                            onApply={(e) => setQuery(e)}
+                        /> */}
 
-                        <Flex className="">
+                        <Flex className="mt-2">
                             <Table
                                 id="inventory_queries"
                                 columns={columns}
                                 serverSideDatasource={serverSideRows}
                                 loading={loading}
                                 onRowClicked={(e) => {
-                                    if(e.data){
+                                    if (e.data) {
                                         setSelectedRow(e?.data)
-
                                     }
                                     setOpenSlider(true)
                                 }}
