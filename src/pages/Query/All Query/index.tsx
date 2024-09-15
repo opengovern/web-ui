@@ -140,16 +140,16 @@ const columns: IColumn<
     {
         field: 'connectors',
         headerName: 'Connector',
-        type: 'string',
+        type: 'connector',
         sortable: true,
         resizable: false,
-        cellRenderer: (params: any) => (
-             params.value.map(
-                            (item: string, index: number) => {
-                                return `${item} `
-                            }
-                        )
-        ),
+        // cellRenderer: (params: any) => (
+        //      params.value.map(
+        //                     (item: string, index: number) => {
+        //                         return `${item} `
+        //                     }
+        //                 )
+        // ),
     },
     // {
     //     field: 'connectors',

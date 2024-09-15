@@ -268,7 +268,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 error: false,
                 children: [
                     {
-                        name: 'Summery',
+                        name: 'Summary',
                         page: 'compliance',
                         isPreview: false,
                         isLoading: false,
@@ -307,7 +307,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     },
                     {
                         name: 'Resource Summary',
-                        page: 'findings/resource-summery',
+                        page: 'findings/resource-summary',
                     },
                     {
                         name: 'Drift Events',
@@ -319,7 +319,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     },
                     {
                         name: 'Control Summary',
-                        page: 'findings/control-summery',
+                        page: 'findings/control-summary',
                     },
                 ],
             },

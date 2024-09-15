@@ -2765,7 +2765,7 @@ export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2 {
     per_page: number
     primary_table?: string
     severity?: string
-    finding_summery?: boolean
+    finding_summary?: boolean
     connector?: string[]
 }
 export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2Response {
@@ -2805,7 +2805,7 @@ export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3 {
     cursor: number
     per_page: number
     primary_table?: string[]
-    finding_summery?: boolean
+    finding_summary?: boolean
 }
 export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseItem {
     metadata: GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseMetaData

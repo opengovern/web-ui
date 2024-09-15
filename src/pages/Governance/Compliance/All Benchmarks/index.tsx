@@ -32,7 +32,11 @@ import { highlight, languages } from 'prismjs' // eslint-disable-next-line impor
 import 'prismjs/components/prism-sql' // eslint-disable-next-line import/no-extraneous-dependencies
 import 'prismjs/themes/prism.css'
 import Editor from 'react-simple-code-editor'
-import {IServerSideGetRowsParams, RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
+import {
+    IServerSideGetRowsParams,
+    RowClickedEvent,
+    ValueFormatterParams,
+} from 'ag-grid-community'
 import {
     CheckCircleIcon,
     ExclamationCircleIcon,
@@ -125,62 +129,60 @@ export const getTable = (
 }
 
 const columns: IColumn<
-    GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseMetaData,
+    GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseItem,
     any
 >[] = [
     {
-        field: 'id',
+        field: 'metadata.id',
         headerName: 'ID',
         type: 'string',
         sortable: true,
         resizable: false,
     },
     {
-        field: 'title',
+        field: 'metadata.title',
         headerName: 'Title',
         type: 'string',
         sortable: true,
         resizable: false,
     },
     {
-        field: 'connectors',
+        field: 'metadata.connectors',
         headerName: 'Connector',
-        type: 'string',
+        type: 'connector',
         sortable: true,
         resizable: false,
-        cellRenderer: (params: any) =>
-            params.value.map((item: string, index: number) => {
-                return `${item} `
-            }),
+        // cellRenderer: (params: any) =>
+        //     params.value?.map((item: string, index: number) => {
+        //         return `${item} `
+        //     }),
     },
     {
-        field: 'primary_tables',
+        field: 'metadata.primary_tables',
         headerName: 'Primary Table',
         type: 'string',
         sortable: true,
         resizable: false,
         cellRenderer: (params: any) => {
-            return (
-                <>
-                {params.value[0]}
-                </>
-            )
-        }
+            return params.value[0]
+        },
     },
     {
-        field: 'enabled',
+        field: 'metadata.enabled',
         headerName: 'Enabled',
         type: 'string',
         sortable: true,
         resizable: false,
+        cellRenderer: (params: any) => {
+            return params.value ? 'True' : 'False'
+        },
     },
     {
-        field: 'number_of_controls',
+        field: 'metadata.number_of_controls',
         headerName: 'Number of Controls',
         type: 'string',
         sortable: true,
         resizable: false,
-        
     },
 
     // {
@@ -216,7 +218,7 @@ export default function AllBenchmarks() {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedRow, setSelectedRow] =
-        useState<GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseMetaData>()
+        useState<GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseItem>()
     const [openDrawer, setOpenDrawer] = useState(false)
     const [openSlider, setOpenSlider] = useState(false)
     const [openSearch, setOpenSearch] = useState(true)
@@ -235,9 +237,6 @@ export default function AllBenchmarks() {
     //         Cursor: 0,
     //         PerPage:25
     //     })
-    
-   
-    
     const recordToArray = (record?: Record<string, string[]> | undefined) => {
         if (record === undefined) {
             return []
@@ -251,20 +250,20 @@ export default function AllBenchmarks() {
         })
     }
 
-     const ssr = () => {
-         return {
-             getRows: (params: IServerSideGetRowsParams) => {
+    const ssr = () => {
+        return {
+            getRows: (params: IServerSideGetRowsParams) => {
                 // setLoading(true)
-                 const api = new Api()
-                 api.instance = AxiosAPI
-                 let body = {
+                const api = new Api()
+                api.instance = AxiosAPI
+                const body = {
                     //  connector: query?.connector,
                     //  severity: query?.severity,
-                     cursor: params.request.startRow
-                         ? Math.floor(params.request.startRow / 25)
-                         : 0,
-                     per_page: 25,
-                 }
+                    cursor: params.request.startRow
+                        ? Math.floor(params.request.startRow / 25)
+                        : 0,
+                    per_page: 25,
+                }
                 //  if(!body.connector){
                 //     delete body["connector"]
                 //  }
@@ -272,28 +271,26 @@ export default function AllBenchmarks() {
                 //     // @ts-ignore
                 //     body["connector"] = [body?.connector]
                 //  }
-                 
-                 api.compliance
-                     .apiV3BenchmarkList(body)
-                     .then((resp) => {
-                         params.success({
-                             rowData: resp.data.items || [],
-                             rowCount: resp.data.total_count,
-                         })
-                         setLoading(false)
-                     })
-                     .catch((err) => {
-                         setLoading(false)
+                api.compliance
+                    .apiV3BenchmarkList(body)
+                    .then((resp) => {
+                        params.success({
+                            rowData: resp.data.items || [],
+                            rowCount: resp.data.total_count,
+                        })
+                        setLoading(false)
+                    })
+                    .catch((err) => {
+                        setLoading(false)
 
-                         console.log(err)
-                         params.fail()
-                     })
-             },
-         }
-     }
+                        console.log(err)
+                        params.fail()
+                    })
+            },
+        }
+    }
 
-     const serverSideRows = ssr()
-
+    const serverSideRows = ssr()
 
     return (
         <>

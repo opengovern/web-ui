@@ -50,7 +50,7 @@ export default function Findings() {
         const url = window.location.pathname.split('/')[4]
         console.log(url,"url")
         switch (url) {
-            case 'resource-summery':
+            case 'resource-summary':
                 setTab(1)
                 break
             case 'drift-events':
@@ -59,7 +59,7 @@ export default function Findings() {
             case 'account-posture':
                 setTab(3)
                 break
-            case 'control-summery':
+            case 'control-summary':
                 setTab(4)
                 break
             default:

@@ -283,8 +283,8 @@ const authRoutes = [
         element: <Findings />,
     },
     {
-        key: 'Resource Summery',
-        path: '/ws/:ws/findings/resource-summery',
+        key: 'Resource summary',
+        path: '/ws/:ws/findings/resource-summary',
         element: <Findings />,
     },
     {
@@ -299,7 +299,7 @@ const authRoutes = [
     },
     {
         key: 'Control Summary',
-        path: '/ws/:ws/findings/control-summery',
+        path: '/ws/:ws/findings/control-summary',
         element: <Findings />,
     },
     {
