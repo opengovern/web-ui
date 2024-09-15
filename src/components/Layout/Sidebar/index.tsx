@@ -266,11 +266,29 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             {
                 name: 'Policies',
                 icon: ClipboardDocumentCheckIcon,
-                page: 'policies',
+                page: ['policies', 'policies/all-controls'],
                 isPreview: false,
                 isLoading: false,
                 count: undefined,
                 error: false,
+                children: [
+                    {
+                        name: 'All Controls',
+                        page: 'policies/all-controls',
+                        isPreview: false,
+                        isLoading: false,
+                        count: undefined,
+                        error: false,
+                    },
+                    {
+                        name: 'Benchmark List',
+                        page: 'policies',
+                        isPreview: false,
+                        isLoading: false,
+                        count: undefined,
+                        error: false,
+                    },
+                ],
             },
             {
                 name: 'Findings',

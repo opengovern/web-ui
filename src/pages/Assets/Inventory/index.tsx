@@ -237,8 +237,8 @@ export default function Invetory() {
                      })
                      .then((resp) => {
                          params.success({
-                             rowData: resp.data || [],
-                             rowCount: 100,
+                             rowData: resp.data.items || [],
+                             rowCount: resp.data.total_count,
                          })
                          setLoading(false)
                      })

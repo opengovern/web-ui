@@ -1613,6 +1613,12 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2 {
     /** Desciption */
     description?: string
 }
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2Response {
+    /** List of items */
+    items: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2[]
+    /** total caount of data */
+    total_count : number
+}
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQuerySortItem {
     direction?: 'asc' | 'desc'
@@ -5718,7 +5724,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2[],
+                GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2Response,
                 any
             >({
                 path: `/inventory/api/v2/queries`,

@@ -24,6 +24,7 @@ import {
     RequestParams,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2Response,
 } from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
@@ -38,7 +39,7 @@ interface IuseInventoryApiV1QueryListState {
 interface IuseInventoryApiV1QueryListStateV2 {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2[]
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2Response
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }

@@ -237,7 +237,7 @@ export default function AllControls() {
                      })
                      .then((resp) => {
                          params.success({
-                             rowData: resp.data || [],
+                             rowData: resp.data.items || [],
                              rowCount: 100,
                          })
                          setLoading(false)

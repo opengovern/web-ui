@@ -250,15 +250,16 @@ const authRoutes = [
         path: '/ws/:ws/policies',
         element: <Compliance />,
     },
-    {
-        key: 'allControls',
-        path: '/ws/:ws/policies/all-controls',
-        element: <AllControls />,
-    },
+
     {
         key: 'benchmark summary',
         path: '/ws/:ws/policies/:benchmarkId',
         element: <BenchmarkSummary />,
+    },
+    {
+        key: 'allControls',
+        path: '/ws/:ws/policies/all-controls',
+        element: <AllControls />,
     },
     {
         key: 'benchmark summary',
