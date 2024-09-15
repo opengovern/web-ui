@@ -2763,11 +2763,10 @@ export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2 {
     title_filter?: string
     cursor: number
     per_page: number
-    primary_table? : string;
-    severity? : string;
-    findingSummery? : boolean
-    connector? : string[];
-
+    primary_table?: string
+    severity?: string
+    finding_summery?: boolean
+    connector?: string[]
 }
 export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2Response {
     items: GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem[]
@@ -2795,6 +2794,40 @@ export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItemTags 
     score_service_name: string[]
     score_tags: string[]
 }
+export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3Response {
+    items: GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseItem[]
+    total_count: number
+}
+export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3 {
+    /** Specifies the Title */
+    parentBenchmarkID? : string[]
+    // title_filter?: string
+    cursor: number
+    per_page: number
+    primary_table?: string[]
+    finding_summery?: boolean
+}
+export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseItem {
+    metadata: GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseMetaData
+    findings: null
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseMetaData {
+    id: string
+    title: string
+    description: string
+    connectors: null
+    number_of_controls: number
+    enabled: boolean
+    track_drift_events: boolean
+    primary_tables: string[]
+    tags: GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseTags
+    created_at: Date
+    updated_at: Date
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseTags {}
+
 
 
 export enum SourceAssetDiscoveryMethodType {
@@ -4238,7 +4271,7 @@ export class Api<
          * @description API for get new control list
          *
          * @tags compliance control
-         * @name ApiV3Control list
+         * @name ApiV3ControlList
          * @summary Get control lists
          * @request POST:/compliance/api/v2/controls
          * @secure
@@ -4252,6 +4285,31 @@ export class Api<
                 any
             >({
                 path: `/compliance/api/v3/controls`,
+                method: 'POST',
+                secure: true,
+                body: request,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+        /**
+         * @description API for get new control list
+         *
+         * @tags compliance control
+         * @name ApiV3BenchmarkList
+         * @summary Get control lists
+         * @request POST:/compliance/api/v2/controls
+         * @secure
+         */
+        apiV3BenchmarkList: (
+            request: GithubComKaytuIoKaytuEnginePkgControlApiListV2,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3Response,
+                any
+            >({
+                path: `/compliance/api/v3/benchmarks`,
                 method: 'POST',
                 secure: true,
                 body: request,

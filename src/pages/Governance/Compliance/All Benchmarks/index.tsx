@@ -58,6 +58,9 @@ import {
     GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem,
     GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItemQuery,
     GithubComKaytuIoKaytuEnginePkgControlApiListV2,
+    GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseItem,
+    GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseMetaData,
+    GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3,
 } from '../../../../api/api'
 import { isDemoAtom, queryAtom, runQueryAtom } from '../../../../store'
 import AxiosAPI from '../../../../api/ApiConfig'
@@ -122,7 +125,7 @@ export const getTable = (
 }
 
 const columns: IColumn<
-    GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem,
+    GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseMetaData,
     any
 >[] = [
     {
@@ -140,7 +143,7 @@ const columns: IColumn<
         resizable: false,
     },
     {
-        field: 'connector',
+        field: 'connectors',
         headerName: 'Connector',
         type: 'string',
         sortable: true,
@@ -151,31 +154,32 @@ const columns: IColumn<
             }),
     },
     {
-        field: 'query',
+        field: 'primary_tables',
         headerName: 'Primary Table',
         type: 'string',
         sortable: true,
         resizable: false,
-        cellRenderer: (params: any) =>
-            params.value?.primary_table,
-    },
-    {
-        field: 'severity',
-        headerName: 'Severity',
-        type: 'string',
-        sortable: true,
-        resizable: false,
-    },
-    {
-        field: 'query.parameters',
-        headerName: 'Has Parametrs',
-        type: 'string',
-        sortable: true,
-        resizable: false,
         cellRenderer: (params: any) => {
-            return <>{params.value.length > 0 ? 'True' : 'False'}</>
+            return (
+                <>
+                {params.value[0]}
+                </>
+            )
         }
-
+    },
+    {
+        field: 'enabled',
+        headerName: 'Enabled',
+        type: 'string',
+        sortable: true,
+        resizable: false,
+    },
+    {
+        field: 'number_of_controls',
+        headerName: 'Number of Controls',
+        type: 'string',
+        sortable: true,
+        resizable: false,
         
     },
 
@@ -212,7 +216,7 @@ export default function AllBenchmarks() {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedRow, setSelectedRow] =
-        useState<GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem>()
+        useState<GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseMetaData>()
     const [openDrawer, setOpenDrawer] = useState(false)
     const [openSlider, setOpenSlider] = useState(false)
     const [openSearch, setOpenSearch] = useState(true)
@@ -222,7 +226,7 @@ export default function AllBenchmarks() {
     const [autoRun, setAutoRun] = useState(false)
     const [engine, setEngine] = useState('odysseus-sql')
     const [query, setQuery] =
-        useState < GithubComKaytuIoKaytuEnginePkgControlApiListV2>()
+        useState<GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3>()
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2AnalyticsCategoriesList()
     // const { response: queries, isLoading: queryLoading } =
@@ -254,23 +258,23 @@ export default function AllBenchmarks() {
                  const api = new Api()
                  api.instance = AxiosAPI
                  let body = {
-                     connector: query?.connector,
-                     severity: query?.severity,
+                    //  connector: query?.connector,
+                    //  severity: query?.severity,
                      cursor: params.request.startRow
                          ? Math.floor(params.request.startRow / 25)
                          : 0,
                      per_page: 25,
                  }
-                 if(!body.connector){
-                    delete body["connector"]
-                 }
-                 else{
-                    // @ts-ignore
-                    body["connector"] = [body?.connector]
-                 }
+                //  if(!body.connector){
+                //     delete body["connector"]
+                //  }
+                //  else{
+                //     // @ts-ignore
+                //     body["connector"] = [body?.connector]
+                //  }
                  
                  api.compliance
-                     .apiV2ControlList(body)
+                     .apiV3BenchmarkList(body)
                      .then((resp) => {
                          params.success({
                              rowData: resp.data.items || [],
