@@ -22,6 +22,8 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCountAnalyticsMetricsResponse,
     RequestParams,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2,
 } from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
@@ -30,6 +32,13 @@ interface IuseInventoryApiV1QueryListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+interface IuseInventoryApiV1QueryListStateV2 {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2[]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
@@ -166,7 +175,7 @@ export const useInventoryApiV1QueryList = (
  * URL:
  */
 export const useInventoryApiV2QueryList = (
-    request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2,
     params: RequestParams = {},
     autoExecute = true,
     overwriteWorkspace: string | undefined = undefined
@@ -177,7 +186,7 @@ export const useInventoryApiV2QueryList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseInventoryApiV1QueryListState>({
+    const [state, setState] = useState<IuseInventoryApiV1QueryListStateV2>({
         isLoading: true,
         isExecuted: false,
     })
@@ -187,7 +196,7 @@ export const useInventoryApiV2QueryList = (
 
     const sendRequest = (
         abortCtrl: AbortController,
-        reqrequest: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2,
         reqparams: RequestParams
     ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
@@ -272,7 +281,7 @@ export const useInventoryApiV2QueryList = (
     }
 
     const sendNowWithParams = (
-        reqrequest: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+        reqrequest: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2,
         reqparams: RequestParams
     ) => {
         controller.abort()

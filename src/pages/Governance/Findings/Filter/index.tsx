@@ -22,7 +22,8 @@ import { useComplianceApiV1FindingsFiltersCreate } from '../../../../api/complia
 import Others from './Others'
 import FindingLifecycle from './FindingLifecycle'
 import { compareArrays } from '../../../../components/Layout/Header/Filter'
-import ConditionDropdown from './ConditionDropdown'
+import ConditionDropdown from '../../../../components/ConditionDropdown'
+
 import {
     CloudConnect,
     Compliance,

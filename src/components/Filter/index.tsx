@@ -4,7 +4,8 @@ import { Checkbox, useCheckboxState } from 'pretty-checkbox-react'
 import { useEffect, useState } from 'react'
 import Spinner from '../Spinner'
 import { Popover, Transition } from '@headlessui/react'
-import { Fragment,ComponentType } from 'react'
+import { Fragment, ComponentType } from 'react'
+import ConditionDropdown from '../ConditionDropdown'
 import {
     CalendarIcon,
     CheckCircleIcon,
@@ -25,8 +26,11 @@ export interface IFilter {
     type: 'multi' | 'single'
     label: string
     onChange: Function
-    selectedItems: string[] ;
-    icon :  ComponentType<any>
+    selectedItems: string[]
+    icon: ComponentType<any>
+    hasCondition?: boolean
+    condition?: string
+    defaultValue?: Option
 }
 
 export default function KFilter({
@@ -35,75 +39,65 @@ export default function KFilter({
     label,
     onChange,
     selectedItems,
-    icon 
-    
+    icon,
+    condition,
+    hasCondition,
 }: IFilter) {
     const [search, setSearch] = useState('')
     const checkbox = useCheckboxState({ state: [...selectedItems] })
-    const [con, setCon] = useState('is')
+    const [con, setCon] = useState<string>(hasCondition == true && condition ? condition : 'is')
 
- useEffect(() => {
-    // @ts-ignore
-    onChange([...checkbox.state])
-    //  if (
-    //      condition !== con ||
-    //      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //      // @ts-ignore
-    //      !compareArrays(value?.sort() || [], checkbox.state.sort())
-    //  ) {
-    //      if (condition === 'is') {
-    //          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //          // @ts-ignore
-    //          onChange([...checkbox.state])
-    //      }
-    //      if (condition === 'isNot') {
-    //          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //          // @ts-ignore
-    //          const arr = data[type]
-    //              .filter(
-    //                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //                  // @ts-ignore
-    //                  (x) => !checkbox.state.includes(x.key)
-    //              )
-    //              .map((x) => x.key)
-    //          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //          // @ts-ignore
-    //          onChange(arr)
-    //      }
-    //      setCon(condition)
-    //  }
-     {
-         /* @ts-ignore */
-     }
-     {
-         console.log(selectedItems)
-     }
- }, [checkbox.state, con])
+    useEffect(() => {
+        // @ts-ignore
+        if (hasCondition == true) {
+            if (condition === 'is') {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                onChange([...checkbox.state])
+            }
+            if (condition === 'isNot') {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                const arr = options
+                    .filter(
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        (x) => !checkbox.state.includes(x.key)
+                    )
+                    .map((x) => x.value)
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                onChange(arr)
+            }
+            setCon(condition ? condition : 'is')
+        } else {
+            // @ts-ignore
+            onChange([...checkbox.state])
+        }
+    }, [checkbox.state, con])
     return (
         <Popover className="relative border-0">
             <Popover.Button
                 id={'salam'}
-                className={`border   py-1.5 px-2 rounded-md border-gray-200 bg-white `}
-                // ${
-                //     f?.id !== 'date' &&
-                //     f?.id !== 'eventDate' &&
-                //     compareArrays(
-                //         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                //         // @ts-ignore
-                //         f?.value?.sort(),
-                //         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                //         // @ts-ignore
-                //         f?.defaultValue?.sort()
-                //     )
-                //         ? 'border-gray-200 bg-white'
-                //         : 'border-kaytu-500 text-kaytu-500 bg-kaytu-50'
-                // }
-                //    `}
+                className={`border   py-1.5 px-2 rounded-md  
+                ${
+                    selectedItems.length == 0
+                        ? 'border-gray-200 bg-white'
+                        : 'border-kaytu-500 text-kaytu-500 bg-kaytu-50'
+                }
+                   `}
             >
                 <Flex className="w-fit">
                     <Icon icon={icon} className="w-3 p-0 mr-3 text-inherit" />
                     <Text className="text-inherit whitespace-nowrap">
                         {label}
+                        {selectedItems.length > 0 && (
+                            <>
+                                {' : '}
+                               { selectedItems.length ==1 ? options.filter((item,value)=> {return item.value == selectedItems[0]})[0]?.label :
+                                `( ${selectedItems.length} )`}
+                            </>
+                        )}
                     </Text>
                     <ChevronDownIcon className="ml-1 w-3 text-inherit" />
                 </Flex>
@@ -122,18 +116,11 @@ export default function KFilter({
                         <Flex className="mb-3">
                             <Flex className="w-fit gap-1.5">
                                 <Text className="font-semibold">{label}</Text>
-                                {/* <ConditionDropdown
-                                        onChange={(c) =>
-                                            f?.setCondition
-                                                ? f?.setCondition(c)
-                                                : undefined
-                                        }
-                                        conditions={f?.conditions}
-                                        isDate={
-                                            f?.id === 'date' ||
-                                            f?.id === 'eventDate'
-                                        }
-                                    /> */}
+                                <ConditionDropdown
+                                    onChange={(c) => setCon(c)}
+                                    conditions={[con]}
+                                    isDate={false}
+                                />
                             </Flex>
                             {/* {f?.onDelete && (
                                     <div className="group relative">
@@ -233,7 +220,6 @@ export default function KFilter({
                             {/* @ts-ignore */}
                             {selectedItems && selectedItems.length !== 0 && (
                                 <Flex className="pt-3 mt-3 border-t border-t-gray-200">
-                                   
                                     <Button
                                         variant="light"
                                         onClick={() => {

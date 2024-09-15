@@ -37,6 +37,7 @@ import WorkloadOptimizer from '../pages/WorkloadOptimizer'
 import RequestAccess from '../pages/Integrations/RequestAccess'
 import SettingsJobs from '../pages/Settings/Jobs'
 import Invetory from '../pages/Assets/Inventory'
+import AllControls from '../pages/Governance/Compliance/All Controls'
 
 const authRoutes = [
     {
@@ -248,6 +249,11 @@ const authRoutes = [
         key: 'policies',
         path: '/ws/:ws/policies',
         element: <Compliance />,
+    },
+    {
+        key: 'allControls',
+        path: '/ws/:ws/policies/all-controls',
+        element: <AllControls />,
     },
     {
         key: 'benchmark summary',

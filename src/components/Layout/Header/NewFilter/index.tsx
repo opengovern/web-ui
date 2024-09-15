@@ -11,7 +11,7 @@ import { CloudConnect, Id } from '../../../../icons/icons'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../api/integration.gen'
 import CloudAccounts from './Filters/CloudAccounts'
 import { compareArrays } from '../Filter'
-import ConditionDropdown from '../../../../pages/Governance/Findings/Filter/ConditionDropdown'
+import ConditionDropdown from '../../../ConditionDropdown'
 import Connector from './Filters/Connector'
 import { useFilterState } from '../../../../utilities/urlstate'
 

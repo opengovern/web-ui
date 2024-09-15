@@ -1376,6 +1376,13 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest {
     /** Specifies the Title */
     titleFilter?: string
 }
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2 {
+    /** Specifies the Title */
+    title_filter?: string;
+    cursor: number;
+    per_page: number;
+}
+
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse {
     others?: GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair
@@ -1588,6 +1595,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem {
     tags?: Record<string, string>
     /** Title */
     title?: string
+ 
 }
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2 {
     /** Category (Tags[category]) */
@@ -1597,11 +1605,13 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2 {
     /** Query Id */
     id?: string
     /** Query */
-    query?: string
+    query?: { query_engine: string; query_to_execute : string} | string
     /** Tags */
     tags?: Record<string, string>
     /** Title */
     title?: string
+    /** Desciption */
+    description?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQuerySortItem {
@@ -5704,16 +5714,16 @@ export class Api<
          * @secure
          */
         apiV2QueryList: (
-            request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+            request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2,
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem[],
+                GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2[],
                 any
             >({
                 path: `/inventory/api/v2/queries`,
                 method: 'GET',
-                body: request,
+                query: request,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',

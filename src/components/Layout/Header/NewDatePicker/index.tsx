@@ -5,7 +5,7 @@ import { CalendarIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 import { DateRange, useUrlDateRangeState } from '../../../../utilities/urlstate'
 import { renderDateText } from '../DatePicker'
-import ConditionDropdown from '../../../../pages/Governance/Findings/Filter/ConditionDropdown'
+import ConditionDropdown from '../../../ConditionDropdown'
 import Datepicker from './Datepicker'
 
 interface INewDatePicker {

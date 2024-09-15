@@ -28,6 +28,7 @@ import { useScheduleApiV1JobsCreate } from '../../../api/schedule.gen'
 import DrawerPanel from '../../../components/DrawerPanel'
 import KFilter from '../../../components/Filter'
 import { CloudIcon } from '@heroicons/react/24/outline'
+import { string } from 'prop-types'
 
 const columns = () => {
     const temp: IColumn<any, any>[] = [
@@ -211,20 +212,32 @@ interface Option {
     value: string | undefined
 }
 export default function SettingsJobs() {
+    const findParmas = (key: string): string[] => {
+        const params = searchParams.getAll(key)
+        const temp = []
+        if (params) {
+            params.map((item, index) => {
+                temp.push(item)
+            })
+        }
+        return temp
+    }
     const [open, setOpen] = useState(false)
     const [clickedJob, setClickedJob] =
         useState<GithubComKaytuIoKaytuEnginePkgDescribeApiJob>()
     const [searchParams, setSearchParams] = useSearchParams()
     const [jobTypeFilter, setJobTypeFilter] = useState<string[] | undefined>(
-        // @ts-ignore
-        searchParams?.get('type') && searchParams?.get('type') !== null
-            ? [searchParams.get('type')]
-            : []
+        findParmas('type')
     )
-    const [statusFilter, setStatusFilter] = useState<
-        string[] | undefined
-        // @ts-ignore
-    >(searchParams.get('status') ? [searchParams.get('status')] : [])
+    const [jobTypeContains, setJobTypeContains] = useState<string>(
+        findParmas('is')
+    )
+    const [jobStatusContains, setJobStatusContains] = useState<string>(
+        findParmas('is')
+    )
+    const [statusFilter, setStatusFilter] = useState<string[] | undefined>(
+        findParmas('status')
+    )
     const [allStatuses, setAllStatuses] = useState<Option[]>([])
 
     const { response } = useScheduleApiV1JobsCreate({
@@ -240,11 +253,11 @@ export default function SettingsJobs() {
                     return { label: v.status, value: v.status }
                 })
                 .filter(
-                    (thing, i, arr) => arr.findIndex((t) => t === thing) === i
+                    (thing, i, arr) => arr.findIndex((t) => t.label === thing.label) === i
                 ) || []
         )
     }, [response])
-    const arrayToString = (arr: string[],title: string) => {
+    const arrayToString = (arr: string[], title: string) => {
         let temp = ``
         arr.map((item, index) => {
             if (index == 0) {
@@ -256,36 +269,19 @@ export default function SettingsJobs() {
         console.log(temp)
         return temp
     }
+
     useEffect(() => {
         if (
-            searchParams.get('type') !== jobTypeFilter ||
+            searchParams.getAll('type') !== jobTypeFilter ||
             searchParams.get('status') !== statusFilter
         ) {
-            if (jobTypeFilter !== '') {
-                if (typeof jobTypeFilter === 'string') {
-                    searchParams.set('type', jobTypeFilter)
-                } else {
-                    if (jobTypeFilter && jobTypeFilter?.length > 0) {
-                        searchParams.set(
-                            'type',
-                            arrayToString(jobTypeFilter, 'type')
-                        )
-                    }
-                }
+            if (jobTypeFilter?.length != 0) {
+                searchParams.set('type',jobTypeFilter)
             } else {
                 searchParams.delete('type')
             }
-            if (statusFilter !== '') {
-                if (typeof statusFilter === 'string') {
-                    searchParams.set('type', statusFilter)
-                } else {
-                    if (statusFilter && statusFilter?.length > 0) {
-                        searchParams.set(
-                            'type',
-                            arrayToString(statusFilter, 'type')
-                        )
-                    }
-                }
+            if (statusFilter?.length != 0) {
+                searchParams.set('status', statusFilter)
             } else {
                 searchParams.delete('status')
             }
@@ -298,6 +294,8 @@ export default function SettingsJobs() {
             getRows: (params: IServerSideGetRowsParams) => {
                 const api = new Api()
                 api.instance = AxiosAPI
+
+
                 api.schedule
                     .apiV1JobsCreate({
                         hours: 24,
@@ -356,8 +354,8 @@ export default function SettingsJobs() {
                     options={jobTypes}
                     type="multi"
                     selectedItems={jobTypeFilter}
-                    onChange={(values: string[] ) => {
-                        setJobTypeFilter(values);
+                    onChange={(values: string[]) => {
+                        setJobTypeFilter(values)
                     }}
                     label="Job Types"
                     icon={CloudIcon}

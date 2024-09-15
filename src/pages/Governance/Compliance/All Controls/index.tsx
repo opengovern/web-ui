@@ -44,24 +44,24 @@ import {
     useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsCategoriesList,
     useInventoryApiV2QueryList,
-} from '../../../api/inventory.gen'
-import Spinner from '../../../components/Spinner'
-import { getErrorMessage } from '../../../types/apierror'
-import DrawerPanel from '../../../components/DrawerPanel'
-import { RenderObject } from '../../../components/RenderObject'
-import Table, { IColumn } from '../../../components/Table'
+} from '../../../../api/inventory.gen'
+import Spinner from '../../../../components/Spinner'
+import { getErrorMessage } from '../../../../types/apierror'
+import DrawerPanel from '../../../../components/DrawerPanel'
+import { RenderObject } from '../../../../components/RenderObject'
+import Table, { IColumn } from '../../../../components/Table'
 
 import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
     Api,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2,
-} from '../../../api/api'
-import { isDemoAtom, queryAtom, runQueryAtom } from '../../../store'
-import AxiosAPI from '../../../api/ApiConfig'
+} from '../../../../api/api'
+import { isDemoAtom, queryAtom, runQueryAtom } from '../../../../store'
+import AxiosAPI from '../../../../api/ApiConfig'
 
-import { snakeCaseToLabel } from '../../../utilities/labelMaker'
-import { numberDisplay } from '../../../utilities/numericDisplay'
-import TopHeader from '../../../components/Layout/Header'
+import { snakeCaseToLabel } from '../../../../utilities/labelMaker'
+import { numberDisplay } from '../../../../utilities/numericDisplay'
+import TopHeader from '../../../../components/Layout/Header'
 import QueryDetail from './QueryDetail'
 
 export const getTable = (
@@ -181,7 +181,7 @@ const columns: IColumn<
     // },
 ]
 
-export default function Invetory() {
+export default function AllControls() {
     const [runQuery, setRunQuery] = useAtom(runQueryAtom)
     const [loading, setLoading] = useState(false)
     const [savedQuery, setSavedQuery] = useAtom(queryAtom)

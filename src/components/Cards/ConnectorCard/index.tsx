@@ -71,6 +71,15 @@ export const getConnectorIcon = (
         if (String(connector).toLowerCase() === 'aws') {
             return AWSIcon
         }
+        if(connector?.length && connector?.length > 0) {
+             if (String(connector[0]).toLowerCase() === 'azure') {
+                 return AzureIcon
+             }
+             if (String(connector[0]).toLowerCase() === 'aws') {
+                 return AWSIcon
+             }
+
+        }
         return undefined
     }
 
