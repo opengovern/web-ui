@@ -45,12 +45,19 @@ const columns = () => {
         {
             field: 'createdAt',
             headerName: 'Created At',
-            type: 'date',
+            type: 'string',
             sortable: true,
             filter: false,
             suppressMenu: true,
             resizable: true,
             hide: false,
+            cellRenderer: (params: any) => {
+                return (
+                    <>{`${params.value.split('T')[0]} ${
+                        params.value.split('T')[1].split('.')[0]
+                    } `}</>
+                )
+            },
         },
 
         {
@@ -174,6 +181,13 @@ const columns = () => {
             suppressMenu: true,
             resizable: true,
             hide: false,
+            cellRenderer: (params: any) => {
+                return (
+                    <>{`${params.value.split('T')[0]} ${
+                        params.value.split('T')[1].split('.')[0]
+                    } `}</>
+                )
+            },
         },
         {
             field: 'failureReason',
@@ -191,19 +205,15 @@ const columns = () => {
 
 const jobTypes = [
     {
-        label: 'All',
-        value: '',
-    },
-    {
         label: 'Discovery',
         value: 'discovery',
     },
     {
-        label: 'Governance',
+        label: 'Compliance',
         value: 'compliance',
     },
     {
-        label: 'Metrics',
+        label: 'Analytics',
         value: 'analytics',
     },
 ]

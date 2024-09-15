@@ -36,8 +36,9 @@ import SecurityOverview from '../pages/Governance/Overview'
 import WorkloadOptimizer from '../pages/WorkloadOptimizer'
 import RequestAccess from '../pages/Integrations/RequestAccess'
 import SettingsJobs from '../pages/Settings/Jobs'
-import Invetory from '../pages/Assets/Inventory'
 import AllControls from '../pages/Governance/Compliance/All Controls'
+import AllBenchmarks from '../pages/Governance/Compliance/All Benchmarks'
+import AllQueries from '../pages/Query/All Query'
 
 const authRoutes = [
     {
@@ -246,29 +247,34 @@ const authRoutes = [
         element: <SecurityOverview />,
     },
     {
-        key: 'policies',
-        path: '/ws/:ws/policies',
+        key: 'Compliance',
+        path: '/ws/:ws/compliance',
         element: <Compliance />,
     },
 
     {
         key: 'benchmark summary',
-        path: '/ws/:ws/policies/:benchmarkId',
+        path: '/ws/:ws/compliance/:benchmarkId',
         element: <BenchmarkSummary />,
     },
     {
         key: 'allControls',
-        path: '/ws/:ws/policies/all-controls',
+        path: '/ws/:ws/compliance/all-controls',
         element: <AllControls />,
     },
     {
+        key: 'allBenchmarks',
+        path: '/ws/:ws/compliance/all-benchmarks',
+        element: <AllBenchmarks />,
+    },
+    {
         key: 'benchmark summary',
-        path: '/ws/:ws/policies/:benchmarkId/:controlId',
+        path: '/ws/:ws/compliance/:benchmarkId/:controlId',
         element: <ControlDetail />,
     },
     {
         key: 'benchmark single connection',
-        path: '/ws/:ws/policies/:benchmarkId/:connectionId',
+        path: '/ws/:ws/compliance/:benchmarkId/:connectionId',
         element: <SingleComplianceConnection />,
     },
     {
@@ -353,8 +359,8 @@ const authRoutes = [
     },
     {
         key: 'All inventory',
-        path: '/ws/:ws/inventory/all-queries',
-        element: <Invetory />,
+        path: '/ws/:ws/query/all-queries',
+        element: <AllQueries />,
     },
 ]
 

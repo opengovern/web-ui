@@ -44,25 +44,27 @@ import {
     useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsCategoriesList,
     useInventoryApiV2QueryList,
-} from '../../../api/inventory.gen'
-import Spinner from '../../../components/Spinner'
-import { getErrorMessage } from '../../../types/apierror'
-import DrawerPanel from '../../../components/DrawerPanel'
-import { RenderObject } from '../../../components/RenderObject'
-import Table, { IColumn } from '../../../components/Table'
+} from '../../../../api/inventory.gen'
+import Spinner from '../../../../components/Spinner'
+import { getErrorMessage } from '../../../../types/apierror'
+import DrawerPanel from '../../../../components/DrawerPanel'
+import { RenderObject } from '../../../../components/RenderObject'
+import Table, { IColumn } from '../../../../components/Table'
 
 import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
     Api,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2,
-} from '../../../api/api'
-import { isDemoAtom, queryAtom, runQueryAtom } from '../../../store'
-import AxiosAPI from '../../../api/ApiConfig'
+    GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem,
+    GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItemQuery,
+    GithubComKaytuIoKaytuEnginePkgControlApiListV2,
+} from '../../../../api/api'
+import { isDemoAtom, queryAtom, runQueryAtom } from '../../../../store'
+import AxiosAPI from '../../../../api/ApiConfig'
 
-import { snakeCaseToLabel } from '../../../utilities/labelMaker'
-import { numberDisplay } from '../../../utilities/numericDisplay'
-import TopHeader from '../../../components/Layout/Header'
+import { snakeCaseToLabel } from '../../../../utilities/labelMaker'
+import { numberDisplay } from '../../../../utilities/numericDisplay'
+import TopHeader from '../../../../components/Layout/Header'
 import QueryDetail from './QueryDetail'
 import Filter from './Filter'
 
@@ -120,7 +122,7 @@ export const getTable = (
 }
 
 const columns: IColumn<
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2,
+    GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem,
     any
 >[] = [
     {
@@ -138,26 +140,45 @@ const columns: IColumn<
         resizable: false,
     },
     {
-        field: 'connectors',
+        field: 'connector',
         headerName: 'Connector',
         type: 'string',
         sortable: true,
         resizable: false,
-        cellRenderer: (params: any) => (
-             params.value.map(
-                            (item: string, index: number) => {
-                                return `${item} `
-                            }
-                        )
-        ),
+        cellRenderer: (params: any) =>
+            params.value.map((item: string, index: number) => {
+                return `${item} `
+            }),
     },
-    // {
-    //     field: 'connectors',
-    //     headerName: 'Service',
-    //     type: 'string',
-    //     sortable: true,
-    //     resizable: false,
-    // },
+    {
+        field: 'query',
+        headerName: 'Primary Table',
+        type: 'string',
+        sortable: true,
+        resizable: false,
+        cellRenderer: (params: any) =>
+            params.value?.primary_table,
+    },
+    {
+        field: 'severity',
+        headerName: 'Severity',
+        type: 'string',
+        sortable: true,
+        resizable: false,
+    },
+    {
+        field: 'query.parameters',
+        headerName: 'Has Parametrs',
+        type: 'string',
+        sortable: true,
+        resizable: false,
+        cellRenderer: (params: any) => {
+            return <>{params.value.length > 0 ? 'True' : 'False'}</>
+        }
+
+        
+    },
+
     // {
     //     field: 'connectors',
     //     headerName: 'Primary Table',
@@ -183,7 +204,7 @@ const columns: IColumn<
     // },
 ]
 
-export default function Invetory() {
+export default function AllBenchmarks() {
     const [runQuery, setRunQuery] = useAtom(runQueryAtom)
     const [loading, setLoading] = useState(false)
     const [savedQuery, setSavedQuery] = useAtom(queryAtom)
@@ -191,18 +212,17 @@ export default function Invetory() {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedRow, setSelectedRow] =
-        useState<GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2>({})
+        useState<GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem>()
     const [openDrawer, setOpenDrawer] = useState(false)
     const [openSlider, setOpenSlider] = useState(false)
     const [openSearch, setOpenSearch] = useState(true)
-        const [query, setQuery] =
-            useState<GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2>()
     const [showEditor, setShowEditor] = useState(true)
     const isDemo = useAtomValue(isDemoAtom)
     const [pageSize, setPageSize] = useState(1000)
     const [autoRun, setAutoRun] = useState(false)
     const [engine, setEngine] = useState('odysseus-sql')
-   
+    const [query, setQuery] =
+        useState < GithubComKaytuIoKaytuEnginePkgControlApiListV2>()
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2AnalyticsCategoriesList()
     // const { response: queries, isLoading: queryLoading } =
@@ -234,21 +254,23 @@ export default function Invetory() {
                  const api = new Api()
                  api.instance = AxiosAPI
                  let body = {
-                     title_filter: '',
-                     connectors: query?.connector,
+                     connector: query?.connector,
+                     severity: query?.severity,
                      cursor: params.request.startRow
                          ? Math.floor(params.request.startRow / 25)
                          : 0,
                      per_page: 25,
                  }
-                  if (!body.connectors) {
-                      delete body['connectors']
-                  } else {
-                      // @ts-ignore
-                      body['connector'] = [body?.connector]
-                  }
-                 api.inventory
-                     .apiV2QueryList(body)
+                 if(!body.connector){
+                    delete body["connector"]
+                 }
+                 else{
+                    // @ts-ignore
+                    body["connector"] = [body?.connector]
+                 }
+                 
+                 api.compliance
+                     .apiV2ControlList(body)
                      .then((resp) => {
                          params.success({
                              rowData: resp.data.items || [],
@@ -598,17 +620,17 @@ export default function Invetory() {
                             onApply={(e) => setQuery(e)}
                         /> */}
 
-                        <Flex className="mt-2">
+                        <Flex className=" mt-2">
                             <Table
                                 id="inventory_queries"
                                 columns={columns}
                                 serverSideDatasource={serverSideRows}
                                 loading={loading}
                                 onRowClicked={(e) => {
-                                    if (e.data) {
-                                        setSelectedRow(e?.data)
-                                    }
-                                    setOpenSlider(true)
+                                    // if (e.data) {
+                                    //     setSelectedRow(e?.data)
+                                    // }
+                                    // setOpenSlider(true)
                                 }}
                                 options={{
                                     rowModelType: 'serverSide',
@@ -619,13 +641,14 @@ export default function Invetory() {
                     </Flex>
                 </Flex>
             )}
-            <QueryDetail
+            {/**  <QueryDetail
                 // type="resource"
                 query={selectedRow}
                 open={openSlider}
                 onClose={() => setOpenSlider(false)}
                 onRefresh={() => window.location.reload()}
             />
+            */}
         </>
     )
 }
