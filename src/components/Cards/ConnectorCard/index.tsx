@@ -61,7 +61,7 @@ export const getConnectorsIcon = (connector: SourceType[], className = '') => {
 }
 
 export const getConnectorIcon = (
-    connector: string | SourceType[] | SourceType | undefined,
+    connector: string | SourceType[] | SourceType | undefined | string[],
     className = ''
 ) => {
     const connectorIcon = () => {

@@ -143,7 +143,7 @@ export default function QueryDetail({
                     className="mt-2"
                 >
                     <Text className="w-56 font-bold">Title : </Text>
-                    <Text className="w-full">{query?.id}</Text>
+                    <Text className="w-full">{query?.title}</Text>
                 </Flex>{' '}
                 <Flex
                     flexDirection="row"
@@ -183,7 +183,22 @@ export default function QueryDetail({
             <TabGroup>
                 <TabPanels>
                     <TabPanel>
-                        <Title className="mb-2">Query</Title>
+                        <Flex flexDirection="row" className="mb-2">
+                            <Title className="mb-2">Query</Title>
+
+                            <Button
+                                icon={PlayCircleIcon}
+                                onClick={() => {
+                                    // @ts-ignore
+                                    setQuery(query?.query?.query_to_execute)
+                                }}
+                                disabled={false}
+                                loading={false}
+                                loadingText="Running"
+                            >
+                                <Link to={`/ws/${ws}/query`}>Run in Query</Link>{' '}
+                            </Button>
+                        </Flex>
                         <Card className=" py-3 mb-2 relative ">
                             <Editor
                                 onValueChange={(text) => {
@@ -204,25 +219,6 @@ export default function QueryDetail({
                                 disabled={true}
                             />
                         </Card>
-                        <Flex justifyContent="end" className="mt-2">
-                            <Button
-                                icon={PlayCircleIcon}
-                                onClick={() => {
-                                    // @ts-ignore
-                                    setQuery(query?.query?.query_to_execute)
-                                }}
-                                disabled={false}
-                                loading={false}
-                                loadingText="Running"
-                            >
-                                <Link to={`/ws/${ws}/query`}>
-                                    Open in Query
-                                </Link>{' '}
-                            </Button>
-                        </Flex>
-                    </TabPanel>
-                    <TabPanel className="pt-8">
-                        {/* <Timeline data={response} isLoading={isLoading} /> */}
                     </TabPanel>
                 </TabPanels>
             </TabGroup>

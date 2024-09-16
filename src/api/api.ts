@@ -2766,6 +2766,7 @@ export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2 {
     primary_table?: string
     severity?: string
     finding_summary?: boolean
+    root? : boolean
     connector?: string[]
 }
 export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2Response {
@@ -2816,17 +2817,43 @@ export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseMetaDat
     id: string
     title: string
     description: string
-    connectors: null
+    connectors: string[]
     number_of_controls: number
     enabled: boolean
     track_drift_events: boolean
     primary_tables: string[]
     tags: GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseTags
-    created_at: Date
-    updated_at: Date
+    created_at: string
+    updated_at: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseTags {}
+
+export interface GithubComKaytuIoKaytuEnginePkgControlDetailV3 {
+    benchmarks: GithubComKaytuIoKaytuEnginePkgControlDetailV3Benchmarks
+    connector: string[]
+    description: string
+    id: string
+    query: GithubComKaytuIoKaytuEnginePkgControlDetailV3Query
+    severity: string
+    tags: GithubComKaytuIoKaytuEnginePkgControlDetailV3Tags
+    title: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgControlDetailV3Benchmarks {
+    fullPath: string[]
+    roots: string[]
+}
+export interface GithubComKaytuIoKaytuEnginePkgControlDetailV3Tags {
+   [key: string] : string[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgControlDetailV3Query {
+    engine: string
+    listOfTables: string[]
+    primaryTable: string
+    queryToExecute: string
+}
 
 
 
@@ -4298,7 +4325,7 @@ export class Api<
          * @tags compliance control
          * @name ApiV3BenchmarkList
          * @summary Get control lists
-         * @request POST:/compliance/api/v2/controls
+         * @request POST:/compliance/api/v3/benchmarks
          * @secure
          */
         apiV3BenchmarkList: (
@@ -4313,6 +4340,24 @@ export class Api<
                 method: 'POST',
                 secure: true,
                 body: request,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+        /**
+         * @description API for get Control detail
+         *
+         * @tags compliance control
+         * @name ApiV3ControlDetail
+         * @summary Get control lists
+         * @request compliance/api/v3/control/${control_id}
+         * @secure
+         */
+        apiV3ControlDetail: (id: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgControlDetailV3, any>({
+                path: `compliance/api/v3/control/${id}?showReferences=true`,
+                method: 'GET',
+                secure: true,
                 type: ContentType.Json,
                 format: 'json',
                 ...params,

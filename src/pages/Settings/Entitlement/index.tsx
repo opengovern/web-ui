@@ -114,8 +114,9 @@ export default function SettingsEntitlement() {
         </Flex>
     ) : (
         <Flex flexDirection="col">
-            <Grid numItemsSm={2} numItemsLg={3} className="gap-4 w-full">
-                <Card key="activeUsers">
+
+            {/* <Grid numItemsSm={2} numItemsLg={3} className="gap-4 w-full"> */}
+                {/* <Card key="activeUsers">
                     <Text>Active users</Text>
                     <Metric>{numericDisplay(currentUsers)}</Metric>
                     <Flex className="mt-3">
@@ -144,7 +145,7 @@ export default function SettingsEntitlement() {
                         <Text>{numericDisplay(maxResources)} Allowed</Text>
                     </Flex>
                     <ProgressBar value={resourcesPercentage} className="mt-2" />
-                </Card>
+                </Card> */}
                 {/* <Card key="hosts">
                     <Text>Hosts</Text>
                     <Metric>{numericDisplay(noOfHosts)}</Metric>
@@ -154,8 +155,8 @@ export default function SettingsEntitlement() {
                     </Flex>
                     <ProgressBar value={hostsPercentage} className="mt-2" />
                 </Card> */}
-            </Grid>
-            <Card key="summary" className="mt-4 w-full">
+            {/* </Grid> */}
+            <Card key="summary" className=" w-full">
                 <Title className="font-semibold">Summary</Title>
                 <List className="mt-3">
                     {wsDetails.map((item) => (

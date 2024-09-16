@@ -32,7 +32,11 @@ import { highlight, languages } from 'prismjs' // eslint-disable-next-line impor
 import 'prismjs/components/prism-sql' // eslint-disable-next-line import/no-extraneous-dependencies
 import 'prismjs/themes/prism.css'
 import Editor from 'react-simple-code-editor'
-import {IServerSideGetRowsParams, RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
+import {
+    IServerSideGetRowsParams,
+    RowClickedEvent,
+    ValueFormatterParams,
+} from 'ag-grid-community'
 import {
     CheckCircleIcon,
     ExclamationCircleIcon,
@@ -58,6 +62,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem,
     GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItemQuery,
     GithubComKaytuIoKaytuEnginePkgControlApiListV2,
+    GithubComKaytuIoKaytuEnginePkgControlDetailV3,
 } from '../../../../api/api'
 import { isDemoAtom, queryAtom, runQueryAtom } from '../../../../store'
 import AxiosAPI from '../../../../api/ApiConfig'
@@ -65,7 +70,7 @@ import AxiosAPI from '../../../../api/ApiConfig'
 import { snakeCaseToLabel } from '../../../../utilities/labelMaker'
 import { numberDisplay } from '../../../../utilities/numericDisplay'
 import TopHeader from '../../../../components/Layout/Header'
-import QueryDetail from './QueryDetail'
+import ControlDetail from './ControlDetail'
 import Filter from './Filter'
 
 export const getTable = (
@@ -156,8 +161,7 @@ const columns: IColumn<
         type: 'string',
         sortable: true,
         resizable: false,
-        cellRenderer: (params: any) =>
-            params.value?.primary_table,
+        cellRenderer: (params: any) => params.value?.primary_table,
     },
     {
         field: 'severity',
@@ -174,9 +178,7 @@ const columns: IColumn<
         resizable: false,
         cellRenderer: (params: any) => {
             return <>{params.value.length > 0 ? 'True' : 'False'}</>
-        }
-
-        
+        },
     },
 
     // {
@@ -212,7 +214,7 @@ export default function AllControls() {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedRow, setSelectedRow] =
-        useState<GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem>()
+        useState<GithubComKaytuIoKaytuEnginePkgControlDetailV3>()
     const [openDrawer, setOpenDrawer] = useState(false)
     const [openSlider, setOpenSlider] = useState(false)
     const [openSearch, setOpenSearch] = useState(true)
@@ -222,7 +224,7 @@ export default function AllControls() {
     const [autoRun, setAutoRun] = useState(false)
     const [engine, setEngine] = useState('odysseus-sql')
     const [query, setQuery] =
-        useState < GithubComKaytuIoKaytuEnginePkgControlApiListV2>()
+        useState<GithubComKaytuIoKaytuEnginePkgControlApiListV2>()
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2AnalyticsCategoriesList()
     // const { response: queries, isLoading: queryLoading } =
@@ -231,65 +233,66 @@ export default function AllControls() {
     //         Cursor: 0,
     //         PerPage:25
     //     })
-    
-   
-    
-    const recordToArray = (record?: Record<string, string[]> | undefined) => {
-        if (record === undefined) {
-            return []
-        }
 
-        return Object.keys(record).map((key) => {
-            return {
-                value: key,
-                resource_types: record[key],
-            }
-        })
+    const getControlDetail = (id: string) => {
+        const api = new Api()
+        api.instance = AxiosAPI
+        // setLoading(true);
+        api.compliance
+            .apiV3ControlDetail(id)
+            .then((resp) => {
+                setSelectedRow(resp.data)
+                setOpenDrawer(true)
+                // setLoading(false)
+            })
+            .catch((err) => {
+                // setLoading(false)
+
+               
+            })
     }
 
-     const ssr = () => {
-         return {
-             getRows: (params: IServerSideGetRowsParams) => {
+    const ssr = () => {
+        return {
+            getRows: (params: IServerSideGetRowsParams) => {
                 // setLoading(true)
-                 const api = new Api()
-                 api.instance = AxiosAPI
-                 let body = {
-                     connector: query?.connector,
-                     severity: query?.severity,
-                     cursor: params.request.startRow
-                         ? Math.floor(params.request.startRow / 25)
-                         : 0,
-                     per_page: 25,
-                 }
-                 if(!body.connector){
-                    delete body["connector"]
-                 }
-                 else{
+                const api = new Api()
+                api.instance = AxiosAPI
+                let body = {
+                    connector: query?.connector,
+                    severity: query?.severity,
+                    cursor: params.request.startRow
+                        ? Math.floor(params.request.startRow / 25)
+                        : 0,
+                    per_page: 25,
+                }
+                if (!body.connector) {
+                    delete body['connector']
+                } else {
                     // @ts-ignore
-                    body["connector"] = [body?.connector]
-                 }
-                 
-                 api.compliance
-                     .apiV2ControlList(body)
-                     .then((resp) => {
-                         params.success({
-                             rowData: resp.data.items || [],
-                             rowCount: resp.data.total_count,
-                         })
-                         setLoading(false)
-                     })
-                     .catch((err) => {
-                         setLoading(false)
+                    body['connector'] = [body?.connector]
+                }
 
-                         console.log(err)
-                         params.fail()
-                     })
-             },
-         }
-     }
+                api.compliance
+                    .apiV2ControlList(body)
+                    .then((resp) => {
+                        params.success({
+                            rowData: resp.data.items || [],
+                            rowCount: resp.data.total_count,
+                        })
+                        setLoading(false)
+                    })
+                    .catch((err) => {
+                        setLoading(false)
 
-     const serverSideRows = ssr()
+                        console.log(err)
+                        params.fail()
+                    })
+            },
+        }
+    }
 
+    const serverSideRows = ssr()
 
     return (
         <>
@@ -627,10 +630,10 @@ export default function AllControls() {
                                 serverSideDatasource={serverSideRows}
                                 loading={loading}
                                 onRowClicked={(e) => {
-                                    // if (e.data) {
-                                    //     setSelectedRow(e?.data)
-                                    // }
-                                    // setOpenSlider(true)
+                                    if (e.data) {
+                                        getControlDetail(e.data.id)
+                                        setOpenSlider(true)
+                                    }
                                 }}
                                 options={{
                                     rowModelType: 'serverSide',
@@ -641,14 +644,14 @@ export default function AllControls() {
                     </Flex>
                 </Flex>
             )}
-            {/**  <QueryDetail
+             <ControlDetail
                 // type="resource"
-                query={selectedRow}
+                selectedItem={selectedRow}
                 open={openSlider}
                 onClose={() => setOpenSlider(false)}
-                onRefresh={() => window.location.reload()}
+                onRefresh={() => {}}
             />
-            */}
+           
         </>
     )
 }

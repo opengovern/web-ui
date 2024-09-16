@@ -72,7 +72,7 @@ import AxiosAPI from '../../../../api/ApiConfig'
 import { snakeCaseToLabel } from '../../../../utilities/labelMaker'
 import { numberDisplay } from '../../../../utilities/numericDisplay'
 import TopHeader from '../../../../components/Layout/Header'
-import QueryDetail from './QueryDetail'
+import BenchmarkDetail from './BenchmarkDetail'
 import Filter from './Filter'
 
 export const getTable = (
@@ -218,7 +218,7 @@ export default function AllBenchmarks() {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedRow, setSelectedRow] =
-        useState<GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseItem>()
+        useState<GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseMetaData>()
     const [openDrawer, setOpenDrawer] = useState(false)
     const [openSlider, setOpenSlider] = useState(false)
     const [openSearch, setOpenSearch] = useState(true)
@@ -263,6 +263,8 @@ export default function AllBenchmarks() {
                         ? Math.floor(params.request.startRow / 25)
                         : 0,
                     per_page: 25,
+                    root: true,
+                    finding_summary: false,
                 }
                 //  if(!body.connector){
                 //     delete body["connector"]
@@ -628,10 +630,10 @@ export default function AllBenchmarks() {
                                 serverSideDatasource={serverSideRows}
                                 loading={loading}
                                 onRowClicked={(e) => {
-                                    // if (e.data) {
-                                    //     setSelectedRow(e?.data)
-                                    // }
-                                    // setOpenSlider(true)
+                                    if (e.data) {
+                                        setSelectedRow(e?.data?.metadata)
+                                    }
+                                    setOpenSlider(true)
                                 }}
                                 options={{
                                     rowModelType: 'serverSide',
@@ -642,14 +644,14 @@ export default function AllBenchmarks() {
                     </Flex>
                 </Flex>
             )}
-            {/**  <QueryDetail
+            *  <BenchmarkDetail
                 // type="resource"
-                query={selectedRow}
+                selectedItem={selectedRow}
                 open={openSlider}
                 onClose={() => setOpenSlider(false)}
                 onRefresh={() => window.location.reload()}
             />
-            */}
+           
         </>
     )
 }

@@ -259,12 +259,12 @@ const authRoutes = [
     },
     {
         key: 'allControls',
-        path: '/ws/:ws/compliance/all-controls',
+        path: '/ws/:ws/compliance/controls',
         element: <AllControls />,
     },
     {
         key: 'allBenchmarks',
-        path: '/ws/:ws/compliance/all-benchmarks',
+        path: '/ws/:ws/compliance/benchmarks',
         element: <AllBenchmarks />,
     },
     {
