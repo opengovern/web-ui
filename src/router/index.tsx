@@ -304,7 +304,7 @@ const authRoutes = [
     },
     {
         key: 'findings',
-        path: '/ws/:ws/findings/:controlId',
+        path: '/ws/:ws/findings/control-summary/:controlId',
         element: <ControlDetail />,
     },
     {
