@@ -13,7 +13,7 @@ import {
     ValueFormatterFunc,
 } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
-import 'ag-grid-enterprise'
+
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { ReactNode, useEffect, useRef, useState } from 'react'

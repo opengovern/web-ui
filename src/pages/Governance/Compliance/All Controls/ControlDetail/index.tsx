@@ -21,6 +21,7 @@ import {
     CheckCircleIcon,
     PlayCircleIcon,
     Square2StackIcon,
+    TagIcon,
     XCircleIcon,
 } from '@heroicons/react/24/outline'
 import {
@@ -280,7 +281,7 @@ export default function ControlDetail({
                                                             justifyContent="start"
                                                             className="hover:cursor-pointer max-w-full w-fit bg-gray-200 border-gray-300 rounded-lg border px-1"
                                                         >
-                                                            <Square2StackIcon className="min-w-4 w-4 mr-1" />
+                                                            <TagIcon className="min-w-4 w-4 mr-1" />
                                                             <Text className="truncate">
                                                                 {/* @ts-ignore */}
                                                                 {key[0]}:
