@@ -25,9 +25,9 @@ export default function NewAzureSubscription({
 }: INewAzureSubscription) {
     const [stepNum, setStepNum] = useState(1)
     const [spnID, setSpnID] = useState('')
-    const [isNew,setIsNew] = useState(false)
+    const [isNew, setIsNew] = useState(false)
     const [choiced, setChoiced] = useState(false)
-    const [openPrencipal,setOpenPrencipal] = useState(false)
+    const [openPrencipal, setOpenPrencipal] = useState(false)
 
     const {
         response: autoOnboardResult,
@@ -37,9 +37,16 @@ export default function NewAzureSubscription({
     } = useIntegrationApiV1CredentialsAzureAutoonboardCreate(spnID, {}, false)
 
     const close = () => {
+        if(!choiced){
+            onClose()
+        }
+        if (stepNum == 1) {
+            setChoiced(false)
+        } else {
+            setStepNum(1)
+            onClose()
+        }
         setSpnID('')
-        setStepNum(1)
-        onClose()
     }
 
     useEffect(() => {
@@ -86,11 +93,18 @@ export default function NewAzureSubscription({
                 <>
                     {isNew ? (
                         <>
-                            <NewPrincipal useDrawer={false} open={openPrencipal}  onClose={()=> {
-                                
-                                setOpenPrencipal(false)
-                                setIsNew(false)
-                                }}/>
+                            <NewPrincipal
+                                useDrawer={false}
+                                open={openPrencipal}
+                                onClose={() => {
+                                    setOpenPrencipal(false)
+                                    setIsNew(false)
+                                }}
+                                onCancel={() => {
+                                    setChoiced(false)
+                                    setIsNew(false)
+                                }}
+                            />
                         </>
                     ) : (
                         <Flex

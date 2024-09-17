@@ -17,6 +17,7 @@ interface INewPrinciple {
     onClose: () => void
     useDrawer?: boolean
     bootstrapMode?: boolean
+    onCancel? : ()=> void
 }
 
 export default function NewPrincipal({
@@ -24,6 +25,7 @@ export default function NewPrincipal({
     onClose,
     useDrawer = true,
     bootstrapMode = false,
+    onCancel,
 }: INewPrinciple) {
     const currentWorkspace = useParams<{ ws: string }>().ws
     const [stepNum, setStepNum] = useState(1)
@@ -79,6 +81,9 @@ export default function NewPrincipal({
     const close = () => {
         setStepNum(1)
         onClose()
+        if(onCancel){
+            onCancel()
+        }
     }
 
     useEffect(() => {
