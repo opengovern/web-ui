@@ -41,7 +41,7 @@ const navList = [
         description: 'Audit cloud configurations against benchmarks.',
         icon: ShieldCheckIcon,
         children: [
-            { name: 'Benchmarks', link: '/ws/:ws/policies' },
+            { name: 'Benchmarks', link: '/ws/:ws/compliance' },
             { name: 'Security findings', link: '/ws/:ws/findings' },
         ],
     },

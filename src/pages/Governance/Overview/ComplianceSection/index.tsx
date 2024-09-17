@@ -91,7 +91,7 @@ export default function Compliance() {
                         iconPosition="right"
                         onClick={() =>
                             navigate(
-                                `/ws/${workspace}/policies?${searchParams}`
+                                `/ws/${workspace}/compliance?${searchParams}`
                             )
                         }
                     >
@@ -127,7 +127,7 @@ export default function Compliance() {
                                     <Card
                                         onClick={() =>
                                             navigate(
-                                                `/ws/${workspace}/policies/${bs.id}?${searchParams}`
+                                                `/ws/${workspace}/compliance/${bs.id}?${searchParams}`
                                             )
                                         }
                                         className="p-3 cursor-pointer dark:ring-gray-500 hover:shadow-md"
