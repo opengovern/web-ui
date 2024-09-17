@@ -23,6 +23,7 @@ import {
 import { getErrorMessage } from '../../../types/apierror'
 import { notificationAtom } from '../../../store'
 import { searchAtom, useURLParam } from '../../../utilities/urlstate'
+import TopHeader from '../../../components/Layout/Header'
 
 interface IParam {
     key: string
@@ -124,72 +125,85 @@ export default function SettingsParameters() {
     }
 
     return (
-        <Card key="summary" className="">
-            <Flex>
-                <Title className="font-semibold">Parameters</Title>
-                <Button variant="secondary" icon={PlusIcon} onClick={addRow}>
-                    Add
-                </Button>
-            </Flex>
-            <Divider />
+        <>
+            <TopHeader />
+            <Card key="summary" className="">
+                <Flex>
+                    <Title className="font-semibold">Parameters</Title>
+                    <Button
+                        variant="secondary"
+                        icon={PlusIcon}
+                        onClick={addRow}
+                    >
+                        Add
+                    </Button>
+                </Flex>
+                <Divider />
 
-            <Flex flexDirection="col" className="mt-4">
-                {params.map((p, idx) => {
-                    return (
-                        <Flex flexDirection="row" className="mb-4">
-                            <KeyIcon className="w-10 mr-3" />
-                            <TextInput
-                                id={p.key}
-                                value={p.key}
-                                onValueChange={(e) => updateKey(String(e), idx)}
-                                className={
-                                    keyParam === p.key ? 'border-red-500' : ''
-                                }
-                            />
-                            <ArrowRightCircleIcon className="w-10 mx-3" />
-                            <Textarea
-                                value={p.value}
-                                onValueChange={(e) =>
-                                    updateValue(String(e), idx)
-                                }
-                                rows={1}
-                                className={
-                                    keyParam === p.key ? 'border-red-500' : ''
-                                }
-                            />
-                            <TrashIcon
-                                className="w-10 ml-3 hover:cursor-pointer"
-                                onClick={() => deleteRow(idx)}
-                            />
-                        </Flex>
-                    )
-                })}
-            </Flex>
-            <Flex flexDirection="row" justifyContent="end">
-                <Button
-                    variant="secondary"
-                    className="mx-4"
-                    onClick={() => {
-                        refresh()
-                    }}
-                    loading={isExecuted && isLoading}
-                >
-                    Reset
-                </Button>
-                <Button
-                    onClick={() => {
-                        sendNowWithParams(
-                            {
-                                queryParameters: params,
-                            },
-                            {}
+                <Flex flexDirection="col" className="mt-4">
+                    {params.map((p, idx) => {
+                        return (
+                            <Flex flexDirection="row" className="mb-4">
+                                <KeyIcon className="w-10 mr-3" />
+                                <TextInput
+                                    id={p.key}
+                                    value={p.key}
+                                    onValueChange={(e) =>
+                                        updateKey(String(e), idx)
+                                    }
+                                    className={
+                                        keyParam === p.key
+                                            ? 'border-red-500'
+                                            : ''
+                                    }
+                                />
+                                <ArrowRightCircleIcon className="w-10 mx-3" />
+                                <Textarea
+                                    value={p.value}
+                                    onValueChange={(e) =>
+                                        updateValue(String(e), idx)
+                                    }
+                                    rows={1}
+                                    className={
+                                        keyParam === p.key
+                                            ? 'border-red-500'
+                                            : ''
+                                    }
+                                />
+                                <TrashIcon
+                                    className="w-10 ml-3 hover:cursor-pointer"
+                                    onClick={() => deleteRow(idx)}
+                                />
+                            </Flex>
                         )
-                    }}
-                    loading={updateIsExecuted && updateIsLoading}
-                >
-                    Save
-                </Button>
-            </Flex>
-        </Card>
+                    })}
+                </Flex>
+                <Flex flexDirection="row" justifyContent="end">
+                    <Button
+                        variant="secondary"
+                        className="mx-4"
+                        onClick={() => {
+                            refresh()
+                        }}
+                        loading={isExecuted && isLoading}
+                    >
+                        Reset
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            sendNowWithParams(
+                                {
+                                    queryParameters: params,
+                                },
+                                {}
+                            )
+                        }}
+                        loading={updateIsExecuted && updateIsLoading}
+                    >
+                        Save
+                    </Button>
+                </Flex>
+            </Card>
+        </>
     )
 }

@@ -39,6 +39,9 @@ import SettingsJobs from '../pages/Settings/Jobs'
 import AllControls from '../pages/Governance/Compliance/All Controls'
 import AllBenchmarks from '../pages/Governance/Compliance/All Benchmarks'
 import AllQueries from '../pages/Query/All Query'
+import SettingsWorkspaceAPIKeys from '../pages/Settings/APIKeys'
+import SettingsParameters from '../pages/Settings/Parameters'
+import SettingsMembers from '../pages/Settings/Members'
 
 const authRoutes = [
     {
@@ -233,13 +236,28 @@ const authRoutes = [
     },
     {
         key: 'settings page',
-        path: '/ws/:ws/settings',
+        path: '/ws/:ws/settings/about',
         element: <Settings />,
     },
     {
         key: 'settings Jobs',
         path: '/ws/:ws/settings/jobs',
         element: <SettingsJobs />,
+    },
+    {
+        key: 'settings APi Keys',
+        path: '/ws/:ws/settings/api-keys',
+        element: <SettingsWorkspaceAPIKeys />,
+    },
+    {
+        key: 'settings variables',
+        path: '/ws/:ws/settings/variables',
+        element: <SettingsParameters />,
+    },
+    {
+        key: 'settings Authentications',
+        path: '/ws/:ws/settings/authentication',
+        element: <SettingsMembers />,
     },
     {
         key: 'security overview',

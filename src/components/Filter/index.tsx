@@ -46,7 +46,7 @@ export default function KFilter({
     const [search, setSearch] = useState('')
     const checkbox = useCheckboxState({ state: [...selectedItems] })
     const [con, setCon] = useState<string>(hasCondition == true && condition ? condition : 'is')
-
+    console.log(checkbox.state)
     useEffect(() => {
         // @ts-ignore
         if (hasCondition == true) {
@@ -94,8 +94,11 @@ export default function KFilter({
                         {selectedItems.length > 0 && (
                             <>
                                 {' : '}
-                               { selectedItems.length ==1 ? options.filter((item,value)=> {return item.value == selectedItems[0]})[0]?.label :
-                                `( ${selectedItems.length} )`}
+                                {selectedItems.length == 1
+                                    ? options.filter((item, value) => {
+                                          return item.value == selectedItems[0]
+                                      })[0]?.label
+                                    : `( ${selectedItems.length} )`}
                             </>
                         )}
                     </Text>
@@ -116,11 +119,15 @@ export default function KFilter({
                         <Flex className="mb-3">
                             <Flex className="w-fit gap-1.5">
                                 <Text className="font-semibold">{label}</Text>
-                                <ConditionDropdown
-                                    onChange={(c) => setCon(c)}
-                                    conditions={[con]}
-                                    isDate={false}
-                                />
+                                {hasCondition == true && (
+                                    <>
+                                        <ConditionDropdown
+                                            onChange={(c) => setCon(c)}
+                                            conditions={[con]}
+                                            isDate={false}
+                                        />
+                                    </>
+                                )}
                             </Flex>
                             {/* {f?.onDelete && (
                                     <div className="group relative">

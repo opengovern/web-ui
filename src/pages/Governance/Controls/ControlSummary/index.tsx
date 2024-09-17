@@ -189,7 +189,7 @@ export default function ControlDetail() {
                                             className="hover:cursor-pointer max-w-full w-fit bg-gray-200 border-gray-300 rounded-lg border px-1"
                                             onClick={() => {
                                                 navigate(
-                                                    `/ws/${ws}/settings?sp=parameters&key=${item.key}`
+                                                    `/ws/${ws}/settings/variables?key=${item.key}`
                                                 )
                                             }}
                                         >

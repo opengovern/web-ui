@@ -11,6 +11,7 @@ import {
     dateTimeDisplay,
     shortDateTimeDisplay,
 } from '../../../utilities/dateDisplay'
+import TopHeader from '../../../components/Layout/Header'
 
 const fixRole = (role: string) => {
     switch (role) {
@@ -50,6 +51,7 @@ export default function SettingsMembers() {
         </Flex>
     ) : (
         <>
+            <TopHeader/>
             <DrawerPanel
                 open={drawerOpen}
                 title={

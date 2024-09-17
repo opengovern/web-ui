@@ -303,7 +303,7 @@ export default function ScoreDetails() {
                                                 className="hover:cursor-pointer max-w-full w-fit bg-gray-200 border-gray-300 rounded-lg border px-1"
                                                 onClick={() => {
                                                     navigate(
-                                                        `/ws/${ws}/settings?sp=parameters&key=${item.key}`
+                                                        `/ws/${ws}/settings/variables&key=${item.key}`
                                                     )
                                                 }}
                                             >
@@ -360,7 +360,7 @@ export default function ScoreDetails() {
                                     }
                                 )}
                                 <Link
-                                    to={`/ws/${ws}/settings?sp=parameters`}
+                                    to={`/ws/${ws}/settings/variables`}
                                     className="text-kaytu-500 cursor-pointer"
                                 >
                                     <Text className="text-kaytu-500">

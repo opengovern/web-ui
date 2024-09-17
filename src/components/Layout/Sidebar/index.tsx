@@ -388,17 +388,35 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             },
             {
                 name: 'Settings',
-                page: 'settings',
+                page: [
+                    'settings/about',
+                    'settings/jobs',
+                    'settings/api-keys',
+                    'settings/variables',
+                    'settings/authentication',
+                ],
                 icon: Cog6ToothIcon,
                 isPreview: false,
                 children: [
                     {
-                        name: 'All Settings',
-                        page: 'settings',
+                        name: 'About',
+                        page: 'settings/about',
                     },
                     {
                         name: 'Jobs',
                         page: 'settings/jobs',
+                    },
+                    {
+                        name: 'Authentication',
+                        page: 'settings/authentication',
+                    },
+                    {
+                        name: 'API Keys',
+                        page: 'settings/api-keys',
+                    },
+                    {
+                        name: 'Variables',
+                        page: 'settings/variables',
                     },
                 ],
             },

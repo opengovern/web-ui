@@ -17,17 +17,17 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import {
     useMetadataApiV1MetadataCreate,
     useMetadataApiV1MetadataDetail,
-} from '../../../api/metadata.gen'
-import Spinner from '../../../components/Spinner'
-import { getErrorMessage } from '../../../types/apierror'
-import { notificationAtom, previewAtom } from '../../../store'
-import { ConvertToBoolean } from '../../../utilities/bool'
-import { useComplianceApiV1QueriesSyncList } from '../../../api/compliance.gen'
+} from '../../../../api/metadata.gen'
+import Spinner from '../../../../components/Spinner'
+import { getErrorMessage } from '../../../../types/apierror'
+import { notificationAtom, previewAtom } from '../../../../store'
+import { ConvertToBoolean } from '../../../../utilities/bool'
+import { useComplianceApiV1QueriesSyncList } from '../../../../api/compliance.gen'
 import {
     useScheduleApiV1AnalyticsTriggerUpdate,
     useScheduleApiV1ComplianceTriggerUpdate,
     useScheduleApiV1DescribeTriggerUpdate,
-} from '../../../api/schedule.gen'
+} from '../../../../api/schedule.gen'
 
 interface ITextMetric {
     title: string

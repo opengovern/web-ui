@@ -21,7 +21,6 @@ import { useWorkspaceApiV1WorkspaceCurrentList } from '../../api/workspace.gen'
 
 import { meAtom, tokenAtom } from '../../store'
 import SettingsJobs from './Jobs'
-import SettingsCustomization from './Customization'
 import TopHeader from '../../components/Layout/Header'
 import SettingsParameters from './Parameters'
 import {
@@ -39,27 +38,27 @@ const navigation = [
         page: 'summary',
         children: [],
     },
-    {
-        name: 'Authentication',
-        page: 'members',
-        icon: UsersIcon,
-        role: ['admin'],
-        children: [],
-    },
-    {
-        name: 'API Keys',
-        page: 'apikeys',
-        icon: KeyIcon,
-        role: ['admin'],
-        children: [],
-    },
-    {
-        name: 'Customization',
-        page: 'customization',
-        icon: AdjustmentsVerticalIcon,
-        role: ['admin'],
-        children: [],
-    },
+    // {
+    //     name: 'Authentication',
+    //     page: 'members',
+    //     icon: UsersIcon,
+    //     role: ['admin'],
+    //     children: [],
+    // },
+    // {
+    //     name: 'API Keys',
+    //     page: 'apikeys',
+    //     icon: KeyIcon,
+    //     role: ['admin'],
+    //     children: [],
+    // },
+    // {
+    //     name: 'Customization',
+    //     page: 'customization',
+    //     icon: AdjustmentsVerticalIcon,
+    //     role: ['admin'],
+    //     children: [],
+    // },
     // {
     //     name: 'Organization',
     //     icon: BuildingOfficeIcon,
@@ -79,21 +78,21 @@ const navigation = [
     //     role: ['admin', 'editor', 'viewer'],
     //     children: [],
     // },
-    {
-        name: 'Metadata',
-        icon: AdjustmentsVerticalIcon,
-        page: 'parameters',
-        role: ['admin'],
-        children: [],
-        // role: ['admin', 'editor', 'viewer'],
-        // children: [
-        //     {
-        //         name: 'Parameters',
-        //         page: 'parameters',
-        //         role: ['admin'],
-        //     },
-        // ],
-    },
+    // {
+    //     name: 'Metadata',
+    //     icon: AdjustmentsVerticalIcon,
+    //     page: 'parameters',
+    //     role: ['admin'],
+    //     children: [],
+    //     // role: ['admin', 'editor', 'viewer'],
+    //     // children: [
+    //     //     {
+    //     //         name: 'Parameters',
+    //     //         page: 'parameters',
+    //     //         role: ['admin'],
+    //     //     },
+    //     // ],
+    // },
     {
         name: 'Profile',
         icon: UserIcon,
@@ -137,9 +136,6 @@ export default function Settings() {
             case 'parameters':
                 setSelectedTab(<SettingsParameters />)
                 break
-            case 'customization':
-                setSelectedTab(<SettingsCustomization />)
-                break
             default:
                 setSelectedTab(<SettingsEntitlement />)
                 break
@@ -174,7 +170,7 @@ export default function Settings() {
                                     return (
                                         <li key={item.name}>
                                             <Link
-                                                to={`/ws/${workspace}/settings?sp=${item.page}`}
+                                                to={`/ws/${workspace}/settings/about?sp=${item.page}`}
                                                 className={`${
                                                     item.page ===
                                                         currentSubPage ||
@@ -211,7 +207,7 @@ export default function Settings() {
                                         </Flex>
                                         {item.children.map((child: any) => (
                                             <Link
-                                                to={`/ws/${workspace}/settings?sp=${child.page}`}
+                                                to={`/ws/${workspace}/settings/about?sp=${child.page}`}
                                                 className={`${
                                                     child.page ===
                                                         currentSubPage ||

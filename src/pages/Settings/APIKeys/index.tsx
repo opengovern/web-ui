@@ -7,6 +7,7 @@ import DrawerPanel from '../../../components/DrawerPanel'
 import CreateAPIKey from './CreateAPIKey'
 import APIKeyRecord from './APIKeyRecord'
 import Notification from '../../../components/Notification'
+import TopHeader from '../../../components/Layout/Header'
 
 export default function SettingsWorkspaceAPIKeys() {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
@@ -31,6 +32,8 @@ export default function SettingsWorkspaceAPIKeys() {
         </Flex>
     ) : (
         <>
+            <TopHeader />
+
             <DrawerPanel
                 open={drawerOpen}
                 title="Create new API Key"
