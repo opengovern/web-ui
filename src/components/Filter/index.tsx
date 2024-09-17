@@ -46,7 +46,6 @@ export default function KFilter({
     const [search, setSearch] = useState('')
     const checkbox = useCheckboxState({ state: [...selectedItems] })
     const [con, setCon] = useState<string>(hasCondition == true && condition ? condition : 'is')
-    console.log(checkbox.state)
     useEffect(() => {
         // @ts-ignore
         if (hasCondition == true) {
