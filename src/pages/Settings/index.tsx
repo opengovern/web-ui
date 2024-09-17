@@ -32,10 +32,10 @@ import { ApiRole } from '../../api/api'
 
 const navigation = [
     {
-        name: 'Summary',
+        name: 'Workspace Settings',
         icon: DocumentTextIcon,
         role: ['admin', 'editor', 'viewer'],
-        page: 'summary',
+        page: 'workspace-settings',
         children: [],
     },
     // {
@@ -115,7 +115,7 @@ export default function Settings() {
 
     useEffect(() => {
         switch (currentSubPage) {
-            case 'summary':
+            case 'workspace-seetings':
                 setSelectedTab(<SettingsEntitlement />)
                 break
             case 'members':
@@ -175,7 +175,8 @@ export default function Settings() {
                                                     item.page ===
                                                         currentSubPage ||
                                                     (!currentSubPage &&
-                                                        item.page === 'summary')
+                                                        item.page ===
+                                                            'workspace-settings')
                                                         ? 'bg-kaytu-100 dark:bg-kaytu-800  rounded-lg text-gray-800 dark:text-gray-100'
                                                         : 'text-gray-600 dark:text-gray-300'
                                                 } group flex gap-x-3 pt-2 pb-0 px-2 -ml-2 font-medium`}

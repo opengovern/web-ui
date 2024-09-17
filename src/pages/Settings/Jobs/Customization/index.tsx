@@ -399,7 +399,7 @@ export default function SettingsCustomization() {
                 </Flex>
             </Flex>
 
-            <Title className="font-semibold mt-8">Git Repositories</Title>
+            {/* <Title className="font-semibold mt-8">Git Repositories</Title>
             <Flex justifyContent="start" className="truncate space-x-4">
                 <div className="truncate">
                     <Text className="truncate text-sm">
@@ -432,7 +432,7 @@ export default function SettingsCustomization() {
                 </Button>
             </Flex>
 
-            <Title className="font-semibold mt-8">App configurations</Title>
+            <Title className="font-semibold mt-8">App configurations</Title> */}
 
             {/* <Flex
                 flexDirection="row"
@@ -451,7 +451,7 @@ export default function SettingsCustomization() {
                     </TabList>
                 </TabGroup>
             </Flex> */}
-            <Flex
+            {/* <Flex
                 flexDirection="row"
                 justifyContent="between"
                 className="w-full mt-4"
@@ -469,7 +469,7 @@ export default function SettingsCustomization() {
                         <Tab>Off</Tab>
                     </TabList>
                 </TabGroup>
-            </Flex>
+            </Flex> */}
         </Card>
     )
 }
