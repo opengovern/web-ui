@@ -234,7 +234,7 @@ export default function AllQueries() {
                  const api = new Api()
                  api.instance = AxiosAPI
                  let body = {
-                     title_filter: '',
+                    //  title_filter: '',
                      connectors: query?.connector,
                      cursor: params.request.startRow
                          ? Math.floor(params.request.startRow / 25)

@@ -21,7 +21,7 @@ export function Credential({ onClose, onNext, isOrg }: ICredential) {
             {
                 config: {
                     assumeRoleName: roleName,
-                    externalId: externalID,
+                    // externalId: externalID,
                     accessKey,
                     secretKey,
                 },
@@ -65,11 +65,11 @@ export function Credential({ onClose, onNext, isOrg }: ICredential) {
                         value={roleName}
                         onValueChange={(v) => setRoleName(v)}
                     />
-                    <TextInput
+                    {/* <TextInput
                         placeholder="External ID"
                         value={externalID}
                         onValueChange={(v) => setExternalID(v)}
-                    />
+                    /> */}
                     {errorMsg !== '' && (
                         <Text className="text-red-500">{errorMsg}</Text>
                     )}

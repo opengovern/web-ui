@@ -94,6 +94,11 @@ const getLocationSearch = () =>
         : window.location.search
 
 export const searchAtom = atom<string>(getLocationSearch())
+export const oldUrlAtom = atom<string>('')
+export const nextUrlAtom = atom<string>('')
+
+
+
 
 export function useURLState<T>(
     defaultValue: T,

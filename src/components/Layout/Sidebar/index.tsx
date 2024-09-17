@@ -19,7 +19,7 @@ import {
     PresentationChartBarIcon,
     CubeTransparentIcon,
 } from '@heroicons/react/24/outline'
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { Popover, Transition } from '@headlessui/react'
 import { Fragment, useEffect } from 'react'
 import { previewAtom, sideBarCollapsedAtom } from '../../../store'
@@ -34,7 +34,7 @@ import { useIntegrationApiV1ConnectionsCountList } from '../../../api/integratio
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import AnimatedAccordion from '../../AnimatedAccordion'
 import { setAuthHeader } from '../../../api/ApiConfig'
-import { searchAtom } from '../../../utilities/urlstate'
+import { searchAtom, oldUrlAtom,nextUrlAtom } from '../../../utilities/urlstate'
 import { useAuth } from '../../../utilities/auth'
 
 const badgeStyle = {
@@ -92,6 +92,10 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     } = useIntegrationApiV1ConnectionsCountList({}, {}, false, workspace)
 
     const searchParams = useAtomValue(searchAtom)
+    const setOldUrl = useSetAtom(oldUrlAtom)
+    const oldUrl = useAtomValue(oldUrlAtom)
+    const nextUrl = useAtomValue(nextUrlAtom)
+    const setNextUrl = useSetAtom(nextUrlAtom)
 
     const isCurrentPage = (page: string | string[] | undefined): boolean => {
         if (Array.isArray(page)) {
@@ -116,8 +120,22 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         }
         return currentPage === page
     }
-    const findPage = (page: string | string[]): string => {
-        return `/ws/${workspace}/${page}`
+    const findPage = (page: string | string[], item: ISidebarItem): string => {
+       
+        if (Array.isArray(item.page)) {
+            if (oldUrl.includes(item.page[0]) || nextUrl.includes(item.page[0])) {
+                return `/ws/${workspace}/${page}?${searchParams}`
+            } else {
+                return `/ws/${workspace}/${page}`
+            }
+        } else {
+            if (oldUrl.includes(item.page) || nextUrl.includes(item.page)) {
+                return `/ws/${workspace}/${page}?${searchParams}`
+            } else {
+                return `/ws/${workspace}/${page}`
+            }
+        }
+
         // if (page.includes('?')) {
         //     return `/ws/${workspace}/${page}`
         // }
@@ -557,7 +575,18 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         >
                                             {item.children.map((i) => (
                                                 <Link
-                                                    to={findPage(i.page)}
+                                                    onClick={() => {
+                                                        setOldUrl(
+                                                            window.location.href
+                                                        )
+                                                        setNextUrl(
+                                                            findPage(
+                                                                i.page,
+                                                                item
+                                                            )
+                                                        )
+                                                    }}
+                                                    to={findPage(i.page, item)}
                                                     className={`my-0.5 py-2 flex rounded-md relative
                                                     ${
                                                         isCurrentPage(i.page)
@@ -648,8 +677,22 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         {item.children.map(
                                                             (i) => (
                                                                 <Link
+                                                                    onClick={() => {
+                                                                        setOldUrl(
+                                                                            window
+                                                                                .location
+                                                                                .href
+                                                                        )
+                                                                        setNextUrl(
+                                                                            findPage(
+                                                                                i.page,
+                                                                                item
+                                                                            )
+                                                                        )
+                                                                    }}
                                                                     to={findPage(
-                                                                        i.page
+                                                                        i.page,
+                                                                        item
                                                                     )}
                                                                     className={`my-0.5 py-2 px-4 flex justify-start rounded-md relative
                                                     ${
