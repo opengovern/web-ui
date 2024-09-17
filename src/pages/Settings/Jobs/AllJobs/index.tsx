@@ -224,8 +224,8 @@ const ShowHours = [
         value: '1',
     },
     {
-        label: '2h',
-        value: '2',
+        label: '3h',
+        value: '3',
     },
     {
         label: '6h',
@@ -262,7 +262,7 @@ export default function SettingsALLJobs() {
     const [jobTypeFilter, setJobTypeFilter] = useState<string[] | undefined>(
         findParmas('type')
     )
-    const [showHoursFilter, setShowHourFilter] = useState<number[]>([])
+    const [showHoursFilter, setShowHourFilter] = useState<number[]>(['1'])
     const [jobTypeContains, setJobTypeContains] = useState<string>(
         'is'
     )
@@ -330,7 +330,7 @@ export default function SettingsALLJobs() {
                 api.instance = AxiosAPI
                 api.schedule
                     .apiV1JobsCreate({
-                        hours: parseInt(showHoursFilter[0]) || 0.25,
+                        hours: parseInt(showHoursFilter[0]) || 1,
                         pageStart: params.request.startRow || 0,
                         pageEnd: params.request.endRow || 0,
                         sortBy:

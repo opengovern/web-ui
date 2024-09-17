@@ -129,7 +129,7 @@ export default function SettingsParameters() {
             <TopHeader />
             <Card key="summary" className="">
                 <Flex>
-                    <Title className="font-semibold">Parameters</Title>
+                    <Title className="font-semibold">Variables</Title>
                     <Button
                         variant="secondary"
                         icon={PlusIcon}
