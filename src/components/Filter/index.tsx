@@ -20,7 +20,7 @@ interface Option {
     value: string | number | undefined
     showValue?: boolean
     icon? : ComponentType<any>
-    color: string
+    color?: string
 
 }
 

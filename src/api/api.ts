@@ -2733,15 +2733,19 @@ export interface KaytuResourceCollectionFilter {
     tags?: Record<string, string>
 }
 export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2 {
-    /** Specifies the Title */
-    title_filter?: string
     cursor: number
     per_page: number
     primary_table?: string
     severity?: string
     finding_summary?: boolean
-    root? : boolean
     connector?: string[]
+    parent_benchmark?: string[]
+    tags?: GithubComKaytuIoKaytuEnginePkgControlApiListV2Tags[]
+    list_of_tables? : string[]
+}
+export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2Tags {
+    Key: string
+    UniqueValues: string[]
 }
 export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2Response {
     items: GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem[]
@@ -2834,7 +2838,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2 {
     cursor: number
     per_page: number
     providers?: string[]
-    tags_filter?: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2TagsFilter
+    tags?: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2TagsFilter
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2TagsFilter {
@@ -2869,6 +2873,27 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2Respo
     items: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2[]
     /** total caount of data */
     total_count: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryFilters {
+    providers: string[]
+    tags: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryFiltersTag[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryFiltersTag {
+    Key: string
+    UniqueValues: string[]
+}
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiV3ControlListFilters {
+    parent_benchmark_id: string[]
+    primary_table: string[]
+    list_of_tables: string[]
+    tags: GithubComKaytuIoKaytuEnginePkgInventoryApiV3ControlListFiltersTag[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiV3ControlListFiltersTag {
+    Key: string
+    UniqueValues: string[]
 }
 
 export enum SourceAssetDiscoveryMethodType {
@@ -4370,6 +4395,27 @@ export class Api<
         apiV3ControlDetail: (id: string, params: RequestParams = {}) =>
             this.request<GithubComKaytuIoKaytuEnginePkgControlDetailV3, any>({
                 path: `compliance/api/v3/control/${id}?showReferences=true`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+        /**
+         * @description API for get Control Filters
+         *
+         * @tags compliance control
+         * @name ApiV3ControlFilters
+         * @summary Get control filters
+         * @request /compliance/api/v3/benchmarks/filters
+         * @secure
+         */
+        apiV3ControlFilters: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiV3ControlListFilters,
+                any
+            >({
+                path: `/compliance/api/v3/benchmarks/filters`,
                 method: 'GET',
                 secure: true,
                 type: ContentType.Json,
@@ -5909,8 +5955,29 @@ export class Api<
                 any
             >({
                 path: `/inventory/api/v3/queries`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+        /**
+         * @description Retrieving Query ListFilters
+         *
+         * @tags smart_query
+         * @name ApiV2QueryListFilters
+         * @summary List smart queries Filters
+         * @request GET:/inventory/api/v3/queries/filters
+         * @secure
+         */
+        apiV3QueryListFilter: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryFilters,
+                any
+            >({
+                path: `/inventory/api/v3/queries/filters`,
                 method: 'GET',
-                query: request,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',

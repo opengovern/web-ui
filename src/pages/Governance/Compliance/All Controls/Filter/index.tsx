@@ -501,7 +501,7 @@ export default function Filter({ onApply, type }: IFilters) {
     })
 
     return (
-        <Flex justifyContent="start" className="mt-4 gap-3 flex-wrap z-10">
+        <Flex justifyContent="start" className="w-fit gap-3 flex-wrap z-10">
             {renderFilters}
             {filterOptions.filter((f) => !selectedFilters.includes(f.id))
                 .length > 0 && (

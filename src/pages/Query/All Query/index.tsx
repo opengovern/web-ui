@@ -22,6 +22,7 @@ import {
     ChevronDoubleLeftIcon,
     ChevronDownIcon,
     ChevronUpIcon,
+    CloudIcon,
     CommandLineIcon,
     FunnelIcon,
     MagnifyingGlassIcon,
@@ -32,7 +33,11 @@ import { highlight, languages } from 'prismjs' // eslint-disable-next-line impor
 import 'prismjs/components/prism-sql' // eslint-disable-next-line import/no-extraneous-dependencies
 import 'prismjs/themes/prism.css'
 import Editor from 'react-simple-code-editor'
-import {IServerSideGetRowsParams, RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
+import {
+    IServerSideGetRowsParams,
+    RowClickedEvent,
+    ValueFormatterParams,
+} from 'ag-grid-community'
 import {
     CheckCircleIcon,
     ExclamationCircleIcon,
@@ -44,6 +49,7 @@ import {
     useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsCategoriesList,
     useInventoryApiV2QueryList,
+    useInventoryApiV3QueryFiltersList,
 } from '../../../api/inventory.gen'
 import Spinner from '../../../components/Spinner'
 import { getErrorMessage } from '../../../types/apierror'
@@ -66,6 +72,7 @@ import TopHeader from '../../../components/Layout/Header'
 import QueryDetail from './QueryDetail'
 import Filter from './Filter'
 import { array } from 'prop-types'
+import KFilter from '../../../components/Filter'
 
 export const getTable = (
     headers: string[] | undefined,
@@ -196,83 +203,96 @@ export default function AllQueries() {
     const [openDrawer, setOpenDrawer] = useState(false)
     const [openSlider, setOpenSlider] = useState(false)
     const [openSearch, setOpenSearch] = useState(true)
-        const [query, setQuery] =
-            useState<GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2>()
+    const [query, setQuery] =
+        useState<GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2>()
     const [showEditor, setShowEditor] = useState(true)
     const isDemo = useAtomValue(isDemoAtom)
     const [pageSize, setPageSize] = useState(1000)
     const [autoRun, setAutoRun] = useState(false)
     const [engine, setEngine] = useState('odysseus-sql')
-   
+
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2AnalyticsCategoriesList()
+
+    const { response: filters, isLoading: filtersLoading } =
+        useInventoryApiV3QueryFiltersList()
+
     // const { response: queries, isLoading: queryLoading } =
     //     useInventoryApiV2QueryList({
     //         titleFilter: '',
     //         Cursor: 0,
     //         PerPage:25
     //     })
-    
-   
-    
-    const ConvertParams = (array : string[],key : string ) => {
-            return `[${array[0]}]`
-            // let temp = ''
-            // array.map((item,index)=>{
-            //     if(index ===0){
-            //         temp = temp + item
-            //     }
-            //     else{
-            //         temp = temp +'&'+key+'='+item
-            //     }
-            // })
-            // return temp
+    const recordToArray = (record?: Record<string, string[]> | undefined) => {
+        if (record === undefined) {
+            return []
+        }
+
+        return Object.keys(record).map((key) => {
+            return {
+                value: key,
+                resource_types: record[key],
+            }
+        })
     }
 
-     const ssr = () => {
-         return {
-             getRows: (params: IServerSideGetRowsParams) => {
+    const ConvertParams = (array: string[], key: string) => {
+        return `[${array[0]}]`
+        // let temp = ''
+        // array.map((item,index)=>{
+        //     if(index ===0){
+        //         temp = temp + item
+        //     }
+        //     else{
+        //         temp = temp +'&'+key+'='+item
+        //     }
+        // })
+        // return temp
+    }
+
+    const ssr = () => {
+        return {
+            getRows: (params: IServerSideGetRowsParams) => {
                 // setLoading(true)
-                 const api = new Api()
-                 api.instance = AxiosAPI
-                 console.log(query)
-                 let body = {
-                     //  title_filter: '',
-                     providers: query?.providers,
-                     cursor: params.request.startRow
-                         ? Math.floor(params.request.startRow / 25)
-                         : 0,
-                     per_page: 25,
-                 }
-                 console.log(body,"body")
-                  if (!body.providers) {
-                      delete body['providers']
-                  } else {
-                      // @ts-ignore
-                      body['providers'] = ConvertParams([body?.providers],'providers')
-                  }
-                  console.log(body,"body2")
-                 api.inventory
-                     .apiV2QueryList(body)
-                     .then((resp) => {
-                         params.success({
-                             rowData: resp.data.items || [],
-                             rowCount: resp.data.total_count,
-                         })
-                         setLoading(false)
-                     })
-                     .catch((err) => {
-                         setLoading(false)
+                const api = new Api()
+                api.instance = AxiosAPI
+                let body = {
+                    //  title_filter: '',
+                    tags: query?.tags,
+                    providers: query?.providers,
+                    cursor: params.request.startRow
+                        ? Math.floor(params.request.startRow / 25)
+                        : 0,
+                    per_page: 25,
+                }
+                if (!body.providers) {
+                    delete body['providers']
+                } else {
+                    // @ts-ignore
+                    body['providers'] = ConvertParams([body?.providers],
+                        'providers'
+                    )
+                }
+                api.inventory
+                    .apiV2QueryList(body)
+                    .then((resp) => {
+                        params.success({
+                            rowData: resp.data.items || [],
+                            rowCount: resp.data.total_count,
+                        })
+                        setLoading(false)
+                    })
+                    .catch((err) => {
+                        setLoading(false)
 
-                         console.log(err)
-                         params.fail()
-                     })
-             },
-         }
-     }
+                        console.log(err)
+                        params.fail()
+                    })
+            },
+        }
+    }
 
-     const serverSideRows = ssr()
-
+    const serverSideRows = ssr()
 
     return (
         <>
@@ -597,11 +617,64 @@ export default function AllQueries() {
                                 </Subtitle>
                             </Card>
                         </Flex> */}
-                        <Filter
-                            type={'findings'}
-                            // @ts-ignore
-                            onApply={(e) => setQuery(e)}
-                        />
+                        <Flex
+                            flexDirection="row"
+                            justifyContent="start"
+                            alignItems="center"
+                            className="w-full  gap-1  pb-2 flex-wrap"
+                            // style={{overflow:"hidden",overflowX:"scroll",overflowY: "hidden"}}
+                        >
+                            <Filter
+                                type={'findings'}
+                                // @ts-ignore
+                                onApply={(e) => setQuery(e)}
+                            />
+                            {filters?.tags.map((item, index) => {
+                                return (
+                                    <>
+                                        <KFilter
+                                            options={item.UniqueValues.map(
+                                                (unique, index) => {
+                                                    return {
+                                                        label: unique,
+                                                        value: unique,
+                                                    }
+                                                }
+                                            )}
+                                            type="multi"
+                                            hasCondition={true}
+                                            condition={'is'}
+                                            //@ts-ignore
+                                            selectedItems={
+                                                query?.tags &&
+                                                query?.tags[item.Key]
+                                                    ? query?.tags[item.Key]
+                                                    : []
+                                            }
+                                            onChange={(values: string[]) => {
+                                                //@ts-ignore
+                                                if (values.length != 0) {
+                                                    //@ts-ignore
+                                                    setQuery(
+                                                        //@ts-ignore
+                                                        (prevSelectedItem) => ({
+                                                            ...prevSelectedItem,
+                                                            tags: {
+                                                                ...prevSelectedItem?.tags,
+                                                                [item.Key]:
+                                                                    values,
+                                                            },
+                                                        })
+                                                    )
+                                                }
+                                            }}
+                                            label={item.Key}
+                                            icon={CloudIcon}
+                                        />
+                                    </>
+                                )
+                            })}
+                        </Flex>
 
                         <Flex className="mt-2">
                             <Table

@@ -22,6 +22,7 @@ import {
     ChevronDoubleLeftIcon,
     ChevronDownIcon,
     ChevronUpIcon,
+    CloudIcon,
     CommandLineIcon,
     FunnelIcon,
     MagnifyingGlassIcon,
@@ -72,6 +73,8 @@ import { numberDisplay } from '../../../../utilities/numericDisplay'
 import TopHeader from '../../../../components/Layout/Header'
 import ControlDetail from './ControlDetail'
 import Filter from './Filter'
+import { useComplianceApiV3ControlListFilters } from '../../../../api/compliance.gen'
+import KFilter from '../../../../components/Filter'
 
 export const getTable = (
     headers: string[] | undefined,
@@ -233,6 +236,8 @@ export default function AllControls() {
     //         Cursor: 0,
     //         PerPage:25
     //     })
+    const { response: filters, isLoading: filtersLoading } =
+        useComplianceApiV3ControlListFilters()
 
     const getControlDetail = (id: string) => {
         const api = new Api()
@@ -247,8 +252,6 @@ export default function AllControls() {
             })
             .catch((err) => {
                 // setLoading(false)
-
-               
             })
     }
 
@@ -261,6 +264,10 @@ export default function AllControls() {
                 let body = {
                     connector: query?.connector,
                     severity: query?.severity,
+                    list_of_tables: query?.list_of_tables,
+                    primary_table: query?.primary_table,
+                    parent_benchmark: query?.parent_benchmark,
+                    tags: query?.tags,
                     cursor: params.request.startRow
                         ? Math.floor(params.request.startRow / 25)
                         : 0,
@@ -622,6 +629,144 @@ export default function AllControls() {
                             // @ts-ignore
                             onApply={(e) => setQuery(e)}
                         /> */}
+                        <Flex
+                            flexDirection="row"
+                            justifyContent="start"
+                            alignItems="center"
+                            className="w-full  gap-1  pb-2 flex-wrap"
+                            // style={{overflow:"hidden",overflowX:"scroll",overflowY: "hidden"}}
+                        >
+                            <Filter
+                                type={'findings'}
+                                // @ts-ignore
+                                onApply={(e) => setQuery(e)}
+                            />
+                            <KFilter
+                                // @ts-ignore
+                                options={filters?.parent_benchmark_id?.map(
+                                    (unique, index) => {
+                                        return {
+                                            label: unique,
+                                            value: unique,
+                                        }
+                                    }
+                                )}
+                                type="multi"
+                                hasCondition={true}
+                                condition={'is'}
+                                //@ts-ignore
+                                selectedItems={
+                                    query?.parent_benchmark
+                                        ? query?.parent_benchmark
+                                        : []
+                                }
+                                onChange={(values: string[]) => {
+                                    // @ts-ignore
+                                    setQuery(
+                                        // @ts-ignore
+                                        { ...query, parent_benchmark: values }
+                                    )
+                                }}
+                                label={'Parent Benchmark'}
+                                icon={CloudIcon}
+                            />
+                            <KFilter
+                                // @ts-ignore
+                                options={filters?.list_of_tables?.map(
+                                    (unique, index) => {
+                                        return {
+                                            label: unique,
+                                            value: unique,
+                                        }
+                                    }
+                                )}
+                                type="multi"
+                                hasCondition={true}
+                                condition={'is'}
+                                //@ts-ignore
+                                selectedItems={
+                                    query?.list_of_tables
+                                        ? query?.list_of_tables
+                                        : []
+                                }
+                                onChange={(values: string[]) => {
+                                    // @ts-ignore
+                                    setQuery(
+                                        // @ts-ignore
+                                        { ...query, list_of_tables: values }
+                                    )
+                                }}
+                                label={'List of Tables'}
+                                icon={CloudIcon}
+                            />
+                            <KFilter
+                                // @ts-ignore
+                                options={filters?.primary_table?.map(
+                                    (unique, index) => {
+                                        return {
+                                            label: unique,
+                                            value: unique,
+                                        }
+                                    }
+                                )}
+                                type="multi"
+                                hasCondition={true}
+                                condition={'is'}
+                                //@ts-ignore
+                                selectedItems={
+                                    query?.primary_table
+                                        ? query?.primary_table
+                                        : []
+                                }
+                                onChange={(values: string[]) => {
+                                    // @ts-ignore
+                                    setQuery(
+                                        // @ts-ignore
+                                        { ...query, primary_table: values }
+                                    )
+                                }}
+                                label={'Primary Table'}
+                                icon={CloudIcon}
+                            />
+                            {filters?.tags.map((item, index) => {
+                                return (
+                                    <>
+                                        <KFilter
+                                            options={item.UniqueValues.map(
+                                                (unique, index) => {
+                                                    return {
+                                                        label: unique,
+                                                        value: unique,
+                                                    }
+                                                }
+                                            )}
+                                            type="multi"
+                                            hasCondition={true}
+                                            condition={'is'}
+                                            //@ts-ignore
+                                            selectedItems={query?.tags &&query?.tags[item.Key] ? query?.tags[item.Key]
+                                                    : []
+                                            }
+                                            onChange={(values: string[]) => {
+                                                // @ts-ignore
+                                                setQuery(
+                                                    // @ts-ignore
+                                                    (prevSelectedItem) => ({
+                                                        ...prevSelectedItem,
+                                                        tags: {
+                                                            ...prevSelectedItem?.tags,
+                                                            [item.Key]: values,
+                                                        },
+                                                    })
+                                                )
+                                            }}
+                                            label={item.Key}
+                                            icon={CloudIcon}
+                                        />
+                                    </>
+                                )
+                            })}
+                        </Flex>
 
                         <Flex className=" mt-2">
                             <Table
@@ -644,14 +789,13 @@ export default function AllControls() {
                     </Flex>
                 </Flex>
             )}
-             <ControlDetail
+            <ControlDetail
                 // type="resource"
                 selectedItem={selectedRow}
                 open={openSlider}
                 onClose={() => setOpenSlider(false)}
                 onRefresh={() => {}}
             />
-           
         </>
     )
 }
