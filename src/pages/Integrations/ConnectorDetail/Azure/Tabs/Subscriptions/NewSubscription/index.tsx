@@ -16,12 +16,17 @@ interface INewAzureSubscription {
     spns: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
     open: boolean
     onClose: () => void
+    credintalsSendNow?: Function
+    accountSendNow?: Function
+
 }
 
 export default function NewAzureSubscription({
     spns,
     open,
     onClose,
+    credintalsSendNow,
+    accountSendNow
 }: INewAzureSubscription) {
     const [stepNum, setStepNum] = useState(1)
     const [spnID, setSpnID] = useState('')
@@ -96,9 +101,14 @@ export default function NewAzureSubscription({
                             <NewPrincipal
                                 useDrawer={false}
                                 open={openPrencipal}
+                                credintalsSendNow={credintalsSendNow}
                                 onClose={() => {
                                     setOpenPrencipal(false)
                                     setIsNew(false)
+                                    if(accountSendNow){
+                                        accountSendNow()
+
+                                    }
                                 }}
                                 onCancel={() => {
                                     setChoiced(false)

@@ -18,6 +18,9 @@ import { isDemoAtom } from '../../../../../../store'
 
 interface IPrincipals {
     principals: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
+    credintalsSendNow?: Function
+    
+
 }
 
 const columns = (isDemo: boolean) => {
@@ -126,7 +129,7 @@ const columns = (isDemo: boolean) => {
     return temp
 }
 
-export default function Principals({ principals }: IPrincipals) {
+export default function Principals({ principals ,credintalsSendNow}: IPrincipals) {
     const [open, setOpen] = useState(false)
     const [openInfo, setOpenInfo] = useState(false)
     const [priData, setPriData] = useState<
@@ -160,7 +163,11 @@ export default function Principals({ principals }: IPrincipals) {
                 onClose={() => setOpenInfo(false)}
                 isDemo={isDemo}
             />
-            <NewPrincipal open={open} onClose={() => setOpen(false)} />
+            <NewPrincipal
+                credintalsSendNow={credintalsSendNow}
+                open={open}
+                onClose={() => setOpen(false)}
+            />
         </>
     )
 }

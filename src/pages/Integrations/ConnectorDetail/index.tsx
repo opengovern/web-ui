@@ -35,7 +35,7 @@ export default function ConnectorDetail() {
 
     const provider = StringToProvider(connector || '')
     const credentialType = ConnectorToCredentialType(connector || '')
-    const { response: accounts, isLoading: isAccountsLoading } =
+    const { response: accounts, isLoading: isAccountsLoading,sendNow: accountSendNow } =
         useIntegrationApiV1ConnectionsSummariesList({
             ...(provider !== '' && {
                 connector: [provider],
@@ -45,7 +45,7 @@ export default function ConnectorDetail() {
             pageSize: 10000,
             pageNumber: 1,
         })
-    const { response: credentials, isLoading: isCredentialLoading } =
+    const { response: credentials, isLoading: isCredentialLoading,sendNow : credintalsSendNow } =
         useIntegrationApiV1CredentialsList({
             connector: provider,
         })
@@ -87,6 +87,8 @@ export default function ConnectorDetail() {
                         principals={credentials?.credentials || []}
                         subscriptions={accounts?.connections || []}
                         loading={isAccountsLoading}
+                        accountSendNow={accountSendNow}
+                        credintalsSendNow={credintalsSendNow}
                     />
                 </>
             )

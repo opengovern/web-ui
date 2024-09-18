@@ -24,6 +24,9 @@ interface ISubscriptions {
     subscriptions: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
     spns: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
     loading: boolean
+    credintalsSendNow?: Function
+    accountSendNow?: Function
+
 }
 
 function getBadgeColor(status: string) {
@@ -223,6 +226,8 @@ export default function Subscriptions({
     subscriptions,
     spns,
     loading,
+    credintalsSendNow,
+    accountSendNow,
 }: ISubscriptions) {
     const [open, setOpen] = useState(false)
     const [openInfo, setOpenInfo] = useState(false)
@@ -261,6 +266,8 @@ export default function Subscriptions({
             <NewAzureSubscription
                 spns={spns}
                 open={open}
+                credintalsSendNow={credintalsSendNow}
+                accountSendNow={accountSendNow}
                 onClose={() => setOpen(false)}
             />
         </>

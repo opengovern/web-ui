@@ -43,7 +43,7 @@ import Provider from './Provider'
 
 interface IFilters {
     onApply: (obj: {
-        connector: SourceType
+        providers: SourceType
         conformanceStatus:
             | GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus[]
             | undefined
@@ -62,7 +62,7 @@ interface IFilters {
 export default function Filter({ onApply, type }: IFilters) {
     const { ws } = useParams()
     const defConnector = SourceType.Nil
-    const [connector, setConnector] = useState<SourceType>(defConnector)
+    const [providers, setProvider] = useState<SourceType>(defConnector)
 
     const defConformanceStatus = [
         GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
@@ -125,7 +125,7 @@ export default function Filter({ onApply, type }: IFilters) {
 
     useEffect(() => {
         onApply({
-            connector,
+            providers,
             conformanceStatus,
             severity,
             connectionID,
@@ -141,7 +141,7 @@ export default function Filter({ onApply, type }: IFilters) {
                 : undefined,
         })
     }, [
-        connector,
+        providers,
         conformanceStatus,
         severity,
         connectionID,
@@ -180,16 +180,16 @@ export default function Filter({ onApply, type }: IFilters) {
             icon: CloudConnect,
             component: (
                 <Provider
-                    value={connector}
+                    value={providers}
                     defaultValue={defConnector}
-                    onChange={(p) => setConnector(p)}
+                    onChange={(p) => setProvider(p)}
                 />
             ),
             conditions: ['is'],
             setCondition: (c: string) => undefined,
-            value: [connector],
+            value: [providers],
             defaultValue: [defConnector],
-            onDelete: () => setConnector(defConnector),
+            onDelete: () => setProvider(defConnector),
             types: ['findings', 'resources', 'events', 'controls', 'accounts'],
         },
         // {

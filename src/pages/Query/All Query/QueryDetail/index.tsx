@@ -17,7 +17,7 @@ import {
 } from '@tremor/react'
 import { useEffect } from 'react'
 import ReactJson from '@microlink/react-json-view'
-import { CheckCircleIcon, PlayCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
+import { CheckCircleIcon, PlayCircleIcon, TagIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
     GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding,
@@ -176,7 +176,7 @@ export default function QueryDetail({
                     <Text className="w-56 font-bold">Query Engine : </Text>
                     <Text className="w-full">
                         {/* @ts-ignore */}
-                        {query?.query?.query_engine}
+                        {query?.query?.engine}
                     </Text>
                 </Flex>
             </Grid>
@@ -190,7 +190,7 @@ export default function QueryDetail({
                                 icon={PlayCircleIcon}
                                 onClick={() => {
                                     // @ts-ignore
-                                    setQuery(query?.query?.query_to_execute)
+                                    setQuery(query?.query?.queryToExecute)
                                 }}
                                 disabled={false}
                                 loading={false}
@@ -208,7 +208,7 @@ export default function QueryDetail({
                                     highlight(text, languages.sql, 'sql')
                                 }
                                 // @ts-ignore
-                                value={query?.query?.query_to_execute}
+                                value={query?.query?.queryToExecute }
                                 className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
                                 style={{
                                     minHeight: '200px',
@@ -219,6 +219,37 @@ export default function QueryDetail({
                                 disabled={true}
                             />
                         </Card>
+                        <Flex
+                            flexDirection="row"
+                            alignItems="start"
+                            className="gap-1 w-full flex-wrap "
+                            justifyContent="start"
+                        >
+                            {/* @ts-ignore */}
+                            {query?.tags && (
+                                <>
+                                    {Object.entries(query?.tags).map(
+                                        (key, index) => {
+                                            return (
+                                                <>
+                                                    <Flex
+                                                        flexDirection="row"
+                                                        justifyContent="start"
+                                                        className="hover:cursor-pointer max-w-full w-fit bg-gray-200 border-gray-300 rounded-lg border px-1"
+                                                    >
+                                                        <TagIcon className="min-w-4 w-4 mr-1" />
+                                                        <Text className="truncate">
+                                                            {/* @ts-ignore */}
+                                                            {key[0]}:{key[1]}
+                                                        </Text>
+                                                    </Flex>
+                                                </>
+                                            )
+                                        }
+                                    )}
+                                </>
+                            )}
+                        </Flex>
                     </TabPanel>
                 </TabPanels>
             </TabGroup>

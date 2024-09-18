@@ -1376,13 +1376,6 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest {
     /** Specifies the Title */
     titleFilter?: string
 }
-export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2 {
-    /** Specifies the Title */
-    title_filter?: string;
-    cursor: number;
-    per_page: number;
-    connector? : string[];
-}
 
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse {
@@ -1598,28 +1591,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem {
     title?: string
  
 }
-export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2 {
-    /** Category (Tags[category]) */
-    category?: string
-    /** Provider */
-    connectors?: SourceType[]
-    /** Query Id */
-    id?: string
-    /** Query */
-    query?: { query_engine: string; query_to_execute : string} | string
-    /** Tags */
-    tags?: Record<string, string>
-    /** Title */
-    title?: string
-    /** Desciption */
-    description?: string
-}
-export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2Response {
-    /** List of items */
-    items: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2[]
-    /** total caount of data */
-    total_count : number
-}
+
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQuerySortItem {
     direction?: 'asc' | 'desc'
@@ -1664,6 +1636,8 @@ export interface GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata {
     type?: GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadataType
     value?: string
 }
+
+
 
 export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadataType {
     ConfigMetadataTypeString = 'string',
@@ -2854,8 +2828,48 @@ export interface GithubComKaytuIoKaytuEnginePkgControlDetailV3Query {
     primaryTable: string
     queryToExecute: string
 }
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2 {
+    /** Specifies the Title */
+    title_filter?: string
+    cursor: number
+    per_page: number
+    providers?: string[]
+    tags_filter?: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2TagsFilter
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2TagsFilter {
+    [key: string]: string[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2 {
+    id: string
+    title: string
+    description: string
+    connectors: string[]
+    query: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2Query
+    tags: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2TagsFilter
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2Query {
+    id: string
+    queryToExecute: string
+    primaryTable: string
+    listOfTables: string[]
+    engine: string
+    parameters: string[]
+    Global: boolean
+    createdAt: Date
+    updatedAt: Date
+}
 
 
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2Response {
+    /** List of items */
+    items: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2[]
+    /** total caount of data */
+    total_count: number
+}
 
 export enum SourceAssetDiscoveryMethodType {
     AssetDiscoveryMethodTypeScheduled = 'scheduled',

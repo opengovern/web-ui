@@ -16,12 +16,16 @@ interface IAzure {
     principals: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
     subscriptions: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
     loading: boolean
+    credintalsSendNow: Function
+    accountSendNow: Function
 }
 
 export default function AzureTabs({
     principals,
     subscriptions,
     loading,
+    credintalsSendNow,
+    accountSendNow
 }: IAzure) {
     const [selectedTab, setSelectedTab] = useState(0)
     const navigate = useNavigate()
@@ -50,10 +54,15 @@ export default function AzureTabs({
                         subscriptions={subscriptions}
                         spns={principals}
                         loading={loading}
+                        accountSendNow={accountSendNow}
+                        credintalsSendNow={credintalsSendNow}
                     />
                 </TabPanel>
                 <TabPanel key="pri">
-                    <Principals principals={principals} />
+                    <Principals
+                        credintalsSendNow={credintalsSendNow}
+                        principals={principals}
+                    />
                 </TabPanel>
             </TabPanels>
         </TabGroup>

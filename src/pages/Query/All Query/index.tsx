@@ -65,6 +65,7 @@ import { numberDisplay } from '../../../utilities/numericDisplay'
 import TopHeader from '../../../components/Layout/Header'
 import QueryDetail from './QueryDetail'
 import Filter from './Filter'
+import { array } from 'prop-types'
 
 export const getTable = (
     headers: string[] | undefined,
@@ -191,7 +192,7 @@ export default function AllQueries() {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedRow, setSelectedRow] =
-        useState<GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2>({})
+        useState<GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2>()
     const [openDrawer, setOpenDrawer] = useState(false)
     const [openSlider, setOpenSlider] = useState(false)
     const [openSearch, setOpenSearch] = useState(true)
@@ -214,17 +215,18 @@ export default function AllQueries() {
     
    
     
-    const recordToArray = (record?: Record<string, string[]> | undefined) => {
-        if (record === undefined) {
-            return []
-        }
-
-        return Object.keys(record).map((key) => {
-            return {
-                value: key,
-                resource_types: record[key],
-            }
-        })
+    const ConvertParams = (array : string[],key : string ) => {
+            return `[${array[0]}]`
+            // let temp = ''
+            // array.map((item,index)=>{
+            //     if(index ===0){
+            //         temp = temp + item
+            //     }
+            //     else{
+            //         temp = temp +'&'+key+'='+item
+            //     }
+            // })
+            // return temp
     }
 
      const ssr = () => {
@@ -233,20 +235,23 @@ export default function AllQueries() {
                 // setLoading(true)
                  const api = new Api()
                  api.instance = AxiosAPI
+                 console.log(query)
                  let body = {
-                    //  title_filter: '',
-                     connectors: query?.connector,
+                     //  title_filter: '',
+                     providers: query?.providers,
                      cursor: params.request.startRow
                          ? Math.floor(params.request.startRow / 25)
                          : 0,
                      per_page: 25,
                  }
-                  if (!body.connectors) {
-                      delete body['connectors']
+                 console.log(body,"body")
+                  if (!body.providers) {
+                      delete body['providers']
                   } else {
                       // @ts-ignore
-                      body['connector'] = [body?.connector]
+                      body['providers'] = ConvertParams([body?.providers],'providers')
                   }
+                  console.log(body,"body2")
                  api.inventory
                      .apiV2QueryList(body)
                      .then((resp) => {
@@ -592,11 +597,11 @@ export default function AllQueries() {
                                 </Subtitle>
                             </Card>
                         </Flex> */}
-                        {/* <Filter
+                        <Filter
                             type={'findings'}
                             // @ts-ignore
                             onApply={(e) => setQuery(e)}
-                        /> */}
+                        />
 
                         <Flex className="mt-2">
                             <Table

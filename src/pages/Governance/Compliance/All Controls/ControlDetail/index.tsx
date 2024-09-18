@@ -269,7 +269,9 @@ export default function ControlDetail({
                                     </Card>
                                     <Flex
                                         flexDirection="row"
-                                        className="gap-2 w-full flex-wrap "
+                                        alignItems='start'
+                                        className="gap-1 w-full flex-wrap "
+                                        justifyContent='start'
                                     >
                                         {}
                                         {Object.entries(selectedItem?.tags).map(

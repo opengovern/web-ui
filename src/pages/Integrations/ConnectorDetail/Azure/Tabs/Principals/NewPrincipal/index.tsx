@@ -17,7 +17,8 @@ interface INewPrinciple {
     onClose: () => void
     useDrawer?: boolean
     bootstrapMode?: boolean
-    onCancel? : ()=> void
+    onCancel?: () => void
+    credintalsSendNow?: Function
 }
 
 export default function NewPrincipal({
@@ -26,6 +27,7 @@ export default function NewPrincipal({
     useDrawer = true,
     bootstrapMode = false,
     onCancel,
+    credintalsSendNow
 }: INewPrinciple) {
     const currentWorkspace = useParams<{ ws: string }>().ws
     const [stepNum, setStepNum] = useState(1)
@@ -104,6 +106,10 @@ export default function NewPrincipal({
                 bcSendNow()
             } else {
                 sendNow()
+            }
+            if(credintalsSendNow){
+            credintalsSendNow()
+
             }
         }
     }, [stepNum])

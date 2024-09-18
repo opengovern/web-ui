@@ -19,6 +19,9 @@ interface Option {
     label: string | number | undefined
     value: string | number | undefined
     showValue?: boolean
+    icon? : ComponentType<any>
+    color: string
+
 }
 
 export interface IFilter {
@@ -28,6 +31,7 @@ export interface IFilter {
     onChange: Function
     selectedItems: string[]
     icon: ComponentType<any>
+    onDelete?: Function
     hasCondition?: boolean
     condition?: string
     defaultValue?: Option
