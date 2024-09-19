@@ -74,10 +74,10 @@ export default function Dashboard() {
                 <div className="border-b w-full rounded-xl border-tremor-border bg-tremor-background-muted p-4 dark:border-dark-tremor-border dark:bg-gray-950 sm:p-6 lg:p-8">
                     <header>
                         <h1 className="text-tremor-title font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
-                            Report
+                            Documantation
                         </h1>
                         <p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
-                            Explore and manage your reports
+                            Explore and manage your Dashboards
                         </p>
                         <div className="mt-8 w-full md:flex md:max-w-3xl md:items-stretch md:space-x-4">
                             <Card className="w-full md:w-7/12">
@@ -113,7 +113,7 @@ export default function Dashboard() {
                         <main>
                             <div className="flex items-center justify-between">
                                 <h2 className="text-tremor-title font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
-                                    Dashboard
+                                   Available Dashboards
                                 </h2>
                                 <div className="flex items-center space-x-2">
                                     {/* <Select
@@ -139,7 +139,7 @@ export default function Dashboard() {
                                             className="-ml-1 size-5 shrink-0"
                                             aria-hidden={true}
                                         />
-                                        Add report
+                                        Add 
                                     </button>
                                 </div>
                             </div>
