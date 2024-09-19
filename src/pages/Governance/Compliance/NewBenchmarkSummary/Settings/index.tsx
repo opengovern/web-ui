@@ -1,6 +1,6 @@
 import { ValueFormatterParams } from 'ag-grid-community'
 import { useAtomValue } from 'jotai'
-import { Button, Callout, Flex, Switch, Text } from '@tremor/react'
+import { Button, Callout, Divider, Flex, Switch, Text } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
 import { isDemoAtom } from '../../../../../store'
@@ -260,37 +260,11 @@ export default function Settings({
                             }
                             fullWidth
                         >
-                            <Flex>
-                                <Flex className="gap-x-2 w-fit">
-                                    <Button
-                                        variant="primary"
-                                        onClick={() => {
-                                            setTransfer({
-                                                connectionID: 'all',
-                                                status: false,
-                                            })
-                                            setBanner(false)
-                                        }}
-                                    >
-                                        Disable All
-                                    </Button>
-                                    <Button
-                                        variant="primary"
-                                        onClick={() => {
-                                            setTransfer({
-                                                connectionID: 'all',
-                                                status: true,
-                                            })
-                                            setBanner(true)
-
-                                        }}
-                                    >
-                                        Enable All
-                                    </Button>
-                                </Flex>
-                                <Flex className="w-fit gap-2">
+                            <Flex flexDirection="col">
+                                <Flex className="bg-white p-7">
                                     <Text className="text-gray-800 whitespace-nowrap">
-                                        Auto enable
+                                        Set Benchmark as Required Baseline and
+                                        Auto-Enable for All Integrations{' '}
                                     </Text>
                                     {enableAllLoading && enableAllExecuted ? (
                                         <Spinner />
@@ -301,11 +275,16 @@ export default function Settings({
                                         />
                                     )}
                                 </Flex>
+                                <Divider />
                             </Flex>
                         </Table>
                     </Flex>
                 )}
-                <Flex className="w-full gap-2 mt-4" justifyContent="between">
+                <Divider />
+                <Flex
+                    className="w-full gap-2  bg-white p-7"
+                    justifyContent="between"
+                >
                     <Text className="text-gray-800 whitespace-nowrap">
                         Maintain Detailed audit trails of Drifts Events
                     </Text>

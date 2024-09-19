@@ -1,4 +1,12 @@
-import { Button, Card, Flex, Subtitle, Text, Title } from '@tremor/react'
+import {
+    Button,
+    Card,
+    Flex,
+    Subtitle,
+    Text,
+    Title,
+    Divider,
+} from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useAtomValue } from 'jotai'
@@ -114,44 +122,51 @@ export default function Compliance() {
                     {sorted?.map(
                         (bs, i) =>
                             i < 2 && (
-                                <Card
-                                    onClick={() =>
-                                        navigate(
-                                            `/ws/${workspace}/compliance/${bs.id}?${searchParams}`
-                                        )
-                                    }
-                                    className="p-3 cursor-pointer dark:ring-gray-500 hover:shadow-md"
-                                >
-                                    <Subtitle className="font-semibold text-gray-800 mb-2">
-                                        {bs.title}
-                                    </Subtitle>
-                                    {(bs.controlsSeverityStatus?.total?.total ||
-                                        0) > 0 ? (
-                                        <>
-                                            <Text>Security score</Text>
-                                            <Title>
-                                                {(
-                                                    ((bs?.controlsSeverityStatus
-                                                        ?.total?.passed || 0) /
-                                                        (bs
+                                <>
+                                    <Card
+                                        onClick={() =>
+                                            navigate(
+                                                `/ws/${workspace}/compliance/${bs.id}?${searchParams}`
+                                            )
+                                        }
+                                        className="p-3 cursor-pointer shadow-none ring-0  border-none dark:ring-gray-500 hover:shadow-md"
+                                    >
+                                        <Subtitle className="font-semibold text-gray-800 mb-2">
+                                            {bs.title}
+                                        </Subtitle>
+                                        {(bs.controlsSeverityStatus?.total
+                                            ?.total || 0) > 0 ? (
+                                            <>
+                                                <Text>Security score</Text>
+                                                <Title>
+                                                    {(
+                                                        ((bs
                                                             ?.controlsSeverityStatus
-                                                            ?.total?.total ||
-                                                            1)) *
-                                                        100 || 0
-                                                ).toFixed(1)}
-                                                %
-                                            </Title>
-                                        </>
-                                    ) : (
-                                        <Button
-                                            variant="light"
-                                            icon={ChevronRightIcon}
-                                            iconPosition="right"
-                                        >
-                                            Assign
-                                        </Button>
+                                                            ?.total?.passed ||
+                                                            0) /
+                                                            (bs
+                                                                ?.controlsSeverityStatus
+                                                                ?.total
+                                                                ?.total || 1)) *
+                                                            100 || 0
+                                                    ).toFixed(1)}
+                                                    %
+                                                </Title>
+                                            </>
+                                        ) : (
+                                            <Button
+                                                variant="light"
+                                                icon={ChevronRightIcon}
+                                                iconPosition="right"
+                                            >
+                                                Assign
+                                            </Button>
+                                        )}
+                                    </Card>
+                                    {i  < sorted.length-1 && (
+                                        <Divider className="m-0 p-0" />
                                     )}
-                                </Card>
+                                </>
                             )
                     )}
                     {/* {benchmarkList(benchmarks?.benchmarkSummary).connected

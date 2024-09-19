@@ -42,6 +42,7 @@ import SummaryCard from '../../../../components/Cards/SummaryCard'
 import Evaluate from './Evaluate'
 import Table, { IColumn } from '../../../../components/Table'
 import { ValueFormatterParams } from 'ag-grid-community'
+import Findings from './Findings'
 
 export default function NewBenchmarkSummary() {
     const { ws } = useParams()
@@ -400,7 +401,7 @@ const columns: (isDemo: boolean) => IColumn<any, any>[] = (isDemo) => [
                                 </>
                             </TabPanel>
                             <TabPanel>
-                                <Flex flexDirection='row' justifyContent='start' alignItems='start' className='gap-4'>
+                                {/* <Flex flexDirection='row' justifyContent='start' alignItems='start' className='gap-4'>
                                     <Flex className=" p-2 w-52 bg-white min-w-52 rounded-md" flexDirection='col' justifyContent='start' alignItems='start'>
                                         <UncontrolledTreeEnvironment<string>
                                             canDragAndDrop
@@ -442,9 +443,18 @@ const columns: (isDemo: boolean) => IColumn<any, any>[] = (isDemo) => [
                                             fullWidth
                                         />
                                     </Flex>
-                                </Flex>
+                                </Flex> */}
+                                <>
+                                    {' '}
+                                    <Controls
+                                        id={String(benchmarkId)}
+                                        assignments={trend === null ? 0 : 1}
+                                    />
+                                </>
                             </TabPanel>
-                            <TabPanel>text</TabPanel>
+                            <TabPanel>
+                                <Findings />
+                            </TabPanel>
                             <TabPanel>
                                 {' '}
                                 <Settings

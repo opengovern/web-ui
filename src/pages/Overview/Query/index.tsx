@@ -119,7 +119,7 @@ export default function Query({ height }: IQuery) {
                                       {q?.title}
                                   </Text>
                               </AccordionHeader>
-                              <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
+                              <AccordionBody className="p-0 w-full pr-0.5 cursor-default ">
                                   <Editor
                                       onValueChange={(text) => {
                                           console.log('')
@@ -128,7 +128,7 @@ export default function Query({ height }: IQuery) {
                                           highlight(text, languages.sql, 'sql')
                                       }
                                       value={q?.query || ''}
-                                      className="w-full bg-white dark:bg-gray-800 font-mono text-sm h-full no-scrollbar"
+                                      className="w-full bg-gray-100 rounded p-20 dark:bg-gray-800 font-mono text-sm h-full no-scrollbar"
                                       style={{
                                           color: 'white !important',
                                           minHeight: '60px',
