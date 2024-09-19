@@ -5,7 +5,7 @@ import Spend from './Spend'
 import TopHeader from '../../components/Layout/Header'
 import ScoreKPIs from './ScoreKPIs'
 import { defaultHomepageTime } from '../../utilities/urlstate'
-
+import Query from './Query'
 export default function Overview() {
     const { ws } = useParams()
     const element = document.getElementById('myDIV')?.offsetHeight
@@ -22,7 +22,7 @@ export default function Overview() {
                 </Col>
             </Grid>
             <Grid numItems={6} className="w-full gap-6 h-fit">
-                <Col numColSpan={6}>
+                <Col numColSpan={4}>
                     <Flex
                         flexDirection="col"
                         alignItems="start"
@@ -32,6 +32,9 @@ export default function Overview() {
                         <Governance />
                         <Spend />
                     </Flex>
+                </Col>
+                <Col numColSpan={2}>
+                    <Query height={1000} />
                 </Col>
             </Grid>
         </>

@@ -42,6 +42,7 @@ import AllQueries from '../pages/Query/All Query'
 import SettingsWorkspaceAPIKeys from '../pages/Settings/APIKeys'
 import SettingsParameters from '../pages/Settings/Parameters'
 import SettingsMembers from '../pages/Settings/Members'
+import NewBenchmarkSummary from '../pages/Governance/Compliance/NewBenchmarkSummary'
 
 const authRoutes = [
     {
@@ -274,6 +275,11 @@ const authRoutes = [
         key: 'benchmark summary',
         path: '/ws/:ws/compliance/:benchmarkId',
         element: <BenchmarkSummary />,
+    },
+    {
+        key: 'benchmark summary 2',
+        path: '/ws/:ws/compliance/new/:benchmarkId',
+        element: <NewBenchmarkSummary />,
     },
     {
         key: 'allControls',

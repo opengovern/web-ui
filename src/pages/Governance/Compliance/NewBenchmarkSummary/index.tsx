@@ -1,5 +1,25 @@
 import { useParams } from 'react-router-dom'
-import { Card, Flex, Grid, Tab, TabGroup, TabList, TabPanel, TabPanels, Text, Title } from '@tremor/react'
+import {
+    Card,
+    Flex,
+    Grid,
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
+    Text,
+    Title,
+    Switch,
+} from '@tremor/react'
+
+import {
+    UncontrolledTreeEnvironment,
+    Tree,
+    StaticTreeDataProvider,
+    ControlledTreeEnvironment,
+} from 'react-complex-tree'
+
 import { useEffect, useState } from 'react'
 import {
     useComplianceApiV1BenchmarksSummaryDetail,
@@ -20,17 +40,60 @@ import BenchmarkChart from '../../../../components/Benchmark/Chart'
 import { toErrorMessage } from '../../../../types/apierror'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import Evaluate from './Evaluate'
+import Table, { IColumn } from '../../../../components/Table'
+import { ValueFormatterParams } from 'ag-grid-community'
 
 export default function NewBenchmarkSummary() {
     const { ws } = useParams()
     const { value: activeTimeRange } = useUrlDateRangeState(
         defaultTime(ws || '')
     )
+    const readTemplate = (template: any, data: any = { items: {} }): any => {
+        for (const [key, value] of Object.entries(template)) {
+            // eslint-disable-next-line no-param-reassign
+            data.items[key] = {
+                index: key,
+                canMove: true,
+                isFolder: value !== null,
+                children:
+                    value !== null
+                        ? Object.keys(value as Record<string, unknown>)
+                        : undefined,
+                data: key,
+                canRename: true,
+            }
+
+            if (value !== null) {
+                readTemplate(value, data)
+            }
+        }
+        return data
+    }
+    const shortTreeTemplate = {
+        root: {
+            container: {
+                item0: null,
+                item1: null,
+                item2: null,
+                item3: {
+                    inner0: null,
+                    inner1: null,
+                    inner2: null,
+                    inner3: null,
+                },
+                item4: null,
+                item5: null,
+            },
+        },
+    }
+    const shortTree = readTemplate(shortTreeTemplate)
+
     const { benchmarkId } = useParams()
     const { value: selectedConnections } = useFilterState()
     const [assignments, setAssignments] = useState(0)
     const [recall, setRecall] = useState(false)
-
+ const [focusedItem, setFocusedItem] = useState<string>()
+ const [expandedItems, setExpandedItems] = useState<string[]>([])
     const topQuery = {
         ...(benchmarkId && { benchmarkId: [benchmarkId] }),
         ...(selectedConnections.provider && {
@@ -93,6 +156,61 @@ export default function NewBenchmarkSummary() {
         startTime: activeTimeRange.start.unix(),
         endTime: activeTimeRange.end.unix(),
     })
+const columns: (isDemo: boolean) => IColumn<any, any>[] = (isDemo) => [
+    {
+        width: 120,
+        sortable: true,
+        filter: true,
+        enableRowGroup: true,
+        type: 'string',
+        field: 'connector',
+    },
+    {
+        field: 'providerConnectionName',
+        headerName: 'Connection Name',
+        type: 'string',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+        cellRenderer: (param: ValueFormatterParams) => (
+            <span className={isDemo ? 'blur-sm' : ''}>{param.value}</span>
+        ),
+    },
+    {
+        field: 'providerConnectionID',
+        headerName: 'Connection ID',
+        type: 'string',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+        cellRenderer: (param: ValueFormatterParams) => (
+            <span className={isDemo ? 'blur-sm' : ''}>{param.value}</span>
+        ),
+    },
+    {
+        headerName: 'Enable',
+        sortable: true,
+        type: 'string',
+        filter: true,
+        resizable: true,
+        flex: 0.5,
+        cellRenderer: (params: any) => {
+            return (
+                <Flex
+                    alignItems="center"
+                    justifyContent="center"
+                    className="h-full w-full"
+                >
+                    <Switch checked={params.data?.status} />
+                </Flex>
+            )
+        },
+    },
+
+]
+// @ts-ignore
 
     useEffect(() => {
         if (isExecuted || recall) {
@@ -281,7 +399,51 @@ export default function NewBenchmarkSummary() {
                                     )}
                                 </>
                             </TabPanel>
-                            <TabPanel>text</TabPanel>
+                            <TabPanel>
+                                <Flex flexDirection='row' justifyContent='start' alignItems='start' className='gap-4'>
+                                    <Flex className=" p-2 w-52 bg-white min-w-52 rounded-md" flexDirection='col' justifyContent='start' alignItems='start'>
+                                        <UncontrolledTreeEnvironment<string>
+                                            canDragAndDrop
+                                            canDropOnFolder
+                                            canReorderItems
+                                            dataProvider={
+                                                new StaticTreeDataProvider(
+                                                    shortTree?.items,
+                                                    (item, data) => ({
+                                                        ...item,
+                                                        data,
+                                                    })
+                                                )
+                                            }
+                                            getItemTitle={(item) => item.data}
+                                            viewState={{
+                                                'tree-1': {
+                                                    expandedItems: [
+                                                        'container',
+                                                    ],
+                                                },
+                                            }}
+                                        >
+                                            <Tree
+                                                treeId="tree-1"
+                                                rootItem="root"
+                                                treeLabel="Tree Example"
+                                            />
+                                        </UncontrolledTreeEnvironment>
+                                    </Flex>
+
+                                    <Flex>
+                                        <Table
+                                            id="compliance_assignments"
+                                            columns={columns(true)}
+                                            onCellClicked={(event) => {}}
+                                            loading={isLoading}
+                                            rowData={[]}
+                                            fullWidth
+                                        />
+                                    </Flex>
+                                </Flex>
+                            </TabPanel>
                             <TabPanel>text</TabPanel>
                             <TabPanel>
                                 {' '}

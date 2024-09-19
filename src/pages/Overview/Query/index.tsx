@@ -70,7 +70,7 @@ export default function Query({ height }: IQuery) {
         >
             <Flex justifyContent="start" className="gap-2 mb-2">
                 <Icon icon={MagnifyingGlassIcon} className="p-0" />
-                <Title className="font-semibold">Popular Asset Queries</Title>
+                <Title className="font-semibold">Bookmarked Queries</Title>
             </Flex>
             {isLoading
                 ? [1, 2, 3, 4, 5].map((i) => (
