@@ -43,6 +43,7 @@ import SettingsWorkspaceAPIKeys from '../pages/Settings/APIKeys'
 import SettingsParameters from '../pages/Settings/Parameters'
 import SettingsMembers from '../pages/Settings/Members'
 import NewBenchmarkSummary from '../pages/Governance/Compliance/NewBenchmarkSummary'
+import Dashboard from '../pages/Dashboard'
 
 const authRoutes = [
     {
@@ -93,7 +94,7 @@ const authRoutes = [
     {
         key: 'dashboards',
         path: '/ws/:ws/dashboards',
-        element: <RequestAccess />,
+        element: <Dashboard />,
     },
     {
         key: 'infrastructure',
