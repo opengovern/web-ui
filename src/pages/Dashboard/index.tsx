@@ -21,31 +21,31 @@ const data = [
         id: 2,
         name: 'Spend Summary',
         description: 'Description',
-        href: 'spend',
+        page: 'spend',
     },
     {
         id: 3,
         name: 'Infrastructure - Cloud Accounts',
         description: 'Description',
-        href: 'infrastructure-cloud-accounts',
+        page: 'infrastructure-cloud-accounts',
     },
     {
         id: 4,
         name: 'Infrastructure - Cloud Services',
         description: 'Description',
-        href: 'infrastructure-metrics',
+        page: 'infrastructure-metrics',
     },
     {
         id: 5,
         name: 'Spend - Cloud Accounts',
         description: 'Description',
-        href: 'spend-accounts',
+        page: 'spend-accounts',
     },
     {
         id: 6,
         name: 'Spend - Cloud Services',
         description: 'Description',
-        href: 'spend-metrics',
+        page: 'spend-metrics',
     },
 ]
 export default function Dashboard() {
