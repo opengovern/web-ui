@@ -205,16 +205,19 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 isPreview: false,
             },
             {
-                name: 'Infrastructure',
+                name: 'Cloud Dashboards',
                 page: [
                     'infrastructure',
                     'infrastructure-cloud-accounts',
                     'infrastructure-metrics',
+                    'spend',
+                    'spend-accounts',
+                    'spend-metrics',
                 ],
                 icon: CubeIcon,
                 children: [
                     {
-                        name: 'Summary',
+                        name: 'Infrastructure Summary',
                         page: 'infrastructure',
                         isPreview: false,
                         isLoading: false,
@@ -222,31 +225,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         error: false,
                     },
                     {
-                        name: 'Cloud Accounts',
-                        page: 'infrastructure-cloud-accounts',
-                        isPreview: false,
-                        isLoading: assetsIsLoading,
-                        count: numericDisplay(assetCount?.connectionCount) || 0,
-                        error: assetCountErr,
-                    },
-                    {
-                        name: 'Cloud Services',
-                        page: 'infrastructure-metrics',
-                        isPreview: false,
-                        isLoading: assetsIsLoading,
-                        count: numericDisplay(assetCount?.metricCount) || 0,
-                        error: assetCountErr,
-                    },
-                ],
-                isPreview: false,
-            },
-            {
-                name: 'Spend',
-                page: ['spend', 'spend-accounts', 'spend-metrics'],
-                icon: BanknotesIcon,
-                children: [
-                    {
-                        name: 'Summary',
+                        name: 'Spend Summary',
                         page: 'spend',
                         isPreview: false,
                         isLoading: false,
@@ -254,7 +233,24 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         error: false,
                     },
                     {
-                        name: 'Cloud Accounts',
+                        name: 'Infrastructure - Cloud Accounts',
+                        page: 'infrastructure-cloud-accounts',
+                        isPreview: false,
+                        isLoading: assetsIsLoading,
+                        count: numericDisplay(assetCount?.connectionCount) || 0,
+                        error: assetCountErr,
+                    },
+                    {
+                        name: 'Infrastructure - Cloud Services',
+                        page: 'infrastructure-metrics',
+                        isPreview: false,
+                        isLoading: assetsIsLoading,
+                        count: numericDisplay(assetCount?.metricCount) || 0,
+                        error: assetCountErr,
+                    },
+
+                    {
+                        name: 'Spend - Cloud Accounts',
                         page: 'spend-accounts',
                         isPreview: false,
                         isLoading: spendCountIsLoading,
@@ -262,7 +258,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         error: spendCountErr,
                     },
                     {
-                        name: 'Services',
+                        name: 'Spend - Cloud Services',
                         page: 'spend-metrics',
                         isPreview: false,
                         isLoading: spendCountIsLoading,
@@ -272,6 +268,38 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 ],
                 isPreview: false,
             },
+            // {
+            //     name: 'Spend',
+            //     page: ['spend', 'spend-accounts', 'spend-metrics'],
+            //     icon: BanknotesIcon,
+            //     children: [
+            //         {
+            //             name: 'Summary',
+            //             page: 'spend',
+            //             isPreview: false,
+            //             isLoading: false,
+            //             count: undefined,
+            //             error: false,
+            //         },
+            //         {
+            //             name: 'Cloud Accounts',
+            //             page: 'spend-accounts',
+            //             isPreview: false,
+            //             isLoading: spendCountIsLoading,
+            //             count: numericDisplay(spendCount?.connectionCount) || 0,
+            //             error: spendCountErr,
+            //         },
+            //         {
+            //             name: 'Services',
+            //             page: 'spend-metrics',
+            //             isPreview: false,
+            //             isLoading: spendCountIsLoading,
+            //             count: numericDisplay(spendCount?.metricCount) || 0,
+            //             error: spendCountErr,
+            //         },
+            //     ],
+            //     isPreview: false,
+            // },
             {
                 name: 'Compliance',
                 icon: ClipboardDocumentCheckIcon,
@@ -445,12 +473,15 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         <Flex
             flexDirection="col"
             alignItems="start"
-            className="z-50 !max-h-screen h-full w-fit pt-4 bg-kaytu-950 dark:bg-gray-950 relative border-r border-r-gray-700"
+            className={`z-50 !max-h-screen h-full  ${
+                collapsed ? 'w-fit' : 'w-1/5'
+            }
+             pt-4 bg-kaytu-950 dark:bg-gray-950 relative border-r border-r-gray-700`}
         >
             <Flex
                 flexDirection="col"
                 justifyContent="start"
-                className={`h-full ${collapsed ? 'w-fit' : 'w-72'}`}
+                className={`h-full ${collapsed ? 'w-fit' : 'w-full'}`}
             >
                 <Flex
                     justifyContent={collapsed ? 'center' : 'between'}

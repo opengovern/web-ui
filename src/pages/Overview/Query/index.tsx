@@ -128,11 +128,12 @@ export default function Query({ height }: IQuery) {
                                           highlight(text, languages.sql, 'sql')
                                       }
                                       value={q?.query || ''}
-                                      className="w-full bg-gray-100 rounded p-20 dark:bg-gray-800 font-mono text-sm h-full no-scrollbar"
+                                      className="w-full bg-gray-100 rounded p-5 dark:bg-gray-800 font-mono text-sm h-full no-scrollbar"
                                       style={{
                                           color: 'white !important',
                                           minHeight: '60px',
                                           overflowY: 'scroll',
+                                          padding: '2rem!important'
                                       }}
                                       placeholder="-- write your SQL query here"
                                   />
