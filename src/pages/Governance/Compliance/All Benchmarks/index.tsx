@@ -133,21 +133,21 @@ const columns: IColumn<
     any
 >[] = [
     {
-        field: 'metadata.id',
+        field: 'benchmark.id',
         headerName: 'ID',
         type: 'string',
         sortable: true,
         resizable: false,
     },
     {
-        field: 'metadata.title',
+        field: 'benchmark.title',
         headerName: 'Title',
         type: 'string',
         sortable: true,
         resizable: false,
     },
     {
-        field: 'metadata.connectors',
+        field: 'benchmark.connectors',
         headerName: 'Connector',
         type: 'connector',
         sortable: true,
@@ -158,17 +158,21 @@ const columns: IColumn<
         //     }),
     },
     {
-        field: 'metadata.primary_tables',
+        field: 'benchmark.primary_tables',
         headerName: 'Primary Table',
         type: 'string',
         sortable: true,
         resizable: false,
         cellRenderer: (params: any) => {
-            return params.value[0]
+            if (params.value && params.value.length > 0) {
+                return params.value[0]
+            } else {
+                return ''
+            }
         },
     },
     {
-        field: 'metadata.enabled',
+        field: 'benchmark.enabled',
         headerName: 'Enabled',
         type: 'string',
         sortable: true,
@@ -178,7 +182,7 @@ const columns: IColumn<
         },
     },
     {
-        field: 'metadata.number_of_controls',
+        field: 'benchmark.number_of_controls',
         headerName: 'Number of Controls',
         type: 'string',
         sortable: true,
@@ -631,7 +635,7 @@ export default function AllBenchmarks() {
                                 loading={loading}
                                 onRowClicked={(e) => {
                                     if (e.data) {
-                                        setSelectedRow(e?.data?.metadata)
+                                        setSelectedRow(e?.data?.benchmark)
                                     }
                                     setOpenSlider(true)
                                 }}

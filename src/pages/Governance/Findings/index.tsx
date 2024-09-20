@@ -48,7 +48,6 @@ export default function Findings() {
     }, [tab])
     useEffect(() => {
         const url = window.location.pathname.split('/')[4]
-        console.log(url,"url")
         switch (url) {
             case 'resource-summary':
                 setTab(1)

@@ -2787,7 +2787,7 @@ export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3 {
     finding_summary?: boolean
 }
 export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseItem {
-    metadata: GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseMetaData
+    benchmark: GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseMetaData
     findings: null
 }
 

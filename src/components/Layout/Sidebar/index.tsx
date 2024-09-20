@@ -64,7 +64,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const navigate = useNavigate()
     const { isAuthenticated, getAccessTokenSilently } = useAuth()
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
-    console.log(collapsed)
     const preview = useAtomValue(previewAtom)
     const {
         response: spendCount,
