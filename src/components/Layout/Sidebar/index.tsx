@@ -347,7 +347,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             {
                 name: 'Incidents',
                 icon: DocumentMagnifyingGlassIcon,
-                page: 'findings',
+                page: 'incidents',
                 isPreview: false,
                 children: [
                     {
@@ -369,10 +369,10 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         name: 'Drift Events',
                         page: 'incidents/drift-events',
                     },
-                    {
-                        name: 'Account Posture',
-                        page: 'incidents/account-posture',
-                    },
+                    // {
+                    //     name: 'Account Posture',
+                    //     page: 'incidents/account-posture',
+                    // },
                     // {
                     //     name: 'Control Summary',
                     //     page: 'incidents/control-summary',

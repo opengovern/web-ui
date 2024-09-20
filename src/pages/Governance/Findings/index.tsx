@@ -36,9 +36,6 @@ export default function Findings() {
             case 2:
                 setSelectedGroup('events')
                 break
-            case 3:
-                setSelectedGroup('accounts')
-                break
             default:
                 setSelectedGroup('findings')
                 break
@@ -52,9 +49,6 @@ export default function Findings() {
                 break
             case 'drift-events':
                 setTab(2)
-                break
-            case 'account-posture':
-                setTab(3)
                 break
             default:
                 setTab(0)
@@ -74,9 +68,7 @@ export default function Findings() {
                 )
             case 2:
                return <Events query={query} />
-            case 3:
-               return <FailingCloudAccounts query={query} />
-          
+
             default:
                 return <Spinner/>
         }

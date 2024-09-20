@@ -11,6 +11,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
 } from '../../../../api/api'
 import { DateRange } from '../../../../utilities/urlstate'
+import FailingCloudAccounts from '../FailingCloudAccounts'
 interface ICount {
    
         connector: SourceType
@@ -39,6 +40,14 @@ export default function Summary({ query, setSelectedGroup } : Props) {
                 <TabList>
                     <Tab
                         onClick={() => {
+                            setSelectedGroup('accounts')
+                            setTab(2)
+                        }}
+                    >
+                        Account Summary
+                    </Tab>
+                    <Tab
+                        onClick={() => {
                             setSelectedGroup('resources')
                             setTab(0)
                         }}
@@ -55,6 +64,13 @@ export default function Summary({ query, setSelectedGroup } : Props) {
                     </Tab>
                 </TabList>
                 <TabPanels>
+                    <TabPanel key={'resource'}>
+                        {tab ==  2 && (
+                            <>
+                                <FailingCloudAccounts query={query} />
+                            </>
+                        )}
+                    </TabPanel>
                     <TabPanel key={'resource'}>
                         {tab == 0 && (
                             <>
