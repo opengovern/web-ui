@@ -16,7 +16,7 @@ interface INewPrinciple {
     open: boolean
     onClose: () => void
     useDrawer?: boolean
-    bootstrapMode?: boolean
+    // bootstrapMode?: boolean
     onCancel?: () => void
     credintalsSendNow?: Function
 }
@@ -25,7 +25,7 @@ export default function NewPrincipal({
     open,
     onClose,
     useDrawer = true,
-    bootstrapMode = false,
+    // bootstrapMode = false,
     onCancel,
     credintalsSendNow
 }: INewPrinciple) {
@@ -102,11 +102,12 @@ export default function NewPrincipal({
 
     useEffect(() => {
         if (stepNum === 3) {
-            if (bootstrapMode) {
-                bcSendNow()
-            } else {
-                sendNow()
-            }
+            // if (bootstrapMode) {
+            //     bcSendNow()
+            // } else {
+            //     sendNow()
+            // }
+            sendNow()
             if(credintalsSendNow){
             credintalsSendNow()
 
@@ -115,11 +116,12 @@ export default function NewPrincipal({
     }, [stepNum])
 
     const showStep = (s: number) => {
-        if (bootstrapMode) {
-            if (bcIsLoading && bcIsExecuted) {
-                return <Spinner />
-            }
-        } else if (isLoading && isExecuted) {
+        // if (bootstrapMode) {
+        //     if (bcIsLoading && bcIsExecuted) {
+        //         return <Spinner />
+        //     }
+        // } else
+         if (isLoading && isExecuted) {
             return <Spinner />
         }
 
@@ -141,7 +143,9 @@ export default function NewPrincipal({
                         iTenId={data.tenId}
                         iSubscriptionId={data.subscriptionId}
                         onPrevious={() => setStepNum(1)}
-                        error={getErrorMessage(bootstrapMode ? bcError : error)}
+                        // error={getErrorMessage(bootstrapMode ? bcError : error)}
+                        error={getErrorMessage(error)}
+
                         onNext={(
                             appId,
                             tenId,

@@ -9,7 +9,7 @@ import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../../api/
 import Table, { IColumn } from '../../../../../components/Table'
 
 interface IFinish {
-    bootstrapMode: boolean
+    // bootstrapMode: boolean
     onClose: () => void
 }
 
@@ -72,12 +72,15 @@ const columns: IColumn<any, any>[] = [
     },
 ]
 
-export function Finish({ bootstrapMode, onClose }: IFinish) {
+export function Finish({
+    //  bootstrapMode,
+      onClose }: IFinish) {
     const { response, isLoading, error } =
         useIntegrationApiV1ConnectionsSummariesList(
             { connector: ['AWS'] },
             {},
-            !bootstrapMode
+            // there is !bootstrap mode
+            true
         )
 
     const options: GridOptions = {
@@ -117,7 +120,8 @@ export function Finish({ bootstrapMode, onClose }: IFinish) {
                         Your accounts are onboarded
                     </Text>
                 </Flex>
-                {!bootstrapMode && (
+                {/* there is not bootstrap mode too */}
+                {!false && (
                     <>
                         <Text className="mb-2">
                             Here&apos;s all the AWS accounts which have been

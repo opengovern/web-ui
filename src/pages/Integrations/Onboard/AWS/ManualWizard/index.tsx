@@ -14,7 +14,7 @@ import {
 } from '../../../../../api/integration.gen'
 
 interface IManualWizard {
-    bootstrapMode: boolean
+    // bootstrapMode: boolean
     orgOrSingle: 'organization' | 'single'
     onPrev: () => void
     onClose: () => void
@@ -24,7 +24,7 @@ export default function ManualWizard({
     onPrev,
     onClose,
     orgOrSingle,
-    bootstrapMode,
+    // bootstrapMode,
 }: IManualWizard) {
     const workspace = useParams<{ ws: string }>().ws
     const [step, setStep] = useState(1)
@@ -138,9 +138,10 @@ export default function ManualWizard({
     }, [scIsLoading])
 
     const sendNow = () => {
-        if (bootstrapMode) {
-            bcSendNow()
-        } else if (orgOrSingle === 'single') {
+        // if (bootstrapMode) {
+        //     bcSendNow()
+        // } else 
+        if (orgOrSingle === 'single') {
             scSendNow()
         } else {
             cSendNow()
@@ -148,9 +149,9 @@ export default function ManualWizard({
     }
 
     const errorMessage = () => {
-        if (bootstrapMode) {
-            return getErrorMessage(bcError)
-        }
+        // if (bootstrapMode) {
+        //     return getErrorMessage(bcError)
+        // }
         if (orgOrSingle === 'single') {
             return getErrorMessage(scError)
         }
@@ -158,9 +159,9 @@ export default function ManualWizard({
     }
 
     const isCreateLoading = () => {
-        if (bootstrapMode) {
-            return bcIsExecuted && bcIsLoading
-        }
+        // if (bootstrapMode) {
+        //     return bcIsExecuted && bcIsLoading
+        // }
         if (orgOrSingle === 'single') {
             return scIsExecuted && scIsLoading
         }
@@ -297,7 +298,9 @@ export default function ManualWizard({
                 )
             default:
                 return (
-                    <Finish onClose={onClose} bootstrapMode={bootstrapMode} />
+                    <Finish onClose={onClose}
+                    //  bootstrapMode={bootstrapMode}
+                      />
                 )
         }
     }

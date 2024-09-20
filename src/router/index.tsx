@@ -16,7 +16,7 @@ import Query from '../pages/Query'
 import Single from '../pages/Assets/Single'
 import SingleSpend from '../pages/Spend/Single'
 import SingleComplianceConnection from '../pages/Governance/Compliance/BenchmarkSummary/SingleConnection'
-import Boostrap from '../pages/Workspaces/Bootstrap'
+// import Boostrap from '../pages/Workspaces/Bootstrap'
 import ResourceCollection from '../pages/ResourceCollection'
 import ResourceCollectionDetail from '../pages/ResourceCollection/Detail'
 import ControlDetail from '../pages/Governance/Controls/ControlSummary'
@@ -352,16 +352,16 @@ const authRoutes = [
         path: '/ws/:ws/query',
         element: <Query />,
     },
-    {
-        key: 'bootstrap',
-        path: '/ws/:ws/bootstrap',
-        element: <Boostrap />,
-    },
-    {
-        key: 'new-ws',
-        path: '/ws/new-ws',
-        element: <Boostrap />,
-    },
+    // {
+    //     key: 'bootstrap',
+    //     path: '/ws/:ws/bootstrap',
+    //     element: <Boostrap />,
+    // },
+    // {
+    //     key: 'new-ws',
+    //     path: '/ws/new-ws',
+    //     element: <Boostrap />,
+    // },
     {
         key: 'resource collection',
         path: '/ws/:ws/resource-collection',

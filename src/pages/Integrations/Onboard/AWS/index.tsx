@@ -13,13 +13,13 @@ import { Finish } from './Finish'
 interface IOnboardDrawer {
     open: boolean
     onClose: () => void
-    bootstrapMode: boolean
+    // bootstrapMode: boolean
 }
 
 export default function OnboardDrawer({
     open,
     onClose,
-    bootstrapMode,
+    // bootstrapMode,
 }: IOnboardDrawer) {
     const [isOrg, setIsOrg] = useState<boolean | undefined>(undefined)
     const [onboarded, setOnboarded] = useState<boolean>(false)
@@ -53,7 +53,9 @@ export default function OnboardDrawer({
                 />
             )
         }
-        return <Finish bootstrapMode={false} onClose={close} />
+        return <Finish
+        //  bootstrapMode={false} 
+         onClose={close} />
     }
 
     return (

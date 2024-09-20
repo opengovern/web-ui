@@ -297,7 +297,7 @@ export default function AccountList({
             <OnboardDrawer
                 open={open}
                 onClose={() => setOpen(false)}
-                bootstrapMode={false}
+                // bootstrapMode={false}
             />
         </>
     )

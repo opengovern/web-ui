@@ -5,14 +5,14 @@ import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline'
 import { CodeBlock } from '../../../../../../components/CodeBlock'
 
 interface IKaytuOnboard {
-    bootstrapMode: boolean
+    // bootstrapMode: boolean
     orgOrSingle: 'organization' | 'single'
     onPrev: () => void
     onNext: () => void
 }
 
 export function KaytuOnboard({
-    bootstrapMode,
+    // bootstrapMode,
     orgOrSingle,
     onPrev,
     onNext,
@@ -23,9 +23,9 @@ export function KaytuOnboard({
     const command = () => {
         let txt = 'kaytu onboard aws'
 
-        if (bootstrapMode) {
-            txt = `${txt} -b`
-        }
+        // if (bootstrapMode) {
+        //     txt = `${txt} -b`
+        // }
         if (orgOrSingle === 'single') {
             txt = `${txt} --single-connection`
         }

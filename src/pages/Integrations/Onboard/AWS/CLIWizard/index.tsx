@@ -6,7 +6,7 @@ import { Finish } from '../Finish'
 import Steps from '../../../../../components/Steps'
 
 interface ICLIWizard {
-    bootstrapMode: boolean
+    // bootstrapMode: boolean
     orgOrSingle: 'organization' | 'single'
     onPrev: () => void
     onClose: () => void
@@ -16,7 +16,7 @@ export default function CLIWizard({
     onPrev,
     onClose,
     orgOrSingle,
-    bootstrapMode,
+    // bootstrapMode,
 }: ICLIWizard) {
     const [step, setStep] = useState(1)
 
@@ -96,7 +96,7 @@ export default function CLIWizard({
             case 2:
                 return (
                     <KaytuOnboard
-                        bootstrapMode={bootstrapMode}
+                        // bootstrapMode={bootstrapMode}
                         orgOrSingle={orgOrSingle}
                         onPrev={() => setStep(1)}
                         onNext={() => setStep(3)}
@@ -104,7 +104,9 @@ export default function CLIWizard({
                 )
             default:
                 return (
-                    <Finish onClose={onClose} bootstrapMode={bootstrapMode} />
+                    <Finish onClose={onClose} 
+                    // bootstrapMode={bootstrapMode}
+                     />
                 )
         }
     }

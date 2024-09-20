@@ -85,7 +85,7 @@ export default function Boostrap() {
                 <OnboardDrawer
                     open={newAWSOpen}
                     onClose={() => setNewAWSOpen(false)}
-                    bootstrapMode
+                    // bootstrapMode
                 />
             )}
 
@@ -93,7 +93,7 @@ export default function Boostrap() {
                 <NewPrincipal
                     open={newAzureOpen}
                     onClose={() => setNewAzureOpen(false)}
-                    bootstrapMode
+                    // bootstrapMode
                 />
             )}
             <Flex

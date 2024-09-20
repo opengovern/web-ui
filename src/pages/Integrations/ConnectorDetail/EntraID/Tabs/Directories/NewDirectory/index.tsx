@@ -19,14 +19,14 @@ interface INewDirectory {
     open: boolean
     onClose: () => void
     useDrawer?: boolean
-    bootstrapMode?: boolean
+    // bootstrapMode?: boolean
 }
 
 export default function NewDirectory({
     open,
     onClose,
     useDrawer = true,
-    bootstrapMode = false,
+    // bootstrapMode = false,
 }: INewDirectory) {
     const currentWorkspace = useParams<{ ws: string }>().ws
     const [stepNum, setStepNum] = useState(1)
@@ -98,20 +98,22 @@ export default function NewDirectory({
 
     useEffect(() => {
         if (stepNum === 3) {
-            if (bootstrapMode) {
-                bcSendNow()
-            } else {
-                sendNow()
-            }
+            // if (bootstrapMode) {
+            //     bcSendNow()
+            // } else {
+            //     sendNow()
+            // }
+            sendNow()
         }
     }, [stepNum])
 
     const showStep = (s: number) => {
-        if (bootstrapMode) {
-            if (bcIsLoading && bcIsExecuted) {
-                return <Spinner />
-            }
-        } else if (isLoading && isExecuted) {
+        // if (bootstrapMode) {
+        //     if (bcIsLoading && bcIsExecuted) {
+        //         return <Spinner />
+        //     }
+        // } else
+         if (isLoading && isExecuted) {
             return <Spinner />
         }
 
@@ -133,7 +135,9 @@ export default function NewDirectory({
                         iTenId={data.tenId}
                         iSubscriptionId={data.subscriptionId}
                         onPrevious={() => setStepNum(1)}
-                        error={getErrorMessage(bootstrapMode ? bcError : error)}
+                        // error={getErrorMessage(bootstrapMode ? bcError : error)}
+                        error={getErrorMessage(error)}
+
                         onNext={(
                             appId,
                             tenId,
