@@ -1,14 +1,14 @@
 image: node:latest
 
 stages:
-  - docker-build
+  - build
 
 cache:
   paths:
     - node_modules/
 
-docker-build:
-  stage: docker-build
+build:
+  stage: build
   image: 
     name: gcr.io/kaniko-project/executor:v1.23.2-debug
     entrypoint: [""]
