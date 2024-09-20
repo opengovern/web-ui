@@ -480,7 +480,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             flexDirection="col"
             alignItems="start"
             className={`z-50 !max-h-screen h-full  ${
-                collapsed ? 'w-20' : 'w-1/5'
+                collapsed ? 'w-20' : ' w-60'
             }
              pt-4 bg-kaytu-950 dark:bg-gray-950 relative border-r border-r-gray-700`}
         >
@@ -517,7 +517,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 >
                     <div
                         className={`w-full p-2  ${
-                            collapsed ? 'flex justify-start flex-col items-center' : 'overflow-y-scroll'
+                            collapsed
+                                ? 'flex justify-start flex-col items-center'
+                                : 'overflow-y-scroll'
                         } h-full no-scrollbar`}
                         style={{ maxHeight: 'calc(100vh - 130px)' }}
                     >
@@ -547,13 +549,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             defaultOpen={
                                                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                                 // @ts-ignore
-                                                item.children.filter(
-                                                    (c: any) =>
-                                                        isCurrentPage(c.page) ||
-                                                        isCurrentPage(
-                                                            c.selected
-                                                        )
-                                                ).length > 0
+                                                // item.children.filter(
+                                                //     (c: any) =>
+                                                //         isCurrentPage(c.page) ||
+                                                //         isCurrentPage(
+                                                //             c.selected
+                                                //         )
+                                                // ).length > 0
+                                                item.name !== 'Settings'
                                             }
                                             header={
                                                 <div
