@@ -5,14 +5,13 @@ stages:
 build-project:
   stage: build-project
   image: node:18-alpine
-  scripts:
+  script:
     - npm install
     - npm run build
     - cp build build
 
 build-image:
   stage: build-image
-  image: docker
   image: docker:latest
   services: 
     - name: docker:dind
