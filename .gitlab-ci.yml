@@ -1,19 +1,11 @@
 image: node:latest
 
 stages:
-  - build
   - docker-build
 
 cache:
   paths:
     - node_modules/
-
-build:
-  stage: build
-  script:
-    - echo "Start building App"
-    - npm install
-    - echo "Build successfully!"
 
 docker-build:
   stage: docker-build
