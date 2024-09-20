@@ -113,7 +113,7 @@ export default function Dashboard() {
                         <main>
                             <div className="flex items-center justify-between">
                                 <h2 className="text-tremor-title font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
-                                   Available Dashboards
+                                    Available Dashboards
                                 </h2>
                                 <div className="flex items-center space-x-2">
                                     {/* <Select
@@ -139,7 +139,7 @@ export default function Dashboard() {
                                             className="-ml-1 size-5 shrink-0"
                                             aria-hidden={true}
                                         />
-                                        Add 
+                                        Add
                                     </button>
                                 </div>
                             </div>
@@ -154,7 +154,7 @@ export default function Dashboard() {
                                             <div className="flex items-center space-x-4 truncate">
                                                 <h4 className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
                                                     <a
-                                                        href={`/ws/${workspace}/${item.page}`}
+                                                        href={`/ws/${workspace}/dashboard/${item.page}`}
                                                         className="focus:outline-none"
                                                     >
                                                         {/* Extend link to entire card */}

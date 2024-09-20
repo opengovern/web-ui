@@ -64,6 +64,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const navigate = useNavigate()
     const { isAuthenticated, getAccessTokenSilently } = useAuth()
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
+    console.log(collapsed)
     const preview = useAtomValue(previewAtom)
     const {
         response: spendCount,
@@ -198,76 +199,71 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 icon: Squares2X2Icon,
                 isPreview: false,
             },
-            {
-                name: 'SCORE',
-                page: 'score',
-                icon: DocumentChartBarIcon,
-                isPreview: false,
-            },
-            {
-                name: 'Cloud Dashboards',
-                page: [
-                    'infrastructure',
-                    'infrastructure-cloud-accounts',
-                    'infrastructure-metrics',
-                    'spend',
-                    'spend-accounts',
-                    'spend-metrics',
-                ],
-                icon: CubeIcon,
-                children: [
-                    {
-                        name: 'Infrastructure Summary',
-                        page: 'infrastructure',
-                        isPreview: false,
-                        isLoading: false,
-                        count: undefined,
-                        error: false,
-                    },
-                    {
-                        name: 'Spend Summary',
-                        page: 'spend',
-                        isPreview: false,
-                        isLoading: false,
-                        count: undefined,
-                        error: false,
-                    },
-                    {
-                        name: 'Infrastructure - Cloud Accounts',
-                        page: 'infrastructure-cloud-accounts',
-                        isPreview: false,
-                        isLoading: assetsIsLoading,
-                        count: numericDisplay(assetCount?.connectionCount) || 0,
-                        error: assetCountErr,
-                    },
-                    {
-                        name: 'Infrastructure - Cloud Services',
-                        page: 'infrastructure-metrics',
-                        isPreview: false,
-                        isLoading: assetsIsLoading,
-                        count: numericDisplay(assetCount?.metricCount) || 0,
-                        error: assetCountErr,
-                    },
 
-                    {
-                        name: 'Spend - Cloud Accounts',
-                        page: 'spend-accounts',
-                        isPreview: false,
-                        isLoading: spendCountIsLoading,
-                        count: numericDisplay(spendCount?.connectionCount) || 0,
-                        error: spendCountErr,
-                    },
-                    {
-                        name: 'Spend - Cloud Services',
-                        page: 'spend-metrics',
-                        isPreview: false,
-                        isLoading: spendCountIsLoading,
-                        count: numericDisplay(spendCount?.metricCount) || 0,
-                        error: spendCountErr,
-                    },
-                ],
-                isPreview: false,
-            },
+            // {
+            //     name: 'Cloud Dashboards',
+            //     page: [
+            //         'infrastructure',
+            //         'infrastructure-cloud-accounts',
+            //         'infrastructure-metrics',
+            //         'spend',
+            //         'spend-accounts',
+            //         'spend-metrics',
+            //     ],
+            //     icon: CubeIcon,
+            //     children: [
+            //         {
+            //             name: 'Infrastructure Summary',
+            //             page: 'infrastructure',
+            //             isPreview: false,
+            //             isLoading: false,
+            //             count: undefined,
+            //             error: false,
+            //         },
+            //         {
+            //             name: 'Spend Summary',
+            //             page: 'spend',
+            //             isPreview: false,
+            //             isLoading: false,
+            //             count: undefined,
+            //             error: false,
+            //         },
+            //         {
+            //             name: 'Infrastructure - Cloud Accounts',
+            //             page: 'infrastructure-cloud-accounts',
+            //             isPreview: false,
+            //             isLoading: assetsIsLoading,
+            //             count: numericDisplay(assetCount?.connectionCount) || 0,
+            //             error: assetCountErr,
+            //         },
+            //         {
+            //             name: 'Infrastructure - Cloud Services',
+            //             page: 'infrastructure-metrics',
+            //             isPreview: false,
+            //             isLoading: assetsIsLoading,
+            //             count: numericDisplay(assetCount?.metricCount) || 0,
+            //             error: assetCountErr,
+            //         },
+
+            //         {
+            //             name: 'Spend - Cloud Accounts',
+            //             page: 'spend-accounts',
+            //             isPreview: false,
+            //             isLoading: spendCountIsLoading,
+            //             count: numericDisplay(spendCount?.connectionCount) || 0,
+            //             error: spendCountErr,
+            //         },
+            //         {
+            //             name: 'Spend - Cloud Services',
+            //             page: 'spend-metrics',
+            //             isPreview: false,
+            //             isLoading: spendCountIsLoading,
+            //             count: numericDisplay(spendCount?.metricCount) || 0,
+            //             error: spendCountErr,
+            //         },
+            //     ],
+            //     isPreview: false,
+            // },
             // {
             //     name: 'Spend',
             //     page: ['spend', 'spend-accounts', 'spend-metrics'],
@@ -304,6 +300,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 name: 'Compliance',
                 icon: ClipboardDocumentCheckIcon,
                 page: [
+                    'score',
                     'compliance',
                     'compliance/controls',
                     'compliance/benchmarks',
@@ -313,6 +310,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 count: undefined,
                 error: false,
                 children: [
+                    {
+                        name: 'Score',
+                        page: 'score',
+                        isPreview: false,
+                        isLoading: false,
+                        count: undefined,
+                        error: false,
+                    },
                     {
                         name: 'Summary',
                         page: 'compliance',
@@ -403,6 +408,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 ],
             },
             {
+                name: 'Dashboards',
+                page: 'dashboards',
+                icon: PresentationChartBarIcon,
+                isPreview: false,
+            },
+            {
                 name: 'Integrations',
                 page: 'integrations',
                 icon: PuzzlePieceIcon,
@@ -426,12 +437,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 icon: RectangleStackIcon,
                 isPreview: true,
             },
-            {
-                name: 'Dashboards',
-                page: 'dashboards',
-                icon: PresentationChartBarIcon,
-                isPreview: true,
-            },
+
             {
                 name: 'Settings',
                 page: [
@@ -474,14 +480,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             flexDirection="col"
             alignItems="start"
             className={`z-50 !max-h-screen h-full  ${
-                collapsed ? 'w-fit' : 'w-1/5'
+                collapsed ? 'w-20' : 'w-1/5'
             }
              pt-4 bg-kaytu-950 dark:bg-gray-950 relative border-r border-r-gray-700`}
         >
             <Flex
                 flexDirection="col"
                 justifyContent="start"
-                className={`h-full ${collapsed ? 'w-fit' : 'w-full'}`}
+                className={`h-full ${collapsed ? 'w-full' : 'w-full'}`}
             >
                 <Flex
                     justifyContent={collapsed ? 'center' : 'between'}
@@ -490,7 +496,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     {collapsed ? <KaytuIcon /> : <KaytuIconBig />}
                     {!collapsed && (
                         <ChevronLeftIcon
-                            className="h-5 text-gray-400 cursor-pointer"
+                            className="h-6 text-gray-400 cursor-pointer"
                             onClick={() => {
                                 setCollapsed(true)
                                 localStorage.collapse = 'true'
@@ -510,8 +516,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     className="h-full max-h-full"
                 >
                     <div
-                        className={`w-full p-2 ${
-                            collapsed ? '' : 'overflow-y-scroll'
+                        className={`w-full p-2  ${
+                            collapsed ? 'flex justify-start flex-col items-center' : 'overflow-y-scroll'
                         } h-full no-scrollbar`}
                         style={{ maxHeight: 'calc(100vh - 130px)' }}
                     >
@@ -520,7 +526,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         )}
                         {collapsed && (
                             <ChevronRightIcon
-                                className="m-2 h-5 text-gray-400 cursor-pointer"
+                                className="m-2 h-6 text-gray-400 cursor-pointer"
                                 onClick={() => {
                                     setCollapsed(false)
                                     localStorage.collapse = 'false'
@@ -564,7 +570,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         {item.isPreview ===
                                                         true ? (
                                                             <item.icon
-                                                                className={`h-5 w-5 stroke-2 ${
+                                                                className={`h-6 w-6 stroke-2 ${
                                                                     collapsed &&
                                                                     isCurrentPage(
                                                                         item.page
@@ -575,7 +581,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             />
                                                         ) : (
                                                             <item.icon
-                                                                className={`h-5 w-5 stroke-2 ${
+                                                                className={`h-6 w-6 stroke-2 ${
                                                                     collapsed &&
                                                                     isCurrentPage(
                                                                         item.page
@@ -637,7 +643,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             {i.isLoading ? (
                                                                 <div className="animate-pulse h-1 w-4 my-2 bg-gray-700 rounded-md" />
                                                             ) : i.error ? (
-                                                                <ExclamationCircleIcon className="h-5" />
+                                                                <ExclamationCircleIcon className="h-6" />
                                                             ) : (
                                                                 i.count
                                                             )}
@@ -656,12 +662,18 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         </AnimatedAccordion>
                                     </div>
                                 ) : item.children && collapsed ? (
-                                    <div className="w-full my-1">
+                                    <div className="w-full my-1 ">
                                         <Popover className="relative z-50 border-0 w-full h-[36px]">
-                                            <div className="group relative">
+                                            <div
+                                                className={`group relative ${
+                                                    collapsed
+                                                        ? 'justify-center flex'
+                                                        : ''
+                                                }`}
+                                            >
                                                 <Popover.Button id={item.name}>
                                                     <div
-                                                        className={`w-full rounded-md p-2
+                                                        className={`w-full rounded-md p-2 
                                                     ${
                                                         isCurrentPage(item.page)
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
@@ -669,7 +681,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     }`}
                                                     >
                                                         <item.icon
-                                                            className={`h-5 w-5 stroke-2 ${
+                                                            className={`h-6 w-6 stroke-2 ${
                                                                 isCurrentPage(
                                                                     item.page
                                                                 )
@@ -725,7 +737,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                                         i.page,
                                                                         item
                                                                     )}
-                                                                    className={`my-0.5 py-2 px-4 flex justify-start rounded-md relative
+                                                                    className={`my-0.5 py-2 px-4 flex  rounded-md relative 
                                                     ${
                                                         isCurrentPage(i.page)
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
@@ -746,7 +758,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                                             {i.isLoading ? (
                                                                                 <div className="animate-pulse h-1 w-4 my-2 bg-gray-700 rounded-md" />
                                                                             ) : i.error ? (
-                                                                                <ExclamationCircleIcon className="h-5" />
+                                                                                <ExclamationCircleIcon className="h-6" />
                                                                             ) : (
                                                                                 i.count
                                                                             )}
@@ -779,7 +791,11 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     ? ''
                                                     : `/ws/${workspace}/${item.page}?${searchParams}`
                                             }
-                                            className={`w-full relative px-6 py-2 flex items-center gap-2.5 rounded-md
+                                            className={`w-full relative px-6 py-2 flex items-center gap-2.5 rounded-md ${
+                                                collapsed
+                                                    ? 'justify-center'
+                                                    : ''
+                                            }
                                                         ${
                                                             isCurrentPage(
                                                                 item.page
@@ -800,7 +816,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             <div className="group relative">
                                                 {item.isPreview === true ? (
                                                     <item.icon
-                                                        className={`h-5 w-5 stroke-2 ${
+                                                        className={`h-6 w-6 stroke-2 ${
                                                             isCurrentPage(
                                                                 item.page
                                                             ) ||
@@ -814,7 +830,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     />
                                                 ) : (
                                                     <item.icon
-                                                        className={`h-5 w-5 stroke-2 ${
+                                                        className={`h-6 w-6 stroke-2 ${
                                                             isCurrentPage(
                                                                 item.page
                                                             ) ||

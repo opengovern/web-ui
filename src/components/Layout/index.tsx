@@ -60,12 +60,13 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                         className={`${
                             current === 'assistant'
                                 ? 'h-fit'
-                                : 'px-12 mt-16 h-fit'
+                                : 'px-12 mt-16 h-fit '
                         } `}
+                        // pl-44 
                     >
                         <div
                             className={`w-full ${
-                                current === 'dashboard' ? '' : 'max-w-7xl'
+                                current === 'dashboard' ? '' : ''
                             } ${
                                 current === 'assistant'
                                     ? 'w-full max-w-full'

@@ -20,7 +20,9 @@ export const notificationAtom = atom<INotification>({
     position: undefined,
 })
 
-export const sideBarCollapsedAtom = atom(localStorage.collapse === 'true')
+export const sideBarCollapsedAtom = atom(
+    localStorage.collapse ? localStorage.collapse === 'true' : true
+)
 export const complianceOpenAtom = atom(false)
 export const automationOpenAtom = atom(false)
 export const queryAtom = atom('')

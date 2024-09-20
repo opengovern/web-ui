@@ -15,14 +15,14 @@ const navList = [
         description: 'Discover and query cloud assets across multiple clouds.',
         icon: CubeIcon,
         children: [
-            { name: 'Overview', link: '/ws/:ws/infrastructure' },
+            { name: 'Overview', link: '/ws/:ws/dashboard/infrastructure' },
             {
                 name: 'Infrastructure metrics',
-                link: '/ws/:ws/infrastructure-metrics',
+                link: '/ws/:ws/dashboard/infrastructure-metrics',
             },
             {
                 name: 'Cloud account details',
-                link: '/ws/:ws/infrastructure-cloud-accounts',
+                link: '/ws/:ws/dashboard/infrastructure-cloud-accounts',
             },
         ],
     },
@@ -31,9 +31,12 @@ const navList = [
         description: 'Understand cloud spend, reduce wastage.',
         icon: BanknotesIcon,
         children: [
-            { name: 'Summary', link: '/ws/:ws/spend' },
-            { name: 'Spend metrics', link: '/ws/:ws/spend-metrics' },
-            { name: 'Spend by accounts', link: '/ws/:ws/spend-accounts' },
+            { name: 'Summary', link: '/ws/:ws/dashboard/spend' },
+            { name: 'Spend metrics', link: '/ws/:ws/dashboard/spend-metrics' },
+            {
+                name: 'Spend by accounts',
+                link: '/ws/:ws/dashboard/spend-accounts',
+            },
         ],
     },
     {
