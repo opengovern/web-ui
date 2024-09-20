@@ -99,6 +99,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const setNextUrl = useSetAtom(nextUrlAtom)
 
     const isCurrentPage = (page: string | string[] | undefined): boolean => {
+        console.log(page)
         if (Array.isArray(page)) {
             return page.map((p) => isCurrentPage(p)).includes(true)
         }
@@ -347,7 +348,11 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             {
                 name: 'Incidents',
                 icon: DocumentMagnifyingGlassIcon,
-                page: 'incidents',
+                page: [
+                    'incidents',
+                    'incidents/summary',
+                    'incidents/drift-events',
+                ],
                 isPreview: false,
                 children: [
                     {
@@ -414,7 +419,15 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             },
             {
                 name: 'Dashboards',
-                page: 'dashboards',
+                page: [
+                    'dashboards',
+                    'dashboard/infrastructure',
+                    'dashboard/spend',
+                    'dashboard/infrastructure-cloud-accounts',
+                    'dashboard/infrastructure-metrics',
+                    'dashboard/spend-accounts',
+                    'dashboard/spend-metrics',
+                ],
                 icon: PresentationChartBarIcon,
                 isPreview: false,
             },
@@ -802,7 +815,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         <Link
                                             to={
                                                 Array.isArray(item.page)
-                                                    ? ''
+                                                    ? `/ws/${workspace}/${item.page[0]}?${searchParams}`
                                                     : `/ws/${workspace}/${item.page}?${searchParams}`
                                             }
                                             className={`w-full relative px-6 py-2 flex items-center gap-2.5 rounded-md ${
