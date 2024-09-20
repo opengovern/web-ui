@@ -9,3 +9,8 @@
      volumes:
        - "/app/node_modules"
        - "./:/app"
+     networks:
+       - front
+ networks:
+  front:
+    driver: bridge
