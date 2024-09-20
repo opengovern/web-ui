@@ -18,6 +18,7 @@ import {
     ArrowUpCircleIcon,
     PresentationChartBarIcon,
     CubeTransparentIcon,
+    BoltIcon,
 } from '@heroicons/react/24/outline'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { Popover, Transition } from '@headlessui/react'
@@ -310,16 +311,16 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 error: false,
                 children: [
                     {
-                        name: 'Score',
-                        page: 'score',
+                        name: 'Summary',
+                        page: 'compliance',
                         isPreview: false,
                         isLoading: false,
                         count: undefined,
                         error: false,
                     },
                     {
-                        name: 'Summary',
-                        page: 'compliance',
+                        name: 'SCORE',
+                        page: 'score',
                         isPreview: false,
                         isLoading: false,
                         count: undefined,
@@ -344,34 +345,38 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 ],
             },
             {
-                name: 'Findings',
+                name: 'Incidents',
                 icon: DocumentMagnifyingGlassIcon,
                 page: 'findings',
                 isPreview: false,
                 children: [
                     {
-                        name: 'All Findings',
-                        page: 'findings',
+                        name: 'All Incidents',
+                        page: 'incidents',
                         isLoading: findingsIsLoading,
                         count: numericDisplay(findingsCount?.count) || 0,
                         error: findingsErr,
                     },
                     {
-                        name: 'Resource Summary',
-                        page: 'findings/resource-summary',
+                        name: 'Summary',
+                        page: 'incidents/summary',
                     },
+                    // {
+                    //     name: 'Resource Summary',
+                    //     page: 'incidents/resource-summary',
+                    // },
                     {
                         name: 'Drift Events',
-                        page: 'findings/drift-events',
+                        page: 'incidents/drift-events',
                     },
                     {
                         name: 'Account Posture',
-                        page: 'findings/account-posture',
+                        page: 'incidents/account-posture',
                     },
-                    {
-                        name: 'Control Summary',
-                        page: 'findings/control-summary',
-                    },
+                    // {
+                    //     name: 'Control Summary',
+                    //     page: 'incidents/control-summary',
+                    // },
                 ],
             },
             // {
@@ -435,6 +440,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 name: 'Stacks',
                 page: 'stacks',
                 icon: RectangleStackIcon,
+                isPreview: true,
+            },
+            {
+                name: 'Automation',
+                page: 'automation',
+                icon: BoltIcon,
                 isPreview: true,
             },
 

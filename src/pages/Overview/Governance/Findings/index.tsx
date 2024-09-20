@@ -57,7 +57,7 @@ export default function Findings() {
                     icon={ChevronRightIcon}
                     iconPosition="right"
                     onClick={() =>
-                        navigate(`/ws/${workspace}/findings?${searchParams}`)
+                        navigate(`/ws/${workspace}/incidents?${searchParams}`)
                     }
                 >
                     Show all
@@ -96,7 +96,7 @@ export default function Findings() {
                                       className="py-4 px-4 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-md cursor-pointer"
                                       onClick={() =>
                                           navigate(
-                                              `/ws/${workspace}/findings/${item.control?.id}?${searchParams}`
+                                              `/ws/${workspace}/incidents/${item.control?.id}?${searchParams}`
                                           )
                                       }
                                   >

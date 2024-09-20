@@ -60,9 +60,10 @@ interface IFilters {
         eventTimeRange: DateRange | undefined
     }) => void
     type: 'findings' | 'resources' | 'controls' | 'accounts' | 'events'
+    id : string;
 }
 
-export default function Filter({ onApply, type }: IFilters) {
+export default function Filter({ onApply, type ,id}: IFilters) {
     const { ws } = useParams()
     const defConnector = SourceType.Nil
     const [connector, setConnector] = useState<SourceType>(defConnector)
@@ -97,7 +98,7 @@ export default function Filter({ onApply, type }: IFilters) {
     const [connectionCon, setConnectionCon] = useState('is')
     const [controlID, setControlID] = useState<string[] | undefined>([])
     const [controlCon, setControlCon] = useState('is')
-    const [benchmarkID, setBenchmarkID] = useState<string[] | undefined>([])
+    const [benchmarkID, setBenchmarkID] = useState<string[] | undefined>([id])
     const [benchmarkCon, setBenchmarkCon] = useState('is')
     const [resourceTypeID, setResourceTypeID] = useState<string[] | undefined>(
         []
@@ -149,7 +150,7 @@ export default function Filter({ onApply, type }: IFilters) {
         severity,
         connectionID,
         controlID,
-        benchmarkID,
+        // benchmarkID,
         resourceTypeID,
         lifecycle,
         activeTimeRange,
@@ -276,28 +277,28 @@ export default function Filter({ onApply, type }: IFilters) {
             data: filters?.controlID,
             types: ['findings', 'resources', 'events'],
         },
-        {
-            id: 'benchmark',
-            name: 'Benchmark',
-            icon: Compliance,
-            component: (
-                <Others
-                    value={benchmarkID}
-                    defaultValue={[]}
-                    data={filters}
-                    condition={benchmarkCon}
-                    type="benchmarkID"
-                    onChange={(o) => setBenchmarkID(o)}
-                />
-            ),
-            conditions: ['is'],
-            setCondition: (c: string) => setBenchmarkCon(c),
-            value: benchmarkID,
-            defaultValue: [],
-            onDelete: () => setBenchmarkID([]),
-            data: filters?.benchmarkID,
-            types: ['findings', 'resources', 'events', 'controls', 'accounts'],
-        },
+        // {
+        //     id: 'benchmark',
+        //     name: 'Benchmark',
+        //     icon: Compliance,
+        //     component: (
+        //         <Others
+        //             value={benchmarkID}
+        //             defaultValue={[]}
+        //             data={filters}
+        //             condition={benchmarkCon}
+        //             type="benchmarkID"
+        //             onChange={(o) => setBenchmarkID(o)}
+        //         />
+        //     ),
+        //     conditions: ['is'],
+        //     setCondition: (c: string) => setBenchmarkCon(c),
+        //     value: benchmarkID,
+        //     defaultValue: [],
+        //     onDelete: () => setBenchmarkID([]),
+        //     data: filters?.benchmarkID,
+        //     types: ['findings', 'resources', 'events', 'controls', 'accounts'],
+        // },
         {
             id: 'resource',
             name: 'Resource Type',

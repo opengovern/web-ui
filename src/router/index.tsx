@@ -92,6 +92,11 @@ const authRoutes = [
         element: <RequestAccess />,
     },
     {
+        key: 'Automation',
+        path: '/ws/:ws/automation',
+        element: <RequestAccess />,
+    },
+    {
         key: 'dashboards',
         path: '/ws/:ws/dashboards',
         element: <Dashboard />,
@@ -274,12 +279,12 @@ const authRoutes = [
 
     {
         key: 'benchmark summary',
-        path: '/ws/:ws/compliance/:benchmarkId',
+        path: '/ws/:ws/compliance/old/:benchmarkId',
         element: <BenchmarkSummary />,
     },
     {
         key: 'benchmark summary 2',
-        path: '/ws/:ws/compliance/new/:benchmarkId',
+        path: '/ws/:ws/compliance/:benchmarkId',
         element: <NewBenchmarkSummary />,
     },
     {
@@ -303,33 +308,39 @@ const authRoutes = [
         element: <SingleComplianceConnection />,
     },
     {
-        key: 'findings control',
-        path: '/ws/:ws/findings',
+        key: 'Incidents control',
+        path: '/ws/:ws/incidents',
         element: <Findings />,
     },
+    // {
+    //     key: 'Resource summary',
+    //     path: '/ws/:ws/incidents/resource-summary',
+    //     element: <Findings />,
+    // },
     {
-        key: 'Resource summary',
-        path: '/ws/:ws/findings/resource-summary',
+        key: ' summary',
+        path: '/ws/:ws/incidents/summary',
         element: <Findings />,
     },
+
     {
         key: 'Drift Events',
-        path: '/ws/:ws/findings/drift-events',
+        path: '/ws/:ws/incidents/drift-events',
         element: <Findings />,
     },
     {
         key: 'Account Posture',
-        path: '/ws/:ws/findings/account-posture',
+        path: '/ws/:ws/incidents/account-posture',
         element: <Findings />,
     },
+    // {
+    //     key: 'Control Summary',
+    //     path: '/ws/:ws/incidents/control-summary',
+    //     element: <Findings />,
+    // },
     {
-        key: 'Control Summary',
-        path: '/ws/:ws/findings/control-summary',
-        element: <Findings />,
-    },
-    {
-        key: 'findings',
-        path: '/ws/:ws/findings/control-summary/:controlId',
+        key: 'incidents',
+        path: '/ws/:ws/incidents/control-summary/:controlId',
         element: <ControlDetail />,
     },
     {

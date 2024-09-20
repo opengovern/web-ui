@@ -29,8 +29,10 @@ import {
 } from '../../../../../utilities/urlstate'
 import Events from './Events'
 import Spinner from '../../../../../components/Spinner'
-
-export default function Findings() {
+interface Props {
+    id: string;
+}
+export default function Findings({id}: Props) {
     const [tab, setTab] = useState<number>(0)
     const [selectedGroup, setSelectedGroup] = useState<
         'findings' | 'resources' | 'controls' | 'accounts' | 'events'
@@ -61,7 +63,7 @@ export default function Findings() {
     const findComponent = () => {
         switch (tab) {
             case 0:
-                return <FindingsWithFailure query={query} />
+                return <FindingsWithFailure  query={query} />
             case 1:
                 return <Events query={query} />
             case 2:
@@ -102,7 +104,7 @@ export default function Findings() {
         ],
         connectionID: [],
         controlID: [],
-        benchmarkID: [],
+        benchmarkID: [id],
         resourceTypeID: [],
         lifecycle: [true, false],
         activeTimeRange: undefined,
@@ -112,7 +114,8 @@ export default function Findings() {
     return (
         <>
             <TopHeader />
-            <Filter type={selectedGroup} onApply={(e) => setQuery(e)} />
+            {/* @ts-ignore */}
+            <Filter type={selectedGroup} onApply={(e) => setQuery(e)} id={id} />
             {/* <Flex className="mt-2">{findComponent()}</Flex> */}
             <Grid numItems={6} className="mt-2 gap-2">
                 {/* @ts-ignore */}

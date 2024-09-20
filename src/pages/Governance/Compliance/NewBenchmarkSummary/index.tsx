@@ -49,6 +49,7 @@ export default function NewBenchmarkSummary() {
     const { value: activeTimeRange } = useUrlDateRangeState(
         defaultTime(ws || '')
     )
+    const [tab,setTab] = useState<number>(0);
     const readTemplate = (template: any, data: any = { items: {} }): any => {
         for (const [key, value] of Object.entries(template)) {
             // eslint-disable-next-line no-param-reassign
@@ -116,7 +117,7 @@ export default function NewBenchmarkSummary() {
     const { sendNowWithParams: triggerEvaluate, isExecuted } =
         useScheduleApiV1ComplianceTriggerUpdate(
             {
-                benchmark_id: [],
+                benchmark_id: [benchmarkId ? benchmarkId  : ''],
                 connection_id: [],
             },
             {},
@@ -282,11 +283,41 @@ const columns: (isDemo: boolean) => IColumn<any, any>[] = (isDemo) => [
                     </Flex>
                     <TabGroup className=" ">
                         <TabList className="mb-4">
-                            <Tab>Posture Summary</Tab>
-                            <Tab>Controls</Tab>
-                            <Tab>Issues</Tab>
-                            <Tab>Settings</Tab>
-                            <Tab>Run</Tab>
+                            <Tab
+                                onClick={() => {
+                                    setTab(0)
+                                }}
+                            >
+                                Posture Summary
+                            </Tab>
+                            <Tab
+                                onClick={() => {
+                                    setTab(1)
+                                }}
+                            >
+                                Controls
+                            </Tab>
+                            <Tab
+                                onClick={() => {
+                                    setTab(2)
+                                }}
+                            >
+                                Issues
+                            </Tab>
+                            <Tab
+                                onClick={() => {
+                                    setTab(3)
+                                }}
+                            >
+                                Settings
+                            </Tab>
+                            <Tab
+                                onClick={() => {
+                                    setTab(4)
+                                }}
+                            >
+                                Run
+                            </Tab>
                         </TabList>
                         <TabPanels>
                             <TabPanel>
@@ -445,46 +476,65 @@ const columns: (isDemo: boolean) => IColumn<any, any>[] = (isDemo) => [
                                     </Flex>
                                 </Flex> */}
                                 <>
-                                    {' '}
-                                    <Controls
-                                        id={String(benchmarkId)}
-                                        assignments={trend === null ? 0 : 1}
-                                    />
+                                    {tab == 1 && (
+                                        <Controls
+                                            id={String(benchmarkId)}
+                                            assignments={trend === null ? 0 : 1}
+                                        />
+                                    )}{' '}
                                 </>
                             </TabPanel>
                             <TabPanel>
-                                <Findings />
+                                {tab == 2 && (
+                                    <>
+                                        <Findings
+                                            id={benchmarkId ? benchmarkId : ''}
+                                        />
+                                    </>
+                                )}
                             </TabPanel>
                             <TabPanel>
                                 {' '}
-                                <Settings
-                                    id={benchmarkDetail?.id}
-                                    response={(e) => setAssignments(e)}
-                                    autoAssign={benchmarkDetail?.autoAssign}
-                                    tracksDriftEvents={
-                                        benchmarkDetail?.tracksDriftEvents
-                                    }
-                                    isAutoResponse={(x) => setRecall(true)}
-                                    reload={() => updateDetail()}
-                                />
+                                {tab == 3 && (
+                                    <>
+                                        <Settings
+                                            id={benchmarkDetail?.id}
+                                            response={(e) => setAssignments(e)}
+                                            autoAssign={
+                                                benchmarkDetail?.autoAssign
+                                            }
+                                            tracksDriftEvents={
+                                                benchmarkDetail?.tracksDriftEvents
+                                            }
+                                            isAutoResponse={(x) =>
+                                                setRecall(true)
+                                            }
+                                            reload={() => updateDetail()}
+                                        />
+                                    </>
+                                )}
                             </TabPanel>
                             <TabPanel>
-                                <Evaluate
-                                    id={benchmarkDetail?.id}
-                                    benchmarkDetail={benchmarkDetail}
-                                    assignmentsCount={assignments}
-                                    onEvaluate={(c) => {
-                                        triggerEvaluate(
-                                            {
-                                                benchmark_id: [
-                                                    benchmarkId || '',
-                                                ],
-                                                connection_id: c,
-                                            },
-                                            {}
-                                        )
-                                    }}
-                                />
+                                {tab == 4 && (
+                                    <>
+                                        <Evaluate
+                                            id={benchmarkDetail?.id}
+                                            benchmarkDetail={benchmarkDetail}
+                                            assignmentsCount={assignments}
+                                            onEvaluate={(c) => {
+                                                triggerEvaluate(
+                                                    {
+                                                        benchmark_id: [
+                                                            benchmarkId || '',
+                                                        ],
+                                                        connection_id: c,
+                                                    },
+                                                    {}
+                                                )
+                                            }}
+                                        />
+                                    </>
+                                )}
                             </TabPanel>
                         </TabPanels>
                     </TabGroup>

@@ -18,6 +18,7 @@ import {
 } from '../../../utilities/urlstate'
 import Events from './Events'
 import Spinner from '../../../components/Spinner'
+import Summary from './Summary'
 
 export default function Findings() {
     const [tab, setTab] = useState<number>(0);
@@ -38,9 +39,6 @@ export default function Findings() {
             case 3:
                 setSelectedGroup('accounts')
                 break
-            case 4:
-                setSelectedGroup('controls')
-                break
             default:
                 setSelectedGroup('findings')
                 break
@@ -49,7 +47,7 @@ export default function Findings() {
     useEffect(() => {
         const url = window.location.pathname.split('/')[4]
         switch (url) {
-            case 'resource-summary':
+            case 'summary':
                 setTab(1)
                 break
             case 'drift-events':
@@ -57,9 +55,6 @@ export default function Findings() {
                 break
             case 'account-posture':
                 setTab(3)
-                break
-            case 'control-summary':
-                setTab(4)
                 break
             default:
                 setTab(0)
@@ -71,13 +66,17 @@ export default function Findings() {
             case 0:
                 return <FindingsWithFailure query={query} />
             case 1:
-                return <ResourcesWithFailure query={query} />
+                return (
+                    <Summary
+                        setSelectedGroup={setSelectedGroup}
+                        query={query}
+                    />
+                )
             case 2:
                return <Events query={query} />
             case 3:
                return <FailingCloudAccounts query={query} />
-            case 4:
-                return <ControlsWithFailure query={query} />
+          
             default:
                 return <Spinner/>
         }

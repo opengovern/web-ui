@@ -45,7 +45,7 @@ const navList = [
         icon: ShieldCheckIcon,
         children: [
             { name: 'Benchmarks', link: '/ws/:ws/compliance' },
-            { name: 'Security findings', link: '/ws/:ws/findings' },
+            { name: 'Security findings', link: '/ws/:ws/incidents' },
         ],
     },
     {
