@@ -7,5 +7,5 @@ RUN npm install --force
 RUN npm install -g serve --force
 COPY . ./
 RUN npm run build
-EXPOSE 2100
-CMD ["serve","-s","dist","-p" ,"2100"]
+EXPOSE 3000
+CMD ["serve","-s","dist","-p" ,"3000"]
