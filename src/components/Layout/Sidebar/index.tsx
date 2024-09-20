@@ -348,6 +348,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 name: 'Findings',
                 icon: DocumentMagnifyingGlassIcon,
                 page: 'findings',
+                isPreview: false,
                 children: [
                     {
                         name: 'All Findings',
