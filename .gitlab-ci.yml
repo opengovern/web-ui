@@ -1,27 +1,28 @@
+image: node:latest
+
 stages:
-  - build-project
-  - build-image
+  - build
+  - docker-build
 
-build-project:
-  stage: build-project
-  image: node:18-alpine
+cache:
+  paths:
+    - node_modules/
+
+build:
+  stage: build
   script:
+    - echo "Start building App"
     - npm install
-    - npm run build
-    - cp build build
+    - echo "Build successfully!"
 
-build-image:
-  stage: build-image
+docker-build:
+  stage: docker-build
   image: docker:latest
-  services: 
-    - name: docker:dind
+  services:
+    - docker:dind
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE" ./deploy
+    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
     - docker push "$CI_REGISTRY_IMAGE"
-    - |
-      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-        docker tag "$DOCKER_IMAGE_NAME" "$CI_REGISTRY_IMAGE:latest"
-        docker push "$CI_REGISTRY_IMAGE:latest"
-      fi
+    - echo "Built Docker Image Successfully!"
