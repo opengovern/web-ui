@@ -11,7 +11,7 @@ build-project:
     - cp build build
 
 build-image:
-  stage: bbuild-image
+  stage: build-image
   image: docker
   image: docker:latest
   services: 
