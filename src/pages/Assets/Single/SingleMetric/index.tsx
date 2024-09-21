@@ -38,7 +38,7 @@ import { resourceTrendChart } from '../../index'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { numberDisplay } from '../../../../utilities/numericDisplay'
 import Table from '../../../../components/Table'
-import { getTable } from '../../../Query'
+import { getTable } from '../../../Search/Query'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Modal from '../../../../components/Modal'
@@ -233,7 +233,9 @@ export default function SingleMetric({
                                 setQuery(modalData)
                             }}
                         >
-                            <Link to={`/ws/${ws}/query`}>Open in Query</Link>
+                            <Link to={`/ws/${ws}/search?tab_id=1`}>
+                                Open in Query
+                            </Link>
                         </Button>
                         <Button onClick={() => setModalData('')}>Close</Button>
                     </Flex>

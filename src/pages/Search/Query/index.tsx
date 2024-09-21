@@ -15,14 +15,11 @@ import {
     TabPanels,
     Text,
     TextInput,
-    Subtitle,
-    Title,
 } from '@tremor/react'
 import {
     ChevronDoubleLeftIcon,
     ChevronDownIcon,
     ChevronUpIcon,
-    CloudIcon,
     CommandLineIcon,
     FunnelIcon,
     MagnifyingGlassIcon,
@@ -33,11 +30,7 @@ import { highlight, languages } from 'prismjs' // eslint-disable-next-line impor
 import 'prismjs/components/prism-sql' // eslint-disable-next-line import/no-extraneous-dependencies
 import 'prismjs/themes/prism.css'
 import Editor from 'react-simple-code-editor'
-import {
-    IServerSideGetRowsParams,
-    RowClickedEvent,
-    ValueFormatterParams,
-} from 'ag-grid-community'
+import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
 import {
     CheckCircleIcon,
     ExclamationCircleIcon,
@@ -48,31 +41,20 @@ import {
     useInventoryApiV1QueryList,
     useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsCategoriesList,
-    useInventoryApiV2QueryList,
-    useInventoryApiV3QueryFiltersList,
 } from '../../../api/inventory.gen'
 import Spinner from '../../../components/Spinner'
 import { getErrorMessage } from '../../../types/apierror'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { RenderObject } from '../../../components/RenderObject'
 import Table, { IColumn } from '../../../components/Table'
-
 import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
-    Api,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
 } from '../../../api/api'
 import { isDemoAtom, queryAtom, runQueryAtom } from '../../../store'
-import AxiosAPI from '../../../api/ApiConfig'
-
 import { snakeCaseToLabel } from '../../../utilities/labelMaker'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import TopHeader from '../../../components/Layout/Header'
-import QueryDetail from './QueryDetail'
-import Filter from './Filter'
-import { array } from 'prop-types'
-import KFilter from '../../../components/Filter'
 
 export const getTable = (
     headers: string[] | undefined,
@@ -120,6 +102,7 @@ export const getTable = (
         }
     }
     const count = rows.length
+
     return {
         columns,
         rows,
@@ -128,83 +111,44 @@ export const getTable = (
 }
 
 const columns: IColumn<
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
     any
 >[] = [
     {
-        field: 'id',
-        headerName: 'ID',
-        type: 'string',
-        sortable: true,
-        resizable: false,
-    },
-    {
         field: 'title',
-        headerName: 'Title',
+        headerName: 'Smart queries',
         type: 'string',
         sortable: true,
         resizable: false,
     },
     {
-        field: 'connectors',
-        headerName: 'Connector',
-        type: 'connector',
-        sortable: true,
+        type: 'string',
+        width: 130,
         resizable: false,
-        // cellRenderer: (params: any) => (
-        //      params.value.map(
-        //                     (item: string, index: number) => {
-        //                         return `${item} `
-        //                     }
-        //                 )
-        // ),
+        sortable: false,
+        cellRenderer: (params: any) => (
+            <Flex
+                justifyContent="center"
+                alignItems="center"
+                className="h-full"
+            >
+                <PlayCircleIcon className="h-5 text-kaytu-500 mr-1" />
+                <Text className="text-kaytu-500">Run query</Text>
+            </Flex>
+        ),
     },
-    // {
-    //     field: 'connectors',
-    //     headerName: 'Service',
-    //     type: 'string',
-    //     sortable: true,
-    //     resizable: false,
-    // },
-    // {
-    //     field: 'connectors',
-    //     headerName: 'Primary Table',
-    //     type: 'string',
-    //     sortable: true,
-    //     resizable: false,
-    // },
-    // {
-    //     type: 'string',
-    //     width: 130,
-    //     resizable: false,
-    //     sortable: false,
-    //     cellRenderer: (params: any) => (
-    //         <Flex
-    //             justifyContent="center"
-    //             alignItems="center"
-    //             className="h-full"
-    //         >
-    //             <PlayCircleIcon className="h-5 text-kaytu-500 mr-1" />
-    //             <Text className="text-kaytu-500">Run query</Text>
-    //         </Flex>
-    //     ),
-    // },
 ]
 
-export default function AllQueries() {
+export default function Query() {
     const [runQuery, setRunQuery] = useAtom(runQueryAtom)
-    const [loading, setLoading] = useState(false)
+    const [loaded, setLoaded] = useState(false)
     const [savedQuery, setSavedQuery] = useAtom(queryAtom)
     const [code, setCode] = useState(savedQuery || '')
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [searchCategory, setSearchCategory] = useState('')
-    const [selectedRow, setSelectedRow] =
-        useState<GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2>()
+    const [selectedRow, setSelectedRow] = useState({})
     const [openDrawer, setOpenDrawer] = useState(false)
-    const [openSlider, setOpenSlider] = useState(false)
     const [openSearch, setOpenSearch] = useState(true)
-    const [query, setQuery] =
-        useState<GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2>()
     const [showEditor, setShowEditor] = useState(true)
     const isDemo = useAtomValue(isDemoAtom)
     const [pageSize, setPageSize] = useState(1000)
@@ -213,16 +157,59 @@ export default function AllQueries() {
 
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2AnalyticsCategoriesList()
+    const { response: queries, isLoading: queryLoading } =
+        useInventoryApiV1QueryList({})
+    const {
+        response: queryResponse,
+        isLoading,
+        isExecuted,
+        sendNow,
+        error,
+    } = useInventoryApiV1QueryRunCreate(
+        {
+            page: { no: 1, size: pageSize },
+            engine,
+            query: code,
+        },
+        {},
+        autoRun
+    )
 
-    const { response: filters, isLoading: filtersLoading } =
-        useInventoryApiV3QueryFiltersList()
+    useEffect(() => {
+        if (isExecuted && !isLoading && code.trim().length > 0) {
+            sendNow()
+        }
+    }, [pageSize])
 
-    // const { response: queries, isLoading: queryLoading } =
-    //     useInventoryApiV2QueryList({
-    //         titleFilter: '',
-    //         Cursor: 0,
-    //         PerPage:25
-    //     })
+    useEffect(() => {
+        if (autoRun) {
+            setAutoRun(false)
+        }
+        if (queryResponse?.query?.length) {
+            setSelectedIndex(2)
+        } else setSelectedIndex(0)
+    }, [queryResponse])
+
+    useEffect(() => {
+        if (!loaded && code.length > 0) {
+            sendNow()
+            setLoaded(true)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (code.length) setShowEditor(true)
+    }, [code])
+
+    useEffect(() => {
+        if (runQuery.length > 0) {
+            setCode(runQuery)
+            setShowEditor(true)
+            setRunQuery('')
+            setAutoRun(true)
+        }
+    }, [runQuery])
+
     const recordToArray = (record?: Record<string, string[]> | undefined) => {
         if (record === undefined) {
             return []
@@ -236,72 +223,27 @@ export default function AllQueries() {
         })
     }
 
-    const ConvertParams = (array: string[], key: string) => {
-        return `[${array[0]}]`
-        // let temp = ''
-        // array.map((item,index)=>{
-        //     if(index ===0){
-        //         temp = temp + item
-        //     }
-        //     else{
-        //         temp = temp +'&'+key+'='+item
-        //     }
-        // })
-        // return temp
-    }
-
-    const ssr = () => {
-        return {
-            getRows: (params: IServerSideGetRowsParams) => {
-                // setLoading(true)
-                const api = new Api()
-                api.instance = AxiosAPI
-                let body = {
-                    //  title_filter: '',
-                    tags: query?.tags,
-                    providers: query?.providers,
-                    cursor: params.request.startRow
-                        ? Math.floor(params.request.startRow / 25)
-                        : 0,
-                    per_page: 25,
-                }
-                if (!body.providers) {
-                    delete body['providers']
-                } else {
-                    // @ts-ignore
-                    body['providers'] = ConvertParams([body?.providers],
-                        'providers'
-                    )
-                }
-                api.inventory
-                    .apiV2QueryList(body)
-                    .then((resp) => {
-                        params.success({
-                            rowData: resp.data.items || [],
-                            rowCount: resp.data.total_count,
-                        })
-                        setLoading(false)
-                    })
-                    .catch((err) => {
-                        setLoading(false)
-
-                        console.log(err)
-                        params.fail()
-                    })
-            },
-        }
-    }
-
-    const serverSideRows = ssr()
+    const memoColumns = useMemo(
+        () =>
+            getTable(queryResponse?.headers, queryResponse?.result, isDemo)
+                .columns,
+        [queryResponse, isDemo]
+    )
+    const memoCount = useMemo(
+        () =>
+            getTable(queryResponse?.headers, queryResponse?.result, isDemo)
+                .count,
+        [queryResponse, isDemo]
+    )
 
     return (
         <>
             <TopHeader />
-            {categoryLoading || loading ? (
+            {categoryLoading || queryLoading ? (
                 <Spinner className="mt-56" />
             ) : (
                 <Flex alignItems="start">
-                    {/* <DrawerPanel
+                    <DrawerPanel
                         open={openDrawer}
                         onClose={() => setOpenDrawer(false)}
                     >
@@ -392,9 +334,9 @@ export default function AllQueries() {
                                 </Flex>
                             </Button>
                         </Flex>
-                    )} */}
+                    )}
                     <Flex flexDirection="col" className="w-full pl-6">
-                        {/* <Transition.Root show={showEditor} as={Fragment}>
+                        <Transition.Root show={showEditor} as={Fragment}>
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-in-out duration-500"
@@ -584,126 +526,162 @@ export default function AllQueries() {
                                     </Flex>
                                 </Flex>
                             </Transition.Child>
-                        </Transition.Root> */}
-                        {/* <Flex flexDirection="row" className="gap-4">
-                            <Card
-                                onClick={() => {
-                                    console.log('salam')
-                                }}
-                                className="p-3 cursor-pointer dark:ring-gray-500 hover:shadow-md"
-                            >
-                                <Subtitle className="font-semibold text-gray-800 mb-2">
-                                    KPI
-                                </Subtitle>
-                            </Card>
-                            <Card
-                                onClick={() => {
-                                    console.log('salam')
-                                }}
-                                className="p-3 cursor-pointer dark:ring-gray-500 hover:shadow-md"
-                            >
-                                <Subtitle className="font-semibold text-gray-800 mb-2">
-                                    KPI
-                                </Subtitle>
-                            </Card>{' '}
-                            <Card
-                                onClick={() => {
-                                    console.log('salam')
-                                }}
-                                className="p-3 cursor-pointer dark:ring-gray-500 hover:shadow-md"
-                            >
-                                <Subtitle className="font-semibold text-gray-800 mb-2">
-                                    KPI
-                                </Subtitle>
-                            </Card>
-                        </Flex> */}
-                        <Flex
-                            flexDirection="row"
-                            justifyContent="start"
-                            alignItems="center"
-                            className="w-full  gap-1  pb-2 flex-wrap"
-                            // style={{overflow:"hidden",overflowX:"scroll",overflowY: "hidden"}}
+                        </Transition.Root>
+                        <TabGroup
+                            id="tabs"
+                            index={selectedIndex}
+                            onIndexChange={setSelectedIndex}
                         >
-                            <Filter
-                                type={'findings'}
-                                // @ts-ignore
-                                onApply={(e) => setQuery(e)}
-                            />
-                            {filters?.tags.map((item, index) => {
-                                return (
-                                    <>
-                                        <KFilter
-                                            options={item.UniqueValues.map(
-                                                (unique, index) => {
-                                                    return {
-                                                        label: unique,
-                                                        value: unique,
-                                                    }
-                                                }
-                                            )}
-                                            type="multi"
-                                            hasCondition={true}
-                                            condition={'is'}
-                                            //@ts-ignore
-                                            selectedItems={
-                                                query?.tags &&
-                                                query?.tags[item.Key]
-                                                    ? query?.tags[item.Key]
-                                                    : []
-                                            }
-                                            onChange={(values: string[]) => {
-                                                //@ts-ignore
-                                                if (values.length != 0) {
-                                                    //@ts-ignore
-                                                    setQuery(
-                                                        //@ts-ignore
-                                                        (prevSelectedItem) => ({
-                                                            ...prevSelectedItem,
-                                                            tags: {
-                                                                ...prevSelectedItem?.tags,
-                                                                [item.Key]:
-                                                                    values,
-                                                            },
-                                                        })
-                                                    )
-                                                }
+                            <TabList className="mb-3">
+                                <Flex>
+                                    <Flex className="w-fit">
+                                        {/* <Tab
+                                            onClick={() => {
+                                                setSavedQuery('')
                                             }}
-                                            label={item.Key}
-                                            icon={CloudIcon}
+                                        >
+                                            Popular queries
+                                        </Tab>
+                                        <Tab
+                                            onClick={() => {
+                                                setSavedQuery('')
+                                            }}
+                                        >
+                                            All queries
+                                        </Tab> */}
+                                        <Tab
+                                            className={
+                                                queryResponse?.query?.length &&
+                                                !isLoading
+                                                    ? 'flex'
+                                                    : 'hidden'
+                                            }
+                                        >
+                                            Result
+                                        </Tab>
+                                    </Flex>
+                                    <Button
+                                        variant="light"
+                                        onClick={() => {
+                                            if (showEditor) {
+                                                setShowEditor(false)
+                                                setSavedQuery('')
+                                                setCode('')
+                                            } else setShowEditor(true)
+                                        }}
+                                        icon={
+                                            showEditor
+                                                ? ChevronUpIcon
+                                                : ChevronDownIcon
+                                        }
+                                    >
+                                        {showEditor
+                                            ? 'Close query editor'
+                                            : 'Open query editor'}
+                                    </Button>
+                                </Flex>
+                            </TabList>
+                            <TabPanels>
+                                {/* <TabPanel>
+                                    <Table
+                                        id="popular_query_table"
+                                        columns={columns}
+                                        rowData={queries
+                                            ?.filter((q) => q.tags?.popular)
+                                            .sort((a, b) => {
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                if (a.title < b.title) {
+                                                    return -1
+                                                }
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                if (a.title > b.title) {
+                                                    return 1
+                                                }
+                                                return 0
+                                            })}
+                                        loading={queryLoading}
+                                        onRowClicked={(e) => {
+                                            setCode(
+                                                `-- ${e.data?.title}\n\n${e.data?.query}` ||
+                                                    ''
+                                            )
+                                            document
+                                                .getElementById(
+                                                    'kaytu-container'
+                                                )
+                                                ?.scrollTo({
+                                                    top: 0,
+                                                    behavior: 'smooth',
+                                                })
+                                        }}
+                                    />
+                                </TabPanel>
+                                <TabPanel>
+                                    <Table
+                                        id="query_table"
+                                        columns={columns}
+                                        rowData={queries?.sort((a, b) => {
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            if (a.title < b.title) {
+                                                return -1
+                                            }
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            if (a.title > b.title) {
+                                                return 1
+                                            }
+                                            return 0
+                                        })}
+                                        loading={queryLoading}
+                                        onRowClicked={(e) => {
+                                            setCode(
+                                                `-- ${e.data?.title}\n\n${e.data?.query}` ||
+                                                    ''
+                                            )
+                                            document
+                                                .getElementById(
+                                                    'kaytu-container'
+                                                )
+                                                ?.scrollTo({
+                                                    top: 0,
+                                                    behavior: 'smooth',
+                                                })
+                                        }}
+                                    />
+                                </TabPanel> */}
+                                <TabPanel>
+                                    {isLoading ? (
+                                        <Spinner className="mt-56" />
+                                    ) : (
+                                        <Table
+                                            title="Query results"
+                                            id="finder_table"
+                                            columns={memoColumns}
+                                            rowData={
+                                                getTable(
+                                                    queryResponse?.headers,
+                                                    queryResponse?.result,
+                                                    isDemo
+                                                ).rows
+                                            }
+                                            downloadable
+                                            onRowClicked={(
+                                                event: RowClickedEvent
+                                            ) => {
+                                                setSelectedRow(event.data)
+                                                setOpenDrawer(true)
+                                            }}
                                         />
-                                    </>
-                                )
-                            })}
-                        </Flex>
-
-                        <Flex className="mt-2">
-                            <Table
-                                id="inventory_queries"
-                                columns={columns}
-                                serverSideDatasource={serverSideRows}
-                                loading={loading}
-                                onRowClicked={(e) => {
-                                    if (e.data) {
-                                        setSelectedRow(e?.data)
-                                    }
-                                    setOpenSlider(true)
-                                }}
-                                options={{
-                                    rowModelType: 'serverSide',
-                                    serverSideDatasource: serverSideRows,
-                                }}
-                            />
-                        </Flex>
+                                    )}
+                                </TabPanel>
+                            </TabPanels>
+                        </TabGroup>
                     </Flex>
                 </Flex>
             )}
-            <QueryDetail
-                // type="resource"
-                query={selectedRow}
-                open={openSlider}
-                onClose={() => setOpenSlider(false)}
-                onRefresh={() => window.location.reload()}
-            />
         </>
     )
 }

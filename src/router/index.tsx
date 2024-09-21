@@ -12,7 +12,6 @@ import Compliance from '../pages/Governance/Compliance'
 import BenchmarkSummary from '../pages/Governance/Compliance/BenchmarkSummary'
 import Overview from '../pages/Overview'
 import Stack from '../pages/Stack'
-import Query from '../pages/Query'
 import Single from '../pages/Assets/Single'
 import SingleSpend from '../pages/Spend/Single'
 import SingleComplianceConnection from '../pages/Governance/Compliance/BenchmarkSummary/SingleConnection'
@@ -38,13 +37,13 @@ import RequestAccess from '../pages/Integrations/RequestAccess'
 import SettingsJobs from '../pages/Settings/Jobs'
 import AllControls from '../pages/Governance/Compliance/All Controls'
 import AllBenchmarks from '../pages/Governance/Compliance/All Benchmarks'
-import AllQueries from '../pages/Query/All Query'
 import SettingsWorkspaceAPIKeys from '../pages/Settings/APIKeys'
 import SettingsParameters from '../pages/Settings/Parameters'
 import SettingsMembers from '../pages/Settings/Members'
 import NewBenchmarkSummary from '../pages/Governance/Compliance/NewBenchmarkSummary'
 import Dashboard from '../pages/Dashboard'
 import Library from '../pages/Governance/Compliance/Library'
+import Search from '../pages/Search'
 
 const authRoutes = [
     {
@@ -324,11 +323,11 @@ const authRoutes = [
         element: <Findings />,
     },
 
-    {
-        key: 'Drift Events',
-        path: '/ws/:ws/incidents/drift-events',
-        element: <Findings />,
-    },
+    // {
+    //     key: 'Drift Events',
+    //     path: '/ws/:ws/incidents/drift-events',
+    //     element: <Findings />,
+    // },
     {
         key: 'Account Posture',
         path: '/ws/:ws/incidents/account-posture',
@@ -341,7 +340,7 @@ const authRoutes = [
     // },
     {
         key: 'incidents',
-        path: '/ws/:ws/incidents/control-summary/:controlId',
+        path: '/ws/:ws/incidents/summary/:controlId',
         element: <ControlDetail />,
     },
     {
@@ -359,11 +358,11 @@ const authRoutes = [
         path: '/ws/:ws/deployment',
         element: <Stack />,
     },
-    {
-        key: 'query',
-        path: '/ws/:ws/query',
-        element: <Query />,
-    },
+    // {
+    //     key: 'query',
+    //     path: '/ws/:ws/query',
+    //     element: <Query />,
+    // },
     // {
     //     key: 'bootstrap',
     //     path: '/ws/:ws/bootstrap',
@@ -414,10 +413,11 @@ const authRoutes = [
         path: '/ws/requestdemo',
         element: <RequestDemo />,
     },
+    
     {
-        key: 'All inventory',
-        path: '/ws/:ws/query/all-queries',
-        element: <AllQueries />,
+        key: 'Search',
+        path: '/ws/:ws/search',
+        element: <Search />,
     },
 ]
 

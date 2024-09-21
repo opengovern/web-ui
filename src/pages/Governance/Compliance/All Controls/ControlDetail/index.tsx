@@ -235,7 +235,7 @@ export default function ControlDetail({
                                             loading={false}
                                             loadingText="Running"
                                         >
-                                            <Link to={`/ws/${ws}/query`}>
+                                            <Link to={`/ws/${ws}/search?tab_id=1`}>
                                                 Run in Query
                                             </Link>{' '}
                                         </Button>
@@ -269,9 +269,9 @@ export default function ControlDetail({
                                     </Card>
                                     <Flex
                                         flexDirection="row"
-                                        alignItems='start'
+                                        alignItems="start"
                                         className="gap-1 w-full flex-wrap "
-                                        justifyContent='start'
+                                        justifyContent="start"
                                     >
                                         {}
                                         {Object.entries(selectedItem?.tags).map(
@@ -336,11 +336,12 @@ export default function ControlDetail({
                                             {selectedItem?.benchmarks?.fullPath.map(
                                                 (item, index) => {
                                                     return (
-                                                        <Text className="">{item}</Text>
+                                                        <Text className="">
+                                                            {item}
+                                                        </Text>
                                                     )
                                                 }
                                             )}
-                                           
                                         </Flex>
                                     </Grid>
                                 </>

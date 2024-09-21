@@ -37,12 +37,17 @@ export default function Summary({ query, setSelectedGroup } : Props) {
     const [tab,setTab] = useState<number>(0);
     return (
         <>
-            <TabGroup>
+            <TabGroup
+                index={tab}
+                onIndexChange={(index) => {
+                    setTab(index)
+                }}
+            >
                 <TabList>
                     <Tab
                         onClick={() => {
                             setSelectedGroup('accounts')
-                            setTab(2)
+                            setTab(0)
                         }}
                     >
                         Account Summary
@@ -50,7 +55,7 @@ export default function Summary({ query, setSelectedGroup } : Props) {
                     <Tab
                         onClick={() => {
                             setSelectedGroup('resources')
-                            setTab(0)
+                            setTab(1)
                         }}
                     >
                         Resource Summary
@@ -58,15 +63,15 @@ export default function Summary({ query, setSelectedGroup } : Props) {
                     <Tab
                         onClick={() => {
                             setSelectedGroup('controls')
-                            setTab(1)
+                            setTab(2)
                         }}
                     >
                         Control Summary
                     </Tab>
                     <Tab
                         onClick={() => {
-                            setSelectedGroup('controls')
-                            setTab(4)
+                            setSelectedGroup('events')
+                            setTab(3)
                         }}
                     >
                         Drift Evenets
@@ -74,24 +79,24 @@ export default function Summary({ query, setSelectedGroup } : Props) {
                 </TabList>
                 <TabPanels>
                     <TabPanel key={'resource'}>
-                        {tab == 2 && (
+                        {tab == 0 && (
                             <>
                                 <FailingCloudAccounts query={query} />
                             </>
                         )}
                     </TabPanel>
                     <TabPanel key={'resource'}>
-                        {tab == 0 && (
+                        {tab == 1 && (
                             <>
                                 <ResourcesWithFailure query={query} />
                             </>
                         )}
                     </TabPanel>
                     <TabPanel key={'control'}>
-                        {tab == 1 && <ControlsWithFailure query={query} />}
+                        {tab == 2 && <ControlsWithFailure query={query} />}
                     </TabPanel>
-                    <TabPanel key={'drift'}>
-                        {tab == 4 && <Events query={query} />}
+                    <TabPanel key={'events'}>
+                        {tab == 3 && <Events query={query} />}
                     </TabPanel>
                 </TabPanels>
             </TabGroup>

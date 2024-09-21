@@ -419,7 +419,7 @@ export default function ControlDetail() {
                                                     }}
                                                 >
                                                     <Link
-                                                        to={`/ws/${ws}/query`}
+                                                        to={`/ws/${ws}/search?tab_id=1`}
                                                     >
                                                         Open in Query
                                                     </Link>

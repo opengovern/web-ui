@@ -122,7 +122,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         return currentPage === page
     }
     const findPage = (page: string | string[], item: ISidebarItem): string => {
-       
+        
         if (Array.isArray(item.page)) {
             if (oldUrl.includes(item.page[0]) || nextUrl.includes(item.page[0])) {
                 return `/ws/${workspace}/${page}?${searchParams}`
@@ -358,7 +358,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 page: [
                     'incidents',
                     'incidents/summary',
-                    'incidents/drift-events',
+                    // 'incidents/drift-events',
                 ],
                 isPreview: false,
                 children: [
@@ -377,10 +377,10 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     //     name: 'Resource Summary',
                     //     page: 'incidents/resource-summary',
                     // },
-                    {
-                        name: 'Drift Events',
-                        page: 'incidents/drift-events',
-                    },
+                    // {
+                    //     name: 'Drift Events',
+                    //     page: 'incidents/drift-events',
+                    // },
                     // {
                     //     name: 'Account Posture',
                     //     page: 'incidents/account-posture',
@@ -416,27 +416,27 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             },
             {
                 name: 'Search',
-                page: ['query', 'query/all-queries'],
+                page: ['search'],
                 icon: MagnifyingGlassIcon,
                 isPreview: false,
-                children: [
-                    {
-                        name: ' Query',
-                        page: 'query',
-                        isPreview: false,
-                        isLoading: false,
-                        count: undefined,
-                        error: false,
-                    },
-                    {
-                        name: 'All Queries',
-                        page: 'query/all-queries',
-                        isPreview: false,
-                        isLoading: false,
-                        count: undefined,
-                        error: false,
-                    },
-                ],
+                // children: [
+                //     {
+                //         name: ' Query',
+                //         page: 'query',
+                //         isPreview: false,
+                //         isLoading: false,
+                //         count: undefined,
+                //         error: false,
+                //     },
+                //     {
+                //         name: 'All Queries',
+                //         page: 'query/all-queries',
+                //         isPreview: false,
+                //         isLoading: false,
+                //         count: undefined,
+                //         error: false,
+                //     },
+                // ],
             },
 
             {
@@ -821,10 +821,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                     <div className="w-full my-1">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                         <Link
+                                            onClick={() => {
+                                                setOldUrl(window.location.href)
+                                                setNextUrl(
+                                                    findPage(item.page, item)
+                                                )
+                                            }}
                                             to={
-                                                Array.isArray(item.page)
-                                                    ? `/ws/${workspace}/${item.page[0]}?${searchParams}`
-                                                    : `/ws/${workspace}/${item.page}?${searchParams}`
+                                               findPage(item.page,item)
                                             }
                                             className={`w-full relative px-6 py-2 flex items-center gap-2.5 rounded-md ${
                                                 collapsed

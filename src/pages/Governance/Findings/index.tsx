@@ -33,9 +33,6 @@ export default function Findings() {
             case 1:
                 setSelectedGroup('resources')
                 break
-            case 2:
-                setSelectedGroup('events')
-                break
             default:
                 setSelectedGroup('findings')
                 break
@@ -47,9 +44,7 @@ export default function Findings() {
             case 'summary':
                 setTab(1)
                 break
-            case 'drift-events':
-                setTab(2)
-                break
+
             default:
                 setTab(0)
                 break
@@ -66,8 +61,6 @@ export default function Findings() {
                         query={query}
                     />
                 )
-            case 2:
-               return <Events query={query} />
 
             default:
                 return <Spinner/>

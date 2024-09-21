@@ -7,7 +7,7 @@ import { Card, Select, SelectItem } from '@tremor/react'
 import Modal from '../../components/Modal'
 import table from '../../icons/table.png'
 import board from '../../icons/board.png'
-
+import { useNavigate } from 'react-router-dom'
 import {
     ChevronRightIcon,
     DocumentTextIcon,
@@ -72,6 +72,7 @@ export default function Dashboard() {
     const [searchParams, setSearchParams] = useSearchParams()
     const [open, setOpen] = useState<boolean>(false)
     const workspace = useParams<{ ws: string }>().ws
+    const navigate = useNavigate()
 
     const f = async () => {
         const cal = await getCalApi({ namespace: 'try-enterprise' })
@@ -168,7 +169,10 @@ export default function Dashboard() {
                                     {data.map((item) => (
                                         <Card
                                             key={item.id}
-                                            className="rounded-tremor-small p-4 hover:bg-tremor-background-muted hover:dark:bg-dark-tremor-background-muted"
+                                            onClick={() => {
+                                                navigate(`/ws/${workspace}/dashboard/${item.page}`)
+                                            }}
+                                            className="rounded-tremor-small cursor-pointer p-4 hover:bg-tremor-background-muted hover:dark:bg-dark-tremor-background-muted"
                                         >
                                             {/* content placeholder */}
                                             <div className="flex items-start justify-start flex-col  ">

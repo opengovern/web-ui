@@ -9,7 +9,12 @@ export default function Library() {
     return (
         <>
             <TopHeader />
-            <TabGroup>
+            <TabGroup
+                index={tab}
+                onIndexChange={(index) => {
+                    setTab(index)
+                }}
+            >
                 <TabList>
                     <Tab
                         onClick={() => {

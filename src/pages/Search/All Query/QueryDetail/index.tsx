@@ -47,6 +47,7 @@ interface IResourceFindingDetail {
     onClose: () => void
     onRefresh: () => void
     linkPrefix?: string
+    setTab: Function
 }
 
 export default function QueryDetail({
@@ -55,8 +56,9 @@ export default function QueryDetail({
     onClose,
     onRefresh,
     linkPrefix = '',
+    setTab,
 }: IResourceFindingDetail) {
-    const { ws} = useParams()
+    const { ws } = useParams()
     const setQuery = useSetAtom(queryAtom)
 
     // const { response, isLoading, sendNow } =
@@ -191,12 +193,15 @@ export default function QueryDetail({
                                 onClick={() => {
                                     // @ts-ignore
                                     setQuery(query?.query?.queryToExecute)
+                                    setTab(1)
                                 }}
                                 disabled={false}
                                 loading={false}
                                 loadingText="Running"
                             >
-                                <Link to={`/ws/${ws}/query`}>Run in Query</Link>{' '}
+                                {/* <Link to={`/ws/${ws}/search?tab_id=1`}> */}
+                                    Run in Query
+                                {/* </Link>{' '} */}
                             </Button>
                         </Flex>
                         <Card className=" py-3 mb-2 relative ">
@@ -208,7 +213,7 @@ export default function QueryDetail({
                                     highlight(text, languages.sql, 'sql')
                                 }
                                 // @ts-ignore
-                                value={query?.query?.queryToExecute }
+                                value={query?.query?.queryToExecute}
                                 className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
                                 style={{
                                     minHeight: '200px',
