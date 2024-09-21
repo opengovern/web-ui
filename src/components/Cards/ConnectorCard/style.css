@@ -1,0 +1,48 @@
+.integration-card {
+    position: relative;
+    padding: 0;
+    padding-top: 20px;
+border: 1px solid #ACACAC;
+    .integration-name{
+        color: #3F3F40;
+font-family: Lato;
+font-size: 20px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+transition: all ease-in-out 0.5s;
+    }
+    .integration-button {
+        bottom: 0;
+        width: 100%;
+        position: absolute;
+        display: flex;
+        height: 41px;
+        justify-content: center;
+        align-items: center;
+        /* gap: 8px; */
+        font-size: 16px;
+font-style: normal;
+font-weight: 400;
+        flex-shrink: 0;
+        align-self: stretch;
+        border: 1px solid #acacac;
+        border-radius: 0px 0px 8px 8px;
+        border-bottom: 0px;
+        border-right: 0px;
+        border-left: 0px;
+transition: all ease-in-out 0.5s;
+
+
+        background: #f3f4f6;
+    }
+}
+.integration-card:hover {
+    border-radius: 8px;
+    border: 1px solid #acacac;
+    box-shadow: 0px 10px 35px 4px rgba(22, 64, 133, 0.15);
+    .integration-button {
+        background: #164085;
+        color: #fff;
+    }
+}

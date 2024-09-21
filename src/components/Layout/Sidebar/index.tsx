@@ -99,7 +99,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const setNextUrl = useSetAtom(nextUrlAtom)
 
     const isCurrentPage = (page: string | string[] | undefined): boolean => {
-        console.log(page)
         if (Array.isArray(page)) {
             return page.map((p) => isCurrentPage(p)).includes(true)
         }

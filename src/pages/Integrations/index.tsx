@@ -49,22 +49,26 @@ export default function Integrations() {
                 </Flex>
             ) : (
                 <>
-                    <Title className="font-semibold">Installed</Title>
-                    <Grid numItemsMd={2} numItemsLg={3} className="gap-14 mt-6">
-                        {installedConnectors.map((connector) => (
-                            <ConnectorCard
-                                connector={connector.name}
-                                title={connector.label}
-                                status={connector.status}
-                                count={connector.connection_count}
-                                description={connector.description}
-                                tier={connector.tier}
-                                logo={connector.logo}
-                            />
-                        ))}
+                    {/* <Title className="font-semibold">Installed</Title> */}
+                    <Grid numItemsMd={3} numItemsLg={4} className="gap-[30px] mt-6">
+                        {connectorList.map((connector) => {
+                            return (
+                                <>
+                                    <ConnectorCard
+                                        connector={connector.name}
+                                        title={connector.label}
+                                        status={connector.status}
+                                        count={connector.connection_count}
+                                        description={connector.description}
+                                        tier={connector.tier}
+                                        logo={connector.logo}
+                                    />
+                                </>
+                            )
+                        })}
                     </Grid>
-                    <Title className="font-semibold mt-8">Available</Title>
-                    <Grid numItemsMd={2} numItemsLg={3} className="gap-14 mt-6">
+                    {/* <Title className="font-semibold mt-8">Available</Title> */}
+                    {/* <Grid numItemsMd={2} numItemsLg={3} className="gap-14 mt-6">
                         {availableConnectorsPage.map((connector) => (
                             <ConnectorCard
                                 connector={connector.name}
@@ -76,7 +80,7 @@ export default function Integrations() {
                                 logo={connector.logo}
                             />
                         ))}
-                    </Grid>
+                    </Grid> */}
                     <Flex
                         flexDirection="row"
                         alignItems="center"

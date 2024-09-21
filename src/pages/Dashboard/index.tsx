@@ -1,10 +1,13 @@
 import Cal, { getCalApi } from '@calcom/embed-react'
-import { Flex, Text, Title } from '@tremor/react'
+import { Flex, Grid, Icon, Text, Title } from '@tremor/react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import TopHeader from '../../components/Layout/Header'
 import { Card, Select, SelectItem } from '@tremor/react'
 import Modal from '../../components/Modal'
+import table from '../../icons/table.png'
+import board from '../../icons/board.png'
+
 import {
     ChevronRightIcon,
     DocumentTextIcon,
@@ -13,46 +16,63 @@ import {
 const data = [
     {
         id: 1,
-        name: 'Infrastructure Summary',
-        description: 'Description',
+        name: 'Cloud Assets & Inventory',
+        description:
+            'Summarized view of all AWS Accounts & Azure Subscriptions Inventory',
         page: 'infrastructure',
+        label: 'Built-in',
+        icon: board,
     },
     {
         id: 2,
-        name: 'Spend Summary',
-        description: 'Description',
+        name: 'Public Cloud Spend',
+        description:
+            'Summarized view of all Spend on AWS Accounts & Azure Subscriptions',
         page: 'spend',
+        label: 'Built-in',
+        icon: board,
     },
     {
         id: 3,
-        name: 'Infrastructure - Cloud Accounts',
-        description: 'Description',
+        name: 'Cloud Assets by Accounts',
+        description:
+            'Asset analytics of all AWS Accounts & Azure Subscriptions',
         page: 'infrastructure-cloud-accounts',
+        label: 'Built-in',
+        icon: table,
     },
     {
         id: 4,
-        name: 'Infrastructure - Cloud Services',
-        description: 'Description',
+        name: 'Cloud Assets by Service',
+        description:
+            'Asset analytics of all Cloud services in AWS Accounts & Azure Subscriptions',
         page: 'infrastructure-metrics',
+        label: 'Built-in',
+        icon: table,
     },
     {
         id: 5,
-        name: 'Spend - Cloud Accounts',
-        description: 'Description',
+        name: 'Cloud Spend by Service',
+        description:
+            'Spend Details of Cloud Services across all  AWS Accounts & Azure Subscriptions',
         page: 'spend-accounts',
+        label: 'Built-in',
+        icon: table,
     },
     {
         id: 6,
-        name: 'Spend - Cloud Services',
+        name: 'Spend Details by Cloud Accounts',
         description: 'Description',
         page: 'spend-metrics',
+        label: 'Built-in',
+        icon: table,
     },
 ]
 export default function Dashboard() {
     const [searchParams, setSearchParams] = useSearchParams()
     const [open, setOpen] = useState<boolean>(false)
     const workspace = useParams<{ ws: string }>().ws
-       
+
     const f = async () => {
         const cal = await getCalApi({ namespace: 'try-enterprise' })
         cal('ui', {
@@ -143,39 +163,36 @@ export default function Dashboard() {
                                     </button>
                                 </div>
                             </div>
-                            <div className="mt-6 space-y-4">
-                                {data.map((item) => (
-                                    <Card
-                                        key={item.id}
-                                        className="rounded-tremor-small p-4 hover:bg-tremor-background-muted hover:dark:bg-dark-tremor-background-muted"
-                                    >
-                                        {/* content placeholder */}
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center space-x-4 truncate">
-                                                <h4 className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
-                                                    <a
-                                                        href={`/ws/${workspace}/dashboard/${item.page}`}
-                                                        className="focus:outline-none"
-                                                    >
-                                                        {/* Extend link to entire card */}
-                                                        <span
-                                                            className="absolute inset-0"
-                                                            aria-hidden={true}
+                            <div className="">
+                                <Grid numItems={3} className="gap-4 mt-4">
+                                    {data.map((item) => (
+                                        <Card
+                                            key={item.id}
+                                            className="rounded-tremor-small p-4 hover:bg-tremor-background-muted hover:dark:bg-dark-tremor-background-muted"
+                                        >
+                                            {/* content placeholder */}
+                                            <div className="flex items-start justify-start flex-col  ">
+                                                <div className=" font-semibold">
+                                                    {item.name}
+                                                </div>
+                                                <div className="label bg-gray-200 p-1 rounded">
+                                                    {item.label}
+                                                </div>
+                                                <div className="content flex flex-row justify-between w-full gap-2">
+                                                    <div className="desc">
+                                                        {item.description}
+                                                    </div>
+                                                    <div className="icon">
+                                                        <img
+                                                            src={item.icon}
+                                                            className="w-[64px] h-[64px]"
                                                         />
-                                                        {item.name}
-                                                    </a>
-                                                </h4>
-                                                <p className="truncate text-tremor-default text-tremor-content dark:text-dark-tremor-content">
-                                                    {item.description}
-                                                </p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <ChevronRightIcon
-                                                className="size-5 shrink-0 text-tremor-content-subtle dark:text-tremor-content"
-                                                aria-hidden={true}
-                                            />
-                                        </div>
-                                    </Card>
-                                ))}
+                                        </Card>
+                                    ))}
+                                </Grid>
                             </div>
                         </main>
                     </div>
