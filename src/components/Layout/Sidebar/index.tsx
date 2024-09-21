@@ -35,7 +35,11 @@ import { useIntegrationApiV1ConnectionsCountList } from '../../../api/integratio
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import AnimatedAccordion from '../../AnimatedAccordion'
 import { setAuthHeader } from '../../../api/ApiConfig'
-import { searchAtom, oldUrlAtom,nextUrlAtom } from '../../../utilities/urlstate'
+import {
+    searchAtom,
+    oldUrlAtom,
+    nextUrlAtom,
+} from '../../../utilities/urlstate'
 import { useAuth } from '../../../utilities/auth'
 
 const badgeStyle = {
@@ -122,12 +126,22 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         return currentPage === page
     }
     const findPage = (page: string | string[], item: ISidebarItem): string => {
-        
         if (Array.isArray(item.page)) {
-            if (oldUrl.includes(item.page[0]) || nextUrl.includes(item.page[0])) {
-                return `/ws/${workspace}/${page}?${searchParams}`
+            if (
+                oldUrl.includes(item.page[0]) ||
+                nextUrl.includes(item.page[0])
+            ) {
+                if (Array.isArray(page)) {
+                    return `/ws/${workspace}/${page[0]}?${searchParams}`
+                } else {
+                    return `/ws/${workspace}/${page}?${searchParams}`
+                }
             } else {
-                return `/ws/${workspace}/${page}`
+                if (Array.isArray(page)) {
+                    return `/ws/${workspace}/${page[0]}`
+                } else {
+                    return `/ws/${workspace}/${page}`
+                }
             }
         } else {
             if (oldUrl.includes(item.page) || nextUrl.includes(item.page)) {
@@ -827,9 +841,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     findPage(item.page, item)
                                                 )
                                             }}
-                                            to={
-                                               findPage(item.page,item)
-                                            }
+                                            to={findPage(item.page, item)}
                                             className={`w-full relative px-6 py-2 flex items-center gap-2.5 rounded-md ${
                                                 collapsed
                                                     ? 'justify-center'
