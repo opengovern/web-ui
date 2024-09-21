@@ -12,6 +12,7 @@ import {
 } from '../../../../api/api'
 import { DateRange } from '../../../../utilities/urlstate'
 import FailingCloudAccounts from '../FailingCloudAccounts'
+import Events from '../Events'
 interface ICount {
    
         connector: SourceType
@@ -62,10 +63,18 @@ export default function Summary({ query, setSelectedGroup } : Props) {
                     >
                         Control Summary
                     </Tab>
+                    <Tab
+                        onClick={() => {
+                            setSelectedGroup('controls')
+                            setTab(4)
+                        }}
+                    >
+                        Drift Evenets
+                    </Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel key={'resource'}>
-                        {tab ==  2 && (
+                        {tab == 2 && (
                             <>
                                 <FailingCloudAccounts query={query} />
                             </>
@@ -80,6 +89,9 @@ export default function Summary({ query, setSelectedGroup } : Props) {
                     </TabPanel>
                     <TabPanel key={'control'}>
                         {tab == 1 && <ControlsWithFailure query={query} />}
+                    </TabPanel>
+                    <TabPanel key={'drift'}>
+                        {tab == 4 && <Events query={query} />}
                     </TabPanel>
                 </TabPanels>
             </TabGroup>

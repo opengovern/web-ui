@@ -22,6 +22,7 @@ import {
     ChevronDoubleLeftIcon,
     ChevronDownIcon,
     ChevronUpIcon,
+    CloudIcon,
     CommandLineIcon,
     FunnelIcon,
     MagnifyingGlassIcon,
@@ -74,6 +75,8 @@ import { numberDisplay } from '../../../../utilities/numericDisplay'
 import TopHeader from '../../../../components/Layout/Header'
 import BenchmarkDetail from './BenchmarkDetail'
 import Filter from './Filter'
+import KFilter from '../../../../components/Filter'
+import { useComplianceApiV3BenchmarkFilters } from '../../../../api/compliance.gen'
 
 export const getTable = (
     headers: string[] | undefined,
@@ -241,18 +244,9 @@ export default function AllBenchmarks() {
     //         Cursor: 0,
     //         PerPage:25
     //     })
-    const recordToArray = (record?: Record<string, string[]> | undefined) => {
-        if (record === undefined) {
-            return []
-        }
+   const { response: filters, isLoading: filtersLoading } =
+       useComplianceApiV3BenchmarkFilters()
 
-        return Object.keys(record).map((key) => {
-            return {
-                value: key,
-                resource_types: record[key],
-            }
-        })
-    }
 
     const ssr = () => {
         return {
@@ -260,9 +254,10 @@ export default function AllBenchmarks() {
                 // setLoading(true)
                 const api = new Api()
                 api.instance = AxiosAPI
-                const body = {
-                    //  connector: query?.connector,
-                    //  severity: query?.severity,
+                let body = {
+                    list_of_tables: query?.list_of_tables,
+                    primary_table: query?.primary_table,
+                    tags: query?.tags,
                     cursor: params.request.startRow
                         ? Math.floor(params.request.startRow / 25)
                         : 0,
@@ -270,13 +265,7 @@ export default function AllBenchmarks() {
                     root: true,
                     finding_summary: false,
                 }
-                //  if(!body.connector){
-                //     delete body["connector"]
-                //  }
-                //  else{
-                //     // @ts-ignore
-                //     body["connector"] = [body?.connector]
-                //  }
+               
                 api.compliance
                     .apiV3BenchmarkList(body)
                     .then((resp) => {
@@ -397,7 +386,7 @@ export default function AllBenchmarks() {
                             </Button>
                         </Flex>
                     )} */}
-                    <Flex flexDirection="col" className="w-full pl-6">
+                    <Flex flexDirection="col" className="w-full ">
                         {/* <Transition.Root show={showEditor} as={Fragment}>
                             <Transition.Child
                                 as={Fragment}
@@ -626,6 +615,150 @@ export default function AllBenchmarks() {
                             // @ts-ignore
                             onApply={(e) => setQuery(e)}
                         /> */}
+                        <Flex
+                            flexDirection="row"
+                            justifyContent="start"
+                            alignItems="center"
+                            className="w-full  gap-1  pb-2 flex-wrap"
+                            // style={{overflow:"hidden",overflowX:"scroll",overflowY: "hidden"}}
+                        >
+                            <KFilter
+                                // @ts-ignore
+                                options={filters?.parent_benchmark_id?.map(
+                                    (unique, index) => {
+                                        return {
+                                            label: unique,
+                                            value: unique,
+                                        }
+                                    }
+                                )}
+                                type="multi"
+                                hasCondition={true}
+                                condition={'is'}
+                                //@ts-ignore
+                                selectedItems={
+                                    query?.parent_benchmark_id
+                                        ? query?.parent_benchmark_id
+                                        : []
+                                }
+                                onChange={(values: string[]) => {
+                                    // @ts-ignore
+                                    setQuery(
+                                        // @ts-ignore
+                                        {
+                                            ...query,
+                                            parent_benchmark_id: values,
+                                        }
+                                    )
+                                }}
+                                label={'Parent Benchmark'}
+                                icon={CloudIcon}
+                            />
+                            <KFilter
+                                // @ts-ignore
+                                options={filters?.list_of_tables?.map(
+                                    (unique, index) => {
+                                        return {
+                                            label: unique,
+                                            value: unique,
+                                        }
+                                    }
+                                )}
+                                type="multi"
+                                hasCondition={true}
+                                condition={'is'}
+                                //@ts-ignore
+                                selectedItems={
+                                    query?.list_of_tables
+                                        ? query?.list_of_tables
+                                        : []
+                                }
+                                onChange={(values: string[]) => {
+                                    // @ts-ignore
+                                    setQuery(
+                                        // @ts-ignore
+                                        { ...query, list_of_tables: values }
+                                    )
+                                }}
+                                label={'List of Tables'}
+                                icon={CloudIcon}
+                            />
+                            <KFilter
+                                // @ts-ignore
+                                options={filters?.primary_table?.map(
+                                    (unique, index) => {
+                                        return {
+                                            label: unique,
+                                            value: unique,
+                                        }
+                                    }
+                                )}
+                                type="multi"
+                                hasCondition={true}
+                                condition={'is'}
+                                //@ts-ignore
+                                selectedItems={
+                                    query?.primary_table
+                                        ? query?.primary_table
+                                        : []
+                                }
+                                onChange={(values: string[]) => {
+                                    // @ts-ignore
+                                    setQuery(
+                                        // @ts-ignore
+                                        { ...query, primary_table: values }
+                                    )
+                                }}
+                                label={'Primary Table'}
+                                icon={CloudIcon}
+                            />
+                            {filters?.tags.map((item, index) => {
+                                return (
+                                    <>
+                                        <KFilter
+                                            options={item.UniqueValues.map(
+                                                (unique, index) => {
+                                                    return {
+                                                        label: unique,
+                                                        value: unique,
+                                                    }
+                                                }
+                                            )}
+                                            type="multi"
+                                            hasCondition={true}
+                                            condition={'is'}
+                                            //@ts-ignore
+                                            selectedItems={
+                                                query?.tags &&
+                                                //@ts-ignore
+                                                query?.tags[item.Key]
+                                                    ? //@ts-ignore
+                                                      query?.tags[item.Key]
+                                                    : []
+                                            }
+                                            onChange={(values: string[]) => {
+                                                // @ts-ignore
+                                                if (values.length > 0) {
+                                                    setQuery(
+                                                        // @ts-ignore
+                                                        (prevSelectedItem) => ({
+                                                            ...prevSelectedItem,
+                                                            tags: {
+                                                                ...prevSelectedItem?.tags,
+                                                                [item.Key]:
+                                                                    values,
+                                                            },
+                                                        })
+                                                    )
+                                                }
+                                            }}
+                                            label={item.Key}
+                                            icon={CloudIcon}
+                                        />
+                                    </>
+                                )
+                            })}
+                        </Flex>
 
                         <Flex className=" mt-2">
                             <Table
@@ -648,14 +781,13 @@ export default function AllBenchmarks() {
                     </Flex>
                 </Flex>
             )}
-            *  <BenchmarkDetail
+            <BenchmarkDetail
                 // type="resource"
                 selectedItem={selectedRow}
                 open={openSlider}
                 onClose={() => setOpenSlider(false)}
                 onRefresh={() => window.location.reload()}
             />
-           
         </>
     )
 }

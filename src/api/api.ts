@@ -2732,6 +2732,15 @@ export interface KaytuResourceCollectionFilter {
     resource_types?: string[]
     tags?: Record<string, string>
 }
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiV3ControlListFilters {
+    provider: string[]
+    severity: string[]
+    root_benchmark: string[]
+    parent_benchmark: string[]
+    primary_table: string[]
+    list_of_tables: string[]
+    tags: GithubComKaytuIoKaytuEnginePkgInventoryApiV3ControlListFiltersTags[]
+}
 export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2 {
     cursor: number
     per_page: number
@@ -2740,12 +2749,17 @@ export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2 {
     finding_summary?: boolean
     connector?: string[]
     parent_benchmark?: string[]
+    root_benchmark? : string[]
+    has_parameters?: boolean
     tags?: GithubComKaytuIoKaytuEnginePkgControlApiListV2Tags[]
     list_of_tables? : string[]
 }
-export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2Tags {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiV3ControlListFiltersTags {
     Key: string
     UniqueValues: string[]
+}
+export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2Tags {
+    [key: string]: string[]
 }
 export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2Response {
     items: GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem[]
@@ -2779,11 +2793,14 @@ export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3Response {
 }
 export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3 {
     /** Specifies the Title */
-    parentBenchmarkID? : string[]
+    parent_benchmark_id?: string[]
+    root: boolean
     // title_filter?: string
     cursor: number
     per_page: number
     primary_table?: string[]
+    list_of_tables?: string[]
+    tags?: GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseTags
     finding_summary?: boolean
 }
 export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseItem {
@@ -2805,7 +2822,9 @@ export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseMetaDat
     updated_at: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseTags {}
+export interface GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3ResponseTags {
+    [key: string]: string[]
+}
 
 export interface GithubComKaytuIoKaytuEnginePkgControlDetailV3 {
     benchmarks: GithubComKaytuIoKaytuEnginePkgControlDetailV3Benchmarks
@@ -2884,17 +2903,18 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryFiltersTag 
     Key: string
     UniqueValues: string[]
 }
-export interface GithubComKaytuIoKaytuEnginePkgInventoryApiV3ControlListFilters {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiV3BenchmarkListFilters {
     parent_benchmark_id: string[]
     primary_table: string[]
     list_of_tables: string[]
-    tags: GithubComKaytuIoKaytuEnginePkgInventoryApiV3ControlListFiltersTag[]
+    tags: GithubComKaytuIoKaytuEnginePkgInventoryApiV3BenchmarkListFiltersTag[]
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgInventoryApiV3ControlListFiltersTag {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiV3BenchmarkListFiltersTag {
     Key: string
     UniqueValues: string[]
 }
+
 
 export enum SourceAssetDiscoveryMethodType {
     AssetDiscoveryMethodTypeScheduled = 'scheduled',
@@ -4368,7 +4388,7 @@ export class Api<
          * @secure
          */
         apiV3BenchmarkList: (
-            request: GithubComKaytuIoKaytuEnginePkgControlApiListV2,
+            request: GithubComKaytuIoKaytuEnginePkgBenchmarkApiListV3,
             params: RequestParams = {}
         ) =>
             this.request<
@@ -4407,12 +4427,33 @@ export class Api<
          * @tags compliance control
          * @name ApiV3ControlFilters
          * @summary Get control filters
-         * @request /compliance/api/v3/benchmarks/filters
+         * @request /compliance/api/v3/control/filters
          * @secure
          */
         apiV3ControlFilters: (params: RequestParams = {}) =>
             this.request<
                 GithubComKaytuIoKaytuEnginePkgInventoryApiV3ControlListFilters,
+                any
+            >({
+                path: `/compliance/api/v3/controls/filters`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+        /**
+         * @description API for get Control Filters
+         *
+         * @tags compliance control
+         * @name ApiV3ControlFilters
+         * @summary Get control filters
+         * @request /compliance/api/v3/benchmarks/filters
+         * @secure
+         */
+        apiV3BenchmarkFilters: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiV3BenchmarkListFilters,
                 any
             >({
                 path: `/compliance/api/v3/benchmarks/filters`,

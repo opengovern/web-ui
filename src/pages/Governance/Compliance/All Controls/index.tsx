@@ -266,6 +266,7 @@ export default function AllControls() {
                     severity: query?.severity,
                     list_of_tables: query?.list_of_tables,
                     primary_table: query?.primary_table,
+                    root_benchmark: query?.root_benchmark,
                     parent_benchmark: query?.parent_benchmark,
                     tags: query?.tags,
                     cursor: params.request.startRow
@@ -400,7 +401,7 @@ export default function AllControls() {
                             </Button>
                         </Flex>
                     )} */}
-                    <Flex flexDirection="col" className="w-full pl-6">
+                    <Flex flexDirection="col" className="w-full ">
                         {/* <Transition.Root show={showEditor} as={Fragment}>
                             <Transition.Child
                                 as={Fragment}
@@ -643,7 +644,7 @@ export default function AllControls() {
                             />
                             <KFilter
                                 // @ts-ignore
-                                options={filters?.parent_benchmark_id?.map(
+                                options={filters?.parent_benchmark?.map(
                                     (unique, index) => {
                                         return {
                                             label: unique,
@@ -744,21 +745,29 @@ export default function AllControls() {
                                             hasCondition={true}
                                             condition={'is'}
                                             //@ts-ignore
-                                            selectedItems={query?.tags &&query?.tags[item.Key] ? query?.tags[item.Key]
+                                            selectedItems={
+                                                query?.tags &&
+                                                //@ts-ignore
+                                                query?.tags[item.Key]
+                                                    ? //@ts-ignore
+                                                      query?.tags[item.Key]
                                                     : []
                                             }
                                             onChange={(values: string[]) => {
                                                 // @ts-ignore
-                                                setQuery(
-                                                    // @ts-ignore
-                                                    (prevSelectedItem) => ({
-                                                        ...prevSelectedItem,
-                                                        tags: {
-                                                            ...prevSelectedItem?.tags,
-                                                            [item.Key]: values,
-                                                        },
-                                                    })
-                                                )
+                                                if (values.length > 0) {
+                                                    setQuery(
+                                                        // @ts-ignore
+                                                        (prevSelectedItem) => ({
+                                                            ...prevSelectedItem,
+                                                            tags: {
+                                                                ...prevSelectedItem?.tags,
+                                                                [item.Key]:
+                                                                    values,
+                                                            },
+                                                        })
+                                                    )
+                                                }
                                             }}
                                             label={item.Key}
                                             icon={CloudIcon}

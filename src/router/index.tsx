@@ -44,6 +44,7 @@ import SettingsParameters from '../pages/Settings/Parameters'
 import SettingsMembers from '../pages/Settings/Members'
 import NewBenchmarkSummary from '../pages/Governance/Compliance/NewBenchmarkSummary'
 import Dashboard from '../pages/Dashboard'
+import Library from '../pages/Governance/Compliance/Library'
 
 const authRoutes = [
     {
@@ -289,14 +290,14 @@ const authRoutes = [
     },
     {
         key: 'allControls',
-        path: '/ws/:ws/compliance/controls',
-        element: <AllControls />,
+        path: '/ws/:ws/compliance/library',
+        element: <Library />,
     },
-    {
-        key: 'allBenchmarks',
-        path: '/ws/:ws/compliance/benchmarks',
-        element: <AllBenchmarks />,
-    },
+    // {
+    //     key: 'allBenchmarks',
+    //     path: '/ws/:ws/compliance/benchmarks',
+    //     element: <AllBenchmarks />,
+    // },
     {
         key: 'benchmark summary',
         path: '/ws/:ws/compliance/:benchmarkId/:controlId',
