@@ -85,9 +85,9 @@ export default function Dashboard() {
 
     return (
         <>
-            <TopHeader />
+            {/* <TopHeader /> */}
             <Flex
-                className="bg-white w-full rounded-xl border-solid  border-2 border-gray-200 "
+                className="bg-white w-[90%] rounded-xl border-solid  border-2 border-gray-200   "
                 flexDirection="col"
                 justifyContent="center"
                 alignItems="center"
@@ -95,7 +95,7 @@ export default function Dashboard() {
                 <div className="border-b w-full rounded-xl border-tremor-border bg-tremor-background-muted p-4 dark:border-dark-tremor-border dark:bg-gray-950 sm:p-6 lg:p-8">
                     <header>
                         <h1 className="text-tremor-title font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
-                            Documantation
+                            Dashboards
                         </h1>
                         <p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
                             Explore and manage your Dashboards
@@ -165,24 +165,26 @@ export default function Dashboard() {
                                 </div>
                             </div>
                             <div className="">
-                                <Grid numItems={3} className="gap-4 mt-4">
+                                <Grid numItems={3} className="gap-7 mt-4">
                                     {data.map((item) => (
                                         <Card
                                             key={item.id}
                                             onClick={() => {
-                                                navigate(`/ws/${workspace}/dashboard/${item.page}`)
+                                                navigate(
+                                                    `/ws/${workspace}/dashboard/${item.page}`
+                                                )
                                             }}
                                             className="rounded-tremor-small cursor-pointer p-4 hover:bg-tremor-background-muted hover:dark:bg-dark-tremor-background-muted"
                                         >
                                             {/* content placeholder */}
-                                            <div className="flex items-start justify-start flex-col  ">
-                                                <div className=" font-semibold">
+                                            <div className="flex items-start justify-start flex-col gap-1  ">
+                                                <div className=" text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
                                                     {item.name}
                                                 </div>
-                                                <div className="label bg-gray-200 p-1 rounded">
+                                                <div className="label text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong bg-gray-200 p-1 rounded">
                                                     {item.label}
                                                 </div>
-                                                <div className="content flex flex-row justify-between w-full gap-2">
+                                                <div className="content dark:text-dark-tremor-cont text-tremor-default text-tremor-content flex flex-row justify-between w-full gap-2">
                                                     <div className="desc">
                                                         {item.description}
                                                     </div>

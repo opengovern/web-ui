@@ -51,7 +51,7 @@ export default function SettingsMembers() {
         </Flex>
     ) : (
         <>
-            <TopHeader/>
+            <TopHeader />
             <DrawerPanel
                 open={drawerOpen}
                 title={
@@ -85,23 +85,24 @@ export default function SettingsMembers() {
                     />
                 )}
             </DrawerPanel>
-            <Card key="summary">
+            <Card key="summary" className="mt-4">
                 <Flex>
                     <Title className="font-semibold">All members</Title>
-                    {/* <Button
+                    <Button
                         className="float-right"
                         onClick={() => {
                             openInviteMember()
                         }}
                     >
-                        Invite member
-                    </Button> */}
+                        Add Users
+                    </Button>
                 </Flex>
                 <List className="mt-4">
                     <ListItem>
                         <Text className="w-1/3 text-start">Member</Text>
+                        <Text className="w-1/3 text-center">Mebmber Since</Text>
                         <Text className="w-1/3 text-center">Last Activity</Text>
-                        <Text className="w-1/3 text-end mr-5">Permissions</Text>
+                        <Text className="w-1/3 text-end mr-5">Role</Text>
                     </ListItem>
                     {response?.map((item) => (
                         <ListItem
@@ -126,6 +127,11 @@ export default function SettingsMembers() {
                                     </Text>
                                 </div>
                             </Flex>
+                            <Text className="w-1/3 text-center">
+                                {item.createdAt
+                                    ? dateTimeDisplay(item.createdAt)
+                                    : 'Never'}
+                            </Text>
                             <Text className="w-1/3 text-center">
                                 {item.lastActivity
                                     ? dateTimeDisplay(item.lastActivity)

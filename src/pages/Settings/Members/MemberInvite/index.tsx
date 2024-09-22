@@ -4,6 +4,8 @@ import {
     Flex,
     List,
     ListItem,
+    Select,
+    SelectItem,
     Subtitle,
     Text,
     TextInput,
@@ -18,6 +20,10 @@ interface MemberInviteProps {
 
 export default function MemberInvite({ close }: MemberInviteProps) {
     const [email, setEmail] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
+    const [auth, setAuth] = useState<string>('')
+
+
     const [role, setRole] = useState<string>('viewer')
     const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
         'viewer'
@@ -91,14 +97,65 @@ export default function MemberInvite({ close }: MemberInviteProps) {
                         className="truncate space-x-4 py-2"
                     >
                         <Text className="font-medium text-gray-800">
-                            Email*
+                            Email
+                            <span className="text-red-600 font-semibold">
+                                *
+                            </span>
                         </Text>
                         <TextInput
+                            placeholder="email"
                             className="font-medium w-1/2 text-gray-800"
                             onChange={(e) => {
                                 setEmail(e.target.value)
                             }}
                         />
+                    </Flex>
+                </ListItem>
+                <ListItem key="password">
+                    <Flex
+                        justifyContent="between"
+                        className="truncate space-x-4 py-2"
+                    >
+                        <Text className="font-medium text-gray-800">
+                            Password
+                            <span className="text-red-600 font-semibold">
+                                *
+                            </span>
+                        </Text>
+                        <TextInput
+                            type="password"
+                            placeholder="password"
+                            className="font-medium w-1/2 text-gray-800"
+                            onChange={(e) => {
+                                setPassword(e.target.value)
+                            }}
+                        />
+                    </Flex>
+                </ListItem>
+                <ListItem key="authentication">
+                    <Flex
+                        justifyContent="between"
+                        alignItems='start'
+                        flexDirection='row'
+                        className="truncate space-x-4 py-2"
+                    >
+                        <Text className="font-medium text-gray-800">
+                            Authentication
+                            <span className="text-red-600 font-semibold">
+                                *
+                            </span>
+                        </Text>
+                        <Select
+                            className=" w-1/2 z-50 static h-[150px] "
+                            value={auth}
+                            onValueChange={setAuth}
+                            placeholder="Authentication"
+                        >
+                            <SelectItem className="static" value="password">
+                                Password
+                            </SelectItem>
+                            <SelectItem   className ='static' value="oicd">OIDC (SSO)</SelectItem>
+                        </Select>
                     </Flex>
                 </ListItem>
                 <ListItem key="role">
@@ -107,7 +164,12 @@ export default function MemberInvite({ close }: MemberInviteProps) {
                         alignItems="start"
                         className="truncate space-x-4"
                     >
-                        <Text className="font-medium text-gray-800">Role*</Text>
+                        <Text className="font-medium text-gray-800">
+                            Role
+                            <span className="text-red-600 font-semibold">
+                                *
+                            </span>
+                        </Text>
 
                         <div className="space-y-5 sm:mt-0 w-1/2">
                             {roleItems.map((item) => {

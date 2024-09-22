@@ -19,6 +19,7 @@ import {
 import Events from './Events'
 import Spinner from '../../../components/Spinner'
 import Summary from './Summary'
+import AllIncidents from './AllIncidents'
 
 export default function Findings() {
     const [tab, setTab] = useState<number>(0);
@@ -53,7 +54,12 @@ export default function Findings() {
     const findComponent = () => {
         switch (tab) {
             case 0:
-                return <FindingsWithFailure query={query} />
+                return (
+                    <AllIncidents
+                        setSelectedGroup={setSelectedGroup}
+                        query={query}
+                    />
+                )
             case 1:
                 return (
                     <Summary

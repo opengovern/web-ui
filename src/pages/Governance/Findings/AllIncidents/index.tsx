@@ -20,6 +20,7 @@ import {
 import { DateRange } from '../../../../utilities/urlstate'
 import FailingCloudAccounts from '../FailingCloudAccounts'
 import Events from '../Events'
+import FindingsWithFailure from '../FindingsWithFailure'
 interface ICount {
     connector: SourceType
     conformanceStatus:
@@ -38,7 +39,7 @@ interface Props {
     query: ICount
     setSelectedGroup: Function
 }
-export default function Summary({ query, setSelectedGroup }: Props) {
+export default function AllIncidents({ query, setSelectedGroup }: Props) {
     const [tab, setTab] = useState<number>(0)
     return (
         <>
@@ -51,57 +52,32 @@ export default function Summary({ query, setSelectedGroup }: Props) {
                 <TabList>
                     <Tab
                         onClick={() => {
-                            setSelectedGroup('accounts')
+                            setSelectedGroup('findings')
                             setTab(0)
                         }}
                     >
-                        Account Summary
-                    </Tab>
-                    <Tab
-                        onClick={() => {
-                            setSelectedGroup('resources')
-                            setTab(1)
-                        }}
-                    >
-                        Resource Summary
-                    </Tab>
-                    <Tab
-                        onClick={() => {
-                            setSelectedGroup('controls')
-                            setTab(2)
-                        }}
-                    >
-                        Control Summary
+                        All Incidents
                     </Tab>
                     <Tab
                         onClick={() => {
                             setSelectedGroup('events')
-                            setTab(3)
+                            setTab(1)
                         }}
                     >
-                        Drift Evenets
+                        Drift Events
                     </Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel key={'resource'}>
                         {tab == 0 && (
                             <>
-                                <FailingCloudAccounts query={query} />
+                                <FindingsWithFailure query={query} />
                             </>
                         )}
                     </TabPanel>
-                    <TabPanel key={'resource'}>
-                        {tab == 1 && (
-                            <>
-                                <ResourcesWithFailure query={query} />
-                            </>
-                        )}
-                    </TabPanel>
-                    <TabPanel key={'control'}>
-                        {tab == 2 && <ControlsWithFailure query={query} />}
-                    </TabPanel>
+
                     <TabPanel key={'events'}>
-                        {tab == 3 && <Events query={query} />}
+                        {tab == 1 && <Events query={query} />}
                     </TabPanel>
                 </TabPanels>
             </TabGroup>

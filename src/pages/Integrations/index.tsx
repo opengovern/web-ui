@@ -1,4 +1,4 @@
-import { Button, Flex, Grid, Text, Title } from '@tremor/react'
+import { Button, Flex, Grid, Tab, TabGroup, TabList, Text, Title } from '@tremor/react'
 import { useState } from 'react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import ConnectorCard from '../../components/Cards/ConnectorCard'
@@ -49,20 +49,40 @@ export default function Integrations() {
                 </Flex>
             ) : (
                 <>
+                    <TabGroup className='mt-4'>
+                        <TabList>
+                            <Tab>test</Tab>
+                            <Tab>test</Tab>
+                            <Tab>test</Tab>
+                            <Tab>test</Tab>
+                        </TabList>
+                    </TabGroup>
                     {/* <Title className="font-semibold">Installed</Title> */}
-                    <Grid numItemsMd={3} numItemsLg={4} className="gap-[30px] mt-6">
-                        {connectorList.map((connector) => {
+                    <Grid
+                        numItemsMd={3}
+                        numItemsLg={4}
+                        className="gap-[60px] mt-6"
+                    >
+                        {connectorList.map((connector, index) => {
                             return (
                                 <>
-                                    <ConnectorCard
-                                        connector={connector.name}
-                                        title={connector.label}
-                                        status={connector.status}
-                                        count={connector.connection_count}
-                                        description={connector.description}
-                                        tier={connector.tier}
-                                        logo={connector.logo}
-                                    />
+                                    {index < 12 && (
+                                        <>
+                                            <ConnectorCard
+                                                connector={connector.name}
+                                                title={connector.label}
+                                                status={connector.status}
+                                                count={
+                                                    connector.connection_count
+                                                }
+                                                description={
+                                                    connector.description
+                                                }
+                                                tier={connector.tier}
+                                                logo={connector.logo}
+                                            />
+                                        </>
+                                    )}
                                 </>
                             )
                         })}
