@@ -325,7 +325,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 error: false,
                 children: [
                     {
-                        name: 'Summary',
+                        name: 'Frameworks',
                         page: 'compliance',
                         isPreview: false,
                         isLoading: false,
@@ -379,7 +379,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 ],
                 icon: PresentationChartBarIcon,
                 isPreview: false,
-                count: 6
+                count: 6,
             },
             {
                 name: 'Incidents',
@@ -392,16 +392,17 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 isPreview: false,
                 children: [
                     {
-                        name: 'All Incidents',
-                        page: 'incidents',
-                        isLoading: findingsIsLoading,
-                        count: numericDisplay(findingsCount?.count) || 0,
-                        error: findingsErr,
-                    },
-                    {
                         name: 'Summary',
                         page: 'incidents/summary',
                     },
+                    {
+                        name: 'All Incidents',
+                        page: 'incidents',
+                        isLoading: findingsIsLoading,
+                        // count: numericDisplay(findingsCount?.count) || 0,
+                        error: findingsErr,
+                    },
+
                     // {
                     //     name: 'Resource Summary',
                     //     page: 'incidents/resource-summary',

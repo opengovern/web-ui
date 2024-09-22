@@ -35,7 +35,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
     return (
         <Card
             key={benchmark?.id}
-            className="cursor-pointer"
+            className="cursor-pointer w-4/5"
             onClick={() => navigate(`${benchmark?.id || ''}?${searchParams}`)}
         >
             <Flex>
