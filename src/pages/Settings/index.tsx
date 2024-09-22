@@ -4,6 +4,7 @@ import {
     AdjustmentsVerticalIcon,
     BugAntIcon,
     Cog8ToothIcon,
+    DocumentMagnifyingGlassIcon,
     DocumentTextIcon,
     FolderIcon,
     KeyIcon,
@@ -100,6 +101,13 @@ const navigation = [
         role: ['admin', 'editor', 'viewer'],
         children: [],
     },
+    // {
+    //     name: 'Sample data',
+    //     icon: DocumentMagnifyingGlassIcon,
+    //     page: 'sample-data',
+    //     role: ['admin', 'editor', 'viewer'],
+    //     children: [],
+    // },
 ]
 
 export default function Settings() {

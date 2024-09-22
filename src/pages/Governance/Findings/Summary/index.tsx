@@ -73,14 +73,14 @@ export default function Summary({ query, setSelectedGroup }: Props) {
                     >
                         Control Summary
                     </Tab>
-                    <Tab
+                    {/* <Tab
                         onClick={() => {
                             setSelectedGroup('events')
                             setTab(3)
                         }}
                     >
                         Drift Evenets
-                    </Tab>
+                    </Tab> */}
                 </TabList>
                 <TabPanels>
                     <TabPanel key={'resource'}>
@@ -100,9 +100,9 @@ export default function Summary({ query, setSelectedGroup }: Props) {
                     <TabPanel key={'control'}>
                         {tab == 2 && <ControlsWithFailure query={query} />}
                     </TabPanel>
-                    <TabPanel key={'events'}>
+                    {/* <TabPanel key={'events'}>
                         {tab == 3 && <Events query={query} />}
-                    </TabPanel>
+                    </TabPanel> */}
                 </TabPanels>
             </TabGroup>
         </>

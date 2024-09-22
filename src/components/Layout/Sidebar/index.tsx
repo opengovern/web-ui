@@ -367,6 +367,21 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 ],
             },
             {
+                name: 'Dashboards',
+                page: [
+                    'dashboards',
+                    'dashboard/infrastructure',
+                    'dashboard/spend',
+                    'dashboard/infrastructure-cloud-accounts',
+                    'dashboard/infrastructure-metrics',
+                    'dashboard/spend-accounts',
+                    'dashboard/spend-metrics',
+                ],
+                icon: PresentationChartBarIcon,
+                isPreview: false,
+                count: 6
+            },
+            {
                 name: 'Incidents',
                 icon: DocumentMagnifyingGlassIcon,
                 page: [
@@ -414,20 +429,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             //     count: undefined,
             //     error: false,
             // },
-            {
-                name: 'Dashboards',
-                page: [
-                    'dashboards',
-                    'dashboard/infrastructure',
-                    'dashboard/spend',
-                    'dashboard/infrastructure-cloud-accounts',
-                    'dashboard/infrastructure-metrics',
-                    'dashboard/spend-accounts',
-                    'dashboard/spend-metrics',
-                ],
-                icon: PresentationChartBarIcon,
-                isPreview: false,
-            },
+
             {
                 name: 'Search',
                 page: ['search'],

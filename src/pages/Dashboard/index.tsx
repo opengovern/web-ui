@@ -112,6 +112,7 @@ export default function Dashboard() {
                                     <a
                                         href="https://docs.opengovernance.io/"
                                         className="focus:outline-none"
+                                        target="_blank"
                                     >
                                         {/* Extend link to entire card */}
                                         <span
@@ -122,8 +123,7 @@ export default function Dashboard() {
                                     </a>
                                 </h3>
                                 <p className="dark:text-dark-tremor-cont text-tremor-default text-tremor-content">
-                                    Lorem ipsum dolor sit amet, consetetur
-                                    sadipscing elitr.
+                                    Learn how to use the included dashboard.
                                 </p>
                             </Card>
                         </div>
@@ -160,7 +160,7 @@ export default function Dashboard() {
                                             className="-ml-1 size-5 shrink-0"
                                             aria-hidden={true}
                                         />
-                                        Add
+                                        Create new Dashboard
                                     </button>
                                 </div>
                             </div>

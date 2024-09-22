@@ -62,7 +62,7 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                                 ? 'h-fit'
                                 : 'px-12 mt-16 h-fit  pl-48'
                         } `}
-                        // pl-44 
+                        // pl-44
                     >
                         <div
                             className={`w-full ${
@@ -73,7 +73,14 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                                     : 'py-6'
                             }`}
                         >
-                            {children}
+                            <>
+                                <p className="left-0 w-full bg-orange-400 p-4  absolute top-0">
+                                   Sample data has been
+                                    loaded. Please purge it before adding your
+                                    data. Click here to purge.{' '}
+                                </p>
+                                {children}
+                            </>
                         </div>
                     </Flex>
                     <Footer />

@@ -360,6 +360,39 @@ export default function SettingsEntitlement() {
                         </TabList>
                     </TabGroup>
                 </Flex>
+                <Title className="font-semibold mt-8">Sample Data</Title>
+                <Flex
+                    justifyContent='between'
+                    alignItems='center'
+                >
+                    <Text className="font-normal w-full">
+                        {' '}
+                        The app can be loaded with sample data, allowing you to
+                        explore features without setting up integrations.
+                    </Text>
+                    <Flex
+                        className='gap-2'
+                        justifyContent='end'
+                        alignItems='center'
+                    >
+                        <Button
+                            variant="secondary"
+                            className="ml-2"
+                            loading={syncExecuted && syncLoading}
+                            onClick={() => runSync()}
+                        >
+                            Load Sample Data
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            className=""
+                            loading={syncExecuted && syncLoading}
+                            onClick={() => runSync()}
+                        >
+                           Purge Sample Data
+                        </Button>
+                    </Flex>
+                </Flex>
             </Card>
         </Flex>
     )
