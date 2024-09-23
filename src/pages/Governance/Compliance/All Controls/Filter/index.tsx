@@ -153,7 +153,7 @@ export default function Filter({ onApply, type }: IFilters) {
         eventTimeRange,
     ])
 
-    const { response: filters } = useComplianceApiV1FindingsFiltersCreate({})
+    // const { response: filters } = useComplianceApiV1FindingsFiltersCreate({})
 
     const filterOptions = [
         // {

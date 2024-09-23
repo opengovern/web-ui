@@ -27,6 +27,7 @@ import {
     FunnelIcon,
     MagnifyingGlassIcon,
     PlayCircleIcon,
+    PlusIcon,
 } from '@heroicons/react/24/outline'
 import { Fragment, useEffect, useMemo, useState } from 'react' // eslint-disable-next-line import/no-extraneous-dependencies
 import { highlight, languages } from 'prismjs' // eslint-disable-next-line import/no-extraneous-dependencies
@@ -209,6 +210,8 @@ export default function AllQueries({setTab} : Props) {
     const [openSearch, setOpenSearch] = useState(true)
     const [query, setQuery] =
         useState<GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2>()
+    const [selectedFilter, setSelectedFilters] = useState<string[]>([])
+
     const [showEditor, setShowEditor] = useState(true)
     const isDemo = useAtomValue(isDemoAtom)
     const [pageSize, setPageSize] = useState(1000)
@@ -253,16 +256,51 @@ export default function AllQueries({setTab} : Props) {
         // })
         // return temp
     }
+    const findFilters = (key: string) => {
+        const temp = filters?.tags.filter((item, index) => {
+            if (item.Key === key) {
+                return item
+            }
+        })
 
+        if (temp) {
+            return temp[0]
+        }
+        return undefined
+    }
     const ssr = () => {
         return {
             getRows: (params: IServerSideGetRowsParams) => {
                 // setLoading(true)
                 const api = new Api()
                 api.instance = AxiosAPI
+                const temp = query?.tags
+                // @ts-ignore
+                if (temp) {
+                    Object.keys(temp).map((item, index) => {
+                        const filtered = selectedFilter.filter((filter, i) => {
+                            if (filter == item) {
+                                return filter
+                            }
+                        })
+                        if (!filtered || filtered.length == 0) {
+                            // @ts-ignore
+                            delete temp[item]
+                        }
+                    })
+                }
+                if (temp?.length !== query?.tags?.length) {
+                    setQuery(
+                        // @ts-ignore
+                        (prevSelectedItem) => ({
+                            ...prevSelectedItem,
+                            tags: temp,
+                        })
+                    )
+                }
                 let body = {
                     //  title_filter: '',
-                    tags: query?.tags,
+                    tags: temp,
                     providers: query?.providers,
                     cursor: params.request.startRow
                         ? Math.floor(params.request.startRow / 25)
@@ -633,49 +671,105 @@ export default function AllQueries({setTab} : Props) {
                                 // @ts-ignore
                                 onApply={(e) => setQuery(e)}
                             />
-                            {filters?.tags.map((item, index) => {
+                            <KFilter
+                                // @ts-ignore
+                                options={filters?.tags?.map((unique, index) => {
+                                    return {
+                                        label: unique.Key,
+                                        value: unique.Key,
+                                    }
+                                })}
+                                type="multi"
+                                hasCondition={false}
+                                condition={'is'}
+                                //@ts-ignore
+                                selectedItems={selectedFilter}
+                                onChange={(values: string[]) => {
+                                    // @ts-ignore
+                                    setSelectedFilters(values)
+                                }}
+                                label={'Add filters'}
+                                icon={PlusIcon}
+                            />
+
+                            {selectedFilter.map((item, index) => {
                                 return (
-                                    <>
-                                        <KFilter
-                                            options={item.UniqueValues.map(
-                                                (unique, index) => {
-                                                    return {
-                                                        label: unique,
-                                                        value: unique,
-                                                    }
-                                                }
-                                            )}
-                                            type="multi"
-                                            hasCondition={true}
-                                            condition={'is'}
-                                            //@ts-ignore
-                                            selectedItems={
-                                                query?.tags &&
-                                                query?.tags[item.Key]
-                                                    ? query?.tags[item.Key]
-                                                    : []
-                                            }
-                                            onChange={(values: string[]) => {
-                                                //@ts-ignore
-                                                if (values.length != 0) {
-                                                    //@ts-ignore
-                                                    setQuery(
+                                    <div key={index}>
+                                        {findFilters(item) &&
+                                            findFilters(item)?.Key && (
+                                                <>
+                                                    <KFilter
+                                                        // @ts-ignore
+                                                        options={findFilters(
+                                                            item
+                                                        ).UniqueValues?.map(
+                                                            (unique, index) => {
+                                                                return {
+                                                                    label: unique,
+                                                                    value: unique,
+                                                                }
+                                                            }
+                                                        )}
+                                                        type="multi"
+                                                        hasCondition={true}
+                                                        condition={'is'}
                                                         //@ts-ignore
-                                                        (prevSelectedItem) => ({
-                                                            ...prevSelectedItem,
-                                                            tags: {
-                                                                ...prevSelectedItem?.tags,
-                                                                [item.Key]:
-                                                                    values,
-                                                            },
-                                                        })
-                                                    )
-                                                }
-                                            }}
-                                            label={item.Key}
-                                            icon={CloudIcon}
-                                        />
-                                    </>
+                                                        selectedItems={
+                                                            query?.tags &&
+                                                            //@ts-ignore
+                                                            query?.tags[
+                                                                //@ts-ignore
+                                                                findFilters(
+                                                                    item
+                                                                )?.Key
+                                                            ]
+                                                                ? //@ts-ignore
+                                                                  query?.tags[
+                                                                      //@ts-ignore
+                                                                      findFilters(
+                                                                          item
+                                                                      )?.Key
+                                                                  ]
+                                                                : []
+                                                        }
+                                                        onChange={(
+                                                            values: string[]
+                                                        ) => {
+                                                            // @ts-ignore
+                                                            if (
+                                                                values.length >
+                                                                0
+                                                            ) {
+                                                                setQuery(
+                                                                    // @ts-ignore
+                                                                    (
+                                                                        prevSelectedItem
+                                                                    ) => ({
+                                                                        ...prevSelectedItem,
+                                                                        tags: {
+                                                                            ...prevSelectedItem?.tags,
+                                                                            //@ts-ignore
+                                                                            [findFilters(
+                                                                                item
+                                                                            )
+                                                                                ?.Key]:
+                                                                                values,
+                                                                        },
+                                                                    })
+                                                                )
+                                                            }
+                                                        }}
+                                                        //@ts-ignore
+                                                        label={
+                                                            //@ts-ignore
+                                                            findFilters(item)
+                                                                ?.Key
+                                                        }
+                                                        icon={CloudIcon}
+                                                    />
+                                                </>
+                                            )}
+                                    </div>
                                 )
                             })}
                         </Flex>
