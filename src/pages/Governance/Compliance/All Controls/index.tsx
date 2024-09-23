@@ -28,6 +28,7 @@ import {
     MagnifyingGlassIcon,
     PlayCircleIcon,
     PlusIcon,
+    TagIcon,
 } from '@heroicons/react/24/outline'
 import { Fragment, useEffect, useMemo, useState } from 'react' // eslint-disable-next-line import/no-extraneous-dependencies
 import { highlight, languages } from 'prismjs' // eslint-disable-next-line import/no-extraneous-dependencies
@@ -858,7 +859,7 @@ export default function AllControls() {
                                                             findFilters(item)
                                                                 ?.Key
                                                         }
-                                                        icon={CloudIcon}
+                                                        icon={TagIcon}
                                                     />
                                                 </>
                                             )}
