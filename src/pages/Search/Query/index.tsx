@@ -157,8 +157,7 @@ export default function Query() {
 
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2AnalyticsCategoriesList()
-    const { response: queries, isLoading: queryLoading } =
-        useInventoryApiV1QueryList({})
+
     const {
         response: queryResponse,
         isLoading,
@@ -175,11 +174,7 @@ export default function Query() {
         autoRun
     )
 
-    useEffect(() => {
-        if (isExecuted && !isLoading && code.trim().length > 0) {
-            sendNow()
-        }
-    }, [pageSize])
+ 
 
     useEffect(() => {
         if (autoRun) {
@@ -239,7 +234,7 @@ export default function Query() {
     return (
         <>
             <TopHeader />
-            {categoryLoading || queryLoading ? (
+            {categoryLoading  ? (
                 <Spinner className="mt-56" />
             ) : (
                 <Flex alignItems="start">

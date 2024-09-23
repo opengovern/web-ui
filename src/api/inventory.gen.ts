@@ -326,7 +326,7 @@ export const useInventoryApiV1QueryRunCreate = (
     api.instance = AxiosAPI
 
     const [state, setState] = useState<IuseInventoryApiV1QueryRunCreateState>({
-        isLoading: true,
+        isLoading: false,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(

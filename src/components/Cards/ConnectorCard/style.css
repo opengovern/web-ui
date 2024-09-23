@@ -71,16 +71,10 @@ font-weight: 400;
 }
 
 .enterprise{
-    background-color: #fcfcfd;
-    /* border: 2px dotted #e0e0e9; */
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
+    /* background-color: #fcfcfd; */
+
 box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
-/* box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px; */
-/* box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px; */
-/* box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset; */
+
     transition: all ease-in-out 0.5s;
      .integration-button {
         top: -10px;
@@ -141,8 +135,8 @@ font-weight: 400;
         display: none;
     }
     .connector-logo{
-        filter: grayscale(70%) contrast(70%) invert(10%) brightness(70%) sepia(0%);
-        filter: brightness(70%) saturate(100%) invert(80%) sepia(7%) saturate(50%) hue-rotate(166deg) brightness(113%) contrast(100%);
+        /* filter: grayscale(70%) contrast(70%) invert(10%) brightness(70%) sepia(0%); */
+        /* filter: brightness(70%) saturate(100%) invert(80%) sepia(7%) saturate(50%) hue-rotate(166deg) brightness(113%) contrast(100%); */
         /* filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(6002%) hue-rotate(306deg) brightness(97%) contrast(89%); */
     }
 }

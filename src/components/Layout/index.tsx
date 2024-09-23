@@ -74,11 +74,11 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                             } ${
                                 current === 'assistant'
                                     ? 'w-full max-w-full'
-                                    : 'py-24'
+                                    : 'py-6'
                             }`}
                         >
                             <>
-                                {sampleAtom && (
+                                {/* {sampleAtom && (
                                     <p
                                         onClick={() => {
                                             navigate(
@@ -90,7 +90,7 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                                         Sample data has been loaded. Please
                                         purge it before adding your data.{' '}
                                     </p>
-                                )}
+                                )} */}
 
                                 {children}
                             </>

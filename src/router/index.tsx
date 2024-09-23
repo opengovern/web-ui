@@ -256,11 +256,11 @@ const authRoutes = [
         path: '/ws/:ws/settings/api-keys',
         element: <SettingsWorkspaceAPIKeys />,
     },
-    {
-        key: 'settings variables',
-        path: '/ws/:ws/settings/variables',
-        element: <SettingsParameters />,
-    },
+    // {
+    //     key: 'settings variables',
+    //     path: '/ws/:ws/settings/variables',
+    //     element: <SettingsParameters />,
+    // },
     {
         key: 'settings Authentications',
         path: '/ws/:ws/settings/authentication',
@@ -291,6 +291,11 @@ const authRoutes = [
         key: 'allControls',
         path: '/ws/:ws/compliance/library',
         element: <Library />,
+    },
+    {
+        key: 'allControls',
+        path: '/ws/:ws/compliance/library/parameters',
+        element: <SettingsParameters />,
     },
     // {
     //     key: 'allBenchmarks',
@@ -413,7 +418,7 @@ const authRoutes = [
         path: '/ws/requestdemo',
         element: <RequestDemo />,
     },
-    
+
     {
         key: 'Search',
         path: '/ws/:ws/search',

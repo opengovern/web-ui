@@ -493,7 +493,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     'settings/about',
                     'settings/jobs',
                     'settings/api-keys',
-                    'settings/variables',
+                    // 'settings/variables',
                     'settings/authentication',
                 ],
                 icon: Cog6ToothIcon,
@@ -515,10 +515,10 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         name: 'API Keys',
                         page: 'settings/api-keys',
                     },
-                    {
-                        name: 'Variables',
-                        page: 'settings/variables',
-                    },
+                    // {
+                    //     name: 'Variables',
+                    //     page: 'settings/variables',
+                    // },
                 ],
             },
         ]

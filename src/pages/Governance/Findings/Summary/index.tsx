@@ -37,9 +37,10 @@ interface ICount {
 interface Props {
     query: ICount
     setSelectedGroup: Function
+    tab: number
+    setTab: Function
 }
-export default function Summary({ query, setSelectedGroup }: Props) {
-    const [tab, setTab] = useState<number>(0)
+export default function Summary({ query, setSelectedGroup,tab,setTab }: Props) {
     return (
         <>
             <TabGroup
@@ -100,9 +101,7 @@ export default function Summary({ query, setSelectedGroup }: Props) {
                     <TabPanel key={'control'}>
                         {tab == 2 && <ControlsWithFailure query={query} />}
                     </TabPanel>
-                    {/* <TabPanel key={'events'}>
-                        {tab == 3 && <Events query={query} />}
-                    </TabPanel> */}
+                    
                 </TabPanels>
             </TabGroup>
         </>

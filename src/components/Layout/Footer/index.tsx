@@ -1,6 +1,10 @@
 import { Flex, Text } from '@tremor/react'
+import { useAtomValue } from 'jotai'
+import { sampleAtom } from '../../../store'
 
 export default function Footer() {
+    const smaple = useAtomValue(sampleAtom)
+
     return (
         <Flex
             justifyContent="center"
@@ -12,7 +16,8 @@ export default function Footer() {
                 className="max-w-7xl w-full"
             >
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <Text>Copyright © 2024 Kaytu, Inc.</Text>
+                <Text>Copyright © 2024 Kaytu, Inc.</Text>{" "}
+                {smaple && <>Demo data loaded</>}
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             </Flex>
         </Flex>

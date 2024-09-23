@@ -100,7 +100,7 @@ export default function SettingsMembers() {
                 <List className="mt-4">
                     <ListItem>
                         <Text className="w-1/3 text-start">Member</Text>
-                        <Text className="w-1/3 text-center">Mebmber Since</Text>
+                        <Text className="w-1/3 text-center">Member Since</Text>
                         <Text className="w-1/3 text-center">Last Activity</Text>
                         <Text className="w-1/3 text-end mr-5">Role</Text>
                     </ListItem>

@@ -38,9 +38,10 @@ interface ICount {
 interface Props {
     query: ICount
     setSelectedGroup: Function
+    tab: number
+    setTab: Function
 }
-export default function AllIncidents({ query, setSelectedGroup }: Props) {
-    const [tab, setTab] = useState<number>(0)
+export default function AllIncidents({ query, setSelectedGroup ,tab,setTab}: Props) {
     return (
         <>
             <TabGroup

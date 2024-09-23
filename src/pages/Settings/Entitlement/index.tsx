@@ -30,7 +30,7 @@ import { numericDisplay } from '../../../utilities/numericDisplay'
 import { useAuthApiV1UserDetail } from '../../../api/auth.gen'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import { GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier } from '../../../api/api'
-import {  isDemoAtom, previewAtom } from '../../../store'
+import {  isDemoAtom, previewAtom, sampleAtom } from '../../../store'
 import {
     useMetadataApiV1MetadataCreate,
     useMetadataApiV1MetadataDetail,
@@ -137,7 +137,7 @@ export default function SettingsEntitlement() {
     const currentUsers = response?.currentUsers || 0
     const currentConnections = response?.currentConnections || 0
     const currentResources = response?.currentResources || 0
-    const setDemo = useSetAtom(isDemoAtom)
+    const setSample = useSetAtom(sampleAtom)
     const maxUsers = response?.maxUsers || 1
     const maxConnections = response?.maxConnections || 1
     const maxResources = response?.maxResources || 1
@@ -399,7 +399,9 @@ export default function SettingsEntitlement() {
                             loading={syncExecuted && syncLoading}
                             onClick={() => {
                                 loadData()
-                                setDemo(true)
+                                setSample(true)
+                                // window.location.reload()
+
                             }}
                         >
                             Load Sample Data
@@ -410,7 +412,8 @@ export default function SettingsEntitlement() {
                             loading={syncExecuted && syncLoading}
                             onClick={() => {
                                 PurgeData()
-                                setDemo(false)
+                                setSample(false)
+                                // window.location.reload()
                             }}
                         >
                            Purge Sample Data
