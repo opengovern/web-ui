@@ -3,7 +3,9 @@ import { ReactNode, UIEvent } from 'react'
 import Footer from './Footer'
 import Sidebar from './Sidebar'
 import Notification from '../Notification'
-
+import { useNavigate } from 'react-router-dom'
+import { useAtomValue,useSetAtom } from 'jotai'
+import { sampleAtom } from '../../store'
 type IProps = {
     children: ReactNode
     onScroll?: (e: UIEvent) => void
@@ -12,6 +14,8 @@ type IProps = {
 
 export default function Layout({ children, onScroll, scrollRef }: IProps) {
     const url = window.location.pathname.split('/')
+    const smaple = useAtomValue(sampleAtom)
+    const navigate = useNavigate()
     if (url[1] === 'ws') {
         url.shift()
     }
@@ -70,15 +74,24 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                             } ${
                                 current === 'assistant'
                                     ? 'w-full max-w-full'
-                                    : 'py-6'
+                                    : 'py-24'
                             }`}
                         >
                             <>
-                                <p className="left-0 w-full bg-orange-400 p-4  absolute top-0">
-                                   Sample data has been
-                                    loaded. Please purge it before adding your
-                                    data. Click here to purge.{' '}
-                                </p>
+                                {sampleAtom && (
+                                    <p
+                                        onClick={() => {
+                                            navigate(
+                                                `ws/${workspace}/settings/about`
+                                            )
+                                        }}
+                                        className=" cursor-pointer  left-1/4 rounded-xl w-1/2 bg-[#FFEED4] border-[#ff9900] border-solid border-[1px] text-[#ff9900]  p-4  absolute top-0 mt-1"
+                                    >
+                                        Sample data has been loaded. Please
+                                        purge it before adding your data.{' '}
+                                    </p>
+                                )}
+
                                 {children}
                             </>
                         </div>

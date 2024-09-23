@@ -8,6 +8,7 @@ import {
     MultiSelect,
     MultiSelectItem,
     Text,
+    TextInput,
 } from '@tremor/react'
 import { ChevronDoubleDownIcon, TrashIcon } from '@heroicons/react/24/outline'
 import dayjs from 'dayjs'
@@ -33,6 +34,7 @@ interface IMemberDetails {
 export default function MemberDetails({ user, close }: IMemberDetails) {
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
     const [role, setRole] = useState<string>(user?.roleName || 'viewer')
+    const [password, setPassword] = useState<string>('')
     const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
         'viewer'
     )
@@ -47,9 +49,9 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
         sendNow: updateRole,
     } = useAuthApiV1UserRoleBindingUpdate(
         {
-            userId: user?.userId || '',
-            roleName: roleValue,
-            connectionIDs: scopedConnectionIDs,
+            email_address: user?.email || '',
+            role: roleValue,
+           
         },
         {},
         false
@@ -60,13 +62,10 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
         isLoading: deleteLoading,
         sendNow: deleteRole,
     } = useAuthApiV1UserRoleBindingDelete(
-        { userId: user?.userId || '' },
+        user?.email || '',
         {},
         false
     )
-
-    const { response: connectionList, isLoading: isConnectionListLoading } =
-        useIntegrationApiV1ConnectionsSummariesList()
 
     useEffect(() => {
         if (role === 'viewer' || role === 'editor' || role === 'admin') {
@@ -188,6 +187,27 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                             </ListItem>
                         )
                     })}
+                    {/* <ListItem key="password">
+                        <Flex
+                            justifyContent="between"
+                            className="truncate space-x-4 py-2"
+                        >
+                            <Text className="font-medium text-gray-800">
+                                Password
+                                <span className="text-red-600 font-semibold">
+                                    *
+                                </span>
+                            </Text>
+                            <TextInput
+                                type="password"
+                                placeholder="password"
+                                className="font-medium w-1/2 text-gray-800"
+                                onChange={(e) => {
+                                    setPassword(e.target.value)
+                                }}
+                            />
+                        </Flex>
+                    </ListItem> */}
                     <ListItem key="item" className="py-4">
                         <Flex
                             justifyContent="between"

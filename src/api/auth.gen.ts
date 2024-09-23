@@ -981,9 +981,7 @@ interface IuseAuthApiV1UserRoleBindingDeleteState {
  * URL:
  */
 export const useAuthApiV1UserRoleBindingDelete = (
-    query: {
-        userId: string
-    },
+    email: string,
     params: RequestParams = {},
     autoExecute = true,
     overwriteWorkspace: string | undefined = undefined
@@ -1001,14 +999,12 @@ export const useAuthApiV1UserRoleBindingDelete = (
         }
     )
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
+        JSON.stringify([params, autoExecute])
     )
 
     const sendRequest = (
         abortCtrl: AbortController,
-        reqquery: {
-            userId: string
-        },
+        reqemail: string,
         reqparams: RequestParams
     ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
@@ -1032,7 +1028,7 @@ export const useAuthApiV1UserRoleBindingDelete = (
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.auth
-                .apiV1UserRoleBindingDelete(reqquery, reqparamsSignal)
+                .apiV1UserRoleBindingDelete(reqemail, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1068,8 +1064,8 @@ export const useAuthApiV1UserRoleBindingDelete = (
         }
     }
 
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1077,7 +1073,7 @@ export const useAuthApiV1UserRoleBindingDelete = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController, query, params)
+            sendRequest(newController, email, params)
         }
     }, [lastInput])
 
@@ -1089,19 +1085,14 @@ export const useAuthApiV1UserRoleBindingDelete = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController, query, params)
+        sendRequest(newController, email, params)
     }
 
-    const sendNowWithParams = (
-        reqquery: {
-            userId: string
-        },
-        reqparams: RequestParams
-    ) => {
+    const sendNowWithParams = (reqemail: string, reqparams: RequestParams) => {
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController, reqquery, reqparams)
+        sendRequest(newController, reqemail, reqparams)
     }
 
     return {

@@ -36,7 +36,7 @@ export default function MemberInvite({ close }: MemberInviteProps) {
         error,
         sendNow: createInvite,
     } = useAuthApiV1UserInviteCreate(
-        { email: email || '', roleName: roleValue },
+        { email_address: email || '', role: roleValue ,password: password },
         {},
         false
     )

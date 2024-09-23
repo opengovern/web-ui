@@ -1,35 +1,95 @@
+// @ts-nocheck
 import { Button, Card, Flex, Grid, Tab, TabGroup, TabList, Text, Title } from '@tremor/react'
-import { useState } from 'react'
-import { ChevronLeftIcon, ChevronRightIcon, DocumentTextIcon, PlusIcon } from '@heroicons/react/24/outline'
+
+import { useEffect, useState } from 'react'
+import { ArrowDownIcon, ChevronLeftIcon, ChevronRightIcon, DocumentTextIcon, PlusIcon } from '@heroicons/react/24/outline'
 import ConnectorCard from '../../components/Cards/ConnectorCard'
 import Spinner from '../../components/Spinner'
 import { useIntegrationApiV1ConnectorsList } from '../../api/integration.gen'
 import TopHeader from '../../components/Layout/Header'
 
 export default function Integrations() {
-    const [pageNo, setPageNo] = useState<number>(0)
-    const { response: responseConnectors, isLoading: connectorsLoading } =
-        useIntegrationApiV1ConnectorsList()
+    const [pageNo, setPageNo] = useState<number>(1)
+    const {
+        response: responseConnectors,
+        isLoading: connectorsLoading,
+        sendNow: getList,
+    } = useIntegrationApiV1ConnectorsList(9, pageNo)
 
-    const connectorList = (
-        Array.isArray(responseConnectors) ? responseConnectors : []
-    ).sort((a, b) => ((a.label || '') > (b.label || '') ? 1 : -1))
+    const connectorList = // @ts-ignore
+        (
+            Array.isArray(responseConnectors?.connectors)
+                ? responseConnectors.connectors
+                : []
+        ).sort((a, b) => ((a.label || '') > (b.label || '') ? 1 : -1))
+    // @ts-ignore
 
-    const availableConnectors = connectorList?.filter(
-        (f) => (f.connection_count || 0) === 0
-    )
-    const installedConnectors = connectorList?.filter(
-        (f) =>
-            (f.connection_count || 0) > 0 ||
-            f.name === 'AWS' ||
-            f.name === 'Azure' ||
-            f.name === 'EntraID'
-    )
-    const totalPages = availableConnectors.length / 9
-    const availableConnectorsPage = availableConnectors.slice(
-        pageNo * 9,
-        (pageNo + 1) * 9
-    )
+    function classNames(...classes) {
+        return classes.filter(Boolean).join(' ')
+    }
+    // @ts-ignore
+
+    const MobileButton = ({ onClick, disabled, children, position }) => {
+        return (
+            <button
+                type="button"
+                className={classNames(
+                    'group p-2 text-tremor-default ring-1 ring-inset ring-tremor-ring hover:bg-tremor-background-muted disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-tremor-background dark:ring-dark-tremor-ring hover:dark:bg-dark-tremor-background disabled:hover:dark:bg-dark-tremor-background',
+                    position === 'left'
+                        ? 'rounded-l-tremor-small'
+                        : position === 'right'
+                        ? '-ml-px rounded-r-tremor-small'
+                        : ''
+                )}
+                onClick={onClick}
+                disabled={disabled}
+            >
+                {children}
+            </button>
+        )
+    }
+    // @ts-ignore
+    const TextButton = ({ onClick, disabled, children }) => {
+        return (
+            <button
+                type="button"
+                className="group rounded-tremor-small bg-tremor-background p-2 text-tremor-default shadow-tremor-input ring-1 ring-inset ring-tremor-ring hover:bg-tremor-background-muted disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-tremor-background dark:bg-dark-tremor-background dark:shadow-dark-tremor-input dark:ring-dark-tremor-ring hover:dark:bg-dark-tremor-background-muted disabled:hover:dark:bg-dark-tremor-background"
+                onClick={onClick}
+                disabled={disabled}
+            >
+                {children}
+            </button>
+        )
+    }
+    // @ts-ignore
+    const NumberButton = ({ active, onClick, children, position }) => {
+        return (
+            // @ts-ignore
+            <button
+                type="button"
+                className={classNames(
+                    'min-w-[36px] rounded-tremor-small p-2 text-tremor-default text-tremor-content-strong disabled:opacity-50 dark:text-dark-tremor-content-strong',
+                    active
+                        ? 'bg-tremor-brand font-semibold text-white dark:bg-dark-tremor-brand dark:text-dark-tremor-brand-inverted'
+                        : 'hover:bg-tremor-background-muted hover:dark:bg-dark-tremor-background',
+                    position === 'left'
+                        ? 'rounded-l-tremor-small'
+                        : position === 'right'
+                        ? 'rounded-r-tremor-small'
+                        : ''
+                )}
+                onClick={onClick}
+                aria-current={classNames(active ? 'Page' : '')}
+            >
+                {children}
+            </button>
+        )
+    }
+    //@ts-ignore
+    const totalPages = Math.ceil(responseConnectors?.total_count / 9)
+    useEffect(() => {
+        getList(9, pageNo)
+    }, [pageNo])
     return (
         <>
             {/* <TopHeader /> */}
@@ -146,34 +206,34 @@ export default function Integrations() {
                                                 (connector, index) => {
                                                     return (
                                                         <>
-                                                            {index < 12 && (
-                                                                <>
-                                                                    <ConnectorCard
-                                                                        connector={
-                                                                            connector.name
-                                                                        }
-                                                                        title={
-                                                                            connector.label
-                                                                        }
-                                                                        status={
-                                                                            connector.status
-                                                                        }
-                                                                        count={
-                                                                            connector.connection_count
-                                                                        }
-                                                                        description={
-                                                                            connector.description
-                                                                        }
-                                                                        tier={
-                                                                            connector.tier
-                                                                        }
-                                                                        logo={connector.logo}
-                                                                        // logo={
-                                                                        //     'https://raw.githubusercontent.com/kaytu-io/website/main/connectors/icons/azure.svg'
-                                                                        // }
-                                                                    />
-                                                                </>
-                                                            )}
+                                                            <>
+                                                                <ConnectorCard
+                                                                    connector={
+                                                                        connector.name
+                                                                    }
+                                                                    title={
+                                                                        connector.label
+                                                                    }
+                                                                    status={
+                                                                        connector.status
+                                                                    }
+                                                                    count={
+                                                                        connector.connection_count
+                                                                    }
+                                                                    description={
+                                                                        connector.description
+                                                                    }
+                                                                    tier={
+                                                                        connector.tier
+                                                                    }
+                                                                    logo={
+                                                                        connector.logo
+                                                                    }
+                                                                    // logo={
+                                                                    //     'https://raw.githubusercontent.com/kaytu-io/website/main/connectors/icons/azure.svg'
+                                                                    // }
+                                                                />
+                                                            </>
                                                         </>
                                                     )
                                                 }
@@ -231,41 +291,197 @@ export default function Integrations() {
                             />
                         ))}
                     </Grid> */}
-                    <Flex
-                        flexDirection="row"
-                        alignItems="center"
-                        justifyContent="center"
-                        className="mt-4 space-x-4"
-                    >
-                        <Text className="font-normal">
-                            Page{' '}
-                            <span className="font-extrabold text-black">
-                                {pageNo + 1}
-                            </span>{' '}
-                            out of{' '}
-                            <span className="font-extrabold text-black">
-                                {totalPages}
-                            </span>
-                        </Text>
-                        <Flex flexDirection="row" className="w-fit">
-                            <Button
-                                variant="light"
-                                disabled={pageNo === 0}
+                    <div className="mt-10 w-[90%] flex items-center justify-between sm:justify-center">
+                        {/* long pagination button form only for desktop view */}
+                        <div className="hidden gap-0.5 sm:inline-flex">
+                            <TextButton
                                 onClick={() => setPageNo(pageNo - 1)}
-                                className="px-2 py-2 !text-3xl bg-white border border-gray-300 rounded-l-full"
+                                disabled={pageNo == 1}
+                                className="group"
                             >
-                                <ChevronLeftIcon className="h-4 w-6 text-black" />
-                            </Button>
-                            <Button
-                                variant="light"
-                                disabled={pageNo >= totalPages - 1}
+                                <span className="sr-only">Previous</span>
+                                <ChevronLeftIcon
+                                    className="size-5 text-tremor-content-emphasis group-hover:text-tremor-content-strong dark:text-dark-tremor-content-emphasis group-hover:dark:text-dark-tremor-content-strong"
+                                    aria-hidden={true}
+                                />
+                            </TextButton>
+                            <NumberButton
+                                onClick={() => setPageNo(0)}
+                                active={pageNo === 1}
+                            >
+                                1
+                            </NumberButton>
+                            {pageNo > 4 ? (
+                                pageNo < totalPages - 2 ? (
+                                    <>
+                                        <NumberButton
+                                            onClick={() =>
+                                                setPageNo(pageNo - 3)
+                                            }
+                                            active={false}
+                                        >
+                                            ...
+                                        </NumberButton>
+                                        <NumberButton
+                                            onClick={() =>
+                                                setPageNo(pageNo - 1)
+                                            }
+                                            active={pageNo === pageNo - 1}
+                                        >
+                                            {pageNo - 1}
+                                        </NumberButton>
+                                        <NumberButton
+                                            onClick={() => setPageNo(pageNo)}
+                                            active={true}
+                                        >
+                                            {pageNo}
+                                        </NumberButton>
+                                        <NumberButton
+                                            onClick={() =>
+                                                setPageNo(pageNo + 1)
+                                            }
+                                            active={pageNo === pageNo + 1}
+                                        >
+                                            {pageNo + 1}
+                                        </NumberButton>
+                                        <NumberButton
+                                            onClick={() =>
+                                                setPageNo(pageNo + 1)
+                                            }
+                                            active={false}
+                                        >
+                                            ...
+                                        </NumberButton>
+                                    </>
+                                ) : (
+                                    <>
+                                        <NumberButton
+                                            onClick={() => setPageNo(2)}
+                                            active={false}
+                                        >
+                                            2
+                                        </NumberButton>
+                                        <NumberButton
+                                            onClick={() =>
+                                                setPageNo(totalPages - 4)
+                                            }
+                                            active={false}
+                                        >
+                                            ...
+                                        </NumberButton>
+                                        <NumberButton
+                                            onClick={() =>
+                                                setPageNo(totalPages - 3)
+                                            }
+                                            active={pageNo === totalPages - 3}
+                                        >
+                                            {totalPages - 3}
+                                        </NumberButton>
+                                        <NumberButton
+                                            onClick={() =>
+                                                setPageNo(totalPages - 2)
+                                            }
+                                            active={pageNo === totalPages - 2}
+                                        >
+                                            {totalPages - 2}
+                                        </NumberButton>
+                                        <NumberButton
+                                            onClick={() =>
+                                                setPageNo(totalPages - 1)
+                                            }
+                                            active={pageNo === totalPages - 1}
+                                        >
+                                            {totalPages - 1}
+                                        </NumberButton>
+                                    </>
+                                )
+                            ) : (
+                                <>
+                                    <NumberButton
+                                        onClick={() => setPageNo(2)}
+                                        active={pageNo === 2}
+                                    >
+                                        2
+                                    </NumberButton>
+                                    <NumberButton
+                                        onClick={() => setPageNo(3)}
+                                        active={pageNo === 3}
+                                    >
+                                        3
+                                    </NumberButton>
+                                    <NumberButton
+                                        onClick={() => setPageNo(4)}
+                                        active={pageNo === 4}
+                                    >
+                                        4
+                                    </NumberButton>
+                                    <NumberButton
+                                        onClick={() => setPageNo(5)}
+                                        active={false}
+                                    >
+                                        ...
+                                    </NumberButton>
+                                    <NumberButton
+                                        onClick={() => setPageNo(pageNo - 1)}
+                                        active={false}
+                                    >
+                                        {totalPages - 1}
+                                    </NumberButton>
+                                </>
+                            )}
+                            <NumberButton
+                                onClick={() => setPageNo(totalPages)}
+                                active={pageNo === totalPages}
+                            >
+                                {totalPages}
+                            </NumberButton>
+                            <TextButton
                                 onClick={() => setPageNo(pageNo + 1)}
-                                className="px-2 py-2 !text-3xl bg-white border border-gray-300 rounded-r-full"
+                                disabled={pageNo == totalPages}
+                                className="group"
                             >
-                                <ChevronRightIcon className="h-4 w-6 text-black" />
-                            </Button>
-                        </Flex>
-                    </Flex>
+                                <span className="sr-only">Next</span>
+                                <ChevronRightIcon
+                                    className="size-5 text-tremor-content-emphasis group-hover:text-tremor-content-strong dark:text-dark-tremor-content-emphasis group-hover:dark:text-dark-tremor-content-strong"
+                                    aria-hidden={true}
+                                />
+                            </TextButton>
+                        </div>
+                        <p className="text-tremor-default tabular-nums text-tremor-content dark:text-dark-tremor-content sm:hidden">
+                            Page of{' '}
+                            <span className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">{`${pageNo}`}</span>{' '}
+                            of
+                            <span className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
+                                {' '}
+                                {`${totalPages}`}
+                            </span>
+                        </p>
+                        {/*  */}
+                        <div className="inline-flex items-center rounded-tremor-small shadow-tremor-input dark:shadow-dark-tremor-input sm:hidden">
+                            <MobileButton
+                                position="left"
+                                onClick={() => setPageNo(pageNo - 1)}
+                                disabled={pageNo == 1}
+                            >
+                                <span className="sr-only">Previous</span>
+                                <ChevronLeftIcon
+                                    className="size-5 text-tremor-content-emphasis group-hover:text-tremor-content-strong dark:text-dark-tremor-content-emphasis group-hover:dark:text-dark-tremor-content-strong"
+                                    aria-hidden={true}
+                                />
+                            </MobileButton>
+                            <MobileButton
+                                position="right"
+                                onClick={() => setPageNo(pageNo + 1)}
+                                disabled={pageNo === totalPages}
+                            >
+                                <span className="sr-only">Next</span>
+                                <ChevronRightIcon
+                                    className="size-5 text-tremor-content-emphasis group-hover:text-tremor-content-strong dark:text-dark-tremor-content-emphasis group-hover:dark:text-dark-tremor-content-strong"
+                                    aria-hidden={true}
+                                />
+                            </MobileButton>
+                        </div>
+                    </div>
                 </>
             )}
         </>

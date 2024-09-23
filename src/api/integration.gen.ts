@@ -17,6 +17,7 @@ import {
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics,
     RequestParams,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorResponse,
 } from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
@@ -1029,7 +1030,7 @@ export const useIntegrationApiV1ConnectionsAzureHealthcheckDetail = (
 interface IuseIntegrationApiV1ConnectorsListState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount[]
+    response?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorResponse
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
@@ -1038,6 +1039,8 @@ interface IuseIntegrationApiV1ConnectorsListState {
  * URL:
  */
 export const useIntegrationApiV1ConnectorsList = (
+    perPage: number,
+    cursor: number,
     params: RequestParams = {},
     autoExecute = true,
     overwriteWorkspace: string | undefined = undefined
@@ -1059,6 +1062,8 @@ export const useIntegrationApiV1ConnectorsList = (
     )
 
     const sendRequest = (
+        reqperPage: number,
+        reqcursor: number,
         abortCtrl: AbortController,
         reqparams: RequestParams
     ) => {
@@ -1083,7 +1088,7 @@ export const useIntegrationApiV1ConnectorsList = (
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.integration
-                .apiV1ConnectorsList(reqparamsSignal)
+                .apiV1ConnectorsList(reqperPage, reqcursor, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1128,7 +1133,7 @@ export const useIntegrationApiV1ConnectorsList = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController, params)
+            sendRequest(perPage, cursor, newController, params)
         }
     }, [lastInput])
 
@@ -1136,18 +1141,22 @@ export const useIntegrationApiV1ConnectorsList = (
     const { isLoading } = state
     const { isExecuted } = state
     const { error } = state
-    const sendNow = () => {
+    const sendNow = (reqperPage: number, reqCursor: number) => {
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController, params)
+        sendRequest(reqperPage, reqCursor, newController, params)
     }
 
-    const sendNowWithParams = (reqparams: RequestParams) => {
+    const sendNowWithParams = (
+        reqPerPage: number,
+        reqCursor: number,
+        reqparams: RequestParams
+    ) => {
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController, reqparams)
+        sendRequest(reqPerPage, reqCursor, newController, reqparams)
     }
 
     return {

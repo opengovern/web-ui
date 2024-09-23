@@ -345,7 +345,7 @@ export default function ConnectorCard({
                 {tier ==
                     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier.TierEnterprise && (
                     <>
-                        <p className="coming-soon"> COMING SOON </p>
+                        <p className="coming-soon"> ENTERPRISE </p>
                         <p
                             className="add-btn "
                         >

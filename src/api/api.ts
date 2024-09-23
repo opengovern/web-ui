@@ -265,12 +265,13 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest {
      * User email address
      * @example "johndoe@example.com"
      */
-    email: string
+    email_address: string
     /**
      * Name of the role
      * @example "admin"
      */
-    roleName?: 'admin' | 'editor' | 'viewer'
+    role?: 'admin' | 'editor' | 'viewer'
+    password: string
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgAuthApiInviteStatus {
@@ -280,17 +281,20 @@ export enum GithubComKaytuIoKaytuEnginePkgAuthApiInviteStatus {
 
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest {
     /** Name of the role */
-    connectionIDs?: string[]
+    // connectionIDs?: string[]
+    email_address: string
+
     /**
      * Name of the role
      * @example "admin"
      */
-    roleName: 'admin' | 'editor' | 'viewer'
+    role: 'admin' | 'editor' | 'viewer'
     /**
      * Unique identifier for the User
      * @example "auth|123456789"
      */
-    userId: string
+    // password: string
+    // userId: string
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgAuthApiTheme {
@@ -2330,6 +2334,10 @@ export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnecto
     tier?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier
 }
 
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorResponse {
+    total_count: number
+    connectors: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount[]
+}
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCountConnectionsResponse {
     count?: number
 }
@@ -4155,7 +4163,7 @@ export class Api<
          * @tags users
          * @name ApiV1UserInviteCreate
          * @summary Invite User
-         * @request POST:/auth/api/v1/user/invite
+         * @request POST:/auth/api/v3/user/create
          * @secure
          */
         apiV1UserInviteCreate: (
@@ -4163,7 +4171,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
-                path: `/auth/api/v1/user/invite`,
+                path: `/auth/api/v3/user/create`,
                 method: 'POST',
                 body: request,
                 secure: true,
@@ -4199,7 +4207,7 @@ export class Api<
          * @tags users
          * @name ApiV1UserRoleBindingUpdate
          * @summary Update User Role
-         * @request PUT:/auth/api/v1/user/role/binding
+         * @request PUT: /auth/api/v3/user/update
          * @secure
          */
         apiV1UserRoleBindingUpdate: (
@@ -4207,8 +4215,8 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
-                path: `/auth/api/v1/user/role/binding`,
-                method: 'PUT',
+                path: `/auth/api/v3/user/update`,
+                method: 'POST',
                 body: request,
                 secure: true,
                 type: ContentType.Json,
@@ -4225,16 +4233,17 @@ export class Api<
          * @secure
          */
         apiV1UserRoleBindingDelete: (
-            query: {
-                /** User ID */
-                userId: string
-            },
+            // query: {
+            //     /** User ID */
+            //     userId: string
+            // },
+            email: string,
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
-                path: `/auth/api/v1/user/role/binding`,
+                path: `/auth/api/v3/user/${email}/delete`,
                 method: 'DELETE',
-                query: query,
+                // query: query,
                 secure: true,
                 ...params,
             }),
@@ -5668,12 +5677,16 @@ export class Api<
          * @request GET:/integration/api/v1/connectors
          * @secure
          */
-        apiV1ConnectorsList: (params: RequestParams = {}) =>
+        apiV1ConnectorsList: (
+            per_page: number,
+            cursor: number,
+            params: RequestParams = {}
+        ) =>
             this.request<
-                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount[],
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorResponse,
                 any
             >({
-                path: `/integration/api/v1/connectors`,
+                path: `/onboard/api/v3/connector?per_page=${per_page}&cursor=${cursor}`,
                 method: 'GET',
                 secure: true,
                 format: 'json',
@@ -7891,6 +7904,50 @@ export class Api<
                 path: `/workspace/api/v1/workspaces/limits/${workspaceName}`,
                 method: 'GET',
                 query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+        /**
+         * No Load sample data
+         *
+         * @tags workspace
+         * @name ApiV3LoadSampleData
+         * @summary Get workspace limits
+         * @request PUT:/workspace/api/v3/sample/sync
+         * @secure
+         */
+        apiV3LoadSampleData: (data: any, params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+                any
+            >({
+                path: `/workspace/api/v3/sample/sync`,
+                method: 'PUT',
+                // query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+        /**
+         * No Purge sample data
+         *
+         * @tags workspace
+         * @name ApiV3PurgeSampleData
+         * @summary Get workspace limits
+         * @request PUT:/workspace/api/v3/sample/purge
+         * @secure
+         */
+        apiV3PurgeSampleData: (data: any, params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+                any
+            >({
+                path: `/workspace/api/v3/sample/purge`,
+                method: 'PUT',
+                // query: query,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',

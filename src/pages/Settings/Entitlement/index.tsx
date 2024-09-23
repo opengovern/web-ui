@@ -22,13 +22,15 @@ import { useEffect, useState } from 'react'
 import {
     useWorkspaceApiV1WorkspaceCurrentList,
     useWorkspaceApiV1WorkspacesLimitsDetail,
+    useWorkspaceApiV3LoadSampleData,
+    useWorkspaceApiV3PurgeSampleData,
 } from '../../../api/workspace.gen'
 import Spinner from '../../../components/Spinner'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { useAuthApiV1UserDetail } from '../../../api/auth.gen'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import { GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier } from '../../../api/api'
-import {  previewAtom } from '../../../store'
+import {  isDemoAtom, previewAtom } from '../../../store'
 import {
     useMetadataApiV1MetadataCreate,
     useMetadataApiV1MetadataDetail,
@@ -135,7 +137,7 @@ export default function SettingsEntitlement() {
     const currentUsers = response?.currentUsers || 0
     const currentConnections = response?.currentConnections || 0
     const currentResources = response?.currentResources || 0
-
+    const setDemo = useSetAtom(isDemoAtom)
     const maxUsers = response?.maxUsers || 1
     const maxConnections = response?.maxConnections || 1
     const maxResources = response?.maxResources || 1
@@ -216,6 +218,22 @@ export default function SettingsEntitlement() {
            sendNow: runSync,
        } = useComplianceApiV1QueriesSyncList({}, {}, false)
 
+     const {
+         isExecuted,
+         isLoading: isLoadingLoad,
+         error,
+         sendNow: loadData,
+     } = useWorkspaceApiV3LoadSampleData(
+       
+         {},
+         false
+     )
+      const {
+          isExecuted: isExecPurge,
+          isLoading: isLoadingPurge,
+          error: errorPurge,
+          sendNow: PurgeData,
+      } = useWorkspaceApiV3PurgeSampleData({}, false)
 
     return isLoading || loadingCurrentWS || ownerIsLoading ? (
         <Flex justifyContent="center" className="mt-56">
@@ -379,7 +397,10 @@ export default function SettingsEntitlement() {
                             variant="secondary"
                             className="ml-2"
                             loading={syncExecuted && syncLoading}
-                            onClick={() => runSync()}
+                            onClick={() => {
+                                loadData()
+                                setDemo(true)
+                            }}
                         >
                             Load Sample Data
                         </Button>
@@ -387,7 +408,10 @@ export default function SettingsEntitlement() {
                             variant="secondary"
                             className=""
                             loading={syncExecuted && syncLoading}
-                            onClick={() => runSync()}
+                            onClick={() => {
+                                PurgeData()
+                                setDemo(false)
+                            }}
                         >
                            Purge Sample Data
                         </Button>
