@@ -95,7 +95,7 @@ export default function Shortcuts() {
                                         className='bg-[#1164D9] rounded-[50%] p-1'
                                         src={nav.icon}
                                     />
-                                    <Text className="text-xl font-semibold text-gray-900 dark:text-gray-50  flex flex-row items-center gap-3">
+                                    <Text className="text-l font-semibold text-gray-900 dark:text-gray-50  flex flex-row items-center gap-2">
                                         {nav.title}
                                         <ChevronRightIcon className="p-0 w-5 h-5 mt-1" />
                                     </Text>
