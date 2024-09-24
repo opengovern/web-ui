@@ -44,6 +44,7 @@ import NewBenchmarkSummary from '../pages/Governance/Compliance/NewBenchmarkSumm
 import Dashboard from '../pages/Dashboard'
 import Library from '../pages/Governance/Compliance/Library'
 import Search from '../pages/Search'
+import Test from '../pages/Test'
 
 const authRoutes = [
     {
@@ -424,6 +425,11 @@ const authRoutes = [
         path: '/ws/:ws/search',
         element: <Search />,
     },
+    // {
+    //     key: 'test',
+    //     path: '/ws/:ws/test',
+    //     element: <Test />,
+    // },
 ]
 
 export default function Router() {

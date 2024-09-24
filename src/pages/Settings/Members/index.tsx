@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useAuthApiV1WorkspaceRoleBindingsList } from '../../../api/auth.gen'
@@ -12,6 +12,7 @@ import {
     shortDateTimeDisplay,
 } from '../../../utilities/dateDisplay'
 import TopHeader from '../../../components/Layout/Header'
+import { useSearchParams } from 'react-router-dom'
 
 const fixRole = (role: string) => {
     switch (role) {
@@ -44,7 +45,21 @@ export default function SettingsMembers() {
         setDrawerParam('openInviteMember')
         setDrawerOpen(true)
     }
+    const [searchParams, setSearchParams] = useSearchParams()
+    const [show, setShow] = useState<boolean>(false)
 
+    useEffect(() => {
+        const tab_id = searchParams.get('action')
+        switch (tab_id) {
+            case 'invite':
+                setDrawerParam('openInviteMember')
+                setDrawerOpen(true)
+                break
+
+            default:
+                break
+        }
+    }, [searchParams])
     return isLoading ? (
         <Flex justifyContent="center" className="mt-56">
             <Spinner />

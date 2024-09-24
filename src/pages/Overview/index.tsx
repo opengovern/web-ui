@@ -8,6 +8,7 @@ import { defaultHomepageTime } from '../../utilities/urlstate'
 import Query from './Query'
 import SummaryCard from '../../components/Cards/SummaryCard'
 import QuickNav from './QuickNav'
+import Shortcuts from './Shortcuts'
 export default function Overview() {
     const { ws } = useParams()
     const element = document.getElementById('myDIV')?.offsetHeight
@@ -55,7 +56,8 @@ export default function Overview() {
             <Grid numItems={6} className="w-full gap-4 h-fit mb-7">
                 <Col numColSpan={6}>
                     {/* <ScoreKPIs /> */}
-                    <QuickNav />
+                    {/* <QuickNav /> */}
+                    <Shortcuts />
                 </Col>
             </Grid>
 
