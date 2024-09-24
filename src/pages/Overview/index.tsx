@@ -54,15 +54,9 @@ export default function Overview() {
                 </Col>
             </Grid> */}
             <Grid numItems={6} className="w-full gap-4 h-fit mb-7">
-                <Col numColSpan={6}>
+                <Col numColSpan={4}>
                     {/* <ScoreKPIs /> */}
                     {/* <QuickNav /> */}
-                    <Shortcuts />
-                </Col>
-            </Grid>
-
-            <Grid numItems={6} className="w-full gap-7 h-fit">
-                <Col numColSpan={4}>
                     <Flex
                         flexDirection="col"
                         alignItems="start"
@@ -70,6 +64,9 @@ export default function Overview() {
                         id="myDIV"
                     >
                         <Grid numItems={6} className="w-full gap-4 h-fit mb-4">
+                            <Col numColSpan={6}>
+                                <Shortcuts />
+                            </Col>
                             <Col numColSpan={6}>
                                 <ScoreKPIs />
                                 {/* <QuickNav /> */}
@@ -83,6 +80,7 @@ export default function Overview() {
                     <Query height={800} />
                 </Col>
             </Grid>
+
             {/* <Grid numItems={6} className="w-full gap-6 h-fit mt-4">
                
                 

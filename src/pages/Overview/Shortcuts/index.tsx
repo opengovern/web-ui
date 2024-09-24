@@ -42,18 +42,18 @@ const navList = [
     {
         title: 'Inventory',
         description:
-            'From Code to cloud, see all everything across your landscape',
+            'From Code to cloud',
         icon: Cube,
         link: 'dashboard/infrastructure',
         new: true,
     },
-    {
-        title: 'Spend',
-        description: 'See Cloud Spend across clouds, regions, and accounts',
-        icon: Dollar,
-        new: false,
-        link: 'dashboard/spend-accounts',
-    },
+    // {
+    //     title: 'Spend',
+    //     description: 'See Cloud Spend across clouds, regions, and accounts',
+    //     icon: Dollar,
+    //     new: false,
+    //     link: 'dashboard/spend-accounts',
+    // },
 
     // {
     //     title: 'Insights',
@@ -77,24 +77,27 @@ export default function Shortcuts() {
                 <Icon icon={CursorArrowRaysIcon} className="p-0" />
                 <Title className="font-semibold">Shortcuts</Title>
             </Flex>
-            <Grid numItems={5} className="w-full mb-4 gap-4">
+            <Grid numItems={4} className="w-full mb-4 gap-4">
                 {navList.map((nav, i) => (
                     <>
                         <a
                             href={`/ws/${workspace}/${nav.link}`}
                             target={nav.new ? '_blank' : '_self'}
                         >
-                            <Card className=" bg-[#F6F8FC] cursor-pointer h-40">
+                            <Card className="  cursor-pointer  min-h-[140px] pt-3 pb-3 hover:bg-gray-50 hover:dark:bg-gray-900">
                                 <Flex
                                     flexDirection="col"
                                     justifyContent="start"
                                     alignItems="start"
                                     className="gap-2"
                                 >
-                                    <img src={nav.icon} />
-                                    <Text className="font-semibold flex flex-row items-center">
+                                    <img
+                                        className='bg-[#1164D9] rounded-[50%] p-1'
+                                        src={nav.icon}
+                                    />
+                                    <Text className="text-xl font-semibold text-gray-900 dark:text-gray-50  flex flex-row items-center gap-3">
                                         {nav.title}
-                                        <ChevronRightIcon className="p-0 w-3 h-3" />
+                                        <ChevronRightIcon className="p-0 w-5 h-5 mt-1" />
                                     </Text>
                                     <Text className="text-sm">
                                         {nav.description}
