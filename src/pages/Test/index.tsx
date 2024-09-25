@@ -17,7 +17,7 @@ import Integrations from './stepComponents/step2'
 import Complete from './stepComponents/step3'
 
 export default () => {
-    const [activeStepIndex, setActiveStepIndex] = useState<number>(1)
+    const [activeStepIndex, setActiveStepIndex] = useState<number>(0)
     const [loading, setLoading] = useState<boolean>(true)
     return (
         <Card className="flex justify-center items-center wizard-card w-full">
