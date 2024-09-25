@@ -27,6 +27,7 @@ interface IConnectorCard {
     description: string | undefined
     tier?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier
     logo?: string
+    onClickCard?: Function
 }
 export const getConnectorsIcon = (connector: SourceType[], className = '') => {
     if (connector?.length >= 2) {
@@ -119,6 +120,7 @@ export default function ConnectorCard({
     description,
     tier,
     logo,
+    onClickCard,
 }: IConnectorCard) {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
@@ -140,6 +142,12 @@ export default function ConnectorCard({
         if (status === 'enabled' && (count || 0) > 0) {
             navigate(`${connector}?${searchParams}`)
             return
+        }
+        if (status === 'first-time') {
+            if (onClickCard) {
+                onClickCard()
+                return
+            }
         }
         if (
             tier ===
@@ -309,8 +317,8 @@ export default function ConnectorCard({
                         </>
                     )} */}
                 </Flex>
-                <button className="integration-button " onClick={onClick}>
-                    {count !== 0 && (
+                {count !== 0 && (
+                    <button className="integration-button " onClick={onClick}>
                         <>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -340,17 +348,13 @@ export default function ConnectorCard({
                             </svg>
                             {count}
                         </>
-                    )}
-                </button>
+                    </button>
+                )}
                 {tier ==
                     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier.TierEnterprise && (
                     <>
                         <p className="coming-soon"> ENTERPRISE </p>
-                        <p
-                            className="add-btn "
-                        >
-                           +
-                        </p>
+                        <p className="add-btn ">+</p>
                     </>
                 )}
             </Card>

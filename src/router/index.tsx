@@ -425,11 +425,11 @@ const authRoutes = [
         path: '/ws/:ws/search',
         element: <Search />,
     },
-    // {
-    //     key: 'test',
-    //     path: '/ws/:ws/test',
-    //     element: <Test />,
-    // },
+    {
+        key: 'test',
+        path: '/ws/:ws/test',
+        element: <Test />,
+    },
 ]
 
 export default function Router() {
