@@ -27,7 +27,7 @@ import {
     TextContent,
     Link,
 } from '@cloudscape-design/components'
-import { link } from 'fs'
+import { access, link } from 'fs'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import ReactMarkdown from 'react-markdown'
@@ -43,11 +43,22 @@ export default function Integrations({ setLoading }: Props) {
     const navigate = useNavigate()
     const [connection, setConnection] = useState('aws')
     const [dataType, setDataType] = useState('manual')
-    const [awsData, setAwsData] = useState()
-    const [azureData, setAzureData] = useState()
+    const [awsData, setAwsData] = useState({
+        accessKey: '',
+        accessSecret: '',
+        role: '',
+    })
+    const [azureData, setAzureData] = useState(
+        {
+            applicationId: '',
+            objectId: '',
+            directoryId: '',
+            secretValue: '',
+        }
+    )
 
     useEffect(() => {
-        setLoading(true)
+        setLoading(false)
     }, [])
     return (
         <>
@@ -194,16 +205,37 @@ export default function Integrations({ setLoading }: Props) {
                                             <Input
                                                 className="w-2/3"
                                                 placeholder="Access Key "
+                                                value={awsData.accessKey}
+                                                onChange={({ detail }) =>
+                                                    setAwsData({
+                                                        ...awsData,
+                                                        accessKey: detail.value,
+                                                    })
+                                                }
                                             />
                                             {/* @ts-ignore */}
                                             <Input
                                                 className="w-2/3"
                                                 placeholder="Access Secret"
+                                                value={awsData.accessSecret}
+                                                onChange={({ detail }) =>
+                                                    setAwsData({
+                                                        ...awsData,
+                                                        accessSecret: detail.value,
+                                                    })
+                                                }
                                             />
                                             {/* @ts-ignore */}
                                             <Input
                                                 className="w-2/3"
                                                 placeholder="Role"
+                                                value={awsData.role}
+                                                onChange={({ detail }) =>
+                                                    setAwsData({
+                                                        ...awsData,
+                                                        role: detail.value,
+                                                    })
+                                                }
                                             />
                                         </Flex>
                                     </FormField>
@@ -237,21 +269,49 @@ export default function Integrations({ setLoading }: Props) {
                                             <Input
                                                 className="w-2/3"
                                                 placeholder="Application (client) ID "
+                                                value={azureData.applicationId}
+                                                onChange={({ detail }) =>
+                                                    setAzureData({
+                                                        ...azureData,
+                                                        applicationId: detail.value,
+                                                    })
+                                                }
                                             />
                                             {/* @ts-ignore */}
                                             <Input
                                                 className="w-2/3"
                                                 placeholder="Object ID"
+                                                value={azureData.objectId}
+                                                onChange={({ detail }) =>
+                                                    setAzureData({
+                                                        ...azureData,
+                                                        objectId: detail.value,
+                                                    })
+                                                }
                                             />
                                             {/* @ts-ignore */}
                                             <Input
                                                 className="w-2/3"
                                                 placeholder="Directory (tenant) ID"
+                                                value={azureData.directoryId}
+                                                onChange={({ detail }) =>
+                                                    setAzureData({
+                                                        ...azureData,
+                                                        directoryId: detail.value,
+                                                    })
+                                                }
                                             />
                                             {/* @ts-ignore */}
                                             <Input
                                                 className="w-2/3"
                                                 placeholder="Secret Value"
+                                                value={azureData.secretValue}
+                                                onChange={({ detail }) =>
+                                                    setAzureData({
+                                                        ...azureData,
+                                                        secretValue: detail.value,
+                                                    })
+                                                }
                                             />
                                         </Flex>
                                     </FormField>
