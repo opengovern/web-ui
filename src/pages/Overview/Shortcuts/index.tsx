@@ -23,14 +23,14 @@ const navList = [
         description: 'Setup an integration',
         icon: Cable,
         link: 'integrations',
-        new: false,
+        new: true,
     },
     {
         title: 'Invite',
         description: 'Invite Users',
         icon: User,
         link: 'settings/authentication?action=invite',
-        new: false,
+        new: true,
     },
     {
         title: 'Audit',
@@ -41,8 +41,7 @@ const navList = [
     },
     {
         title: 'Inventory',
-        description:
-            'From Code to cloud',
+        description: 'From Code to cloud',
         icon: Cube,
         link: 'dashboard/infrastructure',
         new: true,

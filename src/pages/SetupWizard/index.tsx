@@ -27,7 +27,7 @@ export default  function SetupWizard () {
     const setNotification = useSetAtom(notificationAtom)
 
     const OnClickNext = (index: number) => {
-        if(index ==1){
+        if(index ==1 || index == 0){
                 setActiveStepIndex(index)
 return;
         }
@@ -90,6 +90,13 @@ return;
                 setActiveStepIndex(index)
             }
         }
+    }
+    const OnSubmitData = () => {
+        console.log(wizardData)
+        setNotification({
+            text: 'User successfully added',
+            type: 'success',
+        })
     }
 
     return (
@@ -155,6 +162,7 @@ return;
                     },
                 ]}
                 isLoadingNextStep={loading}
+                onSubmit={() => OnSubmitData()}
             />
         </Card>
     )

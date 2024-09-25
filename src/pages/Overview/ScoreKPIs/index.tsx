@@ -6,6 +6,7 @@ import {
     Button,
     Grid,
     Subtitle,
+    Card,
 } from '@tremor/react'
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
@@ -20,6 +21,7 @@ import {
 } from '../../../api/api'
 import { useFilterState } from '../../../utilities/urlstate'
 import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
+import KPICard from './KPICard'
 
 function SecurityScore(
     v:
@@ -170,10 +172,26 @@ export default function ScoreKPIs() {
 
     return (
         <>
-            <Grid numItems={3} className="gap-4">
-                {isLoading ? (
-                    <>
-                        <Flex
+            <Card>
+                <div className="flex items-start justify-between">
+                    <span className="text-gray-900 dark:text-gray-500 text-2xl">
+                        Score
+                    </span>
+                </div>
+                <div
+                    className={'h-fit'}
+                    style={{
+                        transitionDuration: '300ms',
+                        animationFillMode: 'backwards',
+                    }}
+                >
+                    <Grid
+                        numItems={3}
+                        className="mt-6 grid grid-cols-1 gap-4 rounded-md bg-gray-50 py-4 dark:bg-gray-900 md:grid-cols-3 md:divide-x md:divide-gray-200 md:dark:divide-gray-800"
+                    >
+                        {isLoading ? (
+                            <>
+                                {/* <Flex
                             flexDirection="col"
                             className="border px-8 py-6 rounded-lg"
                             alignItems="start"
@@ -186,34 +204,34 @@ export default function ScoreKPIs() {
                                 internal policies, vendor recommendations, and
                                 industry standards
                             </Text>
-                        </Flex>
+                        </Flex> */}
 
-                        {[1, 2, 3, 4, 5].map((i) => (
-                            <Flex
-                                alignItems="start"
-                                justifyContent="start"
-                                className="pl-5 pr-8 py-6 rounded-lg bg-white gap-5 shadow-sm hover:shadow-md"
-                            >
-                                <Flex className="relative w-fit">
-                                    <ProgressCircle value={0} size="md">
-                                        <div className="animate-pulse h-8 w-8 my-2 bg-slate-200 dark:bg-slate-700 rounded-full" />
-                                    </ProgressCircle>
-                                </Flex>
+                                {[1, 2, 3, 4, 5].map((i) => (
+                                    <Flex
+                                        alignItems="start"
+                                        justifyContent="start"
+                                        className="pl-5 pr-8 py-6 rounded-lg bg-white gap-5 shadow-sm hover:shadow-md"
+                                    >
+                                        <Flex className="relative w-fit">
+                                            <ProgressCircle value={0} size="md">
+                                                <div className="animate-pulse h-8 w-8 my-2 bg-slate-200 dark:bg-slate-700 rounded-full" />
+                                            </ProgressCircle>
+                                        </Flex>
 
-                                <Flex
-                                    alignItems="start"
-                                    flexDirection="col"
-                                    className="gap-1.5"
-                                >
-                                    <div className="animate-pulse h-3 w-full my-2 bg-slate-200 dark:bg-slate-700 rounded" />
-                                    <div className="animate-pulse h-3 w-full my-2 bg-slate-200 dark:bg-slate-700 rounded" />
-                                </Flex>
-                            </Flex>
-                        ))}
-                    </>
-                ) : (
-                    <>
-                        <Flex
+                                        <Flex
+                                            alignItems="start"
+                                            flexDirection="col"
+                                            className="gap-1.5"
+                                        >
+                                            <div className="animate-pulse h-3 w-full my-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                            <div className="animate-pulse h-3 w-full my-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                        </Flex>
+                                    </Flex>
+                                ))}
+                            </>
+                        ) : (
+                            <>
+                                {/* <Flex
                             flexDirection="col"
                             className="border px-8 py-6 rounded-lg"
                             alignItems="start"
@@ -226,11 +244,78 @@ export default function ScoreKPIs() {
                                 internal policies, vendor recommendations, and
                                 industry standards
                             </Text>
-                        </Flex>
+                        </Flex> */}
 
-                        {categories().map((item) => {
-                            return (
-                                <ScoreCategoryCard
+                                {categories().map((item) => {
+                                    return (
+                                        <>
+                                            <KPICard
+                                                name={item.category}
+                                                number={item.summary
+                                                    .map(
+                                                        (c) =>
+                                                            c
+                                                                .controlsSeverityStatus
+                                                                ?.total
+                                                                ?.passed || 0
+                                                    )
+                                                    .reduce<number>(
+                                                        (prev, curr) =>
+                                                            prev + curr,
+                                                        0
+                                                    )}
+                                                percentage={SecurityScore(
+                                                    item.summary.map(
+                                                        (c) =>
+                                                            c
+                                                                .controlsSeverityStatus
+                                                                ?.total || {}
+                                                    )
+                                                )}
+                                            />
+                                        </>
+                                    )
+                                })}
+                            </>
+                        )}
+                    </Grid>
+                </div>
+            </Card>
+
+            {toErrorMessage(summaryListError) && (
+                <Flex
+                    flexDirection="col"
+                    justifyContent="between"
+                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
+                >
+                    <Flex
+                        flexDirection="col"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <Title className="mt-6">Failed to load component</Title>
+                        <Text className="mt-2">
+                            {toErrorMessage(summaryListError)}
+                        </Text>
+                    </Flex>
+                    <Button
+                        variant="secondary"
+                        className="mb-6"
+                        color="slate"
+                        onClick={() => {
+                            refresh()
+                        }}
+                    >
+                        Try Again
+                    </Button>
+                </Flex>
+            )}
+        </>
+    )
+}
+
+{
+    /* <ScoreCategoryCard
                                     title={item.title || ''}
                                     percentage={SecurityScore(
                                         item.summary.map(
@@ -267,41 +352,5 @@ export default function ScoreKPIs() {
                                     kpiText="Issues"
                                     varient="minimized"
                                     category={item.category}
-                                />
-                            )
-                        })}
-                    </>
-                )}
-            </Grid>
-
-            {toErrorMessage(summaryListError) && (
-                <Flex
-                    flexDirection="col"
-                    justifyContent="between"
-                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
-                >
-                    <Flex
-                        flexDirection="col"
-                        justifyContent="center"
-                        alignItems="center"
-                    >
-                        <Title className="mt-6">Failed to load component</Title>
-                        <Text className="mt-2">
-                            {toErrorMessage(summaryListError)}
-                        </Text>
-                    </Flex>
-                    <Button
-                        variant="secondary"
-                        className="mb-6"
-                        color="slate"
-                        onClick={() => {
-                            refresh()
-                        }}
-                    >
-                        Try Again
-                    </Button>
-                </Flex>
-            )}
-        </>
-    )
+                                /> */
 }
