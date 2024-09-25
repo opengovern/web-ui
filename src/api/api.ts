@@ -7953,5 +7953,43 @@ export class Api<
                 format: 'json',
                 ...params,
             }),
+        /**
+         *  Check user should setup or not
+         *
+         * @tags workspace
+         * @name ApiV3GetSetup
+         * @summary Get workspace limits
+         * @request PUT:/workspace/api/v3/configured/status
+         * @secure
+         */
+        apiV3GetSetup: (data: any, params: RequestParams = {}) =>
+            this.request<string, any>({
+                path: `/workspace/api/v3/configured/status`,
+                method: 'GET',
+                // query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+        /**
+         *  After Setup
+         *
+         * @tags workspace
+         * @name ApiV3GetSetup
+         * @summary Get workspace limits
+         * @request PUT:/workspace/api/v3/configured/set
+         * @secure
+         */
+        apiV3DoneSetupp: (data: any, params: RequestParams = {}) =>
+            this.request<string, any>({
+                path: `/workspace/api/v3/configured/set`,
+                method: 'PUT',
+                // query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
     }
 }

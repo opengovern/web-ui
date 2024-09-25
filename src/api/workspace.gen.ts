@@ -1334,3 +1334,246 @@ export const useWorkspaceApiV3PurgeSampleData = (
         sendNowWithParams,
     }
 }
+interface IuseWorkspaceApiV3ShouldSetup {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const useWorkspaceApiV3GetShouldSetup = (
+    params: RequestParams = {},
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
+) => {
+    const [controller, setController] = useState(new AbortController())
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    const [state, setState] = useState<IuseWorkspaceApiV3ShouldSetup>({
+        isLoading: true,
+        isExecuted: false,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, autoExecute])
+    )
+
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            setWorkspace('kaytu')
+
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
+            api.workspace
+                .apiV3GetSetup(reqparamsSignal)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController, params)
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, params)
+    }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
+}
+
+interface IuseWorkspaceApiV3Done {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const useWorkspaceApiV3DoneSetup = (
+    params: RequestParams = {},
+    autoExecute = true,
+    overwriteWorkspace: string | undefined = undefined
+) => {
+    const [controller, setController] = useState(new AbortController())
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    const [state, setState] = useState<IuseWorkspaceApiV3Done>({
+        isLoading: true,
+        isExecuted: false,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, autoExecute])
+    )
+
+    const sendRequest = (
+        abortCtrl: AbortController,
+        reqparams: RequestParams
+    ) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            setWorkspace('kaytu')
+
+            const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
+            api.workspace
+                .apiV3DoneSetupp(reqparamsSignal)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController, params)
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, params)
+    }
+
+    const sendNowWithParams = (reqparams: RequestParams) => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController, reqparams)
+    }
+
+    return {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+        sendNowWithParams,
+    }
+}
