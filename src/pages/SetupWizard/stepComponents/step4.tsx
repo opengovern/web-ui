@@ -53,7 +53,7 @@ export default function Complete({ setLoading, setActiveStepIndex,wizardData,set
                         actions={
                             <Button
                                 className="edit-step-btn"
-                                onClick={() => setActiveStepIndex(0)}
+                                onClick={() => setActiveStepIndex(1)}
                             >
                                 Edit
                             </Button>

@@ -19,6 +19,7 @@ import { link } from 'fs'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import ReactMarkdown from 'react-markdown'
+import Spinner from '../../../components/Spinner'
 interface Props {
     setLoading: Function
 }
@@ -28,8 +29,11 @@ export default function License({ setLoading }: Props) {
     const workspace = useParams<{ ws: string }>().ws
     const navigate = useNavigate()
     const [checked, setChecked] = useState(false)
+    const [loadingMD, setLoadingMD] = useState(false)
+
         const [markdown, setMarkdown] = useState('')
     useEffect(() => {
+        setLoadingMD(true)
         const config = {
             headers: {
                 'Content-Type': 'text/plain',
@@ -43,32 +47,43 @@ export default function License({ setLoading }: Props) {
             )
             .then((res) => {
                 setMarkdown(res.data)
+        setLoadingMD(false)
+
             })
     }, [])
     return (
-        <Card>
-            <Flex
-                className="gap-2"
-                flexDirection="col"
-                justifyContent="start"
-                alignItems="start"
+        <>
+            <Card>
+                {loadingMD ? (
+                    <>
+                        <Spinner />
+                    </>
+                ) : (
+                    <>
+                        <Flex
+                            className="gap-2"
+                            flexDirection="col"
+                            justifyContent="start"
+                            alignItems="start"
+                        >
+                            <ReactMarkdown
+                                children={markdown}
+                                // linkTarget="_blank"
+                                // transformLinkUri={undefined}
+                            />
+                        </Flex>
+                    </>
+                )}
+            </Card>
+            <Checkbox className='mt-3'
+                onChange={({ detail }) => {
+                    setChecked(detail.checked)
+                    setLoading(!detail.checked)
+                }}
+                checked={checked}
             >
-                <ReactMarkdown
-                    children={markdown}
-                    // linkTarget="_blank"
-                    // transformLinkUri={undefined}
-                />
-
-                <Checkbox
-                    onChange={({ detail }) => {
-                        setChecked(detail.checked)
-                        setLoading(!detail.checked)
-                    }}
-                    checked={checked}
-                >
-                    I Acknowledge That I Have Read And Understand The Terms
-                </Checkbox>
-            </Flex>
-        </Card>
+                I Acknowledge That I Have Read And Understand The Terms
+            </Checkbox>
+        </>
     )
 }

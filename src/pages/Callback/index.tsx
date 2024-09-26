@@ -20,7 +20,6 @@ export const CallbackPage = () => {
     } else {
         if (response == 'True') {
             if (isAuthenticated) {
-                debugger
                 const c = sessionStorage.getItem('callbackURL')
 
                 window.location.href =

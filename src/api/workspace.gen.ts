@@ -1501,7 +1501,7 @@ export const useWorkspaceApiV3DoneSetup = (
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
-                .apiV3DoneSetupp(reqparamsSignal)
+                .apiV3DoneSetup(reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,

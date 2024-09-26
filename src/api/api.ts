@@ -7981,7 +7981,7 @@ export class Api<
          * @request PUT:/workspace/api/v3/configured/set
          * @secure
          */
-        apiV3DoneSetupp: (data: any, params: RequestParams = {}) =>
+        apiV3DoneSetup: (data: any, params: RequestParams = {}) =>
             this.request<string, any>({
                 path: `/workspace/api/v3/configured/set`,
                 method: 'PUT',
@@ -7991,5 +7991,6 @@ export class Api<
                 format: 'json',
                 ...params,
             }),
+        
     }
 }

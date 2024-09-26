@@ -53,9 +53,9 @@ export default function Integrations({ setLoading ,wizardData,setWizardData}: Pr
     }, [])
     return (
         <>
-            <Box margin={{ bottom: 'l' }}>
+            <Box margin={{ bottom: 'l' }} className="">
                 <Container
-                    header={<Header variant="h2">Setup Integrations</Header>}
+                // header={<Header variant="h2">Setup Integrations</Header>}
                 >
                     <SpaceBetween size="s">
                         <FormField
@@ -63,8 +63,12 @@ export default function Integrations({ setLoading ,wizardData,setWizardData}: Pr
                             stretch={true}
                             info={''}
                         >
-                            <Tiles
-                                value={wizardData?.sampleLoaded ? wizardData?.sampleLoaded : null}
+                            <RadioGroup
+                                value={
+                                    wizardData?.sampleLoaded
+                                        ? wizardData?.sampleLoaded
+                                        : 'manual'
+                                }
                                 onChange={({ detail }) =>
                                     setWizardData({
                                         ...wizardData,
@@ -73,13 +77,13 @@ export default function Integrations({ setLoading ,wizardData,setWizardData}: Pr
                                 }
                                 items={[
                                     {
-                                        value: 'manual',
-                                        label: `Setup Integration`,
+                                        value: 'sample',
+                                        label: 'Load Sample Data',
                                         description: '',
                                     },
                                     {
-                                        value: 'sample',
-                                        label: 'Load Sample Data',
+                                        value: 'manual',
+                                        label: `Setup Integration`,
                                         description: '',
                                     },
                                 ]}
@@ -89,7 +93,7 @@ export default function Integrations({ setLoading ,wizardData,setWizardData}: Pr
                             <>
                                 <Grid
                                     numItems={2}
-                                    className="gap-28 w-full flex flex-row  justify-center items-center"
+                                    className="gap-28 w-full flex flex-row  justify-start items-start"
                                 >
                                     <ConnectorCard
                                         connector={'Amazon Web Services'}
@@ -209,7 +213,10 @@ export default function Integrations({ setLoading ,wizardData,setWizardData}: Pr
                                                             className="w-2/3"
                                                             placeholder="Access Key "
                                                             value={
-                                                                wizardData?.awsData?.accessKey || ''
+                                                                wizardData
+                                                                    ?.awsData
+                                                                    ?.accessKey ||
+                                                                ''
                                                             }
                                                             onChange={({
                                                                 detail,
@@ -229,7 +236,10 @@ export default function Integrations({ setLoading ,wizardData,setWizardData}: Pr
                                                             className="w-2/3"
                                                             placeholder="Access Secret"
                                                             value={
-                                                                wizardData?.awsData?.accessSecret || ''
+                                                                wizardData
+                                                                    ?.awsData
+                                                                    ?.accessSecret ||
+                                                                ''
                                                             }
                                                             onChange={({
                                                                 detail,
@@ -248,7 +258,11 @@ export default function Integrations({ setLoading ,wizardData,setWizardData}: Pr
                                                         <Input
                                                             className="w-2/3"
                                                             placeholder="Role"
-                                                            value={wizardData?.awsData?.role || ''}
+                                                            value={
+                                                                wizardData
+                                                                    ?.awsData
+                                                                    ?.role || ''
+                                                            }
                                                             onChange={({
                                                                 detail,
                                                             }) =>
@@ -295,7 +309,10 @@ export default function Integrations({ setLoading ,wizardData,setWizardData}: Pr
                                                             className="w-2/3"
                                                             placeholder="Application (client) ID "
                                                             value={
-                                                              wizardData?.azureData?.applicationId || ''
+                                                                wizardData
+                                                                    ?.azureData
+                                                                    ?.applicationId ||
+                                                                ''
                                                             }
                                                             onChange={({
                                                                 detail,
@@ -315,7 +332,10 @@ export default function Integrations({ setLoading ,wizardData,setWizardData}: Pr
                                                             className="w-2/3"
                                                             placeholder="Object ID"
                                                             value={
-                                                                wizardData?.azureData?.objectId || ''
+                                                                wizardData
+                                                                    ?.azureData
+                                                                    ?.objectId ||
+                                                                ''
                                                             }
                                                             onChange={({
                                                                 detail,
@@ -335,7 +355,10 @@ export default function Integrations({ setLoading ,wizardData,setWizardData}: Pr
                                                             className="w-2/3"
                                                             placeholder="Directory (tenant) ID"
                                                             value={
-                                                                wizardData?.azureData?.directoryId || ''
+                                                                wizardData
+                                                                    ?.azureData
+                                                                    ?.directoryId ||
+                                                                ''
                                                             }
                                                             onChange={({
                                                                 detail,
@@ -355,7 +378,10 @@ export default function Integrations({ setLoading ,wizardData,setWizardData}: Pr
                                                             className="w-2/3"
                                                             placeholder="Secret Value"
                                                             value={
-                                                                wizardData?.azureData?.secretValue || ''
+                                                                wizardData
+                                                                    ?.azureData
+                                                                    ?.secretValue ||
+                                                                ''
                                                             }
                                                             onChange={({
                                                                 detail,
@@ -374,19 +400,6 @@ export default function Integrations({ setLoading ,wizardData,setWizardData}: Pr
                                                 </FormField>
                                             </>
                                         )}
-
-                                    {/* {ENGINE_DETAILS[engineOption]}
-                            
-                            <div className="custom-screenshot-hide">
-                                <Box variant="awsui-key-label">
-                                    License model
-                                </Box>
-                                <div>{getEngineLicense(engineOption)}</div>
-                            </div>
-                            <RadioOption {...childProps} />
-                            {ENGINE_VERSIONS[engineOption] && (
-                                <Version {...childProps} />
-                            )} */}
                                 </SpaceBetween>
                             </>
                         )}

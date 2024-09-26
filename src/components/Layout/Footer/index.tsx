@@ -16,8 +16,10 @@ export default function Footer() {
                 className="max-w-7xl w-full"
             >
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <Text>Copyright © 2024 Kaytu, Inc.</Text>{" "}
-                {smaple && <>Demo data loaded</>}
+                <Text> © 2024 open governance. All rights reserved.</Text>{" "}
+                
+                {/* {smaple && <>{" "}
+                Demo data loaded</>} */}
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             </Flex>
         </Flex>

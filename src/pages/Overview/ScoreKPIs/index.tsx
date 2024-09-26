@@ -22,6 +22,7 @@ import {
 import { useFilterState } from '../../../utilities/urlstate'
 import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
 import KPICard from './KPICard'
+import { useParams } from 'react-router-dom'
 
 function SecurityScore(
     v:
@@ -60,6 +61,8 @@ interface MR {
 
 export default function ScoreKPIs() {
     const { value: selectedConnections } = useFilterState()
+    const { ws } = useParams()
+
     const setNotification = useSetAtom(notificationAtom)
 
     const query = {
@@ -125,9 +128,9 @@ export default function ScoreKPIs() {
         const titleMap = new Map<string, string>()
         titleMap.set('reliability', 'Reliability')
         titleMap.set('security', 'Security')
-        titleMap.set('performance_efficiency', 'Performance Efficiency')
+        titleMap.set('performance_efficiency', 'Efficiency')
         titleMap.set('operational_excellence', 'Operational Excellence')
-        titleMap.set('cost_optimization', 'Cost Optimization')
+        // titleMap.set('cost_optimization', 'Cost Optimization')
 
         return (
             responseSorted
@@ -175,7 +178,7 @@ export default function ScoreKPIs() {
             <Card>
                 <div className="flex items-start justify-between">
                     <span className="text-gray-900 dark:text-gray-500 text-2xl">
-                        Score
+                            SCORE
                     </span>
                 </div>
                 <div
@@ -246,11 +249,22 @@ export default function ScoreKPIs() {
                             </Text>
                         </Flex> */}
 
-                                {categories().map((item) => {
-                                    return (
-                                        <>
+                                {categories()
+                                    .filter((item) => {
+                                        if (
+                                            item.category !==
+                                                'cost_optimization' &&
+                                            item.category !==
+                                                'operational_excellence'
+                                        ) {
+                                            return item
+                                        }
+                                    })
+                                    .map((item) => {
+                                        return (
                                             <KPICard
-                                                name={item.category}
+                                                link={`/ws/${ws}/score/categories?score_category=${item.category}`}
+                                                name={item.title}
                                                 number={item.summary
                                                     .map(
                                                         (c) =>
@@ -273,9 +287,8 @@ export default function ScoreKPIs() {
                                                     )
                                                 )}
                                             />
-                                        </>
-                                    )
-                                })}
+                                        )
+                                    })}
                             </>
                         )}
                     </Grid>

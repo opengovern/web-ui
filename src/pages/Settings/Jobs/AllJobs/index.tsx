@@ -327,6 +327,7 @@ export default function SettingsALLJobs() {
         return {
             getRows: (params: IServerSideGetRowsParams) => {
                 const api = new Api()
+                debugger
                 api.instance = AxiosAPI
                 api.schedule
                     .apiV1JobsCreate({

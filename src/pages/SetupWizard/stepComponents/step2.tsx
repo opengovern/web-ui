@@ -116,6 +116,7 @@ export default function UserCredinations({
                         <Input
                             className="w-2/3"
                             placeholder="Password"
+                            type='password'
                             value={wizardData?.userData?.password || ''}
                             onChange={({ detail }: InputDetail) =>
                                 setWizardData({
