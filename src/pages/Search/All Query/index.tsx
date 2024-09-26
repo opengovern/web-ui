@@ -343,8 +343,8 @@ export default function AllQueries({setTab} : Props) {
             {categoryLoading || loading ? (
                 <Spinner className="mt-56" />
             ) : (
-                <Flex alignItems="start">
-                    {/* <DrawerPanel
+                <Flex alignItems="start" className='gap-4'>
+                    <DrawerPanel
                         open={openDrawer}
                         onClose={() => setOpenDrawer(false)}
                     >
@@ -435,7 +435,7 @@ export default function AllQueries({setTab} : Props) {
                                 </Flex>
                             </Button>
                         </Flex>
-                    )} */}
+                    )}
                     <Flex flexDirection="col" className="w-full ">
                         {/* <Transition.Root show={showEditor} as={Fragment}>
                             <Transition.Child

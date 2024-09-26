@@ -34,7 +34,7 @@ const navList = [
     },
     {
         title: 'Audit',
-        description: 'Review',
+        description: 'Review and run compliance checks',
         icon: Check,
         link: 'compliance',
         new: true,

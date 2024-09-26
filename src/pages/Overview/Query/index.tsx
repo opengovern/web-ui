@@ -68,9 +68,31 @@ export default function Query({ height }: IQuery) {
             className="h-full overflow-scroll no-scrollbar"
             style={{ maxHeight: `${height}px` }}
         >
-            <Flex justifyContent="start" className="gap-2 mb-2">
-                <Icon icon={MagnifyingGlassIcon} className="p-0" />
-                <Title className="font-semibold">Bookmarked Queries</Title>
+            <Flex justifyContent="between">
+                <Flex justifyContent="start" className="gap-2 mb-2">
+                    <Icon icon={MagnifyingGlassIcon} className="p-0" />
+                    <Title className="font-semibold">
+                        Bookmarked Inventory 
+                    </Title>
+                </Flex>
+                <a
+                    target="__blank"
+                    href={`/ws/${workspace}/search?tab_id=0`}
+                    className=" cursor-pointer"
+                >
+                    <Button
+                        size="xs"
+                        variant="light"
+                        icon={ChevronRightIcon}
+                        iconPosition="right"
+                        className="my-3"
+                        // onClick={() => {
+                        //     navigate(`/ws/${workspace}/search?tab_id=0`)
+                        // }}
+                    >
+                        All Queries
+                    </Button>
+                </a>
             </Flex>
             {isLoading
                 ? [1, 2, 3, 4, 5].map((i) => (
@@ -133,7 +155,7 @@ export default function Query({ height }: IQuery) {
                                           color: 'white !important',
                                           minHeight: '60px',
                                           overflowY: 'scroll',
-                                          padding: '2rem!important'
+                                          padding: '2rem!important',
                                       }}
                                       placeholder="-- write your SQL query here"
                                   />
@@ -145,7 +167,9 @@ export default function Query({ height }: IQuery) {
                                       className="my-3"
                                       onClick={() => {
                                           setRunQuery(q?.query || '')
-                                          navigate(`/ws/${workspace}/search?tab_id=1`)
+                                          navigate(
+                                              `/ws/${workspace}/search?tab_id=1`
+                                          )
                                       }}
                                   >
                                       Run Query

@@ -463,16 +463,16 @@ export default function Findings() {
                                                             className="gap-3 w-full"
                                                         >
                                                             <Title className="flex flex-row gap-1 justify-center align-center items-center">
-                                                                Posture Summary
+                                                                Drift Events
                                                                 <ChevronRightIcon className="w-[20px] mt-1" />
                                                             </Title>
                                                             <p className="dark:text-dark-tremor-cont text-tremor-default text-tremor-content">
-                                                                See over
-                                                                summarized view
-                                                                of Posture by
-                                                                Cloud Accounts,
-                                                                Controls,
-                                                                Severity
+                                                                See all
+                                                                Compliance
+                                                                Drifts over time
+                                                                across
+                                                                configured
+                                                                Benchmarks
                                                             </p>
                                                         </Flex>
                                                         <Flex
@@ -481,7 +481,7 @@ export default function Findings() {
                                                             className="h-full"
                                                         >
                                                             <Title className=" font-bold  border-solid w-fit h-full  border-l-2 border-black pl-2 h-full">
-                                                                2K{' '}
+                                                                500{' '}
                                                                 <span className="font-semibold text-blue-600">
                                                                     +
                                                                 </span>

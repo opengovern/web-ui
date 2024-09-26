@@ -63,21 +63,22 @@ export default function Overview() {
                         className="gap-4"
                         id="myDIV"
                     >
+                        <ScoreKPIs />
+
                         <Grid numItems={6} className="w-full gap-4 h-fit mb-4">
                             <Col numColSpan={6}>
                                 <Shortcuts />
                             </Col>
                             <Col numColSpan={6}>
-                                <ScoreKPIs />
                                 {/* <QuickNav /> */}
+                                <Governance />
                             </Col>
                         </Grid>
-                        <Governance />
                         {/* <Spend/> */}
                     </Flex>
                 </Col>
                 <Col numColSpan={2}>
-                    <Query height={800} />
+                    <Query height={850} />
                 </Col>
             </Grid>
 

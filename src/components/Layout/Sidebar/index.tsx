@@ -19,6 +19,8 @@ import {
     PresentationChartBarIcon,
     CubeTransparentIcon,
     BoltIcon,
+    ArrowUpIcon,
+    ChevronDoubleUpIcon,
 } from '@heroicons/react/24/outline'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { Popover, Transition } from '@headlessui/react'
@@ -312,7 +314,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             // },
             {
                 name: 'Compliance',
-                icon: ClipboardDocumentCheckIcon,
+                icon: ShieldCheckIcon,
                 page: [
                     'score',
                     'compliance',
@@ -332,14 +334,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         count: undefined,
                         error: false,
                     },
-                    {
-                        name: 'SCORE',
-                        page: 'score',
-                        isPreview: false,
-                        isLoading: false,
-                        count: undefined,
-                        error: false,
-                    },
+                    // {
+                    //     name: 'SCORE',
+                    //     page: 'score',
+                    //     isPreview: false,
+                    //     isLoading: false,
+                    //     count: undefined,
+                    //     error: false,
+                    // },
                     {
                         name: ' Library',
                         page: 'compliance/library',
@@ -367,9 +369,16 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 ],
             },
             {
+                name: 'SRE',
+                page: ['score'],
+                icon: ChevronDoubleUpIcon,
+                isPreview: false,
+            
+            },
+            {
                 name: 'Dashboards',
                 page: [
-                    'dashboards',
+                    'dashboard',
                     'dashboard/infrastructure',
                     'dashboard/spend',
                     'dashboard/infrastructure-cloud-accounts',

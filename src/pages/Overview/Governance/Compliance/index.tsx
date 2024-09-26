@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
     Button,
     Card,
@@ -6,6 +7,8 @@ import {
     Text,
     Title,
     Divider,
+    CategoryBar,
+    Grid,
 } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
@@ -85,7 +88,7 @@ export default function Compliance() {
 
     return (
         <Flex flexDirection="col" alignItems="start" justifyContent="start">
-            <Flex className="mb-8">
+            {/* <Flex className="mb-8">
                 <Title className="text-gray-500">Benchmarks</Title>
                 <Button
                     variant="light"
@@ -97,7 +100,7 @@ export default function Compliance() {
                 >
                     Show all
                 </Button>
-            </Flex>
+            </Flex> */}
             {isLoading || getErrorMessage(error).length > 0 ? (
                 <Flex flexDirection="col" className="gap-4">
                     {[1, 2].map((i) => {
@@ -118,57 +121,216 @@ export default function Compliance() {
                     })}
                 </Flex>
             ) : (
-                <Flex flexDirection="col" className="gap-4">
+                <Grid numItems={2} className="gap-4 w-full">
                     {sorted?.map(
                         (bs, i) =>
-                            i < 2 && (
+                            i < 4 && (
                                 <>
-                                    <Card
-                                        onClick={() =>
-                                            navigate(
-                                                `/ws/${workspace}/compliance/${bs.id}?${searchParams}`
-                                            )
-                                        }
-                                        className="p-3 cursor-pointer shadow-none ring-0  border-none dark:ring-gray-500 hover:shadow-md"
-                                    >
-                                        <Subtitle className="font-semibold text-gray-800 mb-2">
-                                            {bs.title}
-                                        </Subtitle>
-                                        {(bs.controlsSeverityStatus?.total
-                                            ?.total || 0) > 0 ? (
-                                            <>
-                                                <Text>Security score</Text>
-                                                <Title>
-                                                    {(
-                                                        ((bs
-                                                            ?.controlsSeverityStatus
-                                                            ?.total?.passed ||
-                                                            0) /
-                                                            (bs
+                                    <a target='__blank' className=' cursor-pointer' href={`/ws/${workspace}/compliance/${bs.id}?${searchParams}`}>
+                                        <Card
+                                         
+                                            key={bs.title}
+                                            className=" px-3 py-3 w-full cursor-pointer"
+                                        >
+                                            <dt className="truncate text-sm text-gray-500 dark:text-gray-500">
+                                                {bs.title}
+                                            </dt>
+                                            <dd className="mt-1 text-2xl  text-gray-900 dark:text-gray-50">
+                                                {(bs.controlsSeverityStatus
+                                                    ?.total?.total || 0) > 0 ? (
+                                                    <>
+                                                        {/* <Text>Security score</Text> */}
+                                                        {(
+                                                            ((bs
                                                                 ?.controlsSeverityStatus
                                                                 ?.total
-                                                                ?.total || 1)) *
-                                                            100 || 0
-                                                    ).toFixed(1)}
-                                                    %
-                                                </Title>
-                                            </>
-                                        ) : (
-                                            <Button
-                                                variant="light"
-                                                icon={ChevronRightIcon}
-                                                iconPosition="right"
+                                                                ?.passed || 0) /
+                                                                (bs
+                                                                    ?.controlsSeverityStatus
+                                                                    ?.total
+                                                                    ?.total ||
+                                                                    1)) *
+                                                                100 || 0
+                                                        ).toFixed(0)}
+                                                        %
+                                                    </>
+                                                ) : (
+                                                    <Button
+                                                        variant="light"
+                                                        icon={ChevronRightIcon}
+                                                        iconPosition="right"
+                                                    >
+                                                        Assign
+                                                    </Button>
+                                                )}
+                                            </dd>
+                                            <CategoryBar
+                                                values={[
+                                                    bs.controlsSeverityStatus
+                                                        ?.critical?.total -
+                                                        bs
+                                                            .controlsSeverityStatus
+                                                            ?.critical?.passed,
+                                                    ,
+                                                    bs.controlsSeverityStatus
+                                                        ?.high?.total -
+                                                        bs
+                                                            .controlsSeverityStatus
+                                                            ?.high?.passed,
+                                                    bs.controlsSeverityStatus
+                                                        ?.medium?.total -
+                                                        bs
+                                                            .controlsSeverityStatus
+                                                            ?.medium?.passed,
+                                                    bs.controlsSeverityStatus
+                                                        ?.low?.total -
+                                                        bs
+                                                            .controlsSeverityStatus
+                                                            ?.low?.passed,
+                                                    bs.controlsSeverityStatus
+                                                        ?.none?.total -
+                                                        bs
+                                                            .controlsSeverityStatus
+                                                            ?.none?.passed,
+                                                ]}
+                                                colors={[
+                                                    '#6E120B',
+                                                    '#CA2B1D',
+                                                    '#EE9235',
+                                                    '#F4C744',
+                                                    '#6B7280',
+                                                ]}
+                                                showLabels={false}
+                                                className="mt-3 w-full"
+                                            />
+                                            <ul
+                                                role="list"
+                                                className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2"
                                             >
-                                                Assign
-                                            </Button>
-                                        )}
-                                    </Card>
-                                    {i  < sorted.length-1 && (
-                                        <Divider className="m-0 p-0" />
-                                    )}
+                                                <li
+                                                    key={'test'}
+                                                    className="flex items-center space-x-2"
+                                                >
+                                                    <span
+                                                        className={
+                                                            'size-3 shrink-0 rounded-sm bg-[#6E120B]'
+                                                        }
+                                                        aria-hidden={true}
+                                                    />
+                                                    <span className="text-sm text-gray-500 dark:text-gray-500">
+                                                        <span className="font-medium text-gray-700 dark:text-gray-300">
+                                                            {bs
+                                                                .controlsSeverityStatus
+                                                                ?.critical
+                                                                ?.total -
+                                                                bs
+                                                                    .controlsSeverityStatus
+                                                                    ?.critical
+                                                                    ?.passed}{' '}
+                                                        </span>
+                                                        Controls
+                                                    </span>
+                                                </li>
+                                                <li
+                                                    key={'test'}
+                                                    className="flex items-center space-x-2"
+                                                >
+                                                    <span
+                                                        className={
+                                                            'size-3 shrink-0 rounded-sm bg-[#CA2B1D]'
+                                                        }
+                                                        aria-hidden={true}
+                                                    />
+                                                    <span className="text-sm text-gray-500 dark:text-gray-500">
+                                                        <span className="font-medium text-gray-700 dark:text-gray-300">
+                                                            {bs
+                                                                .controlsSeverityStatus
+                                                                ?.high?.total -
+                                                                bs
+                                                                    .controlsSeverityStatus
+                                                                    ?.high
+                                                                    ?.passed}{' '}
+                                                        </span>
+                                                        Controls
+                                                    </span>
+                                                </li>
+                                                <li
+                                                    key={'test'}
+                                                    className="flex items-center space-x-2"
+                                                >
+                                                    <span
+                                                        className={
+                                                            'size-3 shrink-0 rounded-sm bg-[#EE9235]'
+                                                        }
+                                                        aria-hidden={true}
+                                                    />
+                                                    <span className="text-sm text-gray-500 dark:text-gray-500">
+                                                        <span className="font-medium text-gray-700 dark:text-gray-300">
+                                                            {bs
+                                                                .controlsSeverityStatus
+                                                                ?.medium
+                                                                ?.total -
+                                                                bs
+                                                                    .controlsSeverityStatus
+                                                                    ?.medium
+                                                                    ?.passed}{' '}
+                                                        </span>
+                                                        Controls
+                                                    </span>
+                                                </li>
+                                                <li
+                                                    key={'test'}
+                                                    className="flex items-center space-x-2"
+                                                >
+                                                    <span
+                                                        className={
+                                                            'size-3 shrink-0 rounded-sm bg-[#F4C744]'
+                                                        }
+                                                        aria-hidden={true}
+                                                    />
+                                                    <span className="text-sm text-gray-500 dark:text-gray-500">
+                                                        <span className="font-medium text-gray-700 dark:text-gray-300">
+                                                            {bs
+                                                                .controlsSeverityStatus
+                                                                ?.low?.total -
+                                                                bs
+                                                                    .controlsSeverityStatus
+                                                                    ?.low
+                                                                    ?.passed}{' '}
+                                                        </span>
+                                                        Controls
+                                                    </span>
+                                                </li>
+                                                {/* <li
+                                                key={'test'}
+                                                className="flex items-center space-x-2"
+                                            >
+                                                <span
+                                                    className={
+                                                        'size-3 shrink-0 rounded-sm bg-[#6B7280]'
+                                                    }
+                                                    aria-hidden={true}
+                                                />
+                                                <span className="text-sm text-gray-500 dark:text-gray-500">
+                                                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                                                        {bs
+                                                            .controlsSeverityStatus
+                                                            ?.none?.total -
+                                                            bs
+                                                                .controlsSeverityStatus
+                                                                ?.none
+                                                                ?.passed}{' '}
+                                                    </span>
+                                                    Controls
+                                                </span>
+                                            </li> */}
+                                            </ul>
+                                        </Card>
+                                    </a>
                                 </>
                             )
                     )}
+
                     {/* {benchmarkList(benchmarks?.benchmarkSummary).connected
                         .length < 2 &&
                         benchmarkList(
@@ -232,8 +394,56 @@ export default function Compliance() {
                             </Button>
                         </Flex>
                     )}
-                </Flex>
+                </Grid>
             )}
         </Flex>
     )
+}
+
+{
+    /* <Card
+                                        onClick={() =>
+                                            navigate(
+                                                `/ws/${workspace}/compliance/${bs.id}?${searchParams}`
+                                            )
+                                        }
+                                        className="p-3 cursor-pointer shadow-none ring-0  border-none dark:ring-gray-500 hover:shadow-md"
+                                    >
+                                        <Subtitle className="font-semibold text-gray-800 mb-2">
+                                            {bs.title}
+                                        </Subtitle>
+                                        {(bs.controlsSeverityStatus?.total
+                                            ?.total || 0) > 0 ? (
+                                            <>
+                                                <Text>Security score</Text>
+                                                <Title>
+                                                    {(
+                                                        ((bs
+                                                            ?.controlsSeverityStatus
+                                                            ?.total?.passed ||
+                                                            0) /
+                                                            (bs
+                                                                ?.controlsSeverityStatus
+                                                                ?.total
+                                                                ?.total || 1)) *
+                                                            100 || 0
+                                                    ).toFixed(1)}
+                                                    %
+                                                </Title>
+                                            </>
+                                        ) : (
+                                            <Button
+                                                variant="light"
+                                                icon={ChevronRightIcon}
+                                                iconPosition="right"
+                                            >
+                                                Assign
+                                            </Button>
+                                        )}
+                                    </Card> */
+}
+{
+    /* {i  < sorted.length-1 && (
+                                        <Divider className="m-0 p-0" />
+                                    )} */
 }

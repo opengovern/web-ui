@@ -43,13 +43,16 @@ import Evaluate from './Evaluate'
 import Table, { IColumn } from '../../../../components/Table'
 import { ValueFormatterParams } from 'ag-grid-community'
 import Findings from './Findings'
-
+import axios from 'axios'
+import { get } from 'http'
 export default function NewBenchmarkSummary() {
     const { ws } = useParams()
     const { value: activeTimeRange } = useUrlDateRangeState(
         defaultTime(ws || '')
     )
-    const [tab,setTab] = useState<number>(0);
+    const [tab, setTab] = useState<number>(0)
+    const [enable, setEnable] = useState<boolean>(true)
+
     const readTemplate = (template: any, data: any = { items: {} }): any => {
         for (const [key, value] of Object.entries(template)) {
             // eslint-disable-next-line no-param-reassign
@@ -94,8 +97,8 @@ export default function NewBenchmarkSummary() {
     const { value: selectedConnections } = useFilterState()
     const [assignments, setAssignments] = useState(0)
     const [recall, setRecall] = useState(false)
- const [focusedItem, setFocusedItem] = useState<string>()
- const [expandedItems, setExpandedItems] = useState<string[]>([])
+    const [focusedItem, setFocusedItem] = useState<string>()
+    const [expandedItems, setExpandedItems] = useState<string[]>([])
     const topQuery = {
         ...(benchmarkId && { benchmarkId: [benchmarkId] }),
         ...(selectedConnections.provider && {
@@ -117,7 +120,7 @@ export default function NewBenchmarkSummary() {
     const { sendNowWithParams: triggerEvaluate, isExecuted } =
         useScheduleApiV1ComplianceTriggerUpdate(
             {
-                benchmark_id: [benchmarkId ? benchmarkId  : ''],
+                benchmark_id: [benchmarkId ? benchmarkId : ''],
                 connection_id: [],
             },
             {},
@@ -158,67 +161,55 @@ export default function NewBenchmarkSummary() {
         startTime: activeTimeRange.start.unix(),
         endTime: activeTimeRange.end.unix(),
     })
-const columns: (isDemo: boolean) => IColumn<any, any>[] = (isDemo) => [
-    {
-        width: 120,
-        sortable: true,
-        filter: true,
-        enableRowGroup: true,
-        type: 'string',
-        field: 'connector',
-    },
-    {
-        field: 'providerConnectionName',
-        headerName: 'Connection Name',
-        type: 'string',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-        cellRenderer: (param: ValueFormatterParams) => (
-            <span className={isDemo ? 'blur-sm' : ''}>{param.value}</span>
-        ),
-    },
-    {
-        field: 'providerConnectionID',
-        headerName: 'Connection ID',
-        type: 'string',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-        cellRenderer: (param: ValueFormatterParams) => (
-            <span className={isDemo ? 'blur-sm' : ''}>{param.value}</span>
-        ),
-    },
-    {
-        headerName: 'Enable',
-        sortable: true,
-        type: 'string',
-        filter: true,
-        resizable: true,
-        flex: 0.5,
-        cellRenderer: (params: any) => {
-            return (
-                <Flex
-                    alignItems="center"
-                    justifyContent="center"
-                    className="h-full w-full"
-                >
-                    <Switch checked={params.data?.status} />
-                </Flex>
-            )
-        },
-    },
+    const GetEnabled = () => {
+        // /compliance/api/v3/benchmark/{benchmark-id}/assignments
+        let url = ''
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
+        }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
 
-]
-// @ts-ignore
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+        console.log(config)
+        axios
+            .get(
+                `${url}/main/compliance/api/v3/benchmark/${benchmarkId}/assignments`,
+                config
+            )
+            .then((res) => {
+                if (res.data) {
+                   if (res.data.length > 0) {
+                       setEnable(true)
+                   } else {
+                       setEnable(false)
+                       setTab(1)
+                   }
+                } else {
+                    setEnable(false)
+                    setTab(1)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+    // @ts-ignore
 
     useEffect(() => {
         if (isExecuted || recall) {
             updateDetail()
         }
     }, [isExecuted, recall])
+    useEffect(() => {
+        GetEnabled()
+    }, [])
 
     return (
         <>
@@ -235,21 +226,21 @@ const columns: (isDemo: boolean) => IColumn<any, any>[] = (isDemo) => [
                 <Spinner className="mt-56" />
             ) : (
                 <>
-                    <Flex alignItems="start" className="mb-3">
+                    <Flex alignItems="start" className="mb-3 w-full">
                         <Flex
                             flexDirection="col"
                             alignItems="start"
                             justifyContent="start"
-                            className="gap-2 w-3/4"
+                            className="gap-2 w-full"
                         >
                             <Title className="font-semibold">
                                 {benchmarkDetail?.title}
                             </Title>
-                            <div className="group w-full relative flex justify-start">
-                                <Text className="test-start truncate">
+                            <div className="group w-1/2 relative flex justify-start">
+                                <Text className="test-start truncate text-wrap">
                                     {benchmarkDetail?.description}
                                 </Text>
-                                <Card className="absolute w-full z-40 top-0 scale-0 transition-all p-2 group-hover:scale-100">
+                                <Card className="absolute w-full text-wrap z-40 top-0 scale-0 transition-all p-2 group-hover:scale-100">
                                     <Text>{benchmarkDetail?.description}</Text>
                                 </Card>
                             </div>
@@ -281,157 +272,204 @@ const columns: (isDemo: boolean) => IColumn<any, any>[] = (isDemo) => [
                             />
                         </Flex> */}
                     </Flex>
-                    <TabGroup className=" ">
+                    <TabGroup
+                        className=" "
+                        tabIndex={tab}
+                        onIndexChange={(index) => {
+                            setTab(index)
+                        }}
+                    >
                         <TabList className="mb-4">
-                            <Tab
-                                onClick={() => {
-                                    setTab(0)
-                                }}
-                            >
-                                Posture Summary
-                            </Tab>
-                            <Tab
-                                onClick={() => {
-                                    setTab(1)
-                                }}
-                            >
-                                Controls
-                            </Tab>
-                            <Tab
-                                onClick={() => {
-                                    setTab(2)
-                                }}
-                            >
-                                Issues
-                            </Tab>
-                            <Tab
-                                onClick={() => {
-                                    setTab(3)
-                                }}
-                            >
-                                Settings
-                            </Tab>
-                            <Tab
-                                onClick={() => {
-                                    setTab(4)
-                                }}
-                            >
-                                Run
-                            </Tab>
+                            <>
+                                {enable && (
+                                    <>
+                                        <Tab
+                                            onClick={() => {
+                                                setTab(0)
+                                            }}
+                                        >
+                                            Summary
+                                        </Tab>
+                                    </>
+                                )}
+
+                                <Tab
+                                    onClick={() => {
+                                        setTab(1)
+                                    }}
+                                >
+                                    Controls
+                                </Tab>
+                                {enable && (
+                                    <>
+                                        <Tab
+                                            onClick={() => {
+                                                setTab(2)
+                                            }}
+                                        >
+                                            Incidents
+                                        </Tab>
+                                    </>
+                                )}
+
+                                <Tab
+                                    onClick={() => {
+                                        setTab(3)
+                                    }}
+                                >
+                                    Scope Assignments
+                                </Tab>
+                                <Tab
+                                    onClick={() => {
+                                        setTab(4)
+                                    }}
+                                >
+                                    Audit History
+                                </Tab>
+                            </>
                         </TabList>
                         <TabPanels>
-                            <TabPanel>
+                            {enable && (
                                 <>
-                                    {hideKPIs ? (
-                                        ''
-                                    ) : (
-                                        <Grid
-                                            numItems={4}
-                                            className="w-full gap-4 mb-4"
-                                        >
-                                            <SummaryCard
-                                                title="Security Score"
-                                                metric={
-                                                    ((benchmarkKPIEnd
-                                                        ?.controlsSeverityStatus
-                                                        ?.total?.passed || 0) /
-                                                        (benchmarkKPIEnd
-                                                            ?.controlsSeverityStatus
-                                                            ?.total?.total ||
-                                                            1)) *
-                                                        100 || 0
-                                                }
-                                                metricPrev={
-                                                    ((benchmarkKPIStart
-                                                        ?.controlsSeverityStatus
-                                                        ?.total?.passed || 0) /
-                                                        (benchmarkKPIStart
-                                                            ?.controlsSeverityStatus
-                                                            ?.total?.total ||
-                                                            1)) *
-                                                        100 || 0
-                                                }
-                                                isPercent
-                                                loading={
-                                                    benchmarkKPIEndLoading ||
-                                                    benchmarkKPIStartLoading
-                                                }
-                                            />
-                                            <SummaryCard
-                                                title="Issues"
-                                                metric={
-                                                    benchmarkKPIEnd
-                                                        ?.conformanceStatusSummary
-                                                        ?.failed
-                                                }
-                                                metricPrev={
-                                                    benchmarkKPIStart
-                                                        ?.conformanceStatusSummary
-                                                        ?.failed
-                                                }
-                                                loading={
-                                                    benchmarkKPIEndLoading ||
-                                                    benchmarkKPIStartLoading
-                                                }
-                                            />
+                                    {' '}
+                                    <TabPanel key={0}>
+                                        <>
+                                            {tab == 0 && (
+                                                <>
+                                                    <Flex
+                                                        className="w-full flex-wrap"
+                                                        flexDirection="col"
+                                                    >
+                                                        {hideKPIs ? (
+                                                            ''
+                                                        ) : (
+                                                            <Grid
+                                                                numItems={4}
+                                                                className="w-full gap-4 mb-4"
+                                                            >
+                                                                <SummaryCard
+                                                                    title="Security Score"
+                                                                    metric={
+                                                                        ((benchmarkKPIEnd
+                                                                            ?.controlsSeverityStatus
+                                                                            ?.total
+                                                                            ?.passed ||
+                                                                            0) /
+                                                                            (benchmarkKPIEnd
+                                                                                ?.controlsSeverityStatus
+                                                                                ?.total
+                                                                                ?.total ||
+                                                                                1)) *
+                                                                            100 ||
+                                                                        0
+                                                                    }
+                                                                    metricPrev={
+                                                                        ((benchmarkKPIStart
+                                                                            ?.controlsSeverityStatus
+                                                                            ?.total
+                                                                            ?.passed ||
+                                                                            0) /
+                                                                            (benchmarkKPIStart
+                                                                                ?.controlsSeverityStatus
+                                                                                ?.total
+                                                                                ?.total ||
+                                                                                1)) *
+                                                                            100 ||
+                                                                        0
+                                                                    }
+                                                                    isPercent
+                                                                    loading={
+                                                                        benchmarkKPIEndLoading ||
+                                                                        benchmarkKPIStartLoading
+                                                                    }
+                                                                />
+                                                                <SummaryCard
+                                                                    title="Issues"
+                                                                    metric={
+                                                                        benchmarkKPIEnd
+                                                                            ?.conformanceStatusSummary
+                                                                            ?.failed
+                                                                    }
+                                                                    metricPrev={
+                                                                        benchmarkKPIStart
+                                                                            ?.conformanceStatusSummary
+                                                                            ?.failed
+                                                                    }
+                                                                    loading={
+                                                                        benchmarkKPIEndLoading ||
+                                                                        benchmarkKPIStartLoading
+                                                                    }
+                                                                />
 
-                                            <SummaryCard
-                                                title="Passed"
-                                                metric={
-                                                    benchmarkKPIEnd
-                                                        ?.conformanceStatusSummary
-                                                        ?.passed
-                                                }
-                                                metricPrev={
-                                                    benchmarkKPIStart
-                                                        ?.conformanceStatusSummary
-                                                        ?.passed
-                                                }
-                                                loading={
-                                                    benchmarkKPIEndLoading ||
-                                                    benchmarkKPIStartLoading
-                                                }
-                                            />
+                                                                <SummaryCard
+                                                                    title="Passed"
+                                                                    metric={
+                                                                        benchmarkKPIEnd
+                                                                            ?.conformanceStatusSummary
+                                                                            ?.passed
+                                                                    }
+                                                                    metricPrev={
+                                                                        benchmarkKPIStart
+                                                                            ?.conformanceStatusSummary
+                                                                            ?.passed
+                                                                    }
+                                                                    loading={
+                                                                        benchmarkKPIEndLoading ||
+                                                                        benchmarkKPIStartLoading
+                                                                    }
+                                                                />
 
-                                            <SummaryCard
-                                                title="Accounts"
-                                                metric={
-                                                    benchmarkKPIEnd
-                                                        ?.connectionsStatus
-                                                        ?.total
-                                                }
-                                                metricPrev={
-                                                    benchmarkKPIStart
-                                                        ?.connectionsStatus
-                                                        ?.total
-                                                }
-                                                loading={
-                                                    benchmarkKPIEndLoading ||
-                                                    benchmarkKPIStartLoading
-                                                }
-                                            />
+                                                                <SummaryCard
+                                                                    title="Accounts"
+                                                                    metric={
+                                                                        benchmarkKPIEnd
+                                                                            ?.connectionsStatus
+                                                                            ?.total
+                                                                    }
+                                                                    metricPrev={
+                                                                        benchmarkKPIStart
+                                                                            ?.connectionsStatus
+                                                                            ?.total
+                                                                    }
+                                                                    loading={
+                                                                        benchmarkKPIEndLoading ||
+                                                                        benchmarkKPIStartLoading
+                                                                    }
+                                                                />
 
-                                            {/* <SummaryCard
+                                                                {/* <SummaryCard
                                 title="Events"
                                 metric={events?.count}
                                 loading={eventsLoading}
                             /> */}
-                                        </Grid>
-                                    )}
-                                    {trend === null ? (
-                                        ''
-                                    ) : (
-                                        <BenchmarkChart
-                                            title="Security Score"
-                                            isLoading={trendLoading}
-                                            trend={trend}
-                                            error={toErrorMessage(trendError)}
-                                            onRefresh={() => sendTrend()}
-                                        />
-                                    )}
+                                                            </Grid>
+                                                        )}
+                                                        {trend === null ? (
+                                                            ''
+                                                        ) : (
+                                                            <BenchmarkChart
+                                                                title="Security Score"
+                                                                isLoading={
+                                                                    trendLoading
+                                                                }
+                                                                trend={trend}
+                                                                error={toErrorMessage(
+                                                                    trendError
+                                                                )}
+                                                                onRefresh={() =>
+                                                                    sendTrend()
+                                                                }
+                                                            />
+                                                        )}
+                                                    </Flex>
+                                                </>
+                                            )}
+                                        </>
+                                    </TabPanel>
                                 </>
-                            </TabPanel>
-                            <TabPanel>
+                            )}
+
+                            <TabPanel key={1}>
                                 {/* <Flex flexDirection='row' justifyContent='start' alignItems='start' className='gap-4'>
                                     <Flex className=" p-2 w-52 bg-white min-w-52 rounded-md" flexDirection='col' justifyContent='start' alignItems='start'>
                                         <UncontrolledTreeEnvironment<string>
@@ -484,16 +522,26 @@ const columns: (isDemo: boolean) => IColumn<any, any>[] = (isDemo) => [
                                     )}{' '}
                                 </>
                             </TabPanel>
-                            <TabPanel>
-                                {tab == 2 && (
-                                    <>
-                                        <Findings
-                                            id={benchmarkId ? benchmarkId : ''}
-                                        />
-                                    </>
-                                )}
-                            </TabPanel>
-                            <TabPanel>
+                            {enable && (
+                                <>
+                                    {' '}
+                                    <TabPanel key={2}>
+                                        {tab == 2 && (
+                                            <>
+                                                <Findings
+                                                    id={
+                                                        benchmarkId
+                                                            ? benchmarkId
+                                                            : ''
+                                                    }
+                                                />
+                                            </>
+                                        )}
+                                    </TabPanel>
+                                </>
+                            )}
+
+                            <TabPanel key={3}>
                                 {' '}
                                 {tab == 3 && (
                                     <>
@@ -514,7 +562,7 @@ const columns: (isDemo: boolean) => IColumn<any, any>[] = (isDemo) => [
                                     </>
                                 )}
                             </TabPanel>
-                            <TabPanel>
+                            <TabPanel key={4}>
                                 {tab == 4 && (
                                     <>
                                         <Evaluate

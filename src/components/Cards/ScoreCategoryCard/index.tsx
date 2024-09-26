@@ -10,6 +10,7 @@ import {
     Icon,
     Subtitle,
     Button,
+    Card,
 } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { numericDisplay } from '../../../utilities/numericDisplay'
@@ -51,7 +52,7 @@ export default function ScoreCategoryCard({
         color = 'red'
     }
     return (
-        <Flex
+        <Card
             onClick={() =>
                 navigate(
                     `/ws/${ws}/score/categories?score_category=${category}&${searchParams}`
@@ -61,8 +62,7 @@ export default function ScoreCategoryCard({
                 varient === 'default'
                     ? 'gap-6 px-8 py-8 rounded-xl'
                     : 'pl-5 pr-4 py-6 rounded-lg'
-            } bg-white dark:bg-kaytu-950 shadow-sm hover:shadow-lg hover:cursor-pointer`}
-            alignItems={varient === 'default' ? 'center' : 'start'}
+            } ${varient === 'default' ? 'items-center' : 'items-start'} flex bg-white dark:bg-kaytu-950 shadow-sm  hover:shadow-lg hover:cursor-pointer`}
         >
             <Flex className="relative w-fit">
                 <ProgressCircle color={color} value={percentage} size="md">
@@ -110,6 +110,6 @@ export default function ScoreCategoryCard({
                     <ChevronRightIconSolid className="w-6 text-gray-300" />
                 )}
             </Flex>
-        </Flex>
+        </Card>
     )
 }

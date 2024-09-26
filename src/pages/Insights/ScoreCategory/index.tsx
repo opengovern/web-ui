@@ -684,8 +684,8 @@ export default function ScoreCategory() {
                 serviceNames={serviceNames}
                 tags={tags}
                 supportedFilters={[
-                    'Environment',
-                    'Product',
+                    // 'Environment',
+                    // 'Product',
                     'Cloud Account',
                     'Service Name',
                     'Severity',
@@ -695,7 +695,7 @@ export default function ScoreCategory() {
                 initialFilters={[
                     'Score Category',
                     'Cloud Account',
-                    'Product',
+                    // 'Product',
                     'Tag',
                 ]}
             />

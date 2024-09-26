@@ -89,7 +89,7 @@ export default function Integrations({ setLoading ,wizardData,setWizardData}: Pr
                                 ]}
                             />
                         </FormField>
-                        {wizardData?.sampleLoaded === 'manual' && (
+                        {wizardData?.sampleLoaded !== 'sample' && (
                             <>
                                 <Grid
                                     numItems={2}

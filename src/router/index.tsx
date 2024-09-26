@@ -98,7 +98,7 @@ const authRoutes = [
     },
     {
         key: 'dashboards',
-        path: '/ws/:ws/dashboards',
+        path: '/ws/:ws/dashboard',
         element: <Dashboard />,
     },
     {
