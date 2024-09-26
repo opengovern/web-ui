@@ -7,6 +7,7 @@ import {
     Grid,
     Subtitle,
     Card,
+    Icon,
 } from '@tremor/react'
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
@@ -23,6 +24,7 @@ import { useFilterState } from '../../../utilities/urlstate'
 import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
 import KPICard from './KPICard'
 import { useParams } from 'react-router-dom'
+import { ChevronDoubleUpIcon } from '@heroicons/react/24/outline'
 
 function SecurityScore(
     v:
@@ -126,11 +128,13 @@ export default function ScoreKPIs() {
 
     const categories = () => {
         const titleMap = new Map<string, string>()
+        titleMap.set('operational_excellence', 'Supportability')
         titleMap.set('reliability', 'Reliability')
-        titleMap.set('security', 'Security')
-        titleMap.set('performance_efficiency', 'Efficiency')
-        titleMap.set('operational_excellence', 'Operational Excellence')
-        // titleMap.set('cost_optimization', 'Cost Optimization')
+
+        // titleMap.set('security', 'Security')
+        // titleMap.set('performance_efficiency', 'Efficiency')
+        // titleMap.set('operational_excellence', 'Operational Excellence')
+        titleMap.set('cost_optimization', 'Efficiency')
 
         return (
             responseSorted
@@ -177,24 +181,8 @@ export default function ScoreKPIs() {
         <>
             <Card>
                 <div className="flex items-center justify-start">
-                    <svg
-                        id="Arrow Up MD"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
-                            d="M11.4697 4.46967C11.7626 4.17678 12.2374 4.17678 12.5303 4.46967L18.5303 10.4697C18.8232 10.7626 18.8232 11.2374 18.5303 11.5303C18.2374 11.8232 17.7626 11.8232 17.4697 11.5303L12.75 6.81066L12.75 19C12.75 19.4142 12.4142 19.75 12 19.75C11.5858 19.75 11.25 19.4142 11.25 19L11.25 6.81066L6.53033 11.5303C6.23744 11.8232 5.76256 11.8232 5.46967 11.5303C5.17678 11.2374 5.17678 10.7626 5.46967 10.4697L11.4697 4.46967Z"
-                            fill="#2970BC"
-                        ></path>
-                    </svg>
-                    <Title className="font-semibold">
-                       SRE
-                    </Title>
+                    <Icon icon={ChevronDoubleUpIcon} className="w-6 h-6" />
+                    <Title className="font-semibold">SRE</Title>
                 </div>
                 <div
                     className={'h-fit'}
@@ -267,32 +255,82 @@ export default function ScoreKPIs() {
                                 {categories()
                                     .filter((item) => {
                                         if (
+                                            item.category !== 'security' &&
                                             item.category !==
-                                                'cost_optimization' &&
-                                            item.category !==
-                                                'operational_excellence'
+                                                'performance_efficiency'
                                         ) {
                                             return item
                                         }
+                                    })
+                                    .sort((a, b) => {
+                                        if (
+                                            a.title === 'Supportability' &&
+                                            b.title === 'Efficiency'
+                                        ) {
+                                            return -1
+                                        }
+                                        if (
+                                            a.title === 'Efficiency' &&
+                                            b.title === 'Supportability'
+                                        ) {
+                                            return 1
+                                        }
+                                        if (
+                                            a.title === 'Reliability' &&
+                                            b.title === 'Efficiency'
+                                        ) {
+                                            return -1
+                                        }
+                                        if (
+                                            a.title === 'Efficiency' &&
+                                            b.title === 'Reliability'
+                                        ) {
+                                            return 1
+                                        }
+                                        return 0
                                     })
                                     .map((item) => {
                                         return (
                                             <KPICard
                                                 link={`/ws/${ws}/score/categories?score_category=${item.category}`}
                                                 name={item.title}
-                                                number={item.summary
-                                                    .map(
-                                                        (c) =>
-                                                            c
-                                                                .controlsSeverityStatus
-                                                                ?.total
-                                                                ?.passed || 0
-                                                    )
-                                                    .reduce<number>(
-                                                        (prev, curr) =>
-                                                            prev + curr,
-                                                        0
-                                                    )}
+                                                number={
+                                                    item.category ==
+                                                    'cost_optimization'
+                                                        ? item.summary
+                                                              .map(
+                                                                  (b) =>
+                                                                      b.costOptimization ||
+                                                                      0
+                                                              )
+                                                              .reduce<number>(
+                                                                  (
+                                                                      prev,
+                                                                      curr
+                                                                  ) =>
+                                                                      prev +
+                                                                      curr,
+                                                                  0
+                                                              )
+                                                        : item.summary
+                                                              .map(
+                                                                  (c) =>
+                                                                      c
+                                                                          .controlsSeverityStatus
+                                                                          ?.total
+                                                                          ?.passed ||
+                                                                      0
+                                                              )
+                                                              .reduce<number>(
+                                                                  (
+                                                                      prev,
+                                                                      curr
+                                                                  ) =>
+                                                                      prev +
+                                                                      curr,
+                                                                  0
+                                                              )
+                                                }
                                                 percentage={SecurityScore(
                                                     item.summary.map(
                                                         (c) =>

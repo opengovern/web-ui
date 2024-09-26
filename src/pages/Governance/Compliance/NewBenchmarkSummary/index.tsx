@@ -45,13 +45,17 @@ import { ValueFormatterParams } from 'ag-grid-community'
 import Findings from './Findings'
 import axios from 'axios'
 import { get } from 'http'
+import EvaluateTable from './EvaluateTable'
+import { notificationAtom } from '../../../../store'
+import { useSetAtom } from 'jotai'
 export default function NewBenchmarkSummary() {
     const { ws } = useParams()
     const { value: activeTimeRange } = useUrlDateRangeState(
         defaultTime(ws || '')
     )
     const [tab, setTab] = useState<number>(0)
-    const [enable, setEnable] = useState<boolean>(true)
+    const [enable, setEnable] = useState<boolean>(false)
+    const setNotification = useSetAtom(notificationAtom)
 
     const readTemplate = (template: any, data: any = { items: {} }): any => {
         for (const [key, value] of Object.entries(template)) {
@@ -187,6 +191,7 @@ export default function NewBenchmarkSummary() {
                 if (res.data) {
                    if (res.data.length > 0) {
                        setEnable(true)
+                       setTab(0)
                    } else {
                        setEnable(false)
                        setTab(1)
@@ -200,6 +205,51 @@ export default function NewBenchmarkSummary() {
                 console.log(err)
             })
     }
+   const RunBenchmark = (c: any[]) => {
+       // /compliance/api/v3/benchmark/{benchmark-id}/assignments
+       let url = ''
+       if (window.location.origin === 'http://localhost:3000') {
+           url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+       } else {
+           url = window.location.origin
+       }
+       const body = {
+           integration_info:
+                c.map((c)=>{
+                    return {
+                        integration_tracker: c.value
+                    }
+                })
+           ,
+       }
+       // @ts-ignore
+       const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+       const config = {
+           headers: {
+               Authorization: `Bearer ${token}`,
+           },
+       }
+    //    console.log(config)
+       axios
+           .post(
+               `${url}/main/schedule/api/v3/compliance/benchmark/${benchmarkId}/run`,
+               body,config
+           )
+           .then((res) => {
+                setNotification({
+                    text: `Run is Done You Job id is ${res.data.job_id}`,
+                    type: 'success',
+                })
+           })
+           .catch((err) => {
+               console.log(err)
+           })
+   }
+   const truncate =(text: string) => {
+    return text.length > 200 ? text.substring(0, 200) + "..." : text;
+   }
+  
     // @ts-ignore
 
     useEffect(() => {
@@ -219,14 +269,14 @@ export default function NewBenchmarkSummary() {
                         ? benchmarkDetail?.title
                         : 'Benchmark summary',
                 ]}
-                supportedFilters={['Date', 'Cloud Account', 'Connector']}
-                initialFilters={['Date']}
+                supportedFilters={enable ? ['Date', 'Cloud Account', 'Connector'] : []}
+                initialFilters={enable ? ['Date'] : []}
             />
             {isLoading ? (
                 <Spinner className="mt-56" />
             ) : (
                 <>
-                    <Flex alignItems="start" className="mb-3 w-full">
+                    <Flex alignItems="start" className="mb-3 w-11/12">
                         <Flex
                             flexDirection="col"
                             alignItems="start"
@@ -236,17 +286,18 @@ export default function NewBenchmarkSummary() {
                             <Title className="font-semibold">
                                 {benchmarkDetail?.title}
                             </Title>
-                            <div className="group w-1/2 relative flex justify-start">
-                                <Text className="test-start truncate text-wrap">
-                                    {benchmarkDetail?.description}
+                            <div className="group  relative flex text-wrap justify-start">
+                                <Text className="test-start w-full ">
+                                    {/* @ts-ignore */}
+                                    {truncate(benchmarkDetail?.description)}
                                 </Text>
                                 <Card className="absolute w-full text-wrap z-40 top-0 scale-0 transition-all p-2 group-hover:scale-100">
                                     <Text>{benchmarkDetail?.description}</Text>
                                 </Card>
                             </div>
                         </Flex>
-                        {/* <Flex className="w-fit gap-4">
-                            <Settings
+                        <Flex className="w-fit gap-4">
+                            {/* <Settings
                                 id={benchmarkDetail?.id}
                                 response={(e) => setAssignments(e)}
                                 autoAssign={benchmarkDetail?.autoAssign}
@@ -255,29 +306,31 @@ export default function NewBenchmarkSummary() {
                                 }
                                 isAutoResponse={(x) => setRecall(true)}
                                 reload={() => updateDetail()}
-                            />
+                            /> */}
                             <Evaluate
                                 id={benchmarkDetail?.id}
                                 benchmarkDetail={benchmarkDetail}
                                 assignmentsCount={assignments}
                                 onEvaluate={(c) => {
-                                    triggerEvaluate(
-                                        {
-                                            benchmark_id: [benchmarkId || ''],
-                                            connection_id: c,
-                                        },
-                                        {}
-                                    )
+                                    RunBenchmark(c)
                                 }}
                             />
-                        </Flex> */}
+                        </Flex>
                     </Flex>
                     <TabGroup
                         className=" "
-                        tabIndex={tab}
-                        onIndexChange={(index) => {
-                            setTab(index)
-                        }}
+                        // tabIndex={enable ? tab : findTab(tab)}
+                        // onIndexChange={(index) => {
+                        //     console.log("its index")
+                        //     if(enable){
+                        //         setTab(index)
+
+                        //     }
+                        //     else{
+                        //         // @ts-ignore
+                        //         setTab(findTab(index))
+                        //     }
+                        // }}
                     >
                         <TabList className="mb-4">
                             <>
@@ -324,266 +377,202 @@ export default function NewBenchmarkSummary() {
                                         setTab(4)
                                     }}
                                 >
-                                    Audit History
+                                    Run History
                                 </Tab>
                             </>
                         </TabList>
                         <TabPanels>
                             {enable && (
                                 <>
-                                    {' '}
-                                    <TabPanel key={0}>
+                                    {tab == 0 && (
                                         <>
-                                            {tab == 0 && (
-                                                <>
-                                                    <Flex
-                                                        className="w-full flex-wrap"
-                                                        flexDirection="col"
+                                            <Flex
+                                                className="w-full flex-wrap"
+                                                flexDirection="col"
+                                            >
+                                                {hideKPIs ? (
+                                                    ''
+                                                ) : (
+                                                    <Grid
+                                                        numItems={4}
+                                                        className="w-full gap-4 mb-4"
                                                     >
-                                                        {hideKPIs ? (
-                                                            ''
-                                                        ) : (
-                                                            <Grid
-                                                                numItems={4}
-                                                                className="w-full gap-4 mb-4"
-                                                            >
-                                                                <SummaryCard
-                                                                    title="Security Score"
-                                                                    metric={
-                                                                        ((benchmarkKPIEnd
-                                                                            ?.controlsSeverityStatus
-                                                                            ?.total
-                                                                            ?.passed ||
-                                                                            0) /
-                                                                            (benchmarkKPIEnd
-                                                                                ?.controlsSeverityStatus
-                                                                                ?.total
-                                                                                ?.total ||
-                                                                                1)) *
-                                                                            100 ||
-                                                                        0
-                                                                    }
-                                                                    metricPrev={
-                                                                        ((benchmarkKPIStart
-                                                                            ?.controlsSeverityStatus
-                                                                            ?.total
-                                                                            ?.passed ||
-                                                                            0) /
-                                                                            (benchmarkKPIStart
-                                                                                ?.controlsSeverityStatus
-                                                                                ?.total
-                                                                                ?.total ||
-                                                                                1)) *
-                                                                            100 ||
-                                                                        0
-                                                                    }
-                                                                    isPercent
-                                                                    loading={
-                                                                        benchmarkKPIEndLoading ||
-                                                                        benchmarkKPIStartLoading
-                                                                    }
-                                                                />
-                                                                <SummaryCard
-                                                                    title="Issues"
-                                                                    metric={
-                                                                        benchmarkKPIEnd
-                                                                            ?.conformanceStatusSummary
-                                                                            ?.failed
-                                                                    }
-                                                                    metricPrev={
-                                                                        benchmarkKPIStart
-                                                                            ?.conformanceStatusSummary
-                                                                            ?.failed
-                                                                    }
-                                                                    loading={
-                                                                        benchmarkKPIEndLoading ||
-                                                                        benchmarkKPIStartLoading
-                                                                    }
-                                                                />
+                                                        <SummaryCard
+                                                            title="Security Score"
+                                                            metric={
+                                                                ((benchmarkKPIEnd
+                                                                    ?.controlsSeverityStatus
+                                                                    ?.total
+                                                                    ?.passed ||
+                                                                    0) /
+                                                                    (benchmarkKPIEnd
+                                                                        ?.controlsSeverityStatus
+                                                                        ?.total
+                                                                        ?.total ||
+                                                                        1)) *
+                                                                    100 || 0
+                                                            }
+                                                            metricPrev={
+                                                                ((benchmarkKPIStart
+                                                                    ?.controlsSeverityStatus
+                                                                    ?.total
+                                                                    ?.passed ||
+                                                                    0) /
+                                                                    (benchmarkKPIStart
+                                                                        ?.controlsSeverityStatus
+                                                                        ?.total
+                                                                        ?.total ||
+                                                                        1)) *
+                                                                    100 || 0
+                                                            }
+                                                            isPercent
+                                                            loading={
+                                                                benchmarkKPIEndLoading ||
+                                                                benchmarkKPIStartLoading
+                                                            }
+                                                        />
+                                                        <SummaryCard
+                                                            title="Issues"
+                                                            metric={
+                                                                benchmarkKPIEnd
+                                                                    ?.conformanceStatusSummary
+                                                                    ?.failed
+                                                            }
+                                                            metricPrev={
+                                                                benchmarkKPIStart
+                                                                    ?.conformanceStatusSummary
+                                                                    ?.failed
+                                                            }
+                                                            loading={
+                                                                benchmarkKPIEndLoading ||
+                                                                benchmarkKPIStartLoading
+                                                            }
+                                                        />
 
-                                                                <SummaryCard
-                                                                    title="Passed"
-                                                                    metric={
-                                                                        benchmarkKPIEnd
-                                                                            ?.conformanceStatusSummary
-                                                                            ?.passed
-                                                                    }
-                                                                    metricPrev={
-                                                                        benchmarkKPIStart
-                                                                            ?.conformanceStatusSummary
-                                                                            ?.passed
-                                                                    }
-                                                                    loading={
-                                                                        benchmarkKPIEndLoading ||
-                                                                        benchmarkKPIStartLoading
-                                                                    }
-                                                                />
+                                                        <SummaryCard
+                                                            title="Passed"
+                                                            metric={
+                                                                benchmarkKPIEnd
+                                                                    ?.conformanceStatusSummary
+                                                                    ?.passed
+                                                            }
+                                                            metricPrev={
+                                                                benchmarkKPIStart
+                                                                    ?.conformanceStatusSummary
+                                                                    ?.passed
+                                                            }
+                                                            loading={
+                                                                benchmarkKPIEndLoading ||
+                                                                benchmarkKPIStartLoading
+                                                            }
+                                                        />
 
-                                                                <SummaryCard
-                                                                    title="Accounts"
-                                                                    metric={
-                                                                        benchmarkKPIEnd
-                                                                            ?.connectionsStatus
-                                                                            ?.total
-                                                                    }
-                                                                    metricPrev={
-                                                                        benchmarkKPIStart
-                                                                            ?.connectionsStatus
-                                                                            ?.total
-                                                                    }
-                                                                    loading={
-                                                                        benchmarkKPIEndLoading ||
-                                                                        benchmarkKPIStartLoading
-                                                                    }
-                                                                />
+                                                        <SummaryCard
+                                                            title="Accounts"
+                                                            metric={
+                                                                benchmarkKPIEnd
+                                                                    ?.connectionsStatus
+                                                                    ?.total
+                                                            }
+                                                            metricPrev={
+                                                                benchmarkKPIStart
+                                                                    ?.connectionsStatus
+                                                                    ?.total
+                                                            }
+                                                            loading={
+                                                                benchmarkKPIEndLoading ||
+                                                                benchmarkKPIStartLoading
+                                                            }
+                                                        />
 
-                                                                {/* <SummaryCard
+                                                        {/* <SummaryCard
                                 title="Events"
                                 metric={events?.count}
                                 loading={eventsLoading}
                             /> */}
-                                                            </Grid>
+                                                    </Grid>
+                                                )}
+                                                {trend === null ? (
+                                                    ''
+                                                ) : (
+                                                    <BenchmarkChart
+                                                        title="Security Score"
+                                                        isLoading={trendLoading}
+                                                        trend={trend}
+                                                        error={toErrorMessage(
+                                                            trendError
                                                         )}
-                                                        {trend === null ? (
-                                                            ''
-                                                        ) : (
-                                                            <BenchmarkChart
-                                                                title="Security Score"
-                                                                isLoading={
-                                                                    trendLoading
-                                                                }
-                                                                trend={trend}
-                                                                error={toErrorMessage(
-                                                                    trendError
-                                                                )}
-                                                                onRefresh={() =>
-                                                                    sendTrend()
-                                                                }
-                                                            />
-                                                        )}
-                                                    </Flex>
-                                                </>
-                                            )}
+                                                        onRefresh={() =>
+                                                            sendTrend()
+                                                        }
+                                                    />
+                                                )}
+                                            </Flex>
                                         </>
-                                    </TabPanel>
+                                    )}{' '}
                                 </>
                             )}
-
-                            <TabPanel key={1}>
-                                {/* <Flex flexDirection='row' justifyContent='start' alignItems='start' className='gap-4'>
-                                    <Flex className=" p-2 w-52 bg-white min-w-52 rounded-md" flexDirection='col' justifyContent='start' alignItems='start'>
-                                        <UncontrolledTreeEnvironment<string>
-                                            canDragAndDrop
-                                            canDropOnFolder
-                                            canReorderItems
-                                            dataProvider={
-                                                new StaticTreeDataProvider(
-                                                    shortTree?.items,
-                                                    (item, data) => ({
-                                                        ...item,
-                                                        data,
-                                                    })
-                                                )
-                                            }
-                                            getItemTitle={(item) => item.data}
-                                            viewState={{
-                                                'tree-1': {
-                                                    expandedItems: [
-                                                        'container',
-                                                    ],
-                                                },
-                                            }}
-                                        >
-                                            <Tree
-                                                treeId="tree-1"
-                                                rootItem="root"
-                                                treeLabel="Tree Example"
-                                            />
-                                        </UncontrolledTreeEnvironment>
-                                    </Flex>
-
-                                    <Flex>
-                                        <Table
-                                            id="compliance_assignments"
-                                            columns={columns(true)}
-                                            onCellClicked={(event) => {}}
-                                            loading={isLoading}
-                                            rowData={[]}
-                                            fullWidth
-                                        />
-                                    </Flex>
-                                </Flex> */}
-                                <>
-                                    {tab == 1 && (
+                            {tab == 1 && (
+                                <div className="w-full flex flex-row justify-start items-start ">
+                                    <div className="w-11/12">
                                         <Controls
                                             id={String(benchmarkId)}
                                             assignments={trend === null ? 0 : 1}
+                                            enable={enable}
                                         />
-                                    )}{' '}
-                                </>
-                            </TabPanel>
+                                    </div>
+                                </div>
+                            )}{' '}
                             {enable && (
                                 <>
                                     {' '}
-                                    <TabPanel key={2}>
-                                        {tab == 2 && (
-                                            <>
-                                                <Findings
-                                                    id={
-                                                        benchmarkId
-                                                            ? benchmarkId
-                                                            : ''
-                                                    }
-                                                />
-                                            </>
-                                        )}
-                                    </TabPanel>
+                                    {tab == 2 && (
+                                        <>
+                                            <Findings
+                                                id={
+                                                    benchmarkId
+                                                        ? benchmarkId
+                                                        : ''
+                                                }
+                                            />
+                                        </>
+                                    )}
                                 </>
                             )}
-
-                            <TabPanel key={3}>
-                                {' '}
-                                {tab == 3 && (
-                                    <>
-                                        <Settings
-                                            id={benchmarkDetail?.id}
-                                            response={(e) => setAssignments(e)}
-                                            autoAssign={
-                                                benchmarkDetail?.autoAssign
-                                            }
-                                            tracksDriftEvents={
-                                                benchmarkDetail?.tracksDriftEvents
-                                            }
-                                            isAutoResponse={(x) =>
-                                                setRecall(true)
-                                            }
-                                            reload={() => updateDetail()}
-                                        />
-                                    </>
-                                )}
-                            </TabPanel>
-                            <TabPanel key={4}>
-                                {tab == 4 && (
-                                    <>
-                                        <Evaluate
-                                            id={benchmarkDetail?.id}
-                                            benchmarkDetail={benchmarkDetail}
-                                            assignmentsCount={assignments}
-                                            onEvaluate={(c) => {
-                                                triggerEvaluate(
-                                                    {
-                                                        benchmark_id: [
-                                                            benchmarkId || '',
-                                                        ],
-                                                        connection_id: c,
-                                                    },
-                                                    {}
-                                                )
-                                            }}
-                                        />
-                                    </>
-                                )}
-                            </TabPanel>
+                            {tab == 3 && (
+                                <>
+                                    <Settings
+                                        id={benchmarkDetail?.id}
+                                        response={(e) => setAssignments(e)}
+                                        autoAssign={benchmarkDetail?.autoAssign}
+                                        tracksDriftEvents={
+                                            benchmarkDetail?.tracksDriftEvents
+                                        }
+                                        isAutoResponse={(x) => setRecall(true)}
+                                        reload={() => updateDetail()}
+                                    />
+                                </>
+                            )}
+                            {tab == 4 && (
+                                <>
+                                    <EvaluateTable
+                                        id={benchmarkDetail?.id}
+                                        benchmarkDetail={benchmarkDetail}
+                                        assignmentsCount={assignments}
+                                        onEvaluate={(c) => {
+                                            triggerEvaluate(
+                                                {
+                                                    benchmark_id: [
+                                                        benchmarkId || '',
+                                                    ],
+                                                    connection_id: c,
+                                                },
+                                                {}
+                                            )
+                                        }}
+                                    />
+                                </>
+                            )}
                         </TabPanels>
                     </TabGroup>
                 </>

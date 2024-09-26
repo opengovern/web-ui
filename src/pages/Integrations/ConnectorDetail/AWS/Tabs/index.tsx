@@ -31,30 +31,12 @@ export default function AWSTabs({ accounts, organizations, loading }: IAWS) {
         }
     }, [tabs])
     return (
-        <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
-            <TabList className="mb-3">
-                <Tab onClick={() => navigate(`#accounts?${searchParams}`)}>
-                    AWS Accounts
-                </Tab>
-                <Tab onClick={() => navigate(`#organizations${searchParams}`)}>
-                    Organizations
-                </Tab>
-            </TabList>
-            <TabPanels>
-                <TabPanel>
-                    <AccountList
-                        accounts={accounts}
-                        organizations={organizations}
-                        loading={loading}
-                    />
-                </TabPanel>
-                <TabPanel>
-                    <Organizations
-                        accounts={accounts}
-                        organizations={organizations}
-                    />
-                </TabPanel>
-            </TabPanels>
-        </TabGroup>
+        <>
+            <AccountList
+                accounts={accounts}
+                organizations={organizations}
+                loading={loading}
+            />
+        </>
     )
 }

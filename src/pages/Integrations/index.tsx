@@ -16,12 +16,8 @@ export default function Integrations() {
         sendNow: getList,
     } = useIntegrationApiV1ConnectorsList(9, pageNo)
 
-    const connectorList = // @ts-ignore
-        (
-            Array.isArray(responseConnectors?.connectors)
-                ? responseConnectors.connectors
-                : []
-        ).sort((a, b) => ((a.label || '') > (b.label || '') ? 1 : -1))
+    const connectorList = responseConnectors?.connectors || []
+       
     // @ts-ignore
 
     function classNames(...classes) {

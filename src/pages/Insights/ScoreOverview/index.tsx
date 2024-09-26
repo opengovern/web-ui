@@ -351,7 +351,7 @@ export default function ScoreOverview() {
                                     className="gap-[70px] mt-6 w-full justify-items-center"
                                 >
                                     {isLoading
-                                        ? [1, 2, 3, 4, 5].map((i) => (
+                                        ? [1, 2, 3,].map((i) => (
                                               <Flex className="gap-6 px-8 py-8 bg-white rounded-xl shadow-sm hover:shadow-md hover:cursor-pointer">
                                                   <Flex className="relative w-fit">
                                                       <ProgressCircle
@@ -469,7 +469,7 @@ export default function ScoreOverview() {
                                                                       curr,
                                                                   0
                                                               )}
-                                                          kpiText="Issues"
+                                                          kpiText="Incidents"
                                                           category={
                                                               item.category
                                                           }

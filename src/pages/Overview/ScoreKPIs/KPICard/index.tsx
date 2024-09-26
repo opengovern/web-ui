@@ -44,17 +44,19 @@ export default function KPICard({ name, number, percentage, link }: Props) {
                     <p className="text-xl text-gray-900 dark:text-gray-50">
                         {name}
                     </p>
-                    <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-50">
-                        {number}
+                    <p className="mt-1 text-lg  text-gray-900 dark:text-gray-50">
+                        {`${name == 'Efficiency' ? '$' : ''}${Math.floor(number ?? 0)} `}
                         <span className="text-xs font-normal text-gray-700 dark:text-gray-300">
-                            {' Issues '}
+                            {name == 'Efficiency'
+                                ? 'wasteful spend '
+                                : ' Incidents '}
                         </span>
                         {/* <span className="text-xs font-normal text-gray-700 dark:text-gray-300">
                             ({Math.floor(percentage)} &#37;)
                         </span> */}
                     </p>
                 </div>
-                <div className='flex flex-row gap-2 justify-center items-center'>
+                <div className="flex flex-row gap-2 justify-center items-center">
                     <ProgressCircle
                         value={percentage}
                         radius={20}

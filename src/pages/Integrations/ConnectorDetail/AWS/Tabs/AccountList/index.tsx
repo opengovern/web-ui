@@ -1,4 +1,4 @@
-import { Badge, Button, Color } from '@tremor/react'
+import { Badge, Button, Color, TextInput } from '@tremor/react'
 import { useState } from 'react'
 import {
     GridOptions,
@@ -20,6 +20,8 @@ import Table, { IColumn } from '../../../../../../components/Table'
 import { snakeCaseToLabel } from '../../../../../../utilities/labelMaker'
 import { isDemoAtom } from '../../../../../../store'
 import OnboardDrawer from '../../../../Onboard/AWS'
+import { Box, Modal, Select, SpaceBetween } from '@cloudscape-design/components'
+import { PencilIcon } from '@heroicons/react/24/outline'
 
 interface IAccountList {
     accounts: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
@@ -261,11 +263,14 @@ export default function AccountList({
     const [openInfo, setOpenInfo] = useState(false)
     const [open, setOpen] = useState(false)
     const isDemo = useAtomValue(isDemoAtom)
+    const [edit, setEdit] = useState<boolean>(false)
+    const [selectedOrg, setSelectedOrg] = useState<string | undefined>(undefined)
+
 
     return (
         <>
             <Table
-                downloadable
+                // downloadable
                 title="Accounts"
                 id="aws_account_list"
                 options={options}
@@ -284,7 +289,76 @@ export default function AccountList({
                 <Button icon={PlusIcon} onClick={() => setOpen(true)}>
                     Onboard New AWS Account
                 </Button>
+                <Button icon={PencilIcon} onClick={() => setEdit(true)}>
+                    Edit Credintials
+                </Button>
             </Table>
+            <Modal
+                onDismiss={() => setEdit(false)}
+                visible={edit}
+                footer={
+                    <Box float="right">
+                        <SpaceBetween direction="horizontal" size="xs">
+                            <Button
+                                variant="secondary"
+                                onClick={() => setEdit(false)}
+                            >
+                                Close
+                            </Button>
+
+                            <Button
+                            disabled={selectedOrg === undefined}
+                                onClick={() => {
+                                    setEdit(false)
+                                }}
+                            >
+                                Edit
+                            </Button>
+                        </SpaceBetween>
+                    </Box>
+                }
+                header="Edit Credintials"
+            >
+                <Select
+                    // @ts-ignore
+                    selectedOption={selectedOrg}
+                    // @ts-ignore
+
+                    onChange={({ detail }) => {
+                        // @ts-ignore
+                        setSelectedOrg(detail.selectedOption)
+                    }}
+                    placeholder="Select organization"
+                    options={organizations?.map((org) => {
+                        return {
+                            label: org?.name,
+                            value: org?.id,
+                        }
+                    })}
+                />
+                {selectedOrg && (
+                    <>
+                        <TextInput
+                            className="w-full my-3"
+                            value={''}
+                            placeholder="Access key ID"
+                            onChange={(e) => {}}
+                        />
+                        <TextInput
+                            className="w-full my-3"
+                            value={''}
+                            placeholder="Secret access key"
+                            onChange={(e) => {}}
+                        />
+                        <TextInput
+                            className="w-full my-3"
+                            value={''}
+                            placeholder="Role name"
+                            onChange={(e) => {}}
+                        />
+                    </>
+                )}
+            </Modal>
             <AccountInfo
                 data={accData}
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

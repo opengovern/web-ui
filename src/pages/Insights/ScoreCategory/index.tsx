@@ -7,6 +7,9 @@ import {
     Switch,
     TextInput,
     Badge,
+    Accordion,
+    AccordionHeader,
+    AccordionBody,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import {
@@ -17,6 +20,8 @@ import {
     MagnifyingGlassIcon,
     ChevronDownIcon,
     ChevronRightIcon,
+    ChevronDoubleLeftIcon,
+    FunnelIcon,
 } from '@heroicons/react/24/outline'
 import {
     GridOptions,
@@ -26,7 +31,7 @@ import {
     ValueFormatterParams,
 } from 'ag-grid-community'
 import { Link, useNavigate } from 'react-router-dom'
-import { useComplianceApiV1BenchmarksControlsDetail } from '../../../api/compliance.gen'
+import { useComplianceApiV1BenchmarksControlsDetail, useInventoryApiV3AllBenchmarksControls } from '../../../api/compliance.gen'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../../api/api'
 import TopHeader from '../../../components/Layout/Header'
 import {
@@ -42,6 +47,7 @@ import {
     exactPriceDisplay,
     numberDisplay,
 } from '../../../utilities/numericDisplay'
+import { useInventoryApiV3AllQueryCategory } from '../../../api/inventory.gen'
 
 interface IRecord
     extends GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary {
@@ -397,6 +403,9 @@ export default function ScoreCategory() {
     const searchParams = useAtomValue(searchAtom)
     const [hideZero, setHideZero] = useState(true)
     const [quickFilterValue, setQuickFilterValue] = useState<string>('')
+    const [openSearch, setOpenSearch] = useState(true)
+    const [searchCategory, setSearchCategory] = useState('')
+
     const [isGrouped, setIsGrouped] = useState<boolean>(false)
     const categories = [
         'security',
@@ -678,6 +687,9 @@ export default function ScoreCategory() {
             return [...prev, curr]
         }, [])
 
+    const { response: categoriesAll, isLoading: categoryLoading } =
+        useInventoryApiV3AllBenchmarksControls()
+
     return (
         <>
             <TopHeader
@@ -701,6 +713,86 @@ export default function ScoreCategory() {
             />
 
             <Flex alignItems="start" className="gap-4">
+                {openSearch ? (
+                    <Card className="sticky w-fit">
+                        <TextInput
+                            className="w-56 mb-6"
+                            icon={MagnifyingGlassIcon}
+                            placeholder="Search..."
+                            value={searchCategory}
+                            onChange={(e) => setSearchCategory(e.target.value)}
+                        />
+                        {categoriesAll?.categories.map(
+                            (cat) =>
+                                !!cat.tables?.filter((catt) =>
+                                    catt.name
+                                        .toLowerCase()
+                                        .includes(searchCategory.toLowerCase())
+                                ).length && (
+                                    <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
+                                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                                            <Text className="text-gray-800 text-left">
+                                                {cat.category}
+                                            </Text>
+                                        </AccordionHeader>
+                                        <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
+                                            <Flex
+                                                flexDirection="col"
+                                                justifyContent="start"
+                                            >
+                                                {cat.tables
+                                                    ?.filter((catt) =>
+                                                        catt.name
+                                                            .toLowerCase()
+                                                            .includes(
+                                                                searchCategory.toLowerCase()
+                                                            )
+                                                    )
+                                                    .map((subCat) => (
+                                                        <Flex
+                                                            justifyContent="start"
+                                                            onClick={() =>{}
+                                                                // setCode(
+                                                                //     `select * from kaytu_resources where resource_type = '${subCat}'`
+                                                                // )
+                                                            }
+                                                        >
+                                                            <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
+                                                                {subCat.name}
+                                                            </Text>
+                                                        </Flex>
+                                                    ))}
+                                            </Flex>
+                                        </AccordionBody>
+                                    </Accordion>
+                                )
+                        )}
+                        <Flex justifyContent="end" className="mt-12">
+                            <Button
+                                variant="light"
+                                onClick={() => setOpenSearch(false)}
+                            >
+                                <ChevronDoubleLeftIcon className="h-4" />
+                            </Button>
+                        </Flex>
+                    </Card>
+                ) : (
+                    <Flex
+                        flexDirection="col"
+                        justifyContent="center"
+                        className="min-h-full w-fit"
+                    >
+                        <Button
+                            variant="light"
+                            onClick={() => setOpenSearch(true)}
+                        >
+                            <Flex flexDirection="col" className="gap-4 w-4">
+                                <FunnelIcon />
+                                <Text className="rotate-90">Options</Text>
+                            </Flex>
+                        </Button>
+                    </Flex>
+                )}
                 {errorWS === undefined &&
                 errorWC === undefined &&
                 errorWO === undefined &&

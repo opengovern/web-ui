@@ -43,6 +43,7 @@ import {
 interface IPolicies {
     id: string | undefined
     assignments: number
+    enable? :boolean
 }
 
 export const severityBadge = (severity: any) => {
@@ -189,7 +190,7 @@ export const countControls = (
     return total
 }
 
-export default function Controls({ id, assignments }: IPolicies) {
+export default function Controls({ id, assignments, enable }: IPolicies) {
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
     const navigate = useNavigate()
@@ -283,38 +284,47 @@ export default function Controls({ id, assignments }: IPolicies) {
                                             <Title className="font-semibold">
                                                 {name}
                                             </Title>
-                                            {assignments > 0 && (
-                                                <Flex
-                                                    justifyContent="start"
-                                                    className="gap-2"
-                                                    style={{ width: '230px' }}
-                                                >
-                                                    {value?.filter(
-                                                        (c: any) => c.passed
-                                                    ).length ===
-                                                    value?.length ? (
-                                                        <CheckCircleIcon className="w-5 min-w-[20px] text-emerald-500" />
-                                                    ) : (
-                                                        <XCircleIcon className="w-5 min-w-[20px] text-rose-600" />
+                                            {enable !== false && (
+                                                <>
+                                                    {assignments > 0 && (
+                                                        <Flex
+                                                            justifyContent="start"
+                                                            className="gap-2"
+                                                            style={{
+                                                                width: '230px',
+                                                            }}
+                                                        >
+                                                            {value?.filter(
+                                                                (c: any) =>
+                                                                    c.passed
+                                                            ).length ===
+                                                            value?.length ? (
+                                                                <CheckCircleIcon className="w-5 min-w-[20px] text-emerald-500" />
+                                                            ) : (
+                                                                <XCircleIcon className="w-5 min-w-[20px] text-rose-600" />
+                                                            )}
+                                                            <Text className="font-semibold whitespace-nowrap">{`Passed controls: ${numberDisplay(
+                                                                value?.filter(
+                                                                    (c: any) =>
+                                                                        c.passed
+                                                                ).length,
+                                                                0
+                                                            )}/${numberDisplay(
+                                                                value?.length,
+                                                                0
+                                                            )} (${Math.floor(
+                                                                // eslint-disable-next-line no-unsafe-optional-chaining
+                                                                (value?.filter(
+                                                                    (c: any) =>
+                                                                        c.passed
+                                                                ).length /
+                                                                    (value?.length ||
+                                                                        0)) *
+                                                                    100
+                                                            )}%)`}</Text>
+                                                        </Flex>
                                                     )}
-                                                    <Text className="font-semibold whitespace-nowrap">{`Passed controls: ${numberDisplay(
-                                                        value?.filter(
-                                                            (c: any) => c.passed
-                                                        ).length,
-                                                        0
-                                                    )}/${numberDisplay(
-                                                        value?.length,
-                                                        0
-                                                    )} (${Math.floor(
-                                                        // eslint-disable-next-line no-unsafe-optional-chaining
-                                                        (value?.filter(
-                                                            (c: any) => c.passed
-                                                        ).length /
-                                                            (value?.length ||
-                                                                0)) *
-                                                            100
-                                                    )}%)`}</Text>
-                                                </Flex>
+                                                </>
                                             )}
                                         </Flex>
                                     </Flex>
@@ -330,14 +340,19 @@ export default function Controls({ id, assignments }: IPolicies) {
                                             <TableHeaderCell>
                                                 Title
                                             </TableHeaderCell>
-                                            <TableHeaderCell className="w-40">
-                                                Remediation
-                                            </TableHeaderCell>
-                                            {assignments > 0 && (
-                                                <TableHeaderCell className="w-48">
-                                                    Passed resources
-                                                </TableHeaderCell>
+                                            {enable !== false && (
+                                                <>
+                                                    <TableHeaderCell className="w-40">
+                                                        Remediation
+                                                    </TableHeaderCell>
+                                                    {assignments > 0 && (
+                                                        <TableHeaderCell className="w-48">
+                                                            Passed resources
+                                                        </TableHeaderCell>
+                                                    )}
+                                                </>
                                             )}
+
                                             <TableHeaderCell className="w-5" />
                                         </TableRow>
                                     </TableHead>
@@ -385,152 +400,163 @@ export default function Controls({ id, assignments }: IPolicies) {
                                                         </Col>
                                                     </Grid>
                                                 </TableCell>
-                                                <TableCell>
-                                                    <Flex
-                                                        justifyContent="start"
-                                                        className="gap-1.5"
-                                                    >
-                                                        {v?.cliRemediation &&
-                                                            v?.cliRemediation
-                                                                .length > 0 && (
-                                                                <div className="group relative flex justify-center">
-                                                                    <CommandLineIcon
-                                                                        className="text-kaytu-500 w-5"
-                                                                        onClick={() => {
-                                                                            setDoc(
-                                                                                v?.cliRemediation
-                                                                            )
-                                                                            setDocTitle(
-                                                                                `Command line (CLI) remediation for '${v?.title}'`
-                                                                            )
-                                                                        }}
-                                                                    />
-                                                                    <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
-                                                                        <Text>
-                                                                            Command
-                                                                            line
-                                                                            (CLI)
-                                                                        </Text>
-                                                                    </Card>
-                                                                </div>
-                                                            )}
-                                                        {v?.manualRemediation &&
-                                                            v?.manualRemediation
-                                                                .length > 0 && (
-                                                                <div className="group relative flex justify-center">
-                                                                    <BookOpenIcon
-                                                                        className="text-kaytu-500 w-5"
-                                                                        onClick={() => {
-                                                                            setDoc(
-                                                                                v?.manualRemediation
-                                                                            )
-                                                                            setDocTitle(
-                                                                                `Manual remediation for '${v?.title}'`
-                                                                            )
-                                                                        }}
-                                                                    />
-                                                                    <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
-                                                                        <Text>
-                                                                            Manual
-                                                                        </Text>
-                                                                    </Card>
-                                                                </div>
-                                                            )}
-                                                        {v?.programmaticRemediation &&
-                                                            v
-                                                                ?.programmaticRemediation
-                                                                .length > 0 && (
-                                                                <div className="group relative flex justify-center">
-                                                                    <CodeBracketIcon
-                                                                        className="text-kaytu-500 w-5"
-                                                                        onClick={() => {
-                                                                            setDoc(
-                                                                                v?.programmaticRemediation
-                                                                            )
-                                                                            setDocTitle(
-                                                                                `Programmatic remediation for '${v?.title}'`
-                                                                            )
-                                                                        }}
-                                                                    />
-                                                                    <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
-                                                                        <Text>
-                                                                            Programmatic
-                                                                        </Text>
-                                                                    </Card>
-                                                                </div>
-                                                            )}
-                                                        {v?.guardrailRemediation &&
-                                                            v
-                                                                ?.guardrailRemediation
-                                                                .length > 0 && (
-                                                                <div className="group relative flex justify-center">
-                                                                    <Cog8ToothIcon
-                                                                        className="text-kaytu-500 w-5"
-                                                                        onClick={() => {
-                                                                            setDoc(
-                                                                                v?.guardrailRemediation
-                                                                            )
-                                                                            setDocTitle(
-                                                                                `Guard rails remediation for '${v?.title}'`
-                                                                            )
-                                                                        }}
-                                                                    />
-                                                                    <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
-                                                                        <Text>
-                                                                            Guard
-                                                                            rail
-                                                                        </Text>
-                                                                    </Card>
-                                                                </div>
-                                                            )}
-                                                    </Flex>
-                                                </TableCell>
-                                                {assignments > 0 && (
-                                                    <TableCell
-                                                        onClick={() =>
-                                                            navigate(
-                                                                `${String(
-                                                                    v?.id
-                                                                )}?${searchParams}`
-                                                            )
-                                                        }
-                                                    >
-                                                        <Flex
-                                                            justifyContent="start"
-                                                            className="gap-2"
-                                                        >
-                                                            {(v?.totalResourcesCount ||
-                                                                0) -
-                                                                (v?.failedResourcesCount ||
-                                                                    0) ===
-                                                            (v?.totalResourcesCount ||
-                                                                0) ? (
-                                                                <CheckCircleIcon className="w-5 min-w-[20px] text-emerald-500" />
-                                                            ) : (
-                                                                <XCircleIcon className="w-5 min-w-[20px] text-rose-600" />
-                                                            )}
-                                                            {`${numberDisplay(
-                                                                (v?.totalResourcesCount ||
-                                                                    0) -
-                                                                    (v?.failedResourcesCount ||
-                                                                        0),
-                                                                0
-                                                            )}/${numberDisplay(
-                                                                v?.totalResourcesCount ||
-                                                                    0,
-                                                                0
-                                                            )} (${Math.floor(
-                                                                (((v?.totalResourcesCount ||
-                                                                    0) -
-                                                                    (v?.failedResourcesCount ||
-                                                                        0)) /
+                                                {enable !== false && (
+                                                    <>
+                                                        <TableCell>
+                                                            <Flex
+                                                                justifyContent="start"
+                                                                className="gap-1.5"
+                                                            >
+                                                                {v?.cliRemediation &&
+                                                                    v
+                                                                        ?.cliRemediation
+                                                                        .length >
+                                                                        0 && (
+                                                                        <div className="group relative flex justify-center">
+                                                                            <CommandLineIcon
+                                                                                className="text-kaytu-500 w-5"
+                                                                                onClick={() => {
+                                                                                    setDoc(
+                                                                                        v?.cliRemediation
+                                                                                    )
+                                                                                    setDocTitle(
+                                                                                        `Command line (CLI) remediation for '${v?.title}'`
+                                                                                    )
+                                                                                }}
+                                                                            />
+                                                                            <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                                                                                <Text>
+                                                                                    Command
+                                                                                    line
+                                                                                    (CLI)
+                                                                                </Text>
+                                                                            </Card>
+                                                                        </div>
+                                                                    )}
+                                                                {v?.manualRemediation &&
+                                                                    v
+                                                                        ?.manualRemediation
+                                                                        .length >
+                                                                        0 && (
+                                                                        <div className="group relative flex justify-center">
+                                                                            <BookOpenIcon
+                                                                                className="text-kaytu-500 w-5"
+                                                                                onClick={() => {
+                                                                                    setDoc(
+                                                                                        v?.manualRemediation
+                                                                                    )
+                                                                                    setDocTitle(
+                                                                                        `Manual remediation for '${v?.title}'`
+                                                                                    )
+                                                                                }}
+                                                                            />
+                                                                            <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                                                                                <Text>
+                                                                                    Manual
+                                                                                </Text>
+                                                                            </Card>
+                                                                        </div>
+                                                                    )}
+                                                                {v?.programmaticRemediation &&
+                                                                    v
+                                                                        ?.programmaticRemediation
+                                                                        .length >
+                                                                        0 && (
+                                                                        <div className="group relative flex justify-center">
+                                                                            <CodeBracketIcon
+                                                                                className="text-kaytu-500 w-5"
+                                                                                onClick={() => {
+                                                                                    setDoc(
+                                                                                        v?.programmaticRemediation
+                                                                                    )
+                                                                                    setDocTitle(
+                                                                                        `Programmatic remediation for '${v?.title}'`
+                                                                                    )
+                                                                                }}
+                                                                            />
+                                                                            <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                                                                                <Text>
+                                                                                    Programmatic
+                                                                                </Text>
+                                                                            </Card>
+                                                                        </div>
+                                                                    )}
+                                                                {v?.guardrailRemediation &&
+                                                                    v
+                                                                        ?.guardrailRemediation
+                                                                        .length >
+                                                                        0 && (
+                                                                        <div className="group relative flex justify-center">
+                                                                            <Cog8ToothIcon
+                                                                                className="text-kaytu-500 w-5"
+                                                                                onClick={() => {
+                                                                                    setDoc(
+                                                                                        v?.guardrailRemediation
+                                                                                    )
+                                                                                    setDocTitle(
+                                                                                        `Guard rails remediation for '${v?.title}'`
+                                                                                    )
+                                                                                }}
+                                                                            />
+                                                                            <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
+                                                                                <Text>
+                                                                                    Guard
+                                                                                    rail
+                                                                                </Text>
+                                                                            </Card>
+                                                                        </div>
+                                                                    )}
+                                                            </Flex>
+                                                        </TableCell>
+                                                        {assignments > 0 && (
+                                                            <TableCell
+                                                                onClick={() =>
+                                                                    navigate(
+                                                                        `${String(
+                                                                            v?.id
+                                                                        )}?${searchParams}`
+                                                                    )
+                                                                }
+                                                            >
+                                                                <Flex
+                                                                    justifyContent="start"
+                                                                    className="gap-2"
+                                                                >
+                                                                    {(v?.totalResourcesCount ||
+                                                                        0) -
+                                                                        (v?.failedResourcesCount ||
+                                                                            0) ===
                                                                     (v?.totalResourcesCount ||
-                                                                        1)) *
-                                                                    100
-                                                            )}%)`}
-                                                        </Flex>
-                                                    </TableCell>
+                                                                        0) ? (
+                                                                        <CheckCircleIcon className="w-5 min-w-[20px] text-emerald-500" />
+                                                                    ) : (
+                                                                        <XCircleIcon className="w-5 min-w-[20px] text-rose-600" />
+                                                                    )}
+                                                                    {`${numberDisplay(
+                                                                        (v?.totalResourcesCount ||
+                                                                            0) -
+                                                                            (v?.failedResourcesCount ||
+                                                                                0),
+                                                                        0
+                                                                    )}/${numberDisplay(
+                                                                        v?.totalResourcesCount ||
+                                                                            0,
+                                                                        0
+                                                                    )} (${Math.floor(
+                                                                        (((v?.totalResourcesCount ||
+                                                                            0) -
+                                                                            (v?.failedResourcesCount ||
+                                                                                0)) /
+                                                                            (v?.totalResourcesCount ||
+                                                                                1)) *
+                                                                            100
+                                                                    )}%)`}
+                                                                </Flex>
+                                                            </TableCell>
+                                                        )}
+                                                    </>
                                                 )}
+
                                                 <TableCell
                                                     onClick={() =>
                                                         navigate(

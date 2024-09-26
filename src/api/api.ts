@@ -1249,6 +1249,20 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse {
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse {
     categoryResourceType?: Record<string, string[]>
 }
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiInventoryCategoriesResponse {
+    categories: GithubComKaytuIoKaytuEnginePkgInventoryApiInventoryCategoriesResponseCategory[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiInventoryCategoriesResponseCategory {
+    category: string
+    tables: GithubComKaytuIoKaytuEnginePkgInventoryApiInventoryCategoriesResponseTable[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiInventoryCategoriesResponseTable {
+    name: string
+    table: string
+    resource_type: string
+}
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric {
     connectors?: SourceType[]
@@ -5462,6 +5476,27 @@ export class Api<
                 format: 'json',
                 ...params,
             }),
+        /**
+         * @description Retrieving list of categories for all controls
+         *
+         * @tags analytics
+         * @name ApiV3ComplianceControlCategoryList
+         * @summary List Analytics categories
+         * @request GET:/compliance/api/v3/controls/categories
+         * @secure
+         */
+        apiV3ComplianceControlCategoryList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiInventoryCategoriesResponse,
+                any
+            >({
+                path: `/compliance/api/v3/controls/categories`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
     }
     integration = {
         /**
@@ -6110,6 +6145,27 @@ export class Api<
                 path: `/inventory/api/v2/analytics/categories`,
                 method: 'GET',
                 query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+        /**
+         * @description Retrieving list of categories for all query
+         *
+         * @tags analytics
+         * @name ApiV3InventoryCategoryList
+         * @summary List Analytics categories
+         * @request GET:/inventory/api/v3/queries/categories
+         * @secure
+         */
+        apiV3InventoryCategoryList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiInventoryCategoriesResponse,
+                any
+            >({
+                path: `/inventory/api/v3/queries/categories`,
+                method: 'GET',
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
@@ -7991,6 +8047,5 @@ export class Api<
                 format: 'json',
                 ...params,
             }),
-        
     }
 }

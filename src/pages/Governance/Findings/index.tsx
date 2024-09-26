@@ -1,4 +1,4 @@
-import { Card, Flex, Grid, Tab, TabGroup, TabList, TabPanel, TabPanels, Title } from '@tremor/react'
+import { Card, Col, Divider, Flex, Grid, Tab, TabGroup, TabList, TabPanel, TabPanels, Title } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import FindingsWithFailure from './FindingsWithFailure'
 import TopHeader from '../../../components/Layout/Header'
@@ -94,7 +94,7 @@ export default function Findings() {
 
     return (
         <>
-            <TopHeader />
+            {/* <TopHeader /> */}
             {show ? (
                 <>
                     <Filter type={selectedGroup} onApply={(e) => setQuery(e)} />
@@ -383,8 +383,173 @@ export default function Findings() {
                                     </header>
                                 </div>
                                 <div className="w-full">
-                                    <div className="p-4 sm:p-6 lg:p-8">
+                                    <div className="p-4  sm:p-4 lg:p-8 lg:pt-2">
                                         <main>
+                                            <Grid
+                                                // flexDirection="row"
+                                                numItems={3}
+                                                // justifyContent="center"
+                                                // alignItems="center"
+                                                className="mt-5 gap-8 flex-col w-full"
+                                            >
+                                                <Col numColSpan={3}>
+                                                    <Title>
+                                                        Incident Summary
+                                                    </Title>
+                                                </Col>
+                                                <Card
+                                                    className=" cursor-pointer flex justify-center items-center"
+                                                    onClick={() => {
+                                                        setTab(1)
+                                                        setSecondTab(0)
+                                                        setShow(true)
+                                                        setSelectedGroup(
+                                                            'accounts'
+                                                        )
+                                                    }}
+                                                >
+                                                    <Flex
+                                                        flexDirection="row"
+                                                        justifyContent="between"
+                                                        className="h-100"
+                                                    >
+                                                        <Flex
+                                                            flexDirection="col"
+                                                            alignItems="start"
+                                                            justifyContent="center"
+                                                            className="gap-3 w-full"
+                                                        >
+                                                            <Title className="flex w-max flex-row gap-1 justify-center align-center items-center">
+                                                                By Cloud
+                                                                Account
+                                                                <ChevronRightIcon className="w-[20px] mt-1" />
+                                                            </Title>
+                                                            <p className="dark:text-dark-tremor-cont text-tremor-default text-tremor-content">
+                                                                View all
+                                                                incidents and
+                                                                drift events
+                                                                across clouds,
+                                                                accounts,
+                                                                regions and
+                                                                platforms.
+                                                            </p>
+                                                        </Flex>
+                                                        {/* <Flex
+                                                            flexDirection="row"
+                                                            justifyContent="end"
+                                                            className="h-full"
+                                                        >
+                                                            <Title className=" font-bold  border-solid w-fit h-full  border-l-2 border-black pl-2 h-full">
+                                                                1K{' '}
+                                                                <span className="font-semibold text-blue-600">
+                                                                    +
+                                                                </span>
+                                                            </Title>
+                                                        </Flex> */}
+                                                    </Flex>
+                                                </Card>
+                                                <Card
+                                                    className=" cursor-pointer flex justify-center items-center"
+                                                    onClick={() => {
+                                                        setTab(1)
+                                                        setSecondTab(1)
+                                                        setShow(true)
+                                                        setSelectedGroup(
+                                                            'resources'
+                                                        )
+                                                    }}
+                                                >
+                                                    <Flex
+                                                        flexDirection="row"
+                                                        justifyContent="between"
+                                                        className="h-100"
+                                                    >
+                                                        <Flex
+                                                            flexDirection="col"
+                                                            alignItems="start"
+                                                            justifyContent="center"
+                                                            className="gap-3 w-full"
+                                                        >
+                                                            <Title className="flex w-max flex-row gap-1 justify-center align-center items-center">
+                                                                By Resource
+                                                                Type
+                                                                <ChevronRightIcon className="w-[20px] mt-1" />
+                                                            </Title>
+                                                            <p className="dark:text-dark-tremor-cont text-tremor-default text-tremor-content">
+                                                                Get a summarized
+                                                                view of posture
+                                                                by Asset,
+                                                                Entity, or
+                                                                Resource Type.
+                                                            </p>
+                                                        </Flex>
+                                                        {/* <Flex
+                                                            flexDirection="row"
+                                                            justifyContent="end"
+                                                            className="h-full"
+                                                        >
+                                                            <Title className=" font-bold  border-solid w-fit h-full  border-l-2 border-black pl-2 h-full">
+                                                                2K{' '}
+                                                                <span className="font-semibold text-blue-600">
+                                                                    +
+                                                                </span>
+                                                            </Title>
+                                                        </Flex> */}
+                                                    </Flex>
+                                                </Card>{' '}
+                                                <Card
+                                                    className=" cursor-pointer flex justify-center items-center"
+                                                    onClick={() => {
+                                                        setTab(1)
+
+                                                        setSecondTab(2)
+                                                        setShow(true)
+                                                        setSelectedGroup(
+                                                            'controls'
+                                                        )
+                                                    }}
+                                                >
+                                                    <Flex
+                                                        flexDirection="row"
+                                                        justifyContent="between"
+                                                        className="h-100"
+                                                    >
+                                                        <Flex
+                                                            flexDirection="col"
+                                                            alignItems="start"
+                                                            justifyContent="center"
+                                                            className="gap-3 w-full"
+                                                        >
+                                                            <Title className="flex w-max flex-row gap-1 justify-center align-center items-center">
+                                                                By Control
+                                                                <ChevronRightIcon className="w-[20px] mt-1" />
+                                                            </Title>
+                                                            <p className="dark:text-dark-tremor-cont text-tremor-default text-tremor-content">
+                                                                Get an overview
+                                                                of conformance
+                                                                by controls and
+                                                                identify
+                                                                problematic
+                                                                ones.
+                                                            </p>
+                                                        </Flex>
+                                                        {/* <Flex
+                                                            flexDirection="row"
+                                                            justifyContent="end"
+                                                            className="h-full"
+                                                        >
+                                                            <Title className=" font-bold  border-solid w-fit h-full  border-l-2 border-black pl-2 h-full">
+                                                                2K{' '}
+                                                                <span className="font-semibold text-blue-600">
+                                                                    +
+                                                                </span>
+                                                            </Title>
+                                                        </Flex> */}
+                                                    </Flex>
+                                                </Card>{' '}
+                                            </Grid>
+                                            {/* <Divider className="mt-10 mb-10" /> */}
+
                                             <Grid
                                                 // flexDirection="row"
                                                 numItems={2}
@@ -392,6 +557,9 @@ export default function Findings() {
                                                 // alignItems="center"
                                                 className="mt-5 gap-8 flex-col w-full"
                                             >
+                                                <Col numColSpan={2}>
+                                                    <Title>All Events</Title>
+                                                </Col>
                                                 <Card
                                                     className=" cursor-pointer flex justify-center items-center"
                                                     onClick={() => {
@@ -427,7 +595,7 @@ export default function Findings() {
                                                                 platforms.
                                                             </p>
                                                         </Flex>
-                                                        <Flex
+                                                        {/* <Flex
                                                             flexDirection="row"
                                                             justifyContent="end"
                                                             className="h-full"
@@ -438,7 +606,7 @@ export default function Findings() {
                                                                     +
                                                                 </span>
                                                             </Title>
-                                                        </Flex>
+                                                        </Flex> */}
                                                     </Flex>
                                                 </Card>
                                                 <Card
@@ -475,7 +643,7 @@ export default function Findings() {
                                                                 Benchmarks
                                                             </p>
                                                         </Flex>
-                                                        <Flex
+                                                        {/* <Flex
                                                             flexDirection="row"
                                                             justifyContent="end"
                                                             className="h-full"
@@ -486,7 +654,7 @@ export default function Findings() {
                                                                     +
                                                                 </span>
                                                             </Title>
-                                                        </Flex>
+                                                        </Flex> */}
                                                     </Flex>
                                                 </Card>{' '}
                                             </Grid>

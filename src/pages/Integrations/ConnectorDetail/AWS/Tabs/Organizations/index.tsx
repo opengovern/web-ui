@@ -1,4 +1,4 @@
-import { Badge, Button } from '@tremor/react'
+import { Badge, Button, Select, TextInput } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { useState } from 'react'
@@ -11,6 +11,8 @@ import {
 import Table, { IColumn } from '../../../../../../components/Table'
 import { isDemoAtom } from '../../../../../../store'
 import OnboardDrawer from '../../../../Onboard/AWS'
+import { PencilIcon } from '@heroicons/react/24/outline'
+import { Box, Modal, SpaceBetween } from '@cloudscape-design/components'
 
 interface IOrganizations {
     accounts: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
@@ -127,12 +129,13 @@ export default function Organizations({
         | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential
         | undefined
     >(undefined)
+    const [edit,setEdit] = useState<boolean>(false);
     const isDemo = useAtomValue(isDemoAtom)
 
     return (
         <>
             <Table
-                downloadable
+                // downloadable
                 title="Organizations"
                 id="aws_org_list"
                 columns={columns(isDemo)}
@@ -144,10 +147,68 @@ export default function Organizations({
                     setOpenInfo(true)
                 }}
             >
-                <Button icon={PlusIcon} onClick={() => setOpen(true)}>
-                    Create New Organization
-                </Button>
+               
             </Table>
+            <Modal
+                onDismiss={() => setEdit(false)}
+                visible={edit}
+                footer={
+                    <Box float="right">
+                        <SpaceBetween direction="horizontal" size="xs">
+                            <Button
+                                variant="secondary"
+                                onClick={() => setEdit(false)}
+                            >
+                                Close
+                            </Button>
+
+                            <Button
+                                onClick={() => {
+                                    setEdit(false)
+                                }}
+                            >
+                                Edit
+                            </Button>
+                        </SpaceBetween>
+                    </Box>
+                }
+                header="Edit Credintials"
+            >
+                <Select
+                // @ts-ignore
+                    selectedOption={undefined}
+                // @ts-ignore
+
+                    onChange={({ detail }) =>{}}
+                    placeholder='Select organization'    
+                
+                    options={[
+                        { label: 'Option 1', value: '1' },
+                        { label: 'Option 2', value: '2' },
+                        { label: 'Option 3', value: '3' },
+                        { label: 'Option 4', value: '4' },
+                        { label: 'Option 5', value: '5' },
+                    ]}
+                />
+                <TextInput
+                    className="w-full my-3"
+                    value={''}
+                    placeholder="Access key ID"
+                    onChange={(e) => {}}
+                />
+                <TextInput
+                    className="w-full my-3"
+                    value={''}
+                    placeholder="Secret access key"
+                    onChange={(e) => {}}
+                />
+                <TextInput
+                    className="w-full my-3"
+                    value={''}
+                    placeholder="Role name"
+                    onChange={(e) => {}}
+                />
+            </Modal>
             <OrganizationInfo
                 open={openInfo}
                 onClose={() => {

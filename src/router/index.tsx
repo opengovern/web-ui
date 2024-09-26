@@ -44,6 +44,7 @@ import NewBenchmarkSummary from '../pages/Governance/Compliance/NewBenchmarkSumm
 import Dashboard from '../pages/Dashboard'
 import Library from '../pages/Governance/Compliance/Library'
 import Search from '../pages/Search'
+import SettingsAccess from '../pages/Settings/Access'
 
 const authRoutes = [
     {
@@ -265,6 +266,11 @@ const authRoutes = [
         key: 'settings Authentications',
         path: '/ws/:ws/settings/authentication',
         element: <SettingsMembers />,
+    },
+    {
+        key: 'settings Access',
+        path: '/ws/:ws/settings/access',
+        element: <SettingsAccess />,
     },
     {
         key: 'security overview',

@@ -370,10 +370,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             },
             {
                 name: 'SRE',
-                page: ['score'],
+                page: ['score', 'score/categories'],
                 icon: ChevronDoubleUpIcon,
                 isPreview: false,
-            
             },
             {
                 name: 'Dashboards',
@@ -399,36 +398,36 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     // 'incidents/drift-events',
                 ],
                 isPreview: false,
-                children: [
-                    {
-                        name: 'Summary',
-                        page: 'incidents/summary',
-                    },
-                    {
-                        name: 'All Incidents',
-                        page: 'incidents',
-                        isLoading: findingsIsLoading,
-                        // count: numericDisplay(findingsCount?.count) || 0,
-                        error: findingsErr,
-                    },
+                // children: [
+                //     {
+                //         name: 'Summary',
+                //         page: 'incidents/summary',
+                //     },
+                //     {
+                //         name: 'Incidents',
+                //         page: 'incidents',
+                //         isLoading: findingsIsLoading,
+                //         // count: numericDisplay(findingsCount?.count) || 0,
+                //         error: findingsErr,
+                //     },
 
-                    // {
-                    //     name: 'Resource Summary',
-                    //     page: 'incidents/resource-summary',
-                    // },
-                    // {
-                    //     name: 'Drift Events',
-                    //     page: 'incidents/drift-events',
-                    // },
-                    // {
-                    //     name: 'Account Posture',
-                    //     page: 'incidents/account-posture',
-                    // },
-                    // {
-                    //     name: 'Control Summary',
-                    //     page: 'incidents/control-summary',
-                    // },
-                ],
+                //     // {
+                //     //     name: 'Resource Summary',
+                //     //     page: 'incidents/resource-summary',
+                //     // },
+                //     // {
+                //     //     name: 'Drift Events',
+                //     //     page: 'incidents/drift-events',
+                //     // },
+                //     // {
+                //     //     name: 'Account Posture',
+                //     //     page: 'incidents/account-posture',
+                //     // },
+                //     // {
+                //     //     name: 'Control Summary',
+                //     //     page: 'incidents/control-summary',
+                //     // },
+                // ],
             },
             // {
             //     name: 'Security',
@@ -502,7 +501,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     'settings/about',
                     'settings/jobs',
                     'settings/api-keys',
-                    // 'settings/variables',
+                    'settings/access',
                     'settings/authentication',
                 ],
                 icon: Cog6ToothIcon,
@@ -517,13 +516,17 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         page: 'settings/jobs',
                     },
                     {
-                        name: 'Authentication',
-                        page: 'settings/authentication',
+                        name: 'Access',
+                        page: 'settings/access',
                     },
-                    {
-                        name: 'API Keys',
-                        page: 'settings/api-keys',
-                    },
+                    // {
+                    //     name: 'Authentication',
+                    //     page: 'settings/authentication',
+                    // },
+                    // {
+                    //     name: 'API Keys',
+                    //     page: 'settings/api-keys',
+                    // },
                     // {
                     //     name: 'Variables',
                     //     page: 'settings/variables',

@@ -51,6 +51,7 @@ import {
     useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsCategoriesList,
     useInventoryApiV2QueryList,
+    useInventoryApiV3AllQueryCategory,
     useInventoryApiV3QueryFiltersList,
 } from '../../../api/inventory.gen'
 import Spinner from '../../../components/Spinner'
@@ -220,7 +221,7 @@ export default function AllQueries({setTab} : Props) {
     const [engine, setEngine] = useState('odysseus-sql')
 
     const { response: categories, isLoading: categoryLoading } =
-        useInventoryApiV2AnalyticsCategoriesList()
+        useInventoryApiV3AllQueryCategory()
 
     const { response: filters, isLoading: filtersLoading } =
         useInventoryApiV3QueryFiltersList()
@@ -343,7 +344,7 @@ export default function AllQueries({setTab} : Props) {
             {categoryLoading || loading ? (
                 <Spinner className="mt-56" />
             ) : (
-                <Flex alignItems="start" className='gap-4'>
+                <Flex alignItems="start" className="gap-4">
                     <DrawerPanel
                         open={openDrawer}
                         onClose={() => setOpenDrawer(false)}
@@ -361,12 +362,10 @@ export default function AllQueries({setTab} : Props) {
                                     setSearchCategory(e.target.value)
                                 }
                             />
-                            {recordToArray(
-                                categories?.categoryResourceType
-                            ).map(
+                            {categories?.categories.map(
                                 (cat) =>
-                                    !!cat.resource_types?.filter((catt) =>
-                                        catt
+                                    !!cat.tables?.filter((catt) =>
+                                        catt.name
                                             .toLowerCase()
                                             .includes(
                                                 searchCategory.toLowerCase()
@@ -374,8 +373,8 @@ export default function AllQueries({setTab} : Props) {
                                     ).length && (
                                         <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
                                             <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                                                <Text className="text-gray-800">
-                                                    {cat.value}
+                                                <Text className="text-gray-800 text-left">
+                                                    {cat.category}
                                                 </Text>
                                             </AccordionHeader>
                                             <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
@@ -383,9 +382,9 @@ export default function AllQueries({setTab} : Props) {
                                                     flexDirection="col"
                                                     justifyContent="start"
                                                 >
-                                                    {cat.resource_types
+                                                    {cat.tables
                                                         ?.filter((catt) =>
-                                                            catt
+                                                            catt.name
                                                                 .toLowerCase()
                                                                 .includes(
                                                                     searchCategory.toLowerCase()
@@ -401,7 +400,9 @@ export default function AllQueries({setTab} : Props) {
                                                                 }
                                                             >
                                                                 <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
-                                                                    {subCat}
+                                                                    {
+                                                                        subCat.name
+                                                                    }
                                                                 </Text>
                                                             </Flex>
                                                         ))}

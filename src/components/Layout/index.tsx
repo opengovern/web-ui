@@ -33,7 +33,17 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
         workspace !== 'new-ws' &&
         current !== 'bootstrap' &&
         workspace !== 'callback'
-
+    const hasTop = () => {
+        if (
+            current.includes('incidents') ||
+            (current == 'integrations'
+               ) ||
+            current.includes('dashboard')
+        ) {
+            return false
+        }
+        return true
+    }
     return (
         <Flex
             flexDirection="row"
@@ -65,7 +75,7 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                             current === 'assistant'
                                 ? 'h-fit'
                                 : 'px-12 mt-16 h-fit '
-                        } ${showSidebar && 'pl-48'} `}
+                        } ${showSidebar && 'pl-48'} ${hasTop() ? 'mt-16' : 'mt-6'} `}
                         // pl-44
                     >
                         <div

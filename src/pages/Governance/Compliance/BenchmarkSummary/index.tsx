@@ -125,11 +125,11 @@ export default function BenchmarkSummary() {
                             <Title className="font-semibold">
                                 {benchmarkDetail?.title}
                             </Title>
-                            <div className="group w-full relative flex justify-start">
-                                <Text className="test-start truncate">
+                            <div className="group  relative flex justify-start">
+                                <Text className="test-start truncate text-wrap">
                                     {benchmarkDetail?.description}
                                 </Text>
-                                <Card className="absolute w-full z-40 top-0 scale-0 transition-all p-2 group-hover:scale-100">
+                                <Card className="absolute  z-40 top-0 scale-0 transition-all p-2 group-hover:scale-100">
                                     <Text>{benchmarkDetail?.description}</Text>
                                 </Card>
                             </div>
