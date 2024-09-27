@@ -151,7 +151,7 @@ const columns: IColumn<
     {
         field: 'connectors',
         headerName: 'Connector',
-        type: 'connector',
+        type: 'string',
         sortable: true,
         resizable: false,
         // cellRenderer: (params: any) => (
@@ -195,10 +195,9 @@ const columns: IColumn<
 ]
 export interface Props {
     setTab: Function
-
 }
 
-export default function AllQueries({setTab} : Props) {
+export default function AllQueries({ setTab }: Props) {
     const [runQuery, setRunQuery] = useAtom(runQueryAtom)
     const [loading, setLoading] = useState(false)
     const [savedQuery, setSavedQuery] = useAtom(queryAtom)
@@ -218,6 +217,8 @@ export default function AllQueries({setTab} : Props) {
     const isDemo = useAtomValue(isDemoAtom)
     const [pageSize, setPageSize] = useState(1000)
     const [autoRun, setAutoRun] = useState(false)
+    const [listofTables, setListOfTables] = useState([])
+
     const [engine, setEngine] = useState('odysseus-sql')
 
     const { response: categories, isLoading: categoryLoading } =
@@ -304,6 +305,7 @@ export default function AllQueries({setTab} : Props) {
                     //  title_filter: '',
                     tags: temp,
                     providers: query?.providers,
+                    list_of_tables: listofTables,
                     cursor: params.request.startRow
                         ? Math.floor(params.request.startRow / 25)
                         : 0,
@@ -393,11 +395,37 @@ export default function AllQueries({setTab} : Props) {
                                                         .map((subCat) => (
                                                             <Flex
                                                                 justifyContent="start"
-                                                                onClick={() =>
-                                                                    setCode(
-                                                                        `select * from kaytu_resources where resource_type = '${subCat}'`
-                                                                    )
-                                                                }
+                                                                onClick={() => {
+                                                                    if (
+                                                                        // @ts-ignore
+                                                                        listofTables.includes(subCat.table
+                                                                        )
+                                                                    ) {
+                                                                        // @ts-ignore
+                                                                        setListOfTables(
+                                                                            // @ts-ignore
+                                                                            listofTables.filter(
+                                                                                (
+                                                                                    item
+                                                                                ) =>
+                                                                                    item !==
+                                                                                    subCat.table
+                                                                            )
+                                                                        )
+                                                                    }
+                                                                    // @ts-ignore
+                                                                    else {
+                                                                        // @ts-ignore
+                                                                        setListOfTables(
+                                                                            [
+                                                                                // @ts-ignore
+                                                                                ...listofTables,
+                                                                                // @ts-ignore
+                                                                                subCat.table,
+                                                                            ]
+                                                                        )
+                                                                    }
+                                                                }}
                                                             >
                                                                 <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
                                                                     {
@@ -411,6 +439,18 @@ export default function AllQueries({setTab} : Props) {
                                         </Accordion>
                                     )
                             )}
+                            {listofTables.length >0 && (<>
+                                <Flex flexDirection='col' justifyContent='start' alignItems='start'>
+                                    <Text>Selected Filters</Text>
+                                    {listofTables.map((item,index)=>{
+                                        return (
+                                            <Flex justifyContent='start' className='w-full'>
+                                                <Text>{item}</Text>
+                                            </Flex>
+                                        )
+                                    })}
+                                </Flex>
+                            </>)}
                             <Flex justifyContent="end" className="mt-12">
                                 <Button
                                     variant="light"

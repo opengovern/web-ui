@@ -351,7 +351,7 @@ const authRoutes = [
     // },
     {
         key: 'incidents',
-        path: '/ws/:ws/incidents/summary/:controlId',
+        path: '/ws/:ws/incidents/:controlId',
         element: <ControlDetail />,
     },
     {

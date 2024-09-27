@@ -145,7 +145,7 @@ export default function SettingsAccess() {
                 setSelectedTab(<SettingsParameters />)
                 break
             default:
-                setSelectedTab(<SettingsEntitlement />)
+                setSelectedTab(<SettingsMembers />)
                 break
         }
     }, [currentSubPage])
@@ -184,7 +184,7 @@ export default function SettingsAccess() {
                                                         currentSubPage ||
                                                     (!currentSubPage &&
                                                         item.page ===
-                                                            'workspace-settings')
+                                                            'authentication')
                                                         ? 'bg-kaytu-100 dark:bg-kaytu-800  rounded-lg text-gray-800 dark:text-gray-100'
                                                         : 'text-gray-600 dark:text-gray-300'
                                                 } group flex gap-x-3 pt-2 pb-0 px-2 -ml-2 font-medium`}

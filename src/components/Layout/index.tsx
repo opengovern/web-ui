@@ -4,7 +4,7 @@ import Footer from './Footer'
 import Sidebar from './Sidebar'
 import Notification from '../Notification'
 import { useNavigate } from 'react-router-dom'
-import { useAtomValue,useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { sampleAtom } from '../../store'
 type IProps = {
     children: ReactNode
@@ -34,15 +34,18 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
         current !== 'bootstrap' &&
         workspace !== 'callback'
     const hasTop = () => {
-        if (
-            current.includes('incidents') ||
-            (current == 'integrations'
-               ) ||
-            current.includes('dashboard')
-        ) {
-            return false
+        if (current) {
+            if (
+                current.includes('incidents') ||
+                current == 'integrations' ||
+                current.includes('dashboard')
+            ) {
+                return false
+            }
+            return true
+        } else {
+            return true
         }
-        return true
     }
     return (
         <Flex
@@ -75,7 +78,9 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                             current === 'assistant'
                                 ? 'h-fit'
                                 : 'px-12 mt-16 h-fit '
-                        } ${showSidebar && 'pl-48'} ${hasTop() ? 'mt-16' : 'mt-6'} `}
+                        } ${showSidebar && 'pl-48'} ${
+                            hasTop() ? 'mt-16' : 'mt-6'
+                        } `}
                         // pl-44
                     >
                         <div

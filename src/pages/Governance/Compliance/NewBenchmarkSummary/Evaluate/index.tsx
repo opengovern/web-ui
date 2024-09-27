@@ -102,28 +102,21 @@ export default function Evaluate({
 
     const checkbox = useCheckboxState()
 
-    useEffect(() => {
-        checkbox.setState(connections)
-        console.log(assignments)
-    }, [connections])
+    // useEffect(() => {
+    //     checkbox.setState(connections)
+    //     console.log(assignments)
+    // }, [connections])
 
-    useEffect(() => {
-        if (assignments) {
-            const activeAccounts = assignments?.connections
-                ?.filter((a) => a.status)
-                .map((a) => a.connectionID || '')
-            setConnections(activeAccounts || [])
-        }
-    }, [assignments])
+    // useEffect(() => {
+    //     if (assignments) {
+    //         const activeAccounts = assignments?.connections
+    //             ?.filter((a) => a.status)
+    //             .map((a) => a.connectionID || '')
+    //         setConnections( [])
+    //     }
+    // }, [assignments])
 
-    const click = (connectionID: string) => {
-        const arrFiltered = connections.filter((v) => v !== connectionID)
-        if (arrFiltered.length === connections.length) {
-            setConnections(() => [...connections, connectionID])
-        } else {
-            setConnections(() => [...arrFiltered])
-        }
-    }
+  
 
     const isLoading =
         benchmarkDetail?.lastJobStatus !== 'FAILED' &&
@@ -184,10 +177,12 @@ export default function Evaluate({
                             >
                                 Select All
                             </Button>
-                            <Button onClick={() =>{
-                                
-                                setOpen(false)
-                                onEvaluate(connections)}}>
+                            <Button
+                                onClick={() => {
+                                    setOpen(false)
+                                    onEvaluate(connections)
+                                }}
+                            >
                                 Run
                             </Button>
                         </SpaceBetween>
@@ -195,6 +190,7 @@ export default function Evaluate({
                 }
                 header="Select Account"
             >
+                <>{console.log(connections)}</>
                 <Multiselect
                     // @ts-ignore
                     className="w-full"
@@ -214,14 +210,16 @@ export default function Evaluate({
                     }}
                 />
             </Modal>
-
-            <Modal
+        </>
+    )
+}
+{/**
+    
+    <Modal
                 visible={openConfirm}
                 onDismiss={() => setOpenConfirm(false)}
             >
                 <Title>
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore */}
                     {`Do you want to run evaluation on ${checkbox.state.length} accounts?`}
                 </Title>
                 <Flex className="mt-8">
@@ -243,6 +241,4 @@ export default function Evaluate({
                     </Button>
                 </Flex>
             </Modal>
-        </>
-    )
-}
+    */}
