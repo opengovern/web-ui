@@ -113,7 +113,7 @@ export default function Findings({id}: Props) {
 
     return (
         <>
-            <TopHeader />
+            {/* <TopHeader /> */}
             {/* @ts-ignore */}
             <Filter type={selectedGroup} onApply={(e) => setQuery(e)} id={id} />
             {/* <Flex className="mt-2">{findComponent()}</Flex> */}

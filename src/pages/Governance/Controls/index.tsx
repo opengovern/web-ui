@@ -224,7 +224,7 @@ export default function Controls({ id, assignments, enable }: IPolicies) {
                 flexDirection="row"
                 justifyContent="between"
             >
-                <Title>Controls ({countControls(controls)})</Title>
+                {/* <Title>Controls ({countControls(controls)})</Title> */}
                 {isLoading ? (
                     ''
                 ) : (
