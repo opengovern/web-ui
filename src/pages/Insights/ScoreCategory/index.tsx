@@ -177,7 +177,8 @@ export default function ScoreCategory() {
             list_of_tables: listofTables,
             root_benchmark: temp,
             cursor: page,
-            per_page: 10,
+            per_page: 9,
+            finding_summary: true,
         }
         if (listofTables.length == 0) {
             // @ts-ignore
@@ -186,7 +187,7 @@ export default function ScoreCategory() {
         api.compliance
             .apiV2ControlList(body)
             .then((resp) => {
-                setTotalPage(Math.ceil(resp.data.total_count / 10))
+                setTotalPage(Math.ceil(resp.data.total_count / 9))
                 if (resp.data.items) {
                     setRows(resp.data.items)
                 }
@@ -893,7 +894,11 @@ export default function ScoreCategory() {
                                     header: 'Incidents',
                                     cell: (item) => (
                                         // @ts-ignore
-                                        <></>
+                                        <>
+                                            {item?.findings_summary?.alarm
+                                                ? item?.findings_summary?.alarm
+                                                : 0}
+                                        </>
                                     ),
                                     minWidth: 50,
                                 },
@@ -902,7 +907,11 @@ export default function ScoreCategory() {
                                     header: 'Passing Resources',
                                     cell: (item) => (
                                         // @ts-ignore
-                                        <></>
+                                        <>
+                                            {item?.findings_summary?.ok
+                                                ? item?.findings_summary?.ok
+                                                : 0}
+                                        </>
                                     ),
                                 },
                                 {
@@ -960,7 +969,14 @@ export default function ScoreCategory() {
                                     filteringText=""
                                 />
                             }
-                            header={<Header className="w-full"></Header>}
+                            header={
+                                <Header className="w-full">
+                                    Controls{' '}
+                                    <span className=" font-medium">
+                                        ({totalPage * 9})
+                                    </span>
+                                </Header>
+                            }
                             pagination={
                                 <Pagination
                                     currentPageIndex={page}

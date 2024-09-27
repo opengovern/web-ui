@@ -834,7 +834,7 @@ export default function NewBenchmarkSummary() {
                                         id: 'second',
                                         content: (
                                             <div className="w-full flex flex-row justify-start items-start ">
-                                                <div className="w-11/12">
+                                                <div className="w-full">
                                                     <Controls
                                                         id={String(benchmarkId)}
                                                         assignments={

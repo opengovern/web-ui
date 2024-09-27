@@ -196,6 +196,7 @@ export default function Controls({ id, assignments, enable }: IPolicies) {
           let body = {
               list_of_tables: listofTables,
               root_benchmark: [id],
+              finding_summary: true,
               cursor: page,
               per_page: 10,
           }
@@ -225,7 +226,7 @@ export default function Controls({ id, assignments, enable }: IPolicies) {
    }, [ listofTables])
 
     return (
-        <Grid numItems={8} className="gap-4">
+        <Grid numItems={10} className="gap-4">
             <Col numColSpan={2}>
                 <Flex className="bg-white  w-full border-solid border-2    rounded-xl p-4">
                     <SideNavigation
@@ -287,11 +288,11 @@ export default function Controls({ id, assignments, enable }: IPolicies) {
                     />
                 </Flex>
             </Col>
-            <Col numColSpan={6}>
+            <Col numColSpan={8}>
                 {' '}
-                <Flex className="flex flex-col min-h-[500px] ">
+                <Flex className="flex flex-col  min-h-[500px] ">
                     <Table
-                        className="p-3 max-w-[60vw] min-h-[450px]"
+                        className="p-3 max-w-[60vw]  min-h-[450px]"
                         // resizableColumns
                         renderAriaLive={({
                             firstIndex,
@@ -313,7 +314,8 @@ export default function Controls({ id, assignments, enable }: IPolicies) {
                                 header: 'Title',
                                 cell: (item) => item.title,
                                 sortingField: 'alt',
-                                minWidth: 500,
+                                // minWidth: 400,
+                                maxWidth: 200,
                             },
                             {
                                 id: 'connector',
@@ -337,6 +339,7 @@ export default function Controls({ id, assignments, enable }: IPolicies) {
                                             item.severity.slice(1)}
                                     </Badge>
                                 ),
+                                maxWidth: 100,
                             },
                             {
                                 id: 'query.parameters',
@@ -355,17 +358,28 @@ export default function Controls({ id, assignments, enable }: IPolicies) {
                                 header: 'Incidents',
                                 cell: (item) => (
                                     // @ts-ignore
-                                    <></>
+                                    <>
+                                        {/**@ts-ignore */}
+                                        {item?.findings_summary?.alarm
+                                            ? item?.findings_summary?.alarm
+                                            : 0}
+                                    </>
                                 ),
-                                minWidth: 50,
+                                // minWidth: 50,
+                                maxWidth: 100,
                             },
                             {
                                 id: 'passing_resources',
                                 header: 'Passing Resources',
                                 cell: (item) => (
                                     // @ts-ignore
-                                    <></>
+                                    <>
+                                        {item?.findings_summary?.ok
+                                            ? item?.findings_summary?.ok
+                                            : 0}
+                                    </>
                                 ),
+                                maxWidth: 100,
                             },
                             {
                                 id: 'action',
@@ -420,7 +434,14 @@ export default function Controls({ id, assignments, enable }: IPolicies) {
                                 filteringText=""
                             />
                         }
-                        header={<Header className="w-full"></Header>}
+                        header={
+                            <Header className="w-full">
+                                Controls{' '}
+                                <span className=" font-medium">
+                                    ({totalPage * 9})
+                                </span>
+                            </Header>
+                        }
                         pagination={
                             <Pagination
                                 currentPageIndex={page}

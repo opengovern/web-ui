@@ -2796,7 +2796,10 @@ export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem {
     severity: string
     tags: GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItemTags
     query: GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItemQuery
-    findings_summary: null
+    findings_summary?: {
+        ok? : number
+        alarm? : number
+    }
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItemQuery {
