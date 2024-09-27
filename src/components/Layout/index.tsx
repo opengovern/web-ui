@@ -38,7 +38,9 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
             if (
                 current.includes('incidents') ||
                 current == 'integrations' ||
-                current.includes('dashboard')
+                current.includes('dashboard') ||
+                current.includes('score') 
+
             ) {
                 return false
             }

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
     Button,
     Card,
@@ -6,11 +6,17 @@ import {
     Text,
     Switch,
     TextInput,
-    Badge,
     Accordion,
     AccordionHeader,
     AccordionBody,
 } from '@tremor/react'
+import Table from '@cloudscape-design/components/table'
+import Box from '@cloudscape-design/components/box'
+import SpaceBetween from '@cloudscape-design/components/space-between'
+import TextFilter from '@cloudscape-design/components/text-filter'
+import Header from '@cloudscape-design/components/header'
+import Badge from '@cloudscape-design/components/badge'
+import KButton from '@cloudscape-design/components/button'
 import { useAtomValue } from 'jotai'
 import {
     CommandLineIcon,
@@ -22,6 +28,7 @@ import {
     ChevronRightIcon,
     ChevronDoubleLeftIcon,
     FunnelIcon,
+    CloudIcon,
 } from '@heroicons/react/24/outline'
 import {
     GridOptions,
@@ -30,9 +37,16 @@ import {
     RowClickedEvent,
     ValueFormatterParams,
 } from 'ag-grid-community'
-import { Link, useNavigate } from 'react-router-dom'
-import { useComplianceApiV1BenchmarksControlsDetail, useInventoryApiV3AllBenchmarksControls } from '../../../api/compliance.gen'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../../api/api'
+import {  useNavigate } from 'react-router-dom'
+import Link from '@cloudscape-design/components/link'
+import {
+    useComplianceApiV1BenchmarksControlsDetail,
+    useInventoryApiV3AllBenchmarksControls,
+} from '../../../api/compliance.gen'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
+    GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem,
+} from '../../../api/api'
 import TopHeader from '../../../components/Layout/Header'
 import {
     searchAtom,
@@ -40,7 +54,6 @@ import {
     useURLParam,
     useURLState,
 } from '../../../utilities/urlstate'
-import Table, { IColumn } from '../../../components/Table'
 import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
 import { severityBadge } from '../../Governance/Controls'
 import {
@@ -48,7 +61,14 @@ import {
     numberDisplay,
 } from '../../../utilities/numericDisplay'
 import { useInventoryApiV3AllQueryCategory } from '../../../api/inventory.gen'
-
+import { Api } from '../../../api/api'
+import AxiosAPI from '../../../api/ApiConfig'
+import ButtonDropdown from '@cloudscape-design/components/button-dropdown'
+import Pagination from '@cloudscape-design/components/pagination'
+import CollectionPreferences from '@cloudscape-design/components/collection-preferences'
+import KFilter from '../../../components/Filter'
+import { ContentLayout, Grid, LineChart } from '@cloudscape-design/components'
+import './style.css'
 interface IRecord
     extends GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary {
     serviceName: string
@@ -60,309 +80,30 @@ interface IDetailCellRenderer {
     data: IRecord
 }
 
-const DetailCellRenderer = ({ data }: IDetailCellRenderer) => {
-    const searchParams = useAtomValue(searchAtom)
-    return (
-        <Flex
-            flexDirection="row"
-            className="w-full h-full"
-            alignItems="center"
-            justifyContent="between"
-        >
-            <Text className="ml-12 truncate">{data.control?.description}</Text>
-            <Link
-                className="mr-2"
-                to={`${data?.control?.id || ''}?${searchParams}`}
-            >
-                <Button size="xs">Open</Button>
-            </Link>
-        </Flex>
-    )
-}
-
-const columns: (
-    category: string,
-    groupByServiceName: boolean,
-    addTagFilter: (tag: string) => void
-) => IColumn<IRecord, any>[] = (category, groupByServiceName, addTagFilter) => {
-    const fixedColumns: IColumn<IRecord, any>[] = [
-        {
-            headerName: 'Title',
-            field: 'control.title',
-            type: 'custom',
-            cellRenderer: 'agGroupCellRenderer',
-            cellRendererParams: {
-                suppressDoubleClickExpand: true,
-                innerRenderer: (
-                    params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-                ) => (
-                    <Flex
-                        flexDirection="row"
-                        alignItems="center"
-                        justifyContent="start"
-                        className="gap-2 h-full"
-                    >
-                        {getConnectorIcon(params.data?.control?.connector)}
-                        <Text className="text-gray-800 mb-0.5 font-bold truncate">
-                            {params.value}
-                        </Text>
-                    </Flex>
-                ),
-            },
-            flex: 1,
-            sortable: true,
-            isBold: true,
-        },
-        {
-            field: 'serviceName',
-            headerName: 'Service Name',
-            type: 'string',
-            width: 150,
-            sortable: true,
-            enableRowGroup: true,
-            rowGroup: groupByServiceName,
-            isBold: true,
-            cellRenderer: (
-                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-            ) => {
-                return params.data ? (
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        justifyContent="center"
-                        className="gap-2 h-full"
-                    >
-                        <Text className="text-gray-800 mb-0.5 font-bold">
-                            {params.data
-                                ? Object.entries(
-                                      params.data?.control?.tags || {}
-                                  )
-                                      .filter(
-                                          (v) => v[0] === 'score_service_name'
-                                      )
-                                      .map((v) => v[1].join(','))
-                                      .join('\n')
-                                : params.value}
-                        </Text>
-                    </Flex>
-                ) : (
-                    params.value
-                )
-            },
-        },
-        {
-            field: 'control.severity',
-            headerName: 'Risk',
-            type: 'string',
-            sortable: true,
-            aggFunc: (p: IAggFuncParams<IRecord>) => {
-                return 'grouped'
-            },
-            width: 100,
-            enableRowGroup: true,
-            cellRenderer: (
-                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-            ) =>
-                params.value !== 'grouped' && (
-                    <Flex className="h-full min-h-[40px]">
-                        {severityBadge(params.value)}
-                    </Flex>
-                ),
-        },
-
-        {
-            field: 'failedResourcesCount',
-            headerName: 'Failing Resources',
-            type: 'custom',
-            aggFunc: 'sum',
-            sortable: true,
-            width: 160,
-            cellRenderer: (
-                param: ValueFormatterParams<
-                    GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
-                    any
-                >
-            ) => (
-                <Flex
-                    justifyContent="start"
-                    alignItems="center"
-                    className="h-full gap-1"
-                >
-                    <Text className="font-bold ">
-                        {numberDisplay(param.value, 0)} resources
-                    </Text>
-                </Flex>
-            ),
-        },
-        {
-            field: 'passedResourcesCount',
-            headerName: 'Passing Resources',
-            type: 'string',
-            width: 160,
-            hide: true,
-            aggFunc: 'sum',
-            sortable: true,
-            cellRenderer: (
-                param: ValueFormatterParams<
-                    GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
-                    any
-                >
-            ) => (
-                <Flex
-                    justifyContent="start"
-                    alignItems="center"
-                    className="h-full gap-1"
-                >
-                    <Text className="font-bold ">
-                        {numberDisplay(param.value, 0)} resources
-                    </Text>
-                </Flex>
-            ),
-        },
-        {
-            field: 'control.tags',
-            headerName: 'Tags',
-            type: 'string',
-            sortable: false,
-            hide: false,
-            width: 200,
-            cellRenderer: (
-                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-            ) =>
-                params.data && (
-                    <Flex
-                        flexDirection="col"
-                        className="h-full"
-                        justifyContent="center"
-                        alignItems="start"
-                    >
-                        {Object.entries(params.data?.control?.tags || {})
-                            .filter((i) => i[0] === 'score_tags')
-                            .map((item) =>
-                                item[1].map((i) => {
-                                    return (
-                                        <Badge
-                                            className="cursor-pointer"
-                                            onClick={() => addTagFilter(i)}
-                                        >
-                                            {i}
-                                        </Badge>
-                                    )
-                                })
-                            )}
-                    </Flex>
-                ),
-        },
-        {
-            field: 'control.query.parameters',
-            headerName: 'Customizable',
-            type: 'string',
-            sortable: true,
-            hide: true,
-            width: 150,
-            cellRenderer: (
-                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-            ) =>
-                params.data && (
-                    <Flex
-                        flexDirection="col"
-                        className="h-full"
-                        justifyContent="center"
-                        alignItems="start"
-                    >
-                        {(params.data?.control?.query?.parameters?.length ||
-                            0) > 0
-                            ? 'True'
-                            : 'False'}
-                    </Flex>
-                ),
-        },
-        {
-            headerName: 'Fix It',
-            type: 'custom',
-            hide: true,
-            width: 200,
-            enableRowGroup: true,
-            cellRenderer: (
-                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-            ) =>
-                params.data && (
-                    <Flex justifyContent="start" className="gap-3">
-                        {params.data?.control?.cliRemediation && (
-                            <div className="group relative flex justify-center cursor-pointer">
-                                <CommandLineIcon className="text-kaytu-500 w-5" />
-                                <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
-                                    <Text>Command line (CLI)</Text>
-                                </Card>
-                            </div>
-                        )}
-                        {params.data?.control?.manualRemediation && (
-                            <div className="group relative flex justify-center cursor-pointer">
-                                <BookOpenIcon className="text-kaytu-500 w-5" />
-                                <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
-                                    <Text>Manual</Text>
-                                </Card>
-                            </div>
-                        )}
-                        {params.data?.control?.programmaticRemediation && (
-                            <div className="group relative flex justify-center cursor-pointer">
-                                <CodeBracketIcon className="text-kaytu-500 w-5" />
-                                <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
-                                    <Text>Programmatic</Text>
-                                </Card>
-                            </div>
-                        )}
-                        {params.data?.control?.guardrailRemediation && (
-                            <div className="group relative flex justify-center cursor-pointer">
-                                <Cog8ToothIcon className="text-kaytu-500 w-5" />
-                                <Card className="absolute -top-2.5 left-6 w-fit z-40 scale-0 transition-all rounded p-2 group-hover:scale-100">
-                                    <Text>Guard rail</Text>
-                                </Card>
-                            </div>
-                        )}
-                    </Flex>
-                ),
-        },
-    ]
-
-    if (category === 'cost_optimization') {
-        fixedColumns.push({
-            field: 'costOptimization',
-            headerName: 'Cost Optimization',
-            type: 'number',
-            aggFunc: 'sum',
-            sortable: true,
-            hide: false,
-            width: 150,
-            cellRenderer: (
-                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
-            ) => (
-                <Flex
-                    flexDirection="col"
-                    className="h-full text-gray-900"
-                    justifyContent="center"
-                    alignItems="start"
-                >
-                    {exactPriceDisplay(params.value, 0)}
-                </Flex>
-            ),
-        })
-    }
-
-    return fixedColumns
-}
-
-const options: GridOptions = {
-    rowGroupPanelShow: 'always',
-    // eslint-disable-next-line consistent-return
-    isRowSelectable: (param) =>
-        param.data?.totalResultValue || param.data?.oldTotalResultValue,
-}
+// const DetailCellRenderer = ({ data }: IDetailCellRenderer) => {
+//     const searchParams = useAtomValue(searchAtom)
+//     return (
+//         <Flex
+//             flexDirection="row"
+//             className="w-full h-full"
+//             alignItems="center"
+//             justifyContent="between"
+//         >
+//             <Text className="ml-12 truncate">{data.control?.description}</Text>
+//             <Link
+//                 className="mr-2"
+//                 to={`${data?.control?.id || ''}?${searchParams}`}
+//             >
+//                 <Button size="xs">Open</Button>
+//             </Link>
+//         </Flex>
+//     )
+// }
 
 export default function ScoreCategory() {
     const { value: selectedConnections } = useFilterState()
     const [category, setCategory] = useURLParam('score_category', '')
-    const detailCellRenderer = useCallback(DetailCellRenderer, [])
+    const [listofTables, setListOfTables] = useState([])
     const [selectedServiceNames, setSelectedServiceNames] = useURLState<
         string[]
     >(
@@ -404,9 +145,13 @@ export default function ScoreCategory() {
     const [hideZero, setHideZero] = useState(true)
     const [quickFilterValue, setQuickFilterValue] = useState<string>('')
     const [openSearch, setOpenSearch] = useState(true)
+    const [loading, setLoading] = useState(true)
+    const [page, setPage] = useState<number>(0)
+    const [rows, setRows] = useState<
+        GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem[]
+    >([])
+    const [totalPage, setTotalPage] = useState<number>(0)
     const [searchCategory, setSearchCategory] = useState('')
-
-    const [isGrouped, setIsGrouped] = useState<boolean>(false)
     const categories = [
         'security',
         'cost_optimization',
@@ -415,470 +160,816 @@ export default function ScoreCategory() {
         'performance_efficiency',
     ]
 
-    const tabIndex = category === '' ? 0 : categories.indexOf(category) + 1
-
-    const {
-        response: responseWS,
-        isLoading: isLoadingWS,
-        error: errorWS,
-        sendNow: sendNowWS,
-    } = useComplianceApiV1BenchmarksControlsDetail(
-        'aws_score_security',
-        {
-            connectionId: selectedConnections.connections,
-        },
-        {},
-        tabIndex === 0 || tabIndex === 1
-    )
-
-    const {
-        response: responseZS,
-        isLoading: isLoadingZS,
-        error: errorZS,
-        sendNow: sendNowZS,
-    } = useComplianceApiV1BenchmarksControlsDetail(
-        'azure_score_security',
-        {
-            connectionId: selectedConnections.connections,
-        },
-        {},
-        tabIndex === 0 || tabIndex === 1
-    )
-
-    const {
-        response: responseWC,
-        isLoading: isLoadingWC,
-        error: errorWC,
-        sendNow: sendNowWC,
-    } = useComplianceApiV1BenchmarksControlsDetail(
-        'aws_score_cost_optimization',
-        {
-            connectionId: selectedConnections.connections,
-        },
-        {},
-        tabIndex === 0 || tabIndex === 2
-    )
-
-    const {
-        response: responseZC,
-        isLoading: isLoadingZC,
-        error: errorZC,
-        sendNow: sendNowZC,
-    } = useComplianceApiV1BenchmarksControlsDetail(
-        'azure_score_cost_optimization',
-        {
-            connectionId: selectedConnections.connections,
-        },
-        {},
-        tabIndex === 0 || tabIndex === 2
-    )
-
-    const {
-        response: responseWO,
-        isLoading: isLoadingWO,
-        error: errorWO,
-        sendNow: sendNowWO,
-    } = useComplianceApiV1BenchmarksControlsDetail(
-        'aws_score_operational_excellence',
-        {
-            connectionId: selectedConnections.connections,
-        },
-        {},
-        tabIndex === 0 || tabIndex === 3
-    )
-
-    const {
-        response: responseZO,
-        isLoading: isLoadingZO,
-        error: errorZO,
-        sendNow: sendNowZO,
-    } = useComplianceApiV1BenchmarksControlsDetail(
-        'azure_score_operational_excellence',
-        {
-            connectionId: selectedConnections.connections,
-        },
-        {},
-        tabIndex === 0 || tabIndex === 3
-    )
-
-    const {
-        response: responseWR,
-        isLoading: isLoadingWR,
-        error: errorWR,
-        sendNow: sendNowWR,
-    } = useComplianceApiV1BenchmarksControlsDetail(
-        'aws_score_reliability',
-        {
-            connectionId: selectedConnections.connections,
-        },
-        {},
-        tabIndex === 0 || tabIndex === 4
-    )
-
-    const {
-        response: responseZR,
-        isLoading: isLoadingZR,
-        error: errorZR,
-        sendNow: sendNowZR,
-    } = useComplianceApiV1BenchmarksControlsDetail(
-        'azure_score_reliability',
-        {
-            connectionId: selectedConnections.connections,
-        },
-        {},
-        tabIndex === 0 || tabIndex === 4
-    )
-
-    const {
-        response: responseWE,
-        isLoading: isLoadingWE,
-        error: errorWE,
-        sendNow: sendNowWE,
-    } = useComplianceApiV1BenchmarksControlsDetail(
-        'aws_score_performance_efficiency',
-        {
-            connectionId: selectedConnections.connections,
-        },
-        {},
-        tabIndex === 0 || tabIndex === 5
-    )
-
-    const {
-        response: responseZE,
-        isLoading: isLoadingZE,
-        error: errorZE,
-        sendNow: sendNowZE,
-    } = useComplianceApiV1BenchmarksControlsDetail(
-        'azure_score_performance_efficiency',
-        {
-            connectionId: selectedConnections.connections,
-        },
-        {},
-        tabIndex === 0 || tabIndex === 5
-    )
-
     const navigateToInsightsDetails = (id: string) => {
         navigate(`${id}?${searchParams}`)
     }
 
-    const responseControls = (idx: number) => {
-        const controls: GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[] =
-            []
+    const GetControls = () => {
+        // setLoading(true)
+        const api = new Api()
+        api.instance = AxiosAPI
+        const benchmarks = category
+        const temp = []
+        temp.push(`aws_score_${benchmarks}`)
+        temp.push(`azure_score_${benchmarks}`)
 
-        if (idx === 0 || idx === 1) {
-            responseWS?.control?.forEach((v) => controls.push(v))
-            responseZS?.control?.forEach((v) => controls.push(v))
+        let body = {
+            list_of_tables: listofTables,
+            root_benchmark: temp,
+            cursor: page,
+            per_page: 10,
         }
-        if (idx === 0 || idx === 2) {
-            responseWC?.control?.forEach((v) => controls.push(v))
-            responseZC?.control?.forEach((v) => controls.push(v))
+        if (listofTables.length == 0) {
+            // @ts-ignore
+            delete body['list_of_tables']
         }
-        if (idx === 0 || idx === 3) {
-            responseWO?.control?.forEach((v) => controls.push(v))
-            responseZO?.control?.forEach((v) => controls.push(v))
-        }
-        if (idx === 0 || idx === 4) {
-            responseWR?.control?.forEach((v) => controls.push(v))
-            responseZR?.control?.forEach((v) => controls.push(v))
-        }
-        if (idx === 0 || idx === 5) {
-            responseWE?.control?.forEach((v) => controls.push(v))
-            responseZE?.control?.forEach((v) => controls.push(v))
-        }
+        api.compliance
+            .apiV2ControlList(body)
+            .then((resp) => {
+                setTotalPage(Math.ceil(resp.data.total_count / 10))
+                if (resp.data.items) {
+                    setRows(resp.data.items)
+                }
 
-        return controls
-            .reduce<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[]
-            >((prev, curr) => {
-                if (
-                    prev.filter((i) => i.control?.id === curr.control?.id)
-                        .length > 0
-                ) {
-                    return prev
-                }
-                return [...prev, curr]
-            }, [])
-            .map((item) => {
-                const r: IRecord = {
-                    serviceName: Object.entries(item.control?.tags || {})
-                        .filter((v) => v[0] === 'score_service_name')
-                        .map((v) => v[1].join(','))
-                        .join('\n'),
-                    tags: Object.entries(item?.control?.tags || {})
-                        .filter((i) => i[0] === 'score_tags')
-                        .flatMap((i) => i[1]),
-                    passedResourcesCount:
-                        (item.totalResourcesCount || 0) -
-                        (item.failedResourcesCount || 0),
-                    ...item,
-                }
-                return r
+                setLoading(false)
+            })
+            .catch((err) => {
+                setLoading(false)
+                setRows([])
             })
     }
-
-    const isLoading = (idx: number) => {
-        switch (idx) {
-            case 1:
-                return isLoadingWS || isLoadingZS
-            case 2:
-                return isLoadingWC || isLoadingZC
-            case 3:
-                return isLoadingWO || isLoadingZO
-            case 4:
-                return isLoadingWR || isLoadingZR
-            case 5:
-                return isLoadingWE || isLoadingZE
-            default:
-                return (
-                    isLoadingWS ||
-                    isLoadingWC ||
-                    isLoadingWR ||
-                    isLoadingWO ||
-                    isLoadingWE ||
-                    isLoadingZS ||
-                    isLoadingZC ||
-                    isLoadingZR ||
-                    isLoadingZO ||
-                    isLoadingZE
-                )
-        }
-    }
-
-    const res = responseControls(tabIndex)
-    const resFiltered = res.filter((item) => {
-        if (selectedServiceNames.length > 0) {
-            if (!selectedServiceNames.includes(item.serviceName)) {
-                return false
-            }
-        }
-        if (selectedScoreTags.length > 0) {
-            if (
-                item.tags.filter((t) => selectedScoreTags.includes(t))
-                    .length === 0
-            ) {
-                return false
-            }
-        }
-        if (selectedSeverities.length > 0) {
-            if (!selectedSeverities.includes(item.control?.severity || '')) {
-                return false
-            }
-        }
-        return true
-    })
-    const serviceNames = res
-        .map((v) => v.serviceName)
-        .reduce<string[]>((prev, curr) => {
-            if (prev.includes(curr)) {
-                return prev
-            }
-            return [...prev, curr]
-        }, [])
-    const tags = res
-        .flatMap((v) =>
-            Object.entries(v?.control?.tags || {})
-                .filter((i) => i[0] === 'score_tags')
-                .flatMap((item) => item[1])
-        )
-        .reduce<string[]>((prev, curr) => {
-            if (prev.includes(curr)) {
-                return prev
-            }
-            return [...prev, curr]
-        }, [])
 
     const { response: categoriesAll, isLoading: categoryLoading } =
         useInventoryApiV3AllBenchmarksControls()
 
+    useEffect(() => {
+        GetControls()
+    }, [categoriesAll, listofTables])
+
     return (
         <>
-            <TopHeader
-                serviceNames={serviceNames}
-                tags={tags}
-                supportedFilters={[
-                    // 'Environment',
-                    // 'Product',
-                    'Cloud Account',
-                    'Service Name',
-                    'Severity',
-                    'Tag',
-                    'Score Category',
-                ]}
-                initialFilters={[
-                    'Score Category',
-                    'Cloud Account',
-                    // 'Product',
-                    'Tag',
-                ]}
-            />
+            {/* <TopHeader
+            // serviceNames={serviceNames}
+            // tags={tags}
+            // supportedFilters={[
+            //     // 'Environment',
+            //     // 'Product',
+            //     'Cloud Account',
+            //     'Service Name',
+            //     'Severity',
+            //     'Tag',
+            //     'Score Category',
+            // ]}
+            // initialFilters={[
+            //     'Score Category',
+            //     'Cloud Account',
+            //     // 'Product',
+            //     'Tag',
+            // ]}
+            /> */}
+            <ContentLayout
+                defaultPadding
+                className="rounded-xl"
+                disableOverlap
+                headerVariant="high-contrast"
+                headerBackgroundStyle={'#0F2940'}
+                maxContentWidth={1200}
+                header={
+                    <Box
+                        className="rounded-xl same"
+                        padding={{ vertical: 'l' }}
+                    >
+                        <Grid
+                            gridDefinition={[
+                                { colspan: { default: 12, xs: 8, s: 9 } },
+                                { colspan: { default: 12, xs: 4, s: 3 } },
+                            ]}
+                        >
+                            <div>
+                                <Box variant="h1">
+                                    Elastic Cloud (Elastic search service)
+                                </Box>
+                                <Box
+                                    variant="p"
+                                    color="text-body-secondary"
+                                    margin={{ top: 'xxs', bottom: 's' }}
+                                >
+                                    With solutions in Enterprise Search,
+                                    Observability, and Security, Elastic
+                                    enhances customer and employee search
+                                    experiences, keeps mission-critical
+                                    applications running smoothly, and protects
+                                    against cyber threats.
+                                </Box>
+                                <SpaceBetween size="xs">
+                                    <div>
+                                        Sold by:{' '}
+                                        <Link variant="primary" href="#">
+                                            Elastic
+                                        </Link>
+                                    </div>
+                                    <div>
+                                        Tags:{' '}
+                                        <Link variant="primary" href="#">
+                                            Free trial
+                                        </Link>
+                                        {' | '}
+                                        <Link variant="primary" href="#">
+                                            Vendor insights
+                                        </Link>
+                                    </div>
+                                </SpaceBetween>
+                            </div>
 
-            <Flex alignItems="start" className="gap-4">
-                {openSearch ? (
-                    <Card className="sticky w-fit">
-                        <TextInput
-                            className="w-56 mb-6"
-                            icon={MagnifyingGlassIcon}
-                            placeholder="Search..."
-                            value={searchCategory}
-                            onChange={(e) => setSearchCategory(e.target.value)}
-                        />
-                        {categoriesAll?.categories.map(
-                            (cat) =>
-                                !!cat.tables?.filter((catt) =>
-                                    catt.name
-                                        .toLowerCase()
-                                        .includes(searchCategory.toLowerCase())
-                                ).length && (
-                                    <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
-                                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                                            <Text className="text-gray-800 text-left">
-                                                {cat.category}
-                                            </Text>
-                                        </AccordionHeader>
-                                        <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
-                                            <Flex
-                                                flexDirection="col"
-                                                justifyContent="start"
-                                            >
-                                                {cat.tables
-                                                    ?.filter((catt) =>
-                                                        catt.name
-                                                            .toLowerCase()
-                                                            .includes(
-                                                                searchCategory.toLowerCase()
-                                                            )
-                                                    )
-                                                    .map((subCat) => (
-                                                        <Flex
-                                                            justifyContent="start"
-                                                            onClick={() =>{}
-                                                                // setCode(
-                                                                //     `select * from kaytu_resources where resource_type = '${subCat}'`
-                                                                // )
-                                                            }
-                                                        >
-                                                            <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
-                                                                {subCat.name}
-                                                            </Text>
-                                                        </Flex>
-                                                    ))}
-                                            </Flex>
-                                        </AccordionBody>
-                                    </Accordion>
-                                )
-                        )}
-                        <Flex justifyContent="end" className="mt-12">
+                            {/* <Box margin={{ top: 'l' }}>
+                                <SpaceBetween size="s">
+                                    <KButton variant="primary" fullWidth={true}>
+                                        View purchase options
+                                    </KButton>
+                                    <KButton fullWidth={true}>
+                                        Request a demo
+                                    </KButton>
+                                    <KButton fullWidth={true}>
+                                        Save to a list
+                                    </KButton>
+                                </SpaceBetween>
+                            </Box> */}
+                        </Grid>
+                    </Box>
+                }
+            >
+                {' '}
+            </ContentLayout>
+            <Flex flexDirection="col" className="w-full mt-4">
+                <Flex className="bg-white  w-full border-solid border-2    rounded-xl p-4">
+                    <LineChart
+                        className="w-full"
+                        series={[
+                            {
+                                title: 'Site 1',
+                                type: 'line',
+                                data: [
+                                    {
+                                        x: new Date(1600979400000),
+                                        y: 58020,
+                                    },
+                                    {
+                                        x: new Date(1600980300000),
+                                        y: 102402,
+                                    },
+                                    {
+                                        x: new Date(1600981200000),
+                                        y: 104920,
+                                    },
+                                    {
+                                        x: new Date(1600982100000),
+                                        y: 94031,
+                                    },
+                                    {
+                                        x: new Date(1600983000000),
+                                        y: 125021,
+                                    },
+                                    {
+                                        x: new Date(1600983900000),
+                                        y: 159219,
+                                    },
+                                    {
+                                        x: new Date(1600984800000),
+                                        y: 193082,
+                                    },
+                                    {
+                                        x: new Date(1600985700000),
+                                        y: 162592,
+                                    },
+                                    {
+                                        x: new Date(1600986600000),
+                                        y: 274021,
+                                    },
+                                    {
+                                        x: new Date(1600987500000),
+                                        y: 264286,
+                                    },
+                                    {
+                                        x: new Date(1600988400000),
+                                        y: 289210,
+                                    },
+                                    {
+                                        x: new Date(1600989300000),
+                                        y: 256362,
+                                    },
+                                    {
+                                        x: new Date(1600990200000),
+                                        y: 257306,
+                                    },
+                                    {
+                                        x: new Date(1600991100000),
+                                        y: 186776,
+                                    },
+                                    {
+                                        x: new Date(1600992000000),
+                                        y: 294020,
+                                    },
+                                    {
+                                        x: new Date(1600992900000),
+                                        y: 385975,
+                                    },
+                                    {
+                                        x: new Date(1600993800000),
+                                        y: 486039,
+                                    },
+                                    {
+                                        x: new Date(1600994700000),
+                                        y: 490447,
+                                    },
+                                    {
+                                        x: new Date(1600995600000),
+                                        y: 361845,
+                                    },
+                                    {
+                                        x: new Date(1600996500000),
+                                        y: 339058,
+                                    },
+                                    {
+                                        x: new Date(1600997400000),
+                                        y: 298028,
+                                    },
+                                    {
+                                        x: new Date(1600998300000),
+                                        y: 231902,
+                                    },
+                                    {
+                                        x: new Date(1600999200000),
+                                        y: 224558,
+                                    },
+                                    {
+                                        x: new Date(1601000100000),
+                                        y: 253901,
+                                    },
+                                    {
+                                        x: new Date(1601001000000),
+                                        y: 102839,
+                                    },
+                                    {
+                                        x: new Date(1601001900000),
+                                        y: 234943,
+                                    },
+                                    {
+                                        x: new Date(1601002800000),
+                                        y: 204405,
+                                    },
+                                    {
+                                        x: new Date(1601003700000),
+                                        y: 190391,
+                                    },
+                                    {
+                                        x: new Date(1601004600000),
+                                        y: 183570,
+                                    },
+                                    {
+                                        x: new Date(1601005500000),
+                                        y: 162592,
+                                    },
+                                    {
+                                        x: new Date(1601006400000),
+                                        y: 148910,
+                                    },
+                                    {
+                                        x: new Date(1601007300000),
+                                        y: 229492,
+                                    },
+                                    {
+                                        x: new Date(1601008200000),
+                                        y: 293910,
+                                    },
+                                ],
+                                valueFormatter: function s(e) {
+                                    return Math.abs(e) >= 1e9
+                                        ? (e / 1e9)
+                                              .toFixed(1)
+                                              .replace(/\.0$/, '') + 'G'
+                                        : Math.abs(e) >= 1e6
+                                        ? (e / 1e6)
+                                              .toFixed(1)
+                                              .replace(/\.0$/, '') + 'M'
+                                        : Math.abs(e) >= 1e3
+                                        ? (e / 1e3)
+                                              .toFixed(1)
+                                              .replace(/\.0$/, '') + 'K'
+                                        : e.toFixed(2)
+                                },
+                            },
+                            {
+                                title: 'Site 2',
+                                type: 'line',
+                                data: [
+                                    {
+                                        x: new Date(1600979400000),
+                                        y: 151023,
+                                    },
+                                    {
+                                        x: new Date(1600980300000),
+                                        y: 169975,
+                                    },
+                                    {
+                                        x: new Date(1600981200000),
+                                        y: 176980,
+                                    },
+                                    {
+                                        x: new Date(1600982100000),
+                                        y: 168852,
+                                    },
+                                    {
+                                        x: new Date(1600983000000),
+                                        y: 149130,
+                                    },
+                                    {
+                                        x: new Date(1600983900000),
+                                        y: 147299,
+                                    },
+                                    {
+                                        x: new Date(1600984800000),
+                                        y: 169552,
+                                    },
+                                    {
+                                        x: new Date(1600985700000),
+                                        y: 163401,
+                                    },
+                                    {
+                                        x: new Date(1600986600000),
+                                        y: 154091,
+                                    },
+                                    {
+                                        x: new Date(1600987500000),
+                                        y: 199516,
+                                    },
+                                    {
+                                        x: new Date(1600988400000),
+                                        y: 195503,
+                                    },
+                                    {
+                                        x: new Date(1600989300000),
+                                        y: 189953,
+                                    },
+                                    {
+                                        x: new Date(1600990200000),
+                                        y: 181635,
+                                    },
+                                    {
+                                        x: new Date(1600991100000),
+                                        y: 192975,
+                                    },
+                                    {
+                                        x: new Date(1600992000000),
+                                        y: 205951,
+                                    },
+                                    {
+                                        x: new Date(1600992900000),
+                                        y: 218958,
+                                    },
+                                    {
+                                        x: new Date(1600993800000),
+                                        y: 220516,
+                                    },
+                                    {
+                                        x: new Date(1600994700000),
+                                        y: 213557,
+                                    },
+                                    {
+                                        x: new Date(1600995600000),
+                                        y: 165899,
+                                    },
+                                    {
+                                        x: new Date(1600996500000),
+                                        y: 173557,
+                                    },
+                                    {
+                                        x: new Date(1600997400000),
+                                        y: 172331,
+                                    },
+                                    {
+                                        x: new Date(1600998300000),
+                                        y: 186492,
+                                    },
+                                    {
+                                        x: new Date(1600999200000),
+                                        y: 131541,
+                                    },
+                                    {
+                                        x: new Date(1601000100000),
+                                        y: 142262,
+                                    },
+                                    {
+                                        x: new Date(1601001000000),
+                                        y: 194091,
+                                    },
+                                    {
+                                        x: new Date(1601001900000),
+                                        y: 185899,
+                                    },
+                                    {
+                                        x: new Date(1601002800000),
+                                        y: 173401,
+                                    },
+                                    {
+                                        x: new Date(1601003700000),
+                                        y: 171635,
+                                    },
+                                    {
+                                        x: new Date(1601004600000),
+                                        y: 179130,
+                                    },
+                                    {
+                                        x: new Date(1601005500000),
+                                        y: 185951,
+                                    },
+                                    {
+                                        x: new Date(1601006400000),
+                                        y: 144091,
+                                    },
+                                    {
+                                        x: new Date(1601007300000),
+                                        y: 152975,
+                                    },
+                                    {
+                                        x: new Date(1601008200000),
+                                        y: 157299,
+                                    },
+                                ],
+                                valueFormatter: function s(e) {
+                                    return Math.abs(e) >= 1e9
+                                        ? (e / 1e9)
+                                              .toFixed(1)
+                                              .replace(/\.0$/, '') + 'G'
+                                        : Math.abs(e) >= 1e6
+                                        ? (e / 1e6)
+                                              .toFixed(1)
+                                              .replace(/\.0$/, '') + 'M'
+                                        : Math.abs(e) >= 1e3
+                                        ? (e / 1e3)
+                                              .toFixed(1)
+                                              .replace(/\.0$/, '') + 'K'
+                                        : e.toFixed(2)
+                                },
+                            },
+                            {
+                                title: 'Performance goal',
+                                type: 'threshold',
+                                y: 250000,
+                                valueFormatter: function s(e) {
+                                    return Math.abs(e) >= 1e9
+                                        ? (e / 1e9)
+                                              .toFixed(1)
+                                              .replace(/\.0$/, '') + 'G'
+                                        : Math.abs(e) >= 1e6
+                                        ? (e / 1e6)
+                                              .toFixed(1)
+                                              .replace(/\.0$/, '') + 'M'
+                                        : Math.abs(e) >= 1e3
+                                        ? (e / 1e3)
+                                              .toFixed(1)
+                                              .replace(/\.0$/, '') + 'K'
+                                        : e.toFixed(2)
+                                },
+                            },
+                        ]}
+                        xDomain={[
+                            new Date(1600979400000),
+                            new Date(1601008200000),
+                        ]}
+                        yDomain={[0, 500000]}
+                        i18nStrings={{
+                            xTickFormatter: (e) =>
+                                e
+                                    .toLocaleDateString('en-US', {
+                                        month: 'short',
+                                        day: 'numeric',
+                                        hour: 'numeric',
+                                        minute: 'numeric',
+                                        hour12: !1,
+                                    })
+                                    .split(',')
+                                    .join('\n'),
+                            yTickFormatter: function s(e) {
+                                return Math.abs(e) >= 1e9
+                                    ? (e / 1e9).toFixed(1).replace(/\.0$/, '') +
+                                          'G'
+                                    : Math.abs(e) >= 1e6
+                                    ? (e / 1e6).toFixed(1).replace(/\.0$/, '') +
+                                      'M'
+                                    : Math.abs(e) >= 1e3
+                                    ? (e / 1e3).toFixed(1).replace(/\.0$/, '') +
+                                      'K'
+                                    : e.toFixed(2)
+                            },
+                        }}
+                        ariaLabel="Multiple data series line chart"
+                        fitHeight
+                        height={300}
+                        hideFilter
+                        xScaleType="time"
+                        xTitle="Time (UTC)"
+                        yTitle="Bytes transferred"
+                        empty={
+                            <Box textAlign="center" color="inherit">
+                                <b>No data available</b>
+                                <Box variant="p" color="inherit">
+                                    There is no data available
+                                </Box>
+                            </Box>
+                        }
+                        noMatch={
+                            <Box textAlign="center" color="inherit">
+                                <b>No matching data</b>
+                                <Box variant="p" color="inherit">
+                                    There is no matching data to display
+                                </Box>
+                                <Button>Clear filter</Button>
+                            </Box>
+                        }
+                    />
+                </Flex>
+                <Flex alignItems="start" className="gap-4 w-full mt-4">
+                    {openSearch ? (
+                        <Card className="sticky w-fit">
+                            <TextInput
+                                className="w-56 mb-6"
+                                icon={MagnifyingGlassIcon}
+                                placeholder="Search..."
+                                value={searchCategory}
+                                onChange={(e) =>
+                                    setSearchCategory(e.target.value)
+                                }
+                            />
+                            {categoriesAll?.categories.map(
+                                (cat) =>
+                                    !!cat.tables?.filter((catt) =>
+                                        catt.name
+                                            .toLowerCase()
+                                            .includes(
+                                                searchCategory.toLowerCase()
+                                            )
+                                    ).length && (
+                                        <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
+                                            <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                                                <Text className="text-gray-800 text-left">
+                                                    {cat.category}
+                                                </Text>
+                                            </AccordionHeader>
+                                            <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
+                                                <Flex
+                                                    flexDirection="col"
+                                                    justifyContent="start"
+                                                >
+                                                    {cat.tables
+                                                        ?.filter((catt) =>
+                                                            catt.name
+                                                                .toLowerCase()
+                                                                .includes(
+                                                                    searchCategory.toLowerCase()
+                                                                )
+                                                        )
+                                                        .map((subCat) => (
+                                                            <Flex
+                                                                justifyContent="start"
+                                                                onClick={() => {
+                                                                    if (
+                                                                        // @ts-ignore
+                                                                        listofTables.includes(
+                                                                            // @ts-ignore
+                                                                            subCat.table
+                                                                        )
+                                                                    ) {
+                                                                        // @ts-ignore
+                                                                        setListOfTables(
+                                                                            // @ts-ignore
+                                                                            listofTables.filter(
+                                                                                (
+                                                                                    item
+                                                                                ) =>
+                                                                                    item !==
+                                                                                    subCat.table
+                                                                            )
+                                                                        )
+                                                                    }
+                                                                    // @ts-ignore
+                                                                    else {
+                                                                        // @ts-ignore
+                                                                        setListOfTables(
+                                                                            [
+                                                                                // @ts-ignore
+                                                                                ...listofTables,
+                                                                                // @ts-ignore
+                                                                                subCat.table,
+                                                                            ]
+                                                                        )
+                                                                    }
+                                                                }}
+                                                            >
+                                                                <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
+                                                                    {
+                                                                        subCat.name
+                                                                    }
+                                                                </Text>
+                                                            </Flex>
+                                                        ))}
+                                                </Flex>
+                                            </AccordionBody>
+                                        </Accordion>
+                                    )
+                            )}
+                            {listofTables.length > 0 && (
+                                <>
+                                    <Flex
+                                        flexDirection="col"
+                                        justifyContent="start"
+                                        alignItems="start"
+                                    >
+                                        <Text>Selected Filters</Text>
+                                        {listofTables.map((item, index) => {
+                                            return (
+                                                <Flex
+                                                    justifyContent="start"
+                                                    className="w-full"
+                                                >
+                                                    <Text>{item}</Text>
+                                                </Flex>
+                                            )
+                                        })}
+                                    </Flex>
+                                </>
+                            )}
+                            <Flex justifyContent="end" className="mt-12">
+                                <Button
+                                    variant="light"
+                                    onClick={() => setOpenSearch(false)}
+                                >
+                                    <ChevronDoubleLeftIcon className="h-4" />
+                                </Button>
+                            </Flex>
+                        </Card>
+                    ) : (
+                        <Flex
+                            flexDirection="col"
+                            justifyContent="center"
+                            className="min-h-full w-fit"
+                        >
                             <Button
                                 variant="light"
-                                onClick={() => setOpenSearch(false)}
+                                onClick={() => setOpenSearch(true)}
                             >
-                                <ChevronDoubleLeftIcon className="h-4" />
+                                <Flex flexDirection="col" className="gap-4 w-4">
+                                    <FunnelIcon />
+                                    <Text className="rotate-90">Options</Text>
+                                </Flex>
                             </Button>
                         </Flex>
-                    </Card>
-                ) : (
-                    <Flex
-                        flexDirection="col"
-                        justifyContent="center"
-                        className="min-h-full w-fit"
-                    >
-                        <Button
-                            variant="light"
-                            onClick={() => setOpenSearch(true)}
-                        >
-                            <Flex flexDirection="col" className="gap-4 w-4">
-                                <FunnelIcon />
-                                <Text className="rotate-90">Options</Text>
-                            </Flex>
-                        </Button>
-                    </Flex>
-                )}
-                {errorWS === undefined &&
-                errorWC === undefined &&
-                errorWO === undefined &&
-                errorWR === undefined &&
-                errorWE === undefined &&
-                errorZS === undefined &&
-                errorZC === undefined &&
-                errorZO === undefined &&
-                errorZR === undefined &&
-                errorZE === undefined ? (
+                    )}
+
                     <Flex className="flex flex-col space-y-2">
-                        <Flex flexDirection="row" justifyContent="between">
-                            <TextInput
-                                icon={MagnifyingGlassIcon}
-                                value={quickFilterValue}
-                                onValueChange={setQuickFilterValue}
-                                placeholder="Search here..."
-                                className="w-72"
-                            />
-                            <Flex flexDirection="row" className="w-fit">
-                                <Text className="mr-2">Hide zero results</Text>
-                                <Switch
-                                    id="switch"
-                                    name="switch"
-                                    checked={hideZero}
-                                    onChange={setHideZero}
-                                />
-                            </Flex>
-                        </Flex>
                         <Table
-                            key="insight_list"
-                            id="insight_list"
-                            masterDetail
-                            detailCellRenderer={detailCellRenderer}
-                            columns={columns(category, isGrouped, (tag) => {
-                                setSelectedScoreTags([
-                                    ...selectedScoreTags,
-                                    tag,
-                                ])
-                            })}
-                            rowData={resFiltered?.filter((v) => {
-                                return hideZero
-                                    ? (v.totalResourcesCount || 0) !== 0
-                                    : true
-                            })}
-                            options={options}
-                            onColumnRowGroupChanged={(e) => {
-                                if (
-                                    e.column?.isRowGroupActive() !== undefined
-                                ) {
-                                    setIsGrouped(e.column?.isRowGroupActive())
-                                }
-                            }}
-                            onRowClicked={(
-                                event: RowClickedEvent<IRecord, any>
-                            ) => {
-                                if (!event.node.expanded) {
-                                    event.api.forEachNode((node) =>
-                                        node.setExpanded(false)
-                                    )
-                                }
-                                event.node.setExpanded(!event.node.expanded)
-                            }}
-                            loading={isLoading(tabIndex)}
-                            // rowHeight="lg"
-                            quickFilter={quickFilterValue}
+                            className="p-3 max-w-[60vw]"
+                            // resizableColumns
+                            renderAriaLive={({
+                                firstIndex,
+                                lastIndex,
+                                totalItemsCount,
+                            }) =>
+                                `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
+                            }
+                            columnDefinitions={[
+                                {
+                                    id: 'id',
+                                    header: 'ID',
+                                    cell: (item) => item.id,
+                                    sortingField: 'id',
+                                    isRowHeader: true,
+                                },
+                                {
+                                    id: 'title',
+                                    header: 'Title',
+                                    cell: (item) => item.title,
+                                    sortingField: 'alt',
+                                    minWidth: 500,
+                                },
+                                {
+                                    id: 'connector',
+                                    header: 'Connector',
+                                    cell: (item) => item.connector,
+                                },
+                                {
+                                    id: 'query',
+                                    header: 'Primary Table',
+                                    cell: (item) => item?.query?.primary_table,
+                                },
+                                {
+                                    id: 'severity',
+                                    header: 'Severity',
+                                    cell: (item) => (
+                                        <Badge
+                                            // @ts-ignore
+                                            color={`severity-${item.severity}`}
+                                        >
+                                            {item.severity
+                                                .charAt(0)
+                                                .toUpperCase() +
+                                                item.severity.slice(1)}
+                                        </Badge>
+                                    ),
+                                },
+                                {
+                                    id: 'query.parameters',
+                                    header: 'Has Parametrs',
+                                    cell: (item) => (
+                                        // @ts-ignore
+                                        <>
+                                            {item.query?.parameters.length > 0
+                                                ? 'True'
+                                                : 'False'}
+                                        </>
+                                    ),
+                                },
+                                {
+                                    id: 'incidents',
+                                    header: 'Incidents',
+                                    cell: (item) => (
+                                        // @ts-ignore
+                                        <></>
+                                    ),
+                                    minWidth: 50,
+                                },
+                                {
+                                    id: 'passing_resources',
+                                    header: 'Passing Resources',
+                                    cell: (item) => (
+                                        // @ts-ignore
+                                        <></>
+                                    ),
+                                },
+                                {
+                                    id: 'action',
+                                    header: 'Action',
+                                    cell: (item) => (
+                                        // @ts-ignore
+                                        <KButton
+                                            onClick={() => {
+                                                navigateToInsightsDetails(
+                                                    item.id
+                                                )
+                                            }}
+                                            variant="inline-link"
+                                            ariaLabel={`Open Detail`}
+                                        >
+                                            Open
+                                        </KButton>
+                                    ),
+                                },
+                            ]}
+                            columnDisplay={[
+                                { id: 'id', visible: false },
+                                { id: 'title', visible: true },
+                                { id: 'connector', visible: false },
+                                { id: 'query', visible: false },
+                                { id: 'severity', visible: true },
+                                { id: 'incidents', visible: true },
+                                { id: 'passing_resources', visible: true },
+
+                                // { id: 'action', visible: true },
+                            ]}
+                            enableKeyboardNavigation
+                            items={rows}
+                            loadingText="Loading resources"
+                            // stickyColumns={{ first: 0, last: 1 }}
+                            // stripedRows
+                            trackBy="id"
+                            empty={
+                                <Box
+                                    margin={{ vertical: 'xs' }}
+                                    textAlign="center"
+                                    color="inherit"
+                                >
+                                    <SpaceBetween size="m">
+                                        <b>No resources</b>
+                                        <Button>Create resource</Button>
+                                    </SpaceBetween>
+                                </Box>
+                            }
+                            filter={
+                                <TextFilter
+                                    className="w-100"
+                                    filteringPlaceholder="Find Control"
+                                    filteringText=""
+                                />
+                            }
+                            header={<Header className="w-full"></Header>}
+                            pagination={
+                                <Pagination
+                                    currentPageIndex={page}
+                                    pagesCount={totalPage}
+                                />
+                            }
                         />
                     </Flex>
-                ) : (
-                    <Button
-                        onClick={() => {
-                            sendNowWS()
-                            sendNowWC()
-                            sendNowWO()
-                            sendNowWR()
-                            sendNowWE()
-                            sendNowZS()
-                            sendNowZC()
-                            sendNowZO()
-                            sendNowZR()
-                            sendNowZE()
-                        }}
-                    >
-                        Retry
-                    </Button>
-                )}
+                </Flex>
             </Flex>
         </>
     )

@@ -1,6 +1,14 @@
 import { ValueFormatterParams } from 'ag-grid-community'
 import { useAtomValue } from 'jotai'
-import { Button, Callout, Divider, Flex, Switch, Text } from '@tremor/react'
+import {
+    Button,
+    Callout,
+    Divider,
+    Flex,
+    Grid,
+    Switch,
+    Text,
+} from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
 import { isDemoAtom } from '../../../../../store'
@@ -13,6 +21,12 @@ import {
     useComplianceApiV1BenchmarksSettingsCreate,
 } from '../../../../../api/compliance.gen'
 import Spinner from '../../../../../components/Spinner'
+import {
+    FormField,
+    RadioGroup,
+    Tiles,
+    Toggle,
+} from '@cloudscape-design/components'
 
 interface ISettings {
     id: string | undefined
@@ -202,8 +216,39 @@ export default function Settings({
                 justifyContent="start"
                 alignItems="center"
             >
+                <Flex className="w-full mb-3">
+                    <Tiles
+                        value={allEnable ? 'all' : 'manual'}
+                        className="gap-8"
+                        onChange={({ detail }) => {
+                            sendEnableAll()
+                            window.location.reload()
+                        }}
+                        items={[
+                            {
+                                value: 'Disable',
+                                label: 'Disable',
+                                description:
+                                    'Makes the framework inactive, with no assignments or audits.',
+                                disabled: true,
+                            },
+                            {
+                                value: 'manual',
+                                label: `Custom Assignment`,
+                                description:
+                                    'Select integrations from the list below to enable the framework for auditing.',
+                            },
+                            {
+                                value: 'all',
+                                label: `Auto-Assign`,
+                                description:
+                                    'Activates the framework on all integrations including any future integrations supported by the framework',
+                            },
+                        ]}
+                    />
+                </Flex>
                 {banner ? (
-                    <Callout title="Provider requirements" color="amber">
+                    <Callout title="Provider requirements" className='w-full' color="amber">
                         <Flex
                             flexDirection="col"
                             alignItems="start"
@@ -260,7 +305,7 @@ export default function Settings({
                             }
                             fullWidth
                         >
-                            <Flex flexDirection="col">
+                            {/* <Flex flexDirection="col">
                                 <Flex className="bg-white p-7">
                                     <Text className="text-gray-800 whitespace-nowrap">
                                         Set Benchmark as Required Baseline and
@@ -276,13 +321,13 @@ export default function Settings({
                                     )}
                                 </Flex>
                                 <Divider />
-                            </Flex>
+                            </Flex> */}
                         </Table>
                     </Flex>
                 )}
-                <Divider />
+                {/* <Divider /> */}
                 <Flex
-                    className="w-full gap-2  bg-white p-7"
+                    className="w-full gap-2  bg-white p-7 rounded-xl mt-2"
                     justifyContent="between"
                 >
                     <Text className="text-gray-800 whitespace-nowrap">
@@ -291,12 +336,18 @@ export default function Settings({
                     {changeSettingsLoading && changeSettingsExecuted ? (
                         <Spinner />
                     ) : (
-                        <Switch
-                            checked={tracksDriftEvents}
-                            onChange={(e) =>
-                                changeSettings(id, { tracksDriftEvents: e }, {})
-                            }
-                        />
+                        <>
+                            <Toggle
+                                onChange={({ detail }) =>
+                                    changeSettings(
+                                        id,
+                                        { tracksDriftEvents: detail.checked },
+                                        {}
+                                    )
+                                }
+                                checked={false}
+                            ></Toggle>
+                        </>
                     )}
                 </Flex>
             </Flex>
