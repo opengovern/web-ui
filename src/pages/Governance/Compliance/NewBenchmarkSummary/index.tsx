@@ -418,6 +418,11 @@ export default function NewBenchmarkSummary() {
 
         }
     }, [])
+     useEffect(() => {
+         if (enable) {
+             GetChart()
+         }
+     }, [enable])
 
     return (
         <>
