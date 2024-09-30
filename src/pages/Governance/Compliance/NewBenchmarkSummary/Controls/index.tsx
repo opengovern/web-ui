@@ -356,10 +356,8 @@ export default function Controls({
     }
     useEffect(() => {
         GetControls(false)
-        if(enable){
         GetTree()
 
-        }
     }, [])
     useEffect(() => {
         if (selected) {

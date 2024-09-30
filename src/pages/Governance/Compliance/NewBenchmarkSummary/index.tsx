@@ -444,107 +444,125 @@ export default function NewBenchmarkSummary() {
                     <Container
                         disableHeaderPaddings
                         disableContentPaddings
+                        
                         className="rounded-xl  bg-[#0f2940] p-0 text-white"
                         footer={
-                            <ExpandableSection
-                                header="Additional settings"
-                                variant="footer"
-                            >
-                                <Flex
-                                    justifyContent="end"
-                                    className="bg-white p-4 pt-0 mb-2 w-full gap-3    rounded-xl"
-                                >
-                                    <Filter
-                                        type={selectedGroup}
-                                        onApply={(e) => {
-                                            setAccount(e.connector)
-                                        }}
-                                        // id={id}
-                                    />
-                                    <DateRangePicker
-                                        onChange={({ detail }) => {
-                                            console.log(detail)
-                                            setValue(detail.value)
-                                        }}
-                                        value={undefined}
-                                        placeholder={'Last 7 days'}
-                                        disabled={true}
-                                        relativeOptions={[
-                                            {
-                                                key: 'previous-5-minutes',
-                                                amount: 5,
-                                                unit: 'minute',
-                                                type: 'relative',
-                                            },
-                                            {
-                                                key: 'previous-30-minutes',
-                                                amount: 30,
-                                                unit: 'minute',
-                                                type: 'relative',
-                                            },
-                                            {
-                                                key: 'previous-1-hour',
-                                                amount: 1,
-                                                unit: 'hour',
-                                                type: 'relative',
-                                            },
-                                            {
-                                                key: 'previous-6-hours',
-                                                amount: 6,
-                                                unit: 'hour',
-                                                type: 'relative',
-                                            },
-                                            {
-                                                key: 'previous-7-fays',
-                                                amount: 7,
-                                                unit: 'day',
-                                                type: 'relative',
-                                            },
-                                        ]}
-                                        isValidRange={(range) => {
-                                            if (range.type === 'absolute') {
-                                                const [startDateWithoutTime] =
-                                                    range.startDate.split('T')
-                                                const [endDateWithoutTime] =
-                                                    range.endDate.split('T')
-                                                if (
-                                                    !startDateWithoutTime ||
-                                                    !endDateWithoutTime
-                                                ) {
-                                                    return {
-                                                        valid: false,
-                                                        errorMessage:
-                                                            'The selected date range is incomplete. Select a start and end date for the date range.',
+                            enable ? (<>
+                              
+                                    <ExpandableSection
+                                        header="Additional settings"
+                                        variant="footer"
+                                    >
+                                        <Flex
+                                            justifyContent="end"
+                                            className="bg-white p-4 pt-0 mb-2 w-full gap-3    rounded-xl"
+                                        >
+                                            <Filter
+                                                type={selectedGroup}
+                                                onApply={(e) => {
+                                                    setAccount(e.connector)
+                                                }}
+                                                // id={id}
+                                            />
+                                            <DateRangePicker
+                                                onChange={({ detail }) => {
+                                                    console.log(detail)
+                                                    setValue(detail.value)
+                                                }}
+                                                value={undefined}
+                                                placeholder={'Last 7 days'}
+                                                disabled={true}
+                                                relativeOptions={[
+                                                    {
+                                                        key: 'previous-5-minutes',
+                                                        amount: 5,
+                                                        unit: 'minute',
+                                                        type: 'relative',
+                                                    },
+                                                    {
+                                                        key: 'previous-30-minutes',
+                                                        amount: 30,
+                                                        unit: 'minute',
+                                                        type: 'relative',
+                                                    },
+                                                    {
+                                                        key: 'previous-1-hour',
+                                                        amount: 1,
+                                                        unit: 'hour',
+                                                        type: 'relative',
+                                                    },
+                                                    {
+                                                        key: 'previous-6-hours',
+                                                        amount: 6,
+                                                        unit: 'hour',
+                                                        type: 'relative',
+                                                    },
+                                                    {
+                                                        key: 'previous-7-fays',
+                                                        amount: 7,
+                                                        unit: 'day',
+                                                        type: 'relative',
+                                                    },
+                                                ]}
+                                                isValidRange={(range) => {
+                                                    if (
+                                                        range.type ===
+                                                        'absolute'
+                                                    ) {
+                                                        const [
+                                                            startDateWithoutTime,
+                                                        ] =
+                                                            range.startDate.split(
+                                                                'T'
+                                                            )
+                                                        const [
+                                                            endDateWithoutTime,
+                                                        ] =
+                                                            range.endDate.split(
+                                                                'T'
+                                                            )
+                                                        if (
+                                                            !startDateWithoutTime ||
+                                                            !endDateWithoutTime
+                                                        ) {
+                                                            return {
+                                                                valid: false,
+                                                                errorMessage:
+                                                                    'The selected date range is incomplete. Select a start and end date for the date range.',
+                                                            }
+                                                        }
+                                                        if (
+                                                            new Date(
+                                                                range.startDate
+                                                            ) -
+                                                                new Date(
+                                                                    range.endDate
+                                                                ) >
+                                                            0
+                                                        ) {
+                                                            return {
+                                                                valid: false,
+                                                                errorMessage:
+                                                                    'The selected date range is invalid. The start date must be before the end date.',
+                                                            }
+                                                        }
                                                     }
-                                                }
-                                                if (
-                                                    new Date(range.startDate) -
-                                                        new Date(
-                                                            range.endDate
-                                                        ) >
-                                                    0
-                                                ) {
-                                                    return {
-                                                        valid: false,
-                                                        errorMessage:
-                                                            'The selected date range is invalid. The start date must be before the end date.',
-                                                    }
-                                                }
-                                            }
-                                            return { valid: true }
-                                        }}
-                                        i18nStrings={{}}
-                                        absoluteFormat="long-localized"
-                                        hideTimeOffset
-                                        dateOnly={true}
-                                        // placeholder="Filter by a date and time range"
-                                    />
-                                </Flex>
-                            </ExpandableSection>
+                                                    return { valid: true }
+                                                }}
+                                                i18nStrings={{}}
+                                                absoluteFormat="long-localized"
+                                                hideTimeOffset
+                                                dateOnly={true}
+                                                // placeholder="Filter by a date and time range"
+                                            />
+                                        </Flex>
+                                    </ExpandableSection>
+                            
+                            </>) : ''
                         }
                         header={
                             <Header
-                                className="bg-[#0f2940] p-4 rounded-xl rounded-b-none  text-white"
+                                className={`bg-[#0f2940] p-4 rounded-xl   text-white ${enable ? 'rounded-b-none' :''}`}
                                 variant="h2"
                                 description=""
                                 actions={
@@ -690,9 +708,7 @@ export default function NewBenchmarkSummary() {
                                         // echarts={echarts}
                                         option={options()}
                                         className="w-full"
-                                        onEvents={
-                                            ()=> {}
-                                        }
+                                        onEvents={() => {}}
                                     />
                                 </Flex>
                             </>

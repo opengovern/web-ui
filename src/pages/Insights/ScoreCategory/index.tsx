@@ -638,12 +638,13 @@ export default function ScoreCategory() {
     useEffect(() => {
         // @ts-ignore
         GetBenchmarks()
+          GetTree()
+
     }, [])
       useEffect(() => {
           // @ts-ignore
           if(enable){
           GetChart()
-          GetTree()
 
           }
       }, [enable])
@@ -673,7 +674,7 @@ export default function ScoreCategory() {
                 disableContentPaddings
                 className="rounded-xl  bg-[#0f2940] p-0 text-white"
                 footer={
-                    <ExpandableSection
+                   enable ? ( <ExpandableSection
                         header="Additional settings"
                         variant="footer"
                     >
@@ -757,11 +758,11 @@ export default function ScoreCategory() {
                                 placeholder="Last 7 days"
                             />
                         </Flex>
-                    </ExpandableSection>
+                    </ExpandableSection>) : ''
                 }
                 header={
                     <Header
-                        className="bg-[#0f2940] p-4 rounded-xl rounded-b-none  text-white"
+                        className={`bg-[#0f2940] p-4 rounded-xl ${enable ? 'rounded-b-none' : ''}  text-white`}
                         variant="h2"
                         description=""
                         actions={
