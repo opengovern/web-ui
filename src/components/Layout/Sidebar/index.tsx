@@ -72,24 +72,24 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const { isAuthenticated, getAccessTokenSilently } = useAuth()
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
     const preview = useAtomValue(previewAtom)
-    const {
-        response: spendCount,
-        isLoading: spendCountIsLoading,
-        error: spendCountErr,
-        sendNow: sendSpend,
-    } = useInventoryApiV2AnalyticsSpendCountList({}, false, workspace)
-    const {
-        response: assetCount,
-        isLoading: assetsIsLoading,
-        error: assetCountErr,
-        sendNow: sendAssets,
-    } = useInventoryApiV2AnalyticsCountList({}, false, workspace)
-    const {
-        response: findingsCount,
-        isLoading: findingsIsLoading,
-        error: findingsErr,
-        sendNow: sendFindings,
-    } = useComplianceApiV1FindingsCountList({}, {}, false, workspace)
+    // const {
+    //     response: spendCount,
+    //     isLoading: spendCountIsLoading,
+    //     error: spendCountErr,
+    //     sendNow: sendSpend,
+    // } = useInventoryApiV2AnalyticsSpendCountList({}, false, workspace)
+    // const {
+    //     response: assetCount,
+    //     isLoading: assetsIsLoading,
+    //     error: assetCountErr,
+    //     sendNow: sendAssets,
+    // } = useInventoryApiV2AnalyticsCountList({}, false, workspace)
+    // const {
+    //     response: findingsCount,
+    //     isLoading: findingsIsLoading,
+    //     error: findingsErr,
+    //     sendNow: sendFindings,
+    // } = useComplianceApiV1FindingsCountList({}, {}, false, workspace)
     const {
         response: connectionCount,
         isExecuted: connectionsIsExecuted,
@@ -169,9 +169,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             getAccessTokenSilently()
                 .then((accessToken) => {
                     setAuthHeader(accessToken)
-                    sendSpend()
-                    sendAssets()
-                    sendFindings()
+                    // sendSpend()
+                    // sendAssets()
+                    // sendFindings()
                     sendConnections()
                     // fetchDashboardToken()
                 })
@@ -480,7 +480,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 isPreview: true,
                 isLoading: false,
                 count: undefined,
-                error: spendCountErr,
+                // error: spendCountErr,
             },
             {
                 name: 'Stacks',
