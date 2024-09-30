@@ -33,6 +33,7 @@ export default function KPICard({ name, number, percentage, link }: Props) {
 
     return (
         <>
+            {console.log(name)}
             <div
                 onClick={() => {
                     navigate(link)
@@ -45,10 +46,12 @@ export default function KPICard({ name, number, percentage, link }: Props) {
                         {name}
                     </p>
                     <p className="mt-1 text-lg  text-gray-900 dark:text-gray-50">
-                        {`${name == 'Efficiency' ? '$' : ''}${Math.floor(number ?? 0)} `}
+                        {`${name == 'Efficiency' ? '$' : ''}${Math.floor(
+                            number ?? 0
+                        )} `}
                         <span className="text-xs font-normal text-gray-700 dark:text-gray-300">
                             {name == 'Efficiency'
-                                ? 'wasteful spend '
+                                ? 'Waste '
                                 : ' Incidents '}
                         </span>
                         {/* <span className="text-xs font-normal text-gray-700 dark:text-gray-300">
@@ -59,12 +62,12 @@ export default function KPICard({ name, number, percentage, link }: Props) {
                 <div className="flex flex-row gap-2 justify-center items-center">
                     <ProgressCircle
                         value={percentage}
-                        radius={20}
-                        strokeWidth={4.5}
+                        radius={25}
+                        strokeWidth={4}
                         // variant="neutral"
                         // className='bg-red'
                         color={color}
-                        size="md"
+                        size="lg"
                     >
                         <Text>{Math.floor(percentage)}%</Text>
                     </ProgressCircle>

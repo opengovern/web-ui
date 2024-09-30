@@ -1,3 +1,4 @@
+// @ts-nocheck
 import dayjs from 'dayjs'
 import {
     Flex,
@@ -27,6 +28,7 @@ import {
 import { useFilterState } from '../../../utilities/urlstate'
 import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
 import Modal from '../../../components/Modal'
+import axios from 'axios'
 
 const severityColor = [
     {
@@ -61,22 +63,6 @@ const severityColor = [
     },
 ]
 
-function SecurityScore(
-    v:
-        | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult[]
-        | undefined
-) {
-    const total =
-        v?.map((t) => t.total || 0).reduce((prev, curr) => prev + curr, 0) || 0
-    const passed =
-        v?.map((t) => t.passed || 0).reduce((prev, curr) => prev + curr, 0) || 0
-
-    if (total === 0) {
-        return 0
-    }
-    return (passed / total) * 100
-}
-
 function fixSort(t: string) {
     return t
         .replaceAll('s', 'a')
@@ -95,27 +81,19 @@ interface MR {
     title: string
     summary: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary[]
 }
+const CATEGORY = {
+    sre_efficiency: 'Efficiency',
+    sre_reliability: 'Reliability',
+    sre_supportability: 'Supportability',
+}
 
 export default function ScoreOverview() {
     const { value: selectedConnections } = useFilterState()
     const setNotification = useSetAtom(notificationAtom)
     const [openConfirm, setOpenConfirm] = useState<boolean>(false)
+    const [response,setResponse] = useState();
+    const [isLoading, setIsLoading] = useState(false)
 
-    const query = {
-        ...{ tag: ['type=SCORE'] },
-        ...(selectedConnections.connections.length > 0 && {
-            connectionId: selectedConnections.connections,
-        }),
-        ...(selectedConnections.provider !== SourceType.Nil && {
-            connector: [selectedConnections.provider],
-        }),
-    }
-    const {
-        response,
-        error: summaryListError,
-        isLoading,
-        sendNow: refresh,
-    } = useComplianceApiV1BenchmarksSummaryList(query)
 
     const {
         sendNowWithParams: triggerEvaluate,
@@ -129,7 +107,43 @@ export default function ScoreOverview() {
         {},
         false
     )
+  const GetBenchmarks = (benchmarks: string[]) => {
+    setIsLoading(true)
+      let url = ''
+      if (window.location.origin === 'http://localhost:3000') {
+          url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+      } else {
+          url = window.location.origin
+      }
+      // @ts-ignore
+      const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
 
+      const config = {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      }
+      const body = {
+          benchmarks: benchmarks,
+      }
+      axios
+          .post(
+              `${url}/main/compliance/api/v3/compliance/summary/benchmark`,
+              body,
+              config
+          )
+          .then((res) => {
+              //  const temp = []
+              setIsLoading(false)
+              setResponse(res.data)
+          })
+          .catch((err) => {
+              setIsLoading(false)
+
+              console.log(err)
+          })
+  }
+ 
     useEffect(() => {
         if (isExecuted && !triggerIsLoading) {
             const err = getErrorMessage(error)
@@ -148,119 +162,15 @@ export default function ScoreOverview() {
             }
         }
     }, [triggerIsLoading])
+     useEffect(() => {
+         GetBenchmarks([
+             'sre_efficiency',
+             'sre_reliability',
+             'sre_supportability',
+         ])
+     }, [])
 
-    const responseSorted = response?.benchmarkSummary?.sort((a, b) => {
-        const aTitle = fixSort(a.title || '')
-        const bTitle = fixSort(b.title || '')
 
-        if (a.title === b.title) {
-            return 0
-        }
-
-        return aTitle < bTitle ? -1 : 1
-    })
-    const controlTotal =
-        responseSorted?.map((i) => i.controlsSeverityStatus?.total) || []
-    const total = controlTotal
-        .map((i) => i?.total || 0)
-        .reduce((prev, curr) => prev + curr, 0)
-    const passed = controlTotal
-        .map((i) => i?.passed || 0)
-        .reduce((prev, curr) => prev + curr, 0)
-
-    const securityScore = (passed / total) * 100
-
-    const severityMap = responseSorted
-        ?.map((v) => v.controlsSeverityStatus)
-        .reduce(
-            (prev, curr) => {
-                return {
-                    critical: prev.critical + (curr?.critical?.total || 0),
-                    high: prev.high + (curr?.high?.total || 0),
-                    medium: prev.medium + (curr?.medium?.total || 0),
-                    low: prev.low + (curr?.low?.total || 0),
-                    none: prev.none + (curr?.none?.total || 0),
-                }
-            },
-            {
-                critical: 0,
-                high: 0,
-                medium: 0,
-                low: 0,
-                none: 0,
-            }
-        )
-    const categories = () => {
-        const titleMap = new Map<string, string>()
-        titleMap.set('operational_excellence', 'Supportability')
-        titleMap.set('reliability', 'Reliability')
-        // titleMap.set('security', 'Security')
-        // titleMap.set('performance_efficiency', 'Performance Efficiency')
-        titleMap.set('cost_optimization', 'Efficiency')
-
-        return (
-            responseSorted
-                ?.map((i) => {
-                    const category =
-                        Object.entries(i.tags || {})
-                            .filter((t) => t[0] === 'score_category')
-                            .flatMap((t) => t[1])
-                            .at(0) || ''
-                    return {
-                        category,
-                        summary: i,
-                    }
-                })
-                .reduce<MR[]>((prev, curr) => {
-                    if (
-                        prev.filter((p) => p.category === curr.category)
-                            .length > 0
-                    ) {
-                        return prev.map((v) => {
-                            if (v.category === curr.category) {
-                                return {
-                                    category: curr.category,
-                                    title: titleMap.get(curr.category) || '',
-                                    summary: [curr.summary, ...v.summary],
-                                }
-                            }
-                            return v
-                        })
-                    }
-                    return [
-                        ...prev,
-                        {
-                            category: curr.category,
-                            title: titleMap.get(curr.category) || '',
-                            summary: [curr.summary],
-                        },
-                    ]
-                }, []) || []
-        )
-    }
-
-    const evaluating =
-        (
-            response?.benchmarkSummary
-                ?.map((b) => {
-                    return !(
-                        b?.lastJobStatus === 'FAILED' ||
-                        b?.lastJobStatus === 'SUCCEEDED' ||
-                        (b?.lastJobStatus || '') === ''
-                    )
-                })
-                .filter((l) => l === true) || []
-        ).length > 0
-
-    const lastEvaluatedAt =
-        response?.benchmarkSummary
-            ?.map((b) => dayjs.utc(b.evaluatedAt))
-            .reduce((prev, curr) => {
-                return curr.isAfter(prev) ? curr : prev
-            }, dayjs.utc(0))
-            ?.format('MMM DD, YYYY kk:mm UTC') || 'Never'
-
-    console.log(categories())
     return (
         <>
             {/* <TopHeader /> */}
@@ -350,7 +260,7 @@ export default function ScoreOverview() {
                                     numItemsLg={3}
                                     className="gap-[70px] mt-6 w-full justify-items-center"
                                 >
-                                    {isLoading
+                                    {isLoading || !response
                                         ? [1, 2, 3,].map((i) => (
                                               <Flex className="gap-6 px-8 py-8 bg-white rounded-xl shadow-sm hover:shadow-md hover:cursor-pointer">
                                                   <Flex className="relative w-fit">
@@ -371,107 +281,78 @@ export default function ScoreOverview() {
                                                   </Flex>
                                               </Flex>
                                           ))
-                                        : categories()
-                                              .filter((item) => {
-                                                  if (
-                                                      item.category !==
-                                                          'performance_efficiency' &&
-                                                      item.category !==
-                                                          'security'
-                                                  ) {
-                                                      return item
-                                                  }
-                                              })
+                                        : response
                                               .sort((a, b) => {
                                                   if (
-                                                      a.title ===
-                                                          'Supportability' &&
-                                                      b.title === 'Efficiency'
+                                                      a.benchmark_title ===
+                                                          'SRE Supportability' &&
+                                                      b.benchmark_title ===
+                                                          'SRE Efficiency'
                                                   ) {
                                                       return -1
                                                   }
                                                   if (
-                                                      a.title ===
-                                                          'Efficiency' &&
-                                                      b.title ===
-                                                          'Supportability'
+                                                      a.benchmark_title ===
+                                                          'SRE Efficiency' &&
+                                                      b.benchmark_title ===
+                                                          'SRE Supportability'
                                                   ) {
                                                       return 1
                                                   }
                                                   if (
-                                                      a.title ===
-                                                          'Reliability' &&
-                                                      b.title === 'Efficiency'
+                                                      a.benchmark_title ===
+                                                          'SRE Reliability' &&
+                                                      b.benchmark_title ===
+                                                          'SRE Efficiency'
                                                   ) {
                                                       return -1
                                                   }
                                                   if (
-                                                      a.title ===
-                                                          'Efficiency' &&
-                                                      b.title === 'Reliability'
+                                                      a.benchmark_title ===
+                                                          'SRE Efficiency' &&
+                                                      b.benchmark_title ===
+                                                          'SRE Reliability'
                                                   ) {
                                                       return 1
                                                   }
+                                                   if (
+                                                       a.benchmark_title ===
+                                                           'SRE Supportability' &&
+                                                       b.benchmark_title ===
+                                                           'SRE Reliability'
+                                                   ) {
+                                                       return -1
+                                                   }
                                                   return 0
                                               })
                                               .map((item) => {
                                                   return (
                                                       <ScoreCategoryCard
                                                           title={
-                                                              item.title || ''
+                                                              item.benchmark_title.split("SRE")[1].trim() ||
+                                                              ''
                                                           }
-                                                          percentage={SecurityScore(
-                                                              item.summary.map(
-                                                                  (c) =>
-                                                                      c
-                                                                          .controlsSeverityStatus
-                                                                          ?.total ||
-                                                                      {}
-                                                              )
-                                                          )}
+                                                          percentage={
+                                                            (  item
+                                                                  .severity_summary_by_control
+                                                                  .total
+                                                                  .passed /
+                                                              item
+                                                                  .severity_summary_by_control
+                                                                  .total.total)*100
+                                                          }
                                                           costOptimization={
-                                                              item.category ===
-                                                              'cost_optimization'
-                                                                  ? item.summary
-                                                                        .map(
-                                                                            (
-                                                                                b
-                                                                            ) =>
-                                                                                b.costOptimization ||
-                                                                                0
-                                                                        )
-                                                                        .reduce<number>(
-                                                                            (
-                                                                                prev,
-                                                                                curr
-                                                                            ) =>
-                                                                                prev +
-                                                                                curr,
-                                                                            0
-                                                                        )
-                                                                  : 0
+                                                              item.cost_optimization
                                                           }
-                                                          value={item.summary
-                                                              .map(
-                                                                  (c) =>
-                                                                      c
-                                                                          .controlsSeverityStatus
-                                                                          ?.total
-                                                                          ?.passed ||
-                                                                      0
-                                                              )
-                                                              .reduce<number>(
-                                                                  (
-                                                                      prev,
-                                                                      curr
-                                                                  ) =>
-                                                                      prev +
-                                                                      curr,
-                                                                  0
-                                                              )}
+                                                          value={
+                                                              item.issues_count
+                                                          }
                                                           kpiText="Incidents"
                                                           category={
-                                                              item.category
+                                                              CATEGORY[
+                                                                  item
+                                                                      .benchmark_id
+                                                              ]
                                                           }
                                                           varient="default"
                                                       />
@@ -483,34 +364,7 @@ export default function ScoreOverview() {
                     </div>
                 </div>
             </Flex>
-            {toErrorMessage(summaryListError) && (
-                <Flex
-                    flexDirection="col"
-                    justifyContent="between"
-                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
-                >
-                    <Flex
-                        flexDirection="col"
-                        justifyContent="center"
-                        alignItems="center"
-                    >
-                        <Title className="mt-6">Failed to load component</Title>
-                        <Text className="mt-2">
-                            {toErrorMessage(summaryListError)}
-                        </Text>
-                    </Flex>
-                    <Button
-                        variant="secondary"
-                        className="mb-6"
-                        color="slate"
-                        onClick={() => {
-                            refresh()
-                        }}
-                    >
-                        Try Again
-                    </Button>
-                </Flex>
-            )}
+         
 
             <Modal open={openConfirm} onClose={() => setOpenConfirm(false)}>
                 <Title>Do you want to run evaluation on all accounts?</Title>

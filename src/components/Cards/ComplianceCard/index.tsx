@@ -52,6 +52,9 @@ export const benchmarkChecks = (
     }
 }
 
+
+
+
 export default function ComplianceCard({ benchmark }: IComplianceCard) {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)

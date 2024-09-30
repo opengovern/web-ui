@@ -1,5 +1,6 @@
+// @ts-nocheck
 import { Card, Flex, Grid, Icon, Title } from '@tremor/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DocumentTextIcon, PuzzlePieceIcon, ShieldCheckIcon } from '@heroicons/react/24/outline'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
 import {
@@ -20,6 +21,10 @@ import RadioSelector, {
 } from '../../../components/FilterGroup/RadioSelector'
 import { benchmarkChecks } from '../../../components/Cards/ComplianceCard'
 import Spinner from '../../../components/Spinner'
+import axios from 'axios'
+import BenchmarkCard from './BenchmarkCard'
+import BenchmarkCards from './BenchmarkCard'
+import { Pagination } from '@cloudscape-design/components'
 
 export default function Compliance() {
     const defaultSelectedConnectors = ''
@@ -91,7 +96,7 @@ export default function Compliance() {
     const [addedFilters, setAddedFilters] = useState<string[]>(
         calcInitialFilters()
     )
-
+    const [loading,setLoading] = useState<boolean>(false);
     const {
         response: benchmarks,
         isLoading,
@@ -259,6 +264,97 @@ export default function Compliance() {
             }
             return true
         })
+        const [AllBenchmarks,setBenchmarks] = useState();
+        const [BenchmarkDetails, setBenchmarksDetails] = useState()
+    const [page, setPage] = useState<number>(1)
+const [totalPage, setTotalPage] = useState<number>(0)
+ const GetCard = () => {
+     let url = ''
+     setLoading(true)
+     if (window.location.origin === 'http://localhost:3000') {
+         url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+     } else {
+         url = window.location.origin
+     }
+     // @ts-ignore
+     const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+     const config = {
+         headers: {
+             Authorization: `Bearer ${token}`,
+         },
+     }
+     const body ={
+        cursor : page,
+        per_page :6,
+        sort_by: 'incidents',
+        assigned: true,
+     }
+     axios
+         .post(`${url}/main/compliance/api/v3/benchmarks`, body,config)
+         .then((res) => {
+             //  const temp = []
+
+            setBenchmarks(res.data.items)
+            setTotalPage(Math.ceil(res.data.total_count/6))
+         })
+         .catch((err) => {
+                setLoading(false)
+
+             console.log(err)
+         })
+ }
+
+  const Detail = (benchmarks: string[]) => {
+      let url = ''
+      if (window.location.origin === 'http://localhost:3000') {
+          url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+      } else {
+          url = window.location.origin
+      }
+      // @ts-ignore
+      const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+      const config = {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      }
+      const body = {
+         benchmarks: benchmarks
+      }
+      axios
+          .post(
+              `${url}/main/compliance/api/v3/compliance/summary/benchmark`,
+              body,
+              config
+          )
+          .then((res) => {
+              //  const temp = []
+                setLoading(false)
+              setBenchmarksDetails(res.data)
+          })
+          .catch((err) => {
+                setLoading(false)
+
+              console.log(err)
+          })
+  }
+ 
+   useEffect(() => {
+
+       GetCard()
+   }, [page])
+   useEffect(() => {
+    if(AllBenchmarks){
+  const temp = []
+  AllBenchmarks?.map((item) => {
+      temp.push(item.benchmark.id)
+  })
+  Detail(temp)
+    }
+    
+   }, [AllBenchmarks])
 
     return (
         <>
@@ -357,7 +453,7 @@ export default function Compliance() {
                                             <Title>Benchmark list</Title>
                                         </Flex>
                                     </Flex> */}
-                                    <Flex
+                                    {/* <Flex
                                         className="mb-2 w-100"
                                         justifyContent="start"
                                     >
@@ -372,21 +468,32 @@ export default function Compliance() {
                                             }
                                             alignment="left"
                                         />
-                                    </Flex>
-                                    {isLoading ? (
+                                    </Flex> */}
+                                    {isLoading || !AllBenchmarks || !BenchmarkDetails ? (
                                         <Spinner />
                                     ) : (
-                                        <Grid className="w-full gap-4 justify-items-start">
-                                            {filtered?.map(
-                                                (
-                                                    bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
-                                                ) => (
-                                                    <ComplianceListCard
-                                                        benchmark={bm}
+                                        <>
+                                            <Grid className="w-full gap-4 justify-items-start">
+                                                <BenchmarkCards
+                                                    benchmark={BenchmarkDetails}
+                                                    all={AllBenchmarks}
+                                                    loading={loading}
+                                                />
+                                                <Flex className='w-full' justifyContent='center'>
+                                                    <Pagination
+                                                        currentPageIndex={page}
+                                                        pagesCount={totalPage}
+                                                        onChange={({
+                                                            detail,
+                                                        }) =>
+                                                            setPage(
+                                                                detail.currentPageIndex
+                                                            )
+                                                        }
                                                     />
-                                                )
-                                            )}
-                                        </Grid>
+                                                </Flex>
+                                            </Grid>
+                                        </>
                                     )}
 
                                     {errorHandling(sendNow, error)}

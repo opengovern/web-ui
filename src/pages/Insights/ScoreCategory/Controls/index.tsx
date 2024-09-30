@@ -368,7 +368,8 @@ const navigateToInsightsDetails = (id: string) => {
            }
        }, [page])
          useEffect(() => {
-        
+            console.log(sort)
+            console.log(sortOrder)
              if (selected) {
                  GetControls(true, selected)
              } else {

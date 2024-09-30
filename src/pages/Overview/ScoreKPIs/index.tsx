@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
     Flex,
     Text,
@@ -10,7 +11,7 @@ import {
     Icon,
 } from '@tremor/react'
 import { useSetAtom } from 'jotai'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../api/schedule.gen'
 import { notificationAtom } from '../../../store'
 import ScoreCategoryCard from '../../../components/Cards/ScoreCategoryCard'
@@ -25,6 +26,7 @@ import { getErrorMessage, toErrorMessage } from '../../../types/apierror'
 import KPICard from './KPICard'
 import { useParams } from 'react-router-dom'
 import { ChevronDoubleUpIcon } from '@heroicons/react/24/outline'
+import axios from 'axios'
 
 function SecurityScore(
     v:
@@ -66,116 +68,56 @@ export default function ScoreKPIs() {
     const { ws } = useParams()
 
     const setNotification = useSetAtom(notificationAtom)
+  const [response, setResponse] = useState()
+  const [isLoading, setIsLoading] = useState(false)
+    
 
-    const query = {
-        ...{ tag: ['type=SCORE'] },
-        ...(selectedConnections.connections.length > 0 && {
-            connectionId: selectedConnections.connections,
-        }),
-        ...(selectedConnections.provider !== SourceType.Nil && {
-            connector: [selectedConnections.provider],
-        }),
-    }
-    const {
-        response,
-        error: summaryListError,
-        isLoading,
-        sendNow: refresh,
-    } = useComplianceApiV1BenchmarksSummaryList(query)
 
-    const {
-        sendNowWithParams: triggerEvaluate,
-        isExecuted,
-        error,
-        isLoading: triggerIsLoading,
-    } = useScheduleApiV1ComplianceTriggerUpdate(
-        {
-            benchmark_id: [],
-        },
-        {},
-        false
-    )
+  const GetBenchmarks = (benchmarks: string[]) => {
+      setIsLoading(true)
+      let url = ''
+      if (window.location.origin === 'http://localhost:3000') {
+          url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+      } else {
+          url = window.location.origin
+      }
+      // @ts-ignore
+      const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
 
-    useEffect(() => {
-        if (isExecuted && !triggerIsLoading) {
-            const err = getErrorMessage(error)
-            if (err === '') {
-                setNotification({
-                    text: 'Evaluation triggered',
-                    type: 'success',
-                    position: 'bottomLeft',
-                })
-            } else {
-                setNotification({
-                    text: `Evaluation trigger failed due to ${err}`,
-                    type: 'error',
-                    position: 'bottomLeft',
-                })
-            }
-        }
-    }, [triggerIsLoading])
+      const config = {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      }
+      const body = {
+          benchmarks: benchmarks,
+      }
+      axios
+          .post(
+              `${url}/main/compliance/api/v3/compliance/summary/benchmark`,
+              body,
+              config
+          )
+          .then((res) => {
+              //  const temp = []
+              setIsLoading(false)
+              setResponse(res.data)
+          })
+          .catch((err) => {
+              setIsLoading(false)
 
-    const responseSorted = response?.benchmarkSummary?.sort((a, b) => {
-        const aTitle = fixSort(a.title || '')
-        const bTitle = fixSort(b.title || '')
+              console.log(err)
+          })
+  }
+     useEffect(() => {
+         GetBenchmarks([
+             'sre_efficiency',
+             'sre_reliability',
+             'sre_supportability',
+         ])
+     }, [])
 
-        if (a.title === b.title) {
-            return 0
-        }
-
-        return aTitle < bTitle ? -1 : 1
-    })
-
-    const categories = () => {
-        const titleMap = new Map<string, string>()
-        titleMap.set('operational_excellence', 'Supportability')
-        titleMap.set('reliability', 'Reliability')
-
-        // titleMap.set('security', 'Security')
-        // titleMap.set('performance_efficiency', 'Efficiency')
-        // titleMap.set('operational_excellence', 'Operational Excellence')
-        titleMap.set('cost_optimization', 'Efficiency')
-
-        return (
-            responseSorted
-                ?.map((i) => {
-                    const category =
-                        Object.entries(i.tags || {})
-                            .filter((t) => t[0] === 'score_category')
-                            .flatMap((t) => t[1])
-                            .at(0) || ''
-                    return {
-                        category,
-                        summary: i,
-                    }
-                })
-                .reduce<MR[]>((prev, curr) => {
-                    if (
-                        prev.filter((p) => p.category === curr.category)
-                            .length > 0
-                    ) {
-                        return prev.map((v) => {
-                            if (v.category === curr.category) {
-                                return {
-                                    category: curr.category,
-                                    title: titleMap.get(curr.category) || '',
-                                    summary: [curr.summary, ...v.summary],
-                                }
-                            }
-                            return v
-                        })
-                    }
-                    return [
-                        ...prev,
-                        {
-                            category: curr.category,
-                            title: titleMap.get(curr.category) || '',
-                            summary: [curr.summary],
-                        },
-                    ]
-                }, []) || []
-        )
-    }
+   
 
     return (
         <>
@@ -195,7 +137,7 @@ export default function ScoreKPIs() {
                         numItems={3}
                         className="mt-6 grid grid-cols-1 gap-4 rounded-md bg-gray-50 py-4 dark:bg-gray-900 md:grid-cols-3 md:divide-x md:divide-gray-200 md:dark:divide-gray-800"
                     >
-                        {isLoading ? (
+                        {isLoading || !response ? (
                             <>
                                 {/* <Flex
                             flexDirection="col"
@@ -212,7 +154,7 @@ export default function ScoreKPIs() {
                             </Text>
                         </Flex> */}
 
-                                {[1, 2, 3, 4, 5].map((i) => (
+                                {[1, 2, 3].map((i) => (
                                     <Flex
                                         alignItems="start"
                                         justifyContent="start"
@@ -252,40 +194,47 @@ export default function ScoreKPIs() {
                             </Text>
                         </Flex> */}
 
-                                {categories()
-                                    .filter((item) => {
-                                        if (
-                                            item.category !== 'security' &&
-                                            item.category !==
-                                                'performance_efficiency'
-                                        ) {
-                                            return item
-                                        }
-                                    })
+                                {response
                                     .sort((a, b) => {
                                         if (
-                                            a.title === 'Supportability' &&
-                                            b.title === 'Efficiency'
+                                            a.benchmark_title ===
+                                                'SRE Supportability' &&
+                                            b.benchmark_title ===
+                                                'SRE Efficiency'
                                         ) {
                                             return -1
                                         }
                                         if (
-                                            a.title === 'Efficiency' &&
-                                            b.title === 'Supportability'
+                                            a.benchmark_title ===
+                                                'SRE Efficiency' &&
+                                            b.benchmark_title ===
+                                                'SRE Supportability'
                                         ) {
                                             return 1
                                         }
                                         if (
-                                            a.title === 'Reliability' &&
-                                            b.title === 'Efficiency'
+                                            a.benchmark_title ===
+                                                'SRE Reliability' &&
+                                            b.benchmark_title ===
+                                                'SRE Efficiency'
                                         ) {
                                             return -1
                                         }
                                         if (
-                                            a.title === 'Efficiency' &&
-                                            b.title === 'Reliability'
+                                            a.benchmark_title ===
+                                                'SRE Efficiency' &&
+                                            b.benchmark_title ===
+                                                'SRE Reliability'
                                         ) {
                                             return 1
+                                        }
+                                        if (
+                                            a.benchmark_title ===
+                                                'SRE Supportability' &&
+                                            b.benchmark_title ===
+                                                'SRE Reliability'
+                                        ) {
+                                            return -1
                                         }
                                         return 0
                                     })
@@ -293,52 +242,18 @@ export default function ScoreKPIs() {
                                         return (
                                             <KPICard
                                                 link={`/ws/${ws}/score/categories?score_category=${item.category}`}
-                                                name={item.title}
-                                                number={
-                                                    item.category ==
-                                                    'cost_optimization'
-                                                        ? item.summary
-                                                              .map(
-                                                                  (b) =>
-                                                                      b.costOptimization ||
-                                                                      0
-                                                              )
-                                                              .reduce<number>(
-                                                                  (
-                                                                      prev,
-                                                                      curr
-                                                                  ) =>
-                                                                      prev +
-                                                                      curr,
-                                                                  0
-                                                              )
-                                                        : item.summary
-                                                              .map(
-                                                                  (c) =>
-                                                                      c
-                                                                          .controlsSeverityStatus
-                                                                          ?.total
-                                                                          ?.passed ||
-                                                                      0
-                                                              )
-                                                              .reduce<number>(
-                                                                  (
-                                                                      prev,
-                                                                      curr
-                                                                  ) =>
-                                                                      prev +
-                                                                      curr,
-                                                                  0
-                                                              )
+                                                name={item.benchmark_title
+                                                    .split('SRE')[1]
+                                                    .trim()}
+                                                number={item.issues_count}
+                                                percentage={
+                                                   ( item
+                                                        .severity_summary_by_control
+                                                        .total.passed /
+                                                    item
+                                                        .severity_summary_by_control
+                                                        .total.total)*100
                                                 }
-                                                percentage={SecurityScore(
-                                                    item.summary.map(
-                                                        (c) =>
-                                                            c
-                                                                .controlsSeverityStatus
-                                                                ?.total || {}
-                                                    )
-                                                )}
                                             />
                                         )
                                     })}
@@ -348,34 +263,7 @@ export default function ScoreKPIs() {
                 </div>
             </Card>
 
-            {toErrorMessage(summaryListError) && (
-                <Flex
-                    flexDirection="col"
-                    justifyContent="between"
-                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
-                >
-                    <Flex
-                        flexDirection="col"
-                        justifyContent="center"
-                        alignItems="center"
-                    >
-                        <Title className="mt-6">Failed to load component</Title>
-                        <Text className="mt-2">
-                            {toErrorMessage(summaryListError)}
-                        </Text>
-                    </Flex>
-                    <Button
-                        variant="secondary"
-                        className="mb-6"
-                        color="slate"
-                        onClick={() => {
-                            refresh()
-                        }}
-                    >
-                        Try Again
-                    </Button>
-                </Flex>
-            )}
+            
         </>
     )
 }

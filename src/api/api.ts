@@ -2797,8 +2797,8 @@ export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem {
     tags: GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItemTags
     query: GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItemQuery
     findings_summary?: {
-        ok? : number
-        alarm? : number
+        non_incident_count?: number
+        incident_count?: number
     }
 }
 
@@ -5488,13 +5488,17 @@ export class Api<
          * @request GET:/compliance/api/v3/controls/categories
          * @secure
          */
-        apiV3ComplianceControlCategoryList: (params: RequestParams = {}) =>
+        apiV3ComplianceControlCategoryList: (
+            query: string[] | undefined,
+            params: RequestParams = {}
+        ) =>
             this.request<
                 GithubComKaytuIoKaytuEnginePkgInventoryApiInventoryCategoriesResponse,
                 any
             >({
                 path: `/compliance/api/v3/controls/categories`,
                 method: 'GET',
+                query: query,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',

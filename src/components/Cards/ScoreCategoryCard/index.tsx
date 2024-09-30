@@ -85,12 +85,9 @@ export default function ScoreCategoryCard({
                         {title}
                     </Title>
 
-                    {costOptimization > 0 ? (
+                    {costOptimization > 0 || title == 'Efficiency' ? (
                         <Text>
-                            Wasteful spend of{' '}
-                            <span className="text-gray-900">
-                                ${numericDisplay(costOptimization)}
-                            </span>
+                            ${costOptimization} Waste
                         </Text>
                     ) : (
                         <Text>

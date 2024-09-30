@@ -5557,6 +5557,7 @@ interface IuseInventoryApiV3InvenoryCategoryList {
  * URL:
  */
 export const useInventoryApiV3AllBenchmarksControls = (
+    query: string[] | undefined,
     params: RequestParams = {},
     autoExecute = true,
     overwriteWorkspace: string | undefined = undefined
@@ -5572,10 +5573,11 @@ export const useInventoryApiV3AllBenchmarksControls = (
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (
+        reqquery: string[] | undefined,
         abortCtrl: AbortController,
         reqparams: RequestParams
     ) => {
@@ -5600,7 +5602,7 @@ export const useInventoryApiV3AllBenchmarksControls = (
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.compliance
-                .apiV3ComplianceControlCategoryList(reqparamsSignal)
+                .apiV3ComplianceControlCategoryList(reqquery, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -5645,7 +5647,7 @@ export const useInventoryApiV3AllBenchmarksControls = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController, params)
+            sendRequest(query, newController, params)
         }
     }, [lastInput])
 
@@ -5653,18 +5655,21 @@ export const useInventoryApiV3AllBenchmarksControls = (
     const { isLoading } = state
     const { isExecuted } = state
     const { error } = state
-    const sendNow = () => {
+    const sendNow = (reqquery: string[]) => {
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController, params)
+        sendRequest(reqquery, newController, params)
     }
 
-    const sendNowWithParams = (reqparams: RequestParams) => {
+    const sendNowWithParams = (
+        reqquery: string[] | undefined,
+        reqparams: RequestParams
+    ) => {
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController, reqparams)
+        sendRequest(reqquery, newController, reqparams)
     }
 
     return {
