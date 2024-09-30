@@ -39,7 +39,7 @@ const columns: ColDef[] = [
     },
     {
         field: 'id',
-        headerName: 'Kaytu Connection ID',
+        headerName: 'OpenGovernance Connection ID',
         sortable: true,
         filter: true,
         resizable: true,

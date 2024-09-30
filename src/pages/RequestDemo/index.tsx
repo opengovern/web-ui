@@ -85,7 +85,7 @@ export default function RequestDemo() {
             <iframe
                 title="Setup a meeting"
                 className="w-full h-full relative max-w-[630px]"
-                src="https://hub.kaytu.io/meetings/anilc"
+                src="https://cal.com/team/opengovernance"
             />
         </Grid>
     )

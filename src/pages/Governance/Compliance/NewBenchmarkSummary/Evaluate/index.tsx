@@ -97,8 +97,8 @@ export default function Evaluate({
     const [openConfirm, setOpenConfirm] = useState(false)
     const [connections, setConnections] = useState<string[]>([])
 
-    const { response: assignments } =
-        useComplianceApiV1AssignmentsBenchmarkDetail(String(id), {})
+    const { response: assignments,sendNow : send, } =
+        useComplianceApiV1AssignmentsBenchmarkDetail(String(id), {},false)
 
     const checkbox = useCheckboxState()
 
@@ -126,7 +126,9 @@ export default function Evaluate({
     return (
         <>
             <KButton
-                onClick={() => setOpen(true)}
+                onClick={() => {setOpen(true)
+                    send()
+                }}
                 loading={false}
                 variant="primary"
                 className="flex flex-row justify-center items-center w-full min-w-20"

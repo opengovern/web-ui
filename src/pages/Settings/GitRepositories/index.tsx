@@ -125,7 +125,7 @@ export default function SettingsGitRepositories() {
                             <Text className="text-red-500">
                                 Changing git repository feature is not enabled
                                 for you.{' '}
-                                <a href="https://kaytu.io/docs/guides/faq#customization-disabled">
+                                <a href="https://docs.opengovernance.io/oss/getting-started/faq#customization-disabled">
                                     Click here to see why
                                 </a>
                             </Text>

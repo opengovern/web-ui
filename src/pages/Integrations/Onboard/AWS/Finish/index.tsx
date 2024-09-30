@@ -53,7 +53,7 @@ const columns: IColumn<any, any>[] = [
     {
         field: 'id',
         type: 'string',
-        headerName: 'Kaytu Connection ID',
+        headerName: 'OpenGovernance Connection ID',
         sortable: true,
         filter: true,
         resizable: true,
@@ -125,7 +125,7 @@ export function Finish({
                     <>
                         <Text className="mb-2">
                             Here&apos;s all the AWS accounts which have been
-                            onboarded to Kaytu
+                            onboarded to OpenGovernance
                         </Text>
                         <Flex
                             flexDirection="col"

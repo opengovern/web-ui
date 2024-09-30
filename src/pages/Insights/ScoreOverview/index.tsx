@@ -19,7 +19,6 @@ import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../api/schedule.g
 import { notificationAtom } from '../../../store'
 import ScoreCategoryCard from '../../../components/Cards/ScoreCategoryCard'
 import TopHeader from '../../../components/Layout/Header'
-import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkStatusResult,

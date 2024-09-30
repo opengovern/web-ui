@@ -455,7 +455,7 @@ export default function SingleMetric({
                                 </Text>
                             </ListItem>
                             <ListItem className="py-6">
-                                <Text>Kaytu connection ID</Text>
+                                <Text>OpenGovernance connection ID</Text>
                                 <Text className="text-gray-800">
                                     {selectedRow?.connection_id}
                                 </Text>

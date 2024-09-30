@@ -174,7 +174,7 @@ export default function ManualWizard({
                 return 'Prerequisites'
             case 2:
                 if (orgOrSingle === 'single') {
-                    return 'Deploying Kaytu Configuration to AWS Account'
+                    return 'Deploying OpenGovernance Configuration to AWS Account'
                 }
                 return 'Onboard AWS Organization Account'
             case 3:
@@ -197,8 +197,9 @@ export default function ManualWizard({
                     expanded: (
                         <Text>
                             In the process of onboarding your account no
-                            credentials will be passed to Kaytu. Kaytu only has
-                            Read-only access to your resources{' '}
+                            credentials will be passed to OpenGovernance.
+                            OpenGovernance only has Read-only access to your
+                            resources{' '}
                             <a
                                 className="text-kaytu-600 underline"
                                 target="_blank"

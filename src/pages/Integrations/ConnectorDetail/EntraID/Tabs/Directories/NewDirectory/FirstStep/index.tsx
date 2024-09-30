@@ -18,7 +18,7 @@ export default function FirstStep({ onNext, onPrevious }: IStep) {
 
                 <Button variant="light">
                     <Link
-                        to="https://kaytu.io/docs/latest/onboard_azure/"
+                        to="https://docs.opengovernance.io/oss/how-to-guide/setup-integrations/setup-azure-subscription"
                         target="_blank"
                     >
                         Refer to guide, by clicking this link

@@ -46,7 +46,6 @@ import {
 import { useNavigate } from 'react-router-dom'
 import Link from '@cloudscape-design/components/link'
 import {
-    useComplianceApiV1BenchmarksControlsDetail,
     useInventoryApiV3AllBenchmarksControls,
 } from '../../../api/compliance.gen'
 import {
@@ -489,7 +488,7 @@ export default function ScoreCategory() {
         }
         axios
             .post(
-                `${url}/main/compliance/api/v3/benchmarks/${benchmarkId}/trend`,
+                `${url}/main/compliance/api/v3/benchmarks/${`sre_${category.toLowerCase()}`}/trend`,
                 {},
                 config
             )
@@ -512,7 +511,7 @@ export default function ScoreCategory() {
                             //     item?.findings_summary?.incidents +
                             //     item?.findings_summary?.non_incidents,
                             Incidents: item.findings_summary?.incidents,
-                            'Non Incidents':
+                            'Non-Compliant':
                                 item.findings_summary?.non_incidents,
                         }
                         return temp_data
@@ -532,6 +531,7 @@ export default function ScoreCategory() {
     useEffect(() => {
         // @ts-ignore
         GetBenchmarks()
+        GetChart()
     }, [])
     return (
         <>
@@ -579,7 +579,7 @@ export default function ScoreCategory() {
                                     ({ detail }) => {}
                                     // setValue(detail.value)
                                 }
-                                value={value}
+                                value={undefined}
                                 disabled={true}
                                 relativeOptions={[
                                     {
@@ -640,7 +640,7 @@ export default function ScoreCategory() {
                                 i18nStrings={{}}
                                 absoluteFormat="long-localized"
                                 hideTimeOffset
-                                placeholder="Filter by a date and time range"
+                                placeholder="Last 7 days"
                             />
                         </Flex>
                     </ExpandableSection>
@@ -653,7 +653,7 @@ export default function ScoreCategory() {
                         actions={
                             <SpaceBetween size="xs" direction="horizontal">
                                 <Evaluate
-                                    id={benchmarkDetail?.id}
+                                    id={`sre_${category.toLowerCase()}`}
                                     benchmarkDetail={benchmarkDetail}
                                     assignmentsCount={0}
                                     onEvaluate={(c) => {
@@ -719,6 +719,13 @@ export default function ScoreCategory() {
                                             </Card>
                                         </div>
                                     </Box>
+                                    <Box
+                                        variant="h1"
+                                        className="text-white important"
+                                        color="white"
+                                    >
+                                        {console.log(benchmarkDetail)}
+                                    </Box>
                                 </div>
                             </KGrid>
                         </Box>
@@ -734,7 +741,7 @@ export default function ScoreCategory() {
                         categories={[
                             // 'Total',
                             'Incidents',
-                            'Non Incidents',
+                            'Non-Compliant',
                         ]}
                         colors={['indigo', 'rose', 'cyan']}
                         noDataText="No Data to Display"
@@ -762,7 +769,7 @@ export default function ScoreCategory() {
                                         className="w-fit"
                                         activeHref={selected}
                                         header={{
-                                            href: '#/',
+                                            href: `sre_${category.toLowerCase()}`,
                                             text: controls?.benchmark?.title,
                                         }}
                                         onFollow={(event) => {
@@ -791,10 +798,15 @@ export default function ScoreCategory() {
                                                         ?.title,
                                                     href: id,
                                                 })
-                                                temp.push({
-                                                    text: event.detail.text,
-                                                    href: event.detail.href,
-                                                })
+                                                if (
+                                                    event.detail.text !==
+                                                    controls?.benchmark?.title
+                                                ) {
+                                                    temp.push({
+                                                        text: event.detail.text,
+                                                        href: event.detail.href,
+                                                    })
+                                                }
                                             }
                                             console.log(temp)
                                             setSelectedBread(temp)
@@ -807,254 +819,268 @@ export default function ScoreCategory() {
                     )}
                     <Col numColSpan={tree && tree.length > 0 ? 8 : 10}>
                         {' '}
-                            {filters &&
-                                filters.length > 0 &&
-                                filterOption &&
-                                filterOption.length > 0 && (
-                                    <>
-                                        <Table
-                                            className="p-3 w-full"
-                                            // resizableColumns
-                                            onSortingChange={(event) => {
-                                                console.log(event)
-                                                setSort(
-                                                    event.detail.sortingColumn
-                                                        .sortingField
-                                                )
-                                                setSortOrder(!sortOrder)
-                                            }}
-                                            sortingColumn={sort}
-                                            sortingDescending={sortOrder}
-                                            renderAriaLive={({
-                                                firstIndex,
-                                                lastIndex,
-                                                totalItemsCount,
-                                            }) =>
-                                                `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
-                                            }
-                                            columnDefinitions={[
-                                                {
-                                                    id: 'id',
-                                                    header: 'ID',
-                                                    cell: (item) => item.id,
-                                                    sortingField: 'id',
-                                                    isRowHeader: true,
-                                                },
-                                                {
-                                                    id: 'title',
-                                                    header: 'Title',
-                                                    cell: (item) => (
-                                                        <Link
-                                                            href="#"
-                                                            onClick={() => {
-                                                                navigateToInsightsDetails(
-                                                                    item.id
-                                                                )
-                                                            }}
-                                                        >
-                                                            {item.title}
-                                                        </Link>
-                                                    ),
-                                                    sortingField: 'title',
-                                                    // minWidth: 400,
-                                                    maxWidth: 200,
-                                                },
-                                                {
-                                                    id: 'connector',
-                                                    header: 'Connector',
-                                                    cell: (item) =>
-                                                        item.connector,
-                                                },
-                                                {
-                                                    id: 'query',
-                                                    header: 'Primary Table',
-                                                    cell: (item) =>
-                                                        item?.query
-                                                            ?.primary_table,
-                                                },
-                                                {
-                                                    id: 'severity',
-                                                    header: 'Severity',
-                                                    sortingField: 'severity',
-                                                    cell: (item) => (
-                                                        <Badge
-                                                            // @ts-ignore
-                                                            color={`severity-${item.severity}`}
-                                                        >
-                                                            {item.severity
-                                                                .charAt(0)
-                                                                .toUpperCase() +
-                                                                item.severity.slice(
-                                                                    1
-                                                                )}
-                                                        </Badge>
-                                                    ),
-                                                    maxWidth: 100,
-                                                },
-                                                {
-                                                    id: 'query.parameters',
-                                                    header: 'Has Parametrs',
-                                                    cell: (item) => (
+                        {filters &&
+                            filters.length > 0 &&
+                            filterOption &&
+                            filterOption.length > 0 && (
+                                <>
+                                    <Table
+                                        className="p-3 w-full"
+                                        // resizableColumns
+                                        onSortingChange={(event) => {
+                                            console.log(event)
+                                            setSort(
+                                                event.detail.sortingColumn
+                                                    .sortingField
+                                            )
+                                            setSortOrder(!sortOrder)
+                                        }}
+                                        sortingColumn={sort}
+                                        sortingDescending={sortOrder}
+                                        renderAriaLive={({
+                                            firstIndex,
+                                            lastIndex,
+                                            totalItemsCount,
+                                        }) =>
+                                            `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
+                                        }
+                                        columnDefinitions={[
+                                            {
+                                                id: 'id',
+                                                header: 'ID',
+                                                cell: (item) => item.id,
+                                                sortingField: 'id',
+                                                isRowHeader: true,
+                                            },
+                                            {
+                                                id: 'title',
+                                                header: 'Title',
+                                                cell: (item) => (
+                                                    <Link
+                                                        href="#"
+                                                        onClick={() => {
+                                                            navigateToInsightsDetails(
+                                                                item.id
+                                                            )
+                                                        }}
+                                                    >
+                                                        {item.title}
+                                                    </Link>
+                                                ),
+                                                sortingField: 'title',
+                                                // minWidth: 400,
+                                                maxWidth: 200,
+                                            },
+                                            {
+                                                id: 'connector',
+                                                header: 'Connector',
+                                                cell: (item) => item.connector,
+                                            },
+                                            {
+                                                id: 'query',
+                                                header: 'Primary Table',
+                                                cell: (item) =>
+                                                    item?.query?.primary_table,
+                                            },
+                                            {
+                                                id: 'severity',
+                                                header: 'Severity',
+                                                sortingField: 'severity',
+                                                cell: (item) => (
+                                                    <Badge
                                                         // @ts-ignore
-                                                        <>
-                                                            {item.query
-                                                                ?.parameters
-                                                                .length > 0
-                                                                ? 'True'
-                                                                : 'False'}
-                                                        </>
-                                                    ),
-                                                },
-                                                {
-                                                    id: 'incidents',
-                                                    header: 'Incidents',
-                                                    sortingField: 'incidents',
+                                                        color={`severity-${item.severity}`}
+                                                    >
+                                                        {item.severity
+                                                            .charAt(0)
+                                                            .toUpperCase() +
+                                                            item.severity.slice(
+                                                                1
+                                                            )}
+                                                    </Badge>
+                                                ),
+                                                maxWidth: 100,
+                                            },
+                                            {
+                                                id: 'query.parameters',
+                                                header: 'Has Parametrs',
+                                                cell: (item) => (
+                                                    // @ts-ignore
+                                                    <>
+                                                        {item.query?.parameters
+                                                            .length > 0
+                                                            ? 'True'
+                                                            : 'False'}
+                                                    </>
+                                                ),
+                                            },
+                                            {
+                                                id: 'incidents',
+                                                header: 'Incidents',
+                                                sortingField: 'incidents',
 
-                                                    cell: (item) => (
-                                                        // @ts-ignore
-                                                        <>
-                                                            {/**@ts-ignore */}
-                                                            {item
-                                                                ?.findings_summary
-                                                                ?.incident_count
-                                                                ? item
-                                                                      ?.findings_summary
-                                                                      ?.incident_count
-                                                                : 0}
-                                                        </>
-                                                    ),
-                                                    // minWidth: 50,
-                                                    maxWidth: 100,
-                                                },
-                                                {
-                                                    id: 'passing_resources',
-                                                    header: 'Non Incidents ',
-                                                    cell: (item) => (
-                                                        // @ts-ignore
-                                                        <>
-                                                            {item
-                                                                ?.findings_summary
-                                                                ?.non_incident_count
-                                                                ? item
-                                                                      ?.findings_summary
-                                                                      ?.non_incident_count
-                                                                : 0}
-                                                        </>
-                                                    ),
-                                                    maxWidth: 100,
-                                                },
-                                                {
-                                                    id: 'action',
-                                                    header: 'Action',
-                                                    cell: (item) => (
-                                                        // @ts-ignore
-                                                        <KButton
-                                                            onClick={() => {
-                                                                navigateToInsightsDetails(
-                                                                    item.id
-                                                                )
-                                                            }}
-                                                            variant="inline-link"
-                                                            ariaLabel={`Open Detail`}
-                                                        >
-                                                            Open
-                                                        </KButton>
-                                                    ),
-                                                },
-                                            ]}
-                                            columnDisplay={[
-                                                { id: 'id', visible: false },
-                                                { id: 'title', visible: true },
-                                                {
-                                                    id: 'connector',
-                                                    visible: false,
-                                                },
-                                                { id: 'query', visible: false },
-                                                {
-                                                    id: 'severity',
-                                                    visible: true,
-                                                },
-                                                {
-                                                    id: 'incidents',
-                                                    visible: true,
-                                                },
-                                                {
-                                                    id: 'passing_resources',
-                                                    visible: true,
-                                                },
+                                                cell: (item) => (
+                                                    // @ts-ignore
+                                                    <>
+                                                        {/**@ts-ignore */}
+                                                        {item?.findings_summary
+                                                            ?.incident_count
+                                                            ? item
+                                                                  ?.findings_summary
+                                                                  ?.incident_count
+                                                            : 0}
+                                                    </>
+                                                ),
+                                                // minWidth: 50,
+                                                maxWidth: 100,
+                                            },
+                                            {
+                                                id: 'passing_resources',
+                                                header: 'Non Incidents ',
+                                                cell: (item) => (
+                                                    // @ts-ignore
+                                                    <>
+                                                        {item?.findings_summary
+                                                            ?.non_incident_count
+                                                            ? item
+                                                                  ?.findings_summary
+                                                                  ?.non_incident_count
+                                                            : 0}
+                                                    </>
+                                                ),
+                                                maxWidth: 100,
+                                            },
+                                            {
+                                                id: 'noncompliant_resources',
+                                                header: 'Non-Compliant Resources',
+                                                cell: (item) => (
+                                                    // @ts-ignore
+                                                    <>
+                                                        {item?.findings_summary
+                                                            ?.noncompliant_resources
+                                                            ? item
+                                                                  ?.findings_summary
+                                                                  ?.noncompliant_resources
+                                                            : 0}
+                                                    </>
+                                                ),
+                                                maxWidth: 100,
+                                            },
+                                            {
+                                                id: 'action',
+                                                header: 'Action',
+                                                cell: (item) => (
+                                                    // @ts-ignore
+                                                    <KButton
+                                                        onClick={() => {
+                                                            navigateToInsightsDetails(
+                                                                item.id
+                                                            )
+                                                        }}
+                                                        variant="inline-link"
+                                                        ariaLabel={`Open Detail`}
+                                                    >
+                                                        Open
+                                                    </KButton>
+                                                ),
+                                            },
+                                        ]}
+                                        columnDisplay={[
+                                            { id: 'id', visible: false },
+                                            { id: 'title', visible: true },
+                                            {
+                                                id: 'connector',
+                                                visible: false,
+                                            },
+                                            { id: 'query', visible: false },
+                                            {
+                                                id: 'severity',
+                                                visible: true,
+                                            },
+                                            {
+                                                id: 'incidents',
+                                                visible: false,
+                                            },
+                                            {
+                                                id: 'passing_resources',
+                                                visible: false,
+                                            },
+                                            {
+                                                id: 'noncompliant_resources',
+                                                visible: true,
+                                            },
 
-                                                // { id: 'action', visible: true },
-                                            ]}
-                                            enableKeyboardNavigation
-                                            items={rows}
-                                            loading={loading}
-                                            loadingText="Loading resources"
-                                            // stickyColumns={{ first: 0, last: 1 }}
-                                            // stripedRows
-                                            trackBy="id"
-                                            empty={
-                                                <Box
-                                                    margin={{ vertical: 'xs' }}
-                                                    textAlign="center"
-                                                    color="inherit"
-                                                >
-                                                    <SpaceBetween size="m">
-                                                        <b>No resources</b>
-                                                        <Button>
-                                                            Create resource
-                                                        </Button>
-                                                    </SpaceBetween>
-                                                </Box>
-                                            }
-                                            filter={
-                                                <PropertyFilter
+                                            // { id: 'action', visible: true },
+                                        ]}
+                                        enableKeyboardNavigation
+                                        items={rows}
+                                        loading={loading}
+                                        loadingText="Loading resources"
+                                        // stickyColumns={{ first: 0, last: 1 }}
+                                        // stripedRows
+                                        trackBy="id"
+                                        empty={
+                                            <Box
+                                                margin={{ vertical: 'xs' }}
+                                                textAlign="center"
+                                                color="inherit"
+                                            >
+                                                <SpaceBetween size="m">
+                                                    <b>No resources</b>
+                                                    <Button>
+                                                        Create resource
+                                                    </Button>
+                                                </SpaceBetween>
+                                            </Box>
+                                        }
+                                        filter={
+                                            <PropertyFilter
+                                                // @ts-ignore
+                                                query={queries}
+                                                // @ts-ignore
+                                                onChange={({ detail }) => {
                                                     // @ts-ignore
-                                                    query={queries}
-                                                    // @ts-ignore
-                                                    onChange={({ detail }) => {
-                                                        // @ts-ignore
-                                                        setQueries(detail)
-                                                    }}
-                                                    // countText="5 matches"
-                                                    enableTokenGroups
-                                                    expandToViewport
-                                                    filteringAriaLabel="Control Categories"
-                                                    // @ts-ignore
-                                                    // filteringOptions={filters}
-                                                    filteringPlaceholder="Control Categories"
-                                                    // @ts-ignore
-                                                    filteringOptions={filters}
-                                                    filteringProperties={
-                                                        filterOption
-                                                    }
-                                                    // filteringProperties={
-                                                    //     filterOption
-                                                    // }
-                                                />
-                                            }
-                                            header={
-                                                <Header className="w-full">
-                                                    Controls{' '}
-                                                    <span className=" font-medium">
-                                                        ({totalCount})
-                                                    </span>
-                                                </Header>
-                                            }
-                                            pagination={
-                                                <Pagination
-                                                    currentPageIndex={page}
-                                                    onChange={({ detail }) =>
-                                                        setPage(
-                                                            detail.currentPageIndex
-                                                        )
-                                                    }
-                                                    pagesCount={totalPage}
-                                                />
-                                            }
-                                        />
-                                    </>
-                                )}
-                        
+                                                    setQueries(detail)
+                                                }}
+                                                // countText="5 matches"
+                                                enableTokenGroups
+                                                expandToViewport
+                                                filteringAriaLabel="Control Categories"
+                                                // @ts-ignore
+                                                // filteringOptions={filters}
+                                                filteringPlaceholder="Control Categories"
+                                                // @ts-ignore
+                                                filteringOptions={filters}
+                                                filteringProperties={
+                                                    filterOption
+                                                }
+                                                // filteringProperties={
+                                                //     filterOption
+                                                // }
+                                            />
+                                        }
+                                        header={
+                                            <Header className="w-full">
+                                                Controls{' '}
+                                                <span className=" font-medium">
+                                                    ({totalCount})
+                                                </span>
+                                            </Header>
+                                        }
+                                        pagination={
+                                            <Pagination
+                                                currentPageIndex={page}
+                                                onChange={({ detail }) =>
+                                                    setPage(
+                                                        detail.currentPageIndex
+                                                    )
+                                                }
+                                                pagesCount={totalPage}
+                                            />
+                                        }
+                                    />
+                                </>
+                            )}
                     </Col>
                 </Grid>
             </Flex>

@@ -38,7 +38,7 @@ export function Screen1({ onClose, onNext }: IScreen1) {
                 </Text>
                 <Text>
                     For advanced deployment options,{' '}
-                    <a href="https://docs.kaytu.io/oss/connect-your-environments/aws-accounts">
+                    <a href="https://docs.opengovernance.io/oss/how-to-guide/setup-integrations/setup-aws-integration">
                         click here
                     </a>
                     .

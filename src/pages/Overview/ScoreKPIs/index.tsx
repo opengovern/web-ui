@@ -239,20 +239,24 @@ export default function ScoreKPIs() {
                                         return 0
                                     })
                                     .map((item) => {
+                                        console.log(item,"item")
                                         return (
                                             <KPICard
-                                                link={`/ws/${ws}/score/categories?score_category=${item.category}`}
+                                                link={`/ws/${ws}/score/categories?score_category=${item.benchmark_title
+                                                    .split('SRE')[1]
+                                                    .trim()}`}
                                                 name={item.benchmark_title
                                                     .split('SRE')[1]
                                                     .trim()}
                                                 number={item.issues_count}
                                                 percentage={
-                                                   ( item
+                                                    (item
                                                         .severity_summary_by_control
                                                         .total.passed /
-                                                    item
-                                                        .severity_summary_by_control
-                                                        .total.total)*100
+                                                        item
+                                                            .severity_summary_by_control
+                                                            .total.total) *
+                                                    100
                                                 }
                                             />
                                         )

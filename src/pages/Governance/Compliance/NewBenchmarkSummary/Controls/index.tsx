@@ -54,7 +54,11 @@ import Header from '@cloudscape-design/components/header'
 import Badge from '@cloudscape-design/components/badge'
 import KButton from '@cloudscape-design/components/button'
 import axios from 'axios'
-import { BreadcrumbGroup, Link, PropertyFilter } from '@cloudscape-design/components'
+import {
+    BreadcrumbGroup,
+    Link,
+    PropertyFilter,
+} from '@cloudscape-design/components'
 interface IPolicies {
     id: string | undefined
     assignments: number
@@ -77,7 +81,6 @@ export const activeBadge = (status: boolean) => {
         </Flex>
     )
 }
-
 
 export const statusBadge = (
     status:
@@ -155,7 +158,12 @@ export const countControls = (
     return total
 }
 
-export default function Controls({ id, assignments, enable,accounts }: IPolicies) {
+export default function Controls({
+    id,
+    assignments,
+    enable,
+    accounts,
+}: IPolicies) {
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
     const [page, setPage] = useState<number>(0)
@@ -173,12 +181,12 @@ export default function Controls({ id, assignments, enable,accounts }: IPolicies
     const [listofTables, setListOfTables] = useState([])
     const [totalPage, setTotalPage] = useState<number>(0)
     const [totalCount, setTotalCount] = useState<number>(0)
-     const [query, setQuery] =
-         useState<GithubComKaytuIoKaytuEnginePkgControlApiListV2>()
-   const [queries, setQueries] = useState({
-       tokens: [],
-       operation: 'and',
-   })
+    const [query, setQuery] =
+        useState<GithubComKaytuIoKaytuEnginePkgControlApiListV2>()
+    const [queries, setQueries] = useState({
+        tokens: [],
+        operation: 'and',
+    })
 
     const [tree, setTree] = useState()
     const [selected, setSelected] = useState()
@@ -210,13 +218,12 @@ export default function Controls({ id, assignments, enable,accounts }: IPolicies
             groupValuesLabel: `Severity values`,
         },
     ])
-    const [sort,setSort] = useState('incidents')
+    const [sort, setSort] = useState('incidents')
     const [sortOrder, setSortOrder] = useState(true)
 
-
-const navigateToInsightsDetails = (id: string) => {
-    navigate(`${id}?${searchParams}`)
-}
+    const navigateToInsightsDetails = (id: string) => {
+        navigate(`${id}?${searchParams}`)
+    }
     const toggleOpen = () => {
         setOpenAllControls(!openAllControls)
     }
@@ -232,12 +239,12 @@ const navigateToInsightsDetails = (id: string) => {
         const total: number = (countChildren || 0) + (v?.children?.length || 0)
         return total
     }
-      const truncate = (text: string | undefined) => {
-          if (text) {
-              return text.length > 50 ? text.substring(0, 50) + '...' : text
-          }
-      }
-    const GetControls = (flag: boolean,id: string | undefined) => {
+    const truncate = (text: string | undefined) => {
+        if (text) {
+            return text.length > 50 ? text.substring(0, 50) + '...' : text
+        }
+    }
+    const GetControls = (flag: boolean, id: string | undefined) => {
         setLoading(true)
         const api = new Api()
         api.instance = AxiosAPI
@@ -264,7 +271,6 @@ const navigateToInsightsDetails = (id: string) => {
             // @ts-ignore
             .apiV2ControlList(body)
             .then((resp) => {
-                
                 setTotalPage(Math.ceil(resp.data.total_count / 10))
                 setTotalCount(resp.data.total_count)
                 if (resp.data.items) {
@@ -299,7 +305,7 @@ const navigateToInsightsDetails = (id: string) => {
                 config
             )
             .then((res) => {
-                    const temp = []
+                const temp = []
 
                 if (res.data.children) {
                     // temp.push({
@@ -315,18 +321,18 @@ const navigateToInsightsDetails = (id: string) => {
                                 ? 'expandable-link-group'
                                 : 'link',
                         }
-                        if(item.children && item.children.length>0){
-                                let child_item =[]
-                                item.children.map((sub_item)=>{
-                                    child_item.push({
-                                        text: truncate(sub_item.title),
-                                        href: sub_item.id,
-                                        type: 'link',
-                                        parentId: item.id,
-                                        parentTitle: item.title,
-                                    })
+                        if (item.children && item.children.length > 0) {
+                            let child_item = []
+                            item.children.map((sub_item) => {
+                                child_item.push({
+                                    text: truncate(sub_item.title),
+                                    href: sub_item.id,
+                                    type: 'link',
+                                    parentId: item.id,
+                                    parentTitle: item.title,
                                 })
-                                childs['items'] = child_item
+                            })
+                            childs['items'] = child_item
                         }
                         temp.push(childs)
                     })
@@ -338,7 +344,6 @@ const navigateToInsightsDetails = (id: string) => {
                     //     type: 'link',
                     // })
                 }
-                console.log(temp)
                 setTree(temp)
             })
             .catch((err) => {
@@ -349,58 +354,48 @@ const navigateToInsightsDetails = (id: string) => {
         GetControls(false)
         GetTree()
     }, [])
-     useEffect(() => {
-        if(selected){
+    useEffect(() => {
+        if (selected) {
             setPage(0)
-         GetControls(true, selected)
-           
+            GetControls(true, selected)
         }
+    }, [selected])
+    useEffect(() => {
+        if (selected) {
+            GetControls(true, selected)
+        } else {
+            GetControls(false)
+        }
+    }, [page])
+    useEffect(() => {
+        if (selected) {
+            GetControls(true, selected)
+        } else {
+            GetControls(false)
+        }
+    }, [sort, sortOrder])
+    useEffect(() => {
+        let temp = {}
 
-       
-     }, [selected])
-       useEffect(() => {
-           if (selected) {
-               GetControls(true, selected)
+        queries?.tokenGroups?.map((item) => {
+            // @ts-ignore
+            if (temp[item.propertyKey] && temp[item.propertyKey].length > 0) {
+                temp[item.propertyKey].push(item.value.toLowerCase())
+            } else {
+                temp[item.propertyKey] = []
+                temp[item.propertyKey].push(item.value.toLowerCase())
+            }
+        })
+        setQuery(temp)
+    }, [queries])
 
-           }
-           else{
-             GetControls(false)
-           }
-       }, [page])
-         useEffect(() => {
-        
-             if (selected) {
-                 GetControls(true, selected)
-             } else {
-                 GetControls(false)
-             }
-         }, [sort,sortOrder])
-        useEffect(() => {
-                   let temp = {}
-
-              queries?.tokenGroups?.map((item) => {
-                  // @ts-ignore
-                  if (temp[item.propertyKey] && temp[item.propertyKey].length >0){
-                   temp[item.propertyKey].push(item.value.toLowerCase())
-
-                  }
-                  else{
-                      temp[item.propertyKey] = []
-                   temp[item.propertyKey].push(item.value.toLowerCase())
-
-                  }
-              })
-                   setQuery(temp)
-
-        }, [queries])
-
-        useEffect(() => {
-             if (selected) {
-                 GetControls(true, selected)
-             } else {
-                 GetControls(false)
-             }
-        }, [query])
+    useEffect(() => {
+        if (selected) {
+            GetControls(true, selected)
+        } else {
+            GetControls(false)
+        }
+    }, [query])
     return (
         <Grid numItems={10} className="gap-4">
             <Col numColSpan={10}>
@@ -421,11 +416,10 @@ const navigateToInsightsDetails = (id: string) => {
                                 className="w-fit"
                                 activeHref={selected}
                                 header={{
-                                    href: '#/',
+                                    href: benchmarkId,
                                     text: controls?.benchmark?.title,
                                 }}
                                 onFollow={(event) => {
-                                   
                                     event.preventDefault()
                                     setSelected(event.detail.href)
                                     const temp = []
@@ -448,12 +442,16 @@ const navigateToInsightsDetails = (id: string) => {
                                             text: controls?.benchmark?.title,
                                             href: id,
                                         })
-                                        temp.push({
-                                            text: event.detail.text,
-                                            href: event.detail.href,
-                                        })
+                                        if (
+                                            event.detail.text !==
+                                            controls?.benchmark?.title
+                                        ) {
+                                            temp.push({
+                                                text: event.detail.text,
+                                                href: event.detail.href,
+                                            })
+                                        }
                                     }
-                                    console.log(temp)
                                     setSelectedBread(temp)
                                 }}
                                 items={tree}
@@ -462,7 +460,7 @@ const navigateToInsightsDetails = (id: string) => {
                     </Flex>
                 </Col>
             )}
-            <Col numColSpan={tree && tree.length >0 ? 8 : 10}>
+            <Col numColSpan={tree && tree.length > 0 ? 8 : 10}>
                 {' '}
                 <Flex className="flex flex-col  min-h-[500px] ">
                     <Table
@@ -476,7 +474,6 @@ const navigateToInsightsDetails = (id: string) => {
                             `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
                         }
                         onSortingChange={(event) => {
-                            console.log(event)
                             setSort(event.detail.sortingColumn.sortingField)
                             setSortOrder(!sortOrder)
                         }}
@@ -579,6 +576,21 @@ const navigateToInsightsDetails = (id: string) => {
                                 maxWidth: 100,
                             },
                             {
+                                id: 'noncompliant_resources',
+                                header: 'Non-Compliant Resources',
+                                cell: (item) => (
+                                    // @ts-ignore
+                                    <>
+                                        {item?.findings_summary
+                                            ?.noncompliant_resources
+                                            ? item?.findings_summary
+                                                  ?.noncompliant_resources
+                                            : 0}
+                                    </>
+                                ),
+                                maxWidth: 100,
+                            },
+                            {
                                 id: 'action',
                                 header: 'Action',
                                 cell: (item) => (
@@ -601,8 +613,12 @@ const navigateToInsightsDetails = (id: string) => {
                             { id: 'connector', visible: false },
                             { id: 'query', visible: false },
                             { id: 'severity', visible: true },
-                            { id: 'incidents', visible: true },
-                            { id: 'passing_resources', visible: true },
+                            { id: 'incidents', visible: false },
+                            { id: 'passing_resources', visible: false },
+                            {
+                                id: 'noncompliant_resources',
+                                visible: true,
+                            },
 
                             // { id: 'action', visible: true },
                         ]}
