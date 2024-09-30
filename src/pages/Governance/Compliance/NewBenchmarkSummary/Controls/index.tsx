@@ -402,8 +402,8 @@ export default function Controls({
         }
     }, [query])
     return (
-        <Grid numItems={10} className="gap-4">
-            <Col numColSpan={10}>
+        <Grid numItems={12} className="gap-4">
+            <Col numColSpan={12}>
                 <BreadcrumbGroup
                     onClick={(event) => {
                         event.preventDefault()
@@ -414,7 +414,7 @@ export default function Controls({
                 />
             </Col>
             {tree && tree.length > 0 && (
-                <Col numColSpan={2}>
+                <Col numColSpan={3}>
                     <Flex className="bg-white  w-full border-solid border-2    rounded-xl p-4">
                         <>
                             <SideNavigation
@@ -465,7 +465,7 @@ export default function Controls({
                     </Flex>
                 </Col>
             )}
-            <Col numColSpan={tree && tree.length > 0 ? 8 : 10}>
+            <Col numColSpan={tree && tree.length > 0 ? 9 : 12}>
                 {' '}
                 <Flex className="flex flex-col  min-h-[500px] ">
                     <Table
