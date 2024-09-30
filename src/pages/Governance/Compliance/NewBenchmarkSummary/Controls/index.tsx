@@ -54,11 +54,15 @@ import Header from '@cloudscape-design/components/header'
 import Badge from '@cloudscape-design/components/badge'
 import KButton from '@cloudscape-design/components/button'
 import axios from 'axios'
+import ReactEChartsCore from 'echarts-for-react/lib/core'
+import * as echarts from 'echarts/core'
+import {LineChart} from 'echarts/charts'
 import {
     BreadcrumbGroup,
     Link,
     PropertyFilter,
 } from '@cloudscape-design/components'
+
 interface IPolicies {
     id: string | undefined
     assignments: number
@@ -257,7 +261,7 @@ export default function Controls({
             // list_of_tables: listofTables,
             severity: query?.severity,
             root_benchmark: flag ? [id] : [benchmarkId],
-            finding_summary: true,
+            finding_summary: enable,
             cursor: page,
             per_page: 10,
             sort_by: sort,
@@ -352,7 +356,10 @@ export default function Controls({
     }
     useEffect(() => {
         GetControls(false)
+        if(enable){
         GetTree()
+
+        }
     }, [])
     useEffect(() => {
         if (selected) {
@@ -617,7 +624,7 @@ export default function Controls({
                             { id: 'passing_resources', visible: false },
                             {
                                 id: 'noncompliant_resources',
-                                visible: true,
+                                visible: enable,
                             },
 
                             // { id: 'action', visible: true },

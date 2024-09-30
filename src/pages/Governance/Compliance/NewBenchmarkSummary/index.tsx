@@ -12,7 +12,6 @@ import {
     Title,
     Switch,
 } from '@tremor/react'
-
 import {
     UncontrolledTreeEnvironment,
     Tree,
@@ -59,8 +58,10 @@ import Header from '@cloudscape-design/components/header'
 import Link from '@cloudscape-design/components/link'
 import Button from '@cloudscape-design/components/button'
 import Filter from './Filter'
-import { LineChart } from '@tremor/react'
+// import { LineChart } from '@tremor/react'
 import { ExpandableSection, SpaceBetween } from '@cloudscape-design/components'
+import ReactEcharts from 'echarts-for-react' 
+import { numericDisplay } from '../../../../utilities/numericDisplay'
 
 export default function NewBenchmarkSummary() {
     const { ws } = useParams()
@@ -70,7 +71,73 @@ export default function NewBenchmarkSummary() {
     const [tab, setTab] = useState<number>(0)
     const [enable, setEnable] = useState<boolean>(false)
     const [chart, setChart] = useState()
+    const options = () =>{
+        const confine =true
+        const opt = {
+            tooltip: {
+                confine,
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'line',
+                    label: {
+                        formatter: (param: any) => {
+                            let total = 0
+                            if (param.seriesData && param.seriesData.length) {
+                                for (
+                                    let i = 0;
+                                    i < param.seriesData.length;
+                                    i += 1
+                                ) {
+                                    total += param.seriesData[i].data
+                                }
+                            }
 
+                            return `${param.value} (Total: ${total.toFixed(2)})`
+                        },
+                        // backgroundColor: '#6a7985',
+                    },
+                },
+                valueFormatter: (value: number | string) => {
+                    return numericDisplay(value)
+                },
+                order: 'valueDesc',
+            },
+            grid: {
+                left: 45,
+                right: 0,
+                top: 20,
+                bottom: 40,
+            },
+            xAxis: {
+                type: 'category',
+                data: chart?.map((item) => {
+                    return item.date
+                }),
+            },
+            yAxis: {
+                type: 'value',
+            },
+            series: [
+                {
+                    name: 'Incidents',
+                    data: chart?.map((item) => {
+                        return item.Incidents
+                    }),
+                    type: 'line',
+                },
+                {
+                    name: 'Non Compliant',
+
+                    data: chart?.map((item) => {
+                        return item['Non Compliant']
+                    }),
+                    type: 'line',
+                },
+            ],
+        }
+        return opt
+    }
+    
     const setNotification = useSetAtom(notificationAtom)
     const [selectedGroup, setSelectedGroup] = useState<
         'findings' | 'resources' | 'controls' | 'accounts' | 'events'
@@ -346,7 +413,10 @@ export default function NewBenchmarkSummary() {
     }, [isExecuted, recall])
     useEffect(() => {
         GetEnabled()
+        if(enable) {
         GetChart()
+
+        }
     }, [])
 
     return (
@@ -392,7 +462,7 @@ export default function NewBenchmarkSummary() {
                                             setValue(detail.value)
                                         }}
                                         value={undefined}
-                                        placeholder= {"Last 7 days"}
+                                        placeholder={'Last 7 days'}
                                         disabled={true}
                                         relativeOptions={[
                                             {
@@ -593,10 +663,10 @@ export default function NewBenchmarkSummary() {
                         </Flex>
                     </Flex> */}
                     <Flex flexDirection="col" className="w-full mt-4">
-                        {chart && (
+                        {chart && enable && (
                             <>
                                 <Flex className="bg-white  w-full border-solid border-2    rounded-xl p-4">
-                                    <LineChart
+                                    {/* <LineChart
                                         className="h-80"
                                         data={chart?.length < 0 ? [] : chart}
                                         index="date"
@@ -610,6 +680,14 @@ export default function NewBenchmarkSummary() {
                                         // valueFormatter={dataFormatter}
                                         yAxisWidth={60}
                                         onValueChange={(v) => console.log(v)}
+                                    /> */}
+                                    <ReactEcharts
+                                        // echarts={echarts}
+                                        option={options()}
+                                        className="w-full"
+                                        onEvents={
+                                            ()=> {}
+                                        }
                                     />
                                 </Flex>
                             </>

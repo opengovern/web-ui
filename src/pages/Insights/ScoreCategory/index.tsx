@@ -86,6 +86,9 @@ import Filter from '../../Governance/Compliance/NewBenchmarkSummary/Filter'
 import Evaluate from '../../Governance/Compliance/NewBenchmarkSummary/Evaluate'
 import axios from 'axios'
 import { notificationAtom } from '../../../store'
+import ReactEcharts from 'echarts-for-react'
+import { numericDisplay } from '../../../utilities/numericDisplay'
+
 interface IRecord
     extends GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary {
     serviceName: string
@@ -470,6 +473,8 @@ export default function ScoreCategory() {
         }
     }
     const [chart, setChart] = useState()
+    const [enable, setEnable] = useState<boolean>(false)
+
     const GetChart = () => {
         // /compliance/api/v3/benchmark/{benchmark-id}/assignments
         let url = ''
@@ -528,11 +533,120 @@ export default function ScoreCategory() {
                 console.log(err)
             })
     }
+    const GetEnabled = () => {
+        // /compliance/api/v3/benchmark/{benchmark-id}/assignments
+        let url = ''
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
+        }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+        axios
+            .get(
+                `${url}/main/compliance/api/v3/benchmark/sre_${category.toLowerCase()}/assignments`,
+                config
+            )
+            .then((res) => {
+                if (res.data) {
+                    if (res.data.length > 0) {
+                        setEnable(true)
+                    } else {
+                        setEnable(false)
+                    }
+                } else {
+                    setEnable(false)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+  const options = () => {
+      const confine = true
+      const opt = {
+          tooltip: {
+              confine,
+              trigger: 'axis',
+              axisPointer: {
+                  type: 'line',
+                  label: {
+                      formatter: (param: any) => {
+                          let total = 0
+                          if (param.seriesData && param.seriesData.length) {
+                              for (
+                                  let i = 0;
+                                  i < param.seriesData.length;
+                                  i += 1
+                              ) {
+                                  total += param.seriesData[i].data
+                              }
+                          }
+
+                          return `${param.value} (Total: ${total.toFixed(2)})`
+                      },
+                      // backgroundColor: '#6a7985',
+                  },
+              },
+              valueFormatter: (value: number | string) => {
+                  return numericDisplay(value)
+              },
+              order: 'valueDesc',
+          },
+          grid: {
+              left: 45,
+              right: 0,
+              top: 20,
+              bottom: 40,
+          },
+          xAxis: {
+              type: 'category',
+              data: chart?.map((item) => {
+                  return item.date
+              }),
+          },
+          yAxis: {
+              type: 'value',
+          },
+          series: [
+              {
+                  name: 'Incidents',
+                  data: chart?.map((item) => {
+                      return item.Incidents
+                  }),
+                  type: 'line',
+              },
+              {
+                  name: 'Non Compliant',
+
+                  data: chart?.map((item) => {
+                      return item['Non Compliant']
+                  }),
+                  type: 'line',
+              },
+          ],
+      }
+      return opt
+  }
     useEffect(() => {
         // @ts-ignore
         GetBenchmarks()
-        GetChart()
     }, [])
+      useEffect(() => {
+          // @ts-ignore
+          if(enable){
+          GetChart()
+          GetTree()
+
+          }
+      }, [enable])
     return (
         <>
             {/* <TopHeader
@@ -733,23 +847,33 @@ export default function ScoreCategory() {
                 }
             ></Container>
             <Flex flexDirection="col" className="w-full mt-4">
-                <Flex className="bg-white  w-full border-solid border-2    rounded-xl p-4">
-                    <LineChart
-                        className="h-80"
-                        data={chart?.length < 0 ? [] : chart}
-                        index="date"
-                        categories={[
-                            // 'Total',
-                            'Incidents',
-                            'Non-Compliant',
-                        ]}
-                        colors={['indigo', 'rose', 'cyan']}
-                        noDataText="No Data to Display"
-                        // valueFormatter={dataFormatter}
-                        yAxisWidth={60}
-                        onValueChange={(v) => console.log(v)}
-                    />
-                </Flex>
+                {chart && enable  && (
+                    <>
+                        <Flex className="bg-white  w-full border-solid border-2    rounded-xl p-4">
+                            {/* <LineChart
+                                        className="h-80"
+                                        data={chart?.length < 0 ? [] : chart}
+                                        index="date"
+                                        categories={[
+                                            // 'Total',
+                                            'Incidents',
+                                            'Non Compliant',
+                                        ]}
+                                        colors={['indigo', 'rose', 'cyan']}
+                                        noDataText="No Data to Display"
+                                        // valueFormatter={dataFormatter}
+                                        yAxisWidth={60}
+                                        onValueChange={(v) => console.log(v)}
+                                    /> */}
+                            <ReactEcharts
+                                // echarts={echarts}
+                                option={options()}
+                                className="w-full"
+                                onEvents={() => {}}
+                            />
+                        </Flex>
+                    </>
+                )}
                 <Grid numItems={10} className="gap-4 w-full">
                     <Col numColSpan={10}>
                         <BreadcrumbGroup
@@ -1007,7 +1131,7 @@ export default function ScoreCategory() {
                                             },
                                             {
                                                 id: 'noncompliant_resources',
-                                                visible: true,
+                                                visible: enable,
                                             },
 
                                             // { id: 'action', visible: true },
