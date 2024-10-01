@@ -5,7 +5,7 @@ import {
     ValueFormatterParams,
     IServerSideGetRowsParams,
 } from 'ag-grid-community'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai/index'
 import {
     Api,
@@ -20,6 +20,17 @@ import Table, { IColumn } from '../../../../components/Table'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import ResourceFindingDetail from '../ResourceFindingDetail'
+import KTable from '@cloudscape-design/components/table'
+import Box from '@cloudscape-design/components/box'
+import SpaceBetween from '@cloudscape-design/components/space-between'
+import Badge from '@cloudscape-design/components/badge'
+import {
+    BreadcrumbGroup,
+    Header,
+    Link,
+    Pagination,
+    PropertyFilter,
+} from '@cloudscape-design/components'
 
 const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -165,81 +176,93 @@ interface ICount {
 
 export default function ResourcesWithFailure({ query }: ICount) {
     const setNotification = useSetAtom(notificationAtom)
+    const [loading, setLoading] = useState(false)
 
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<
         GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding | undefined
     >(undefined)
-
+    const [rows, setRows] = useState<any[]>()
+    const [page, setPage] = useState(1)
+    const [totalCount, setTotalCount] = useState(0)
+    const [totalPage, setTotalPage] = useState(0)
     const isDemo = useAtomValue(isDemoAtom)
 
-    const ssr = () => {
-        return {
-            getRows: (
-                params: IServerSideGetRowsParams<GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding>
-            ) => {
-                const api = new Api()
-                api.instance = AxiosAPI
-                api.compliance
-                    .apiV1ResourceFindingsCreate({
-                        filters: {
-                            connector: query.connector.length
-                                ? [query.connector]
-                                : [],
-                            controlID: query.controlID,
-                            connectionID: query.connectionID,
-                            benchmarkID: query.benchmarkID,
-                            severity: query.severity,
-                            resourceTypeID: query.resourceTypeID,
-                            conformanceStatus: query.conformanceStatus,
-                        },
-                        sort: params.request.sortModel.length
-                            ? [
-                                  {
-                                      [params.request.sortModel[0].colId]:
-                                          params.request.sortModel[0].sort,
-                                  },
-                              ]
-                            : [],
-                        limit: 100,
-                        afterSortKey:
-                            params.request.startRow === 0 || sortKey.length < 1
-                                ? []
-                                : sortKey,
-                    })
-                    .then((resp) => {
-                        params.success({
-                            rowData: resp.data.resourceFindings || [],
-                            rowCount: resp.data.totalCount || 0,
-                        })
-                        sortKey =
-                            resp.data?.resourceFindings?.at(
-                                (resp.data.resourceFindings?.length || 0) - 1
-                            )?.sortKey || []
-                    })
-                    .catch((err) => {
-                        params.fail()
-                    })
-            },
-        }
+    const GetRows = () => {
+        setLoading(true)
+        const api = new Api()
+        api.instance = AxiosAPI
+        api.compliance
+            .apiV1ResourceFindingsCreate({
+                filters: {
+                    connector: query.connector.length ? [query.connector] : [],
+                    controlID: query.controlID,
+                    connectionID: query.connectionID,
+                    benchmarkID: query.benchmarkID,
+                    severity: query.severity,
+                    resourceTypeID: query.resourceTypeID,
+                    conformanceStatus: query.conformanceStatus,
+                },
+                // sort: [],
+                limit: 100,
+                // @ts-ignore
+                afterSortKey: page == 1 ? [] : rows[rows?.length - 1].sortKey,
+
+                // afterSortKey:
+                //    [],
+            })
+            .then((resp) => {
+                setLoading(false)
+
+                setRows(resp.data.resourceFindings)
+                // @ts-ignore
+
+                setTotalPage(Math.ceil(resp.data.totalCount / 10))
+                // @ts-ignore
+
+                setTotalCount(resp.data.totalCount)
+                // @ts-ignore
+                // sortKey =
+                //     resp.data?.resourceFindings?.at(
+                //         (resp.data.resourceFindings?.length || 0) - 1
+                //     )?.sortKey || []
+            })
+            .catch((err) => {
+                setLoading(false)
+                setNotification({
+                    text: 'Can not Connect to Server',
+                    type: 'warning',
+                })
+            })
     }
 
-    const serverSideRows = useMemo(() => ssr(), [query])
+    useEffect(() => {
+        GetRows()
+    }, [page])
 
     return (
         <>
-            <Table
-                fullWidth
-                id="compliance_findings"
-                columns={columns(isDemo)}
-                onCellClicked={(
-                    event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding>
-                ) => {
+            <KTable
+                className="p-3   min-h-[450px]"
+                // resizableColumns
+                renderAriaLive={({ firstIndex, lastIndex, totalItemsCount }) =>
+                    `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
+                }
+                onSortingChange={(event) => {
+                    // setSort(event.detail.sortingColumn.sortingField)
+                    // setSortOrder(!sortOrder)
+                }}
+                // sortingColumn={sort}
+                // sortingDescending={sortOrder}
+                // sortingDescending={sortOrder == 'desc' ? true : false}
+                // @ts-ignore
+                onRowClick={(event) => {
+                    const row = event.detail.item
                     if (
-                        event.data?.kaytuResourceID &&
-                        event.data?.kaytuResourceID.length > 0
+                        row?.kaytuResourceID &&
+                        row?.kaytuResourceID.length > 0
                     ) {
-                        setFinding(event.data)
+                        setFinding(row)
                         setOpen(true)
                     } else {
                         setNotification({
@@ -248,15 +271,215 @@ export default function ResourcesWithFailure({ query }: ICount) {
                         })
                     }
                 }}
-                onSortChange={() => {
-                    sortKey = []
-                }}
-                serverSideDatasource={serverSideRows}
-                options={{
-                    rowModelType: 'serverSide',
-                    serverSideDatasource: serverSideRows,
-                }}
-                rowHeight="lg"
+                columnDefinitions={[
+                    {
+                        id: 'resourceName',
+                        header: 'Resource name',
+                        cell: (item) => (
+                            <>
+                                <Flex
+                                    flexDirection="col"
+                                    alignItems="start"
+                                    justifyContent="center"
+                                    className="h-full"
+                                >
+                                    <Text className="text-gray-800">
+                                        {item.resourceName}
+                                    </Text>
+                                    <Text className={isDemo ? 'blur-sm' : ''}>
+                                        {item.kaytuResourceID}
+                                    </Text>
+                                </Flex>
+                            </>
+                        ),
+                        sortingField: 'id',
+                        isRowHeader: true,
+                        maxWidth: 200,
+                    },
+                    {
+                        id: 'resourceType',
+                        header: 'Resource type',
+                        cell: (item) => (
+                            <>
+                                <Flex
+                                    flexDirection="col"
+                                    alignItems="start"
+                                    justifyContent="center"
+                                >
+                                    <Text className="text-gray-800">
+                                        {item.resourceType}
+                                    </Text>
+                                    <Text>{item.resourceTypeLabel}</Text>
+                                </Flex>
+                            </>
+                        ),
+                        sortingField: 'title',
+                        // minWidth: 400,
+                        maxWidth: 200,
+                    },
+                    {
+                        id: 'providerConnectionName',
+                        header: 'Cloud account',
+                        maxWidth: 100,
+                        cell: (item) => (
+                            <>
+                                <Flex
+                                    justifyContent="start"
+                                    className={`h-full gap-3 group relative ${
+                                        isDemo ? 'blur-sm' : ''
+                                    }`}
+                                >
+                                    {getConnectorIcon(item.connector)}
+                                    <Flex
+                                        flexDirection="col"
+                                        alignItems="start"
+                                    >
+                                        <Text className="text-gray-800">
+                                            {item.providerConnectionName}
+                                        </Text>
+                                        <Text>{item.providerConnectionID}</Text>
+                                    </Flex>
+                                    <Card className="cursor-pointer absolute w-fit h-fit z-40 right-1 scale-0 transition-all py-1 px-4 group-hover:scale-100">
+                                        <Text color="blue">Open</Text>
+                                    </Card>
+                                </Flex>
+                            </>
+                        ),
+                    },
+                    {
+                        id: 'totalCount',
+                        header: 'Findings',
+                        maxWidth: 100,
+
+                        cell: (item) => (
+                            <>
+                                <Flex
+                                    flexDirection="col"
+                                    alignItems="start"
+                                    justifyContent="center"
+                                    className="h-full"
+                                >
+                                    <Text className="text-gray-800">{`${item.totalCount} issues`}</Text>
+                                    <Text>{`${
+                                        item.totalCount - item.failedCount
+                                    } passed`}</Text>
+                                </Flex>
+                            </>
+                        ),
+                    },
+                    // {
+                    //     id: 'conformanceStatus',
+                    //     header: 'Status',
+                    //     sortingField: 'severity',
+                    //     cell: (item) => (
+                    //         <Badge
+                    //             // @ts-ignore
+                    //             color={`${
+                    //                 item.conformanceStatus == 'passed'
+                    //                     ? 'green'
+                    //                     : 'red'
+                    //             }`}
+                    //         >
+                    //             {item.conformanceStatus}
+                    //         </Badge>
+                    //     ),
+                    //     maxWidth: 100,
+                    // },
+                    // {
+                    //     id: 'severity',
+                    //     header: 'Severity',
+                    //     sortingField: 'severity',
+                    //     cell: (item) => (
+                    //         <Badge
+                    //             // @ts-ignore
+                    //             color={`severity-${item.severity}`}
+                    //         >
+                    //             {item.severity.charAt(0).toUpperCase() +
+                    //                 item.severity.slice(1)}
+                    //         </Badge>
+                    //     ),
+                    //     maxWidth: 100,
+                    // },
+                    // {
+                    //     id: 'evaluatedAt',
+                    //     header: 'Last Evaluation',
+                    //     cell: (item) => (
+                    //         // @ts-ignore
+                    //         <>{dateTimeDisplay(item.value)}</>
+                    //     ),
+                    // },
+                ]}
+                columnDisplay={[
+                    { id: 'resourceName', visible: true },
+                    { id: 'resourceType', visible: true },
+                    { id: 'providerConnectionName', visible: true },
+                    { id: 'totalCount', visible: true },
+                    // { id: 'severity', visible: true },
+                    // { id: 'evaluatedAt', visible: true },
+
+                    // { id: 'action', visible: true },
+                ]}
+                enableKeyboardNavigation
+                // @ts-ignore
+                items={rows}
+                loading={loading}
+                loadingText="Loading resources"
+                // stickyColumns={{ first: 0, last: 1 }}
+                // stripedRows
+                trackBy="id"
+                empty={
+                    <Box
+                        margin={{ vertical: 'xs' }}
+                        textAlign="center"
+                        color="inherit"
+                    >
+                        <SpaceBetween size="m">
+                            <b>No resources</b>
+                        </SpaceBetween>
+                    </Box>
+                }
+                filter={
+                    ''
+                    // <PropertyFilter
+                    //     // @ts-ignore
+                    //     query={undefined}
+                    //     // @ts-ignore
+                    //     onChange={({ detail }) => {
+                    //         // @ts-ignore
+                    //         setQueries(detail)
+                    //     }}
+                    //     // countText="5 matches"
+                    //     enableTokenGroups
+                    //     expandToViewport
+                    //     filteringAriaLabel="Control Categories"
+                    //     // @ts-ignore
+                    //     // filteringOptions={filters}
+                    //     filteringPlaceholder="Control Categories"
+                    //     // @ts-ignore
+                    //     filteringOptions={undefined}
+                    //     // @ts-ignore
+
+                    //     filteringProperties={undefined}
+                    //     // filteringProperties={
+                    //     //     filterOption
+                    //     // }
+                    // />
+                }
+                header={
+                    <Header className="w-full">
+                        Events{' '}
+                        <span className=" font-medium">({totalCount})</span>
+                    </Header>
+                }
+                pagination={
+                    <Pagination
+                        currentPageIndex={page}
+                        pagesCount={totalPage}
+                        onChange={({ detail }) =>
+                            setPage(detail.currentPageIndex)
+                        }
+                    />
+                }
             />
             <ResourceFindingDetail
                 // type="resource"

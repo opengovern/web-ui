@@ -341,10 +341,10 @@ export default function FindingsWithFailure({ query }: ICount) {
                 //           },
                 //       ]
                 //     : [],
-                limit: 100,
+                limit: 10,
                 // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                // afterSortKey:
+                afterSortKey: page == 1 ? [] : rows[rows?.length-1].sortKey
                 //     params.request.startRow === 0 ||
                 //     sortKey.length < 1 ||
                 //     sortKey === 'none'
@@ -377,7 +377,7 @@ export default function FindingsWithFailure({ query }: ICount) {
 
     useEffect(() => {
         GetRows()
-    }, [])
+    }, [page])
     return (
         <>
             <KTable

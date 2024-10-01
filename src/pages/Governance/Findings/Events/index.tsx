@@ -291,7 +291,8 @@ export default function Events({ query }: ICount) {
                 //     : [],
                 // limit: 100,
                 // // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
-                // // @ts-ignore
+                // @ts-ignore
+                afterSortKey: page == 1 ? [] : rows[rows?.length - 1].sortKey,
                 // afterSortKey:
                 //     params.request.startRow === 0 ||
                 //     sortKey.length < 1 ||
@@ -334,7 +335,7 @@ export default function Events({ query }: ICount) {
     }
     useEffect(() => {
         GetRows()
-    }, [])
+    }, [page])
     return (
         <>
             <KTable
