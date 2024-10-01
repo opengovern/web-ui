@@ -627,7 +627,7 @@ export default function ScoreCategory() {
                   name: 'Non Compliant',
 
                   data: chart?.map((item) => {
-                      return item['Non Compliant']
+                      return item['Non-Compliant']
                   }),
                   type: 'line',
               },
@@ -639,6 +639,7 @@ export default function ScoreCategory() {
         // @ts-ignore
         GetBenchmarks()
           GetTree()
+          GetEnabled()
 
     }, [])
       useEffect(() => {
