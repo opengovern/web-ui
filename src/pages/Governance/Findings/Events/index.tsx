@@ -260,6 +260,7 @@ export default function Events({ query }: ICount) {
     const isDemo = useAtomValue(isDemoAtom)
 
     const GetRows = () => {
+        setLoading(true)
         const api = new Api()
         api.instance = AxiosAPI
         api.compliance
@@ -299,7 +300,8 @@ export default function Events({ query }: ICount) {
                 //         : sortKey,
             })
             .then((resp) => {
-               
+                setLoading(false)
+
                 // @ts-ignore
 
                 setTotalPage(Math.ceil(resp.data.totalCount / 10))
@@ -330,9 +332,9 @@ export default function Events({ query }: ICount) {
                 })
             })
     }
-      useEffect(() => {
-          GetRows()
-      }, [])
+    useEffect(() => {
+        GetRows()
+    }, [])
     return (
         <>
             <KTable
@@ -368,7 +370,7 @@ export default function Events({ query }: ICount) {
                         cell: (item) => item.id,
                         sortingField: 'id',
                         isRowHeader: true,
-                        maxWidth:200
+                        maxWidth: 200,
                     },
                     {
                         id: 'resourceType',
@@ -554,7 +556,7 @@ export default function Events({ query }: ICount) {
                 }
                 header={
                     <Header className="w-full">
-                        Incidents{' '}
+                        Events{' '}
                         <span className=" font-medium">({totalCount})</span>
                     </Header>
                 }
