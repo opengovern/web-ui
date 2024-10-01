@@ -400,9 +400,10 @@ export default function NewBenchmarkSummary() {
         today.getDate() - 7
     )
     const [value, setValue] = useState({
-        type: 'absolute',
-        startDate: lastWeek.toISOString(),
-        endDate: today.toISOString(),
+        type: 'relative',
+        amount: 7,
+        unit: 'day',
+        key: 'previous-7-Days',
     })
     // @ts-ignore
 
@@ -466,12 +467,11 @@ export default function NewBenchmarkSummary() {
                                             />
                                             <DateRangePicker
                                                 onChange={({ detail }) => {
-                                                    console.log(detail)
                                                     setValue(detail.value)
                                                 }}
-                                                value={undefined}
-                                                placeholder={'Last 7 days'}
-                                                disabled={true}
+                                                value={value}
+                                                placeholder={'Please select Date'}
+                                                // disabled={true}
                                                 relativeOptions={[
                                                     {
                                                         key: 'previous-5-minutes',
@@ -498,7 +498,7 @@ export default function NewBenchmarkSummary() {
                                                         type: 'relative',
                                                     },
                                                     {
-                                                        key: 'previous-7-fays',
+                                                        key: 'previous-7-Days',
                                                         amount: 7,
                                                         unit: 'day',
                                                         type: 'relative',

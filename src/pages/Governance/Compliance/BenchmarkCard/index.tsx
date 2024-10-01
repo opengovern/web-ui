@@ -19,6 +19,8 @@ import SpaceBetween from '@cloudscape-design/components/space-between'
 import Button from '@cloudscape-design/components/button'
 import Header from '@cloudscape-design/components/header'
 import { Link } from '@cloudscape-design/components'
+import Badge from '@cloudscape-design/components/badge'
+import { Flex } from '@tremor/react'
 
 interface IComplianceCard {
     benchmark: NewBenchmark[] | undefined
@@ -78,6 +80,11 @@ export default function BenchmarkCards({ benchmark, all,loading }: IComplianceCa
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
     const isDemo = useAtomValue(isDemoAtom)
+    const truncate = (text: string | undefined) => {
+        if (text) {
+            return text.length > 40 ? text.substring(0, 40) + '...' : text
+        }
+    }
     return (
         <>
             <Cards
@@ -88,6 +95,7 @@ export default function BenchmarkCards({ benchmark, all,loading }: IComplianceCa
                 cardDefinition={{
                     header: (item) => (
                         <Link
+                            className="mb-10"
                             onClick={(e) => {
                                 e.preventDefault()
                                 // console.log(item.id)
@@ -96,10 +104,25 @@ export default function BenchmarkCards({ benchmark, all,loading }: IComplianceCa
                             href={`./compliance/${item.id}`}
                             fontSize="heading-m"
                         >
-                            {item.name}
+                            <Flex className="w-100" justifyContent="between">
+                                {truncate(item.name)}
+
+                                <Badge>AWS</Badge>
+                            </Flex>
                         </Link>
                     ),
                     sections: [
+                        {
+                            id: 'security_score',
+                            header: '',
+                            content: (item) => '',
+                        },
+                        // (item?.connectors?.map((sub)=>{
+                        //         return (<>
+                        //         <Badge>{sub}</Badge>
+                        //         </>)
+                        //     }))
+
                         {
                             id: 'security_score',
                             header: 'Security Score',
@@ -117,6 +140,7 @@ export default function BenchmarkCards({ benchmark, all,loading }: IComplianceCa
                     ],
                 }}
                 cardsPerRow={[{ cards: 1 }, { minWidth: 500, cards: 2 }]}
+                // totalItemsCount={7}
                 items={benchmark?.map((item) => {
                     return {
                         name: all?.filter((sub) => {
@@ -142,7 +166,7 @@ export default function BenchmarkCards({ benchmark, all,loading }: IComplianceCa
                     >
                         <SpaceBetween size="m">
                             <b>No resources</b>
-                            <Button>Create resource</Button>
+                            {/* <Button>Create resource</Button> */}
                         </SpaceBetween>
                     </Box>
                 }

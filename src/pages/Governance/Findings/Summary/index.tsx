@@ -40,6 +40,8 @@ interface Props {
     tab: number
     setTab: Function
 }
+const GROUPS = { 0: 'findings', 1: 'events' }
+
 export default function Summary({ query, setSelectedGroup,tab,setTab }: Props) {
     return (
         <>
