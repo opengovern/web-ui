@@ -248,7 +248,10 @@ export default function ScoreKPIs() {
                                                 name={item.benchmark_title
                                                     .split('SRE')[1]
                                                     .trim()}
-                                                number={item.issues_count}
+                                                number={
+                                                    item.benchmark_id === 'sre_efficiency' ? item.cost_optimization :item
+                                                        .issues_count
+                                                }
                                                 percentage={
                                                     (item
                                                         .severity_summary_by_control

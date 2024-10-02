@@ -139,6 +139,7 @@ export default function Settings({
         if (enableAllResponse) {
             isAutoResponse(true)
             setAllEnable(!allEnable)
+            window.location.reload()
         }
     }, [enableAllResponse])
 
@@ -222,7 +223,6 @@ export default function Settings({
                         className="gap-8"
                         onChange={({ detail }) => {
                             sendEnableAll()
-                            window.location.reload()
                         }}
                         items={[
                             {

@@ -68,11 +68,12 @@ export default function Compliance() {
              Authorization: `Bearer ${token}`,
          },
      }
-     const body ={
-        cursor : 1,
-        per_page :4,
-        sort_by: 'incidents',
-        assigned: true,
+     const body = {
+         cursor: 1,
+         per_page: 4,
+         sort_by: 'incidents',
+         assigned: true,
+         is_sre_benchmark: false,
      }
      axios
          .post(`${url}/main/compliance/api/v3/benchmarks`, body,config)

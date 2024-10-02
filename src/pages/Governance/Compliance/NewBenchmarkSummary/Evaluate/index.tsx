@@ -28,6 +28,7 @@ import { Fragment, ReactNode } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import Modal from '@cloudscape-design/components/modal'
 import KButton from '@cloudscape-design/components/button'
+import axios from 'axios'
 interface IEvaluate {
     id: string | undefined
     assignmentsCount: number
@@ -93,14 +94,13 @@ export default function Evaluate({
     onEvaluate,
 }: IEvaluate) {
     const [open, setOpen] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [accounts,setAccounts] = useState()
     const isDemo = useAtomValue(isDemoAtom)
     const [openConfirm, setOpenConfirm] = useState(false)
     const [connections, setConnections] = useState<string[]>([])
 
-    const { response: assignments,sendNow : send, } =
-        useComplianceApiV1AssignmentsBenchmarkDetail(String(id), {},false)
 
-    const checkbox = useCheckboxState()
 
     // useEffect(() => {
     //     checkbox.setState(connections)
@@ -115,7 +115,42 @@ export default function Evaluate({
     //         setConnections( [])
     //     }
     // }, [assignments])
+    const GetEnabled = () => {
+        // /compliance/api/v3/benchmark/{benchmark-id}/assignments
+        setLoading(true)
+        let url = ''
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
+        }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
 
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+        let connector= ''
+        benchmarkDetail?.connectors?.map((c) => {
+            connector += `connectors=${c}&`
+        }
+    )
+        axios
+            .get(
+                `${url}/main/onboard/api/v3/integrations?health_state=healthy&${connector}`,
+                config
+            )
+            .then((res) => {
+                setAccounts(res.data.integrations)
+                setLoading(false)
+            })
+            .catch((err) => {
+                setLoading(false)
+                console.log(err)
+            })
+    }
   
 
     const isLoading =
@@ -126,8 +161,9 @@ export default function Evaluate({
     return (
         <>
             <KButton
-                onClick={() => {setOpen(true)
-                    send()
+                onClick={() => {
+                    setOpen(true)
+                  GetEnabled()
                 }}
                 loading={false}
                 variant="primary"
@@ -193,17 +229,20 @@ export default function Evaluate({
                 header="Select Account"
             >
                 <Multiselect
-                    // @ts-ignore
                     className="w-full"
-                    options={assignments?.connections?.map((c) => {
+                    // @ts-ignore
+                    options={accounts?.map((c) => {
                         return {
-                            label: c.providerConnectionName,
-                            value: c.connectionID,
-                            description: c.providerConnectionID,
+                            label: c.name,
+                            value: c.integration_tracker,
+                            description: c.id,
                         }
                     })}
                     // @ts-ignore
                     selectedOptions={connections}
+                    loadingText="Loading Accounts"
+                    emptyText="No Accounts"
+                    loading={loading}
                     placeholder="Select Account"
                     onChange={({ detail }) => {
                         // @ts-ignore
