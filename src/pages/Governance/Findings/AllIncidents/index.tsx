@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react'
 
 import ResourcesWithFailure from '../ResourcesWithFailure'
 import ControlsWithFailure from '../ControlsWithFailure'
+import Tabs from '@cloudscape-design/components/tabs'
 
 import Spinner from '../../../../components/Spinner'
 import {
@@ -41,47 +42,40 @@ interface Props {
     tab: number
     setTab: Function
 }
+const GROUPS ={0:'findings' ,1:'events'}
 export default function AllIncidents({ query, setSelectedGroup ,tab,setTab}: Props) {
     return (
         <>
-            <TabGroup
-                index={tab}
-                onIndexChange={(index) => {
-                    setTab(index)
+            <Tabs
+                onChange={({ detail }) => {
+                    setTab(parseInt(detail.activeTabId))
+                    // @ts-ignore
+                    setSelectedGroup(GROUPS[parseInt(detail.activeTabId)])
                 }}
-            >
-                <TabList>
-                    <Tab
-                        onClick={() => {
-                            setSelectedGroup('findings')
-                            setTab(0)
-                        }}
-                    >
-                        All Incidents
-                    </Tab>
-                    <Tab
-                        onClick={() => {
-                            setSelectedGroup('events')
-                            setTab(1)
-                        }}
-                    >
-                        Drift Events
-                    </Tab>
-                </TabList>
-                <TabPanels>
-                    <TabPanel key={'resource'}>
-                        {tab == 0 && (
+                activeTabId={tab.toString()}
+                tabs={[
+                    {
+                        label: 'All Incidents',
+                        id: '0',
+                        content: (
                             <>
-                                <FindingsWithFailure query={query} />
+                                {tab == 0 && (
+                                    <>
+                                        <FindingsWithFailure query={query} />
+                                    </>
+                                )}
                             </>
-                        )}
-                    </TabPanel>
-
-                    <TabPanel key={'events'}>
-                        {tab == 1 && <Events query={query} />}
-                    </TabPanel>
-                </TabPanels>
-            </TabGroup>
+                        ),
+                    },
+                    {
+                        label: ' Drift Events',
+                        id: '1',
+                        content: <>{tab == 1 && <Events query={query} />}</>,
+                    },
+                 
+                ]}
+            />
+            
         </>
     )
 }

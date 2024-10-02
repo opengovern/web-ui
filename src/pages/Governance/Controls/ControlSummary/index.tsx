@@ -131,8 +131,8 @@ export default function ControlDetail() {
                                     controlDetail?.control?.severity
                                 )}
                             </Flex>
-                            <div className="group w-full relative flex justify-start">
-                                <Text className="truncate">
+                            <div className="group  relative flex justify-start">
+                                <Text className="">
                                     {controlDetail?.control?.description}
                                 </Text>
                                 <Card className="absolute w-full z-40 top-0 scale-0 transition-all p-2 group-hover:scale-100">
