@@ -83,7 +83,7 @@ export default function InsightCategoryCard({
 
                 <Button
                     variant="light"
-
+                    className="hidden"
                     onClick={() =>
                         navigate(
                             `/ws/${workspace}/insights?category=${category}&${searchParams}`

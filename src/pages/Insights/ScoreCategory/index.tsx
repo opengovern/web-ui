@@ -627,7 +627,7 @@ export default function ScoreCategory() {
                   name: 'Non Compliant',
 
                   data: chart?.map((item) => {
-                      return item['Non Compliant']
+                      return item['Non-Compliant']
                   }),
                   type: 'line',
               },
@@ -639,6 +639,7 @@ export default function ScoreCategory() {
         // @ts-ignore
         GetBenchmarks()
           GetTree()
+          GetEnabled()
 
     }, [])
       useEffect(() => {
@@ -674,95 +675,101 @@ export default function ScoreCategory() {
                 disableContentPaddings
                 className="rounded-xl  bg-[#0f2940] p-0 text-white"
                 footer={
-                   enable ? ( <ExpandableSection
-                        header="Additional settings"
-                        variant="footer"
-                    >
-                        <Flex
-                            justifyContent="end"
-                            className="bg-white p-4 pt-0 mb-2 w-full gap-3    rounded-xl"
+                    enable ? (
+                        <ExpandableSection
+                            header="Additional settings"
+                            variant="footer"
                         >
-                            <Filter
-                                type={'accounts'}
-                                onApply={(e) => {
-                                    // setAccount(e.connector)
-                                }}
-                                // id={id}
-                            />
-                            <DateRangePicker
-                                onChange={
-                                    ({ detail }) => {}
-                                    // setValue(detail.value)
-                                }
-                                value={undefined}
-                                disabled={true}
-                                relativeOptions={[
-                                    {
-                                        key: 'previous-5-minutes',
-                                        amount: 5,
-                                        unit: 'minute',
-                                        type: 'relative',
-                                    },
-                                    {
-                                        key: 'previous-30-minutes',
-                                        amount: 30,
-                                        unit: 'minute',
-                                        type: 'relative',
-                                    },
-                                    {
-                                        key: 'previous-1-hour',
-                                        amount: 1,
-                                        unit: 'hour',
-                                        type: 'relative',
-                                    },
-                                    {
-                                        key: 'previous-6-hours',
-                                        amount: 6,
-                                        unit: 'hour',
-                                        type: 'relative',
-                                    },
-                                ]}
-                                isValidRange={(range) => {
-                                    if (range.type === 'absolute') {
-                                        const [startDateWithoutTime] =
-                                            range.startDate.split('T')
-                                        const [endDateWithoutTime] =
-                                            range.endDate.split('T')
-                                        if (
-                                            !startDateWithoutTime ||
-                                            !endDateWithoutTime
-                                        ) {
-                                            return {
-                                                valid: false,
-                                                errorMessage:
-                                                    'The selected date range is incomplete. Select a start and end date for the date range.',
-                                            }
-                                        }
-                                        if (
-                                            new Date(range.startDate) -
-                                                new Date(range.endDate) >
-                                            0
-                                        ) {
-                                            return {
-                                                valid: false,
-                                                errorMessage:
-                                                    'The selected date range is invalid. The start date must be before the end date.',
-                                            }
-                                        }
+                            <Flex
+                                justifyContent="end"
+                                className="bg-white p-4 pt-0 mb-2 w-full gap-3    rounded-xl"
+                            >
+                                <Filter
+                                    type={'accounts'}
+                                    onApply={(e) => {
+                                        // setAccount(e.connector)
+                                    }}
+                                    // id={id}
+                                />
+                                <DateRangePicker
+                                    onChange={
+                                        ({ detail }) => {}
+                                        // setValue(detail.value)
                                     }
-                                    return { valid: true }
-                                }}
-                                i18nStrings={{}}
-                                absoluteFormat="long-localized"
-                                hideTimeOffset
-                                placeholder="Last 7 days"
-                            />
-                        </Flex>
-                    </ExpandableSection>) : ''
+                                    value={undefined}
+                                    disabled={true}
+                                    relativeOptions={[
+                                        {
+                                            key: 'previous-5-minutes',
+                                            amount: 5,
+                                            unit: 'minute',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-30-minutes',
+                                            amount: 30,
+                                            unit: 'minute',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-1-hour',
+                                            amount: 1,
+                                            unit: 'hour',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-6-hours',
+                                            amount: 6,
+                                            unit: 'hour',
+                                            type: 'relative',
+                                        },
+                                    ]}
+                                    isValidRange={(range) => {
+                                        if (range.type === 'absolute') {
+                                            const [startDateWithoutTime] =
+                                                range.startDate.split('T')
+                                            const [endDateWithoutTime] =
+                                                range.endDate.split('T')
+                                            if (
+                                                !startDateWithoutTime ||
+                                                !endDateWithoutTime
+                                            ) {
+                                                return {
+                                                    valid: false,
+                                                    errorMessage:
+                                                        'The selected date range is incomplete. Select a start and end date for the date range.',
+                                                }
+                                            }
+                                            if (
+                                                new Date(range.startDate) -
+                                                    new Date(range.endDate) >
+                                                0
+                                            ) {
+                                                return {
+                                                    valid: false,
+                                                    errorMessage:
+                                                        'The selected date range is invalid. The start date must be before the end date.',
+                                                }
+                                            }
+                                        }
+                                        return { valid: true }
+                                    }}
+                                    i18nStrings={{}}
+                                    absoluteFormat="long-localized"
+                                    hideTimeOffset
+                                    placeholder="Last 7 days"
+                                />
+                            </Flex>
+                        </ExpandableSection>
+                    ) : (
+                        ''
+                    )
                 }
                 header={
                     <Header
-                        className={`bg-[#0f2940] p-4 rounded-xl ${enable ? 'rounded-b-none' : ''}  text-white`}
+                        className={`bg-[#0f2940] p-4 rounded-xl ${
+                            enable ? 'rounded-b-none' : ''
+                        }  text-white`}
                         variant="h2"
                         description=""
                         actions={
@@ -848,7 +855,7 @@ export default function ScoreCategory() {
                 }
             ></Container>
             <Flex flexDirection="col" className="w-full mt-4">
-                {chart && enable  && (
+                {chart && enable && (
                     <>
                         <Flex className="bg-white  w-full border-solid border-2    rounded-xl p-4">
                             {/* <LineChart
@@ -1092,6 +1099,22 @@ export default function ScoreCategory() {
                                                 maxWidth: 100,
                                             },
                                             {
+                                                id: 'waste',
+                                                header: 'Waste',
+                                                cell: (item) => (
+                                                    // @ts-ignore
+                                                    <>
+                                                        {item?.findings_summary
+                                                            ?.cost_optimization
+                                                            ? item
+                                                                  ?.findings_summary
+                                                                  ?.cost_optimization
+                                                            : 0}
+                                                    </>
+                                                ),
+                                                maxWidth: 100,
+                                            },
+                                            {
                                                 id: 'action',
                                                 header: 'Action',
                                                 cell: (item) => (
@@ -1133,6 +1156,10 @@ export default function ScoreCategory() {
                                             {
                                                 id: 'noncompliant_resources',
                                                 visible: enable,
+                                            },
+                                            {
+                                                id: 'waste',
+                                                visible: category == "Efficiency" && enable ? true : false,
                                             },
 
                                             // { id: 'action', visible: true },

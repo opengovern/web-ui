@@ -192,7 +192,6 @@ export default function Evaluate({
                 }
                 header="Select Account"
             >
-                <>{console.log(connections)}</>
                 <Multiselect
                     // @ts-ignore
                     className="w-full"

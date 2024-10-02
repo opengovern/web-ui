@@ -20,10 +20,12 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
         url.shift()
     }
     let current = url[2]
+    let sub_page= false
     if (url.length > 3) {
         for (let i = 3; i < url.length; i += 1) {
             current += `/${url[i]}`
         }
+        sub_page= true
     }
     const workspace = url[1]
     const showSidebar =
@@ -35,11 +37,12 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
         workspace !== 'callback'
     const hasTop = () => {
         if (current) {
+            console.log(current,"current")
             if (
-                current.includes('incidents') ||
+               ( current.includes('incidents') ||
                 current == 'integrations' ||
                 current.includes('dashboard') ||
-                current.includes('score') 
+                current.includes('score') ) && !sub_page
 
             ) {
                 return false

@@ -596,6 +596,21 @@ export default function Controls({
                                 maxWidth: 100,
                             },
                             {
+                                id: 'waste',
+                                header: 'Waste',
+                                cell: (item) => (
+                                    // @ts-ignore
+                                    <>
+                                        {item?.findings_summary
+                                            ?.cost_optimization
+                                            ? item?.findings_summary
+                                                  ?.cost_optimization
+                                            : 0}
+                                    </>
+                                ),
+                                maxWidth: 100,
+                            },
+                            {
                                 id: 'action',
                                 header: 'Action',
                                 cell: (item) => (
@@ -623,6 +638,15 @@ export default function Controls({
                             {
                                 id: 'noncompliant_resources',
                                 visible: enable,
+                            },
+                            {
+                                id: 'waste',
+                                visible:
+                                    (benchmarkId == 'sre_efficiency' ||
+                                        selected == 'sre_efficiency') &&
+                                    enable
+                                        ? true
+                                        : false,
                             },
 
                             // { id: 'action', visible: true },
