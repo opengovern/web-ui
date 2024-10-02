@@ -44,6 +44,8 @@ import {
 import { isDemoAtom, notificationAtom } from '../../../../../store'
 import { getErrorMessage } from '../../../../../types/apierror'
 import { searchAtom } from '../../../../../utilities/urlstate'
+import { Tabs } from '@cloudscape-design/components'
+
 
 interface IFindingDetail {
     finding: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
@@ -182,18 +184,7 @@ export default function FindingDetail({
     const isDemo = useAtomValue(isDemoAtom)
 
     return (
-        <DrawerPanel
-            open={open}
-            onClose={onClose}
-            title={
-                <Flex justifyContent="start">
-                    {getConnectorIcon(finding?.connector)}
-                    <Title className="text-lg font-semibold ml-2 my-1">
-                        {finding?.resourceName}
-                    </Title>
-                </Flex>
-            }
-        >
+        <>
             <Grid className="w-full gap-4 mb-6" numItems={2}>
                 <SummaryCard
                     title="Account"
@@ -221,8 +212,143 @@ export default function FindingDetail({
                     metric={severityBadge(finding?.severity)}
                     isString
                 />
+                <Button
+                    color="orange"
+                    variant="secondary"
+                    disabled={reEvaluateLoading}
+                    onClick={() => {
+                        Reelavuate()
+                    }}
+                >
+                    <Flex flexDirection="row">
+                        {reEvaluateLoading && (
+                            <Spinner
+                                className="w-6 h-6"
+                                color="fill-orange-600"
+                            />
+                        )}
+                        Re-evaluate
+                    </Flex>
+                </Button>
             </Grid>
-            <TabGroup>
+            <Tabs
+                tabs={[
+                    {
+                        label: 'Summary',
+                        id: '0',
+                        content: (
+                            <>
+                                <List>
+                                    <ListItem className="py-6">
+                                        <Text>Control</Text>
+                                        <Link
+                                            className="text-kaytu-500 cursor-pointer underline"
+                                            to={`${finding?.controlID}?${searchParams}`}
+                                        >
+                                            {finding?.controlTitle}
+                                        </Link>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Conformance Status</Text>
+                                        {finding?.conformanceStatus ===
+                                        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed ? (
+                                            <Flex className="w-fit gap-1.5">
+                                                <CheckCircleIcon className="h-4 text-emerald-500" />
+                                                <Text>Passed</Text>
+                                            </Flex>
+                                        ) : (
+                                            <Flex className="w-fit gap-1.5">
+                                                <XCircleIcon className="h-4 text-rose-600" />
+                                                <Text>Failed</Text>
+                                            </Flex>
+                                        )}
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Findings state</Text>
+                                        {renderStatus(finding?.stateActive)}
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Last evaluated</Text>
+                                        <Text className="text-gray-800">
+                                            {dateTimeDisplay(
+                                                finding?.evaluatedAt
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>First discovered</Text>
+                                        <Text className="text-gray-800">
+                                            {dateTimeDisplay(
+                                                failedEvents.at(
+                                                    failedEvents.length - 1
+                                                )?.evaluatedAt
+                                            )}
+                                        </Text>
+                                    </ListItem>
+
+                                    <ListItem className="py-6 space-x-5">
+                                        <Flex
+                                            flexDirection="row"
+                                            justifyContent="between"
+                                            alignItems="start"
+                                            className="w-full"
+                                        >
+                                            <Text className="w-1/4">
+                                                Reason
+                                            </Text>
+                                            <Text className="text-gray-800 text-end w-3/4 whitespace-break-spaces h-fit">
+                                                {finding?.reason}
+                                            </Text>
+                                        </Flex>
+                                    </ListItem>
+                                </List>
+                            </>
+                        ),
+                    },
+                    {
+                        label: 'Resource Details',
+                        disabled: !response?.resource,
+                        id: '1',
+                        content: (
+                            <>
+                                <Title className="mb-2">JSON</Title>
+                                <Card className="px-1.5 py-3 mb-2">
+                                    <ReactJson src={response?.resource || {}} />
+                                </Card>
+                            </>
+                        ),
+                    },
+                    {
+                        label: 'Timeline',
+                        id: '2',
+                        content: (
+                            <>
+                                <Timeline
+                                    data={
+                                        type === 'finding'
+                                            ? findingTimeline
+                                            : response
+                                    }
+                                    isLoading={
+                                        type === 'finding'
+                                            ? findingTimelineLoading
+                                            : isLoading
+                                    }
+                                />
+                            </>
+                        ),
+                    },
+                ]}
+            />
+        </>
+    )
+}
+
+// 
+{
+    /**
+    
+       <TabGroup>
                 <Flex
                     flexDirection="row"
                     justifyContent="between"
@@ -393,6 +519,5 @@ export default function FindingDetail({
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
-        </DrawerPanel>
-    )
+    */
 }

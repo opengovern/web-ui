@@ -26,6 +26,7 @@ import { severityBadge, statusBadge } from '../../../Controls'
 import FindingDetail from '../../FindingsWithFailure/Detail'
 import { useComplianceApiV1FindingsSingleDetail } from '../../../../../api/compliance.gen'
 import { isDemoAtom } from '../../../../../store'
+import { Tabs } from '@cloudscape-design/components'
 
 interface IFindingDetail {
     event: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent | undefined
@@ -48,18 +49,7 @@ export default function EventDetail({ event, open, onClose }: IFindingDetail) {
         }
     }, [event])
     return (
-        <DrawerPanel
-            open={open}
-            onClose={onClose}
-            title={
-                <Flex justifyContent="start">
-                    {getConnectorIcon(event?.connector)}
-                    <Title className="text-lg font-semibold ml-2 my-1">
-                        {event?.providerConnectionName}
-                    </Title>
-                </Flex>
-            }
-        >
+        <>
             <Grid className="w-full gap-4 mb-6" numItems={2}>
                 <SummaryCard
                     title="Account ID"
@@ -80,10 +70,84 @@ export default function EventDetail({ event, open, onClose }: IFindingDetail) {
                 />
                 <SummaryCard
                     title="Resource Type"
-                    metric={event?.resourceTypeName}
+                    metric={event?.resourceType}
                     isString
                 />
             </Grid>
+            <Tabs
+                tabs={[
+                    {
+                        label: 'Summary',
+                        id: '0',
+                        content: (
+                            <>
+                                <List>
+                                    <ListItem className="py-6">
+                                        <Text>Event ID</Text>
+                                        <Text className="text-gray-800">
+                                            {event?.id}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Event Date</Text>
+                                        <Text className="text-gray-800">
+                                            {dateTimeDisplay(
+                                                event?.evaluatedAt
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>State</Text>
+                                        <Flex
+                                            flexDirection="row"
+                                            className="h-full w-fit gap-2"
+                                        >
+                                            {statusBadge(
+                                                event?.previousConformanceStatus
+                                            )}
+                                            <ArrowRightIcon className="w-5" />
+                                            {statusBadge(
+                                                event?.conformanceStatus
+                                            )}
+                                        </Flex>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Severity</Text>
+                                        {severityBadge(event?.severity)}
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Control ID</Text>
+                                        <Text className="text-gray-800">
+                                            {event?.controlID}
+                                        </Text>
+                                    </ListItem>
+                                    {/* <ListItem className="py-6">
+                                <Text>Finding</Text>
+                                <Button
+                                    variant="light"
+                                    onClick={() => setOpenFinding(true)}
+                                >
+                                    Click to see finding detail
+                                </Button>
+                            </ListItem> */}
+                                </List>
+                            </>
+                        ),
+                    },
+                    {
+                        label: 'Resource Details',
+                        id: '1',
+                        content: (
+                            <>
+                                <Title className="mb-2">JSON</Title>
+                                <Card className="px-1.5 py-3 mb-2">
+                                    <ReactJson src={event || {}} />
+                                </Card>
+                            </>
+                        ),
+                    },
+                ]}
+            />
             <TabGroup>
                 <TabList>
                     <Tab>Summary</Tab>
@@ -127,7 +191,7 @@ export default function EventDetail({ event, open, onClose }: IFindingDetail) {
                                     {event?.controlID}
                                 </Text>
                             </ListItem>
-                            <ListItem className="py-6">
+                            {/* <ListItem className="py-6">
                                 <Text>Finding</Text>
                                 <Button
                                     variant="light"
@@ -135,7 +199,7 @@ export default function EventDetail({ event, open, onClose }: IFindingDetail) {
                                 >
                                     Click to see finding detail
                                 </Button>
-                            </ListItem>
+                            </ListItem> */}
                         </List>
                     </TabPanel>
                     <TabPanel>
@@ -146,13 +210,6 @@ export default function EventDetail({ event, open, onClose }: IFindingDetail) {
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
-            <FindingDetail
-                finding={finding}
-                type="finding"
-                open={openFinding}
-                onClose={() => setOpenFinding(false)}
-                onRefresh={() => window.location.reload()}
-            />
-        </DrawerPanel>
+        </>
     )
 }

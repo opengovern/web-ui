@@ -1,4 +1,4 @@
-import { Card, Flex, Text } from '@tremor/react'
+import { Card, Flex, Text, Title } from '@tremor/react'
 import {
     ICellRendererParams,
     RowClickedEvent,
@@ -31,7 +31,10 @@ import {
     Pagination,
     PropertyFilter,
 } from '@cloudscape-design/components'
-
+import {
+    AppLayout,
+    SplitPanel,
+} from '@cloudscape-design/components'
 const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
@@ -242,252 +245,307 @@ export default function ResourcesWithFailure({ query }: ICount) {
 
     return (
         <>
-            <KTable
-                className="p-3   min-h-[450px]"
-                // resizableColumns
-                renderAriaLive={({ firstIndex, lastIndex, totalItemsCount }) =>
-                    `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
-                }
-                onSortingChange={(event) => {
-                    // setSort(event.detail.sortingColumn.sortingField)
-                    // setSortOrder(!sortOrder)
-                }}
-                // sortingColumn={sort}
-                // sortingDescending={sortOrder}
-                // sortingDescending={sortOrder == 'desc' ? true : false}
-                // @ts-ignore
-                onRowClick={(event) => {
-                    const row = event.detail.item
-                    if (
-                        row?.kaytuResourceID &&
-                        row?.kaytuResourceID.length > 0
-                    ) {
-                        setFinding(row)
-                        setOpen(true)
-                    } else {
-                        setNotification({
-                            text: 'Detail for this finding is currently not available',
-                            type: 'warning',
-                        })
+            <AppLayout
+                toolsOpen={false}
+                navigationOpen={false}
+                contentType="table"
+                toolsHide={true}
+                navigationHide={true}
+                splitPanelOpen={open}
+                onSplitPanelToggle={() => {
+                    setOpen(!open)
+                    if (open) {
+                        setFinding(undefined)
                     }
                 }}
-                columnDefinitions={[
-                    {
-                        id: 'resourceName',
-                        header: 'Resource name',
-                        cell: (item) => (
-                            <>
-                                <Flex
-                                    flexDirection="col"
-                                    alignItems="start"
-                                    justifyContent="center"
-                                    className="h-full"
-                                >
-                                    <Text className="text-gray-800">
-                                        {item.resourceName}
-                                    </Text>
-                                    <Text className={isDemo ? 'blur-sm' : ''}>
-                                        {item.kaytuResourceID}
-                                    </Text>
-                                </Flex>
-                            </>
-                        ),
-                        sortingField: 'id',
-                        isRowHeader: true,
-                        maxWidth: 200,
-                    },
-                    {
-                        id: 'resourceType',
-                        header: 'Resource type',
-                        cell: (item) => (
-                            <>
-                                <Flex
-                                    flexDirection="col"
-                                    alignItems="start"
-                                    justifyContent="center"
-                                >
-                                    <Text className="text-gray-800">
-                                        {item.resourceType}
-                                    </Text>
-                                    <Text>{item.resourceTypeLabel}</Text>
-                                </Flex>
-                            </>
-                        ),
-                        sortingField: 'title',
-                        // minWidth: 400,
-                        maxWidth: 200,
-                    },
-                    {
-                        id: 'providerConnectionName',
-                        header: 'Cloud account',
-                        maxWidth: 100,
-                        cell: (item) => (
-                            <>
-                                <Flex
-                                    justifyContent="start"
-                                    className={`h-full gap-3 group relative ${
-                                        isDemo ? 'blur-sm' : ''
-                                    }`}
-                                >
-                                    {getConnectorIcon(item.connector)}
-                                    <Flex
-                                        flexDirection="col"
-                                        alignItems="start"
-                                    >
-                                        <Text className="text-gray-800">
-                                            {item.providerConnectionName}
-                                        </Text>
-                                        <Text>{item.providerConnectionID}</Text>
+                splitPanel={
+                    // @ts-ignore
+                    <SplitPanel
+                        // @ts-ignore
+                        header={
+                            finding ? (
+                                <>
+                                    <Flex justifyContent="start">
+                                        {getConnectorIcon(finding?.connector)}
+                                        <Title className="text-lg font-semibold ml-2 my-1">
+                                            {finding?.resourceName}
+                                        </Title>
                                     </Flex>
-                                    <Card className="cursor-pointer absolute w-fit h-fit z-40 right-1 scale-0 transition-all py-1 px-4 group-hover:scale-100">
-                                        <Text color="blue">Open</Text>
-                                    </Card>
-                                </Flex>
-                            </>
-                        ),
-                    },
-                    {
-                        id: 'totalCount',
-                        header: 'Findings',
-                        maxWidth: 100,
-
-                        cell: (item) => (
-                            <>
-                                <Flex
-                                    flexDirection="col"
-                                    alignItems="start"
-                                    justifyContent="center"
-                                    className="h-full"
-                                >
-                                    <Text className="text-gray-800">{`${item.totalCount} issues`}</Text>
-                                    <Text>{`${
-                                        item.totalCount - item.failedCount
-                                    } passed`}</Text>
-                                </Flex>
-                            </>
-                        ),
-                    },
-                    // {
-                    //     id: 'conformanceStatus',
-                    //     header: 'Status',
-                    //     sortingField: 'severity',
-                    //     cell: (item) => (
-                    //         <Badge
-                    //             // @ts-ignore
-                    //             color={`${
-                    //                 item.conformanceStatus == 'passed'
-                    //                     ? 'green'
-                    //                     : 'red'
-                    //             }`}
-                    //         >
-                    //             {item.conformanceStatus}
-                    //         </Badge>
-                    //     ),
-                    //     maxWidth: 100,
-                    // },
-                    // {
-                    //     id: 'severity',
-                    //     header: 'Severity',
-                    //     sortingField: 'severity',
-                    //     cell: (item) => (
-                    //         <Badge
-                    //             // @ts-ignore
-                    //             color={`severity-${item.severity}`}
-                    //         >
-                    //             {item.severity.charAt(0).toUpperCase() +
-                    //                 item.severity.slice(1)}
-                    //         </Badge>
-                    //     ),
-                    //     maxWidth: 100,
-                    // },
-                    // {
-                    //     id: 'evaluatedAt',
-                    //     header: 'Last Evaluation',
-                    //     cell: (item) => (
-                    //         // @ts-ignore
-                    //         <>{dateTimeDisplay(item.value)}</>
-                    //     ),
-                    // },
-                ]}
-                columnDisplay={[
-                    { id: 'resourceName', visible: true },
-                    { id: 'resourceType', visible: true },
-                    { id: 'providerConnectionName', visible: true },
-                    { id: 'totalCount', visible: true },
-                    // { id: 'severity', visible: true },
-                    // { id: 'evaluatedAt', visible: true },
-
-                    // { id: 'action', visible: true },
-                ]}
-                enableKeyboardNavigation
-                // @ts-ignore
-                items={rows}
-                loading={loading}
-                loadingText="Loading resources"
-                // stickyColumns={{ first: 0, last: 1 }}
-                // stripedRows
-                trackBy="id"
-                empty={
-                    <Box
-                        margin={{ vertical: 'xs' }}
-                        textAlign="center"
-                        color="inherit"
+                                </>
+                            ) : (
+                                'Resource not selected'
+                            )
+                        }
                     >
-                        <SpaceBetween size="m">
-                            <b>No resources</b>
-                        </SpaceBetween>
-                    </Box>
+                        <ResourceFindingDetail
+                            // type="resource"
+                            resourceFinding={finding}
+                            open={open}
+                            showOnlyOneControl={false}
+                            onClose={() => setOpen(false)}
+                            onRefresh={() => window.location.reload()}
+                        />
+                    </SplitPanel>
                 }
-                filter={
-                    ''
-                    // <PropertyFilter
-                    //     // @ts-ignore
-                    //     query={undefined}
-                    //     // @ts-ignore
-                    //     onChange={({ detail }) => {
-                    //         // @ts-ignore
-                    //         setQueries(detail)
-                    //     }}
-                    //     // countText="5 matches"
-                    //     enableTokenGroups
-                    //     expandToViewport
-                    //     filteringAriaLabel="Control Categories"
-                    //     // @ts-ignore
-                    //     // filteringOptions={filters}
-                    //     filteringPlaceholder="Control Categories"
-                    //     // @ts-ignore
-                    //     filteringOptions={undefined}
-                    //     // @ts-ignore
+                content={
+                    <KTable
+                        className="min-h-[450px]"
+                        // resizableColumns
+                        renderAriaLive={({
+                            firstIndex,
+                            lastIndex,
+                            totalItemsCount,
+                        }) =>
+                            `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
+                        }
+                        variant="full-page"
+                        onSortingChange={(event) => {
+                            // setSort(event.detail.sortingColumn.sortingField)
+                            // setSortOrder(!sortOrder)
+                        }}
+                        // sortingColumn={sort}
+                        // sortingDescending={sortOrder}
+                        // sortingDescending={sortOrder == 'desc' ? true : false}
+                        // @ts-ignore
+                        onRowClick={(event) => {
+                            const row = event.detail.item
+                            if (
+                                row?.kaytuResourceID &&
+                                row?.kaytuResourceID.length > 0
+                            ) {
+                                setFinding(row)
+                                setOpen(true)
+                            } else {
+                                setNotification({
+                                    text: 'Detail for this finding is currently not available',
+                                    type: 'warning',
+                                })
+                            }
+                        }}
+                        columnDefinitions={[
+                            {
+                                id: 'resourceName',
+                                header: 'Resource name',
+                                cell: (item) => (
+                                    <>
+                                        <Flex
+                                            flexDirection="col"
+                                            alignItems="start"
+                                            justifyContent="center"
+                                            className="h-full"
+                                        >
+                                            <Text className="text-gray-800">
+                                                {item.resourceName}
+                                            </Text>
+                                            <Text
+                                                className={
+                                                    isDemo ? 'blur-sm' : ''
+                                                }
+                                            >
+                                                {item.kaytuResourceID}
+                                            </Text>
+                                        </Flex>
+                                    </>
+                                ),
+                                sortingField: 'id',
+                                isRowHeader: true,
+                                maxWidth: 200,
+                            },
+                            {
+                                id: 'resourceType',
+                                header: 'Resource type',
+                                cell: (item) => (
+                                    <>
+                                        <Flex
+                                            flexDirection="col"
+                                            alignItems="start"
+                                            justifyContent="center"
+                                        >
+                                            <Text className="text-gray-800">
+                                                {item.resourceType}
+                                            </Text>
+                                            <Text>
+                                                {item.resourceTypeLabel}
+                                            </Text>
+                                        </Flex>
+                                    </>
+                                ),
+                                sortingField: 'title',
+                                // minWidth: 400,
+                                maxWidth: 200,
+                            },
+                            {
+                                id: 'providerConnectionName',
+                                header: 'Cloud account',
+                                maxWidth: 100,
+                                cell: (item) => (
+                                    <>
+                                        <Flex
+                                            justifyContent="start"
+                                            className={`h-full gap-3 group relative ${
+                                                isDemo ? 'blur-sm' : ''
+                                            }`}
+                                        >
+                                            {getConnectorIcon(item.connector)}
+                                            <Flex
+                                                flexDirection="col"
+                                                alignItems="start"
+                                            >
+                                                <Text className="text-gray-800">
+                                                    {
+                                                        item.providerConnectionName
+                                                    }
+                                                </Text>
+                                                <Text>
+                                                    {item.providerConnectionID}
+                                                </Text>
+                                            </Flex>
+                                            <Card className="cursor-pointer absolute w-fit h-fit z-40 right-1 scale-0 transition-all py-1 px-4 group-hover:scale-100">
+                                                <Text color="blue">Open</Text>
+                                            </Card>
+                                        </Flex>
+                                    </>
+                                ),
+                            },
+                            {
+                                id: 'totalCount',
+                                header: 'Findings',
+                                maxWidth: 100,
 
-                    //     filteringProperties={undefined}
-                    //     // filteringProperties={
-                    //     //     filterOption
-                    //     // }
-                    // />
-                }
-                header={
-                    <Header className="w-full">
-                        Events{' '}
-                        <span className=" font-medium">({totalCount})</span>
-                    </Header>
-                }
-                pagination={
-                    <Pagination
-                        currentPageIndex={page}
-                        pagesCount={totalPage}
-                        onChange={({ detail }) =>
-                            setPage(detail.currentPageIndex)
+                                cell: (item) => (
+                                    <>
+                                        <Flex
+                                            flexDirection="col"
+                                            alignItems="start"
+                                            justifyContent="center"
+                                            className="h-full"
+                                        >
+                                            <Text className="text-gray-800">{`${item.totalCount} issues`}</Text>
+                                            <Text>{`${
+                                                item.totalCount -
+                                                item.failedCount
+                                            } passed`}</Text>
+                                        </Flex>
+                                    </>
+                                ),
+                            },
+                            // {
+                            //     id: 'conformanceStatus',
+                            //     header: 'Status',
+                            //     sortingField: 'severity',
+                            //     cell: (item) => (
+                            //         <Badge
+                            //             // @ts-ignore
+                            //             color={`${
+                            //                 item.conformanceStatus == 'passed'
+                            //                     ? 'green'
+                            //                     : 'red'
+                            //             }`}
+                            //         >
+                            //             {item.conformanceStatus}
+                            //         </Badge>
+                            //     ),
+                            //     maxWidth: 100,
+                            // },
+                            // {
+                            //     id: 'severity',
+                            //     header: 'Severity',
+                            //     sortingField: 'severity',
+                            //     cell: (item) => (
+                            //         <Badge
+                            //             // @ts-ignore
+                            //             color={`severity-${item.severity}`}
+                            //         >
+                            //             {item.severity.charAt(0).toUpperCase() +
+                            //                 item.severity.slice(1)}
+                            //         </Badge>
+                            //     ),
+                            //     maxWidth: 100,
+                            // },
+                            // {
+                            //     id: 'evaluatedAt',
+                            //     header: 'Last Evaluation',
+                            //     cell: (item) => (
+                            //         // @ts-ignore
+                            //         <>{dateTimeDisplay(item.value)}</>
+                            //     ),
+                            // },
+                        ]}
+                        columnDisplay={[
+                            { id: 'resourceName', visible: true },
+                            { id: 'resourceType', visible: true },
+                            { id: 'providerConnectionName', visible: true },
+                            { id: 'totalCount', visible: true },
+                            // { id: 'severity', visible: true },
+                            // { id: 'evaluatedAt', visible: true },
+
+                            // { id: 'action', visible: true },
+                        ]}
+                        enableKeyboardNavigation
+                        // @ts-ignore
+                        items={rows}
+                        loading={loading}
+                        loadingText="Loading resources"
+                        // stickyColumns={{ first: 0, last: 1 }}
+                        // stripedRows
+                        trackBy="id"
+                        empty={
+                            <Box
+                                margin={{ vertical: 'xs' }}
+                                textAlign="center"
+                                color="inherit"
+                            >
+                                <SpaceBetween size="m">
+                                    <b>No resources</b>
+                                </SpaceBetween>
+                            </Box>
+                        }
+                        filter={
+                            ''
+                            // <PropertyFilter
+                            //     // @ts-ignore
+                            //     query={undefined}
+                            //     // @ts-ignore
+                            //     onChange={({ detail }) => {
+                            //         // @ts-ignore
+                            //         setQueries(detail)
+                            //     }}
+                            //     // countText="5 matches"
+                            //     enableTokenGroups
+                            //     expandToViewport
+                            //     filteringAriaLabel="Control Categories"
+                            //     // @ts-ignore
+                            //     // filteringOptions={filters}
+                            //     filteringPlaceholder="Control Categories"
+                            //     // @ts-ignore
+                            //     filteringOptions={undefined}
+                            //     // @ts-ignore
+
+                            //     filteringProperties={undefined}
+                            //     // filteringProperties={
+                            //     //     filterOption
+                            //     // }
+                            // />
+                        }
+                        header={
+                            <Header className="w-full">
+                                Resources{' '}
+                                <span className=" font-medium">
+                                    ({totalCount})
+                                </span>
+                            </Header>
+                        }
+                        pagination={
+                            <Pagination
+                                currentPageIndex={page}
+                                pagesCount={totalPage}
+                                onChange={({ detail }) =>
+                                    setPage(detail.currentPageIndex)
+                                }
+                            />
                         }
                     />
                 }
-            />
-            <ResourceFindingDetail
-                // type="resource"
-                resourceFinding={finding}
-                open={open}
-                showOnlyOneControl={false}
-                onClose={() => setOpen(false)}
-                onRefresh={() => window.location.reload()}
             />
         </>
     )
