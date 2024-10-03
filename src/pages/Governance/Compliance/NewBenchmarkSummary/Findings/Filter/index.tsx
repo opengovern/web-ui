@@ -122,6 +122,8 @@ export default function Filter({ onApply, type }: IFilters) {
     })
     const [jobData,setJobData] = useState([])
     const [jobs,setJobs] = useState([])
+    const { benchmarkId } = useParams()
+
  const GetJobs = () => {
      // /compliance/api/v3/benchmark/{benchmark-id}/assignments
      let url = ''
@@ -131,7 +133,8 @@ export default function Filter({ onApply, type }: IFilters) {
          url = window.location.origin
      }
      const body = {
-         job_status : ['SUCCEEDED'],
+         job_status: ['SUCCEEDED'],
+         benchmark_id: [benchmarkId],
      }
      // @ts-ignore
      const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
@@ -677,6 +680,7 @@ export default function Filter({ onApply, type }: IFilters) {
                     expandToViewport
                     hideOperations
                     tokenLimit={2}
+                    filteringEmpty="No suggestions found"
                     filteringAriaLabel="Find Incidents"
                     // @ts-ignore
                     filteringOptions={options}

@@ -560,7 +560,13 @@ export default function Filter({ onApply, type }: IFilters) {
         // },
     ]
     const [query, setQuery] = useState({
-        tokens: [],
+        tokens: [
+            {
+                propertyKey: 'conformance_status',
+                value: 'failed',
+                operator: '=',
+            },
+        ],
         operation: 'and',
     })
     useEffect(()=>{
@@ -571,6 +577,7 @@ export default function Filter({ onApply, type }: IFilters) {
         const benchmark: any = []
         const resource: any = []
         const job_id: any = []
+        // console.log(query)
         query.tokens.map((t: { propertyKey: string; value: string }) => {
             if (t.propertyKey === 'conformance_status') {
                 conformance_status.push(t.value)
