@@ -25,7 +25,15 @@ import DrawerPanel from '../../../../../components/DrawerPanel'
 import Table, { IColumn } from '../../../../../components/Table'
 import { isDemoAtom } from '../../../../../store'
 import KFilter from '../../../../../components/Filter'
-import { Box, Icon, Multiselect, SpaceBetween, Spinner } from '@cloudscape-design/components'
+import {
+    Box,
+    DateRangePicker,
+    Icon,
+    SpaceBetween,
+    Spinner,
+} from '@cloudscape-design/components'
+
+import KMulstiSelect from '@cloudscape-design/components/multiselect'
 import { Fragment, ReactNode } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import Modal from '@cloudscape-design/components/modal'
@@ -45,6 +53,15 @@ import { AppLayout, SplitPanel } from '@cloudscape-design/components'
 import { dateTimeDisplay } from '../../../../../utilities/dateDisplay'
 import StatusIndicator from '@cloudscape-design/components/status-indicator'
 import SeverityBar from '../../BenchmarkCard/SeverityBar'
+
+const JOB_STATUS = {
+    CANCELED: 'stopped',
+    SUCCEEDED: '',
+    FAILED: 'error',
+    SUMMARIZER_IN_PROGRESS: 'in-progress',
+    SINK_IN_PROGRESS: 'in-progress',
+    RUNNERS_IN_PROGRESS: 'in-progress',
+}
 interface IEvaluate {
     id: string | undefined
     assignmentsCount: number
@@ -64,104 +81,120 @@ export default function EvaluateTable({
     const isDemo = useAtomValue(isDemoAtom)
     const [openConfirm, setOpenConfirm] = useState(false)
     const [connections, setConnections] = useState<string[]>([])
- const [loading, setLoading] = useState(false)
- const [detailLoading, setDetailLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [detailLoading, setDetailLoading] = useState(false)
 
- const [accounts, setAccounts] = useState()
- const [selected, setSelected] = useState()
- const [detail, setDetail] = useState()
+    const [accounts, setAccounts] = useState()
+    const [selected, setSelected] = useState()
+    const [detail, setDetail] = useState()
 
- const [page, setPage] = useState(1)
-const [totalCount, setTotalCount] = useState(0)
-const [totalPage, setTotalPage] = useState(0)
+    const [page, setPage] = useState(1)
+    const [totalCount, setTotalCount] = useState(0)
+    const [totalPage, setTotalPage] = useState(0)
+    const [jobStatus, setJobStatus] = useState()
+    const [date, setDate] = useState([])
+    const GetHistory = () => {
+        // /compliance/api/v3/benchmark/{benchmark-id}/assignments
+        setLoading(true)
+        let url = ''
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
+        }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
 
-  const GetHistory = () => {
-      // /compliance/api/v3/benchmark/{benchmark-id}/assignments
-      setLoading(true)
-      let url = ''
-      if (window.location.origin === 'http://localhost:3000') {
-          url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
-      } else {
-          url = window.location.origin
-      }
-      // @ts-ignore
-      const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+        const temp_status = []
+        if (jobStatus && jobStatus?.length > 0) {
+            jobStatus.map((status) => {
+                temp_status.push(status.value)
+            })
+        }
+        const body = {
+            cursor: page,
+            per_page: 20,
+            job_status: temp_status,
+            start_time: date?.startDate,
+            end_time: date?.endDate,
+        }
+        axios
+            .post(
+                `${url}/main/schedule/api/v3/benchmark/${id}/run-history`,
+                body,
+                config
+            )
+            .then((res) => {
+                if (!res.data.items) {
+                    setAccounts([])
+                    setTotalCount(0)
+                    setTotalPage(0)
+                } else {
+                    setAccounts(res.data.items)
+                    setTotalCount(res.data.total_count)
+                    setTotalPage(Math.ceil(res.data.total_count / 20))
+                }
 
-      const config = {
-          headers: {
-              Authorization: `Bearer ${token}`,
-          },
-      }
-      const body ={
-        cursor : page,
-        per_page:20,
+                setLoading(false)
+            })
+            .catch((err) => {
+                setLoading(false)
+                console.log(err)
+            })
+    }
 
-      }
-      axios
-          .post(
-              `${url}/main/schedule/api/v3/benchmark/${id}/run-history`,
-              body,config
-          )
-          .then((res) => {
-              setAccounts(res.data.items)
-              setTotalCount(res.data.total_count)
-                setTotalPage(Math.ceil(res.data.total_count / 20))
-              setLoading(false)
-          })
-          .catch((err) => {
-              setLoading(false)
-              console.log(err)
-          })
-  }
-  
-  const GetDetail = () => {
-      // /compliance/api/v3/benchmark/{benchmark-id}/assignments
-      setDetailLoading(true)
-      let url = ''
-      if (window.location.origin === 'http://localhost:3000') {
-          url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
-      } else {
-          url = window.location.origin
-      }
-      // @ts-ignore
-      const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+    const GetDetail = () => {
+        // /compliance/api/v3/benchmark/{benchmark-id}/assignments
+        setDetailLoading(true)
+        let url = ''
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
+        }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
 
-      const config = {
-          headers: {
-              Authorization: `Bearer ${token}`,
-          },
-      }
-      let connector = ''
-      benchmarkDetail?.connectors?.map((c) => {
-          connector += `connector=${c}&`
-      })
-      axios
-          .get(
-              // @ts-ignore
-              `${url}/main//compliance/api/v3/compliance/summary/${selected.job_id} `,
-              config
-          )
-          .then((res) => {
-              //   setAccounts(res.data.integrations)
-              setDetail(res.data)
-              setDetailLoading(false)
-          })
-          .catch((err) => {
-              setDetailLoading(false)
-              console.log(err)
-          })
-  }
-  useEffect(()=>{
-    GetHistory()
-  },[page])
-  
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+        let connector = ''
+        benchmarkDetail?.connectors?.map((c) => {
+            connector += `connector=${c}&`
+        })
+        axios
+            .get(
+                // @ts-ignore
+                `${url}/main//compliance/api/v3/compliance/summary/${selected.job_id} `,
+                config
+            )
+            .then((res) => {
+                //   setAccounts(res.data.integrations)
+                setDetail(res.data)
+                setDetailLoading(false)
+            })
+            .catch((err) => {
+                setDetailLoading(false)
+                console.log(err)
+            })
+    }
     useEffect(() => {
-        if(selected){
-        GetDetail()
+        GetHistory()
+    }, [page, jobStatus, date])
 
+    useEffect(() => {
+        if (selected) {
+            GetDetail()
         }
     }, [selected])
-  
+
     return (
         <>
             <AppLayout
@@ -195,9 +228,14 @@ const [totalPage, setTotalPage] = useState(0)
                             </>
                         ) : (
                             <>
-                                <Flex flexDirection="col" className="w-full" alignItems='center' justifyContent='center'>
+                                <Flex
+                                    flexDirection="col"
+                                    className="w-full"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                >
                                     <KeyValuePairs
-                                    className='w-full'
+                                        className="w-full"
                                         columns={6}
                                         items={[
                                             {
@@ -225,14 +263,21 @@ const [totalPage, setTotalPage] = useState(0)
                                             {
                                                 label: 'Job Status',
                                                 value: (
-                                                    <StatusIndicator>
+                                                    <StatusIndicator
+                                                        type={
+                                                            JOB_STATUS[
+                                                                selected
+                                                                    ?.job_status
+                                                            ]
+                                                        }
+                                                    >
                                                         {selected?.job_status}
                                                     </StatusIndicator>
                                                 ),
                                             },
                                         ]}
                                     />
-                                    <Flex className='w-1/2 mt-2'>
+                                    <Flex className="w-1/2 mt-2">
                                         <SeverityBar benchmark={detail} />
                                     </Flex>
                                 </Flex>
@@ -340,31 +385,97 @@ const [totalPage, setTotalPage] = useState(0)
                             </Box>
                         }
                         filter={
-                            ''
-                            // <PropertyFilter
-                            //     // @ts-ignore
-                            //     query={undefined}
-                            //     // @ts-ignore
-                            //     onChange={({ detail }) => {
-                            //         // @ts-ignore
-                            //         setQueries(detail)
-                            //     }}
-                            //     // countText="5 matches"
-                            //     enableTokenGroups
-                            //     expandToViewport
-                            //     filteringAriaLabel="Control Categories"
-                            //     // @ts-ignore
-                            //     // filteringOptions={filters}
-                            //     filteringPlaceholder="Control Categories"
-                            //     // @ts-ignore
-                            //     filteringOptions={undefined}
-                            //     // @ts-ignore
-
-                            //     filteringProperties={undefined}
-                            //     // filteringProperties={
-                            //     //     filterOption
-                            //     // }
-                            // />
+                            <Flex
+                                flexDirection="row"
+                                justifyContent="start"
+                                alignItems="start"
+                                className="gap-2"
+                            >
+                                <KMulstiSelect
+                                    className="w-1/4"
+                                    placeholder="Filter by Job status"
+                                    selectedOptions={jobStatus}
+                                    options={[
+                                        {
+                                            label: 'SUCCEEDED',
+                                            value: 'SUCCEEDED',
+                                        },
+                                        {
+                                            label: 'FAILED',
+                                            value: 'FAILED',
+                                        },
+                                        {
+                                            label: 'CREATED',
+                                            value: 'CREATED',
+                                        },
+                                        {
+                                            label: 'RUNNERS_IN_PROGRESS',
+                                            value: 'RUNNERS_IN_PROGRESS',
+                                        },
+                                        {
+                                            label: 'SINK_IN_PROGRESS',
+                                            value: 'SINK_IN_PROGRESS',
+                                        },
+                                        {
+                                            label: 'CANCELED',
+                                            value: 'CANCELED',
+                                        },
+                                        {
+                                            label: 'TIMEOUT',
+                                            value: 'TIMEOUT',
+                                        },
+                                        {
+                                            label: 'SUMMARIZER_IN_PROGRESS',
+                                            value: 'SUMMARIZER_IN_PROGRESS',
+                                        },
+                                    ]}
+                                    onChange={({ detail }) => {
+                                        setJobStatus(detail.selectedOptions)
+                                    }}
+                                />
+                                {/* default last 24 */}
+                                <DateRangePicker
+                                    onChange={({ detail }) => {
+                                        setDate(detail.value)
+                                    }}
+                                    value={date}
+                                    absoluteFormat="long-localized"
+                                    hideTimeOffset
+                                    rangeSelectorMode={'absolute-only'}
+                                    isValidRange={(range) => {
+                                        if (range.type === 'absolute') {
+                                            const [startDateWithoutTime] =
+                                                range.startDate.split('T')
+                                            const [endDateWithoutTime] =
+                                                range.endDate.split('T')
+                                            if (
+                                                !startDateWithoutTime ||
+                                                !endDateWithoutTime
+                                            ) {
+                                                return {
+                                                    valid: false,
+                                                    errorMessage:
+                                                        'The selected date range is incomplete. Select a start and end date for the date range.',
+                                                }
+                                            }
+                                            if (
+                                                new Date(range.startDate) -
+                                                    new Date(range.endDate) >
+                                                0
+                                            ) {
+                                                return {
+                                                    valid: false,
+                                                    errorMessage:
+                                                        'The selected date range is invalid. The start date must be before the end date.',
+                                                }
+                                            }
+                                        }
+                                        return { valid: true }
+                                    }}
+                                    i18nStrings={{}}
+                                    placeholder="Filter by Job Range"
+                                />
+                            </Flex>
                         }
                         header={
                             <Header className="w-full">

@@ -556,7 +556,7 @@ export default function ScoreCategory() {
             )
             .then((res) => {
                 if (res.data) {
-                    if (res.data.length > 0) {
+                    if (res.data.items.length > 0) {
                         setEnable(true)
                     } else {
                         setEnable(false)
@@ -675,7 +675,7 @@ export default function ScoreCategory() {
                 disableContentPaddings
                 className="rounded-xl  bg-[#0f2940] p-0 text-white"
                 footer={
-                    enable ? (
+                    false ? (
                         <ExpandableSection
                             header="Additional settings"
                             variant="footer"
@@ -768,22 +768,11 @@ export default function ScoreCategory() {
                 header={
                     <Header
                         className={`bg-[#0f2940] p-4 rounded-xl ${
-                            enable ? 'rounded-b-none' : ''
+                            false ? 'rounded-b-none' : ''
                         }  text-white`}
                         variant="h2"
                         description=""
-                        actions={
-                            <SpaceBetween size="xs" direction="horizontal">
-                                <Evaluate
-                                    id={`sre_${category.toLowerCase()}`}
-                                    benchmarkDetail={benchmarkDetail}
-                                    assignmentsCount={0}
-                                    onEvaluate={(c) => {
-                                        RunBenchmark(c)
-                                    }}
-                                />
-                            </SpaceBetween>
-                        }
+                        actions={''}
                     >
                         <Box
                             className="rounded-xl same text-white"
@@ -846,8 +835,17 @@ export default function ScoreCategory() {
                                         className="text-white important"
                                         color="white"
                                     >
-                                        {console.log(benchmarkDetail)}
                                     </Box>
+                                    <Flex className="w-max">
+                                        <Evaluate
+                                            id={`sre_${category.toLowerCase()}`}
+                                            benchmarkDetail={benchmarkDetail}
+                                            assignmentsCount={0}
+                                            onEvaluate={(c) => {
+                                                RunBenchmark(c)
+                                            }}
+                                        />
+                                    </Flex>
                                 </div>
                             </KGrid>
                         </Box>
@@ -1159,7 +1157,11 @@ export default function ScoreCategory() {
                                             },
                                             {
                                                 id: 'waste',
-                                                visible: category == "Efficiency" && enable ? true : false,
+                                                visible:
+                                                    category == 'Efficiency' &&
+                                                    enable
+                                                        ? true
+                                                        : false,
                                             },
 
                                             // { id: 'action', visible: true },

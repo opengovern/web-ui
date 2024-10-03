@@ -339,7 +339,7 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                                     value: 'Compliance Benchmark',
                                                                 },
                                                             ]}
-                                                            filteringPlaceholder="Find distributions"
+                                                            filteringPlaceholder="Find Benchmarks"
                                                             filteringProperties={[
                                                                 {
                                                                     key: 'connector',

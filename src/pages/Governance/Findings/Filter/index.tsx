@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Icon, Text } from '@tremor/react'
+import { Button, Card, Col, Flex, Grid, Icon, Text } from '@tremor/react'
 import { Popover, Transition } from '@headlessui/react'
 import {
     CalendarIcon,
@@ -43,6 +43,7 @@ import {
     useUrlDateRangeState,
 } from '../../../../utilities/urlstate'
 import { renderDateText } from '../../../../components/Layout/Header/DatePicker'
+import LimitHealthy from './LimitHealthy'
 
 interface IFilters {
     onApply: (obj: {
@@ -105,19 +106,29 @@ export default function Filter({ onApply, type }: IFilters) {
     const [resourceCon, setResourceCon] = useState('is')
     const [dateCon, setDateCon] = useState('isBetween')
     const [eventDateCon, setEventDateCon] = useState('isBetween')
-    const { value: activeTimeRange, setValue: setActiveTimeRange } =
-        useUrlDateRangeState(defaultFindingsTime(ws || ''))
-    const { value: eventTimeRange, setValue: setEventTimeRange } =
-        useUrlDateRangeState(
-            defaultEventTime(ws || ''),
-            'eventStartDate',
-            'eventEndDate'
-        )
+     const today = new Date()
+     const lastWeek = new Date(
+         today.getFullYear(),
+         today.getMonth(),
+         today.getDate() - 7
+     )
+    const [ activeTimeRange, setActiveTimeRange ] =useState({
+        start: dayjs(lastWeek),
+        end: dayjs(today)
+    })
+      
+    // const { value: eventTimeRange, setValue: setEventTimeRange } =
+    //     useUrlDateRangeState(
+    //         defaultEventTime(ws || ''),
+    //         'eventStartDate',
+    //         'eventEndDate'
+    //     )
     const [selectedFilters, setSelectedFilters] = useState<string[]>([
         'conformance_status',
         'provider',
         'lifecycle',
         'severity',
+        'limit_healthy',
         'connection',
         'control',
         'benchmark',
@@ -127,6 +138,7 @@ export default function Filter({ onApply, type }: IFilters) {
     ])
 
     useEffect(() => {
+        // @ts-ignore
         onApply({
             connector,
             conformanceStatus,
@@ -139,9 +151,9 @@ export default function Filter({ onApply, type }: IFilters) {
             activeTimeRange: selectedFilters.includes('date')
                 ? activeTimeRange
                 : undefined,
-            eventTimeRange: selectedFilters.includes('eventDate')
-                ? eventTimeRange
-                : undefined,
+            // eventTimeRange: selectedFilters.includes('eventDate')
+            //     ? eventTimeRange
+            //     : undefined,
         })
     }, [
         connector,
@@ -153,7 +165,7 @@ export default function Filter({ onApply, type }: IFilters) {
         resourceTypeID,
         lifecycle,
         activeTimeRange,
-        eventTimeRange,
+        // eventTimeRange,
     ])
 
     const { response: filters } = useComplianceApiV1FindingsFiltersCreate({})
@@ -177,42 +189,43 @@ export default function Filter({ onApply, type }: IFilters) {
             onDelete: undefined,
             types: ['findings', 'resources', 'events'],
         },
-        {
-            id: 'provider',
-            name: 'Connector',
-            icon: CloudConnect,
-            component: (
-                <Provider
-                    value={connector}
-                    defaultValue={defConnector}
-                    onChange={(p) => setConnector(p)}
-                />
-            ),
-            conditions: ['is'],
-            setCondition: (c: string) => undefined,
-            value: [connector],
-            defaultValue: [defConnector],
-            onDelete: () => setConnector(defConnector),
-            types: ['findings', 'resources', 'events', 'controls', 'accounts'],
-        },
-        {
-            id: 'lifecycle',
-            name: 'Lifecycle',
-            icon: Lifecycle,
-            component: (
-                <FindingLifecycle
-                    value={lifecycle}
-                    defaultValue={defLifecycle}
-                    onChange={(l) => setLifecycle(l)}
-                />
-            ),
-            conditions: ['is'],
-            setCondition: (c: string) => console.log(c),
-            value: lifecycle,
-            defaultValue: defLifecycle,
-            onDelete: () => setLifecycle(defLifecycle),
-            types: ['findings', 'resources', 'events'],
-        },
+
+        // {
+        //     id: 'provider',
+        //     name: 'Connector',
+        //     icon: CloudConnect,
+        //     component: (
+        //         <Provider
+        //             value={connector}
+        //             defaultValue={defConnector}
+        //             onChange={(p) => setConnector(p)}
+        //         />
+        //     ),
+        //     conditions: ['is'],
+        //     setCondition: (c: string) => undefined,
+        //     value: [connector],
+        //     defaultValue: [defConnector],
+        //     onDelete: () => setConnector(defConnector),
+        //     types: ['findings', 'resources', 'events', 'controls', 'accounts'],
+        // },
+        // {
+        //     id: 'lifecycle',
+        //     name: 'Lifecycle',
+        //     icon: Lifecycle,
+        //     component: (
+        //         <FindingLifecycle
+        //             value={lifecycle}
+        //             defaultValue={defLifecycle}
+        //             onChange={(l) => setLifecycle(l)}
+        //         />
+        //     ),
+        //     conditions: ['is'],
+        //     setCondition: (c: string) => console.log(c),
+        //     value: lifecycle,
+        //     defaultValue: defLifecycle,
+        //     onDelete: () => setLifecycle(defLifecycle),
+        //     types: ['findings', 'resources', 'events'],
+        // },
         {
             id: 'severity',
             name: 'Severity',
@@ -233,6 +246,24 @@ export default function Filter({ onApply, type }: IFilters) {
             types: ['findings', 'resources', 'events'],
         },
         {
+            id: 'limit_healthy',
+            name: 'Limit Healthy',
+            icon: CheckCircleIcon,
+            component: (
+                <LimitHealthy
+                    value={undefined}
+                    defaultValue={undefined}
+                    onChange={(c) => {}}
+                />
+            ),
+            conditions: ['is'],
+            setCondition: (c: string) => console.log(c),
+            value: conformanceStatus,
+            defaultValue: defConformanceStatus,
+            onDelete: undefined,
+            types: ['findings', 'resources', 'events'],
+        },
+        {
             id: 'connection',
             name: 'Cloud Account',
             icon: Id,
@@ -244,6 +275,7 @@ export default function Filter({ onApply, type }: IFilters) {
                     condition={connectionCon}
                     type="connectionID"
                     onChange={(o) => setConnectionID(o)}
+                    name={'Integration'}
                 />
             ),
             conditions: ['is', 'isNot'],
@@ -265,6 +297,7 @@ export default function Filter({ onApply, type }: IFilters) {
                     data={filters}
                     condition={controlCon}
                     type="controlID"
+                    name={'Control'}
                     onChange={(o) => setControlID(o)}
                 />
             ),
@@ -288,6 +321,7 @@ export default function Filter({ onApply, type }: IFilters) {
                     condition={benchmarkCon}
                     type="benchmarkID"
                     onChange={(o) => setBenchmarkID(o)}
+                    name={'Frameworks'}
                 />
             ),
             conditions: ['is'],
@@ -310,6 +344,7 @@ export default function Filter({ onApply, type }: IFilters) {
                     condition={resourceCon}
                     type="resourceTypeID"
                     onChange={(o) => setResourceTypeID(o)}
+                    name={'Resource Type'}
                 />
             ),
             conditions: ['is', 'isNot'],
@@ -322,13 +357,14 @@ export default function Filter({ onApply, type }: IFilters) {
         },
         {
             id: 'date',
-            name: type === 'events' ? 'Audit Period' : 'Last Evaluated',
+            name: type === 'events' ? 'Audit Period' : 'Last Updated',
             icon: CalendarIcon,
             component: (
                 <Datepicker
                     condition={dateCon}
                     activeTimeRange={activeTimeRange}
                     setActiveTimeRange={(v) => setActiveTimeRange(v)}
+                    name={type === 'events' ? 'Audit Period' : 'Last Updated'}
                 />
             ),
             conditions: ['isBetween', 'isRelative'],
@@ -339,227 +375,49 @@ export default function Filter({ onApply, type }: IFilters) {
                 setActiveTimeRange({ start: dayjs.utc(), end: dayjs.utc() }),
             types: ['findings', 'events'],
         },
-        {
-            id: 'eventDate',
-            name: 'Last Event',
-            icon: CalendarIcon,
-            component: (
-                <Datepicker
-                    condition={eventDateCon}
-                    activeTimeRange={eventTimeRange}
-                    setActiveTimeRange={(v) => setEventTimeRange(v)}
-                />
-            ),
-            conditions: ['isBetween', 'isRelative'],
-            setCondition: (c: string) => setEventDateCon(c),
-            value: eventTimeRange,
-            defaultValue: { start: dayjs.utc(), end: dayjs.utc() },
-            onDelete: () =>
-                setEventTimeRange({ start: dayjs.utc(), end: dayjs.utc() }),
-            types: ['findings'],
-        },
+        // {
+        //     id: 'eventDate',
+        //     name: 'Last Event',
+        //     icon: CalendarIcon,
+        //     component: (
+        //         <Datepicker
+        //             condition={eventDateCon}
+        //             activeTimeRange={eventTimeRange}
+        //             setActiveTimeRange={(v) => setEventTimeRange(v)}
+        //         />
+        //     ),
+        //     conditions: ['isBetween', 'isRelative'],
+        //     setCondition: (c: string) => setEventDateCon(c),
+        //     value: eventTimeRange,
+        //     defaultValue: { start: dayjs.utc(), end: dayjs.utc() },
+        //     onDelete: () =>
+        //         setEventTimeRange({ start: dayjs.utc(), end: dayjs.utc() }),
+        //     types: ['findings'],
+        // },
     ]
 
     const renderFilters = selectedFilters.map((sf) => {
         const f = filterOptions.find((o) => o.id === sf)
         return (
             f?.types.includes(type) && (
-                <Popover className="relative border-0">
-                    <Popover.Button
-                        id={f?.id}
-                        className={`border ${
-                            f?.id !== 'date' &&
-                            f?.id !== 'eventDate' &&
-                            compareArrays(
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                f?.value?.sort(),
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                f?.defaultValue?.sort()
-                            )
-                                ? 'border-gray-200 bg-white'
-                                : 'border-kaytu-500 text-kaytu-500 bg-kaytu-50'
-                        } py-1.5 px-2 rounded-md`}
-                    >
-                        <Flex className="w-fit">
-                            <Icon
-                                icon={f?.icon || CloudIcon}
-                                className="w-3 p-0 mr-3 text-inherit"
-                            />
-                            <Text className="text-inherit whitespace-nowrap">
-                                {`${f?.name}${
-                                    // eslint-disable-next-line no-nested-ternary
-                                    f?.id === 'date' || f?.id === 'eventDate'
-                                        ? ` ${renderDateText(
-                                              f?.id === 'date'
-                                                  ? activeTimeRange.start
-                                                  : eventTimeRange.start,
-                                              f?.id === 'date'
-                                                  ? activeTimeRange.end
-                                                  : eventTimeRange.end
-                                          )}`
-                                        : compareArrays(
-                                              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                              // @ts-ignore
-                                              f?.value?.sort(),
-                                              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                              // @ts-ignore
-                                              f?.defaultValue?.sort()
-                                          )
-                                        ? ''
-                                        : `${
-                                              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                              // @ts-ignore
-                                              f?.value && f.value.length < 2
-                                                  ? `: ${
-                                                        f.data
-                                                            ? f.data.find(
-                                                                  (d) =>
-                                                                      d.key ===
-                                                                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                                      // @ts-ignore
-                                                                      f.value[0]
-                                                              )?.displayName
-                                                            : f.value
-                                                    }`
-                                                  : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                    // @ts-ignore
-                                                    ` (${f?.value?.length})`
-                                          }`
-                                }`}
-                            </Text>
-                            <ChevronDownIcon className="ml-1 w-3 text-inherit" />
-                        </Flex>
-                    </Popover.Button>
-                    <Transition
-                        as={Fragment}
-                        enter="transition ease-out duration-200"
-                        enterFrom="opacity-0 translate-y-1"
-                        enterTo="opacity-100 translate-y-0"
-                        leave="transition ease-in duration-150"
-                        leaveFrom="opacity-100 translate-y-0"
-                        leaveTo="opacity-0 translate-y-1"
-                    >
-                        <Popover.Panel
-                            static
-                            className="absolute z-50 top-full left-0"
-                        >
-                            <Card className="mt-2 p-4 min-w-[256px] w-fit">
-                                <Flex className="mb-3">
-                                    <Flex className="w-fit gap-1.5">
-                                        <Text className="font-semibold">
-                                            {f?.name}
-                                        </Text>
-                                        <ConditionDropdown
-                                            onChange={(c) =>
-                                                f?.setCondition
-                                                    ? f?.setCondition(c)
-                                                    : undefined
-                                            }
-                                            conditions={f?.conditions}
-                                            isDate={
-                                                f?.id === 'date' ||
-                                                f?.id === 'eventDate'
-                                            }
-                                        />
-                                    </Flex>
-                                    {f?.onDelete && (
-                                        <div className="group relative">
-                                            <TrashIcon
-                                                onClick={() => {
-                                                    f?.onDelete()
-                                                    setSelectedFilters(
-                                                        (prevState) => {
-                                                            return prevState.filter(
-                                                                (s) =>
-                                                                    s !== f?.id
-                                                            )
-                                                        }
-                                                    )
-                                                }}
-                                                className="w-4 cursor-pointer hover:text-kaytu-500"
-                                            />
-                                            <Card className="absolute w-fit z-40 -top-2 left-full ml-2 scale-0 transition-all p-2 group-hover:scale-100">
-                                                <Text className="whitespace-nowrap">
-                                                    Remove filter
-                                                </Text>
-                                            </Card>
-                                        </div>
-                                    )}
-                                </Flex>
-                                {f?.component}
-                            </Card>
-                        </Popover.Panel>
-                    </Transition>
-                </Popover>
+                <>
+                    {f.id == 'date' ? (
+                        <>
+                            <Col numColSpan={4}>{f.component}</Col>
+                        </>
+                    ) : (
+                        <>
+                            <Col numColSpan={2}>{f.component}</Col>
+                        </>
+                    )}
+                </>
             )
         )
     })
 
     return (
-        <Flex justifyContent="start" className="mt-4 gap-3 flex-wrap z-10">
+        <Grid numItems={10}  className="mt-4 gap-2  z-10">
             {renderFilters}
-            {filterOptions.filter((f) => !selectedFilters.includes(f.id))
-                .length > 0 && (
-                <Flex className="w-fit pl-3 border-l border-l-gray-200 h-full">
-                    <Popover className="relative border-0">
-                        <Popover.Button>
-                            <Button
-                                variant="light"
-                                icon={PlusIcon}
-                                className="pt-1"
-                            >
-                                Add Filter
-                            </Button>
-                        </Popover.Button>
-                        <Transition
-                            as={Fragment}
-                            enter="transition ease-out duration-200"
-                            enterFrom="opacity-0 translate-y-1"
-                            enterTo="opacity-100 translate-y-0"
-                            leave="transition ease-in duration-150"
-                            leaveFrom="opacity-100 translate-y-0"
-                            leaveTo="opacity-0 translate-y-1"
-                        >
-                            <Popover.Panel className="absolute z-50 top-full left-0">
-                                <Card className="mt-2 p-4 w-64">
-                                    <Flex
-                                        flexDirection="col"
-                                        justifyContent="start"
-                                        alignItems="start"
-                                        className="gap-1.5 max-w-full"
-                                    >
-                                        {filterOptions
-                                            .filter(
-                                                (f) =>
-                                                    !selectedFilters.includes(
-                                                        f.id
-                                                    ) && f.types.includes(type)
-                                            )
-                                            .map((f) => (
-                                                <Button
-                                                    icon={f.icon}
-                                                    color="slate"
-                                                    variant="light"
-                                                    className="w-full pl-1 flex justify-start"
-                                                    onClick={() => {
-                                                        setSelectedFilters([
-                                                            ...selectedFilters,
-                                                            f.id,
-                                                        ])
-                                                    }}
-                                                >
-                                                    {f.name}
-                                                </Button>
-                                            ))}
-                                    </Flex>
-                                </Card>
-                            </Popover.Panel>
-                        </Transition>
-                    </Popover>
-                </Flex>
-            )}
-        </Flex>
+        </Grid>
     )
 }
