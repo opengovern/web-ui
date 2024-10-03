@@ -577,7 +577,7 @@ export default function FindingsWithFailure({ query }: ICount) {
                                 header: 'Last Evaluation',
                                 cell: (item) => (
                                     // @ts-ignore
-                                    <>{dateTimeDisplay(item.value)}</>
+                                    <>{dateTimeDisplay(item.evaluatedAt)}</>
                                 ),
                             },
                         ]}

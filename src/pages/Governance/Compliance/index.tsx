@@ -24,13 +24,17 @@ import Spinner from '../../../components/Spinner'
 import axios from 'axios'
 import BenchmarkCard from './BenchmarkCard'
 import BenchmarkCards from './BenchmarkCard'
-import { Header, Pagination } from '@cloudscape-design/components'
+import { Header, Pagination, PropertyFilter } from '@cloudscape-design/components'
 import Multiselect from '@cloudscape-design/components/multiselect'
 import Select from '@cloudscape-design/components/select'
 export default function Compliance() {
     const defaultSelectedConnectors = ''
   
     const [loading,setLoading] = useState<boolean>(false);
+    const [query, setQuery] = useState({
+        tokens: [],
+        operation: 'and',
+    })
     const [connectors, setConnectors] = useState(
         {
             label: 'Any',
@@ -71,30 +75,46 @@ const [totalCount, setTotalCount] = useState<number>(0)
              Authorization: `Bearer ${token}`,
          },
      }
-     const connector_filter = []
-     if(connectors.value == 'Any'){
-        connector_filter.push('AWS')
-        connector_filter.push('Azure')
+     const connectors= []
+     const enable = []
+     const isSRE = []
+    query.tokens.map((item) => {
+        if(item.propertyKey == 'connector'){
+            connectors.push(item.value)
+        }
+        if(item.propertyKey == 'enable'){
+            enable.push(item.value)
+        }
+        if(item.propertyKey == 'family'){
+            isSRE.push(item.value)
+        }
+    }
+    )
+    const connector_filter = connectors.length ==1 ? connectors : []
 
-     }
-     else{
-        connector_filter.push(connectors.value)
+    let  sre_filter = false
+    if(isSRE.length == 1){
+        if(isSRE[0] == 'SRE benchmark'){
+            sre_filter = true
+        }
+    }
 
-     }
-     let sre_filter = false
-     let enable_filter = true
-    sre_filter = isSRE.value
-    enable_filter = enable.value
+    let enable_filter = true
+    if(enable.length == 1){
+        if(enable[0] == 'No'){
+            enable_filter = false
+        }
 
-    
+    }
      
      const body = {
          cursor: page,
          per_page: 6,
          sort_by: 'incidents',
          assigned: false,
-         IsSREBenchmark: sre_filter,
-         connectors : connector_filter
+         is_sre_benchmark: sre_filter,
+         connectors: connector_filter,
+         root: true,
      }
 
      axios
@@ -156,7 +176,7 @@ const [totalCount, setTotalCount] = useState<number>(0)
  
    useEffect(() => {
        GetCard()
-   }, [page, isSRE, connectors, enable])
+   }, [page, query])
  
    useEffect(() => {
     if(AllBenchmarks){
@@ -257,31 +277,6 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                     numItemsLg={1}
                                     className="gap-[10px] mt-1 w-full justify-items-start"
                                 >
-                                    {/* <Flex
-                                        className="mb-4 w-3/5"
-                                        justifyContent="center"
-                                    >
-                                        <Flex className="gap-2 w-fit">
-                                            <Icon icon={ShieldCheckIcon} />
-                                            <Title>Benchmark list</Title>
-                                        </Flex>
-                                    </Flex> */}
-                                    {/* <Flex
-                                        className="mb-2 w-100"
-                                        justifyContent="start"
-                                    >
-                                        <FilterGroup
-                                            filterList={filters}
-                                            addedFilters={addedFilters}
-                                            onFilterAdded={(i) =>
-                                                setAddedFilters([
-                                                    ...addedFilters,
-                                                    i,
-                                                ])
-                                            }
-                                            alignment="left"
-                                        />
-                                    </Flex> */}
                                     {loading ? (
                                         <Spinner />
                                     ) : (
@@ -297,88 +292,86 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                     numItems={9}
                                                     className="gap-2 min-h-[80px]  w-1/2 "
                                                 >
-                                                    <Col numColSpan={2}>
-                                                        <Select
-                                                            className="w-full"
-                                                            inlineLabelText="Connector"
-                                                            selectedOption={
-                                                                connectors
-                                                            }
+                                                    <Col numColSpan={9}>
+                                                        <PropertyFilter
+                                                            query={query}
                                                             onChange={({
                                                                 detail,
-                                                            }) => {
-                                                                setConnectors(
-                                                                    detail.selectedOption
-                                                                )
-                                                            }}
-                                                            options={[
+                                                            }) =>{
+                                                                console.log(detail)
+                                                                setQuery(detail)
+
+                                                            }
+                                                            }
+                                                            countText="5 matches"
+                                                            // enableTokenGroups
+                                                            expandToViewport
+                                                            filteringAriaLabel="Filter Benchmarks"
+                                                            filteringOptions={[
                                                                 {
-                                                                    label: 'AWS',
+                                                                    propertyKey:
+                                                                        'connector',
                                                                     value: 'AWS',
                                                                 },
                                                                 {
-                                                                    label: 'Azure',
+                                                                    propertyKey:
+                                                                        'connector',
                                                                     value: 'Azure',
                                                                 },
-                                                            ]}
-                                                            placeholder="Connectors"
-                                                        />
-                                                    </Col>
-                                                    <Col numColSpan={3}>
-                                                        <Select
-                                                            className="w-full"
-                                                            selectedOption={
-                                                                enable
-                                                            }
-                                                            inlineLabelText="Has Scope Assigments"
-                                                            onChange={({
-                                                                detail,
-                                                            }) =>
-                                                                setEnanble(
-                                                                    detail.selectedOption
-                                                                )
-                                                            }
-                                                            options={[
                                                                 {
-                                                                    label: 'Yes',
-                                                                    value: true,
+                                                                    propertyKey:
+                                                                        'enable',
+                                                                    value: 'Yes',
                                                                 },
                                                                 {
-                                                                    label: 'No',
-                                                                    value: false,
+                                                                    propertyKey:
+                                                                        'enable',
+                                                                    value: 'No',
+                                                                },
+                                                                {
+                                                                    propertyKey:
+                                                                        'family',
+                                                                    value: 'SRE benchmark',
+                                                                },
+                                                                {
+                                                                    propertyKey:
+                                                                        'family',
+                                                                    value: 'Compliance Benchmark',
                                                                 },
                                                             ]}
-                                                            placeholder="Is Enabled"
-                                                        />
-                                                    </Col>
-                                                    <Col numColSpan={4}>
-                                                        <Select
-                                                            selectedOption={
-                                                                isSRE
-                                                            }
-                                                            inlineLabelText="Benchmark Family"
-                                                            onChange={({
-                                                                detail,
-                                                            }) =>
-                                                                setIsSRE(
-                                                                    detail.selectedOption
-                                                                )
-                                                            }
-                                                            options={[
-                                                                // {
-                                                                //     label: 'Any Family',
-                                                                //     value: true,
-                                                                // },
+                                                            filteringPlaceholder="Find distributions"
+                                                            filteringProperties={[
                                                                 {
-                                                                    label: 'SRE benchmark',
-                                                                    value: true,
+                                                                    key: 'connector',
+                                                                    operators: [
+                                                                        '=',
+                                                                    ],
+                                                                    propertyLabel:
+                                                                        'Connector',
+                                                                    groupValuesLabel:
+                                                                        'Connector values',
                                                                 },
                                                                 {
-                                                                    label: 'Compliance Benchmark',
-                                                                    value: false,
+                                                                    key: 'enable',
+                                                                    operators: [
+                                                                        '=',
+                                                                    ],
+                                                                    propertyLabel:
+                                                                        'Has Scope Assigments',
+                                                                    groupValuesLabel:
+                                                                        'Has Scope Assigments values',
+                                                                },
+                                                                {
+                                                                    key: 'family',
+                                                                    operators: [
+                                                                        '=',
+                                                                    ],
+                                                                    propertyLabel:
+                                                                        'Family',
+                                                                    groupValuesLabel:
+                                                                        'Family values',
                                                                 },
                                                             ]}
-                                                            placeholder="Family"
                                                         />
                                                     </Col>
                                                 </Grid>

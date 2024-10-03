@@ -105,9 +105,16 @@ export default function BenchmarkCards({ benchmark, all,loading }: IComplianceCa
                             fontSize="heading-m"
                         >
                             <Flex className="w-100" justifyContent="between">
-                                {truncate(item.name)}
-
-                                <Badge>AWS</Badge>
+                                <Flex className='w-100 min-w-max' justifyContent='start'>{truncate(item.name)}</Flex>
+                                <Flex justifyContent="end" className="gap-2">
+                                    {item?.connectors?.map((sub) => {
+                                        return (
+                                            <>
+                                                <Badge>{sub}</Badge>
+                                            </>
+                                        )
+                                    })}
+                                </Flex>
                             </Flex>
                         </Link>
                     ),
@@ -117,11 +124,6 @@ export default function BenchmarkCards({ benchmark, all,loading }: IComplianceCa
                             header: '',
                             content: (item) => '',
                         },
-                        // (item?.connectors?.map((sub)=>{
-                        //         return (<>
-                        //         <Badge>{sub}</Badge>
-                        //         </>)
-                        //     }))
 
                         {
                             id: 'security_score',
@@ -153,6 +155,7 @@ export default function BenchmarkCards({ benchmark, all,loading }: IComplianceCa
                             0
                         ),
                         id: item.benchmark_id,
+                        connectors: item.connectors,
                     }
                 })}
                 entireCardClickable
