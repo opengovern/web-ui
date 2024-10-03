@@ -92,7 +92,18 @@ export default function EvaluateTable({
     const [totalCount, setTotalCount] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
     const [jobStatus, setJobStatus] = useState()
-    const [date, setDate] = useState([])
+    const today = new Date()
+    const lastWeek = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate() - 7
+    )
+
+    const [date, setDate] = useState({
+        startDate: lastWeek.toISOString(),
+        endDate: today.toISOString(),
+        type: 'absolute',
+    })
     const GetHistory = () => {
         // /compliance/api/v3/benchmark/{benchmark-id}/assignments
         setLoading(true)

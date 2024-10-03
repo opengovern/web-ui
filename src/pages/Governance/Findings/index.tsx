@@ -71,6 +71,7 @@ export default function Findings() {
         lifecycle: boolean[] | undefined
         activeTimeRange: DateRange | undefined
         eventTimeRange: DateRange | undefined
+        jobID: string[] | undefined
     }>({
         connector: SourceType.Nil,
         conformanceStatus: [
@@ -90,6 +91,7 @@ export default function Findings() {
         lifecycle: [true, false],
         activeTimeRange: undefined,
         eventTimeRange: undefined,
+        jobID: [],
     })
 
     return (
@@ -97,8 +99,9 @@ export default function Findings() {
             {/* <TopHeader /> */}
             {show ? (
                 <>
-                    <Filter type={selectedGroup} onApply={(e) => {
-                        setQuery(e)}} />
+                    {/* <Filter type={selectedGroup} onApply={(e) => {
+                        // @ts-ignore
+                        setQuery(e)}} /> */}
 
                     <Flex className="mt-2 w-full">
                         <>

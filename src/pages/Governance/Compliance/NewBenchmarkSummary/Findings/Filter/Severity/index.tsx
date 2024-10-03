@@ -3,6 +3,7 @@ import { Button, Flex, Text } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { TypesFindingSeverity } from '../../../../../../../api/api'
 import { compareArrays } from '../../../../../../../components/Layout/Header/Filter'
+import Multiselect from '@cloudscape-design/components/multiselect'
 
 interface ISeverity {
     value: TypesFindingSeverity[] | undefined
@@ -17,74 +18,205 @@ export default function Severity({
     condition,
     onChange,
 }: ISeverity) {
-    const [con, setCon] = useState(condition)
-    const severityCheckbox = useCheckboxState({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        state: [...value],
-    })
-
-    useEffect(() => {
-        if (
-            !compareArrays(
-                value?.sort() || [],
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                severityCheckbox.state.sort()
-            ) ||
-            con !== condition
-        ) {
-            if (condition === 'is') {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                onChange([...severityCheckbox.state])
-            }
-            if (condition === 'isNot') {
-                const arr = defaultValue.filter(
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    (x) => !severityCheckbox.state.includes(x)
-                )
-                onChange(arr)
-            }
-            setCon(condition)
-        }
-    }, [severityCheckbox.state, condition])
+    const [selectedOptions, setSelectedOptions] = useState([
+        {
+            label: 'Critical',
+            value: TypesFindingSeverity.FindingSeverityCritical,
+            color: '#6E120B',
+            iconSvg: (
+                <>
+                    <div
+                        className="h-4 w-1.5 rounded-sm"
+                        style={{
+                            backgroundColor: '#6E120B',
+                        }}
+                    />
+                </>
+            ),
+        },
+        {
+            label: 'High',
+            value: TypesFindingSeverity.FindingSeverityHigh,
+            color: '#CA2B1D',
+            iconSvg: (
+                <>
+                    <div
+                        className="h-4 w-1.5 rounded-sm"
+                        style={{
+                            backgroundColor: '#ca2b1d',
+                        }}
+                    />
+                </>
+            ),
+        },
+        {
+            label: 'Medium',
+            value: TypesFindingSeverity.FindingSeverityMedium,
+            color: '#EE9235',
+            iconSvg: (
+                <>
+                    <div
+                        className="h-4 w-1.5 rounded-sm"
+                        style={{
+                            backgroundColor: '#ee9235',
+                        }}
+                    />
+                </>
+            ),
+        },
+        {
+            label: 'Low',
+            value: TypesFindingSeverity.FindingSeverityLow,
+            color: '#F4C744',
+            iconSvg: (
+                <>
+                    <div
+                        className="h-4 w-1.5 rounded-sm"
+                        style={{
+                            backgroundColor: '#f4c744',
+                        }}
+                    />
+                </>
+            ),
+        },
+        {
+            label: 'None',
+            value: TypesFindingSeverity.FindingSeverityNone,
+            color: '#9BA2AE',
+            iconSvg: (
+                <>
+                    <div
+                        className="h-4 w-1.5 rounded-sm"
+                        style={{
+                            backgroundColor: '#9ba2ae',
+                        }}
+                    />
+                </>
+            ),
+        },
+    ])
 
     const options = [
         {
-            name: 'Critical',
+            label: 'Critical',
             value: TypesFindingSeverity.FindingSeverityCritical,
             color: '#6E120B',
+            iconSvg: (
+                <>
+                    <div
+                        className="h-4 w-1.5 rounded-sm"
+                        style={{
+                            backgroundColor: '#6E120B',
+                        }}
+                    />
+                </>
+            ),
         },
         {
-            name: 'High',
+            label: 'High',
             value: TypesFindingSeverity.FindingSeverityHigh,
             color: '#CA2B1D',
+            iconSvg: (
+                <>
+                    <div
+                        className="h-4 w-1.5 rounded-sm"
+                        style={{
+                            backgroundColor: '#ca2b1d',
+                        }}
+                    />
+                </>
+            ),
         },
         {
-            name: 'Medium',
+            label: 'Medium',
             value: TypesFindingSeverity.FindingSeverityMedium,
             color: '#EE9235',
+            iconSvg: (
+                <>
+                    <div
+                        className="h-4 w-1.5 rounded-sm"
+                        style={{
+                            backgroundColor: '#ee9235',
+                        }}
+                    />
+                </>
+            ),
         },
         {
-            name: 'Low',
+            label: 'Low',
             value: TypesFindingSeverity.FindingSeverityLow,
             color: '#F4C744',
+            iconSvg: (
+                <>
+                    <div
+                        className="h-4 w-1.5 rounded-sm"
+                        style={{
+                            backgroundColor: '#f4c744',
+                        }}
+                    />
+                </>
+            ),
         },
         {
-            name: 'None',
+            label: 'None',
             value: TypesFindingSeverity.FindingSeverityNone,
             color: '#9BA2AE',
+            iconSvg: (
+                <>
+                    <div
+                        className="h-4 w-1.5 rounded-sm"
+                        style={{
+                            backgroundColor: '#9ba2ae',
+                        }}
+                    />
+                </>
+            ),
         },
     ]
 
-    return (
-        <Flex flexDirection="col" alignItems="start" className="gap-1.5">
-            {options.map((o) => (
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    useEffect(() => {
+        if (selectedOptions.length === 0) {
+            onChange(defaultValue)
+            return
+        }
+        else {
+            // @ts-ignore
+            const temp = []
+            selectedOptions.map((o) => {
                 // @ts-ignore
-                <Checkbox
+
+                temp.push(o.value)
+            })
+            // @ts-ignore
+            onChange(temp)
+            // @ts-ignore
+        }
+    }, [selectedOptions])
+    return (
+        <>
+            <Multiselect
+                // @ts-ignore
+                selectedOptions={selectedOptions}
+                tokenLimit={0}
+                onChange={({ detail }) =>
+                    // @ts-ignore
+                    setSelectedOptions(detail.selectedOptions)
+                }
+                options={options}
+                // filteringType="auto"
+                placeholder=" Severity"
+                virtualScroll
+            />
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
+        </>
+    )
+}
+
+{
+    /**
+    
+                    <Checkbox
                     shape="curve"
                     className="!items-start w-full"
                     value={o.value}
@@ -101,21 +233,6 @@ export default function Severity({
                     </Flex>
                 </Checkbox>
             ))}
-            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-            {/* @ts-ignore */}
-            {!compareArrays(value?.sort(), defaultValue?.sort()) && (
-                <Flex className="pt-3 mt-3 border-t border-t-gray-200">
-                    <Button
-                        variant="light"
-                        onClick={() => {
-                            onChange(defaultValue)
-                            severityCheckbox.setState(defaultValue)
-                        }}
-                    >
-                        Reset
-                    </Button>
-                </Flex>
-            )}
-        </Flex>
-    )
+
+    */
 }

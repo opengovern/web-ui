@@ -35,6 +35,7 @@ interface ICount {
     lifecycle: boolean[] | undefined
     activeTimeRange: DateRange | undefined
     eventTimeRange: DateRange | undefined
+    jobID: string[] | undefined
 }
 interface Props {
     query: ICount
