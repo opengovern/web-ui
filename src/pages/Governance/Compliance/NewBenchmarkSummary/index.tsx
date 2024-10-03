@@ -892,30 +892,30 @@ export default function NewBenchmarkSummary() {
                                         ),
                                         disabled: false,
                                     },
-                                    // {
-                                    //     label: 'Run History',
-                                    //     id: 'fifth',
-                                    //     content: (
-                                    //         <EvaluateTable
-                                    //             id={benchmarkDetail?.id}
-                                    //             benchmarkDetail={benchmarkDetail}
-                                    //             assignmentsCount={assignments}
-                                    //             onEvaluate={(c) => {
-                                    //                 triggerEvaluate(
-                                    //                     {
-                                    //                         benchmark_id: [
-                                    //                             benchmarkId || '',
-                                    //                         ],
-                                    //                         connection_id: c,
-                                    //                     },
-                                    //                     {}
-                                    //                 )
-                                    //             }}
-                                    //         />
-                                    //     ),
-                                    //     disabled: true,
-                                    //     disabledReason: 'COMING SOON',
-                                    // },
+                                    {
+                                        label: 'Run History',
+                                        id: 'fifth',
+                                        content: (
+                                            <EvaluateTable
+                                                id={benchmarkDetail?.id}
+                                                benchmarkDetail={benchmarkDetail}
+                                                assignmentsCount={assignments}
+                                                onEvaluate={(c) => {
+                                                    triggerEvaluate(
+                                                        {
+                                                            benchmark_id: [
+                                                                benchmarkId || '',
+                                                            ],
+                                                            connection_id: c,
+                                                        },
+                                                        {}
+                                                    )
+                                                }}
+                                            />
+                                        ),
+                                        // disabled: true,
+                                        // disabledReason: 'COMING SOON',
+                                    },
                                 ]}
                             />
                         </Flex>
