@@ -360,8 +360,14 @@ export default function FindingsWithFailure({ query }: ICount) {
 
                 setTotalCount(resp.data.totalCount)
                 // @ts-ignore
-
+                if (resp.data.findings) {
                 setRows(resp.data.findings)
+
+                }
+                else{
+                    setRows([])
+                }
+
 
                 // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -377,13 +383,14 @@ export default function FindingsWithFailure({ query }: ICount) {
 
     useEffect(() => {
         GetRows()
-    }, [page])
+    }, [page,query])
     return (
         <>
             <AppLayout
                 toolsOpen={false}
                 navigationOpen={false}
                 contentType="table"
+                className='w-full'
                 toolsHide={true}
                 navigationHide={true}
                 splitPanelOpen={open}

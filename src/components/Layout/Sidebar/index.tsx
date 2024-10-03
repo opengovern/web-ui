@@ -390,7 +390,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 count: 6,
             },
             {
-                name: 'Incidents',
+                name: 'All Incidents',
                 icon: DocumentMagnifyingGlassIcon,
                 page: [
                     'incidents',
@@ -496,7 +496,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             },
 
             {
-                name: 'Settings',
+                name: 'Adminstration',
                 page: [
                     'settings/about',
                     'settings/jobs',

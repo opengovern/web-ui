@@ -186,6 +186,7 @@ export default function NewBenchmarkSummary() {
     const { benchmarkId } = useParams()
     const { value: selectedConnections } = useFilterState()
     const [assignments, setAssignments] = useState(0)
+    
     const [recall, setRecall] = useState(false)
     const [focusedItem, setFocusedItem] = useState<string>()
     const [expandedItems, setExpandedItems] = useState<string[]>([])
@@ -274,7 +275,7 @@ export default function NewBenchmarkSummary() {
             )
             .then((res) => {
                 if (res.data) {
-                    if (res.data.length > 0) {
+                    if (res.data.items.length > 0) {
                         setEnable(true)
                         setTab(0)
                     } else {
@@ -445,11 +446,10 @@ export default function NewBenchmarkSummary() {
                     <Container
                         disableHeaderPaddings
                         disableContentPaddings
-                        
                         className="rounded-xl  bg-[#0f2940] p-0 text-white"
                         footer={
-                            enable ? (<>
-                              
+                            false ? (
+                                <>
                                     <ExpandableSection
                                         header="Additional settings"
                                         variant="footer"
@@ -470,7 +470,9 @@ export default function NewBenchmarkSummary() {
                                                     setValue(detail.value)
                                                 }}
                                                 value={value}
-                                                placeholder={'Please select Date'}
+                                                placeholder={
+                                                    'Please select Date'
+                                                }
                                                 // disabled={true}
                                                 relativeOptions={[
                                                     {
@@ -557,28 +559,23 @@ export default function NewBenchmarkSummary() {
                                             />
                                         </Flex>
                                     </ExpandableSection>
-                            
-                            </>) : ''
+                                </>
+                            ) : (
+                                ''
+                            )
                         }
                         header={
                             <Header
-                                className={`bg-[#0f2940] p-4 rounded-xl   text-white ${enable ? 'rounded-b-none' :''}`}
+                                className={`bg-[#0f2940] p-4 rounded-xl   text-white ${
+                                    false ? 'rounded-b-none' : ''
+                                }`}
                                 variant="h2"
                                 description=""
                                 actions={
                                     <SpaceBetween
                                         size="xs"
                                         direction="horizontal"
-                                    >
-                                        <Evaluate
-                                            id={benchmarkDetail?.id}
-                                            benchmarkDetail={benchmarkDetail}
-                                            assignmentsCount={assignments}
-                                            onEvaluate={(c) => {
-                                                RunBenchmark(c)
-                                            }}
-                                        />
-                                    </SpaceBetween>
+                                    ></SpaceBetween>
                                 }
                             >
                                 <Box
@@ -637,6 +634,20 @@ export default function NewBenchmarkSummary() {
                                                     </Card>
                                                 </div>
                                             </Box>
+                                            <Flex className='w-max'>
+                                                <Evaluate
+                                                    id={benchmarkDetail?.id}
+                                                    benchmarkDetail={
+                                                        benchmarkDetail
+                                                    }
+                                                    assignmentsCount={
+                                                        assignments
+                                                    }
+                                                    onEvaluate={(c) => {
+                                                        RunBenchmark(c)
+                                                    }}
+                                                />
+                                            </Flex>
                                         </div>
                                     </Grid>
                                 </Box>
@@ -865,12 +876,12 @@ export default function NewBenchmarkSummary() {
                                                 }
                                             />
                                         ),
-                                        disabled: enable ? false : true,
+                                        disabled: false,
                                         disabledReason:
                                             'This is available when the Framework has at least one assignments.',
                                     },
                                     {
-                                        label: 'Scope Assignments',
+                                        label: 'Settings',
                                         id: 'fourth',
                                         content: (
                                             <Settings
@@ -898,13 +909,16 @@ export default function NewBenchmarkSummary() {
                                         content: (
                                             <EvaluateTable
                                                 id={benchmarkDetail?.id}
-                                                benchmarkDetail={benchmarkDetail}
+                                                benchmarkDetail={
+                                                    benchmarkDetail
+                                                }
                                                 assignmentsCount={assignments}
                                                 onEvaluate={(c) => {
                                                     triggerEvaluate(
                                                         {
                                                             benchmark_id: [
-                                                                benchmarkId || '',
+                                                                benchmarkId ||
+                                                                    '',
                                                             ],
                                                             connection_id: c,
                                                         },
