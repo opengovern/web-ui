@@ -478,14 +478,18 @@ export default function Controls({
                                 )}
                             />
                         </>
-                        <Pagination
-                            className="pb-2"
-                            currentPageIndex={treePage + 1}
-                            pagesCount={treeTotalPages}
-                            onChange={({ detail }) =>
-                                setTreePage(detail.currentPageIndex - 1)
-                            }
-                        />
+                        {treeTotalPages > 1 && (
+                            <>
+                                <Pagination
+                                    className="pb-2"
+                                    currentPageIndex={treePage + 1}
+                                    pagesCount={treeTotalPages}
+                                    onChange={({ detail }) =>
+                                        setTreePage(detail.currentPageIndex - 1)
+                                    }
+                                />
+                            </>
+                        )}
                     </Flex>
                 </Col>
             )}
