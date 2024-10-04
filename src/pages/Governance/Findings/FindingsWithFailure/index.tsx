@@ -286,6 +286,7 @@ interface ICount {
         activeTimeRange: DateRange | undefined
         eventTimeRange: DateRange | undefined
         jobID: string[] | undefined
+        connectionGroup: string[] | undefined
     }
 }
 
@@ -326,6 +327,7 @@ export default function FindingsWithFailure({ query }: ICount) {
                     conformanceStatus: queries.conformanceStatus,
                     stateActive: queries.lifecycle,
                     jobID: queries?.jobID,
+                    connectionGroup: queries.connectionGroup,
                     ...(queries.eventTimeRange && {
                         lastEvent: {
                             from: queries.eventTimeRange.start.unix(),

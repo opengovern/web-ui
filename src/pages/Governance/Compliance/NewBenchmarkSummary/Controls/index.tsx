@@ -195,6 +195,10 @@ export default function Controls({
     const [tree, setTree] = useState()
     const [selected, setSelected] = useState()
     const [selectedBread, setSelectedBread] = useState()
+    const [treePage, setTreePage] = useState(0)
+    const [treeTotal, setTreeTotal] = useState(0)
+    const [treeTotalPages, setTreeTotalPages] = useState(0)
+
 
     const [filters, setFilters] = useState([
         {
@@ -340,7 +344,8 @@ export default function Controls({
                         }
                         temp.push(childs)
                     })
-                    setTree(res.data.children)
+                  
+                    // setTree(temp)
                 } else {
                     // temp.push({
                     //     text: res.data.title,
@@ -348,6 +353,10 @@ export default function Controls({
                     //     type: 'link',
                     // })
                 }
+                  setTreeTotalPages(Math.ceil(temp.length / 12))
+                  setTreeTotal(temp.length)
+                  setTreePage(0)
+
                 setTree(temp)
             })
             .catch((err) => {
@@ -415,11 +424,15 @@ export default function Controls({
             </Col>
             {tree && tree.length > 0 && (
                 <Col numColSpan={3}>
-                    <Flex className="bg-white  w-full border-solid border-2    rounded-xl p-4">
+                    <Flex
+                        className="bg-white  w-full border-solid border-2 h-[550px]    rounded-xl gap-1 "
+                        flexDirection="col"
+                    >
                         <>
                             <SideNavigation
-                                className="w-fit"
+                                className="w-full scroll  h-[550px] overflow-scroll p-4 pb-0"
                                 activeHref={selected}
+                                virtualScroll
                                 header={{
                                     href: benchmarkId,
                                     text: controls?.benchmark?.title,
@@ -459,17 +472,28 @@ export default function Controls({
                                     }
                                     setSelectedBread(temp)
                                 }}
-                                items={tree}
+                                items={tree?.slice(
+                                    treePage * 12,
+                                    (treePage + 1) * 12
+                                )}
                             />
                         </>
+                        <Pagination
+                            className="pb-2"
+                            currentPageIndex={treePage + 1}
+                            pagesCount={treeTotalPages}
+                            onChange={({ detail }) =>
+                                setTreePage(detail.currentPageIndex - 1)
+                            }
+                        />
                     </Flex>
                 </Col>
             )}
             <Col numColSpan={tree && tree.length > 0 ? 9 : 12}>
                 {' '}
-                <Flex className="flex flex-col  min-h-[500px] ">
+                <Flex className="flex flex-col  min-h-[550px] ">
                     <Table
-                        className="p-3   min-h-[450px]"
+                        className="p-3   min-h-[550px]"
                         // resizableColumns
                         renderAriaLive={({
                             firstIndex,
@@ -550,7 +574,7 @@ export default function Controls({
                             {
                                 id: 'incidents',
                                 header: 'Incidents',
-                                sortingField: 'incidents',
+                                // sortingField: 'incidents',
 
                                 cell: (item) => (
                                     // @ts-ignore
@@ -568,6 +592,7 @@ export default function Controls({
                             {
                                 id: 'passing_resources',
                                 header: 'Non Incidents ',
+
                                 cell: (item) => (
                                     // @ts-ignore
                                     <>
@@ -583,6 +608,8 @@ export default function Controls({
                             {
                                 id: 'noncompliant_resources',
                                 header: 'Non-Compliant Resources',
+                                sortingField: 'noncompliant_resources',
+
                                 cell: (item) => (
                                     // @ts-ignore
                                     <>

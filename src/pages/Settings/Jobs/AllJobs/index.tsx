@@ -30,7 +30,24 @@ import DrawerPanel from '../../../../components/DrawerPanel'
 import KFilter from '../../../../components/Filter'
 import { CloudIcon } from '@heroicons/react/24/outline'
 import { string } from 'prop-types'
-
+import KTable from '@cloudscape-design/components/table'
+import Box from '@cloudscape-design/components/box'
+import SpaceBetween from '@cloudscape-design/components/space-between'
+import KBadge from '@cloudscape-design/components/badge'
+import {
+    BreadcrumbGroup,
+    Header,
+    Link,
+    Pagination,
+    PropertyFilter,
+} from '@cloudscape-design/components'
+import {
+    AppLayout,
+    Container,
+    ContentLayout,
+    SplitPanel,
+} from '@cloudscape-design/components'
+import KeyValuePairs from '@cloudscape-design/components/key-value-pairs'
 const columns = () => {
     const temp: IColumn<any, any>[] = [
         {
@@ -263,16 +280,20 @@ export default function SettingsALLJobs() {
         findParmas('type')
     )
     const [showHoursFilter, setShowHourFilter] = useState<number[]>(['1'])
-    const [jobTypeContains, setJobTypeContains] = useState<string>(
-        'is'
-    )
-    const [jobStatusContains, setJobStatusContains] = useState<string>(
-        'is'
-    )
     const [statusFilter, setStatusFilter] = useState<string[] | undefined>(
         findParmas('status')
     )
     const [allStatuses, setAllStatuses] = useState<Option[]>([])
+    const [jobs, setJobs] = useState([])
+    const [page, setPage] = useState(0)
+    const [totalCount, setTotalCount] = useState(0)
+    const [totalPage, setTotalPage] = useState(0)
+    const [propertyOptions, setPropertyOptions] = useState()
+
+    const [queries, setQueries] = useState({
+        tokens: [],
+        operation: 'and',
+    })
 
     const { response } = useScheduleApiV1JobsCreate({
         hours: 24,
@@ -281,15 +302,32 @@ export default function SettingsALLJobs() {
     })
 
     useEffect(() => {
-        setAllStatuses(
+        const temp =
             response?.summaries
                 ?.map((v) => {
                     return { label: v.status, value: v.status }
                 })
                 .filter(
-                    (thing, i, arr) => arr.findIndex((t) => t.label === thing.label) === i
+                    (thing, i, arr) =>
+                        arr.findIndex((t) => t.label === thing.label) === i
                 ) || []
+        setAllStatuses(temp)
+        const temp_option = []
+        temp.map((item) => {
+            temp_option.push({
+                propertyKey: 'job_status',
+                value: item.value,
+            })
+        })
+        jobTypes?.map((item) => {
+            temp_option.push({
+                propertyKey: 'job_type',
+                value: item.value,
+            })
+        }
         )
+        setPropertyOptions(temp_option)
+
     }, [response])
     const arrayToString = (arr: string[], title: string) => {
         let temp = ``
@@ -310,7 +348,7 @@ export default function SettingsALLJobs() {
             searchParams.get('status') !== statusFilter
         ) {
             if (jobTypeFilter?.length != 0) {
-                searchParams.set('type',jobTypeFilter)
+                searchParams.set('type', jobTypeFilter)
             } else {
                 searchParams.delete('type')
             }
@@ -323,44 +361,68 @@ export default function SettingsALLJobs() {
         }
     }, [jobTypeFilter, statusFilter])
 
-    const ssr = () => {
-        return {
-            getRows: (params: IServerSideGetRowsParams) => {
-                const api = new Api()
-                api.instance = AxiosAPI
-                api.schedule
-                    .apiV1JobsCreate({
-                        hours: parseInt(showHoursFilter[0]) || 1,
-                        pageStart: params.request.startRow || 0,
-                        pageEnd: params.request.endRow || 0,
-                        sortBy:
-                            params.request.sortModel?.at(0)?.colId ||
-                            'updatedAt',
-                        sortOrder: params.request.sortModel?.at(0)
-                            ?.sort?.toUpperCase() || 'DESC',
-                        statusFilter: statusFilter,
-                        typeFilters: jobTypeFilter,
-                    })
-                    .then((resp) => {
-                        params.success({
-                            rowData: resp.data.jobs || [],
-                            rowCount: resp.data.summaries
-                                ?.map((v) => v.count)
-                                .reduce(
-                                    (prev, curr) => (prev || 0) + (curr || 0),
-                                    0
-                                ),
-                        })
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                        params.fail()
-                    })
-            },
+    const GetRows = () => {
+        const api = new Api()
+        api.instance = AxiosAPI
+        const status_filter = []
+        const jobType_filter = []
+        queries.tokens.map((item) => {
+            if (item.propertyKey == 'job_status') {
+                status_filter.push(item.value)
+            } else if (item.propertyKey == 'job_type') {
+                jobType_filter.push(item.value)
+            }
         }
-    }
+        )
+        api.schedule
+            .apiV1JobsCreate({
+                hours: parseInt(showHoursFilter[0]) || 1,
+                pageStart: page * 10,
+                pageEnd: (page + 1) * 10,
+                // sortBy: params.request.sortModel?.at(0)?.colId || 'updatedAt',
+                // sortOrder:
+                //     params.request.sortModel?.at(0)?.sort?.toUpperCase() ||
+                //     'DESC',
+                statusFilter: status_filter,
+                typeFilters: jobType_filter,
+            })
+            .then((resp) => {
+                if (resp.data.jobs) {
+                    setJobs(resp.data.jobs)
+                } else {
+                    setJobs([])
+                }
 
-    const serverSideRows = ssr()
+                setTotalCount(
+                    resp.data.summaries
+                        ?.map((v) => v.count)
+                        ?.reduce((prev, curr) => (prev || 0) + (curr || 0), 0)
+                )
+                setTotalPage(
+                    Math.ceil(
+                        resp.data.summaries
+                            ?.map((v) => v.count)
+                            ?.reduce(
+                                (prev, curr) => (prev || 0) + (curr || 0),
+                                0
+                            ) / 10
+                    )
+                )
+                // params.success({
+                //     rowData: resp.data.jobs || [],
+                //     rowCount: resp.data.summaries
+                //         ?.map((v) => v.count)
+                //         .reduce((prev, curr) => (prev || 0) + (curr || 0), 0),
+                // })
+            })
+            .catch((err) => {
+                console.log(err)
+                // params.fail()
+            })
+    }
+    useEffect(() => {
+        GetRows()
+    }, [queries])
 
     const clickedJobDetails = [
         { title: 'ID', value: clickedJob?.id },
@@ -376,83 +438,353 @@ export default function SettingsALLJobs() {
     ]
 
     return (
-        <Flex flexDirection="col">
-            <Flex
-                flexDirection="row"
-                alignItems="start"
-                justifyContent="between"
-                className="gap-2"
-            >
+        <>
+            <AppLayout
+                toolsOpen={false}
+                navigationOpen={false}
+                contentType="table"
+                toolsHide={true}
+                navigationHide={true}
+                splitPanelOpen={open}
+                onSplitPanelToggle={() => {
+                    setOpen(!open)
+                }}
+                splitPanel={
+                    <SplitPanel
+                        header={
+                            clickedJob ? clickedJob.title : 'Job not selected'
+                        }
+                    >
+                        <Flex
+                            flexDirection="col"
+                            className="w-full"
+                            alignItems="center"
+                            justifyContent="center"
+                        >
+                            <KeyValuePairs
+                                columns={4}
+                                className="w-full"
+                                items={clickedJobDetails.map((item) => {
+                                    return {
+                                        label: item?.title,
+                                        value: item?.value,
+                                    }
+                                })}
+                            />
+                        </Flex>
+                    </SplitPanel>
+                }
+                content={
+                    <KTable
+                        className="  min-h-[450px]"
+                        variant="full-page"
+                        // resizableColumns
+                        renderAriaLive={({
+                            firstIndex,
+                            lastIndex,
+                            totalItemsCount,
+                        }) =>
+                            `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
+                        }
+                        onSortingChange={(event) => {
+                            // setSort(event.detail.sortingColumn.sortingField)
+                            // setSortOrder(!sortOrder)
+                        }}
+                        // sortingColumn={sort}
+                        // sortingDescending={sortOrder}
+                        // sortingDescending={sortOrder == 'desc' ? true : false}
+                        // @ts-ignore
+                        onRowClick={(event) => {
+                            const row = event.detail.item
+                            setClickedJob(row)
+                            setOpen(true)
+                        }}
+                        columnDefinitions={[
+                            {
+                                id: 'id',
+                                header: 'Id',
+                                cell: (item) => <>{item.id}</>,
+                                sortingField: 'id',
+                                isRowHeader: true,
+                                maxWidth: 100,
+                            },
+                            {
+                                id: 'createdAt',
+                                header: 'Created At',
+                                cell: (item) => (
+                                    <>{`${item?.createdAt.split('T')[0]} ${
+                                        item?.createdAt
+                                            .split('T')[1]
+                                            .split('.')[0]
+                                    } `}</>
+                                ),
+                                sortingField: 'id',
+                                isRowHeader: true,
+                                maxWidth: 100,
+                            },
+                            {
+                                id: 'type',
+                                header: 'Job Type',
+                                cell: (item) => <>{item.type}</>,
+                                sortingField: 'id',
+                                isRowHeader: true,
+                                maxWidth: 100,
+                            },
+                            {
+                                id: 'title',
+                                header: 'Title',
+                                cell: (item) => <>{item.title}</>,
+                                sortingField: 'id',
+                                isRowHeader: true,
+                                maxWidth: 100,
+                            },
+                            {
+                                id: 'status',
+                                header: 'Status',
+                                cell: (item) => {
+                                    let jobStatus = ''
+                                    let jobColor: Color = 'gray'
+                                    switch (item?.status) {
+                                        case 'CREATED':
+                                            jobStatus = 'created'
+                                            break
+                                        case 'QUEUED':
+                                            jobStatus = 'queued'
+                                            break
+                                        case 'IN_PROGRESS':
+                                            jobStatus = 'in progress'
+                                            jobColor = 'orange'
+                                            break
+                                        case 'RUNNERS_IN_PROGRESS':
+                                            jobStatus = 'in progress'
+                                            jobColor = 'orange'
+                                            break
+                                        case 'SUMMARIZER_IN_PROGRESS':
+                                            jobStatus = 'summarizing'
+                                            jobColor = 'orange'
+                                            break
+                                        case 'OLD_RESOURCE_DELETION':
+                                            jobStatus = 'summarizing'
+                                            jobColor = 'orange'
+                                            break
+                                        case 'SUCCEEDED':
+                                            jobStatus = 'succeeded'
+                                            jobColor = 'emerald'
+                                            break
+                                        case 'COMPLETED':
+                                            jobStatus = 'completed'
+                                            jobColor = 'emerald'
+                                            break
+                                        case 'FAILED':
+                                            jobStatus = 'failed'
+                                            jobColor = 'red'
+                                            break
+                                        case 'COMPLETED_WITH_FAILURE':
+                                            jobStatus = 'completed with failed'
+                                            jobColor = 'red'
+                                            break
+                                        case 'TIMEOUT':
+                                            jobStatus = 'time out'
+                                            jobColor = 'red'
+                                            break
+                                        default:
+                                            jobStatus = String(item?.status)
+                                    }
+
+                                    return (
+                                        <Badge color={jobColor}>
+                                            {jobStatus}
+                                        </Badge>
+                                    )
+                                },
+                                sortingField: 'id',
+                                isRowHeader: true,
+                                maxWidth: 100,
+                            },
+                            {
+                                id: 'updatedAt',
+                                header: 'Updated At',
+                                cell: (item) => (
+                                    <>{`${item?.updatedAt.split('T')[0]} ${
+                                        item?.updatedAt
+                                            .split('T')[1]
+                                            .split('.')[0]
+                                    } `}</>
+                                ),
+                                sortingField: 'id',
+                                isRowHeader: true,
+                                maxWidth: 100,
+                            },
+                        ]}
+                        columnDisplay={[
+                            { id: 'id', visible: true },
+                            { id: 'updatedAt', visible: true },
+                            { id: 'title', visible: true },
+                            { id: 'type', visible: true },
+                            { id: 'status', visible: true },
+                            { id: 'createdAt', visible: true },
+                        ]}
+                        enableKeyboardNavigation
+                        // @ts-ignore
+                        items={jobs}
+                        loading={false}
+                        loadingText="Loading resources"
+                        // stickyColumns={{ first: 0, last: 1 }}
+                        // stripedRows
+                        trackBy="id"
+                        empty={
+                            <Box
+                                margin={{ vertical: 'xs' }}
+                                textAlign="center"
+                                color="inherit"
+                            >
+                                <SpaceBetween size="m">
+                                    <b>No resources</b>
+                                </SpaceBetween>
+                            </Box>
+                        }
+                        filter={
+                            <PropertyFilter
+                                // @ts-ignore
+                                query={queries}
+                                // @ts-ignore
+                                onChange={({ detail }) => {
+                                    // @ts-ignore
+                                    setQueries(detail)
+                                }}
+                                // countText="5 matches"
+                                // enableTokenGroups
+                                expandToViewport
+                                filteringAriaLabel="Job Filters"
+                                // @ts-ignore
+                                // filteringOptions={filters}
+                                filteringPlaceholder="Job Filters"
+                                // @ts-ignore
+                                filteringOptions={propertyOptions}
+                                // @ts-ignore
+
+                                filteringProperties={[
+                                    {
+                                        key: 'job_type',
+                                        operators: ['='],
+                                        propertyLabel: 'Job Type',
+                                        groupValuesLabel: 'Job Type values',
+                                    },
+                                    {
+                                        key: 'job_status',
+                                        operators: [
+                                            '=',
+                                           
+                                        ],
+                                        propertyLabel: 'Job Status',
+                                        groupValuesLabel: 'Job Status values',
+                                    },
+                                ]}
+                                // filteringProperties={
+                                //     filterOption
+                                // }
+                            />
+                        }
+                        header={
+                            <Header className="w-full">
+                                Jobs{' '}
+                                <span className=" font-medium">
+                                    ({totalCount})
+                                </span>
+                            </Header>
+                        }
+                        pagination={
+                            <Pagination
+                                currentPageIndex={page + 1}
+                                pagesCount={totalPage}
+                                onChange={({ detail }) =>
+                                    setPage(detail.currentPageIndex - 1)
+                                }
+                            />
+                        }
+                    />
+                }
+            />
+        </>
+    )
+}
+
+{
+    /**
+       <Flex flexDirection="col">
                 <Flex
                     flexDirection="row"
                     alignItems="start"
-                    justifyContent="start"
+                    justifyContent="between"
                     className="gap-2"
                 >
-                    <KFilter
-                        options={jobTypes}
-                        type="multi"
-                        hasCondition={true}
-                        condition={jobTypeContains}
-                        selectedItems={jobTypeFilter}
-                        onChange={(values: string[]) => {
-                            console.log(values, 'values')
-                            console.log(jobTypeFilter, 'filter')
+                    <Flex
+                        flexDirection="row"
+                        alignItems="start"
+                        justifyContent="start"
+                        className="gap-2"
+                    >
+                        <KFilter
+                            options={jobTypes}
+                            type="multi"
+                            hasCondition={true}
+                            condition={jobTypeContains}
+                            selectedItems={jobTypeFilter}
+                            onChange={(values: string[]) => {
+                                console.log(values, 'values')
+                                console.log(jobTypeFilter, 'filter')
 
-                            setJobTypeFilter(values)
-                        }}
-                        label="Job Types"
-                        icon={CloudIcon}
-                    />
-                    <KFilter
-                        options={allStatuses}
-                        type="multi"
-                        selectedItems={statusFilter}
-                        condition={jobStatusContains}
-                        hasCondition={true}
-                        onChange={(values: string[]) => {
-                            setStatusFilter(values)
-                        }}
-                        label="Job Status"
-                        icon={CloudIcon}
-                    />
-                    <KFilter
-                        options={ShowHours}
-                        type="multi"
-                        hasCondition={false}
-                        selectedItems={showHoursFilter}
-                        onChange={(values: string[]) => {
-                            if (values.length == 0) {
-                            setShowHourFilter([])
+                                setJobTypeFilter(values)
+                            }}
+                            label="Job Types"
+                            icon={CloudIcon}
+                        />
+                        <KFilter
+                            options={allStatuses}
+                            type="multi"
+                            selectedItems={statusFilter}
+                            condition={jobStatusContains}
+                            hasCondition={true}
+                            onChange={(values: string[]) => {
+                                setStatusFilter(values)
+                            }}
+                            label="Job Status"
+                            icon={CloudIcon}
+                        />
+                        <KFilter
+                            options={ShowHours}
+                            type="multi"
+                            hasCondition={false}
+                            selectedItems={showHoursFilter}
+                            onChange={(values: string[]) => {
+                                if (values.length == 0) {
+                                    setShowHourFilter([])
+                                } else {
+                                    setShowHourFilter([values.pop()])
+                                }
+                            }}
+                            label="Show jobs in"
+                            icon={CloudIcon}
+                        />
+                    </Flex>
 
-                            }
-                            else{
-                            setShowHourFilter([values.pop()])
-
-                            }
+                    <Button
+                        onClick={() => {
+                            // @ts-ignore
+                            ssr()
                         }}
-                        label="Show jobs in"
-                        icon={CloudIcon}
-                    />
+                        disabled={false}
+                        loading={false}
+                        loadingText="Running"
+                    >
+                        Refresh
+                    </Button>
                 </Flex>
+                <Card className="mt-4">
+                    <Title className="font-semibold mb-5">Jobs</Title>
 
-                <Button
-                    onClick={() => {
-                        // @ts-ignore
-                        window.location.reload()
-                    }}
-                    disabled={false}
-                    loading={false}
-                    loadingText="Running"
-                >
-                    Refresh
-                </Button>
-            </Flex>
-            <Card className="mt-4">
-                <Title className="font-semibold mb-5">Jobs</Title>
-
-                <Flex alignItems="start">
-                    {/* <Card className="sticky top-6 min-w-[200px] max-w-[200px]">
+                    <Flex alignItems="start">
+                        {/* <Card className="sticky top-6 min-w-[200px] max-w-[200px]">
                     <Accordion
                         defaultOpen
                         className="border-0 rounded-none bg-transparent mb-1"
@@ -519,47 +851,49 @@ export default function SettingsALLJobs() {
                             </Flex>
                         </AccordionBody>
                     </Accordion>
-                </Card> */}
-                    <Flex className="pl-4">
-                        <Table
-                            id="jobs"
-                            columns={columns()}
-                            serverSideDatasource={serverSideRows}
-                            onCellClicked={(event) => {
-                                setClickedJob(event.data)
-                                setOpen(true)
-                            }}
-                            options={{
-                                rowModelType: 'serverSide',
-                                serverSideDatasource: serverSideRows,
-                            }}
-                        />
+                </Card> 
+                        <Flex className="pl-4">
+                            <Table
+                                id="jobs"
+                                columns={columns()}
+                                serverSideDatasource={serverSideRows}
+                                onCellClicked={(event) => {
+                                    setClickedJob(event.data)
+                                    setOpen(true)
+                                }}
+                                options={{
+                                    rowModelType: 'serverSide',
+                                    serverSideDatasource: serverSideRows,
+                                }}
+                            />
+                        </Flex>
                     </Flex>
-                </Flex>
-                <DrawerPanel
-                    open={open}
-                    onClose={() => setOpen(false)}
-                    title="Job Details"
-                >
-                    <Flex flexDirection="col">
-                        {clickedJobDetails.map((item) => {
-                            return (
-                                <Flex
-                                    flexDirection="row"
-                                    justifyContent="between"
-                                    alignItems="start"
-                                    className="mt-2"
-                                >
-                                    <Text className="w-56 font-bold">
-                                        {item.title}
-                                    </Text>
-                                    <Text className="w-full">{item.value}</Text>
-                                </Flex>
-                            )
-                        })}
-                    </Flex>
-                </DrawerPanel>
-            </Card>
-        </Flex>
-    )
+                    <DrawerPanel
+                        open={open}
+                        onClose={() => setOpen(false)}
+                        title="Job Details"
+                    >
+                        <Flex flexDirection="col">
+                            {clickedJobDetails.map((item) => {
+                                return (
+                                    <Flex
+                                        flexDirection="row"
+                                        justifyContent="between"
+                                        alignItems="start"
+                                        className="mt-2"
+                                    >
+                                        <Text className="w-56 font-bold">
+                                            {item.title}
+                                        </Text>
+                                        <Text className="w-full">
+                                            {item.value}
+                                        </Text>
+                                    </Flex>
+                                )
+                            })}
+                        </Flex>
+                    </DrawerPanel>
+                </Card>
+            </Flex>
+    */
 }

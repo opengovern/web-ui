@@ -82,7 +82,7 @@ export default function BenchmarkCards({ benchmark, all,loading }: IComplianceCa
     const isDemo = useAtomValue(isDemoAtom)
     const truncate = (text: string | undefined) => {
         if (text) {
-            return text.length > 40 ? text.substring(0, 40) + '...' : text
+            return text.length > 25 ? text.substring(0, 25) + '...' : text
         }
     }
     return (
@@ -104,7 +104,7 @@ export default function BenchmarkCards({ benchmark, all,loading }: IComplianceCa
                             href={`./compliance/${item.id}`}
                             fontSize="heading-m"
                         >
-                            <Flex className="w-100" justifyContent="between">
+                            <Flex className="w-100" justifyContent="between" alignItems='center'>
                                 <Flex className='w-100 min-w-max' justifyContent='start'>{truncate(item.name)}</Flex>
                                 <Flex justifyContent="end" className="gap-2">
                                     {item?.connectors?.map((sub) => {
