@@ -949,7 +949,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
     /** @example [true] */
     stateActive?: boolean[]
     /**@example [477] */
-    jobID? : string[]
+    jobID?: string[]
+    connectionGroup?: string[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata {

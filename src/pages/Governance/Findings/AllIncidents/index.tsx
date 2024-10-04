@@ -36,6 +36,7 @@ interface ICount {
     activeTimeRange: DateRange | undefined
     eventTimeRange: DateRange | undefined
     jobID: string[] | undefined
+    connectionGroup: string[] | undefined
 }
 interface Props {
     query: ICount

@@ -37,6 +37,7 @@ import { string } from 'prop-types'
 import SettingsALLJobs from './AllJobs'
 import SettingsCustomization from './Customization'
 import TopHeader from '../../../components/Layout/Header'
+import { Tabs } from '@cloudscape-design/components'
 
 const columns = () => {
     const temp: IColumn<any, any>[] = [
@@ -235,7 +236,13 @@ export default function SettingsJobs() {
     return (
         <>
             <TopHeader />
-            <TabGroup>
+            <Tabs 
+                tabs={[
+                    { label: 'All Jobs',  content: <SettingsALLJobs /> ,id : '0' },
+                    { label: 'Customization', content: <SettingsCustomization /> ,id:'1' },
+                ]}
+            />
+            {/* <TabGroup>
                 <TabList>
                     <Tab>All Jobs</Tab>
                     <Tab>Customization</Tab>
@@ -248,7 +255,7 @@ export default function SettingsJobs() {
                         <SettingsCustomization />
                     </TabPanel>
                 </TabPanels>
-            </TabGroup>
+            </TabGroup> */}
         </>
     )
 }

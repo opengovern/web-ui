@@ -42,10 +42,10 @@ export default function KPICard({ name, number, percentage, link }: Props) {
                 className=" cursor-pointer flex items-center justify-between px-4 pr-0"
             >
                 <div>
-                    <p className="text-xl text-gray-900 dark:text-gray-50">
+                    <p className="text  text-[16px] font-sans text-gray-900 dark:text-gray-50">
                         {name}
                     </p>
-                    <p className="mt-1 text-lg  text-gray-900 dark:text-gray-50">
+                    <p className="mt-1 text-[14px]  text-gray-900 dark:text-gray-50">
                         {`${name == 'Efficiency' ? '$' : ''}${Math.floor(
                             number ?? 0
                         )} `}
