@@ -165,6 +165,9 @@ export default function ScoreCategory() {
     const [sortOrder, setSortOrder] = useState(true)
     const [selected, setSelected] = useState()
     const [isLoading, setIsLoading] = useState(false)
+   const [treePage, setTreePage] = useState(0)
+   const [treeTotal, setTreeTotal] = useState(0)
+   const [treeTotalPages, setTreeTotalPages] = useState(0)
 
     const [searchCategory, setSearchCategory] = useState('')
     const categories = [
@@ -272,7 +275,7 @@ export default function ScoreCategory() {
                         }
                         temp.push(childs)
                     })
-                    setTree(res.data.children)
+                    // setTree(res.data.children)
                 } else {
                     // temp.push({
                     //     text: res.data.title,
@@ -280,7 +283,9 @@ export default function ScoreCategory() {
                     //     type: 'link',
                     // })
                 }
-                console.log(temp)
+                setTreeTotalPages(Math.ceil(temp.length / 12))
+                setTreeTotal(temp.length)
+                setTreePage(0)
                 setTree(temp)
             })
             .catch((err) => {
@@ -834,8 +839,7 @@ export default function ScoreCategory() {
                                         variant="h1"
                                         className="text-white important"
                                         color="white"
-                                    >
-                                    </Box>
+                                    ></Box>
                                     <Flex className="w-max">
                                         <Evaluate
                                             id={`sre_${category.toLowerCase()}`}
@@ -893,10 +897,13 @@ export default function ScoreCategory() {
                     </Col>
                     {tree && tree.length > 0 && (
                         <Col numColSpan={3}>
-                            <Flex className="bg-white  w-full border-solid border-2    rounded-xl p-4">
+                            <Flex
+                                className="bg-white  w-full border-solid border-2 h-[550px]    rounded-xl gap-1"
+                                flexDirection="col"
+                            >
                                 <>
                                     <SideNavigation
-                                        className="w-fit"
+                                        className="w-full scroll  h-[550px] overflow-scroll p-4 pb-0"
                                         activeHref={selected}
                                         header={{
                                             href: `sre_${category.toLowerCase()}`,
@@ -938,12 +945,22 @@ export default function ScoreCategory() {
                                                     })
                                                 }
                                             }
-                                            console.log(temp)
                                             setSelectedBread(temp)
                                         }}
-                                        items={tree}
+                                        items={tree?.slice(
+                                            treePage * 12,
+                                            (treePage + 1) * 12
+                                        )}
                                     />
                                 </>
+                                <Pagination
+                                    className="pb-2"
+                                    currentPageIndex={treePage + 1}
+                                    pagesCount={treeTotalPages}
+                                    onChange={({ detail }) =>
+                                        setTreePage(detail.currentPageIndex - 1)
+                                    }
+                                />
                             </Flex>
                         </Col>
                     )}
@@ -1083,6 +1100,7 @@ export default function ScoreCategory() {
                                             {
                                                 id: 'noncompliant_resources',
                                                 header: 'Non-Compliant Resources',
+                                                sortingField: 'noncompliant_resources',
                                                 cell: (item) => (
                                                     // @ts-ignore
                                                     <>

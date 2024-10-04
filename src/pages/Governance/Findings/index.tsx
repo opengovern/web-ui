@@ -72,6 +72,7 @@ export default function Findings() {
         activeTimeRange: DateRange | undefined
         eventTimeRange: DateRange | undefined
         jobID: string[] | undefined
+        connectionGroup: []
     }>({
         connector: SourceType.Nil,
         conformanceStatus: [
@@ -92,6 +93,7 @@ export default function Findings() {
         activeTimeRange: undefined,
         eventTimeRange: undefined,
         jobID: [],
+        connectionGroup: [],
     })
 
     return (

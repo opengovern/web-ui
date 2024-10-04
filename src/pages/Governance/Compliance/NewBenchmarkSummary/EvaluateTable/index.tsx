@@ -340,20 +340,28 @@ export default function EvaluateTable({
                             },
 
                             {
-                                id: 'integrantion_id',
+                                id: 'integration_id',
                                 header: 'Integration Id',
                                 cell: (item) => (
                                     // @ts-ignore
-                                    <>{dateTimeDisplay(item.updated_at)}</>
+                                    <>{item.integration_info?.id}</>
                                 ),
                             },
 
                             {
-                                id: 'integrantion_name',
+                                id: 'integration_name',
                                 header: 'Integration Name',
                                 cell: (item) => (
                                     // @ts-ignore
-                                    <>{dateTimeDisplay(item.updated_at)}</>
+                                    <>{item.integration_info?.id_name}</>
+                                ),
+                            },
+                            {
+                                id: 'connector',
+                                header: 'Connector',
+                                cell: (item) => (
+                                    // @ts-ignore
+                                    <>{item.integration_info?.integration}</>
                                 ),
                             },
 
@@ -370,6 +378,10 @@ export default function EvaluateTable({
                             { id: 'job_id', visible: true },
                             { id: 'updated_at', visible: true },
                             { id: 'job_status', visible: true },
+                            { id: 'integration_id', visible: true },
+                            { id: 'integration_name', visible: true },
+                            { id: 'connector', visible: true },
+
                             // { id: 'conformanceStatus', visible: true },
                             // { id: 'severity', visible: true },
                             // { id: 'evaluatedAt', visible: true },
