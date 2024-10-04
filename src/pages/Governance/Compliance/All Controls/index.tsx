@@ -31,9 +31,9 @@ import {
     TagIcon,
 } from '@heroicons/react/24/outline'
 import { Fragment, useEffect, useMemo, useState } from 'react' // eslint-disable-next-line import/no-extraneous-dependencies
-import { highlight, languages } from 'prismjs' // eslint-disable-next-line import/no-extraneous-dependencies
-import 'prismjs/components/prism-sql' // eslint-disable-next-line import/no-extraneous-dependencies
-import 'prismjs/themes/prism.css'
+// import { highlight, languages } from 'prismjs' // eslint-disable-next-line import/no-extraneous-dependencies
+// import 'prismjs/components/prism-sql' // eslint-disable-next-line import/no-extraneous-dependencies
+// import 'prismjs/themes/prism.css'
 import Editor from 'react-simple-code-editor'
 import {
     IServerSideGetRowsParams,
