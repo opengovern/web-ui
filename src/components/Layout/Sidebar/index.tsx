@@ -125,6 +125,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             })
             return currentPage === page?.substring(0, page?.indexOf('?')) && ok
         }
+        // if(page?.includes(":")){
+        //     return currentPage.split("/")[0] === page?.substring(0, page?.indexOf(':')).split("/")[0]
+        // }
         return currentPage === page
     }
     const findPage = (page: string | string[], item: ISidebarItem): string => {
@@ -316,8 +319,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 name: 'Compliance',
                 icon: ShieldCheckIcon,
                 page: [
-                    'score',
                     'compliance',
+                    'compliance/:benchmarkId',
                     'compliance/controls',
                     'compliance/benchmarks',
                 ],
@@ -325,15 +328,15 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 isLoading: false,
                 count: undefined,
                 error: false,
-                children: [
-                    {
-                        name: 'Frameworks',
-                        page: 'compliance',
-                        isPreview: false,
-                        isLoading: false,
-                        count: undefined,
-                        error: false,
-                    },
+                // children: [
+                    // {
+                    //     name: 'Frameworks',
+                    //     page: ['compliance','compliance/:benchmarkId'],
+                    //     isPreview: false,
+                    //     isLoading: false,
+                    //     count: undefined,
+                    //     error: false,
+                    // },
                     // {
                     //     name: 'SCORE',
                     //     page: 'score',
@@ -342,14 +345,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     //     count: undefined,
                     //     error: false,
                     // },
-                    {
-                        name: ' Library',
-                        page: 'compliance/library',
-                        isPreview: false,
-                        isLoading: false,
-                        count: undefined,
-                        error: false,
-                    },
+                    // {
+                    //     name: ' Library',
+                    //     page: 'compliance/library',
+                    //     isPreview: false,
+                    //     isLoading: false,
+                    //     count: undefined,
+                    //     error: false,
+                    // },
                     // {
                     //     name: ' Benchmarks',
                     //     page: 'compliance/benchmarks',
@@ -366,14 +369,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     //     count: undefined,
                     //     error: false,
                     // },
-                ],
+                // ],
             },
-            {
-                name: 'SRE',
-                page: ['score', 'score/categories'],
-                icon: ChevronDoubleUpIcon,
-                isPreview: false,
-            },
+            // {
+            //     name: 'SRE',
+            //     page: ['score', 'score/categories'],
+            //     icon: ChevronDoubleUpIcon,
+            //     isPreview: false,
+            // },
             {
                 name: 'Dashboards',
                 page: [

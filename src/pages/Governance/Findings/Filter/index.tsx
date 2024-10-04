@@ -715,7 +715,7 @@ export default function Filter({ onApply, type }: IFilters) {
                     // @ts-ignore
                     query={query}
                     // @ts-ignore
-                    className="w-full"
+                    // className="w-full"
                     // @ts-ignore
                     onChange={({ detail }) => setQuery(detail)}
                     // countText="5 matches"
@@ -732,16 +732,12 @@ export default function Filter({ onApply, type }: IFilters) {
                     filteringProperties={properties}
                     virtualScroll
                 />
-                {has_date && (
+                {/* {has_date && (
                     <div className="w-full ">{date_filter?.component}</div>
-                )}
+                )} */}
             </>
         )
     }
 
-    return (
-        <Flex flexDirection="row" className="mt-4 gap-1  z-10" alignItems='start' justifyContent='start'>
-            {renderFilters()}
-        </Flex>
-    )
+    return <>{renderFilters()}</>
 }

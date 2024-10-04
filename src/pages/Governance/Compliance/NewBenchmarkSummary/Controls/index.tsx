@@ -249,7 +249,7 @@ export default function Controls({
     }
     const truncate = (text: string | undefined) => {
         if (text) {
-            return text.length > 50 ? text.substring(0, 50) + '...' : text
+            return text.length > 30 ? text.substring(0, 30) + '...' : text
         }
     }
     const GetControls = (flag: boolean, id: string | undefined) => {
@@ -478,14 +478,18 @@ export default function Controls({
                                 )}
                             />
                         </>
-                        <Pagination
-                            className="pb-2"
-                            currentPageIndex={treePage + 1}
-                            pagesCount={treeTotalPages}
-                            onChange={({ detail }) =>
-                                setTreePage(detail.currentPageIndex - 1)
-                            }
-                        />
+                        {treeTotalPages > 1 && (
+                            <>
+                                <Pagination
+                                    className="pb-2"
+                                    currentPageIndex={treePage + 1}
+                                    pagesCount={treeTotalPages}
+                                    onChange={({ detail }) =>
+                                        setTreePage(detail.currentPageIndex - 1)
+                                    }
+                                />
+                            </>
+                        )}
                     </Flex>
                 </Col>
             )}

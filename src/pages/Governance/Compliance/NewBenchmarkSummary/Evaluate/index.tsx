@@ -202,12 +202,11 @@ export default function Evaluate({
                                 onClick={() => {
                                     setConnections(
                                         // @ts-ignore
-                                        assignments?.connections?.map((c) => {
+                                        accounts?.map((c) => {
                                             return {
-                                                label: c.providerConnectionName,
-                                                value: c.connectionID,
-                                                description:
-                                                    c.providerConnectionID,
+                                                label: c.name,
+                                                value: c.integration_tracker,
+                                                description: c.id,
                                             }
                                         })
                                     )

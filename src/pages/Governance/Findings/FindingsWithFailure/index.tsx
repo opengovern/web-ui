@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Card, Flex, Text, Title } from '@tremor/react'
 import { useEffect, useMemo, useState } from 'react'
 import {
@@ -28,6 +29,7 @@ import SpaceBetween from '@cloudscape-design/components/space-between'
 import Badge from '@cloudscape-design/components/badge'
 import {
     BreadcrumbGroup,
+    DateRangePicker,
     Header,
     Link,
     Pagination,
@@ -35,6 +37,7 @@ import {
 } from '@cloudscape-design/components'
 import { AppLayout, SplitPanel } from '@cloudscape-design/components'
 import Filter from '../Filter'
+import dayjs from 'dayjs'
 export const columns = (isDemo: boolean) => {
     const temp: IColumn<
         GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
@@ -303,62 +306,97 @@ export default function FindingsWithFailure({ query }: ICount) {
     const [totalCount, setTotalCount] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
     const isDemo = useAtomValue(isDemoAtom)
-     const [queries, setQuery] = useState(query)
-  const truncate = (text: string | undefined) => {
-      if (text) {
-          return text.length > 40 ? text.substring(0, 40) + '...' : text
-      }
-  }
+    const [queries, setQuery] = useState(query)
+    const today = new Date()
+    const lastWeek = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate() - 7
+    )
+
+    const [date, setDate] = useState({
+        startDate: lastWeek.toISOString(),
+        endDate: today.toISOString(),
+        type: 'absolute',
+    })
+    const truncate = (text: string | undefined) => {
+        if (text) {
+            return text.length > 40 ? text.substring(0, 40) + '...' : text
+        }
+    }
     const GetRows = () => {
         setLoading(true)
         const api = new Api()
         api.instance = AxiosAPI
+        let isRelative = false
+        let relative = ''
+        let start = ''
+        let end = ''
+          if (date) {
+              if (date.type == 'relative') {
+                  // @ts-ignore
+                    isRelative = true
+                    relative = `${date.amount}${date.unit.charAt(
+                      0
+                  )}`
+              } else {
+                  // @ts-ignore
+
+                 start = dayjs(date?.startDate)
+                  // @ts-ignore
+
+                  end = dayjs(date?.endDate)
+              }
+          }
+        let body = {
+            filters: {
+                connector: queries.connector.length ? [query.connector] : [],
+                controlID: queries.controlID,
+                connectionID: queries.connectionID,
+                benchmarkID: queries.benchmarkID,
+                severity: queries.severity,
+                resourceTypeID: queries.resourceTypeID,
+                conformanceStatus: queries.conformanceStatus,
+                stateActive: queries.lifecycle,
+                jobID: queries?.jobID,
+                connectionGroup: queries.connectionGroup,
+                ...(queries.eventTimeRange && {
+                    lastEvent: {
+                        from: queries.eventTimeRange.start.unix(),
+                        to: queries.eventTimeRange.end.unix(),
+                    },
+                }),
+                ...(!isRelative ? {
+                    evaluatedAt: {
+                        from: start.unix(),
+                        to: end.unix(),
+                    },
+                } : {
+                    interval: relative,
+                }),
+            },
+            // sort: params.request.sortModel.length
+            //     ? [
+            //           {
+            //               [params.request.sortModel[0].colId]:
+            //                   params.request.sortModel[0].sort,
+            //           },
+            //       ]
+            //     : [],
+            limit: 10,
+            // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            afterSortKey: page == 1 ? [] : rows[rows?.length - 1].sortKey,
+            //     params.request.startRow === 0 ||
+            //     sortKey.length < 1 ||
+            //     sortKey === 'none'
+            //         ? []
+            //         : sortKey,
+        }
+      
+
         api.compliance
-            .apiV1FindingsCreate({
-                filters: {
-                    connector: queries.connector.length
-                        ? [query.connector]
-                        : [],
-                    controlID: queries.controlID,
-                    connectionID: queries.connectionID,
-                    benchmarkID: queries.benchmarkID,
-                    severity: queries.severity,
-                    resourceTypeID: queries.resourceTypeID,
-                    conformanceStatus: queries.conformanceStatus,
-                    stateActive: queries.lifecycle,
-                    jobID: queries?.jobID,
-                    connectionGroup: queries.connectionGroup,
-                    ...(queries.eventTimeRange && {
-                        lastEvent: {
-                            from: queries.eventTimeRange.start.unix(),
-                            to: queries.eventTimeRange.end.unix(),
-                        },
-                    }),
-                    ...(queries.activeTimeRange && {
-                        evaluatedAt: {
-                            from: queries.activeTimeRange.start.unix(),
-                            to: queries.activeTimeRange.end.unix(),
-                        },
-                    }),
-                },
-                // sort: params.request.sortModel.length
-                //     ? [
-                //           {
-                //               [params.request.sortModel[0].colId]:
-                //                   params.request.sortModel[0].sort,
-                //           },
-                //       ]
-                //     : [],
-                limit: 10,
-                // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                afterSortKey: page == 1 ? [] : rows[rows?.length - 1].sortKey,
-                //     params.request.startRow === 0 ||
-                //     sortKey.length < 1 ||
-                //     sortKey === 'none'
-                //         ? []
-                //         : sortKey,
-            })
+            .apiV1FindingsCreate(body)
             .then((resp) => {
                 setLoading(false)
                 // @ts-ignore
@@ -388,7 +426,7 @@ export default function FindingsWithFailure({ query }: ICount) {
 
     useEffect(() => {
         GetRows()
-    }, [page,queries])
+    }, [page, queries, date])
     return (
         <>
             <AppLayout
@@ -623,14 +661,96 @@ export default function FindingsWithFailure({ query }: ICount) {
                             </Box>
                         }
                         filter={
-                            <Filter
-                                // @ts-ignore
-                                type={'findings'}
-                                onApply={(e) => {
+                            <Flex
+                                flexDirection="row"
+                                justifyContent="start"
+                                alignItems="start"
+                                className="gap-1"
+                            >
+                                <Filter
                                     // @ts-ignore
-                                    setQuery(e)
-                                }}
-                            />
+                                    type={'findings'}
+                                    onApply={(e) => {
+                                        // @ts-ignore
+                                        setQuery(e)
+                                    }}
+                                />
+                                <DateRangePicker
+                                    onChange={({ detail }) =>
+                                        // @ts-ignore
+                                        setDate(detail.value)
+                                    }
+                                    // @ts-ignore
+
+                                    value={date}
+                                    relativeOptions={[
+                                        {
+                                            key: 'previous-5-minutes',
+                                            amount: 5,
+                                            unit: 'minute',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-30-minutes',
+                                            amount: 30,
+                                            unit: 'minute',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-1-hour',
+                                            amount: 1,
+                                            unit: 'hour',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-6-hours',
+                                            amount: 6,
+                                            unit: 'hour',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-7-days',
+                                            amount: 7,
+                                            unit: 'day',
+                                            type: 'relative',
+                                        },
+                                    ]}
+                                    hideTimeOffset
+                                    absoluteFormat="long-localized"
+                                    isValidRange={(range) => {
+                                        if (range.type === 'absolute') {
+                                            const [startDateWithoutTime] =
+                                                range.startDate.split('T')
+                                            const [endDateWithoutTime] =
+                                                range.endDate.split('T')
+                                            if (
+                                                !startDateWithoutTime ||
+                                                !endDateWithoutTime
+                                            ) {
+                                                return {
+                                                    valid: false,
+                                                    errorMessage:
+                                                        'The selected date range is incomplete. Select a start and end date for the date range.',
+                                                }
+                                            }
+                                            if (
+                                                new Date(range.startDate) -
+                                                    new Date(range.endDate) >
+                                                0
+                                            ) {
+                                                return {
+                                                    valid: false,
+                                                    errorMessage:
+                                                        'The selected date range is invalid. The start date must be before the end date.',
+                                                }
+                                            }
+                                        }
+                                        return { valid: true }
+                                    }}
+                                    i18nStrings={{}}
+                                    placeholder="Filter by a date and time range"
+                                />
+                            </Flex>
                         }
                         header={
                             <Header className="w-full">

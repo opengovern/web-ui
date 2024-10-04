@@ -43,7 +43,7 @@ import {
 import { isDemoAtom, notificationAtom } from '../../../../../../../store'
 import { getErrorMessage } from '../../../../../../../types/apierror'
 import { searchAtom } from '../../../../../../../utilities/urlstate'
-import { Tabs } from '@cloudscape-design/components'
+import { KeyValuePairs, Tabs } from '@cloudscape-design/components'
 import { severityBadge } from '../../../../../Controls'
 
 
@@ -185,35 +185,84 @@ export default function FindingDetail({
 
     return (
         <>
-        
-            <Grid className="w-full gap-4 mb-6" numItems={2}>
-                <SummaryCard
-                    title="Account"
-                    metric={finding?.providerConnectionName}
-                    secondLine={finding?.providerConnectionID}
-                    blur={isDemo}
-                    blurSecondLine={isDemo}
-                    isString
-                />
-                <SummaryCard
-                    title="Resource"
-                    metric={finding?.resourceName}
-                    secondLine={finding?.resourceID}
-                    blurSecondLine={isDemo}
-                    isString
-                />
-                <SummaryCard
-                    title="Resource Type"
-                    metric={finding?.resourceTypeName}
-                    secondLine={finding?.resourceType}
-                    isString
-                />
-                <SummaryCard
-                    title="Severity"
-                    metric={severityBadge(finding?.severity)}
-                    isString
-                />
-                {/* <Button
+            {finding ? (
+                <>
+                    <Grid className="w-full gap-4 mb-6" numItems={1}>
+                        <KeyValuePairs
+                            columns={4}
+                            items={[
+                                {
+                                    label: 'Account',
+                                    value: (
+                                        <>
+                                            {finding?.providerConnectionName}
+                                            <Text
+                                                className={` w-full text-start mb-0.5 truncate`}
+                                            >
+                                                {finding?.providerConnectionID}
+                                            </Text>
+                                        </>
+                                    ),
+                                },
+                                {
+                                    label: 'Resource',
+                                    value: (
+                                        <>
+                                            {finding?.resourceName}
+                                            <Text
+                                                className={` w-full text-start mb-0.5 truncate`}
+                                            >
+                                                {finding?.resourceID}
+                                            </Text>
+                                        </>
+                                    ),
+                                },
+                                {
+                                    label: 'Resource Type',
+                                    value: (
+                                        <>
+                                            {finding?.resourceTypeName}
+                                            <Text
+                                                className={` w-full text-start mb-0.5 truncate`}
+                                            >
+                                                {finding?.resourceType}
+                                            </Text>
+                                        </>
+                                    ),
+                                },
+                                {
+                                    label: 'Severity',
+                                    value: severityBadge(finding?.severity),
+                                },
+                            ]}
+                        />
+                        {/* <SummaryCard
+                            title="Account"
+                            metric={finding?.providerConnectionName}
+                            secondLine={finding?.providerConnectionID}
+                            blur={isDemo}
+                            blurSecondLine={isDemo}
+                            isString
+                        />
+                        <SummaryCard
+                            title="Resource"
+                            metric={finding?.resourceName}
+                            secondLine={finding?.resourceID}
+                            blurSecondLine={isDemo}
+                            isString
+                        />
+                        <SummaryCard
+                            title="Resource Type"
+                            metric={finding?.resourceTypeName}
+                            secondLine={finding?.resourceType}
+                            isString
+                        />
+                        <SummaryCard
+                            title="Severity"
+                            metric={severityBadge(finding?.severity)}
+                            isString
+                        /> */}
+                        {/* <Button
                     color="orange"
                     variant="secondary"
                     disabled={reEvaluateLoading}
@@ -231,116 +280,197 @@ export default function FindingDetail({
                         Re-evaluate
                     </Flex>
                 </Button> */}
-            </Grid>
-            <Tabs
-                tabs={[
-                    {
-                        label: 'Summary',
-                        id: '0',
-                        content: (
-                            <>
-                                <List>
-                                    <ListItem className="py-6">
-                                        <Text>Control</Text>
-                                        <Link
-                                            className="text-kaytu-500 cursor-pointer underline"
-                                            to={`${finding?.controlID}?${searchParams}`}
-                                        >
-                                            {finding?.controlTitle}
-                                        </Link>
-                                    </ListItem>
-                                    <ListItem className="py-6">
-                                        <Text>Conformance Status</Text>
-                                        {finding?.conformanceStatus ===
-                                        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed ? (
-                                            <Flex className="w-fit gap-1.5">
-                                                <CheckCircleIcon className="h-4 text-emerald-500" />
-                                                <Text>Passed</Text>
-                                            </Flex>
-                                        ) : (
-                                            <Flex className="w-fit gap-1.5">
-                                                <XCircleIcon className="h-4 text-rose-600" />
-                                                <Text>Failed</Text>
-                                            </Flex>
-                                        )}
-                                    </ListItem>
-                                    <ListItem className="py-6">
-                                        <Text>Findings state</Text>
-                                        {renderStatus(finding?.stateActive)}
-                                    </ListItem>
-                                    <ListItem className="py-6">
-                                        <Text>Last evaluated</Text>
-                                        <Text className="text-gray-800">
-                                            {dateTimeDisplay(
-                                                finding?.evaluatedAt
-                                            )}
-                                        </Text>
-                                    </ListItem>
-                                    <ListItem className="py-6">
-                                        <Text>First discovered</Text>
-                                        <Text className="text-gray-800">
-                                            {dateTimeDisplay(
-                                                failedEvents.at(
-                                                    failedEvents.length - 1
-                                                )?.evaluatedAt
-                                            )}
-                                        </Text>
-                                    </ListItem>
+                    </Grid>
+                    <Tabs
+                        tabs={[
+                            {
+                                label: 'Summary',
+                                id: '0',
+                                content: (
+                                    <>
+                                        <KeyValuePairs
+                                            columns={5}
+                                            items={[
+                                                {
+                                                    label: 'Control',
+                                                    value: (
+                                                        <>
+                                                            <Link
+                                                                className="text-kaytu-500 cursor-pointer underline"
+                                                                to={`${finding?.controlID}?${searchParams}`}
+                                                            >
+                                                                {
+                                                                    finding?.controlTitle
+                                                                }
+                                                            </Link>
+                                                        </>
+                                                    ),
+                                                },
+                                                {
+                                                    label: 'Conformance Statu',
+                                                    value: (
+                                                        <>
+                                                            {finding?.conformanceStatus ===
+                                                            GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed ? (
+                                                                <Flex className="w-fit gap-1.5">
+                                                                    <CheckCircleIcon className="h-4 text-emerald-500" />
+                                                                    <Text>
+                                                                        Passed
+                                                                    </Text>
+                                                                </Flex>
+                                                            ) : (
+                                                                <Flex className="w-fit gap-1.5">
+                                                                    <XCircleIcon className="h-4 text-rose-600" />
+                                                                    <Text>
+                                                                        Failed
+                                                                    </Text>
+                                                                </Flex>
+                                                            )}
+                                                        </>
+                                                    ),
+                                                },
+                                                {
+                                                    label: 'Findings state',
+                                                    value: (
+                                                        <>
+                                                            {renderStatus(
+                                                                finding?.stateActive
+                                                            )}
+                                                        </>
+                                                    ),
+                                                },
+                                                {
+                                                    label: 'First discovered',
+                                                    value: (
+                                                        <>
+                                                            {dateTimeDisplay(
+                                                                failedEvents.at(
+                                                                    failedEvents.length -
+                                                                        1
+                                                                )?.evaluatedAt
+                                                            )}
+                                                        </>
+                                                    ),
+                                                },
+                                                {
+                                                    label: 'Reason',
+                                                    value: (
+                                                        <>{finding?.reason}</>
+                                                    ),
+                                                },
+                                            ]}
+                                        />
+                                        {/* <List>
+                                            <ListItem className="py-6">
+                                                <Text>Control</Text>
+                                                <Link
+                                                    className="text-kaytu-500 cursor-pointer underline"
+                                                    to={`${finding?.controlID}?${searchParams}`}
+                                                >
+                                                    {finding?.controlTitle}
+                                                </Link>
+                                            </ListItem>
+                                            <ListItem className="py-6">
+                                                <Text>Conformance Status</Text>
+                                                {finding?.conformanceStatus ===
+                                                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed ? (
+                                                    <Flex className="w-fit gap-1.5">
+                                                        <CheckCircleIcon className="h-4 text-emerald-500" />
+                                                        <Text>Passed</Text>
+                                                    </Flex>
+                                                ) : (
+                                                    <Flex className="w-fit gap-1.5">
+                                                        <XCircleIcon className="h-4 text-rose-600" />
+                                                        <Text>Failed</Text>
+                                                    </Flex>
+                                                )}
+                                            </ListItem>
+                                            <ListItem className="py-6">
+                                                <Text>Findings state</Text>
+                                                {renderStatus(
+                                                    finding?.stateActive
+                                                )}
+                                            </ListItem>
+                                            <ListItem className="py-6">
+                                                <Text>Last evaluated</Text>
+                                                <Text className="text-gray-800">
+                                                    {dateTimeDisplay(
+                                                        finding?.evaluatedAt
+                                                    )}
+                                                </Text>
+                                            </ListItem>
+                                            <ListItem className="py-6">
+                                                <Text>First discovered</Text>
+                                                <Text className="text-gray-800">
+                                                    {dateTimeDisplay(
+                                                        failedEvents.at(
+                                                            failedEvents.length -
+                                                                1
+                                                        )?.evaluatedAt
+                                                    )}
+                                                </Text>
+                                            </ListItem>
 
-                                    <ListItem className="py-6 space-x-5">
-                                        <Flex
-                                            flexDirection="row"
-                                            justifyContent="between"
-                                            alignItems="start"
-                                            className="w-full"
-                                        >
-                                            <Text className="w-1/4">
-                                                Reason
-                                            </Text>
-                                            <Text className="text-gray-800 text-end w-3/4 whitespace-break-spaces h-fit">
-                                                {finding?.reason}
-                                            </Text>
-                                        </Flex>
-                                    </ListItem>
-                                </List>
-                            </>
-                        ),
-                    },
-                    {
-                        label: 'Resource Details',
-                        disabled: !response?.resource,
-                        id: '1',
-                        content: (
-                            <>
-                                <Title className="mb-2">JSON</Title>
-                                <Card className="px-1.5 py-3 mb-2">
-                                    <ReactJson src={response?.resource || {}} />
-                                </Card>
-                            </>
-                        ),
-                    },
-                    {
-                        label: 'Timeline',
-                        id: '2',
-                        content: (
-                            <>
-                                <Timeline
-                                    data={
-                                        type === 'finding'
-                                            ? findingTimeline
-                                            : response
-                                    }
-                                    isLoading={
-                                        type === 'finding'
-                                            ? findingTimelineLoading
-                                            : isLoading
-                                    }
-                                />
-                            </>
-                        ),
-                    },
-                ]}
-            />
+                                            <ListItem className="py-6 space-x-5">
+                                                <Flex
+                                                    flexDirection="row"
+                                                    justifyContent="between"
+                                                    alignItems="start"
+                                                    className="w-full"
+                                                >
+                                                    <Text className="w-1/4">
+                                                        Reason
+                                                    </Text>
+                                                    <Text className="text-gray-800 text-end w-3/4 whitespace-break-spaces h-fit">
+                                                        {finding?.reason}
+                                                    </Text>
+                                                </Flex>
+                                            </ListItem>
+                                        </List> */}
+                                    </>
+                                ),
+                            },
+                            {
+                                label: 'Resource Details',
+                                disabled: !response?.resource,
+                                id: '1',
+                                content: (
+                                    <>
+                                        <Title className="mb-2">JSON</Title>
+                                        <Card className="px-1.5 py-3 mb-2">
+                                            <ReactJson
+                                                src={response?.resource || {}}
+                                            />
+                                        </Card>
+                                    </>
+                                ),
+                            },
+                            {
+                                label: 'Timeline',
+                                id: '2',
+                                content: (
+                                    <>
+                                        <Timeline
+                                            data={
+                                                type === 'finding'
+                                                    ? findingTimeline
+                                                    : response
+                                            }
+                                            isLoading={
+                                                type === 'finding'
+                                                    ? findingTimelineLoading
+                                                    : isLoading
+                                            }
+                                        />
+                                    </>
+                                ),
+                            },
+                        ]}
+                    />
+                </>
+            ) : (
+                ''
+            )}
         </>
     )
 }

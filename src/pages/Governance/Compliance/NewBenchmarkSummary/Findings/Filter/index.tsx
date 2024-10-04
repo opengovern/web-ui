@@ -63,6 +63,7 @@ interface IFilters {
         activeTimeRange: DateRange | undefined
         eventTimeRange: DateRange | undefined
         jobID: string[] | undefined
+        connectionGroup: string[] | undefined
     }) => void
     type: 'findings' | 'resources' | 'controls' | 'accounts' | 'events'
 }
@@ -175,6 +176,7 @@ export default function Filter({ onApply, type }: IFilters) {
     //     )
     const [selectedFilters, setSelectedFilters] = useState<string[]>([
         'conformance_status',
+        'connectionGroup',
         'provider',
         'lifecycle',
         'severity',
@@ -308,6 +310,16 @@ export default function Filter({ onApply, type }: IFilters) {
             iconSvg: <CheckCircleIcon className="h-5 text-emerald-500" />,
         },
     ]
+     const connectionGroup_data = [
+         {
+             label: 'Healthy',
+             value: 'healthy',
+         },
+         {
+             label: 'Unhealthy',
+             value: 'unhealthy',
+         },
+     ]
     const filterOptions = [
         {
             id: 'conformance_status',
@@ -327,6 +339,26 @@ export default function Filter({ onApply, type }: IFilters) {
             defaultValue: defConformanceStatus,
             onDelete: undefined,
             data: confarmance_data,
+            types: ['findings', 'resources', 'events'],
+        },
+        {
+            id: 'connectionGroup',
+            name: 'Integration Groups',
+            icon: CheckCircleIcon,
+            component: (
+                <ConformanceStatus
+                    value={conformanceStatus}
+                    defaultValue={defConformanceStatus}
+                    onChange={(c) => setConformanceStatus(c)}
+                />
+            ),
+            conditions: ['is'],
+            onChange: (c: any) => setJobs(c),
+            setCondition: (c: string) => console.log(c),
+            value: conformanceStatus,
+            defaultValue: defConformanceStatus,
+            onDelete: undefined,
+            data: connectionGroup_data,
             types: ['findings', 'resources', 'events'],
         },
         {
@@ -574,6 +606,8 @@ export default function Filter({ onApply, type }: IFilters) {
         // const benchmark: any = []
         const resource: any = []
         const job_id: any = []
+        const connection_group: any = []
+
         query.tokens.map((t: { propertyKey: string; value: string }) => {
             if (t.propertyKey === 'conformance_status') {
                 conformance_status.push(t.value)
@@ -581,6 +615,9 @@ export default function Filter({ onApply, type }: IFilters) {
             if (t.propertyKey === 'severity') {
                 temp_severity.push(t.value)
             }
+              if (t.propertyKey === 'connectionGroup') {
+                  connection_group.push(t.value)
+              }
             if (t.propertyKey === 'connection') {
                 connection.push(t.value)
             }
@@ -608,7 +645,7 @@ export default function Filter({ onApply, type }: IFilters) {
             resourceTypeID: resource,
             lifecycle,
             jobID: job_id,
-           
+            connectionGroup: connection_group,
             activeTimeRange: selectedFilters.includes('date')
                 ? activeTimeRange
                 : undefined,
@@ -635,7 +672,12 @@ export default function Filter({ onApply, type }: IFilters) {
                     propertyLabel: f.name,
                     groupValuesLabel: `${f.name}  Values`,
                 });
-                if (f.id == 'severity' || f.id == 'conformance_status' || f.id == 'job_id') {
+                if (
+                    f.id == 'severity' ||
+                    f.id == 'conformance_status' ||
+                    f.id == 'job_id' ||
+                    f.id == 'connectionGroup'
+                ) {
                     f?.data?.map((d) => {
                         options.push({
                             propertyKey: f.id.toString(),
@@ -672,7 +714,7 @@ export default function Filter({ onApply, type }: IFilters) {
                     // @ts-ignore
                     query={query}
                     // @ts-ignore
-                    className="w-full"
+                    // className="w-full"
                     // @ts-ignore
                     onChange={({ detail }) => setQuery(detail)}
                     // countText="5 matches"
@@ -690,16 +732,13 @@ export default function Filter({ onApply, type }: IFilters) {
                     filteringProperties={properties}
                     virtualScroll
                 />
-                {has_date && (
+                {/* {has_date && (
                     <div className="w-full ">{date_filter?.component}</div>
-                )}
+                )} */}
             </>
         )
     }
 
-    return (
-        <Flex flexDirection="row" className="mt-4 gap-1  z-10" alignItems='start' justifyContent='start'>
-            {renderFilters()}
-        </Flex>
-    )
+     return <>{renderFilters()}</>
+
 }
