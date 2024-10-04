@@ -7,6 +7,7 @@ import {
     CloudIcon,
     PlusIcon,
     TrashIcon,
+    XCircleIcon,
 } from '@heroicons/react/24/outline'
 import { Fragment, useEffect, useState } from 'react'
 import dayjs from 'dayjs'
@@ -44,6 +45,8 @@ import {
 } from '../../../../utilities/urlstate'
 import { renderDateText } from '../../../../components/Layout/Header/DatePicker'
 import LimitHealthy from './LimitHealthy'
+import { PropertyFilter } from '@cloudscape-design/components'
+import axios from 'axios'
 
 interface IFilters {
     onApply: (obj: {
@@ -59,6 +62,7 @@ interface IFilters {
         lifecycle: boolean[] | undefined
         activeTimeRange: DateRange | undefined
         eventTimeRange: DateRange | undefined
+        jobID: string[] | undefined
     }) => void
     type: 'findings' | 'resources' | 'controls' | 'accounts' | 'events'
 }
@@ -106,17 +110,60 @@ export default function Filter({ onApply, type }: IFilters) {
     const [resourceCon, setResourceCon] = useState('is')
     const [dateCon, setDateCon] = useState('isBetween')
     const [eventDateCon, setEventDateCon] = useState('isBetween')
-     const today = new Date()
-     const lastWeek = new Date(
-         today.getFullYear(),
-         today.getMonth(),
-         today.getDate() - 7
-     )
-    const [ activeTimeRange, setActiveTimeRange ] =useState({
+    const today = new Date()
+    const lastWeek = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate() - 7
+    )
+    const [activeTimeRange, setActiveTimeRange] = useState({
         start: dayjs(lastWeek),
-        end: dayjs(today)
+        end: dayjs(today),
     })
-      
+    const [jobData,setJobData] = useState([])
+    const [jobs,setJobs] = useState([])
+ const GetJobs = () => {
+     // /compliance/api/v3/benchmark/{benchmark-id}/assignments
+     let url = ''
+     if (window.location.origin === 'http://localhost:3000') {
+         url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+     } else {
+         url = window.location.origin
+     }
+     const body = {
+         job_status : ['SUCCEEDED'],
+     }
+     // @ts-ignore
+     const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+     const config = {
+         headers: {
+             Authorization: `Bearer ${token}`,
+         },
+     }
+     //    console.log(config)
+     axios
+         .post(`${url}/main//schedule/api/v3/jobs/compliance`, body, config)
+         .then((res) => {
+             // @ts-ignore
+             const temp = []
+             // @ts-ignore
+             res.data.map((d) => {
+                 temp.push({
+                     label: d.job_id.toString(),
+                     value: d.job_id.toString(),
+                 })
+             })
+             // @ts-ignore
+             setJobData(temp)
+         })
+         .catch((err) => {
+             console.log(err)
+         })
+ }
+    useEffect(()=>{
+      GetJobs()  
+    },[])
     // const { value: eventTimeRange, setValue: setEventTimeRange } =
     //     useUrlDateRangeState(
     //         defaultEventTime(ws || ''),
@@ -135,6 +182,7 @@ export default function Filter({ onApply, type }: IFilters) {
         'resource',
         'date',
         'eventDate',
+        'job_id',
     ])
 
     useEffect(() => {
@@ -156,20 +204,107 @@ export default function Filter({ onApply, type }: IFilters) {
             //     : undefined,
         })
     }, [
-        connector,
-        conformanceStatus,
-        severity,
-        connectionID,
-        controlID,
-        benchmarkID,
-        resourceTypeID,
-        lifecycle,
+        
         activeTimeRange,
         // eventTimeRange,
     ])
-
+  const truncate = (text: string | undefined) => {
+      if (text) {
+          return text.length > 30 ? text.substring(0, 30) + '...' : text
+      }
+  }
     const { response: filters } = useComplianceApiV1FindingsFiltersCreate({})
+    const severity_data = [
+        {
+            label: 'Critical',
+            value: TypesFindingSeverity.FindingSeverityCritical,
+            color: '#6E120B',
+            iconSvg: (
+                <>
+                    <div
+                        className="h-4 w-1.5 rounded-sm"
+                        style={{
+                            backgroundColor: '#6E120B',
+                        }}
+                    />
+                </>
+            ),
+        },
+        {
+            label: 'High',
+            value: TypesFindingSeverity.FindingSeverityHigh,
+            color: '#CA2B1D',
+            iconSvg: (
+                <>
+                    <div
+                        className="h-4 w-1.5 rounded-sm"
+                        style={{
+                            backgroundColor: '#ca2b1d',
+                        }}
+                    />
+                </>
+            ),
+        },
+        {
+            label: 'Medium',
+            value: TypesFindingSeverity.FindingSeverityMedium,
+            color: '#EE9235',
+            iconSvg: (
+                <>
+                    <div
+                        className="h-4 w-1.5 rounded-sm"
+                        style={{
+                            backgroundColor: '#ee9235',
+                        }}
+                    />
+                </>
+            ),
+        },
+        {
+            label: 'Low',
+            value: TypesFindingSeverity.FindingSeverityLow,
+            color: '#F4C744',
+            iconSvg: (
+                <>
+                    <div
+                        className="h-4 w-1.5 rounded-sm"
+                        style={{
+                            backgroundColor: '#f4c744',
+                        }}
+                    />
+                </>
+            ),
+        },
+        {
+            label: 'None',
+            value: TypesFindingSeverity.FindingSeverityNone,
+            color: '#9BA2AE',
+            iconSvg: (
+                <>
+                    <div
+                        className="h-4 w-1.5 rounded-sm"
+                        style={{
+                            backgroundColor: '#9ba2ae',
+                        }}
+                    />
+                </>
+            ),
+        },
+    ]
+    const confarmance_data = [
+        {
+            label: 'Failed',
+            value: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
 
+            iconSvg: <XCircleIcon className="h-5 text-rose-600" />,
+        },
+        {
+            label: 'Passed',
+            value: GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
+
+            iconSvg: <CheckCircleIcon className="h-5 text-emerald-500" />,
+        },
+    ]
     const filterOptions = [
         {
             id: 'conformance_status',
@@ -183,10 +318,32 @@ export default function Filter({ onApply, type }: IFilters) {
                 />
             ),
             conditions: ['is'],
+            onChange: (c: any) => setConformanceStatus(c),
             setCondition: (c: string) => console.log(c),
             value: conformanceStatus,
             defaultValue: defConformanceStatus,
             onDelete: undefined,
+            data: confarmance_data,
+            types: ['findings', 'resources', 'events'],
+        },
+        {
+            id: 'job_id',
+            name: 'Job Id',
+            icon: CheckCircleIcon,
+            component: (
+                <ConformanceStatus
+                    value={conformanceStatus}
+                    defaultValue={defConformanceStatus}
+                    onChange={(c) => setConformanceStatus(c)}
+                />
+            ),
+            conditions: ['is'],
+            onChange: (c: any) => setJobs(c),
+            setCondition: (c: string) => console.log(c),
+            value: conformanceStatus,
+            defaultValue: defConformanceStatus,
+            onDelete: undefined,
+            data: jobData,
             types: ['findings', 'resources', 'events'],
         },
 
@@ -240,29 +397,31 @@ export default function Filter({ onApply, type }: IFilters) {
             ),
             conditions: ['is', 'isNot'],
             setCondition: (c: string) => setSeverityCon(c),
+            onChange: (s: any) => setSeverity(s),
             value: severity,
             defaultValue: defSeverity,
+            data: severity_data,
             onDelete: () => setSeverity(defSeverity),
             types: ['findings', 'resources', 'events'],
         },
-        {
-            id: 'limit_healthy',
-            name: 'Limit Healthy',
-            icon: CheckCircleIcon,
-            component: (
-                <LimitHealthy
-                    value={undefined}
-                    defaultValue={undefined}
-                    onChange={(c) => {}}
-                />
-            ),
-            conditions: ['is'],
-            setCondition: (c: string) => console.log(c),
-            value: conformanceStatus,
-            defaultValue: defConformanceStatus,
-            onDelete: undefined,
-            types: ['findings', 'resources', 'events'],
-        },
+        // {
+        //     id: 'limit_healthy',
+        //     name: 'Limit Healthy',
+        //     icon: CheckCircleIcon,
+        //     component: (
+        //         <LimitHealthy
+        //             value={undefined}
+        //             defaultValue={undefined}
+        //             onChange={(c) => {}}
+        //         />
+        //     ),
+        //     conditions: ['is'],
+        //     setCondition: (c: string) => console.log(c),
+        //     value: conformanceStatus,
+        //     defaultValue: defConformanceStatus,
+        //     onDelete: undefined,
+        //     types: ['findings', 'resources', 'events'],
+        // },
         {
             id: 'connection',
             name: 'Cloud Account',
@@ -281,6 +440,8 @@ export default function Filter({ onApply, type }: IFilters) {
             conditions: ['is', 'isNot'],
             setCondition: (c: string) => setConnectionCon(c),
             value: connectionID,
+            onChange: (s: any) => setConnectionID(s),
+
             defaultValue: [],
             onDelete: () => setConnectionID([]),
             data: filters?.connectionID,
@@ -305,6 +466,7 @@ export default function Filter({ onApply, type }: IFilters) {
             setCondition: (c: string) => setControlCon(c),
             value: controlID,
             defaultValue: [],
+            onChange: (s: any) => setControlID(s),
             onDelete: () => setControlID([]),
             data: filters?.controlID,
             types: ['findings', 'resources', 'events'],
@@ -328,6 +490,7 @@ export default function Filter({ onApply, type }: IFilters) {
             setCondition: (c: string) => setBenchmarkCon(c),
             value: benchmarkID,
             defaultValue: [],
+            onChange: (s: any) => setBenchmarkCon(s),
             onDelete: () => setBenchmarkID([]),
             data: filters?.benchmarkID,
             types: ['findings', 'resources', 'events', 'controls', 'accounts'],
@@ -350,6 +513,7 @@ export default function Filter({ onApply, type }: IFilters) {
             conditions: ['is', 'isNot'],
             setCondition: (c: string) => setResourceCon(c),
             value: resourceTypeID,
+            onChange: (s: any) => setResourceTypeID(s),
             defaultValue: [],
             onDelete: () => setResourceTypeID([]),
             data: filters?.resourceTypeID,
@@ -395,29 +559,150 @@ export default function Filter({ onApply, type }: IFilters) {
         //     types: ['findings'],
         // },
     ]
-
-    const renderFilters = selectedFilters.map((sf) => {
-        const f = filterOptions.find((o) => o.id === sf)
-        return (
-            f?.types.includes(type) && (
-                <>
-                    {f.id == 'date' ? (
-                        <>
-                            <Col numColSpan={4}>{f.component}</Col>
-                        </>
-                    ) : (
-                        <>
-                            <Col numColSpan={2}>{f.component}</Col>
-                        </>
-                    )}
-                </>
-            )
-        )
+    const [query, setQuery] = useState({
+        tokens: [
+            {
+                propertyKey: 'conformance_status',
+                value: 'failed',
+                operator: '=',
+            },
+        ],
+        operation: 'and',
     })
+    useEffect(()=>{
+        const conformance_status :any = []
+        const temp_severity : any = []
+        const connection: any = []
+        const control: any = []
+        const benchmark: any = []
+        const resource: any = []
+        const job_id: any = []
+        // console.log(query)
+        query.tokens.map((t: { propertyKey: string; value: string }) => {
+            if (t.propertyKey === 'conformance_status') {
+                conformance_status.push(t.value)
+            }
+            if (t.propertyKey === 'severity') {
+                temp_severity.push(t.value)
+            }
+            if (t.propertyKey === 'connection') {
+                connection.push(t.value)
+            }
+            if (t.propertyKey === 'control') {
+                control.push(t.value)
+            }
+            if (t.propertyKey === 'benchmark') {
+                benchmark.push(t.value)
+            }
+            if (t.propertyKey === 'resource') {
+                resource.push(t.value)
+            }
+            if (t.propertyKey === 'job_id') {
+                job_id.push(t.value)
+            }
+        })
+        // @ts-ignore
+        onApply({
+            connector,
+            conformanceStatus: conformance_status,
+            severity: temp_severity,
+            connectionID: connection,
+            controlID: control,
+            benchmarkID : benchmark,
+            resourceTypeID: resource,
+            lifecycle,
+            jobID: job_id,
+           
+            activeTimeRange: selectedFilters.includes('date')
+                ? activeTimeRange
+                : undefined,
+            // eventTimeRange: selectedFilters.includes('eventDate')
+            //     ? eventTimeRange
+            //     : undefined,
+        })
+    },[query])
+    const renderFilters = () => {
+        let date_filter = filterOptions.find((o) => o.id === 'date')
+        let has_date = selectedFilters.includes('date')
+        // @ts-ignore
+
+        const options = []
+        // @ts-ignore
+
+        const properties = []
+        selectedFilters.map((sf) => {
+            const f = filterOptions.find((o) => o.id === sf)
+            if (f?.types?.includes(type)) {
+                properties.push({
+                    key: f.id,
+                    operators: ['='],
+                    propertyLabel: f.name,
+                    groupValuesLabel: `${f.name}  Values`,
+                });
+                if (f.id == 'severity' || f.id == 'conformance_status' || f.id == 'job_id') {
+                    f?.data?.map((d) => {
+                        options.push({
+                            propertyKey: f.id.toString(),
+                            // @ts-ignore
+
+                            label: d?.label.toString(),
+                            // @ts-ignore
+
+                            value: d?.value.toString(),
+                            // @ts-ignore
+
+                            iconSvg: d?.iconSvg?.toString(),
+                        })
+                    })
+                } else {
+                    f?.data?.map((d) => {
+                        options.push({
+                            propertyKey: f.id.toString(),
+                            // @ts-ignore
+
+                            label: d?.displayName.toString(),
+                            // @ts-ignore
+
+                            value: d?.key.toString(),
+                        })
+                    })
+                }
+            }
+        });
+
+        return (
+            <>
+                <PropertyFilter
+                    // @ts-ignore
+                    query={query}
+                    // @ts-ignore
+                    className="w-full"
+                    // @ts-ignore
+                    onChange={({ detail }) => setQuery(detail)}
+                    // countText="5 matches"
+                    // enableTokenGroups
+                    expandToViewport
+                    hideOperations
+                    tokenLimit={2}
+                    filteringAriaLabel="Find Incidents"
+                    // @ts-ignore
+                    filteringOptions={options}
+                    filteringPlaceholder="Find Incidents"
+                    // @ts-ignore
+
+                    filteringProperties={properties}
+                    virtualScroll
+                />
+                {has_date && (
+                    <div className="w-full ">{date_filter?.component}</div>
+                )}
+            </>
+        )
+    }
 
     return (
-        <Grid numItems={10}  className="mt-4 gap-2  z-10">
-            {renderFilters}
-        </Grid>
+        <Flex flexDirection="row" className="mt-4 gap-1  z-10" alignItems='start' justifyContent='start'>
+            {renderFilters()}
+        </Flex>
     )
 }

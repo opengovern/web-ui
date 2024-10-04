@@ -185,6 +185,7 @@ export default function FindingDetail({
 
     return (
         <>
+        
             <Grid className="w-full gap-4 mb-6" numItems={2}>
                 <SummaryCard
                     title="Account"
@@ -212,7 +213,7 @@ export default function FindingDetail({
                     metric={severityBadge(finding?.severity)}
                     isString
                 />
-                <Button
+                {/* <Button
                     color="orange"
                     variant="secondary"
                     disabled={reEvaluateLoading}
@@ -229,7 +230,7 @@ export default function FindingDetail({
                         )}
                         Re-evaluate
                     </Flex>
-                </Button>
+                </Button> */}
             </Grid>
             <Tabs
                 tabs={[

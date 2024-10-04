@@ -22,16 +22,16 @@ export default function Library() {
                         }}
                     >
                         <TabList>
-                            <Tab
+                            {/* <Tab
                                 onClick={() => {
                                     setTab(0)
                                 }}
                             >
                                 Benchmarks
-                            </Tab>
+                            </Tab> */}
                             <Tab
                                 onClick={() => {
-                                    setTab(1)
+                                    setTab(0)
                                 }}
                             >
                                 Controls
@@ -39,22 +39,22 @@ export default function Library() {
 
                             <Tab
                                 onClick={() => {
-                                    setTab(2)
+                                    setTab(1)
                                 }}
                             >
                                 Parameters
                             </Tab>
                         </TabList>
                         <TabPanels>
-                            <TabPanel>
+                            {/* <TabPanel>
                                 {tab == 0 && (
                                     <>
                                         <AllBenchmarks />
                                     </>
                                 )}
-                            </TabPanel>
+                            </TabPanel> */}
                             <TabPanel>
-                                {tab == 1 && (
+                                {tab == 0 && (
                                     <>
                                         <AllControls />
                                     </>
@@ -62,7 +62,7 @@ export default function Library() {
                             </TabPanel>
 
                             <TabPanel>
-                                {tab == 2 && (
+                                {tab == 1 && (
                                     <>
                                         <SettingsParameters />
                                     </>
@@ -124,12 +124,12 @@ export default function Library() {
                                 <main>
                                     <Grid
                                         // flexDirection="row"
-                                        numItems={3}
+                                        numItems={2}
                                         // justifyContent="center"
                                         // alignItems="center"
                                         className="mt-5 gap-8 flex-col w-full"
                                     >
-                                        <Card
+                                        {/* <Card
                                             className=" cursor-pointer flex justify-center items-center"
                                             onClick={() => {
                                                 setTab(0)
@@ -172,11 +172,11 @@ export default function Library() {
                                                     </Title>
                                                 </Flex>
                                             </Flex>
-                                        </Card>
+                                        </Card> */}
                                         <Card
                                             className=" cursor-pointer flex justify-center items-center"
                                             onClick={() => {
-                                                setTab(1)
+                                                setTab(0)
                                                 setShow(true)
                                             }}
                                         >
@@ -219,7 +219,7 @@ export default function Library() {
                                         <Card
                                             className=" cursor-pointer flex justify-center items-center"
                                             onClick={() => {
-                                                setTab(2)
+                                                setTab(1)
                                                 setShow(true)
                                             }}
                                         >

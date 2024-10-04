@@ -948,6 +948,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
     severity?: TypesFindingSeverity[]
     /** @example [true] */
     stateActive?: boolean[]
+    /**@example [477] */
+    jobID? : string[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata {

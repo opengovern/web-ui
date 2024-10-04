@@ -20,7 +20,7 @@ interface IConformanceStatus {
     ) => void
 }
 
-export default function ConformanceStatus({
+export default function LimitHealthy({
     value,
     defaultValue,
     onChange,
@@ -28,28 +28,28 @@ export default function ConformanceStatus({
     const options = [
       
         {
-            label: 'Failed',
+            label: 'Yes',
             value: 
-                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+                true,
             
             iconSvg: <XCircleIcon className="h-5 text-rose-600" />,
         },
         {
-            label: 'Passed',
+            label: 'No',
             value: 
-                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
+                false,
             
             iconSvg: <CheckCircleIcon className="h-5 text-emerald-500" />,
         },
     ]
   const [selectedOptions, setSelectedOptions] = useState([
-      {
-          label: 'Failed',
-          value: 
-              GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+    //   {
+    //       label: 'Failed',
+    //       value: 
+    //           GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
           
-          iconSvg: <XCircleIcon className="h-5 text-rose-600" />,
-      },
+    //       iconSvg: <XCircleIcon className="h-5 text-rose-600" />,
+    //   },
   ])
    useEffect(() => {
        if (selectedOptions.length === 0) {
@@ -80,8 +80,7 @@ export default function ConformanceStatus({
                 // @ts-ignore
                 options={options}
                 // filteringType="auto"
-                tokenLimit={0}
-                placeholder="Incident"
+                placeholder="Limit to Healthy Integrations"
             />
             {/* {options.map((o) => (
                 <Radio

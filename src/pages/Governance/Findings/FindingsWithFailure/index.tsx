@@ -34,6 +34,7 @@ import {
     PropertyFilter,
 } from '@cloudscape-design/components'
 import { AppLayout, SplitPanel } from '@cloudscape-design/components'
+import Filter from '../Filter'
 export const columns = (isDemo: boolean) => {
     const temp: IColumn<
         GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
@@ -284,6 +285,7 @@ interface ICount {
         lifecycle: boolean[] | undefined
         activeTimeRange: DateRange | undefined
         eventTimeRange: DateRange | undefined
+        jobID: string[] | undefined
     }
 }
 
@@ -300,6 +302,7 @@ export default function FindingsWithFailure({ query }: ICount) {
     const [totalCount, setTotalCount] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
     const isDemo = useAtomValue(isDemoAtom)
+     const [queries, setQuery] = useState(query)
   const truncate = (text: string | undefined) => {
       if (text) {
           return text.length > 40 ? text.substring(0, 40) + '...' : text
@@ -312,24 +315,27 @@ export default function FindingsWithFailure({ query }: ICount) {
         api.compliance
             .apiV1FindingsCreate({
                 filters: {
-                    connector: query.connector.length ? [query.connector] : [],
-                    controlID: query.controlID,
-                    connectionID: query.connectionID,
-                    benchmarkID: query.benchmarkID,
-                    severity: query.severity,
-                    resourceTypeID: query.resourceTypeID,
-                    conformanceStatus: query.conformanceStatus,
-                    stateActive: query.lifecycle,
-                    ...(query.eventTimeRange && {
+                    connector: queries.connector.length
+                        ? [query.connector]
+                        : [],
+                    controlID: queries.controlID,
+                    connectionID: queries.connectionID,
+                    benchmarkID: queries.benchmarkID,
+                    severity: queries.severity,
+                    resourceTypeID: queries.resourceTypeID,
+                    conformanceStatus: queries.conformanceStatus,
+                    stateActive: queries.lifecycle,
+                    jobID: queries?.jobID,
+                    ...(queries.eventTimeRange && {
                         lastEvent: {
-                            from: query.eventTimeRange.start.unix(),
-                            to: query.eventTimeRange.end.unix(),
+                            from: queries.eventTimeRange.start.unix(),
+                            to: queries.eventTimeRange.end.unix(),
                         },
                     }),
-                    ...(query.activeTimeRange && {
+                    ...(queries.activeTimeRange && {
                         evaluatedAt: {
-                            from: query.activeTimeRange.start.unix(),
-                            to: query.activeTimeRange.end.unix(),
+                            from: queries.activeTimeRange.start.unix(),
+                            to: queries.activeTimeRange.end.unix(),
                         },
                     }),
                 },
@@ -344,7 +350,7 @@ export default function FindingsWithFailure({ query }: ICount) {
                 limit: 10,
                 // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                afterSortKey: page == 1 ? [] : rows[rows?.length-1].sortKey
+                afterSortKey: page == 1 ? [] : rows[rows?.length - 1].sortKey,
                 //     params.request.startRow === 0 ||
                 //     sortKey.length < 1 ||
                 //     sortKey === 'none'
@@ -361,13 +367,10 @@ export default function FindingsWithFailure({ query }: ICount) {
                 setTotalCount(resp.data.totalCount)
                 // @ts-ignore
                 if (resp.data.findings) {
-                setRows(resp.data.findings)
-
-                }
-                else{
+                    setRows(resp.data.findings)
+                } else {
                     setRows([])
                 }
-
 
                 // eslint-disable-next-line prefer-destructuring,@typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -383,14 +386,14 @@ export default function FindingsWithFailure({ query }: ICount) {
 
     useEffect(() => {
         GetRows()
-    }, [page,query])
+    }, [page,queries])
     return (
         <>
             <AppLayout
                 toolsOpen={false}
                 navigationOpen={false}
                 contentType="table"
-                className='w-full'
+                className="w-full"
                 toolsHide={true}
                 navigationHide={true}
                 splitPanelOpen={open}
@@ -618,31 +621,14 @@ export default function FindingsWithFailure({ query }: ICount) {
                             </Box>
                         }
                         filter={
-                            ''
-                            // <PropertyFilter
-                            //     // @ts-ignore
-                            //     query={undefined}
-                            //     // @ts-ignore
-                            //     onChange={({ detail }) => {
-                            //         // @ts-ignore
-                            //         setQueries(detail)
-                            //     }}
-                            //     // countText="5 matches"
-                            //     enableTokenGroups
-                            //     expandToViewport
-                            //     filteringAriaLabel="Control Categories"
-                            //     // @ts-ignore
-                            //     // filteringOptions={filters}
-                            //     filteringPlaceholder="Control Categories"
-                            //     // @ts-ignore
-                            //     filteringOptions={undefined}
-                            //     // @ts-ignore
-
-                            //     filteringProperties={undefined}
-                            //     // filteringProperties={
-                            //     //     filterOption
-                            //     // }
-                            // />
+                            <Filter
+                                // @ts-ignore
+                                type={'findings'}
+                                onApply={(e) => {
+                                    // @ts-ignore
+                                    setQuery(e)
+                                }}
+                            />
                         }
                         header={
                             <Header className="w-full">
