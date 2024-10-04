@@ -312,6 +312,7 @@ export default function EvaluateTable({
                             // setSort(event.detail.sortingColumn.sortingField)
                             // setSortOrder(!sortOrder)
                         }}
+                        
                         // sortingColumn={sort}
                         // sortingDescending={sortOrder}
                         // sortingDescending={sortOrder == 'desc' ? true : false}
@@ -501,11 +502,20 @@ export default function EvaluateTable({
                             </Flex>
                         }
                         header={
-                            <Header className="w-full">
+                            <Header
+                                counter={
+                                    totalCount? `(${totalCount})` : ''
+                                }
+                                actions={
+                                    <KButton onClick={()=>{
+                                        GetHistory()
+                                    }}>
+                                        Reload
+                                    </KButton>
+                                }
+                            className="w-full">
                                 Jobs{' '}
-                                <span className=" font-medium">
-                                    ({totalCount})
-                                </span>
+                                
                             </Header>
                         }
                         pagination={

@@ -36,6 +36,7 @@ import SpaceBetween from '@cloudscape-design/components/space-between'
 import KBadge from '@cloudscape-design/components/badge'
 import {
     BreadcrumbGroup,
+    DateRangePicker,
     Header,
     Link,
     Pagination,
@@ -279,7 +280,6 @@ export default function SettingsALLJobs() {
     const [jobTypeFilter, setJobTypeFilter] = useState<string[] | undefined>(
         findParmas('type')
     )
-    const [showHoursFilter, setShowHourFilter] = useState<number[]>(['1'])
     const [statusFilter, setStatusFilter] = useState<string[] | undefined>(
         findParmas('status')
     )
@@ -289,7 +289,11 @@ export default function SettingsALLJobs() {
     const [totalCount, setTotalCount] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
     const [propertyOptions, setPropertyOptions] = useState()
-
+  const [date, setDate] = useState({
+        type: 'relative',
+        amount: 7,
+        unit: 'day',
+  })
     const [queries, setQueries] = useState({
         tokens: [],
         operation: 'and',
@@ -374,18 +378,26 @@ export default function SettingsALLJobs() {
             }
         }
         )
+        let body = {
+            
+            pageStart: page * 10,
+            pageEnd: (page + 1) * 10,
+            
+            statusFilter: status_filter,
+            typeFilters: jobType_filter,
+        }
+        if(date){
+            if(date.type =='relative'){
+                body.interval = `${date.amount}${date.unit.charAt(0)}`
+            }
+            else{
+                body.from = date.startDate
+                body.to = date.endDate
+            }
+        }
+
         api.schedule
-            .apiV1JobsCreate({
-                hours: parseInt(showHoursFilter[0]) || 1,
-                pageStart: page * 10,
-                pageEnd: (page + 1) * 10,
-                // sortBy: params.request.sortModel?.at(0)?.colId || 'updatedAt',
-                // sortOrder:
-                //     params.request.sortModel?.at(0)?.sort?.toUpperCase() ||
-                //     'DESC',
-                statusFilter: status_filter,
-                typeFilters: jobType_filter,
-            })
+            .apiV1JobsCreate(body)
             .then((resp) => {
                 if (resp.data.jobs) {
                     setJobs(resp.data.jobs)
@@ -422,7 +434,7 @@ export default function SettingsALLJobs() {
     }
     useEffect(() => {
         GetRows()
-    }, [queries])
+    }, [queries, date])
 
     const clickedJobDetails = [
         { title: 'ID', value: clickedJob?.id },
@@ -644,46 +656,124 @@ export default function SettingsALLJobs() {
                             </Box>
                         }
                         filter={
-                            <PropertyFilter
-                                // @ts-ignore
-                                query={queries}
-                                // @ts-ignore
-                                onChange={({ detail }) => {
+                            <Flex
+                                flexDirection="row"
+                                justifyContent="start"
+                                alignItems="start"
+                                className="gap-2"
+                            >
+                                <PropertyFilter
                                     // @ts-ignore
-                                    setQueries(detail)
-                                }}
-                                // countText="5 matches"
-                                // enableTokenGroups
-                                expandToViewport
-                                filteringAriaLabel="Job Filters"
-                                // @ts-ignore
-                                // filteringOptions={filters}
-                                filteringPlaceholder="Job Filters"
-                                // @ts-ignore
-                                filteringOptions={propertyOptions}
-                                // @ts-ignore
+                                    query={queries}
+                                    // @ts-ignore
+                                    onChange={({ detail }) => {
+                                        // @ts-ignore
+                                        setQueries(detail)
+                                    }}
+                                    // countText="5 matches"
+                                    // enableTokenGroups
+                                    expandToViewport
+                                    filteringAriaLabel="Job Filters"
+                                    // @ts-ignore
+                                    // filteringOptions={filters}
+                                    filteringPlaceholder="Job Filters"
+                                    // @ts-ignore
+                                    filteringOptions={propertyOptions}
+                                    // @ts-ignore
 
-                                filteringProperties={[
-                                    {
-                                        key: 'job_type',
-                                        operators: ['='],
-                                        propertyLabel: 'Job Type',
-                                        groupValuesLabel: 'Job Type values',
-                                    },
-                                    {
-                                        key: 'job_status',
-                                        operators: [
-                                            '=',
-                                           
-                                        ],
-                                        propertyLabel: 'Job Status',
-                                        groupValuesLabel: 'Job Status values',
-                                    },
-                                ]}
-                                // filteringProperties={
-                                //     filterOption
-                                // }
-                            />
+                                    filteringProperties={[
+                                        {
+                                            key: 'job_type',
+                                            operators: ['='],
+                                            propertyLabel: 'Job Type',
+                                            groupValuesLabel: 'Job Type values',
+                                        },
+                                        {
+                                            key: 'job_status',
+                                            operators: ['='],
+                                            propertyLabel: 'Job Status',
+                                            groupValuesLabel:
+                                                'Job Status values',
+                                        },
+                                    ]}
+                                    // filteringProperties={
+                                    //     filterOption
+                                    // }
+                                />
+
+                                <DateRangePicker
+                                    onChange={({ detail }) =>
+                                        setDate(detail.value)
+                                    }
+                                    value={date}
+                                    relativeOptions={[
+                                        {
+                                            key: 'previous-5-minutes',
+                                            amount: 5,
+                                            unit: 'minute',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-30-minutes',
+                                            amount: 30,
+                                            unit: 'minute',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-1-hour',
+                                            amount: 1,
+                                            unit: 'hour',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-6-hours',
+                                            amount: 6,
+                                            unit: 'hour',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-7-days',
+                                            amount: 7,
+                                            unit: 'day',
+                                            type: 'relative',
+                                        },
+                                    ]}
+                                    hideTimeOffset
+                                    absoluteFormat= 'long-localized'
+                                    isValidRange={(range) => {
+                                        if (range.type === 'absolute') {
+                                            const [startDateWithoutTime] =
+                                                range.startDate.split('T')
+                                            const [endDateWithoutTime] =
+                                                range.endDate.split('T')
+                                            if (
+                                                !startDateWithoutTime ||
+                                                !endDateWithoutTime
+                                            ) {
+                                                return {
+                                                    valid: false,
+                                                    errorMessage:
+                                                        'The selected date range is incomplete. Select a start and end date for the date range.',
+                                                }
+                                            }
+                                            if (
+                                                new Date(range.startDate) -
+                                                    new Date(range.endDate) >
+                                                0
+                                            ) {
+                                                return {
+                                                    valid: false,
+                                                    errorMessage:
+                                                        'The selected date range is invalid. The start date must be before the end date.',
+                                                }
+                                            }
+                                        }
+                                        return { valid: true }
+                                    }}
+                                    i18nStrings={{}}
+                                    placeholder="Filter by a date and time range"
+                                />
+                            </Flex>
                         }
                         header={
                             <Header className="w-full">
