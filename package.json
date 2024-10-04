@@ -19,7 +19,7 @@
         "@react-spectrum/view": "^3.6.5",
         "@react-spring/web": "^9.7.2",
         "@sentry/cli": "^2.22.3",
-        "@sentry/react": "^7.84.0",
+        "@sentry/react": "^7.119.1",
         "@superset-ui/embedded-sdk": "^0.1.0-alpha.11",
         "@tailwindcss/forms": "^0.5.7",
         "@testing-library/jest-dom": "^5.17.0",
