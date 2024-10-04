@@ -25,7 +25,7 @@ import { ChevronRightIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
 export default function Findings() {
     const [tab, setTab] = useState<number>(0);
     const [secondTab, setSecondTab] = useState<number>(0)
-    const [show,setShow] = useState<boolean>(false)
+    const [show,setShow] = useState<boolean>(true)
     const [selectedGroup, setSelectedGroup] = useState<
         'findings' | 'resources' | 'controls' | 'accounts' | 'events'
     >('findings')
@@ -42,20 +42,20 @@ export default function Findings() {
                 break
         }
     }, [tab])
-    useEffect(() => {
-        const url = window.location.pathname.split('/')[4]
-        setShow(false);
+    // useEffect(() => {
+    //     const url = window.location.pathname.split('/')[4]
+    //     // setShow(false);
         
-        switch (url) {
-            case 'summary':
-                setTab(1)
-                break
+    //     switch (url) {
+    //         case 'summary':
+    //             setTab(1)
+    //             break
 
-            default:
-                setTab(0)
-                break
-        }
-    }, [window.location.pathname])
+    //         default:
+    //             setTab(0)
+    //             break
+    //     }
+    // }, [window.location.pathname])
  
 
     const [query, setQuery] = useState<{
@@ -71,6 +71,7 @@ export default function Findings() {
         lifecycle: boolean[] | undefined
         activeTimeRange: DateRange | undefined
         eventTimeRange: DateRange | undefined
+        jobID: string[] | undefined
     }>({
         connector: SourceType.Nil,
         conformanceStatus: [
@@ -90,6 +91,7 @@ export default function Findings() {
         lifecycle: [true, false],
         activeTimeRange: undefined,
         eventTimeRange: undefined,
+        jobID: [],
     })
 
     return (
@@ -97,9 +99,11 @@ export default function Findings() {
             {/* <TopHeader /> */}
             {show ? (
                 <>
-                    <Filter type={selectedGroup} onApply={(e) => setQuery(e)} />
+                    {/* <Filter type={selectedGroup} onApply={(e) => {
+                        // @ts-ignore
+                        setQuery(e)}} /> */}
 
-                    <Flex className="mt-2">
+                    <Flex className="mt-2 w-full">
                         <>
                             {tab == 1 && (
                                 <Summary

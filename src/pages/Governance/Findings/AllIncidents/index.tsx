@@ -35,6 +35,7 @@ interface ICount {
     lifecycle: boolean[] | undefined
     activeTimeRange: DateRange | undefined
     eventTimeRange: DateRange | undefined
+    jobID: string[] | undefined
 }
 interface Props {
     query: ICount
@@ -46,7 +47,9 @@ const GROUPS ={0:'findings' ,1:'events'}
 export default function AllIncidents({ query, setSelectedGroup ,tab,setTab}: Props) {
     return (
         <>
-            <Tabs
+            <FindingsWithFailure query={query} />
+
+            {/* <Tabs
                 onChange={({ detail }) => {
                     setTab(parseInt(detail.activeTabId))
                     // @ts-ignore
@@ -74,8 +77,7 @@ export default function AllIncidents({ query, setSelectedGroup ,tab,setTab}: Pro
                     },
                  
                 ]}
-            />
-            
+            /> */}
         </>
     )
 }

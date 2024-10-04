@@ -85,9 +85,9 @@ const [totalCount, setTotalCount] = useState<number>(0)
         if(item.propertyKey == 'enable'){
             enable.push(item.value)
         }
-        if(item.propertyKey == 'family'){
-            isSRE.push(item.value)
-        }
+        // if(item.propertyKey == 'family'){
+        //     isSRE.push(item.value)
+        // }
     }
     )
     const connector_filter = connectors.length ==1 ? connectors : []
@@ -290,19 +290,19 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                 </Header>
                                                 <Grid
                                                     numItems={9}
-                                                    className="gap-2 min-h-[80px]  w-1/2 "
+                                                    className="gap-2 min-h-[80px]  w-full "
                                                 >
-                                                    <Col numColSpan={9}>
+                                                    <Col numColSpan={4}>
                                                         <PropertyFilter
                                                             query={query}
                                                             onChange={({
                                                                 detail,
-                                                            }) =>{
-                                                                console.log(detail)
+                                                            }) => {
+                                                                console.log(
+                                                                    detail
+                                                                )
                                                                 setQuery(detail)
-
-                                                            }
-                                                            }
+                                                            }}
                                                             countText="5 matches"
                                                             // enableTokenGroups
                                                             expandToViewport
@@ -328,18 +328,18 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                                         'enable',
                                                                     value: 'No',
                                                                 },
-                                                                {
-                                                                    propertyKey:
-                                                                        'family',
-                                                                    value: 'SRE benchmark',
-                                                                },
-                                                                {
-                                                                    propertyKey:
-                                                                        'family',
-                                                                    value: 'Compliance Benchmark',
-                                                                },
+                                                                // {
+                                                                //     propertyKey:
+                                                                //         'family',
+                                                                //     value: 'SRE benchmark',
+                                                                // },
+                                                                // {
+                                                                //     propertyKey:
+                                                                //         'family',
+                                                                //     value: 'Compliance Benchmark',
+                                                                // },
                                                             ]}
-                                                            filteringPlaceholder="Find distributions"
+                                                            filteringPlaceholder="Find Frameworks"
                                                             filteringProperties={[
                                                                 {
                                                                     key: 'connector',
@@ -361,18 +361,40 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                                     groupValuesLabel:
                                                                         'Has Scope Assigments values',
                                                                 },
-                                                                {
-                                                                    key: 'family',
-                                                                    operators: [
-                                                                        '=',
-                                                                    ],
-                                                                    propertyLabel:
-                                                                        'Family',
-                                                                    groupValuesLabel:
-                                                                        'Family values',
-                                                                },
+                                                                // {
+                                                                //     key: 'family',
+                                                                //     operators: [
+                                                                //         '=',
+                                                                //     ],
+                                                                //     propertyLabel:
+                                                                //         'Family',
+                                                                //     groupValuesLabel:
+                                                                //         'Family values',
+                                                                // },
                                                             ]}
                                                         />
+                                                    </Col>
+                                                    <Col numColSpan={5}>
+                                                        <Flex
+                                                            className="w-full"
+                                                            justifyContent="end"
+                                                        >
+                                                            <Pagination
+                                                                currentPageIndex={
+                                                                    page
+                                                                }
+                                                                pagesCount={
+                                                                    totalPage
+                                                                }
+                                                                onChange={({
+                                                                    detail,
+                                                                }) =>
+                                                                    setPage(
+                                                                        detail.currentPageIndex
+                                                                    )
+                                                                }
+                                                            />
+                                                        </Flex>
                                                     </Col>
                                                 </Grid>
                                                 <BenchmarkCards
@@ -380,22 +402,6 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                     all={AllBenchmarks}
                                                     loading={loading}
                                                 />
-                                                <Flex
-                                                    className="w-full"
-                                                    justifyContent="center"
-                                                >
-                                                    <Pagination
-                                                        currentPageIndex={page}
-                                                        pagesCount={totalPage}
-                                                        onChange={({
-                                                            detail,
-                                                        }) =>
-                                                            setPage(
-                                                                detail.currentPageIndex
-                                                            )
-                                                        }
-                                                    />
-                                                </Flex>
                                             </Grid>
                                         </>
                                     )}

@@ -1,3 +1,4 @@
+// @ts-noCheck
 import { ValueFormatterParams } from 'ag-grid-community'
 import { useAtomValue } from 'jotai'
 import {
@@ -21,13 +22,23 @@ import {
     useComplianceApiV1BenchmarksSettingsCreate,
 } from '../../../../../api/compliance.gen'
 import Spinner from '../../../../../components/Spinner'
+import KTable from '@cloudscape-design/components/table'
+import Box from '@cloudscape-design/components/box'
+import SpaceBetween from '@cloudscape-design/components/space-between'
 import {
     FormField,
     RadioGroup,
     Tiles,
     Toggle,
 } from '@cloudscape-design/components'
-
+import axios from 'axios'
+import {
+    BreadcrumbGroup,
+    Header,
+    Link,
+    Pagination,
+    PropertyFilter,
+} from '@cloudscape-design/components'
 interface ISettings {
     id: string | undefined
     response: (x: number) => void
@@ -112,7 +123,9 @@ export default function Settings({
     const [allEnable, setAllEnable] = useState(autoAssign)
     const [banner, setBanner] = useState(autoAssign)
     const isDemo = useAtomValue(isDemoAtom)
-
+    const [loading, setLoading] = useState(false)
+    const [rows,setRows] = useState<any>([])
+       const [page, setPage] = useState(0)
     const {
         sendNow: sendEnable,
         isLoading: enableLoading,
@@ -154,11 +167,11 @@ export default function Settings({
         false
     )
 
-    const {
-        response: assignments,
-        isLoading,
-        sendNow: refreshList,
-    } = useComplianceApiV1AssignmentsBenchmarkDetail(String(id), {}, false)
+    // const {
+    //     response: assignments,
+    //     isLoading,
+    //     sendNow: refreshList,
+    // } = useComplianceApiV1AssignmentsBenchmarkDetail(String(id), {}, false)
 
     const {
         isLoading: changeSettingsLoading,
@@ -172,15 +185,15 @@ export default function Settings({
         }
     }, [changeSettingsLoading])
 
-    useEffect(() => {
-        if (id && !assignments) {
-            refreshList()
-        }
-        if (assignments) {
-            const count = assignments.connections?.filter((c) => c.status)
-            response(count?.length || 0)
-        }
-    }, [id, assignments])
+    // useEffect(() => {
+    //     if (id && !assignments) {
+    //         refreshList()
+    //     }
+    //     if (assignments) {
+    //         const count = assignments.connections?.filter((c) => c.status)
+    //         response(count?.length || 0)
+    //     }
+    // }, [id, assignments])
 
     useEffect(() => {
         if (transfer.connectionID !== '') {
@@ -193,23 +206,58 @@ export default function Settings({
     }, [transfer])
 
     useEffect(() => {
-        if (firstLoading) {
-            refreshList()
-        }
-        setFirstLoading(false)
+        // if (firstLoading) {
+        //     refreshList()
+        // }
+        // setFirstLoading(false)
     }, [])
 
     useEffect(() => {
         if (enableExecuted && !enableLoading) {
             setTransfer({ connectionID: '', status: false })
-            refreshList()
+            // refreshList()
         }
         if (disableExecuted && !disableLoading) {
             setTransfer({ connectionID: '', status: false })
-            refreshList()
+            // refreshList()
         }
     }, [enableExecuted, disableExecuted, enableLoading, disableLoading])
+   const GetEnabled = () => {
+       // /compliance/api/v3/benchmark/{benchmark-id}/assignments
+       setLoading(true)
+       let url = ''
+       if (window.location.origin === 'http://localhost:3000') {
+           url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+       } else {
+           url = window.location.origin
+       }
+       // @ts-ignore
+       const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
 
+       const config = {
+           headers: {
+               Authorization: `Bearer ${token}`,
+           },
+       }
+       axios
+           .get(
+               `${url}/main/compliance/api/v3/benchmark/${id}/assignments`,
+               config
+           )
+           .then((res) => {
+            setRows(res.data.items)
+       setLoading(false)
+              
+           })
+           .catch((err) => {
+       setLoading(false)
+
+               console.log(err)
+           })
+   }
+   useEffect(() => {
+       GetEnabled()
+   }, [enableExecuted, disableExecuted])
     return (
         <>
             <Flex
@@ -227,28 +275,193 @@ export default function Settings({
                         items={[
                             {
                                 value: 'Disable',
-                                label: 'Disable',
+                                label: 'Disabled',
                                 description:
                                     'Makes the framework inactive, with no assignments or audits.',
-                                disabled: true,
+                                // disabled: true,
                             },
                             {
                                 value: 'manual',
-                                label: `Custom Assignment`,
+                                label: `Enabled`,
                                 description:
                                     'Select integrations from the list below to enable the framework for auditing.',
                             },
                             {
                                 value: 'all',
-                                label: `Auto-Assign`,
+                                label: `Auto Enabled`,
                                 description:
                                     'Activates the framework on all integrations including any future integrations supported by the framework',
                             },
                         ]}
                     />
                 </Flex>
-                {banner ? (
-                    <Callout title="Provider requirements" className='w-full' color="amber">
+                <Flex className="relative">
+                    {/* {allEnable && (
+                        <Flex
+                            justifyContent="center"
+                            className="w-full h-full absolute backdrop-blur-sm z-10 top-[50px] rounded-lg"
+                            style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
+                        >
+                            <Text className="py-2 px-4 rounded bg-white border">
+                                Auto onboard enabled
+                            </Text>
+                        </Flex>
+                    )} */}
+                    <KTable
+                        className="   min-h-[450px]"
+                        // resizableColumns
+                        // variant="full-page"
+                        renderAriaLive={({
+                            firstIndex,
+                            lastIndex,
+                            totalItemsCount,
+                        }) =>
+                            `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
+                        }
+                        onSortingChange={(event) => {
+                            // setSort(event.detail.sortingColumn.sortingField)
+                            // setSortOrder(!sortOrder)
+                        }}
+                        // sortingColumn={sort}
+                        // sortingDescending={sortOrder}
+                        // sortingDescending={sortOrder == 'desc' ? true : false}
+                        // @ts-ignore
+                        onRowClick={(event) => {
+                            // console.log(event)
+                            // const row = event.detail.item
+                        }}
+                        columnDefinitions={[
+                            {
+                                id: 'id',
+                                header: 'Id',
+                                cell: (item) => item?.integration?.id,
+                                sortingField: 'id',
+                                isRowHeader: true,
+                            },
+                            {
+                                id: 'id_name',
+                                header: 'Name',
+                                cell: (item) => item?.integration?.id_name,
+                                sortingField: 'id',
+                                isRowHeader: true,
+                            },
+                            {
+                                id: 'integration',
+                                header: 'Integration',
+                                cell: (item) => item?.integration?.integration,
+                                sortingField: 'id',
+                                isRowHeader: true,
+                            },
+                            {
+                                id: 'integration_tracker',
+                                header: 'Integration Tracker',
+                                cell: (item) =>
+                                    item?.integration?.integration_tracker,
+                                sortingField: 'id',
+                                isRowHeader: true,
+                            },
+                            {
+                                id: 'enable',
+                                header: 'Enable',
+                                cell: (item) => (
+                                    <>
+                                        <Switch
+                                        disabled={banner}
+                                            onChange={(e) => {
+                                                setTransfer({
+                                                    connectionID:
+                                                        item?.integration
+                                                            ?.integration_tracker ||
+                                                        '',
+                                                    status: e,
+                                                })
+                                            }}
+                                            checked={item?.assigned}
+                                        />
+                                    </>
+                                ),
+                                sortingField: 'id',
+                                isRowHeader: true,
+                            },
+                        ]}
+                        columnDisplay={[
+                            { id: 'id', visible: true },
+                            { id: 'id_name', visible: true },
+                            { id: 'integration', visible: true },
+                            { id: 'integration_tracker', visible: true },
+                            { id: 'enable', visible: true },
+                        ]}
+                        enableKeyboardNavigation
+                        // @ts-ignore
+                        items={rows ?rows.slice(page * 10, (page + 1) * 10) : []}
+                        loading={loading}
+                        loadingText="Loading resources"
+                        // stickyColumns={{ first: 0, last: 1 }}
+                        // stripedRows
+                        trackBy="id"
+                        empty={
+                            <Box
+                                margin={{ vertical: 'xs' }}
+                                textAlign="center"
+                                color="inherit"
+                            >
+                                <SpaceBetween size="m">
+                                    <b>No resources</b>
+                                </SpaceBetween>
+                            </Box>
+                        }
+                        filter={
+                            ''
+                            // <PropertyFilter
+                            //     // @ts-ignore
+                            //     query={undefined}
+                            //     // @ts-ignore
+                            //     onChange={({ detail }) => {
+                            //         // @ts-ignore
+                            //         setQueries(detail)
+                            //     }}
+                            //     // countText="5 matches"
+                            //     enableTokenGroups
+                            //     expandToViewport
+                            //     filteringAriaLabel="Control Categories"
+                            //     // @ts-ignore
+                            //     // filteringOptions={filters}
+                            //     filteringPlaceholder="Control Categories"
+                            //     // @ts-ignore
+                            //     filteringOptions={undefined}
+                            //     // @ts-ignore
+
+                            //     filteringProperties={undefined}
+                            //     // filteringProperties={
+                            //     //     filterOption
+                            //     // }
+                            // />
+                        }
+                        header={
+                            <Header className="w-full">
+                                Assigments{' '}
+                                <span className=" font-medium">
+                                    ({rows?.length})
+                                </span>
+                            </Header>
+                        }
+                        pagination={
+                            <Pagination
+                                currentPageIndex={page + 1}
+                                pagesCount={Math.ceil(rows?.length / 10)}
+                                onChange={({ detail }) =>
+                                    setPage(detail.currentPageIndex - 1)
+                                }
+                            />
+                        }
+                    />
+                </Flex>
+                {/* {banner ? (
+                    <Callout
+                        title="Provider requirements"
+                        className="w-full"
+                        color="amber"
+                    >
                         <Flex
                             flexDirection="col"
                             alignItems="start"
@@ -267,64 +480,8 @@ export default function Settings({
                         </Flex>
                     </Callout>
                 ) : (
-                    <Flex className="relative">
-                        {allEnable && (
-                            <Flex
-                                justifyContent="center"
-                                className="w-full h-full absolute backdrop-blur-sm z-10 top-[50px] rounded-lg"
-                                style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
-                            >
-                                <Text className="py-2 px-4 rounded bg-white border">
-                                    Auto onboard enabled
-                                </Text>
-                            </Flex>
-                        )}
-                        <Table
-                            id="compliance_assignments"
-                            columns={columns(isDemo)}
-                            onCellClicked={(event) => {
-                                if (event.colDef.headerName === 'Enable') {
-                                    setTransfer({
-                                        connectionID:
-                                            event.data?.connectionID || '',
-                                        status: !(event.data?.status || false),
-                                    })
-                                }
-                            }}
-                            loading={isLoading}
-                            rowData={
-                                assignments?.connections?.sort(
-                                    (a, b) =>
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        b.providerConnectionName -
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        a.providerConnectionName
-                                ) || []
-                            }
-                            fullWidth
-                        >
-                            {/* <Flex flexDirection="col">
-                                <Flex className="bg-white p-7">
-                                    <Text className="text-gray-800 whitespace-nowrap">
-                                        Set Benchmark as Required Baseline and
-                                        Auto-Enable for All Integrations{' '}
-                                    </Text>
-                                    {enableAllLoading && enableAllExecuted ? (
-                                        <Spinner />
-                                    ) : (
-                                        <Switch
-                                            checked={allEnable}
-                                            onClick={() => sendEnableAll()}
-                                        />
-                                    )}
-                                </Flex>
-                                <Divider />
-                            </Flex> */}
-                        </Table>
-                    </Flex>
-                )}
+                  
+                )} */}
                 {/* <Divider /> */}
                 <Flex
                     className="w-full gap-2  bg-white p-7 rounded-xl mt-2"

@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from 'react'
 import FindingsWithFailure from './FindingsWithFailure'
 import TopHeader from '../../../../../components/Layout/Header'
-import Filter from './Filter'
+// import Filter from './Filter'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
     SourceType,
@@ -30,9 +30,9 @@ import {
 import Events from './Events'
 import Spinner from '../../../../../components/Spinner'
 interface Props {
-    id: string;
+    id: string
 }
-export default function Findings({id}: Props) {
+export default function Findings({ id }: Props) {
     const [tab, setTab] = useState<number>(0)
     const [selectedGroup, setSelectedGroup] = useState<
         'findings' | 'resources' | 'controls' | 'accounts' | 'events'
@@ -59,19 +59,19 @@ export default function Findings({id}: Props) {
                 break
         }
     }, [tab])
-  
+
     const findComponent = () => {
         switch (tab) {
             case 0:
-                return <FindingsWithFailure  query={query} />
+                return <FindingsWithFailure query={query} />
             case 1:
                 return <Events query={query} />
             case 2:
                 return <ControlsWithFailure query={query} />
             case 3:
-                return  <ResourcesWithFailure query={query} />
+                return <ResourcesWithFailure query={query} />
             case 4:
-                return  <FailingCloudAccounts query={query} />
+                return <FailingCloudAccounts query={query} />
             default:
                 return <Spinner />
         }
@@ -90,6 +90,7 @@ export default function Findings({id}: Props) {
         lifecycle: boolean[] | undefined
         activeTimeRange: DateRange | undefined
         eventTimeRange: DateRange | undefined
+        jobID: string[] | undefined
     }>({
         connector: SourceType.Nil,
         conformanceStatus: [
@@ -109,17 +110,18 @@ export default function Findings({id}: Props) {
         lifecycle: [true, false],
         activeTimeRange: undefined,
         eventTimeRange: undefined,
+        jobID: [],
     })
 
     return (
         <>
             {/* <TopHeader /> */}
             {/* @ts-ignore */}
-            <Filter type={selectedGroup} onApply={(e) => setQuery(e)} id={id} />
+            {/* <Filter type={selectedGroup} onApply={(e) => setQuery(e)} id={id} /> */}
             {/* <Flex className="mt-2">{findComponent()}</Flex> */}
             <Grid numItems={6} className="mt-2 gap-2">
                 {/* @ts-ignore */}
-                <Col numColSpan={1}>
+                {/* <Col numColSpan={1}>
                     <Flex
                         flexDirection="col"
                         justifyContent="center"
@@ -167,8 +169,8 @@ export default function Findings({id}: Props) {
                             Posture by Integration{' '}
                         </Button>
                     </Flex>
-                </Col>
-                <Col numColSpan={5}>{findComponent()}</Col>
+                </Col> */}
+                <Col numColSpan={6}>{findComponent()}</Col>
             </Grid>
         </>
     )
