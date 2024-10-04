@@ -55,14 +55,16 @@ export default function ScoreCategoryCard({
         <Card
             onClick={() =>
                 navigate(
-                    `/ws/${ws}/score/categories?score_category=${category}&${searchParams}`
+                    `/ws/${ws}/compliance/${category}${searchParams}`
                 )
             }
             className={` ${
                 varient === 'default'
                     ? 'gap-6 px-8 py-8 rounded-xl'
                     : 'pl-5 pr-4 py-6 rounded-lg'
-            } ${varient === 'default' ? 'items-center' : 'items-start'} flex bg-white dark:bg-kaytu-950 shadow-sm  hover:shadow-lg hover:cursor-pointer`}
+            } ${
+                varient === 'default' ? 'items-center' : 'items-start'
+            } flex bg-white dark:bg-kaytu-950 shadow-sm  hover:shadow-lg hover:cursor-pointer`}
         >
             <Flex className="relative w-fit">
                 <ProgressCircle color={color} value={percentage} size="md">
@@ -86,9 +88,7 @@ export default function ScoreCategoryCard({
                     </Title>
 
                     {costOptimization > 0 || title == 'Efficiency' ? (
-                        <Text>
-                            ${costOptimization} Waste
-                        </Text>
+                        <Text>${costOptimization} Waste</Text>
                     ) : (
                         <Text>
                             <Flex className="gap-1">

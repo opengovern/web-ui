@@ -242,15 +242,15 @@ export default function ScoreKPIs() {
                                         console.log(item,"item")
                                         return (
                                             <KPICard
-                                                link={`/ws/${ws}/score/categories?score_category=${item.benchmark_title
-                                                    .split('SRE')[1]
-                                                    .trim()}`}
+                                                link={`/ws/${ws}/compliance/${item.benchmark_id}`}
                                                 name={item.benchmark_title
                                                     .split('SRE')[1]
                                                     .trim()}
                                                 number={
-                                                    item.benchmark_id === 'sre_efficiency' ? item.cost_optimization :item
-                                                        .issues_count
+                                                    item.benchmark_id ===
+                                                    'sre_efficiency'
+                                                        ? item.cost_optimization
+                                                        : item.issues_count
                                                 }
                                                 percentage={
                                                     (item

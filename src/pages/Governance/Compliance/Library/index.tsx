@@ -5,6 +5,7 @@ import AllControls from '../All Controls';
 import AllBenchmarks from '../All Benchmarks';
 import SettingsParameters from '../../../Settings/Parameters';
 import { ChevronRightIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import { Tabs } from '@cloudscape-design/components';
 
 export default function Library() {
     const [tab, setTab] = useState<number>(0)
@@ -15,61 +16,25 @@ export default function Library() {
             {show ? (
                 <>
                     {' '}
-                    <TabGroup
-                        index={tab}
-                        onIndexChange={(index) => {
-                            setTab(index)
+                    <Tabs
+                        activeTabId={tab.toString()}
+                        onChange={({ detail }) => {
+                            setTab(parseInt(detail.activeTabId))
                         }}
-                    >
-                        <TabList>
-                            {/* <Tab
-                                onClick={() => {
-                                    setTab(0)
-                                }}
-                            >
-                                Benchmarks
-                            </Tab> */}
-                            <Tab
-                                onClick={() => {
-                                    setTab(0)
-                                }}
-                            >
-                                Controls
-                            </Tab>
-
-                            <Tab
-                                onClick={() => {
-                                    setTab(1)
-                                }}
-                            >
-                                Parameters
-                            </Tab>
-                        </TabList>
-                        <TabPanels>
-                            {/* <TabPanel>
-                                {tab == 0 && (
-                                    <>
-                                        <AllBenchmarks />
-                                    </>
-                                )}
-                            </TabPanel> */}
-                            <TabPanel>
-                                {tab == 0 && (
-                                    <>
-                                        <AllControls />
-                                    </>
-                                )}
-                            </TabPanel>
-
-                            <TabPanel>
-                                {tab == 1 && (
-                                    <>
-                                        <SettingsParameters />
-                                    </>
-                                )}
-                            </TabPanel>
-                        </TabPanels>
-                    </TabGroup>
+                        tabs={[
+                            {
+                                id: '0',
+                                label: 'Controls',
+                                content: <AllControls />,
+                            },
+                            {
+                                id: '1',
+                                label: 'Parameters',
+                                content: <SettingsParameters />,
+                            },
+                        ]}
+                    />
+                    {/*       <AllBenchmarks /> */}
                 </>
             ) : (
                 <>

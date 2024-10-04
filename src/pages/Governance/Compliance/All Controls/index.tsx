@@ -340,7 +340,7 @@ export default function AllControls() {
 
     return (
         <>
-            <TopHeader />
+            {/* <TopHeader /> */}
             {categoryLoading || loading ? (
                 <Spinner className="mt-56" />
             ) : (

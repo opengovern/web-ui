@@ -37,13 +37,13 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
         workspace !== 'callback'
     const hasTop = () => {
         if (current) {
-            console.log(current,"current")
             if (
-               ( current.includes('incidents') ||
-                current == 'integrations' ||
-                current.includes('dashboard') ||
-                current.includes('score') ) && !sub_page
-
+                (current.includes('incidents') ||
+                    current == 'integrations' ||
+                    current.includes('dashboard') ||
+                    current.includes('compliance') ||
+                    current.includes('score')) &&
+                !sub_page
             ) {
                 return false
             }

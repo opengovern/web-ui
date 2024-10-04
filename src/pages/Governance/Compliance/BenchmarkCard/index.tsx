@@ -84,10 +84,14 @@ export default function BenchmarkCards({ benchmark, all,loading }: IComplianceCa
         if (text) {
             return text.length > 25 ? text.substring(0, 25) + '...' : text
         }
+        else{
+            return '...'
+        }
     }
     return (
         <>
             <Cards
+                className='w-full'
                 ariaLabels={{
                     itemSelectionLabel: (e, t) => `select ${t.name}`,
                     selectionGroupLabel: 'Item selection',
@@ -141,15 +145,11 @@ export default function BenchmarkCards({ benchmark, all,loading }: IComplianceCa
                         },
                     ],
                 }}
-                cardsPerRow={[{ cards: 1 }, { minWidth: 500, cards: 2 }]}
+                cardsPerRow={[{ cards: 2 }]}
                 // totalItemsCount={7}
                 items={benchmark?.map((item) => {
                     return {
-                        name: all?.filter((sub) => {
-                            if (item.benchmark_id === sub.benchmark.id) {
-                                return item
-                            }
-                        })[0]?.benchmark?.title,
+                        name: item?.benchmark_title,
                         benchmark: item,
                         security_score: (item?.compliance_score * 100).toFixed(
                             0

@@ -145,7 +145,7 @@ export default function Datepicker({
                 value={val}
                 absoluteFormat="long-localized"
                 hideTimeOffset
-                rangeSelectorMode={'absolute-only'}
+                // rangeSelectorMode={'absolute-only'}
                 isValidRange={(range) => {
                     if (range.type === 'absolute') {
                         const [startDateWithoutTime] =
