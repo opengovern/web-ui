@@ -12,18 +12,12 @@ import {
 import { Fragment, useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import { useParams } from 'react-router-dom'
-import Provider from './Provider'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus,
     SourceType,
     TypesFindingSeverity,
-} from '../../../../api/api'
-import ConformanceStatus from './ConformanceStatus'
-import { useComplianceApiV1FindingsFiltersCreate } from '../../../../api/compliance.gen'
-import Others from './Others'
-import FindingLifecycle from './FindingLifecycle'
-import { compareArrays } from '../../../../components/Layout/Header/Filter'
-import ConditionDropdown from '../../../../components/ConditionDropdown'
+} from '../../../../../../../api/api'
+import { useComplianceApiV1FindingsFiltersCreate } from '../../../../../../../api/compliance.gen'
 
 import {
     CloudConnect,
@@ -33,18 +27,14 @@ import {
     Lifecycle,
     Resources,
     SeverityIcon,
-} from '../../../../icons/icons'
-import Severity from './Severity'
-import Datepicker, { IDate } from './Datepicker'
+} from '../../../../../../../icons/icons'
 import {
     DateRange,
     defaultEventTime,
     defaultFindingsTime,
     useURLParam,
     useUrlDateRangeState,
-} from '../../../../utilities/urlstate'
-import { renderDateText } from '../../../../components/Layout/Header/DatePicker'
-import LimitHealthy from './LimitHealthy'
+} from '../../../../../../../utilities/urlstate'
 import { PropertyFilter, Select } from '@cloudscape-design/components'
 import axios from 'axios'
 
@@ -66,7 +56,7 @@ interface IFilters {
         connectionGroup: string[] | undefined
     }) => void
     type: 'findings' | 'resources' | 'controls' | 'accounts' | 'events'
-    setDate: Function 
+    setDate: Function
 }
 
 export default function Filter({ onApply, type, setDate }: IFilters) {
@@ -180,7 +170,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
         'severity',
         'limit_healthy',
         'connection',
-        'control',
+        // 'control',
         'benchmark',
         'resource',
         'date',
@@ -195,7 +185,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             conformanceStatus,
             severity,
             connectionID,
-            controlID,
+            // controlID,
             benchmarkID,
             resourceTypeID,
             lifecycle,
@@ -322,13 +312,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             id: 'conformance_status',
             name: 'Conformance Status',
             icon: CheckCircleIcon,
-            component: (
-                <ConformanceStatus
-                    value={conformanceStatus}
-                    defaultValue={defConformanceStatus}
-                    onChange={(c) => setConformanceStatus(c)}
-                />
-            ),
+
             conditions: ['is'],
             onChange: (c: any) => setConformanceStatus(c),
             setCondition: (c: string) => console.log(c),
@@ -340,15 +324,9 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
         },
         {
             id: 'connectionGroup',
-            name: 'Integration Group',
+            name: 'Integration Groups',
             icon: CheckCircleIcon,
-            component: (
-                <ConformanceStatus
-                    value={conformanceStatus}
-                    defaultValue={defConformanceStatus}
-                    onChange={(c) => setConformanceStatus(c)}
-                />
-            ),
+
             conditions: ['is'],
             onChange: (c: any) => setJobs(c),
             setCondition: (c: string) => console.log(c),
@@ -362,13 +340,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             id: 'job_id',
             name: 'Job Id',
             icon: CheckCircleIcon,
-            component: (
-                <ConformanceStatus
-                    value={conformanceStatus}
-                    defaultValue={defConformanceStatus}
-                    onChange={(c) => setConformanceStatus(c)}
-                />
-            ),
+
             conditions: ['is'],
             onChange: (c: any) => setJobs(c),
             setCondition: (c: string) => console.log(c),
@@ -419,14 +391,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             id: 'severity',
             name: 'Severity',
             icon: SeverityIcon,
-            component: (
-                <Severity
-                    value={severity}
-                    defaultValue={defSeverity}
-                    condition={severityCon}
-                    onChange={(s) => setSeverity(s)}
-                />
-            ),
+
             conditions: ['is', 'isNot'],
             setCondition: (c: string) => setSeverityCon(c),
             onChange: (s: any) => setSeverity(s),
@@ -458,17 +423,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             id: 'connection',
             name: 'Cloud Account',
             icon: Id,
-            component: (
-                <Others
-                    value={connectionID}
-                    defaultValue={[]}
-                    data={filters}
-                    condition={connectionCon}
-                    type="connectionID"
-                    onChange={(o) => setConnectionID(o)}
-                    name={'Integration'}
-                />
-            ),
+
             conditions: ['is', 'isNot'],
             setCondition: (c: string) => setConnectionCon(c),
             value: connectionID,
@@ -479,45 +434,35 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             data: filters?.connectionID,
             types: ['findings', 'resources', 'events', 'controls', 'accounts'],
         },
-        {
-            id: 'control',
-            name: 'Control',
-            icon: Control,
-            component: (
-                <Others
-                    value={controlID}
-                    defaultValue={[]}
-                    data={filters}
-                    condition={controlCon}
-                    type="controlID"
-                    name={'Control'}
-                    onChange={(o) => setControlID(o)}
-                />
-            ),
-            conditions: ['is', 'isNot'],
-            setCondition: (c: string) => setControlCon(c),
-            value: controlID,
-            defaultValue: [],
-            onChange: (s: any) => setControlID(s),
-            onDelete: () => setControlID([]),
-            data: filters?.controlID,
-            types: ['findings', 'resources', 'events'],
-        },
+        // {
+        //     id: 'control',
+        //     name: 'Control',
+        //     icon: Control,
+        //     component: (
+        //         <Others
+        //             value={controlID}
+        //             defaultValue={[]}
+        //             data={filters}
+        //             condition={controlCon}
+        //             type="controlID"
+        //             name={'Control'}
+        //             onChange={(o) => setControlID(o)}
+        //         />
+        //     ),
+        //     conditions: ['is', 'isNot'],
+        //     setCondition: (c: string) => setControlCon(c),
+        //     value: controlID,
+        //     defaultValue: [],
+        //     onChange: (s: any) => setControlID(s),
+        //     onDelete: () => setControlID([]),
+        //     data: filters?.controlID,
+        //     types: ['findings', 'resources', 'events'],
+        // },
         {
             id: 'benchmark',
             name: 'Benchmark',
             icon: Compliance,
-            component: (
-                <Others
-                    value={benchmarkID}
-                    defaultValue={[]}
-                    data={filters}
-                    condition={benchmarkCon}
-                    type="benchmarkID"
-                    onChange={(o) => setBenchmarkID(o)}
-                    name={'Frameworks'}
-                />
-            ),
+
             conditions: ['is'],
             setCondition: (c: string) => setBenchmarkCon(c),
             value: benchmarkID,
@@ -531,17 +476,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             id: 'resource',
             name: 'Resource Type',
             icon: Resources,
-            component: (
-                <Others
-                    value={resourceTypeID}
-                    defaultValue={[]}
-                    data={filters}
-                    condition={resourceCon}
-                    type="resourceTypeID"
-                    onChange={(o) => setResourceTypeID(o)}
-                    name={'Resource Type'}
-                />
-            ),
+
             conditions: ['is', 'isNot'],
             setCondition: (c: string) => setResourceCon(c),
             value: resourceTypeID,
@@ -555,14 +490,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             id: 'date',
             name: type === 'events' ? 'Audit Period' : 'Last Updated',
             icon: CalendarIcon,
-            component: (
-                <Datepicker
-                    condition={dateCon}
-                    activeTimeRange={activeTimeRange}
-                    setActiveTimeRange={(v) => setActiveTimeRange(v)}
-                    name={type === 'events' ? 'Audit Period' : 'Last Updated'}
-                />
-            ),
+
             conditions: ['isBetween', 'isRelative'],
             setCondition: (c: string) => setDateCon(c),
             value: activeTimeRange,
@@ -610,7 +538,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
         const conformance_status: any = []
         const temp_severity: any = []
         const connection: any = []
-        const control: any = []
+        // const control: any = []
         const benchmark: any = []
         const resource: any = []
         const job_id: any = []
@@ -629,9 +557,9 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             if (t.propertyKey === 'connection') {
                 connection.push(t.value)
             }
-            if (t.propertyKey === 'control') {
-                control.push(t.value)
-            }
+            // if (t.propertyKey === 'control') {
+            //     control.push(t.value)
+            // }
             if (t.propertyKey === 'benchmark') {
                 benchmark.push(t.value)
             }
@@ -648,7 +576,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             conformanceStatus: conformance_status,
             severity: temp_severity,
             connectionID: connection,
-            controlID: control,
+            // controlID: control,
             benchmarkID: benchmark,
             resourceTypeID: resource,
             lifecycle,
@@ -663,70 +591,69 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             //     : undefined,
         })
     }, [query])
-    const [filter, setFilter] = useState({
-        label: 'Recent Incidents',
-        value: '1',
-    })
-    useEffect(() => {
-        // @ts-ignore
-        if (filter) {
-            // @ts-ignore
+     const [filter, setFilter] = useState({
+         label: 'Recent Incidents',
+         value: '1',
+     })
+     useEffect(() => {
+         // @ts-ignore
+         if (filter) {
+             // @ts-ignore
 
-            if (filter.value == '1') {
-                setDate({
-                    key: 'previous-3-days',
-                    amount: 3,
-                    unit: 'day',
-                    type: 'relative',
-                })
-                    setQuery({
-                        tokens: [
-                          
-                            {
-                                propertyKey: 'conformance_status',
-                                value: 'failed',
-                                operator: '=',
-                            },
-                            {
-                                propertyKey: 'connectionGroup',
-                                value: 'healthy',
-                                operator: '=',
-                            },
-                        ],
-                        operation: 'and',
-                    })
-            }
-            // @ts-ignore
-            else if (filter.value == '2') {
-                setDate({
-                    key: 'previous-3-days',
-                    amount: 3,
-                    unit: 'day',
-                    type: 'relative',
-                })
-                setQuery({
-                    tokens: [
-                        {
-                            propertyKey: 'severity',
-                            value: 'critical',
-                            operator: '=',
-                        },
-                        {
-                            propertyKey: 'conformance_status',
-                            value: 'failed',
-                            operator: '=',
-                        },
-                        {
-                            propertyKey: 'connectionGroup',
-                            value: 'healthy',
-                            operator: '=',
-                        },
-                    ],
-                    operation: 'and',
-                })
-            }
-        }
-    }, [filter])
+             if (filter.value == '1') {
+                 setDate({
+                     key: 'previous-3-days',
+                     amount: 3,
+                     unit: 'day',
+                     type: 'relative',
+                 })
+                 setQuery({
+                     tokens: [
+                         {
+                             propertyKey: 'conformance_status',
+                             value: 'failed',
+                             operator: '=',
+                         },
+                         {
+                             propertyKey: 'connectionGroup',
+                             value: 'healthy',
+                             operator: '=',
+                         },
+                     ],
+                     operation: 'and',
+                 })
+             }
+             // @ts-ignore
+             else if (filter.value == '2') {
+                 setDate({
+                     key: 'previous-3-days',
+                     amount: 3,
+                     unit: 'day',
+                     type: 'relative',
+                 })
+                 setQuery({
+                     tokens: [
+                         {
+                             propertyKey: 'severity',
+                             value: 'critical',
+                             operator: '=',
+                         },
+                         {
+                             propertyKey: 'conformance_status',
+                             value: 'failed',
+                             operator: '=',
+                         },
+                         {
+                             propertyKey: 'connectionGroup',
+                             value: 'healthy',
+                             operator: '=',
+                         },
+                     ],
+                     operation: 'and',
+                 })
+             }
+         }
+     }, [filter])
     const renderFilters = () => {
         let date_filter = filterOptions.find((o) => o.id === 'date')
         let has_date = selectedFilters.includes('date')
@@ -794,7 +721,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
                         selectedOption={filter}
                         className="w-1/5 mt-[-9px]"
                         inlineLabelText={'Saved Filters'}
-                        placeholder='Select Filter Set'
+                        placeholder="Select Filter Set"
                         // @ts-ignore
                         onChange={({ detail }) =>
                             // @ts-ignore
@@ -806,7 +733,6 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
                         ]}
                     />
                     <PropertyFilter
-                    className='w-4/5'
                         // @ts-ignore
                         query={query}
                         // @ts-ignore

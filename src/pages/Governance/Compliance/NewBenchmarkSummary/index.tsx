@@ -59,7 +59,7 @@ import Link from '@cloudscape-design/components/link'
 import Button from '@cloudscape-design/components/button'
 import Filter from './Filter'
 // import { LineChart } from '@tremor/react'
-import { ExpandableSection, SpaceBetween } from '@cloudscape-design/components'
+import { BreadcrumbGroup, ExpandableSection, SpaceBetween } from '@cloudscape-design/components'
 import ReactEcharts from 'echarts-for-react' 
 import { numericDisplay } from '../../../../utilities/numericDisplay'
 
@@ -380,8 +380,15 @@ export default function NewBenchmarkSummary() {
                 config
             )
             .then((res) => {
+                let ids=''
+                res.data.jobs.map((item ,index)=>{
+                    if(index <5){
+                    ids = ids + item.job_id + ','
+
+                    }
+                })
                 setNotification({
-                    text: `Run is Done You Job id is ${res.data.job_id}`,
+                    text: `Run is Done You Job id is ${ids}`,
                     type: 'success',
                 })
             })
@@ -443,10 +450,21 @@ export default function NewBenchmarkSummary() {
                 <Spinner className="mt-56" />
             ) : (
                 <>
+                    <BreadcrumbGroup
+                        onClick={(event) => {
+                            // event.preventDefault()
+                        }}
+                        items={[
+                            { text: 'Compliance', href: `/ws/${ws}/compliance` },
+                            { text: 'Frameworks', href: '#' },
+                        ]}
+                        ariaLabel="Breadcrumbs"
+                    />
+
                     <Container
                         disableHeaderPaddings
                         disableContentPaddings
-                        className="rounded-xl  bg-[#0f2940] p-0 text-white"
+                        className="rounded-xl  bg-[#0f2940] p-0 text-white mt-4"
                         footer={
                             false ? (
                                 <>
@@ -566,91 +584,80 @@ export default function NewBenchmarkSummary() {
                         }
                         header={
                             <Header
-                                className={`bg-[#0f2940] p-4 rounded-xl   text-white ${
+                                className={`bg-[#0f2940] p-4 pt-0 rounded-xl   text-white ${
                                     false ? 'rounded-b-none' : ''
                                 }`}
                                 variant="h2"
                                 description=""
-                                actions={
-                                    <SpaceBetween
-                                        size="xs"
-                                        direction="horizontal"
-                                    ></SpaceBetween>
-                                }
                             >
-                                <Box
-                                    className="rounded-xl same text-white"
-                                    padding={{ vertical: 'l' }}
-                                >
-                                    <Grid
-                                        gridDefinition={[
-                                            {
-                                                colspan: {
-                                                    default: 12,
-                                                    xs: 8,
-                                                    s: 9,
+                                <SpaceBetween size="xxxs" direction="vertical">
+                                    <Box className="rounded-xl same text-white pt-3 pl-3 pb-0">
+                                        <Grid
+                                            gridDefinition={[
+                                                {
+                                                    colspan: {
+                                                        default: 12,
+                                                        xs: 8,
+                                                        s: 9,
+                                                    },
                                                 },
-                                            },
-                                            {
-                                                colspan: {
-                                                    default: 12,
-                                                    xs: 4,
-                                                    s: 3,
+                                                {
+                                                    colspan: {
+                                                        default: 12,
+                                                        xs: 4,
+                                                        s: 3,
+                                                    },
                                                 },
-                                            },
-                                        ]}
-                                    >
-                                        <div>
-                                            <Box
-                                                variant="h1"
-                                                className="text-white important"
-                                                color="white"
-                                            >
-                                                <span className="text-white">
-                                                    {benchmarkDetail?.title}
-                                                </span>
-                                            </Box>
-                                            <Box
-                                                variant="p"
-                                                color="white"
-                                                margin={{
-                                                    top: 'xxs',
-                                                    bottom: 's',
-                                                }}
-                                            >
-                                                <div className="group text-white important  relative flex text-wrap justify-start">
-                                                    <Text className="test-start w-full text-white ">
-                                                        {/* @ts-ignore */}
-                                                        {truncate(
-                                                            benchmarkDetail?.description
-                                                        )}
-                                                    </Text>
-                                                    <Card className="absolute w-full text-wrap z-40 top-0 scale-0 transition-all p-2 group-hover:scale-100">
-                                                        <Text>
-                                                            {
-                                                                benchmarkDetail?.description
-                                                            }
-                                                        </Text>
-                                                    </Card>
-                                                </div>
-                                            </Box>
-                                            <Flex className='w-max'>
-                                                <Evaluate
-                                                    id={benchmarkDetail?.id}
-                                                    benchmarkDetail={
-                                                        benchmarkDetail
-                                                    }
-                                                    assignmentsCount={
-                                                        assignments
-                                                    }
-                                                    onEvaluate={(c) => {
-                                                        RunBenchmark(c)
+                                            ]}
+                                        >
+                                            <div>
+                                                <Box
+                                                    variant="h1"
+                                                    className="text-white important"
+                                                    color="white"
+                                                >
+                                                    <span className="text-white">
+                                                        {benchmarkDetail?.title}
+                                                    </span>
+                                                </Box>
+                                                <Box
+                                                    variant="p"
+                                                    color="white"
+                                                    margin={{
+                                                        top: 'xxs',
+                                                        bottom: 's',
                                                     }}
-                                                />
-                                            </Flex>
-                                        </div>
-                                    </Grid>
-                                </Box>
+                                                >
+                                                    <div className="group text-white important  relative flex text-wrap justify-start">
+                                                        <Text className="test-start w-full text-white ">
+                                                            {/* @ts-ignore */}
+                                                            {truncate(
+                                                                benchmarkDetail?.description
+                                                            )}
+                                                        </Text>
+                                                        <Card className="absolute w-full text-wrap z-40 top-0 scale-0 transition-all p-2 group-hover:scale-100">
+                                                            <Text>
+                                                                {
+                                                                    benchmarkDetail?.description
+                                                                }
+                                                            </Text>
+                                                        </Card>
+                                                    </div>
+                                                </Box>
+                                            </div>
+                                        </Grid>
+                                    </Box>
+                                    <Flex className="w-max pl-3">
+                                        <Evaluate
+                                            id={benchmarkDetail?.id}
+                                            benchmarkDetail={benchmarkDetail}
+                                            assignmentsCount={assignments}
+                                            onEvaluate={(c) => {
+                                                RunBenchmark(c)
+                                            }}
+                                        />
+                                    </Flex>
+                                </SpaceBetween>
                             </Header>
                         }
                     ></Container>

@@ -315,9 +315,10 @@ export default function FindingsWithFailure({ query }: ICount) {
     )
 
     const [date, setDate] = useState({
-        startDate: lastWeek.toISOString(),
-        endDate: today.toISOString(),
-        type: 'absolute',
+        key: 'previous-7-days',
+        amount: 7,
+        unit: 'day',
+        type: 'relative',
     })
     const truncate = (text: string | undefined) => {
         if (text) {
@@ -336,9 +337,7 @@ export default function FindingsWithFailure({ query }: ICount) {
               if (date.type == 'relative') {
                   // @ts-ignore
                     isRelative = true
-                    relative = `${date.amount}${date.unit.charAt(
-                      0
-                  )}`
+                    relative = `${date.amount}${date.unit}s`
               } else {
                   // @ts-ignore
 
@@ -528,9 +527,13 @@ export default function FindingsWithFailure({ query }: ICount) {
                                             }
                                         >
                                             <Text className="text-gray-800">
-                                                {item.resourceName}
+                                                {truncate(item.resourceName)}
                                             </Text>
-                                            <Text>{item.resourceTypeName}</Text>
+                                            <Text>
+                                                {truncate(
+                                                    item.resourceTypeName
+                                                )}
+                                            </Text>
                                         </Flex>
                                     </>
                                 ),
@@ -541,7 +544,7 @@ export default function FindingsWithFailure({ query }: ICount) {
                             {
                                 id: 'benchmarkID',
                                 header: 'Benchmark',
-                                maxWidth: 100,
+                                maxWidth: 120,
                                 cell: (item) => (
                                     <>
                                         <Text className="text-gray-800">
@@ -551,21 +554,21 @@ export default function FindingsWithFailure({ query }: ICount) {
                                                 )
                                             )}
                                         </Text>
-                                        <Text>
+                                        {/* <Text>
                                             {truncate(
                                                 item?.parentBenchmarkNames?.at(
                                                     (item?.parentBenchmarkNames
                                                         ?.length || 0) - 1
                                                 )
                                             )}
-                                        </Text>
+                                        </Text> */}
                                     </>
                                 ),
                             },
                             {
                                 id: 'controlID',
                                 header: 'Control',
-                                maxWidth: 100,
+                                maxWidth: 160,
 
                                 cell: (item) => (
                                     <>
@@ -576,15 +579,14 @@ export default function FindingsWithFailure({ query }: ICount) {
                                             className="h-full"
                                         >
                                             <Text className="text-gray-800">
-                                                {truncate(
+                                                {truncate(item?.controlTitle)}
+                                                {/* {truncate(
                                                     item?.parentBenchmarkNames?.at(
                                                         0
                                                     )
-                                                )}
+                                                )} */}
                                             </Text>
-                                            <Text>
-                                                {truncate(item?.controlTitle)}
-                                            </Text>
+                                            {/* <Text></Text> */}
                                         </Flex>
                                     </>
                                 ),
@@ -605,7 +607,7 @@ export default function FindingsWithFailure({ query }: ICount) {
                                         {item.conformanceStatus}
                                     </Badge>
                                 ),
-                                maxWidth: 100,
+                                maxWidth: 50,
                             },
                             {
                                 id: 'severity',
@@ -620,11 +622,13 @@ export default function FindingsWithFailure({ query }: ICount) {
                                             item.severity.slice(1)}
                                     </Badge>
                                 ),
-                                maxWidth: 100,
+                                maxWidth: 50,
                             },
                             {
                                 id: 'evaluatedAt',
                                 header: 'Last Evaluation',
+                                maxWidth: 100,
+
                                 cell: (item) => (
                                     // @ts-ignore
                                     <>{dateTimeDisplay(item.evaluatedAt)}</>
@@ -665,7 +669,7 @@ export default function FindingsWithFailure({ query }: ICount) {
                                 flexDirection="row"
                                 justifyContent="start"
                                 alignItems="start"
-                                className="gap-1"
+                                className="gap-1 mt-1"
                             >
                                 <Filter
                                     // @ts-ignore
@@ -674,6 +678,7 @@ export default function FindingsWithFailure({ query }: ICount) {
                                         // @ts-ignore
                                         setQuery(e)
                                     }}
+                                    setDate={setDate}
                                 />
                                 <DateRangePicker
                                     onChange={({ detail }) =>
@@ -706,6 +711,12 @@ export default function FindingsWithFailure({ query }: ICount) {
                                             key: 'previous-6-hours',
                                             amount: 6,
                                             unit: 'hour',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-3-days',
+                                            amount: 3,
+                                            unit: 'day',
                                             type: 'relative',
                                         },
                                         {

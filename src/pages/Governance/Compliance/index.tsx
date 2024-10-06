@@ -211,9 +211,196 @@ const [totalCount, setTotalCount] = useState<number>(0)
              config
          )
          .then((res) => {
-             //  const temp = []
+              const temp = [
+                  {
+                      benchmark_id: 'sre_supportability',
+                      benchmark_title: 'SRE Security',
+                      compliance_score: 0.6666666666666666,
+                      connectors: ['Azure', 'AWS'],
+                      severity_summary_by_control: {
+                          total: {
+                              total: 12,
+                              passed: 8,
+                              failed: 4,
+                          },
+                          critical: {
+                              total: 0,
+                              passed: 0,
+                              failed: 0,
+                          },
+                          high: {
+                              total: 7,
+                              passed: 4,
+                              failed: 3,
+                          },
+                          medium: {
+                              total: 3,
+                              passed: 2,
+                              failed: 1,
+                          },
+                          low: {
+                              total: 2,
+                              passed: 2,
+                              failed: 0,
+                          },
+                          none: {
+                              total: 0,
+                              passed: 0,
+                              failed: 0,
+                          },
+                      },
+                      severity_summary_by_resource: {
+                          total: {
+                              total: 19,
+                              passed: 13,
+                              failed: 6,
+                          },
+                          critical: {
+                              total: 0,
+                              passed: 0,
+                              failed: 0,
+                          },
+                          high: {
+                              total: 11,
+                              passed: 7,
+                              failed: 4,
+                          },
+                          medium: {
+                              total: 6,
+                              passed: 4,
+                              failed: 2,
+                          },
+                          low: {
+                              total: 2,
+                              passed: 2,
+                              failed: 0,
+                          },
+                          none: {
+                              total: 0,
+                              passed: 0,
+                              failed: 0,
+                          },
+                      },
+                      severity_summary_by_incidents: {
+                          none: 0,
+                          low: 0,
+                          medium: 4,
+                          high: 8,
+                          critical: 0,
+                          total: 12,
+                      },
+                      cost_optimization: 0,
+                      findings_summary: {
+                          total_count: 30,
+                          passed: 18,
+                          failed: 12,
+                      },
+                      issues_count: 12,
+                      top_integrations: [
+                          {
+                              integration_info: {
+                                  integration: 'Azure',
+                                  type: 'azure_subscription',
+                                  id: '75b0a9a9-3222-4290-bdf9-56127d550563',
+                                  id_name: 'Policy Testing Subscription',
+                                  integration_tracker:
+                                      '1c2a6b18-ac87-4f5e-a472-1e26f8704f29',
+                              },
+                              issues: 4,
+                          },
+                          {
+                              integration_info: {
+                                  integration: 'AWS',
+                                  type: 'aws_account',
+                                  id: '861370837605',
+                                  id_name: 'ADorigi',
+                                  integration_tracker:
+                                      'e6cb0afa-e624-4ca7-8b47-fa9988831137',
+                              },
+                              issues: 4,
+                          },
+                      ],
+                      top_resources_with_issues: [
+                          {
+                              field: 'Resource',
+                              key: 'o-ng68d511a2',
+                              issues: 2,
+                          },
+                          {
+                              field: 'Resource',
+                              key: '861370837605',
+                              issues: 2,
+                          },
+                          {
+                              field: 'Resource',
+                              key: '/subscriptions/75b0a9a9-3222-4290-bdf9-56127d550563/resourceGroups/policy-testing-us-east/providers/Microsoft.KeyVault/vaults/vm-policy-test-keyvault2',
+                              issues: 1,
+                          },
+                          {
+                              field: 'Resource',
+                              key: '/subscriptions/75b0a9a9-3222-4290-bdf9-56127d550563/resourceGroups/policy-testing-us-east/providers/Microsoft.KeyVault/vaults/vm-policy-test-keyvault3',
+                              issues: 1,
+                          },
+                          {
+                              field: 'Resource',
+                              key: '/subscriptions/75b0a9a9-3222-4290-bdf9-56127d550563/resourceGroups/policy-testing-us-east/providers/Microsoft.Storage/storageAccounts/kaytustorageaccounttest',
+                              issues: 1,
+                          },
+                      ],
+                      top_resource_types_with_issues: [
+                          {
+                              field: 'ResourceType',
+                              key: 'aws::account::account',
+                              issues: 2,
+                          },
+                          {
+                              field: 'ResourceType',
+                              key: 'microsoft.keyvault/vaults',
+                              issues: 2,
+                          },
+                          {
+                              field: 'ResourceType',
+                              key: 'microsoft.storage/storageaccounts',
+                              issues: 2,
+                          },
+                      ],
+                      top_controls_with_issues: [
+                          {
+                              field: 'Control',
+                              key: 'aws_cis_v120_1_11',
+                              issues: 2,
+                          },
+                          {
+                              field: 'Control',
+                              key: 'aws_cis_v120_1_8',
+                              issues: 2,
+                          },
+                          {
+                              field: 'Control',
+                              key: 'aws_cis_v130_1_8',
+                              issues: 2,
+                          },
+                          {
+                              field: 'Control',
+                              key: 'aws_account_alternate_contact_security_registered',
+                              issues: 2,
+                          },
+                          {
+                              field: 'Control',
+                              key: 'aws_account_alternate_contacts',
+                              issues: 2,
+                          },
+                      ],
+                      last_evaluated_at: '2024-10-06T12:21:46Z',
+                      last_job_status: 'SUCCEEDED',
+                      last_job_id: '70',
+                  },
+              ]
              setIsLoading(false)
-             setResponse(res.data)
+             res.data?.map((item) => {
+                    temp.push(item)
+             })
+             setResponse(temp)
          })
          .catch((err) => {
              setIsLoading(false)
@@ -240,6 +427,7 @@ const [totalCount, setTotalCount] = useState<number>(0)
             'sre_efficiency',
             'sre_reliability',
             'sre_supportability',
+,
         ])
     }, [])
 
@@ -249,7 +437,7 @@ const [totalCount, setTotalCount] = useState<number>(0)
             <Tabs
                 tabs={[
                     {
-                        label: 'Framewroks',
+                        label: 'Frameworks',
                         id: '0',
                         content: (
                             <>
@@ -270,12 +458,12 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                 Frameworks.
                                             </p>
                                             <Grid
-                                                numItemsMd={3}
-                                                numItemsLg={3}
-                                                className="gap-[70px] mt-6 w-full justify-items-center"
+                                                numItemsMd={4}
+                                                numItemsLg={4}
+                                                className="gap-[30px] mt-6 w-full justify-items-center"
                                             >
                                                 {isLoading || !response
-                                                    ? [1, 2, 3].map((i) => (
+                                                    ? [1, 2, 3,4].map((i) => (
                                                           <Flex className="gap-6 px-8 py-8 bg-white rounded-xl shadow-sm hover:shadow-md hover:cursor-pointer">
                                                               <Flex className="relative w-fit">
                                                                   <ProgressCircle
@@ -291,7 +479,7 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                                   flexDirection="col"
                                                                   className="gap-1"
                                                               >
-                                                                  <div className="animate-pulse h-3 w-40 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
+                                                                  <div className="animate-pulse h-3 w-20 my-2 bg-slate-200 dark:bg-slate-700 rounded" />
                                                               </Flex>
                                                           </Flex>
                                                       ))
@@ -303,7 +491,7 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                                   b.benchmark_title ===
                                                                       'SRE Efficiency'
                                                               ) {
-                                                                  return -1
+                                                                  return 1
                                                               }
                                                               if (
                                                                   a.benchmark_title ===
@@ -311,7 +499,7 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                                   b.benchmark_title ===
                                                                       'SRE Supportability'
                                                               ) {
-                                                                  return 1
+                                                                  return -1
                                                               }
                                                               if (
                                                                   a.benchmark_title ===
@@ -335,7 +523,7 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                                   b.benchmark_title ===
                                                                       'SRE Reliability'
                                                               ) {
-                                                                  return -1
+                                                                  return 1
                                                               }
                                                               return 0
                                                           })
@@ -345,7 +533,7 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                                       title={
                                                                           item.benchmark_title
                                                                               .split(
-                                                                                  'SRE'
+                                                                                  ' '
                                                                               )[1]
                                                                               .trim() ||
                                                                           ''
@@ -371,7 +559,7 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                                       category={
                                                                           item.benchmark_id
                                                                       }
-                                                                      varient="default"
+                                                                      varient="minimized"
                                                                   />
                                                               )
                                                           })}

@@ -5,7 +5,6 @@ import {
     List,
     ListItem,
     Metric,
-    ProgressBar,
     Switch,
     Text,
     Title,
@@ -38,6 +37,8 @@ import {
 import { useComplianceApiV1QueriesSyncList } from '../../../api/compliance.gen'
 import { getErrorMessage } from '../../../types/apierror'
 import { ConvertToBoolean } from '../../../utilities/bool'
+import axios from 'axios'
+import { ProgressBar } from '@cloudscape-design/components'
 
 
 interface ITextMetric {
@@ -125,12 +126,12 @@ export default function SettingsEntitlement() {
     )
     const { response: currentWorkspace, isLoading: loadingCurrentWS } =
         useWorkspaceApiV1WorkspaceCurrentList()
-    const { response: ownerResp, isLoading: ownerIsLoading } =
-        useAuthApiV1UserDetail(
-            currentWorkspace?.ownerId || '',
-            {},
-            !loadingCurrentWS
-        )
+    // const { response: ownerResp, isLoading: ownerIsLoading } =
+    //     useAuthApiV1UserDetail(
+    //         currentWorkspace?.ownerId || '',
+    //         {},
+    //         !loadingCurrentWS
+    //     )
 
     const noOfHosts = 0 // metricsResp?.count || 0
 
@@ -235,7 +236,75 @@ export default function SettingsEntitlement() {
           sendNow: PurgeData,
       } = useWorkspaceApiV3PurgeSampleData({}, false)
 
-    return isLoading || loadingCurrentWS || ownerIsLoading ? (
+        const [status,setStatus] = useState();
+        const [percentage, setPercentage] = useState()
+        const [intervalId, setIntervalId] = useState()
+
+
+ const GetStatus = () => {
+     let url = ''
+    //  setLoading(true)
+     if (window.location.origin === 'http://localhost:3000') {
+         url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+     } else {
+         url = window.location.origin
+     }
+     // @ts-ignore
+     const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+     const config = {
+         headers: {
+             Authorization: `Bearer ${token}`,
+         },
+     }
+    
+
+     axios
+         .get(`${url}/main/workspace/api/v3/migration/status `, config)
+         .then((res) => {
+            setStatus(res.data.status)
+            setPercentage(res.data.Summary?.progress_percentage)
+            if(intervalId){
+                if(res.data.status === 'SUCCEEDED'){
+                    clearInterval(intervalId)
+                }
+               
+            }
+            else{
+                if(res.data.status !== 'SUCCEEDED'){
+                   const id = setInterval(GetStatus, 10000)
+                   // @ts-ignore
+                   setIntervalId(id)
+                }
+            }
+             //  const temp = []
+             //  if (!res.data.items) {
+             //      setLoading(false)
+             //  }
+             //  setBenchmarks(res.data.items)
+             //  setTotalPage(Math.ceil(res.data.total_count / 6))
+             //  setTotalCount(res.data.total_count)
+         })
+         .catch((err) => {
+             //  setLoading(false)
+             //  setBenchmarks([])
+
+             console.log(err)
+         })
+ }
+ useEffect(()=>{
+    GetStatus()
+ },[])
+  useEffect(() => {
+        if (syncExecuted && !syncLoading) {
+            const id = setInterval(GetStatus,10000)
+            // @ts-ignore
+            setIntervalId(id)
+            // setValue(response?.value || '')
+            // window.location.reload()
+        }
+  }, [syncLoading, syncExecuted])
+    return isLoading || loadingCurrentWS ? (
         <Flex justifyContent="center" className="mt-56">
             <Spinner />
         </Flex>
@@ -283,7 +352,7 @@ export default function SettingsEntitlement() {
                 </Card> */}
             {/* </Grid> */}
             <Card key="summary" className=" w-full">
-                <Title className="font-semibold">Workspace Settings</Title>
+                <Title className="font-semibold">Settings</Title>
                 <List className="mt-3">
                     {wsDetails.map((item) => (
                         <ListItem key={item.title} className="my-1">
@@ -303,13 +372,15 @@ export default function SettingsEntitlement() {
                         />
                     </ListItem> */}
                 </List>
-                <Title className="font-semibold mt-8">Git Repositories</Title>
+                <Title className="font-semibold mt-8">
+                    Platform Configuration
+                </Title>
                 <Flex justifyContent="start" className="truncate space-x-4">
                     <div className="truncate">
                         <Text className="truncate text-sm">
-                            At the present time, for git repositories to
-                            function, they need to be public and accessible over
-                            https://.
+                            Platform Controls, Frameworks, and Queries are
+                            sourced from Git repositories. Currently, only
+                            public repositories are supported.
                         </Text>
                     </div>
                 </Flex>
@@ -331,11 +402,31 @@ export default function SettingsEntitlement() {
                         variant="secondary"
                         className="ml-2"
                         loading={syncExecuted && syncLoading}
+                        disabled={status !== 'SUCCEEDED'}
                         onClick={() => runSync()}
                     >
-                        Re-Sync
+                        <Flex flexDirection="row" className="gap-2">
+                            {status !== 'SUCCEEDED' && (
+                                <Spinner className=" w-4 h-4" />
+                            )}
+                            {status === 'SUCCEEDED' ? 'Re-Sync' : status}
+                        </Flex>
                     </Button>
                 </Flex>
+                {status !== 'SUCCEEDED' && (
+                    <>
+                        <Flex className="w-full">
+                            <ProgressBar
+                                value={percentage}
+                                className="w-full"
+                                // additionalInfo="Additional information"
+                                description={status}
+                                resultText="Configuration done"
+                                label="Platform Configuration"
+                            />
+                        </Flex>
+                    </>
+                )}
 
                 <Title className="font-semibold mt-8">App configurations</Title>
 
@@ -379,19 +470,16 @@ export default function SettingsEntitlement() {
                     </TabGroup>
                 </Flex>
                 <Title className="font-semibold mt-8">Sample Data</Title>
-                <Flex
-                    justifyContent='between'
-                    alignItems='center'
-                >
+                <Flex justifyContent="between" alignItems="center">
                     <Text className="font-normal w-full">
                         {' '}
                         The app can be loaded with sample data, allowing you to
                         explore features without setting up integrations.
                     </Text>
                     <Flex
-                        className='gap-2'
-                        justifyContent='end'
-                        alignItems='center'
+                        className="gap-2"
+                        justifyContent="end"
+                        alignItems="center"
                     >
                         <Button
                             variant="secondary"
@@ -401,7 +489,6 @@ export default function SettingsEntitlement() {
                                 loadData()
                                 setSample(true)
                                 // window.location.reload()
-
                             }}
                         >
                             Load Sample Data
@@ -416,7 +503,7 @@ export default function SettingsEntitlement() {
                                 // window.location.reload()
                             }}
                         >
-                           Purge Sample Data
+                            Purge Sample Data
                         </Button>
                     </Flex>
                 </Flex>
