@@ -600,6 +600,11 @@ export default function Filter({ onApply, type }: IFilters) {
                 value: 'failed',
                 operator: '=',
             },
+            {
+                propertyKey: 'connectionGroup',
+                value: 'healthy',
+                operator: '=',
+            },
         ],
         operation: 'and',
     })
