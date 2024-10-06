@@ -13,7 +13,7 @@ import {
     DocumentTextIcon,
     PlusIcon,
 } from '@heroicons/react/24/outline'
-import { Cards, Link } from '@cloudscape-design/components'
+import { Badge, Cards, Link } from '@cloudscape-design/components'
 const data = [
     {
         id: 1,
@@ -181,24 +181,44 @@ export default function Dashboard() {
                                                 href={`./ws/${workspace}/dashboard/${item.page}`}
                                                 fontSize="heading-m"
                                             >
-                                                {item.name}
+                                                <Flex
+                                                    className="w-100"
+                                                    justifyContent="between"
+                                                    alignItems="center"
+                                                >
+                                                    <Flex
+                                                        className="w-100 min-w-max"
+                                                        justifyContent="start"
+                                                    >
+                                                        {item.name}
+                                                    </Flex>
+                                                    <Flex
+                                                        justifyContent="end"
+                                                        className="gap-2"
+                                                    >
+                                                      <Badge>{item.label}</Badge>
+                                                    </Flex>
+                                                </Flex>
                                             </Link>
                                         ),
                                         sections: [
                                             {
                                                 id: 'ss',
                                                 header: '',
-                                                content: (item) => (<>
-                                                                                                <div className="label text-tremor-default font-medium w-fit text-tremor-content-strong dark:text-dark-tremor-content-strong bg-gray-200 p-1 rounded">
-                                                                                                    {item.label}
-                                                                                                </div>
-                                                </>),
+                                                content: (item) => (
+                                                    <>
+                                                       
+                                                    </>
+                                                ),
                                             },
                                             {
                                                 id: 'description',
                                                 header: 'Description',
-                                                content: (item) =>
-                                                    item.description,
+                                                content: (item) => (
+                                                    <div className=" text-wrap">
+                                                        {item.description}
+                                                    </div>
+                                                ),
                                             },
                                         ],
                                     }}
