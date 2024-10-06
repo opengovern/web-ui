@@ -48,6 +48,7 @@ import {
     ContentLayout,
     SplitPanel,
 } from '@cloudscape-design/components'
+import KButton from '@cloudscape-design/components/button'
 import KeyValuePairs from '@cloudscape-design/components/key-value-pairs'
 const columns = () => {
     const temp: IColumn<any, any>[] = [
@@ -284,15 +285,17 @@ export default function SettingsALLJobs() {
         findParmas('status')
     )
     const [allStatuses, setAllStatuses] = useState<Option[]>([])
+    const [loading, setLoading] = useState(false)
     const [jobs, setJobs] = useState([])
     const [page, setPage] = useState(0)
     const [totalCount, setTotalCount] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
     const [propertyOptions, setPropertyOptions] = useState()
   const [date, setDate] = useState({
-        type: 'relative',
-        amount: 7,
-        unit: 'day',
+      key: 'previous-6-hours',
+      amount: 6,
+      unit: 'hour',
+      type: 'relative',
   })
     const [queries, setQueries] = useState({
         tokens: [],
@@ -300,7 +303,7 @@ export default function SettingsALLJobs() {
     })
 
     const { response } = useScheduleApiV1JobsCreate({
-        hours: 24,
+        interval: "7 days",
         pageStart: 0,
         pageEnd: 1,
     })
@@ -366,6 +369,7 @@ export default function SettingsALLJobs() {
     }, [jobTypeFilter, statusFilter])
 
     const GetRows = () => {
+        setLoading(true);
         const api = new Api()
         api.instance = AxiosAPI
         const status_filter = []
@@ -379,12 +383,13 @@ export default function SettingsALLJobs() {
         }
         )
         let body = {
-            
-            pageStart: page * 10,
-            pageEnd: (page + 1) * 10,
-            
+            pageStart: page * 15,
+            pageEnd: (page + 1) * 15,
+
             statusFilter: status_filter,
             typeFilters: jobType_filter,
+            sortBy: 'updatedAt',
+            sortOrder: 'desc',
         }
         if(date){
             if(date.type =='relative'){
@@ -417,9 +422,11 @@ export default function SettingsALLJobs() {
                             ?.reduce(
                                 (prev, curr) => (prev || 0) + (curr || 0),
                                 0
-                            ) / 10
+                            ) / 15
                     )
                 )
+        setLoading(false)
+
                 // params.success({
                 //     rowData: resp.data.jobs || [],
                 //     rowCount: resp.data.summaries
@@ -429,12 +436,14 @@ export default function SettingsALLJobs() {
             })
             .catch((err) => {
                 console.log(err)
+        setLoading(false)
+
                 // params.fail()
             })
     }
     useEffect(() => {
         GetRows()
-    }, [queries, date])
+    }, [queries, date,page])
 
     const clickedJobDetails = [
         { title: 'ID', value: clickedJob?.id },
@@ -639,7 +648,7 @@ export default function SettingsALLJobs() {
                         enableKeyboardNavigation
                         // @ts-ignore
                         items={jobs}
-                        loading={false}
+                        loading={loading}
                         loadingText="Loading resources"
                         // stickyColumns={{ first: 0, last: 1 }}
                         // stripedRows
@@ -739,7 +748,7 @@ export default function SettingsALLJobs() {
                                         },
                                     ]}
                                     hideTimeOffset
-                                    absoluteFormat= 'long-localized'
+                                    absoluteFormat="long-localized"
                                     isValidRange={(range) => {
                                         if (range.type === 'absolute') {
                                             const [startDateWithoutTime] =
@@ -776,11 +785,20 @@ export default function SettingsALLJobs() {
                             </Flex>
                         }
                         header={
-                            <Header className="w-full">
+                            <Header
+                                counter={totalCount ? `(${totalCount})` : ''}
+                                actions={
+                                    <KButton
+                                        onClick={() => {
+                                            GetRows()
+                                        }}
+                                    >
+                                        Reload
+                                    </KButton>
+                                }
+                                className="w-full"
+                            >
                                 Jobs{' '}
-                                <span className=" font-medium">
-                                    ({totalCount})
-                                </span>
                             </Header>
                         }
                         pagination={

@@ -42,20 +42,20 @@ export default function Findings() {
                 break
         }
     }, [tab])
-    // useEffect(() => {
-    //     const url = window.location.pathname.split('/')[4]
-    //     // setShow(false);
+    useEffect(() => {
+        const url = window.location.pathname.split('/')[4]
+        // setShow(false);
         
-    //     switch (url) {
-    //         case 'summary':
-    //             setTab(1)
-    //             break
+        switch (url) {
+            case 'summary':
+                setTab(1)
+                break
 
-    //         default:
-    //             setTab(0)
-    //             break
-    //     }
-    // }, [window.location.pathname])
+            default:
+                setTab(0)
+                break
+        }
+    }, [window.location.pathname])
  
 
     const [query, setQuery] = useState<{

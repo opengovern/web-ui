@@ -380,8 +380,15 @@ export default function NewBenchmarkSummary() {
                 config
             )
             .then((res) => {
+                let ids=''
+                res.data.jobs.map((item ,index)=>{
+                    if(index <5){
+                    ids = ids + item.job_id + ','
+
+                    }
+                })
                 setNotification({
-                    text: `Run is Done You Job id is ${res.data.job_id}`,
+                    text: `Run is Done You Job id is ${ids}`,
                     type: 'success',
                 })
             })
