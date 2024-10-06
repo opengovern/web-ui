@@ -27,6 +27,7 @@ import {
     Box,
     Icon,
     Multiselect,
+    Select,
     SpaceBetween,
 } from '@cloudscape-design/components'
 import { Fragment, ReactNode } from 'react'
@@ -109,7 +110,7 @@ export default function Evaluate({
     const [openConfirm, setOpenConfirm] = useState(false)
     const [connections, setConnections] = useState<string[]>([])
     const [benchmarks, setBenchmarks] = useState<any[]>([])
-    const [selectedbenchmarks, setSelectedBenchmarks] = useState<any[]>([])
+    const [selectedbenchmarks, setSelectedBenchmarks] = useState<any[]>()
     const setNotification = useSetAtom(notificationAtom)
 
     // useEffect(() => {
@@ -140,9 +141,8 @@ export default function Evaluate({
                     integration_tracker: c.value,
                 }
             }),
-            benchmark_ids: selectedbenchmarks.map((c) => {
-                return c.value
-            }),
+            // @ts-ignore
+            benchmark_ids: [selectedbenchmarks?.value],
         }
         // @ts-ignore
         const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
@@ -156,8 +156,15 @@ export default function Evaluate({
         axios
             .post(`${url}/main/schedule/api/v3/compliance/run`, body, config)
             .then((res) => {
+                let ids = ''
+                // @ts-ignore
+                res.data.jobs.map((item, index) => {
+                    if (index < 5) {
+                        ids = ids + item.job_id + ','
+                    }
+                })
                 setNotification({
-                    text: `Run is Done You Can see on jobs page`,
+                    text: `Run is Done You Job id is ${ids}`,
                     type: 'success',
                 })
             })
@@ -362,7 +369,7 @@ export default function Evaluate({
             >
                 {opened && (
                     <>
-                        <Multiselect
+                        <Select
                             className="w-full mb-2"
                             // @ts-ignore
                             options={benchmarks?.map((c) => {
@@ -373,17 +380,17 @@ export default function Evaluate({
                                 }
                             })}
                             // @ts-ignore
-                            selectedOptions={selectedbenchmarks}
+                            selectedOption={selectedbenchmarks}
                             loadingText="Loading Frameworks"
                             // @ts-ignore
                             emptyText="No Frameworks"
                             loading={loading}
-                            tokenLimit={0}
+                            // tokenLimit={0}
                             filteringType="auto"
                             placeholder="Select Frameworks"
                             onChange={({ detail }) => {
                                 // @ts-ignore
-                                setSelectedBenchmarks(detail.selectedOptions)
+                                setSelectedBenchmarks(detail.selectedOption)
                             }}
                         />
                     </>

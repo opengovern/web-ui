@@ -94,7 +94,6 @@ export default function EvaluateTable({
 
     const [selectedIntegrations, setSelectedIntegrations] = useState()
 
-
     const [totalCount, setTotalCount] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
     const [jobStatus, setJobStatus] = useState()
@@ -106,9 +105,10 @@ export default function EvaluateTable({
     )
 
     const [date, setDate] = useState({
-        startDate: lastWeek.toISOString(),
-        endDate: today.toISOString(),
-        type: 'absolute',
+        key: 'previous-6-hours',
+        amount: 6,
+        unit: 'hour',
+        type: 'relative',
     })
     const GetHistory = () => {
         // /compliance/api/v3/benchmark/{benchmark-id}/assignments
@@ -142,13 +142,19 @@ export default function EvaluateTable({
             })
         }
 
-        const body = {
+        let body = {
             cursor: page,
             per_page: 20,
             job_status: temp_status,
-            integration_info : integrations,
-            start_time: date?.startDate,
-            end_time: date?.endDate,
+            integration_info: integrations,
+        }
+        if (date) {
+            if (date.type == 'relative') {
+                body.interval = `${date.amount} ${date.unit}s`
+            } else {
+                body.start_time = date.startDate
+                body.end_time = date.endDate
+            }
         }
         axios
             .post(
@@ -191,11 +197,11 @@ export default function EvaluateTable({
                 Authorization: `Bearer ${token}`,
             },
         }
-        
+
         axios
             .get(
                 `${url}/main/schedule/api/v3/benchmark/run-history/integrations`,
-                
+
                 config
             )
             .then((res) => {
@@ -248,23 +254,22 @@ export default function EvaluateTable({
     }
     useEffect(() => {
         GetHistory()
-    }, [page, jobStatus, date,selectedIntegrations])
+    }, [page, jobStatus, date, selectedIntegrations])
 
     useEffect(() => {
         GetIntegrations()
     }, [])
-    
 
     useEffect(() => {
         if (selected) {
             GetDetail()
         }
     }, [selected])
-  const truncate = (text: string | undefined) => {
-      if (text) {
-          return text.length > 30 ? text.substring(0, 30) + '...' : text
-      }
-  }
+    const truncate = (text: string | undefined) => {
+        if (text) {
+            return text.length > 30 ? text.substring(0, 30) + '...' : text
+        }
+    }
     return (
         <>
             <AppLayout
@@ -519,7 +524,7 @@ export default function EvaluateTable({
                                     className="w-1/4"
                                     placeholder="Filter by Integration"
                                     selectedOptions={selectedIntegrations}
-                                    filteringType='auto'
+                                    filteringType="auto"
                                     options={integrationData?.map((i) => {
                                         return {
                                             label: i.id_name,
@@ -527,10 +532,12 @@ export default function EvaluateTable({
                                             description: truncate(i.id),
                                         }
                                     })}
-                                    loadingText='Loading Integrations'
+                                    loadingText="Loading Integrations"
                                     loading={loadingI}
                                     onChange={({ detail }) => {
-                                        setSelectedIntegrations(detail.selectedOptions)
+                                        setSelectedIntegrations(
+                                            detail.selectedOptions
+                                        )
                                     }}
                                 />
                                 {/* default last 24 */}
@@ -539,9 +546,41 @@ export default function EvaluateTable({
                                         setDate(detail.value)
                                     }}
                                     value={date}
+                                    relativeOptions={[
+                                        {
+                                            key: 'previous-5-minutes',
+                                            amount: 5,
+                                            unit: 'minute',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-30-minutes',
+                                            amount: 30,
+                                            unit: 'minute',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-1-hour',
+                                            amount: 1,
+                                            unit: 'hour',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-6-hours',
+                                            amount: 6,
+                                            unit: 'hour',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-7-days',
+                                            amount: 7,
+                                            unit: 'day',
+                                            type: 'relative',
+                                        },
+                                    ]}
                                     absoluteFormat="long-localized"
                                     hideTimeOffset
-                                    rangeSelectorMode={'absolute-only'}
+                                    // rangeSelectorMode={'absolute-only'}
                                     isValidRange={(range) => {
                                         if (range.type === 'absolute') {
                                             const [startDateWithoutTime] =
