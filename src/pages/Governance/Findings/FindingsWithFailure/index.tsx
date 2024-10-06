@@ -315,9 +315,10 @@ export default function FindingsWithFailure({ query }: ICount) {
     )
 
     const [date, setDate] = useState({
-        startDate: lastWeek.toISOString(),
-        endDate: today.toISOString(),
-        type: 'absolute',
+        key: 'previous-7-days',
+        amount: 7,
+        unit: 'day',
+        type: 'relative',
     })
     const truncate = (text: string | undefined) => {
         if (text) {

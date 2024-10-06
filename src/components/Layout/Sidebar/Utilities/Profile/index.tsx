@@ -4,7 +4,7 @@ import {
     Bars2Icon,
 } from '@heroicons/react/24/outline'
 import { Fragment, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Popover, Transition } from '@headlessui/react'
 import { useAtomValue } from 'jotai'
 import { workspaceAtom } from '../../../../../store'
@@ -22,6 +22,7 @@ export default function Profile({ isCollapsed }: IProfile) {
     const { user, logout } = useAuth()
 
     const workspace = useAtomValue(workspaceAtom)
+    const { ws } = useParams()
 
     const [index, setIndex] = useState(
         // eslint-disable-next-line no-nested-ternary
@@ -118,21 +119,21 @@ export default function Profile({ isCollapsed }: IProfile) {
                         <Flex
                             flexDirection="col"
                             alignItems="start"
-                            className="pb-2 mb-1 border-b border-b-gray-700"
+                            className="pb-0 mb-0 "
+                            // border-b border-b-gray-700
                         >
-                            <Text className="mb-1">ACCOUNT</Text>
-                            {/* <Flex
-                                onClick={() =>
-                                    navigate(
-                                        `/ws/${workspace.current?.name}/settings?sp=profile`
-                                    )
-                                }
+                            {/* <Text className="mb-1">ACCOUNT</Text> */}
+                            <Flex
+                                onClick={() => {
+                                    // navigate(`/ws/${ws}/profile`)
+                                    navigate(`/ws/main/profile`)
+                                }}
                                 className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-kaytu-800"
                             >
                                 <Text className="text-inherit">
                                     Profile info
                                 </Text>
-                            </Flex> */}
+                            </Flex>
                             {/* <Flex
                                 onClick={() => navigate(`/ws/billing`)}
                                 className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-kaytu-800"
@@ -147,7 +148,7 @@ export default function Profile({ isCollapsed }: IProfile) {
                                 <ArrowTopRightOnSquareIcon className="w-5 text-gray-400" />
                             </Flex>
                         </Flex>
-                        <Flex flexDirection="col" alignItems="start">
+                        {/* <Flex flexDirection="col" alignItems="start">
                             <Text className="my-2">THEME</Text>
                             <TabGroup index={index} onIndexChange={setIndex}>
                                 <TabList
@@ -169,7 +170,7 @@ export default function Profile({ isCollapsed }: IProfile) {
                                     </Tab>
                                 </TabList>
                             </TabGroup>
-                        </Flex>
+                        </Flex> */}
                     </Card>
                 </Popover.Panel>
             </Transition>

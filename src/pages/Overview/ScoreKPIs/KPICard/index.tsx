@@ -33,7 +33,6 @@ export default function KPICard({ name, number, percentage, link }: Props) {
 
     return (
         <>
-            {console.log(name)}
             <div
                 onClick={() => {
                     navigate(link)

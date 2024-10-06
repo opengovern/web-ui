@@ -21,6 +21,7 @@ import {
     BoltIcon,
     ArrowUpIcon,
     ChevronDoubleUpIcon,
+    CalendarDateRangeIcon,
 } from '@heroicons/react/24/outline'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { Popover, Transition } from '@headlessui/react'
@@ -329,46 +330,46 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 count: undefined,
                 error: false,
                 // children: [
-                    // {
-                    //     name: 'Frameworks',
-                    //     page: ['compliance','compliance/:benchmarkId'],
-                    //     isPreview: false,
-                    //     isLoading: false,
-                    //     count: undefined,
-                    //     error: false,
-                    // },
-                    // {
-                    //     name: 'SCORE',
-                    //     page: 'score',
-                    //     isPreview: false,
-                    //     isLoading: false,
-                    //     count: undefined,
-                    //     error: false,
-                    // },
-                    // {
-                    //     name: ' Library',
-                    //     page: 'compliance/library',
-                    //     isPreview: false,
-                    //     isLoading: false,
-                    //     count: undefined,
-                    //     error: false,
-                    // },
-                    // {
-                    //     name: ' Benchmarks',
-                    //     page: 'compliance/benchmarks',
-                    //     isPreview: false,
-                    //     isLoading: false,
-                    //     count: undefined,
-                    //     error: false,
-                    // },
-                    // {
-                    //     name: ' Controls',
-                    //     page: 'compliance/controls',
-                    //     isPreview: false,
-                    //     isLoading: false,
-                    //     count: undefined,
-                    //     error: false,
-                    // },
+                // {
+                //     name: 'Frameworks',
+                //     page: ['compliance','compliance/:benchmarkId'],
+                //     isPreview: false,
+                //     isLoading: false,
+                //     count: undefined,
+                //     error: false,
+                // },
+                // {
+                //     name: 'SCORE',
+                //     page: 'score',
+                //     isPreview: false,
+                //     isLoading: false,
+                //     count: undefined,
+                //     error: false,
+                // },
+                // {
+                //     name: ' Library',
+                //     page: 'compliance/library',
+                //     isPreview: false,
+                //     isLoading: false,
+                //     count: undefined,
+                //     error: false,
+                // },
+                // {
+                //     name: ' Benchmarks',
+                //     page: 'compliance/benchmarks',
+                //     isPreview: false,
+                //     isLoading: false,
+                //     count: undefined,
+                //     error: false,
+                // },
+                // {
+                //     name: ' Controls',
+                //     page: 'compliance/controls',
+                //     isPreview: false,
+                //     isLoading: false,
+                //     count: undefined,
+                //     error: false,
+                // },
                 // ],
             },
             // {
@@ -476,21 +477,21 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 error: connectionsErr,
                 isPreview: false,
             },
-            {
-                name: 'Workload Optimizer',
-                page: 'workload-optimizer',
-                icon: ArrowUpCircleIcon,
-                isPreview: true,
-                isLoading: false,
-                count: undefined,
-                // error: spendCountErr,
-            },
-            {
-                name: 'Stacks',
-                page: 'stacks',
-                icon: RectangleStackIcon,
-                isPreview: true,
-            },
+            // {
+            //     name: 'Workload Optimizer',
+            //     page: 'workload-optimizer',
+            //     icon: ArrowUpCircleIcon,
+            //     isPreview: true,
+            //     isLoading: false,
+            //     count: undefined,
+            //     // error: spendCountErr,
+            // },
+            // {
+            //     name: 'Stacks',
+            //     page: 'stacks',
+            //     icon: RectangleStackIcon,
+            //     isPreview: true,
+            // },
             {
                 name: 'Automation',
                 page: 'automation',
@@ -500,41 +501,16 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
 
             {
                 name: 'Adminstration',
-                page: [
-                    'settings/about',
-                    'settings/jobs',
-                    'settings/api-keys',
-                    'settings/access',
-                    'settings/authentication',
-                ],
+                page: ['adminstration'],
                 icon: Cog6ToothIcon,
                 isPreview: false,
-                children: [
-                    {
-                        name: 'About',
-                        page: 'settings/about',
-                    },
-                    {
-                        name: 'Jobs',
-                        page: 'settings/jobs',
-                    },
-                    {
-                        name: 'Access',
-                        page: 'settings/access',
-                    },
-                    // {
-                    //     name: 'Authentication',
-                    //     page: 'settings/authentication',
-                    // },
-                    // {
-                    //     name: 'API Keys',
-                    //     page: 'settings/api-keys',
-                    // },
-                    // {
-                    //     name: 'Variables',
-                    //     page: 'settings/variables',
-                    // },
-                ],
+           
+            },
+            {
+                name: 'Jobs',
+                page: 'jobs',
+                icon: CalendarDateRangeIcon,
+                isPreview: false,
             },
         ]
     }

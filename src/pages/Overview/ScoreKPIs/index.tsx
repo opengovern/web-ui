@@ -239,7 +239,6 @@ export default function ScoreKPIs() {
                                         return 0
                                     })
                                     .map((item) => {
-                                        console.log(item,"item")
                                         return (
                                             <KPICard
                                                 link={`/ws/${ws}/compliance/${item.benchmark_id}`}

@@ -283,7 +283,7 @@ export default function SettingsEntitlement() {
                 </Card> */}
             {/* </Grid> */}
             <Card key="summary" className=" w-full">
-                <Title className="font-semibold">Workspace Settings</Title>
+                <Title className="font-semibold">Settings</Title>
                 <List className="mt-3">
                     {wsDetails.map((item) => (
                         <ListItem key={item.title} className="my-1">
