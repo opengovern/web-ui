@@ -337,7 +337,7 @@ export default function FindingsWithFailure({ query }: ICount) {
              if (date.type == 'relative') {
                  // @ts-ignore
                  isRelative = true
-                 relative = `${date.amount}${date.unit.charAt(0)}`
+                 relative = `${date.amount} ${date.unit}s`
              } else {
                  // @ts-ignore
 

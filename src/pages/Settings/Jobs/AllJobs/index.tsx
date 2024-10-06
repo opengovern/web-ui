@@ -388,7 +388,7 @@ export default function SettingsALLJobs() {
         }
         if(date){
             if(date.type =='relative'){
-                body.interval = `${date.amount}${date.unit.charAt(0)}`
+                body.interval = `${date.amount} ${date.unit}s`
             }
             else{
                 body.from = date.startDate
