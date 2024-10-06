@@ -89,6 +89,12 @@ export default function EvaluateTable({
     const [detail, setDetail] = useState()
 
     const [page, setPage] = useState(1)
+    const [integrationData, setIntegrationData] = useState()
+    const [loadingI, setLoadingI] = useState(false)
+
+    const [selectedIntegrations, setSelectedIntegrations] = useState()
+
+
     const [totalCount, setTotalCount] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
     const [jobStatus, setJobStatus] = useState()
@@ -127,10 +133,20 @@ export default function EvaluateTable({
                 temp_status.push(status.value)
             })
         }
+        const integrations = []
+        if (selectedIntegrations && selectedIntegrations?.length > 0) {
+            selectedIntegrations.map((integration) => {
+                integrations.push({
+                    integration_tracker: integration.value,
+                })
+            })
+        }
+
         const body = {
             cursor: page,
             per_page: 20,
             job_status: temp_status,
+            integration_info : integrations,
             start_time: date?.startDate,
             end_time: date?.endDate,
         }
@@ -155,6 +171,40 @@ export default function EvaluateTable({
             })
             .catch((err) => {
                 setLoading(false)
+                console.log(err)
+            })
+    }
+    const GetIntegrations = () => {
+        // /compliance/api/v3/benchmark/{benchmark-id}/assignments
+        setLoadingI(true)
+        let url = ''
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
+        }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+        
+        axios
+            .get(
+                `${url}/main/schedule/api/v3/benchmark/run-history/integrations`,
+                
+                config
+            )
+            .then((res) => {
+                setIntegrationData(res.data)
+
+                setLoadingI(false)
+            })
+            .catch((err) => {
+                setLoadingI(false)
                 console.log(err)
             })
     }
@@ -198,14 +248,23 @@ export default function EvaluateTable({
     }
     useEffect(() => {
         GetHistory()
-    }, [page, jobStatus, date])
+    }, [page, jobStatus, date,selectedIntegrations])
+
+    useEffect(() => {
+        GetIntegrations()
+    }, [])
+    
 
     useEffect(() => {
         if (selected) {
             GetDetail()
         }
     }, [selected])
-
+  const truncate = (text: string | undefined) => {
+      if (text) {
+          return text.length > 30 ? text.substring(0, 30) + '...' : text
+      }
+  }
     return (
         <>
             <AppLayout
@@ -312,7 +371,6 @@ export default function EvaluateTable({
                             // setSort(event.detail.sortingColumn.sortingField)
                             // setSortOrder(!sortOrder)
                         }}
-                        
                         // sortingColumn={sort}
                         // sortingDescending={sortOrder}
                         // sortingDescending={sortOrder == 'desc' ? true : false}
@@ -457,6 +515,24 @@ export default function EvaluateTable({
                                         setJobStatus(detail.selectedOptions)
                                     }}
                                 />
+                                <KMulstiSelect
+                                    className="w-1/4"
+                                    placeholder="Filter by Integration"
+                                    selectedOptions={selectedIntegrations}
+                                    filteringType='auto'
+                                    options={integrationData?.map((i) => {
+                                        return {
+                                            label: i.id_name,
+                                            value: i.integration_tracker,
+                                            description: truncate(i.id),
+                                        }
+                                    })}
+                                    loadingText='Loading Integrations'
+                                    loading={loadingI}
+                                    onChange={({ detail }) => {
+                                        setSelectedIntegrations(detail.selectedOptions)
+                                    }}
+                                />
                                 {/* default last 24 */}
                                 <DateRangePicker
                                     onChange={({ detail }) => {
@@ -503,19 +579,19 @@ export default function EvaluateTable({
                         }
                         header={
                             <Header
-                                counter={
-                                    totalCount? `(${totalCount})` : ''
-                                }
+                                counter={totalCount ? `(${totalCount})` : ''}
                                 actions={
-                                    <KButton onClick={()=>{
-                                        GetHistory()
-                                    }}>
+                                    <KButton
+                                        onClick={() => {
+                                            GetHistory()
+                                        }}
+                                    >
                                         Reload
                                     </KButton>
                                 }
-                            className="w-full">
+                                className="w-full"
+                            >
                                 Jobs{' '}
-                                
                             </Header>
                         }
                         pagination={

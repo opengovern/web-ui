@@ -63,7 +63,7 @@ export default function Overview() {
                         className="gap-4"
                         id="myDIV"
                     >
-                        <ScoreKPIs />
+                        {/* <ScoreKPIs /> */}
 
                         <Grid numItems={6} className="w-full gap-4 h-fit mb-4">
                             <Col numColSpan={6}>
@@ -78,7 +78,7 @@ export default function Overview() {
                     </Flex>
                 </Col>
                 <Col numColSpan={2}>
-                    <Query height={850} />
+                    <Query height={880} />
                 </Col>
             </Grid>
 

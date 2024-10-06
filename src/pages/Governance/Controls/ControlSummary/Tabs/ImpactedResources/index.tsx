@@ -388,7 +388,7 @@ export default function ImpactedResources({
                     serverSideDatasource: serverSideRows,
                 }}
             />
-            <ResourceFindingDetail
+            {/* <ResourceFindingDetail
                 resourceFinding={finding}
                 controlID={controlId}
                 showOnlyOneControl
@@ -396,7 +396,7 @@ export default function ImpactedResources({
                 onClose={() => setOpen(false)}
                 onRefresh={() => window.location.reload()}
                 linkPrefix={linkPrefix}
-            />
+            /> */}
         </>
     )
 }

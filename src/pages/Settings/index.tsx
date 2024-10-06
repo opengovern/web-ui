@@ -30,6 +30,7 @@ import {
 } from '../../api/auth.gen'
 import { recordToMap } from '../../utilities/record'
 import { ApiRole } from '../../api/api'
+import { Tabs } from '@cloudscape-design/components'
 
 const navigation = [
     {
@@ -161,8 +162,39 @@ export default function Settings() {
 
     return (
         <>
-            <TopHeader />
-            <Flex alignItems="start" justifyContent="start">
+            {/* <TopHeader /> */}
+            <Tabs
+                tabs={[
+                    {
+                        label: 'Settings',
+                        content: (
+                            <>
+                                <SettingsEntitlement />
+                            </>
+                        ),
+                        id: '0',
+                    },
+                    {
+                        label: 'Authentication',
+                        content: (
+                            <>
+                                <SettingsMembers />
+                            </>
+                        ),
+                        id: '1',
+                    },
+                    {
+                        label: 'API',
+                        content: (
+                            <>
+                                <SettingsWorkspaceAPIKeys />
+                            </>
+                        ),
+                        id: '2',
+                    },
+                ]}
+            />
+            {/* <Flex alignItems="start" justifyContent="start">
                 <Flex flexDirection="col" alignItems="start" className="w-fit">
                     <nav className="w-56 text-sm">
                         <ul className="space-y-1.5">
@@ -245,7 +277,7 @@ export default function Settings() {
                         {selectedTab}
                     </Flex>
                 </Flex>
-            </Flex>
+            </Flex> */}
         </>
     )
 }

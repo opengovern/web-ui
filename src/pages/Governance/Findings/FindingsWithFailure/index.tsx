@@ -315,9 +315,10 @@ export default function FindingsWithFailure({ query }: ICount) {
     )
 
     const [date, setDate] = useState({
-        startDate: lastWeek.toISOString(),
-        endDate: today.toISOString(),
-        type: 'absolute',
+        key: 'previous-7-days',
+        amount: 7,
+        unit: 'day',
+        type: 'relative',
     })
     const truncate = (text: string | undefined) => {
         if (text) {
@@ -336,9 +337,7 @@ export default function FindingsWithFailure({ query }: ICount) {
               if (date.type == 'relative') {
                   // @ts-ignore
                     isRelative = true
-                    relative = `${date.amount}${date.unit.charAt(
-                      0
-                  )}`
+                    relative = `${date.amount}${date.unit}s`
               } else {
                   // @ts-ignore
 

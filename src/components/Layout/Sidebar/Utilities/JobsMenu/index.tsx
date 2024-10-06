@@ -192,7 +192,7 @@ function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
                     color={color}
                     onClick={(e) => {
                         navigate(
-                            `/ws/${workspace}/settings/jobs?type=${jobType}`
+                            `/ws/${workspace}/jobs?type=${jobType}`
                         )
                     }}
                     // valueFormatter={dataFormatter}
@@ -280,7 +280,7 @@ export default function JobsMenu({ isCollapsed, workspace }: IJobsMenu) {
                                 iconPosition="right"
                                 onClick={() =>
                                     navigate(
-                                        `/ws/${workspace}/settings/jobs`
+                                        `/ws/${workspace}/jobs`
                                     )
                                 }
                             >

@@ -13,6 +13,7 @@ import {
     DocumentTextIcon,
     PlusIcon,
 } from '@heroicons/react/24/outline'
+import { Badge, Cards, Link } from '@cloudscape-design/components'
 const data = [
     {
         id: 1,
@@ -62,7 +63,7 @@ const data = [
     {
         id: 6,
         name: 'Spend Details by Cloud Accounts',
-        description: 'Description',
+        description: 'Cloud Spend detail at Cloud Account',
         page: 'spend-metrics',
         label: 'Built-in',
         icon: table,
@@ -164,41 +165,74 @@ export default function Dashboard() {
                                     </button>
                                 </div>
                             </div>
-                            <div className="">
-                                <Grid numItems={3} className="gap-7 mt-4">
-                                    {data.map((item) => (
-                                        <Card
-                                            key={item.id}
-                                            onClick={() => {
-                                                navigate(
-                                                    `/ws/${workspace}/dashboard/${item.page}`
-                                                )
-                                            }}
-                                            className="rounded-tremor-small cursor-pointer p-4 hover:bg-tremor-background-muted hover:dark:bg-dark-tremor-background-muted"
-                                        >
-                                            {/* content placeholder */}
-                                            <div className="flex items-start justify-start flex-col gap-1  ">
-                                                <div className=" text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
-                                                    {item.name}
-                                                </div>
-                                                <div className="label text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong bg-gray-200 p-1 rounded">
-                                                    {item.label}
-                                                </div>
-                                                <div className="content dark:text-dark-tremor-cont text-tremor-default text-tremor-content flex flex-row justify-between w-full gap-2">
-                                                    <div className="desc">
+                            <div className="mt-4">
+                                <Cards
+                                    cardsPerRow={[
+                                        { cards: 1 },
+                                        { minWidth: 500, cards: 2 },
+                                    ]}
+                                    cardDefinition={{
+                                        header: (item) => (
+                                            <Link
+                                                onClick={(e) => {
+                                                    // @ts-ignore
+                                                    e.preventDefault()
+                                                }}
+                                                href={`./ws/${workspace}/dashboard/${item.page}`}
+                                                fontSize="heading-m"
+                                            >
+                                                <Flex
+                                                    className="w-100"
+                                                    justifyContent="between"
+                                                    alignItems="center"
+                                                >
+                                                    <Flex
+                                                        className="w-100 min-w-max"
+                                                        justifyContent="start"
+                                                    >
+                                                        {item.name}
+                                                    </Flex>
+                                                    <Flex
+                                                        justifyContent="end"
+                                                        className="gap-2"
+                                                    >
+                                                      <Badge>{item.label}</Badge>
+                                                    </Flex>
+                                                </Flex>
+                                            </Link>
+                                        ),
+                                        sections: [
+                                            {
+                                                id: 'ss',
+                                                header: '',
+                                                content: (item) => (
+                                                    <>
+                                                       
+                                                    </>
+                                                ),
+                                            },
+                                            {
+                                                id: 'description',
+                                                header: 'Description',
+                                                content: (item) => (
+                                                    <div className=" text-wrap">
                                                         {item.description}
                                                     </div>
-                                                    <div className="icon">
-                                                        <img
-                                                            src={item.icon}
-                                                            className="w-[64px] h-[64px]"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Card>
-                                    ))}
-                                </Grid>
+                                                ),
+                                            },
+                                        ],
+                                    }}
+                                    items={data.map((item) => {
+                                        return {
+                                            id: item.id,
+                                            name: item.name,
+                                            description: item.description,
+                                            icon: item.icon,
+                                            page: item.page,
+                                            label: item.label,
+                                        }
+                                    })}
+                                />
                             </div>
                         </main>
                     </div>

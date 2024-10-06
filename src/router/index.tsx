@@ -45,6 +45,7 @@ import Dashboard from '../pages/Dashboard'
 import Library from '../pages/Governance/Compliance/Library'
 import Search from '../pages/Search'
 import SettingsAccess from '../pages/Settings/Access'
+import SettingsProfile from '../pages/Settings/Profile'
 
 const authRoutes = [
     {
@@ -244,12 +245,17 @@ const authRoutes = [
     },
     {
         key: 'settings page',
-        path: '/ws/:ws/settings/about',
+        path: '/ws/:ws/adminstration',
         element: <Settings />,
     },
     {
+        key: 'Profile',
+        path: '/ws/:ws/profile',
+        element: <SettingsProfile />,
+    },
+    {
         key: 'settings Jobs',
-        path: '/ws/:ws/settings/jobs',
+        path: '/ws/:ws/jobs',
         element: <SettingsJobs />,
     },
     {
