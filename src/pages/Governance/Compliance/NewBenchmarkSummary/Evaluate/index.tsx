@@ -1,4 +1,4 @@
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
@@ -21,9 +21,14 @@ import {
 } from '../../../../../api/api'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import Table, { IColumn } from '../../../../../components/Table'
-import { isDemoAtom } from '../../../../../store'
+import { isDemoAtom, notificationAtom } from '../../../../../store'
 import KFilter from '../../../../../components/Filter'
-import { Box, Icon, Multiselect, SpaceBetween } from '@cloudscape-design/components'
+import {
+    Box,
+    Icon,
+    Multiselect,
+    SpaceBetween,
+} from '@cloudscape-design/components'
 import { Fragment, ReactNode } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import Modal from '@cloudscape-design/components/modal'
@@ -36,6 +41,8 @@ interface IEvaluate {
         | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
         | undefined
     onEvaluate: (c: string[]) => void
+    opened: boolean | undefined
+    setOpened: Function
 }
 const columns: (
     checkbox: {
@@ -92,15 +99,18 @@ export default function Evaluate({
     benchmarkDetail,
     assignmentsCount,
     onEvaluate,
+    opened,
+    setOpened,
 }: IEvaluate) {
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [accounts,setAccounts] = useState()
+    const [accounts, setAccounts] = useState()
     const isDemo = useAtomValue(isDemoAtom)
     const [openConfirm, setOpenConfirm] = useState(false)
     const [connections, setConnections] = useState<string[]>([])
-
-
+    const [benchmarks, setBenchmarks] = useState<any[]>([])
+    const [selectedbenchmarks, setSelectedBenchmarks] = useState<any[]>([])
+    const setNotification = useSetAtom(notificationAtom)
 
     // useEffect(() => {
     //     checkbox.setState(connections)
@@ -115,6 +125,47 @@ export default function Evaluate({
     //         setConnections( [])
     //     }
     // }, [assignments])
+    const RunBenchmark = () => {
+        // /compliance/api/v3/benchmark/{benchmark-id}/assignments
+        let url = ''
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
+        }
+        const body = {
+            integration_info: connections.map((c) => {
+                return {
+                    // @ts-ignore
+                    integration_tracker: c.value,
+                }
+            }),
+            benchmark_ids: selectedbenchmarks.map((c) => {
+                return c.value
+            }),
+        }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+        //    console.log(config)
+        axios
+            .post(`${url}/main/schedule/api/v3/compliance/run`, body, config)
+            .then((res) => {
+                setNotification({
+                    text: `Run is Done You Can see on jobs page`,
+                    type: 'success',
+                })
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
     const GetEnabled = () => {
         // /compliance/api/v3/benchmark/{benchmark-id}/assignments
         setLoading(true)
@@ -132,11 +183,10 @@ export default function Evaluate({
                 Authorization: `Bearer ${token}`,
             },
         }
-        let connector= ''
+        let connector = ''
         benchmarkDetail?.connectors?.map((c) => {
             connector += `connectors=${c}&`
-        }
-    )
+        })
         axios
             .get(
                 `${url}/main/onboard/api/v3/integrations?health_state=healthy&${connector}`,
@@ -151,32 +201,96 @@ export default function Evaluate({
                 console.log(err)
             })
     }
-  
 
     const isLoading =
         benchmarkDetail?.lastJobStatus !== 'FAILED' &&
         benchmarkDetail?.lastJobStatus !== 'SUCCEEDED' &&
         (benchmarkDetail?.lastJobStatus || '') !== ''
+    const GetCard = () => {
+        let url = ''
+        setLoading(true)
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
+        }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+
+        const body = {
+            sort_by: 'incidents',
+            assigned: false,
+            is_sre_benchmark: false,
+            connectors: [],
+            root: true,
+        }
+
+        axios
+            .post(`${url}/main/compliance/api/v3/benchmarks`, body, config)
+            .then((res) => {
+                //  const temp = []
+                if (!res.data.items) {
+                    setLoading(false)
+                }
+                setBenchmarks(res.data.items)
+            })
+            .catch((err) => {
+                setLoading(false)
+                setBenchmarks([])
+
+                console.log(err)
+            })
+    }
+
+    useEffect(() => {
+        if (opened) {
+            setOpen(true)
+            GetCard()
+            GetEnabled()
+        }
+    }, [opened])
+    // useEffect(() => {
+    //     if (opened) {
+    //         setOpen(true)
+    //         GetCard()
+    //     }
+    // }, [opened])
 
     return (
         <>
-            <KButton
-                onClick={() => {
-                    setOpen(true)
-                  GetEnabled()
-                }}
-                loading={false}
-                variant="primary"
-                className="flex flex-row justify-center items-center w-full min-w-20"
-                // iconAlign="left"
-            >
-                <div className="flex flex-row justify-center items-center w-full min-w-20 gap-2">
-                    <PlayCircleIcon className="w-5" />
-                    Run
-                </div>
-            </KButton>
+            {opened == undefined && (
+                <>
+                    <KButton
+                        onClick={() => {
+                            setOpen(true)
+                            GetEnabled()
+                        }}
+                        loading={false}
+                        variant="primary"
+                        className="flex flex-row justify-center items-center w-full min-w-20"
+                        // iconAlign="left"
+                    >
+                        <div className="flex flex-row justify-center items-center w-full min-w-20 gap-2">
+                            <PlayCircleIcon className="w-5" />
+                            Run
+                        </div>
+                    </KButton>
+                </>
+            )}
+
             <Modal
-                onDismiss={() => setOpen(false)}
+                onDismiss={() => {
+                    setOpen(false)
+                    if (opened) {
+                        setOpened(false)
+                    }
+                }}
                 visible={open}
                 footer={
                     <Box float="right">
@@ -210,6 +324,17 @@ export default function Evaluate({
                                             }
                                         })
                                     )
+                                    if (opened) {
+                                        setSelectedBenchmarks(
+                                            benchmarks?.map((c) => {
+                                                return {
+                                                    label: c?.benchmark?.title,
+                                                    value: c?.benchmark?.id,
+                                                    // description: c.id,
+                                                }
+                                            })
+                                        )
+                                    }
                                 }}
                             >
                                 Select All
@@ -217,7 +342,11 @@ export default function Evaluate({
                             <Button
                                 onClick={() => {
                                     setOpen(false)
-                                    onEvaluate(connections)
+                                    if (opened) {
+                                        RunBenchmark()
+                                    } else {
+                                        onEvaluate(connections)
+                                    }
                                 }}
                             >
                                 Run
@@ -225,8 +354,40 @@ export default function Evaluate({
                         </SpaceBetween>
                     </Box>
                 }
-                header="Select Account"
+                header={
+                    opened
+                        ? 'Select Compliance Framework for Audit'
+                        : 'Select Account'
+                }
             >
+                {opened && (
+                    <>
+                        <Multiselect
+                            className="w-full mb-2"
+                            // @ts-ignore
+                            options={benchmarks?.map((c) => {
+                                return {
+                                    label: c?.benchmark?.title,
+                                    value: c?.benchmark?.id,
+                                    description: c?.benchmark?.id,
+                                }
+                            })}
+                            // @ts-ignore
+                            selectedOptions={selectedbenchmarks}
+                            loadingText="Loading Frameworks"
+                            // @ts-ignore
+                            emptyText="No Frameworks"
+                            loading={loading}
+                            tokenLimit={0}
+                            filteringType="auto"
+                            placeholder="Select Frameworks"
+                            onChange={({ detail }) => {
+                                // @ts-ignore
+                                setSelectedBenchmarks(detail.selectedOptions)
+                            }}
+                        />
+                    </>
+                )}
                 <Multiselect
                     className="w-full"
                     // @ts-ignore
@@ -242,6 +403,8 @@ export default function Evaluate({
                     loadingText="Loading Accounts"
                     emptyText="No Accounts"
                     loading={loading}
+                    tokenLimit={1}
+                    filteringType="auto"
                     placeholder="Select Account"
                     onChange={({ detail }) => {
                         // @ts-ignore
@@ -252,7 +415,8 @@ export default function Evaluate({
         </>
     )
 }
-{/**
+{
+    /**
     
     <Modal
                 visible={openConfirm}
@@ -280,4 +444,5 @@ export default function Evaluate({
                     </Button>
                 </Flex>
             </Modal>
-    */}
+    */
+}

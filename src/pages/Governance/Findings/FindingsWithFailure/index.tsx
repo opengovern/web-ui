@@ -529,7 +529,11 @@ export default function FindingsWithFailure({ query }: ICount) {
                                             <Text className="text-gray-800">
                                                 {truncate(item.resourceName)}
                                             </Text>
-                                            <Text>{truncate(item.resourceTypeName)}</Text>
+                                            <Text>
+                                                {truncate(
+                                                    item.resourceTypeName
+                                                )}
+                                            </Text>
                                         </Flex>
                                     </>
                                 ),
@@ -665,7 +669,7 @@ export default function FindingsWithFailure({ query }: ICount) {
                                 flexDirection="row"
                                 justifyContent="start"
                                 alignItems="start"
-                                className="gap-1"
+                                className="gap-1 mt-1"
                             >
                                 <Filter
                                     // @ts-ignore
@@ -674,6 +678,7 @@ export default function FindingsWithFailure({ query }: ICount) {
                                         // @ts-ignore
                                         setQuery(e)
                                     }}
+                                    setDate={setDate}
                                 />
                                 <DateRangePicker
                                     onChange={({ detail }) =>
@@ -706,6 +711,12 @@ export default function FindingsWithFailure({ query }: ICount) {
                                             key: 'previous-6-hours',
                                             amount: 6,
                                             unit: 'hour',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-3-days',
+                                            amount: 3,
+                                            unit: 'day',
                                             type: 'relative',
                                         },
                                         {

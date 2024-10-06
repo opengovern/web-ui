@@ -239,7 +239,7 @@ export default function SettingsJobs() {
             <Tabs 
                 tabs={[
                     { label: 'All Jobs',  content: <SettingsALLJobs /> ,id : '0' },
-                    { label: 'Customization', content: <SettingsCustomization /> ,id:'1' },
+                    { label: 'Scheduling', content: <SettingsCustomization /> ,id:'1' },
                 ]}
             />
             {/* <TabGroup>

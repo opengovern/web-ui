@@ -15,19 +15,20 @@ import Dollar from '../../../icons/Dollar.svg'
 import Cable from '../../../icons/Cable.svg'
 import Cube from '../../../icons/Cube.svg'
 import { link } from 'fs'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import Evaluate from '../../Governance/Compliance/NewBenchmarkSummary/Evaluate'
 
 const navList = [
     {
         title: 'Connect',
-        description: 'Setup an integration',
+        description: 'Setup Integrations and enable visibility',
         icon: Cable,
         link: 'integrations',
         new: true,
     },
     {
         title: 'Invite',
-        description: 'Invite Users',
+        description: 'Add new users and govern as a team',
         icon: User,
         link: 'settings/authentication?action=invite',
         new: true,
@@ -41,7 +42,7 @@ const navList = [
     },
     {
         title: 'Inventory',
-        description: 'From Code to cloud',
+        description: 'See all workloads - from code to cloud',
         icon: Cube,
         link: 'dashboard/infrastructure',
         new: true,
@@ -69,6 +70,7 @@ const navList = [
 export default function Shortcuts() {
     const workspace = useParams<{ ws: string }>().ws
     const navigate = useNavigate()
+    const [open,setOpen] = useState(false)
 
     return (
         <Card>
@@ -79,31 +81,69 @@ export default function Shortcuts() {
             <Grid numItems={4} className="w-full mb-4 gap-4">
                 {navList.map((nav, i) => (
                     <>
-                        <a
-                            href={`/ws/${workspace}/${nav.link}`}
-                            target={nav.new ? '_blank' : '_self'}
-                        >
-                            <Card className="  cursor-pointer  min-h-[140px] pt-3 pb-3 hover:bg-gray-50 hover:dark:bg-gray-900">
-                                <Flex
-                                    flexDirection="col"
-                                    justifyContent="start"
-                                    alignItems="start"
-                                    className="gap-2"
+                        {nav?.title !== 'Audit' ? (
+                            <>
+                                <a
+                                    href={`/ws/${workspace}/${nav.link}`}
+                                    target={nav.new ? '_blank' : '_self'}
                                 >
-                                    <img
-                                        className='bg-[#1164D9] rounded-[50%] p-[0.3rem] w-7 h-7'
-                                        src={nav.icon}
-                                    />
-                                    <Text className="text-l font-semibold text-gray-900 dark:text-gray-50  flex flex-row items-center gap-2">
-                                        {nav.title}
-                                        <ChevronRightIcon className="p-0 w-5 h-5 " />
-                                    </Text>
-                                    <Text className="text-sm">
-                                        {nav.description}
-                                    </Text>
-                                </Flex>
-                            </Card>
-                        </a>
+                                    <Card className="  cursor-pointer  min-h-[140px] pt-3 pb-3 hover:bg-gray-50 hover:dark:bg-gray-900">
+                                        <Flex
+                                            flexDirection="col"
+                                            justifyContent="start"
+                                            alignItems="start"
+                                            className="gap-2"
+                                        >
+                                            <img
+                                                className="bg-[#1164D9] rounded-[50%] p-[0.3rem] w-7 h-7"
+                                                src={nav.icon}
+                                            />
+                                            <Text className="text-l font-semibold text-gray-900 dark:text-gray-50  flex flex-row items-center gap-2">
+                                                {nav.title}
+                                                <ChevronRightIcon className="p-0 w-5 h-5 " />
+                                            </Text>
+                                            <Text className="text-sm">
+                                                {nav.description}
+                                            </Text>
+                                        </Flex>
+                                    </Card>
+                                </a>
+                            </>
+                        ) : (
+                            <>
+                                <Card onClick={()=>{
+                                    setOpen(true)
+                                }} className="  cursor-pointer  min-h-[140px] pt-3 pb-3 hover:bg-gray-50 hover:dark:bg-gray-900">
+                                    <Flex
+                                        flexDirection="col"
+                                        justifyContent="start"
+                                        alignItems="start"
+                                        className="gap-2"
+                                    >
+                                        <img
+                                            className="bg-[#1164D9] rounded-[50%] p-[0.3rem] w-7 h-7"
+                                            src={nav.icon}
+                                        />
+                                        <Text className="text-l font-semibold text-gray-900 dark:text-gray-50  flex flex-row items-center gap-2">
+                                            {nav.title}
+                                            <ChevronRightIcon className="p-0 w-5 h-5 " />
+                                        </Text>
+                                        <Text className="text-sm">
+                                            {nav.description}
+                                        </Text>
+                                    </Flex>
+                                </Card>
+                                <Evaluate 
+                                opened ={open}
+                                id= ''
+                                assignmentsCount={0}
+                                benchmarkDetail={undefined}
+                                setOpened={()=>{setOpen(false)}}
+                                onEvaluate={()=>{}}
+                                // complianceScore={0}
+                                />
+                            </>
+                        )}
                     </>
                 ))}
             </Grid>

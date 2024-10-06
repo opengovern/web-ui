@@ -431,7 +431,7 @@ export default function FindingDetail({
                                 ),
                             },
                             {
-                                label: 'Resource Details',
+                                label: 'Evidence',
                                 disabled: !response?.resource,
                                 id: '1',
                                 content: (
@@ -445,26 +445,26 @@ export default function FindingDetail({
                                     </>
                                 ),
                             },
-                            {
-                                label: 'Timeline',
-                                id: '2',
-                                content: (
-                                    <>
-                                        <Timeline
-                                            data={
-                                                type === 'finding'
-                                                    ? findingTimeline
-                                                    : response
-                                            }
-                                            isLoading={
-                                                type === 'finding'
-                                                    ? findingTimelineLoading
-                                                    : isLoading
-                                            }
-                                        />
-                                    </>
-                                ),
-                            },
+                            // {
+                            //     label: 'Timeline',
+                            //     id: '2',
+                            //     content: (
+                            //         <>
+                            //             <Timeline
+                            //                 data={
+                            //                     type === 'finding'
+                            //                         ? findingTimeline
+                            //                         : response
+                            //                 }
+                            //                 isLoading={
+                            //                     type === 'finding'
+                            //                         ? findingTimelineLoading
+                            //                         : isLoading
+                            //                 }
+                            //             />
+                            //         </>
+                            //     ),
+                            // },
                         ]}
                     />
                 </>

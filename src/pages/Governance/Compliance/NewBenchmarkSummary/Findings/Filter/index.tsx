@@ -45,7 +45,7 @@ import {
 } from '../../../../../../utilities/urlstate'
 import { renderDateText } from '../../../../../../components/Layout/Header/DatePicker'
 import LimitHealthy from './LimitHealthy'
-import { PropertyFilter } from '@cloudscape-design/components'
+import { PropertyFilter, Select } from '@cloudscape-design/components'
 import axios from 'axios'
 
 interface IFilters {
@@ -66,9 +66,10 @@ interface IFilters {
         connectionGroup: string[] | undefined
     }) => void
     type: 'findings' | 'resources' | 'controls' | 'accounts' | 'events'
+    setDate: Function
 }
 
-export default function Filter({ onApply, type }: IFilters) {
+export default function Filter({ onApply, type, setDate }: IFilters) {
     const { ws } = useParams()
     const defConnector = SourceType.Nil
     const [connector, setConnector] = useState<SourceType>(defConnector)
@@ -121,53 +122,53 @@ export default function Filter({ onApply, type }: IFilters) {
         start: dayjs(lastWeek),
         end: dayjs(today),
     })
-    const [jobData,setJobData] = useState([])
-    const [jobs,setJobs] = useState([])
+    const [jobData, setJobData] = useState([])
+    const [jobs, setJobs] = useState([])
     const { benchmarkId } = useParams()
 
- const GetJobs = () => {
-     // /compliance/api/v3/benchmark/{benchmark-id}/assignments
-     let url = ''
-     if (window.location.origin === 'http://localhost:3000') {
-         url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
-     } else {
-         url = window.location.origin
-     }
-     const body = {
-         job_status: ['SUCCEEDED'],
-         benchmark_id: [benchmarkId],
-     }
-     // @ts-ignore
-     const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+    const GetJobs = () => {
+        // /compliance/api/v3/benchmark/{benchmark-id}/assignments
+        let url = ''
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
+        }
+        const body = {
+            job_status: ['SUCCEEDED'],
+            benchmark_id: [benchmarkId],
+        }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
 
-     const config = {
-         headers: {
-             Authorization: `Bearer ${token}`,
-         },
-     }
-     //    console.log(config)
-     axios
-         .post(`${url}/main//schedule/api/v3/jobs/compliance`, body, config)
-         .then((res) => {
-             // @ts-ignore
-             const temp = []
-             // @ts-ignore
-             res.data.map((d) => {
-                 temp.push({
-                     label: d.job_id.toString(),
-                     value: d.job_id.toString(),
-                 })
-             })
-             // @ts-ignore
-             setJobData(temp)
-         })
-         .catch((err) => {
-             console.log(err)
-         })
- }
-    useEffect(()=>{
-      GetJobs()  
-    },[])
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+        //    console.log(config)
+        axios
+            .post(`${url}/main//schedule/api/v3/jobs/compliance`, body, config)
+            .then((res) => {
+                // @ts-ignore
+                const temp = []
+                // @ts-ignore
+                res.data.map((d) => {
+                    temp.push({
+                        label: d.job_id.toString(),
+                        value: d.job_id.toString(),
+                    })
+                })
+                // @ts-ignore
+                setJobData(temp)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+    useEffect(() => {
+        GetJobs()
+    }, [])
     // const { value: eventTimeRange, setValue: setEventTimeRange } =
     //     useUrlDateRangeState(
     //         defaultEventTime(ws || ''),
@@ -209,15 +210,14 @@ export default function Filter({ onApply, type }: IFilters) {
             //     : undefined,
         })
     }, [
-        
         activeTimeRange,
         // eventTimeRange,
     ])
-  const truncate = (text: string | undefined) => {
-      if (text) {
-          return text.length > 30 ? text.substring(0, 30) + '...' : text
-      }
-  }
+    const truncate = (text: string | undefined) => {
+        if (text) {
+            return text.length > 30 ? text.substring(0, 30) + '...' : text
+        }
+    }
     const { response: filters } = useComplianceApiV1FindingsFiltersCreate({})
     const severity_data = [
         {
@@ -310,16 +310,16 @@ export default function Filter({ onApply, type }: IFilters) {
             iconSvg: <CheckCircleIcon className="h-5 text-emerald-500" />,
         },
     ]
-     const connectionGroup_data = [
-         {
-             label: 'Healthy',
-             value: 'healthy',
-         },
-         {
-             label: 'Unhealthy',
-             value: 'unhealthy',
-         },
-     ]
+    const connectionGroup_data = [
+        {
+            label: 'Healthy',
+            value: 'healthy',
+        },
+        {
+            label: 'Unhealthy',
+            value: 'unhealthy',
+        },
+    ]
     const filterOptions = [
         {
             id: 'conformance_status',
@@ -595,12 +595,23 @@ export default function Filter({ onApply, type }: IFilters) {
         // },
     ]
     const [query, setQuery] = useState({
-        tokens: [],
+        tokens: [
+            {
+                propertyKey: 'conformance_status',
+                value: 'failed',
+                operator: '=',
+            },
+            {
+                propertyKey: 'connectionGroup',
+                value: 'healthy',
+                operator: '=',
+            },
+        ],
         operation: 'and',
     })
-    useEffect(()=>{
-        const conformance_status :any = []
-        const temp_severity : any = []
+    useEffect(() => {
+        const conformance_status: any = []
+        const temp_severity: any = []
         const connection: any = []
         const control: any = []
         // const benchmark: any = []
@@ -615,9 +626,9 @@ export default function Filter({ onApply, type }: IFilters) {
             if (t.propertyKey === 'severity') {
                 temp_severity.push(t.value)
             }
-              if (t.propertyKey === 'connectionGroup') {
-                  connection_group.push(t.value)
-              }
+            if (t.propertyKey === 'connectionGroup') {
+                connection_group.push(t.value)
+            }
             if (t.propertyKey === 'connection') {
                 connection.push(t.value)
             }
@@ -653,7 +664,70 @@ export default function Filter({ onApply, type }: IFilters) {
             //     ? eventTimeRange
             //     : undefined,
         })
-    },[query])
+    }, [query])
+      const [filter, setFilter] = useState({
+          label: 'Recent Incidents',
+          value: '1',
+      })
+      useEffect(() => {
+          // @ts-ignore
+          if (filter) {
+              // @ts-ignore
+
+              if (filter.value == '1') {
+                  setDate({
+                      key: 'previous-3-days',
+                      amount: 3,
+                      unit: 'day',
+                      type: 'relative',
+                  })
+                  setQuery({
+                      tokens: [
+                          {
+                              propertyKey: 'conformance_status',
+                              value: 'failed',
+                              operator: '=',
+                          },
+                          {
+                              propertyKey: 'connectionGroup',
+                              value: 'healthy',
+                              operator: '=',
+                          },
+                      ],
+                      operation: 'and',
+                  })
+              }
+              // @ts-ignore
+              else if (filter.value == '2') {
+                  setDate({
+                      key: 'previous-3-days',
+                      amount: 3,
+                      unit: 'day',
+                      type: 'relative',
+                  })
+                  setQuery({
+                      tokens: [
+                          {
+                              propertyKey: 'severity',
+                              value: 'critical',
+                              operator: '=',
+                          },
+                          {
+                              propertyKey: 'conformance_status',
+                              value: 'failed',
+                              operator: '=',
+                          },
+                          {
+                              propertyKey: 'connectionGroup',
+                              value: 'healthy',
+                              operator: '=',
+                          },
+                      ],
+                      operation: 'and',
+                  })
+              }
+          }
+      }, [filter])
     const renderFilters = () => {
         let date_filter = filterOptions.find((o) => o.id === 'date')
         let has_date = selectedFilters.includes('date')
@@ -671,7 +745,7 @@ export default function Filter({ onApply, type }: IFilters) {
                     operators: ['='],
                     propertyLabel: f.name,
                     groupValuesLabel: `${f.name}  Values`,
-                });
+                })
                 if (
                     f.id == 'severity' ||
                     f.id == 'conformance_status' ||
@@ -706,39 +780,61 @@ export default function Filter({ onApply, type }: IFilters) {
                     })
                 }
             }
-        });
+        })
 
         return (
             <>
-                <PropertyFilter
-                    // @ts-ignore
-                    query={query}
-                    // @ts-ignore
-                    // className="w-full"
-                    // @ts-ignore
-                    onChange={({ detail }) => setQuery(detail)}
-                    // countText="5 matches"
-                    // enableTokenGroups
-                    expandToViewport
-                    hideOperations
-                    tokenLimit={2}
-                    filteringEmpty="No suggestions found"
-                    filteringAriaLabel="Find Incidents"
-                    // @ts-ignore
-                    filteringOptions={options}
-                    filteringPlaceholder="Find Incidents"
-                    // @ts-ignore
+                <Flex
+                    flexDirection="row"
+                    justifyContent="start"
+                    alignItems="start"
+                    className="w-full gap-2"
+                >
+                    <Select
+                        // @ts-ignore
+                        selectedOption={filter}
+                        className="w-1/5 mt-[-9px]"
+                        inlineLabelText={'Saved Filters'}
+                        placeholder="Select Filter Set"
+                        // @ts-ignore
+                        onChange={({ detail }) =>
+                            // @ts-ignore
+                            setFilter(detail.selectedOption)
+                        }
+                        options={[
+                            { label: 'Recent Incidents', value: '1' },
+                            { label: 'Recent Critical Incidents', value: '2' },
+                        ]}
+                    />
+                    <PropertyFilter
+                        // @ts-ignore
+                        query={query}
+                        // @ts-ignore
+                        // className="w-full"
+                        // @ts-ignore
+                        onChange={({ detail }) => setQuery(detail)}
+                        // countText="5 matches"
+                        // enableTokenGroups
+                        expandToViewport
+                        hideOperations
+                        tokenLimit={2}
+                        filteringEmpty="No suggestions found"
+                        filteringAriaLabel="Find Incidents"
+                        // @ts-ignore
+                        filteringOptions={options}
+                        filteringPlaceholder="Find Incidents"
+                        // @ts-ignore
 
-                    filteringProperties={properties}
-                    virtualScroll
-                />
-                {/* {has_date && (
+                        filteringProperties={properties}
+                        virtualScroll
+                    />
+                    {/* {has_date && (
                     <div className="w-full ">{date_filter?.component}</div>
                 )} */}
+                </Flex>
             </>
         )
     }
 
-     return <>{renderFilters()}</>
-
+    return <>{renderFilters()}</>
 }

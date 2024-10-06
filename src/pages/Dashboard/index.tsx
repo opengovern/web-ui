@@ -178,7 +178,7 @@ export default function Dashboard() {
                                                     // @ts-ignore
                                                     e.preventDefault()
                                                 }}
-                                                href={`./ws/${workspace}/dashboard/${item.page}`}
+                                                href={`/ws/${workspace}/dashboard/${item.page}`}
                                                 fontSize="heading-m"
                                             >
                                                 <Flex
@@ -196,7 +196,9 @@ export default function Dashboard() {
                                                         justifyContent="end"
                                                         className="gap-2"
                                                     >
-                                                      <Badge>{item.label}</Badge>
+                                                        <Badge>
+                                                            {item.label}
+                                                        </Badge>
                                                     </Flex>
                                                 </Flex>
                                             </Link>
@@ -205,11 +207,7 @@ export default function Dashboard() {
                                             {
                                                 id: 'ss',
                                                 header: '',
-                                                content: (item) => (
-                                                    <>
-                                                       
-                                                    </>
-                                                ),
+                                                content: (item) => <></>,
                                             },
                                             {
                                                 id: 'description',
@@ -246,7 +244,7 @@ export default function Dashboard() {
                 </Title>
                 <Cal
                     namespace="try-enterprise"
-                    calLink="team/open-governance/try-enterprise"
+                    calLink="team/opengovernance/try-enterprise"
                     style={{
                         width: '100%',
                         height: '100%',
