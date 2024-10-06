@@ -378,21 +378,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             //     icon: ChevronDoubleUpIcon,
             //     isPreview: false,
             // },
-            {
-                name: 'Dashboards',
-                page: [
-                    'dashboard',
-                    'dashboard/infrastructure',
-                    'dashboard/spend',
-                    'dashboard/infrastructure-cloud-accounts',
-                    'dashboard/infrastructure-metrics',
-                    'dashboard/spend-accounts',
-                    'dashboard/spend-metrics',
-                ],
-                icon: PresentationChartBarIcon,
-                isPreview: false,
-                count: 6,
-            },
+
             {
                 name: 'All Incidents',
                 icon: DocumentMagnifyingGlassIcon,
@@ -432,6 +418,21 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 //     //     page: 'incidents/control-summary',
                 //     // },
                 // ],
+            },
+            {
+                name: 'Dashboards',
+                page: [
+                    'dashboard',
+                    'dashboard/infrastructure',
+                    'dashboard/spend',
+                    'dashboard/infrastructure-cloud-accounts',
+                    'dashboard/infrastructure-metrics',
+                    'dashboard/spend-accounts',
+                    'dashboard/spend-metrics',
+                ],
+                icon: PresentationChartBarIcon,
+                isPreview: false,
+                count: 6,
             },
             // {
             //     name: 'Security',
@@ -498,18 +499,16 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 icon: BoltIcon,
                 isPreview: true,
             },
-
-            {
-                name: 'Adminstration',
-                page: ['adminstration'],
-                icon: Cog6ToothIcon,
-                isPreview: false,
-           
-            },
             {
                 name: 'Jobs',
                 page: 'jobs',
                 icon: CalendarDateRangeIcon,
+                isPreview: false,
+            },
+            {
+                name: 'Adminstration',
+                page: ['adminstration'],
+                icon: Cog6ToothIcon,
                 isPreview: false,
             },
         ]

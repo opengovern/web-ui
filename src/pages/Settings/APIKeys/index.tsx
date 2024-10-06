@@ -32,7 +32,7 @@ export default function SettingsWorkspaceAPIKeys() {
         </Flex>
     ) : (
         <>
-            <TopHeader />
+            {/* <TopHeader /> */}
 
             <DrawerPanel
                 open={drawerOpen}

@@ -42,7 +42,10 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
                     current == 'integrations' ||
                     current.includes('dashboard') ||
                     current.includes('compliance') ||
-                    current.includes('score')) &&
+                    current.includes('score')||
+                    current.includes('adminstration') 
+                
+                ) &&
                 !sub_page
             ) {
                 return false

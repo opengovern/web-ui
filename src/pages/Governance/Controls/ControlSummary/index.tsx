@@ -100,13 +100,13 @@ export default function ControlDetail() {
 
     return (
         <>
-            <TopHeader
+            {/* <TopHeader
                 breadCrumb={[
                     controlDetail
                         ? controlDetail?.control?.title
                         : 'Control detail',
                 ]}
-            />
+            /> */}
             {isLoading ? (
                 <Spinner className="mt-56" />
             ) : (
@@ -149,7 +149,7 @@ export default function ControlDetail() {
                             justifyContent="start"
                             className="w-1/3 gap-2"
                         >
-                            <Flex
+                            {/* <Flex
                                 flexDirection="row"
                                 justifyContent="start"
                                 className="hover:cursor-pointer max-w-full w-fit bg-gray-200 border-gray-300 rounded-lg border px-1"
@@ -163,8 +163,8 @@ export default function ControlDetail() {
                                 <Text className="truncate">
                                     Control ID: {controlDetail?.control?.id}
                                 </Text>
-                            </Flex>
-                            <Flex
+                            </Flex> */}
+                            {/* <Flex
                                 flexDirection="row"
                                 justifyContent="start"
                                 className="max-w-full w-fit bg-gray-200 border-gray-300 rounded-lg border px-1"
@@ -178,7 +178,7 @@ export default function ControlDetail() {
                                               controlDetail?.evaluatedAt
                                           )}
                                 </Text>
-                            </Flex>
+                            </Flex> */}
 
                             {controlDetail?.control?.query?.parameters?.map(
                                 (item) => {
@@ -466,7 +466,7 @@ export default function ControlDetail() {
                                     }}
                                 />
                             </DrawerPanel>
-                            <Title className="font-semibold mt-2 mb-2">
+                            {/* <Title className="font-semibold mt-2 mb-2">
                                 Remediation
                             </Title>
                             <Grid numItems={2} className="w-full h-full gap-4">
@@ -652,7 +652,7 @@ export default function ControlDetail() {
                                         at scale
                                     </Text>
                                 </Card>
-                            </Grid>
+                            </Grid> */}
                         </Flex>
                     </Grid>
                     <TabGroup>

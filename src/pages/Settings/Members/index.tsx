@@ -13,6 +13,7 @@ import {
 } from '../../../utilities/dateDisplay'
 import TopHeader from '../../../components/Layout/Header'
 import { useSearchParams } from 'react-router-dom'
+import { Alert, Link } from '@cloudscape-design/components'
 
 const fixRole = (role: string) => {
     switch (role) {
@@ -66,7 +67,7 @@ export default function SettingsMembers() {
         </Flex>
     ) : (
         <>
-            <TopHeader />
+            {/* <TopHeader /> */}
             <DrawerPanel
                 open={drawerOpen}
                 title={
@@ -100,6 +101,18 @@ export default function SettingsMembers() {
                     />
                 )}
             </DrawerPanel>
+            <a className=' cursor-pointer' target='__blank'  href="https://docs.opengovernance.io/oss/getting-started/configure-sso">
+                <Alert statusIconAriaLabel="Info" header=" SSO Configuration">
+                    Enable SSO in OpenGovernance using OIDC. Integrate with
+                    Auth0, AzureAD, Google, and more.
+                    <Link
+                        href="  https://docs.opengovernance.io/oss/getting-started/configure-sso"
+                        external={true}
+                    >
+                        Click here.
+                    </Link>
+                </Alert>
+            </a>
             <Card key="summary" className="mt-4">
                 <Flex>
                     <Title className="font-semibold">All members</Title>
