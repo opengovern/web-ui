@@ -63,7 +63,7 @@ const data = [
     {
         id: 6,
         name: 'Spend Details by Cloud Accounts',
-        description: 'Description',
+        description: 'Cloud Spend detail at Cloud Account',
         page: 'spend-metrics',
         label: 'Built-in',
         icon: table,
