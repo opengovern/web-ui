@@ -297,6 +297,7 @@ export default function SettingsEntitlement() {
  },[])
   useEffect(() => {
         if (syncExecuted && !syncLoading) {
+            GetStatus()
             const id = setInterval(GetStatus,10000)
             // @ts-ignore
             setIntervalId(id)
