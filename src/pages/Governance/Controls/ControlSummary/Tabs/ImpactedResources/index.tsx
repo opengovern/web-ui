@@ -706,7 +706,7 @@ export default function ImpactedResources({
                             { id: 'resourceName', visible: true },
                             { id: 'resourceType', visible: true },
                             { id: 'providerConnectionName', visible: true },
-                            { id: 'totalCount', visible: true },
+                            // { id: 'totalCount', visible: true },
                             // { id: 'severity', visible: true },
                             // { id: 'evaluatedAt', visible: true },
 

@@ -72,12 +72,12 @@ export default function Query({ height }: IQuery) {
                 <Flex justifyContent="start" className="gap-2 mb-2">
                     <Icon icon={MagnifyingGlassIcon} className="p-0" />
                     <Title className="font-semibold">
-                        Bookmarked Inventory 
+                        Bookmarked Inventory
                     </Title>
                 </Flex>
                 <a
                     target="__blank"
-                    href={`/ws/${workspace}/search?tab_id=0`}
+                    href={`/ws/${workspace}/finder?tab_id=0`}
                     className=" cursor-pointer"
                 >
                     <Button
@@ -87,7 +87,7 @@ export default function Query({ height }: IQuery) {
                         iconPosition="right"
                         className="my-3"
                         // onClick={() => {
-                        //     navigate(`/ws/${workspace}/search?tab_id=0`)
+                        //     navigate(`/ws/${workspace}/finder?tab_id=0`)
                         // }}
                     >
                         All Queries
@@ -168,7 +168,7 @@ export default function Query({ height }: IQuery) {
                                       onClick={() => {
                                           setRunQuery(q?.query || '')
                                           navigate(
-                                              `/ws/${workspace}/search?tab_id=1`
+                                              `/ws/${workspace}/finder?tab_id=1`
                                           )
                                       }}
                                   >

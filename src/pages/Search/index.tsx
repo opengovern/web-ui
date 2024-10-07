@@ -109,7 +109,7 @@ export default function Search() {
                                     setTab(0)
                                 }}
                             >
-                                All Queries
+                                Query Library
                             </Tab>
                             <Tab
                                 value={1}
@@ -117,7 +117,7 @@ export default function Search() {
                                     setTab(1)
                                 }}
                             >
-                                Queries
+                                Run a Query
                             </Tab>
                         </TabList>
                         <TabPanels>
@@ -149,7 +149,7 @@ export default function Search() {
                         <div className="border-b w-full rounded-xl border-tremor-border bg-tremor-background-muted p-4 dark:border-dark-tremor-border dark:bg-gray-950 sm:p-6 lg:p-8">
                             <header>
                                 <h1 className="text-tremor-title font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
-                                    Search
+                                    Finder
                                 </h1>
                                 <p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
                                     Find everything you need, from Code to
@@ -215,7 +215,7 @@ export default function Search() {
                                                     className="gap-3 w-full"
                                                 >
                                                     <Title className="flex flex-row gap-1 justify-center align-center items-center">
-                                                        Search
+                                                        Run a Query
                                                         <ChevronRightIcon className="w-[20px] mt-1" />
                                                     </Title>
                                                     <p className="dark:text-dark-tremor-cont text-tremor-default text-tremor-content">
@@ -258,13 +258,15 @@ export default function Search() {
                                                     className="gap-3 w-full"
                                                 >
                                                     <Title className="flex flex-row gap-1 justify-center align-center items-center">
-                                                        Saved Query
+                                                        Query Library
                                                         <ChevronRightIcon className="w-[20px] mt-1" />
                                                     </Title>
                                                     <p className="dark:text-dark-tremor-cont text-tremor-default text-tremor-content">
                                                         See over 2k+ search
-                                                        queries, filter them by
-                                                        service and explore by
+                                                        queries sourced from
+                                                        Steampipe's examples,
+                                                        filter them by service
+                                                        and explore by
                                                         framework.
                                                     </p>
                                                 </Flex>

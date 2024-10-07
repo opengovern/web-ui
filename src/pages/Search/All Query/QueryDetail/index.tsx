@@ -199,8 +199,8 @@ export default function QueryDetail({
                                 loading={false}
                                 loadingText="Running"
                             >
-                                {/* <Link to={`/ws/${ws}/search?tab_id=1`}> */}
-                                    Run in Query
+                                {/* <Link to={`/ws/${ws}/finder?tab_id=1`}> */}
+                                Run in Query
                                 {/* </Link>{' '} */}
                             </Button>
                         </Flex>

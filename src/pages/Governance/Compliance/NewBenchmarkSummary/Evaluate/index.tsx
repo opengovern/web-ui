@@ -233,7 +233,7 @@ export default function Evaluate({
         const body = {
             sort_by: 'incidents',
             assigned: false,
-            is_sre_benchmark: false,
+            is_baseline: false,
             connectors: [],
             root: true,
         }

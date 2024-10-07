@@ -445,8 +445,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             // },
 
             {
-                name: 'Search',
-                page: ['search'],
+                name: 'Finder',
+                page: ['finder'],
                 icon: MagnifyingGlassIcon,
                 isPreview: false,
                 // children: [

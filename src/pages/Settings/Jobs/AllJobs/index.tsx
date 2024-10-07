@@ -41,6 +41,7 @@ import {
     Link,
     Pagination,
     PropertyFilter,
+    Select,
 } from '@cloudscape-design/components'
 import {
     AppLayout,
@@ -288,6 +289,9 @@ export default function SettingsALLJobs() {
     const [loading, setLoading] = useState(false)
     const [jobs, setJobs] = useState([])
     const [page, setPage] = useState(0)
+    const [sort, setSort] = useState('updatedAt')
+    const [sortOrder,setSortOrder]= useState(true)
+
     const [totalCount, setTotalCount] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
     const [propertyOptions, setPropertyOptions] = useState()
@@ -297,6 +301,81 @@ export default function SettingsALLJobs() {
       unit: 'hour',
       type: 'relative',
   })
+    const [filter, setFilter] = useState({
+        label: 'Recent Incidents',
+        value: '1',
+    })
+      useEffect(() => {
+          // @ts-ignore
+          if (filter) {
+              // @ts-ignore
+
+              if (filter.value == '1') {
+                  setDate({
+                      key: 'previous-6-hours',
+                      amount: 6,
+                      unit: 'hour',
+                      type: 'relative',
+                  })
+                  setQueries({
+                      tokens: [
+                          {
+                              propertyKey: 'job_type',
+                              value: 'compliance',
+                              operator: '=',
+                          },
+                      ],
+                      operation: 'and',
+                  })
+              }
+              // @ts-ignore
+              else if (filter.value == '2') {
+                  setDate({
+                      key: 'previous-6-hours',
+                      amount: 6,
+                      unit: 'hour',
+                      type: 'relative',
+                  })
+                  setQueries({
+                      tokens: [
+                          {
+                              propertyKey: 'job_type',
+                              value: 'compliance',
+                              operator: '=',
+                          },
+                          {
+                              propertyKey: 'job_status',
+                              value: 'FAILED',
+                              operator: '=',
+                          },
+                      ],
+                      operation: 'and',
+                  })
+              } else if (filter.value == '3') {
+                  setDate({
+                      key: 'previous-7-days',
+                      amount: 7,
+                      unit: 'day',
+                      type: 'relative',
+                  })
+                  setQueries({
+                      tokens: [
+                          {
+                              propertyKey: 'job_type',
+                              value: 'discovery',
+                              operator: '=',
+                          },
+                          {
+                              propertyKey: 'job_status',
+                              value: 'FAILED',
+                              operator: '=',
+                          },
+                      ],
+                      operation: 'and',
+                  })
+              }
+          }
+      }, [filter])
     const [queries, setQueries] = useState({
         tokens: [],
         operation: 'and',
@@ -388,8 +467,8 @@ export default function SettingsALLJobs() {
 
             statusFilter: status_filter,
             typeFilters: jobType_filter,
-            sortBy: 'updatedAt',
-            sortOrder: 'desc',
+            sortBy: sort,
+            sortOrder: sortOrder ? 'DESC' : 'ASC',
         }
         if(date){
             if(date.type =='relative'){
@@ -443,7 +522,7 @@ export default function SettingsALLJobs() {
     }
     useEffect(() => {
         GetRows()
-    }, [queries, date,page])
+    }, [queries, date,page,sort,sortOrder])
 
     const clickedJobDetails = [
         { title: 'ID', value: clickedJob?.id },
@@ -508,12 +587,11 @@ export default function SettingsALLJobs() {
                             `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
                         }
                         onSortingChange={(event) => {
-                            // setSort(event.detail.sortingColumn.sortingField)
-                            // setSortOrder(!sortOrder)
+                            setSort(event.detail.sortingColumn.sortingField)
+                            setSortOrder(!sortOrder)
                         }}
-                        // sortingColumn={sort}
-                        // sortingDescending={sortOrder}
-                        // sortingDescending={sortOrder == 'desc' ? true : false}
+                        sortingColumn={sort}
+                        sortingDescending={sortOrder}
                         // @ts-ignore
                         onRowClick={(event) => {
                             const row = event.detail.item
@@ -525,7 +603,7 @@ export default function SettingsALLJobs() {
                                 id: 'id',
                                 header: 'Id',
                                 cell: (item) => <>{item.id}</>,
-                                sortingField: 'id',
+                                // sortingField: 'id',
                                 isRowHeader: true,
                                 maxWidth: 100,
                             },
@@ -539,7 +617,7 @@ export default function SettingsALLJobs() {
                                             .split('.')[0]
                                     } `}</>
                                 ),
-                                sortingField: 'id',
+                                sortingField: 'createdAt',
                                 isRowHeader: true,
                                 maxWidth: 100,
                             },
@@ -547,7 +625,7 @@ export default function SettingsALLJobs() {
                                 id: 'type',
                                 header: 'Job Type',
                                 cell: (item) => <>{item.type}</>,
-                                sortingField: 'id',
+                                sortingField: 'type',
                                 isRowHeader: true,
                                 maxWidth: 100,
                             },
@@ -555,7 +633,7 @@ export default function SettingsALLJobs() {
                                 id: 'title',
                                 header: 'Title',
                                 cell: (item) => <>{item.title}</>,
-                                sortingField: 'id',
+                                sortingField: 'title',
                                 isRowHeader: true,
                                 maxWidth: 100,
                             },
@@ -618,7 +696,7 @@ export default function SettingsALLJobs() {
                                         </Badge>
                                     )
                                 },
-                                sortingField: 'id',
+                                sortingField: 'status',
                                 isRowHeader: true,
                                 maxWidth: 100,
                             },
@@ -632,7 +710,7 @@ export default function SettingsALLJobs() {
                                             .split('.')[0]
                                     } `}</>
                                 ),
-                                sortingField: 'id',
+                                sortingField: 'updatedAt',
                                 isRowHeader: true,
                                 maxWidth: 100,
                             },
@@ -671,6 +749,32 @@ export default function SettingsALLJobs() {
                                 alignItems="start"
                                 className="gap-2"
                             >
+                                <Select
+                                    // @ts-ignore
+                                    selectedOption={filter}
+                                    className="w-1/5 mt-[-9px]"
+                                    inlineLabelText={'Saved Filters'}
+                                    placeholder="Select Filter Set"
+                                    // @ts-ignore
+                                    onChange={({ detail }) =>
+                                        // @ts-ignore
+                                        setFilter(detail.selectedOption)
+                                    }
+                                    options={[
+                                        {
+                                            label: 'Recent Compliance Jobs',
+                                            value: '1',
+                                        },
+                                        {
+                                            label: 'Failing Compliance Jobs',
+                                            value: '2',
+                                        },
+                                        {
+                                            label: 'All Discovery Jobs',
+                                            value: '3'
+                                        },
+                                    ]}
+                                />
                                 <PropertyFilter
                                     // @ts-ignore
                                     query={queries}
