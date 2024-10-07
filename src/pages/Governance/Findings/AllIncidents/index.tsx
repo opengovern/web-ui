@@ -48,9 +48,7 @@ const GROUPS ={0:'findings' ,1:'events'}
 export default function AllIncidents({ query, setSelectedGroup ,tab,setTab}: Props) {
     return (
         <>
-            <FindingsWithFailure query={query} />
-
-            {/* <Tabs
+            <Tabs
                 onChange={({ detail }) => {
                     setTab(parseInt(detail.activeTabId))
                     // @ts-ignore
@@ -72,13 +70,33 @@ export default function AllIncidents({ query, setSelectedGroup ,tab,setTab}: Pro
                         ),
                     },
                     {
-                        label: ' Drift Events',
+                        label: 'Control Incident Summary',
                         id: '1',
-                        content: <>{tab == 1 && <Events query={query} />}</>,
+                        content: (
+                            <>
+                                {' '}
+                                {tab == 1 && (
+                                    <ControlsWithFailure query={query} />
+                                )}
+                            </>
+                        ),
                     },
-                 
+                    {
+                        label: 'Resource Incident Summary',
+                        id: '2',
+                        content: (
+                            <>
+                                {' '}
+                                {tab == 2 && (
+                                    <>
+                                        <ResourcesWithFailure query={query} />
+                                    </>
+                                )}
+                            </>
+                        ),
+                    },
                 ]}
-            /> */}
+            />
         </>
     )
 }

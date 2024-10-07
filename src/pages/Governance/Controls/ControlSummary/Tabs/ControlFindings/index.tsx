@@ -277,8 +277,8 @@ export default function ControlFindings({
     )
 
     const [date, setDate] = useState({
-        key: 'previous-7-days',
-        amount: 7,
+        key: 'previous-3-days',
+        amount: 3,
         unit: 'day',
         type: 'relative',
     })

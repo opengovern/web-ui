@@ -66,6 +66,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItemQuery,
     GithubComKaytuIoKaytuEnginePkgControlApiListV2,
     GithubComKaytuIoKaytuEnginePkgControlDetailV3,
+    TypesFindingSeverity,
 } from '../../../../api/api'
 import { isDemoAtom, queryAtom, runQueryAtom } from '../../../../store'
 import AxiosAPI from '../../../../api/ApiConfig'
@@ -77,7 +78,20 @@ import ControlDetail from './ControlDetail'
 import Filter from './Filter'
 import { useComplianceApiV3ControlListFilters } from '../../../../api/compliance.gen'
 import KFilter from '../../../../components/Filter'
-
+import KTable from '@cloudscape-design/components/table'
+import Box from '@cloudscape-design/components/box'
+import SpaceBetween from '@cloudscape-design/components/space-between'
+import Badge from '@cloudscape-design/components/badge'
+import {
+    BreadcrumbGroup,
+    DateRangePicker,
+    Header,
+    Link,
+    Pagination,
+    PropertyFilter,
+} from '@cloudscape-design/components'
+import { AppLayout, SplitPanel } from '@cloudscape-design/components'
+import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 export const getTable = (
     headers: string[] | undefined,
     details: any[][] | undefined,
@@ -211,6 +225,7 @@ const columns: IColumn<
     // },
 ]
 
+
 export default function AllControls() {
     const [runQuery, setRunQuery] = useAtom(runQueryAtom)
     const [loading, setLoading] = useState(false)
@@ -220,6 +235,8 @@ export default function AllControls() {
         useState<GithubComKaytuIoKaytuEnginePkgControlDetailV3>()
     const [openDrawer, setOpenDrawer] = useState(false)
     const [openSlider, setOpenSlider] = useState(false)
+    const [open, setOpen] = useState(false)
+
     const [openSearch, setOpenSearch] = useState(true)
     const [showEditor, setShowEditor] = useState(true)
     const isDemo = useAtomValue(isDemoAtom)
@@ -229,8 +246,24 @@ export default function AllControls() {
     const [engine, setEngine] = useState('odysseus-sql')
     const [query, setQuery] =
         useState<GithubComKaytuIoKaytuEnginePkgControlApiListV2>()
-    const { response: categories, isLoading: categoryLoading } =
-        useInventoryApiV2AnalyticsCategoriesList()
+    const [rows, setRows] = useState<any[]>()
+    const [page, setPage] = useState(1)
+    const [totalCount, setTotalCount] = useState(0)
+    const [totalPage, setTotalPage] = useState(0)
+    const [properties, setProperties] = useState<any[]>([])
+    const [options, setOptions] = useState<any[]>([])
+    const [filterQuery, setFilterQuery] = useState({
+        tokens: [
+            { propertyKey: 'severity', value: 'high', operator: '=' },
+            { propertyKey: 'severity', value: 'medium', operator: '=' },
+            { propertyKey: 'severity', value: 'low', operator: '=' },
+            { propertyKey: 'severity', value: 'critical', operator: '=' },
+            { propertyKey: 'severity', value: 'none', operator: '=' },
+        ],
+        operation: 'or',
+    })
+    // const { response: categories, isLoading: categoryLoading } =
+    //     useInventoryApiV2AnalyticsCategoriesList()
     // const { response: queries, isLoading: queryLoading } =
     //     useInventoryApiV2QueryList({
     //         titleFilter: '',
@@ -268,84 +301,218 @@ export default function AllControls() {
         return undefined
     }
 
-    const ssr = () => {
-        return {
-            getRows: (params: IServerSideGetRowsParams) => {
-                // setLoading(true)
-                const api = new Api()
-                api.instance = AxiosAPI
-                const temp = query?.tags
-                // @ts-ignore
-                if (temp) {
-                    Object.keys(temp).map((item, index) => {
-                        const filtered = selectedFilter.filter((filter, i) => {
-                            if (filter == item) {
-                                return filter
-                            }
-                        })
-                        if (!filtered || filtered.length == 0) {
-                            // @ts-ignore
-                            delete temp[item]
-                        }
-                    })
-                }
-                if (temp?.length !== query?.tags?.length) {
-                    setQuery(
-                        // @ts-ignore
-                        (prevSelectedItem) => ({
-                            ...prevSelectedItem,
-                            tags: temp,
-                        })
-                    )
-                }
+    const GetRows = () => {
+        // debugger;
+        setLoading(true)
+        const api = new Api()
+        api.instance = AxiosAPI
+        
+        // @ts-ignore
+       
 
-                let body = {
-                    connector: query?.connector,
-                    severity: query?.severity,
-                    list_of_tables: query?.list_of_tables,
-                    primary_table: query?.primary_table,
-                    root_benchmark: query?.root_benchmark,
-                    parent_benchmark: query?.parent_benchmark,
-                    tags: temp,
-                    cursor: params.request.startRow
-                        ? Math.floor(params.request.startRow / 25)
-                        : 0,
-                    per_page: 25,
-                }
-                if (!body.connector) {
-                    delete body['connector']
-                } else {
-                    // @ts-ignore
-                    body['connector'] = [body?.connector]
-                }
-
-                api.compliance
-                    .apiV2ControlList(body)
-                    .then((resp) => {
-                        params.success({
-                            rowData: resp.data.items || [],
-                            rowCount: resp.data.total_count,
-                        })
-                        setLoading(false)
-                    })
-                    .catch((err) => {
-                        setLoading(false)
-
-                        console.log(err)
-                        params.fail()
-                    })
-            },
+        let body = {
+            connector: query?.connector,
+            severity: query?.severity,
+            list_of_tables: query?.list_of_tables,
+            primary_table: query?.primary_table,
+            root_benchmark: query?.root_benchmark,
+            parent_benchmark: query?.parent_benchmark,
+            tags: query?.tags,
+            cursor: page,
+            per_page: 15,
         }
-    }
+        if (!body.connector) {
+            delete body['connector']
+        } else {
+            // @ts-ignore
+            body['connector'] = [body?.connector]
+        }
 
+        api.compliance
+            .apiV2ControlList(body)
+            .then((resp) => {
+                setRows(resp.data.items)
+                setTotalCount(resp.data.total_count)
+                setTotalPage(Math.ceil(resp.data.total_count / 15))
+                setLoading(false)
+            })
+            .catch((err) => {
+                setLoading(false)
+
+                console.log(err)
+                // params.fail()
+            })
+    }
+    useEffect(() => {
+        GetRows()
+    }, [page,query])
+    useEffect(() => {
+        const temp_option = [
+            { propertyKey: 'connector', value: 'AWS' },
+            { propertyKey: 'connector', value: 'Azure' },
+            { propertyKey: 'severity', value: 'high' },
+            { propertyKey: 'severity', value: 'medium' },
+            { propertyKey: 'severity', value: 'low' },
+            { propertyKey: 'severity', value: 'critical' },
+            { propertyKey: 'severity', value: 'none' },
+        ]
+        const property = [
+            {
+                key: 'severity',
+                operators: ['='],
+                propertyLabel: 'Severity',
+                groupValuesLabel: 'Severity values',
+            },
+            {
+                key: 'connector',
+                operators: ['='],
+                propertyLabel: 'Connector',
+                groupValuesLabel: 'Connector values',
+            },
+            {
+                key: 'parent_benchmark',
+                operators: ['='],
+                propertyLabel: 'Parent Benchmark',
+                groupValuesLabel: 'Parent Benchmark values',
+            },
+            {
+                key: 'list_of_tables',
+                operators: ['='],
+                propertyLabel: 'List of Tables',
+                groupValuesLabel: 'List of Tables values',
+            },
+            {
+                key: 'primary_table',
+                operators: ['='],
+                propertyLabel: 'Primary Service',
+                groupValuesLabel: 'Primary Service values',
+            },
+        ]
+        filters?.parent_benchmark?.map((unique, index) => {
+            temp_option.push({
+                propertyKey: 'parent_benchmark',
+                value: unique,
+            })
+        })
+        filters?.list_of_tables?.map((unique, index) => {
+            temp_option.push({
+                propertyKey: 'list_of_tables',
+                value: unique,
+            })
+        })
+        filters?.primary_table?.map((unique, index) => {
+            temp_option.push({
+                propertyKey: 'primary_table',
+                value: unique,
+            })
+        })
+        filters?.tags?.map((unique, index) => {
+            property.push({
+                key: unique.Key,
+                operators: ['='],
+                propertyLabel: unique.Key,
+                groupValuesLabel: `${unique.Key} values`,
+                // @ts-ignore
+                group: 'tags',
+            })
+            unique.UniqueValues?.map((value, idx) => {
+                temp_option.push({
+                    propertyKey: unique.Key,
+                    value: value,
+                })
+            })
+        })
+        setProperties(property)
+        setOptions(temp_option)
+
+    }, [filters])
+    
+     useEffect(() => {
+        if(filterQuery){
+            const temp_severity :any = []
+            const temp_connector: any = []
+            const temp_parent_benchmark: any = []
+            const temp_list_of_tables: any = []
+            const temp_primary_table: any = []
+            let temp_tags = {}
+            filterQuery.tokens.map((item, index) => {
+                // @ts-ignore
+                if (item.propertyKey === 'severity') {
+                    // @ts-ignore
+
+                    temp_severity.push(item.value)
+                }
+                // @ts-ignore
+                else if (item.propertyKey === 'connector') {
+                    // @ts-ignore
+
+                    temp_connector.push(item.value)
+                }
+                // @ts-ignore
+                else if (item.propertyKey === 'parent_benchmark') {
+                    // @ts-ignore
+
+                    temp_parent_benchmark.push(item.value)
+                }
+                // @ts-ignore
+                else if (item.propertyKey === 'list_of_tables') {
+                    // @ts-ignore
+
+                    temp_list_of_tables.push(item.value)
+                }
+                // @ts-ignore
+                else if (item.propertyKey === 'primary_table') {
+                    // @ts-ignore
+
+                    temp_primary_table.push(item.value)
+                }
+                
+                else {
+                    // @ts-ignore
+
+                    if (temp_tags[item.propertyKey]) {
+                        // @ts-ignore
+
+                        temp_tags[item.propertyKey].push(item.value)
+                    } else {
+                        // @ts-ignore
+
+                        temp_tags[item.propertyKey] = [item.value]
+                    }
+                }
+
+
+
+            })
+            setQuery({
+                connector:
+                    temp_connector.length > 0 ? temp_connector : undefined,
+                severity: temp_severity.length > 0 ? temp_severity : undefined,
+                parent_benchmark:
+                    temp_parent_benchmark.length > 0
+                        ? temp_parent_benchmark
+                        : undefined,
+                list_of_tables:
+                    temp_list_of_tables.length > 0
+                        ? temp_list_of_tables
+                        : undefined,
+                primary_table:
+                    temp_primary_table.length > 0
+                        ? temp_primary_table
+                        : undefined,
+                // @ts-ignore
+                tags: temp_tags,
+            })
+        }
+     }, [filterQuery])
+     
+     
     return (
         <>
             {/* <TopHeader /> */}
-            {categoryLoading || loading ? (
-                <Spinner className="mt-56" />
-            ) : (
-                <Flex alignItems="start">
-                    {/* <DrawerPanel
+
+            <Flex alignItems="start">
+                {/* <DrawerPanel
                         open={openDrawer}
                         onClose={() => setOpenDrawer(false)}
                     >
@@ -437,8 +604,8 @@ export default function AllControls() {
                             </Button>
                         </Flex>
                     )} */}
-                    <Flex flexDirection="col" className="w-full ">
-                        {/* <Transition.Root show={showEditor} as={Fragment}>
+                <Flex flexDirection="col" className="w-full ">
+                    {/* <Transition.Root show={showEditor} as={Fragment}>
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-in-out duration-500"
@@ -629,7 +796,7 @@ export default function AllControls() {
                                 </Flex>
                             </Transition.Child>
                         </Transition.Root> */}
-                        {/* <Flex flexDirection="row" className="gap-4">
+                    {/* <Flex flexDirection="row" className="gap-4">
                             <Card
                                 onClick={() => {
                                     console.log('salam')
@@ -661,12 +828,12 @@ export default function AllControls() {
                                 </Subtitle>
                             </Card>
                         </Flex> */}
-                        {/* <Filter
+                    {/* <Filter
                             type={'findings'}
                             // @ts-ignore
                             onApply={(e) => setQuery(e)}
                         /> */}
-                        <Flex
+                    {/* <Flex
                             flexDirection="row"
                             justifyContent="start"
                             alignItems="center"
@@ -866,37 +1033,231 @@ export default function AllControls() {
                                     </div>
                                 )
                             })}
-                            
-                        </Flex>
+                        </Flex> */}
 
-                        <Flex className=" mt-2">
-                            <Table
-                                id="inventory_queries"
-                                columns={columns}
-                                serverSideDatasource={ssr()}
-                                loading={loading}
-                                onRowClicked={(e) => {
-                                    if (e.data) {
-                                        getControlDetail(e.data.id)
-                                        setOpenSlider(true)
+                    <Flex className=" mt-2">
+                        <AppLayout
+                            toolsOpen={false}
+                            navigationOpen={false}
+                            contentType="table"
+                            className="w-full"
+                            toolsHide={true}
+                            navigationHide={true}
+                            splitPanelOpen={open}
+                            onSplitPanelToggle={() => {
+                                setOpen(!open)
+                                if (open) {
+                                    setSelectedRow(undefined)
+                                }
+                            }}
+                            splitPanel={
+                                // @ts-ignore
+                                <SplitPanel
+                                    // @ts-ignore
+                                    header={
+                                        selectedRow ? (
+                                            <>
+                                                <Flex justifyContent="start">
+                                                    {getConnectorIcon(
+                                                        selectedRow?.connector
+                                                    )}
+                                                    <Title className="text-lg font-semibold ml-2 my-1">
+                                                        {selectedRow?.title}
+                                                    </Title>
+                                                </Flex>
+                                            </>
+                                        ) : (
+                                            'Control not selected'
+                                        )
                                     }
-                                }}
-                                options={{
-                                    rowModelType: 'serverSide',
-                                    serverSideDatasource: ssr(),
-                                }}
-                            />
-                        </Flex>
+                                >
+                                    <ControlDetail
+                                        // type="resource"
+                                        selectedItem={selectedRow}
+                                        open={openSlider}
+                                        onClose={() => setOpenSlider(false)}
+                                        onRefresh={() => {}}
+                                    />
+                                </SplitPanel>
+                            }
+                            content={
+                                <KTable
+                                    className="   min-h-[450px]"
+                                    // resizableColumns
+                                    variant="full-page"
+                                    renderAriaLive={({
+                                        firstIndex,
+                                        lastIndex,
+                                        totalItemsCount,
+                                    }) =>
+                                        `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
+                                    }
+                                    onSortingChange={(event) => {
+                                        // setSort(event.detail.sortingColumn.sortingField)
+                                        // setSortOrder(!sortOrder)
+                                    }}
+                                    // sortingColumn={sort}
+                                    // sortingDescending={sortOrder}
+                                    // sortingDescending={sortOrder == 'desc' ? true : false}
+                                    // @ts-ignore
+                                    onRowClick={(event) => {
+                                        const row = event.detail.item
+
+                                        getControlDetail(row.id)
+                                        setOpen(true)
+                                    }}
+                                    columnDefinitions={[
+                                        {
+                                            id: 'title',
+                                            header: 'Title',
+                                            cell: (item) => item.title,
+                                            // sortingField: 'id',
+                                            isRowHeader: true,
+                                            maxWidth: 150,
+                                        },
+                                        {
+                                            id: 'connector',
+                                            header: 'Connector',
+                                            cell: (item) => item.connector,
+                                            // sortingField: 'title',
+                                            // minWidth: 400,
+                                            maxWidth: 70,
+                                        },
+                                        {
+                                            id: 'query',
+                                            header: 'Primary Table',
+                                            maxWidth: 120,
+                                            cell: (item) => (
+                                                <>
+                                                    {item?.query?.primary_table}
+                                                </>
+                                            ),
+                                        },
+                                        {
+                                            id: 'severity',
+                                            header: 'Severity',
+                                            // sortingField: 'severity',
+                                            cell: (item) => (
+                                                <Badge
+                                                    // @ts-ignore
+                                                    color={`severity-${item.severity}`}
+                                                >
+                                                    {item.severity
+                                                        .charAt(0)
+                                                        .toUpperCase() +
+                                                        item.severity.slice(1)}
+                                                </Badge>
+                                            ),
+                                            maxWidth: 80,
+                                        },
+                                        {
+                                            id: 'parameters',
+                                            header: 'Customizable',
+                                            maxWidth: 80,
+
+                                            cell: (item) => (
+                                                <>
+                                                    {item?.query?.parameters
+                                                        .length > 0
+                                                        ? 'True'
+                                                        : 'False'}
+                                                </>
+                                            ),
+                                        },
+                                    ]}
+                                    columnDisplay={[
+                                        {
+                                            id: 'title',
+                                            visible: true,
+                                        },
+                                        {
+                                            id: 'connector',
+                                            visible: true,
+                                        },
+                                        // { id: 'query', visible: true },
+                                        {
+                                            id: 'severity',
+                                            visible: true,
+                                        },
+                                        { id: 'parameters', visible: true },
+                                        // {
+                                        //     id: 'evaluatedAt',
+                                        //     visible: true,
+                                        // },
+
+                                        // { id: 'action', visible: true },
+                                    ]}
+                                    enableKeyboardNavigation
+                                    // @ts-ignore
+                                    items={rows}
+                                    loading={loading}
+                                    loadingText="Loading resources"
+                                    // stickyColumns={{ first: 0, last: 1 }}
+                                    // stripedRows
+                                    trackBy="id"
+                                    empty={
+                                        <Box
+                                            margin={{ vertical: 'xs' }}
+                                            textAlign="center"
+                                            color="inherit"
+                                        >
+                                            <SpaceBetween size="m">
+                                                <b>No resources</b>
+                                            </SpaceBetween>
+                                        </Box>
+                                    }
+                                    filter={
+                                        <PropertyFilter
+                                            // @ts-ignore
+                                            query={filterQuery}
+                                            tokenLimit={2}
+                                            onChange={({ detail }) =>
+                                                // @ts-ignore
+                                                setFilterQuery(detail)
+                                            }
+                                            customGroupsText={[
+                                                {
+                                                    properties: 'Tags',
+                                                    values: 'Tag values',
+                                                    group: 'tags',
+                                                },
+                                            ]}
+                                            // countText="5 matches"
+                                            expandToViewport
+                                            filteringAriaLabel="Find Controls"
+                                            filteringPlaceholder="Find Controls"
+                                            filteringOptions={options}
+                                            filteringProperties={properties}
+                                            asyncProperties
+                                            virtualScroll
+                                        />
+                                    }
+                                    header={
+                                        <Header className="w-full">
+                                            Controls{' '}
+                                            <span className=" font-medium">
+                                                ({totalCount})
+                                            </span>
+                                        </Header>
+                                    }
+                                    pagination={
+                                        <Pagination
+                                            currentPageIndex={page}
+                                            pagesCount={totalPage}
+                                            onChange={({ detail }) =>
+                                                setPage(detail.currentPageIndex)
+                                            }
+                                        />
+                                    }
+                                />
+                            }
+                        />
                     </Flex>
                 </Flex>
-            )}
-            <ControlDetail
-                // type="resource"
-                selectedItem={selectedRow}
-                open={openSlider}
-                onClose={() => setOpenSlider(false)}
-                onRefresh={() => {}}
-            />
+            </Flex>
         </>
     )
 }
+
+//    getControlDetail(e.data.id)
+// setOpenSlider(true)

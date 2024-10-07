@@ -74,7 +74,7 @@ export default function Summary({
                         ),
                     },
                     {
-                        label: 'Resource Summary',
+                        label: 'Resource Incident Summary',
                         id: '1',
                         content: (
                             <>
@@ -88,7 +88,7 @@ export default function Summary({
                         ),
                     },
                     {
-                        label: 'Control Summary',
+                        label: 'Control Incident Summary',
                         id: '2',
                         content: (
                             <>
@@ -101,7 +101,6 @@ export default function Summary({
                     },
                 ]}
             />
-       
         </>
     )
 }
