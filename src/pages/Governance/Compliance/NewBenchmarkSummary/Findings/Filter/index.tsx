@@ -601,11 +601,11 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
                 value: 'failed',
                 operator: '=',
             },
-            {
-                propertyKey: 'connectionGroup',
-                value: 'healthy',
-                operator: '=',
-            },
+            // {
+            //     propertyKey: 'connectionGroup',
+            //     value: 'healthy',
+            //     operator: '=',
+            // },
         ],
         operation: 'and',
     })
@@ -688,11 +688,11 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
                               value: 'failed',
                               operator: '=',
                           },
-                          {
-                              propertyKey: 'connectionGroup',
-                              value: 'healthy',
-                              operator: '=',
-                          },
+                        //   {
+                        //       propertyKey: 'connectionGroup',
+                        //       value: 'healthy',
+                        //       operator: '=',
+                        //   },
                       ],
                       operation: 'and',
                   })
@@ -717,11 +717,11 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
                               value: 'failed',
                               operator: '=',
                           },
-                          {
-                              propertyKey: 'connectionGroup',
-                              value: 'healthy',
-                              operator: '=',
-                          },
+                        //   {
+                        //       propertyKey: 'connectionGroup',
+                        //       value: 'healthy',
+                        //       operator: '=',
+                        //   },
                       ],
                       operation: 'and',
                   })

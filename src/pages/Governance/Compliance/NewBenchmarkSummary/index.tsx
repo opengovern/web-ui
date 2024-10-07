@@ -59,8 +59,12 @@ import Link from '@cloudscape-design/components/link'
 import Button from '@cloudscape-design/components/button'
 import Filter from './Filter'
 // import { LineChart } from '@tremor/react'
-import { BreadcrumbGroup, ExpandableSection, SpaceBetween } from '@cloudscape-design/components'
-import ReactEcharts from 'echarts-for-react' 
+import {
+    BreadcrumbGroup,
+    ExpandableSection,
+    SpaceBetween,
+} from '@cloudscape-design/components'
+import ReactEcharts from 'echarts-for-react'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
 
 export default function NewBenchmarkSummary() {
@@ -71,8 +75,8 @@ export default function NewBenchmarkSummary() {
     const [tab, setTab] = useState<number>(0)
     const [enable, setEnable] = useState<boolean>(false)
     const [chart, setChart] = useState()
-    const options = () =>{
-        const confine =true
+    const options = () => {
+        const confine = true
         const opt = {
             tooltip: {
                 confine,
@@ -137,7 +141,7 @@ export default function NewBenchmarkSummary() {
         }
         return opt
     }
-    
+
     const setNotification = useSetAtom(notificationAtom)
     const [selectedGroup, setSelectedGroup] = useState<
         'findings' | 'resources' | 'controls' | 'accounts' | 'events'
@@ -186,7 +190,7 @@ export default function NewBenchmarkSummary() {
     const { benchmarkId } = useParams()
     const { value: selectedConnections } = useFilterState()
     const [assignments, setAssignments] = useState(0)
-    
+
     const [recall, setRecall] = useState(false)
     const [focusedItem, setFocusedItem] = useState<string>()
     const [expandedItems, setExpandedItems] = useState<string[]>([])
@@ -380,11 +384,10 @@ export default function NewBenchmarkSummary() {
                 config
             )
             .then((res) => {
-                let ids=''
-                res.data.jobs.map((item ,index)=>{
-                    if(index <5){
-                    ids = ids + item.job_id + ','
-
+                let ids = ''
+                res.data.jobs.map((item, index) => {
+                    if (index < 5) {
+                        ids = ids + item.job_id + ','
                     }
                 })
                 setNotification({
@@ -422,16 +425,88 @@ export default function NewBenchmarkSummary() {
     }, [isExecuted, recall])
     useEffect(() => {
         GetEnabled()
-        if(enable) {
-        GetChart()
-
+        if (enable) {
+            GetChart()
         }
     }, [])
-     useEffect(() => {
-         if (enable) {
-             GetChart()
-         }
-     }, [enable])
+    useEffect(() => {
+        if (enable) {
+            GetChart()
+        }
+    }, [enable])
+    const find_tabs = () => {
+        const tabs =[]
+        tabs.push({
+            label: 'Controls',
+            id: 'second',
+            content: (
+                <div className="w-full flex flex-row justify-start items-start ">
+                    <div className="w-full">
+                        <Controls
+                            id={String(benchmarkId)}
+                            assignments={trend === null ? 0 : 1}
+                            enable={enable}
+                            accounts={account}
+                        />
+                    </div>
+                </div>
+            ),
+        })
+        tabs.push({
+            label: 'Framework-Specific Incidents',
+            id: 'third',
+            content: <Findings id={benchmarkId ? benchmarkId : ''} />,
+            disabled: false,
+            disabledReason:
+                'This is available when the Framework has at least one assignments.',
+        })
+        if(!['baseline_efficiency',
+            'baseline_reliability',
+            'baseline_security',
+            'baseline_supportability'].includes(benchmarkDetail?.id)){
+                tabs.push({
+                    label: 'Settings',
+                    id: 'fourth',
+                    content: (
+                        <Settings
+                            id={benchmarkDetail?.id}
+                            response={(e) => setAssignments(e)}
+                            autoAssign={benchmarkDetail?.autoAssign}
+                            tracksDriftEvents={
+                                benchmarkDetail?.tracksDriftEvents
+                            }
+                            isAutoResponse={(x) => setRecall(true)}
+                            reload={() => updateDetail()}
+                        />
+                    ),
+                    disabled: false,
+                })
+            }
+            tabs.push({
+                label: 'Run History',
+                id: 'fifth',
+                content: (
+                    <EvaluateTable
+                        id={benchmarkDetail?.id}
+                        benchmarkDetail={benchmarkDetail}
+                        assignmentsCount={assignments}
+                        onEvaluate={(c) => {
+                            triggerEvaluate(
+                                {
+                                    benchmark_id: [benchmarkId || ''],
+                                    connection_id: c,
+                                },
+                                {}
+                            )
+                        }}
+                    />
+                ),
+                // disabled: true,
+                // disabledReason: 'COMING SOON',
+            })
+            return tabs
+        
+    }
 
     return (
         <>
@@ -455,7 +530,10 @@ export default function NewBenchmarkSummary() {
                             // event.preventDefault()
                         }}
                         items={[
-                            { text: 'Compliance', href: `/ws/${ws}/compliance` },
+                            {
+                                text: 'Compliance',
+                                href: `/ws/${ws}/compliance`,
+                            },
                             { text: 'Frameworks', href: '#' },
                         ]}
                         ariaLabel="Breadcrumbs"
@@ -736,208 +814,7 @@ export default function NewBenchmarkSummary() {
                             <Tabs
                                 className="mt-6 rounded-[1px] rounded-s-none rounded-e-none"
                                 // variant="container"
-                                tabs={[
-                                    {
-                                        label: 'Controls',
-                                        id: 'second',
-                                        content: (
-                                            <div className="w-full flex flex-row justify-start items-start ">
-                                                <div className="w-full">
-                                                    <Controls
-                                                        id={String(benchmarkId)}
-                                                        assignments={
-                                                            trend === null
-                                                                ? 0
-                                                                : 1
-                                                        }
-                                                        enable={enable}
-                                                        accounts={account}
-                                                    />
-                                                </div>
-                                            </div>
-                                        ),
-                                    },
-                                    // {
-                                    //     label: 'Summary',
-                                    //     id: 'first',
-                                    //     content: (
-                                    //         <Flex
-                                    //             className="w-full flex-wrap"
-                                    //             flexDirection="col"
-                                    //         >
-                                    //             {/* {hideKPIs ? (
-                                    //                 ''
-                                    //             ) : (
-                                    //                 <Grid
-                                    //                     numItems={4}
-                                    //                     className="w-full gap-4 mb-4"
-                                    //                 >
-                                    //                     <SummaryCard
-                                    //                         title="Security Score"
-                                    //                         metric={
-                                    //                             ((benchmarkKPIEnd
-                                    //                                 ?.controlsSeverityStatus
-                                    //                                 ?.total?.passed ||
-                                    //                                 0) /
-                                    //                                 (benchmarkKPIEnd
-                                    //                                     ?.controlsSeverityStatus
-                                    //                                     ?.total
-                                    //                                     ?.total || 1)) *
-                                    //                                 100 || 0
-                                    //                         }
-                                    //                         metricPrev={
-                                    //                             ((benchmarkKPIStart
-                                    //                                 ?.controlsSeverityStatus
-                                    //                                 ?.total?.passed ||
-                                    //                                 0) /
-                                    //                                 (benchmarkKPIStart
-                                    //                                     ?.controlsSeverityStatus
-                                    //                                     ?.total
-                                    //                                     ?.total || 1)) *
-                                    //                                 100 || 0
-                                    //                         }
-                                    //                         isPercent
-                                    //                         loading={
-                                    //                             benchmarkKPIEndLoading ||
-                                    //                             benchmarkKPIStartLoading
-                                    //                         }
-                                    //                     />
-                                    //                     <SummaryCard
-                                    //                         title="Issues"
-                                    //                         metric={
-                                    //                             benchmarkKPIEnd
-                                    //                                 ?.conformanceStatusSummary
-                                    //                                 ?.failed
-                                    //                         }
-                                    //                         metricPrev={
-                                    //                             benchmarkKPIStart
-                                    //                                 ?.conformanceStatusSummary
-                                    //                                 ?.failed
-                                    //                         }
-                                    //                         loading={
-                                    //                             benchmarkKPIEndLoading ||
-                                    //                             benchmarkKPIStartLoading
-                                    //                         }
-                                    //                     />
-
-                                    //                     <SummaryCard
-                                    //                         title="Passed"
-                                    //                         metric={
-                                    //                             benchmarkKPIEnd
-                                    //                                 ?.conformanceStatusSummary
-                                    //                                 ?.passed
-                                    //                         }
-                                    //                         metricPrev={
-                                    //                             benchmarkKPIStart
-                                    //                                 ?.conformanceStatusSummary
-                                    //                                 ?.passed
-                                    //                         }
-                                    //                         loading={
-                                    //                             benchmarkKPIEndLoading ||
-                                    //                             benchmarkKPIStartLoading
-                                    //                         }
-                                    //                     />
-
-                                    //                     <SummaryCard
-                                    //                         title="Accounts"
-                                    //                         metric={
-                                    //                             benchmarkKPIEnd
-                                    //                                 ?.connectionsStatus
-                                    //                                 ?.total
-                                    //                         }
-                                    //                         metricPrev={
-                                    //                             benchmarkKPIStart
-                                    //                                 ?.connectionsStatus
-                                    //                                 ?.total
-                                    //                         }
-                                    //                         loading={
-                                    //                             benchmarkKPIEndLoading ||
-                                    //                             benchmarkKPIStartLoading
-                                    //                         }
-                                    //                     />
-                                    //                 </Grid>
-                                    //             )} */}
-                                    //             {trend === null ? (
-                                    //                 ''
-                                    //             ) : (
-                                    //                 // <BenchmarkChart
-                                    //                 //     title="Security Score"
-                                    //                 //     isLoading={trendLoading}
-                                    //                 //     trend={trend}
-                                    //                 //     error={toErrorMessage(
-                                    //                 //         trendError
-                                    //                 //     )}
-                                    //                 //     onRefresh={() => sendTrend()}
-                                    //                 // />
-                                    //
-
-                                    {
-                                        label: 'Framework-Specific Incidents',
-                                        id: 'third',
-                                        content: (
-                                            <Findings
-                                                id={
-                                                    benchmarkId
-                                                        ? benchmarkId
-                                                        : ''
-                                                }
-                                            />
-                                        ),
-                                        disabled: false,
-                                        disabledReason:
-                                            'This is available when the Framework has at least one assignments.',
-                                    },
-                                    {
-                                        label: 'Settings',
-                                        id: 'fourth',
-                                        content: (
-                                            <Settings
-                                                id={benchmarkDetail?.id}
-                                                response={(e) =>
-                                                    setAssignments(e)
-                                                }
-                                                autoAssign={
-                                                    benchmarkDetail?.autoAssign
-                                                }
-                                                tracksDriftEvents={
-                                                    benchmarkDetail?.tracksDriftEvents
-                                                }
-                                                isAutoResponse={(x) =>
-                                                    setRecall(true)
-                                                }
-                                                reload={() => updateDetail()}
-                                            />
-                                        ),
-                                        disabled: false,
-                                    },
-                                    {
-                                        label: 'Run History',
-                                        id: 'fifth',
-                                        content: (
-                                            <EvaluateTable
-                                                id={benchmarkDetail?.id}
-                                                benchmarkDetail={
-                                                    benchmarkDetail
-                                                }
-                                                assignmentsCount={assignments}
-                                                onEvaluate={(c) => {
-                                                    triggerEvaluate(
-                                                        {
-                                                            benchmark_id: [
-                                                                benchmarkId ||
-                                                                    '',
-                                                            ],
-                                                            connection_id: c,
-                                                        },
-                                                        {}
-                                                    )
-                                                }}
-                                            />
-                                        ),
-                                        // disabled: true,
-                                        // disabledReason: 'COMING SOON',
-                                    },
-                                ]}
+                                tabs={find_tabs()}
                             />
                         </Flex>
                     </Flex>
@@ -1205,3 +1082,118 @@ export default function NewBenchmarkSummary() {
         </>
     )
 }
+
+
+   // {
+                                    //     label: 'Summary',
+                                    //     id: 'first',
+                                    //     content: (
+                                    //         <Flex
+                                    //             className="w-full flex-wrap"
+                                    //             flexDirection="col"
+                                    //         >
+                                    //             {/* {hideKPIs ? (
+                                    //                 ''
+                                    //             ) : (
+                                    //                 <Grid
+                                    //                     numItems={4}
+                                    //                     className="w-full gap-4 mb-4"
+                                    //                 >
+                                    //                     <SummaryCard
+                                    //                         title="Security Score"
+                                    //                         metric={
+                                    //                             ((benchmarkKPIEnd
+                                    //                                 ?.controlsSeverityStatus
+                                    //                                 ?.total?.passed ||
+                                    //                                 0) /
+                                    //                                 (benchmarkKPIEnd
+                                    //                                     ?.controlsSeverityStatus
+                                    //                                     ?.total
+                                    //                                     ?.total || 1)) *
+                                    //                                 100 || 0
+                                    //                         }
+                                    //                         metricPrev={
+                                    //                             ((benchmarkKPIStart
+                                    //                                 ?.controlsSeverityStatus
+                                    //                                 ?.total?.passed ||
+                                    //                                 0) /
+                                    //                                 (benchmarkKPIStart
+                                    //                                     ?.controlsSeverityStatus
+                                    //                                     ?.total
+                                    //                                     ?.total || 1)) *
+                                    //                                 100 || 0
+                                    //                         }
+                                    //                         isPercent
+                                    //                         loading={
+                                    //                             benchmarkKPIEndLoading ||
+                                    //                             benchmarkKPIStartLoading
+                                    //                         }
+                                    //                     />
+                                    //                     <SummaryCard
+                                    //                         title="Issues"
+                                    //                         metric={
+                                    //                             benchmarkKPIEnd
+                                    //                                 ?.conformanceStatusSummary
+                                    //                                 ?.failed
+                                    //                         }
+                                    //                         metricPrev={
+                                    //                             benchmarkKPIStart
+                                    //                                 ?.conformanceStatusSummary
+                                    //                                 ?.failed
+                                    //                         }
+                                    //                         loading={
+                                    //                             benchmarkKPIEndLoading ||
+                                    //                             benchmarkKPIStartLoading
+                                    //                         }
+                                    //                     />
+
+                                    //                     <SummaryCard
+                                    //                         title="Passed"
+                                    //                         metric={
+                                    //                             benchmarkKPIEnd
+                                    //                                 ?.conformanceStatusSummary
+                                    //                                 ?.passed
+                                    //                         }
+                                    //                         metricPrev={
+                                    //                             benchmarkKPIStart
+                                    //                                 ?.conformanceStatusSummary
+                                    //                                 ?.passed
+                                    //                         }
+                                    //                         loading={
+                                    //                             benchmarkKPIEndLoading ||
+                                    //                             benchmarkKPIStartLoading
+                                    //                         }
+                                    //                     />
+
+                                    //                     <SummaryCard
+                                    //                         title="Accounts"
+                                    //                         metric={
+                                    //                             benchmarkKPIEnd
+                                    //                                 ?.connectionsStatus
+                                    //                                 ?.total
+                                    //                         }
+                                    //                         metricPrev={
+                                    //                             benchmarkKPIStart
+                                    //                                 ?.connectionsStatus
+                                    //                                 ?.total
+                                    //                         }
+                                    //                         loading={
+                                    //                             benchmarkKPIEndLoading ||
+                                    //                             benchmarkKPIStartLoading
+                                    //                         }
+                                    //                     />
+                                    //                 </Grid>
+                                    //             )} */}
+                                    //             {trend === null ? (
+                                    //                 ''
+                                    //             ) : (
+                                    //                 // <BenchmarkChart
+                                    //                 //     title="Security Score"
+                                    //                 //     isLoading={trendLoading}
+                                    //                 //     trend={trend}
+                                    //                 //     error={toErrorMessage(
+                                    //                 //         trendError
+                                    //                 //     )}
+                                    //                 //     onRefresh={() => sendTrend()}
+                                    //                 // />
+                                    //
