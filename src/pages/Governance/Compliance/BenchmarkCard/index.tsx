@@ -131,7 +131,7 @@ export default function BenchmarkCards({ benchmark, all,loading }: IComplianceCa
 
                         {
                             id: 'security_score',
-                            header: 'Security Score',
+                            header: 'Compliance Score',
                             content: (item) => `${item.security_score}%`,
                         },
                         {

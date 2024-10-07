@@ -288,6 +288,9 @@ export default function SettingsALLJobs() {
     const [loading, setLoading] = useState(false)
     const [jobs, setJobs] = useState([])
     const [page, setPage] = useState(0)
+    const [sort, setSort] = useState('updatedAt')
+    const [sortOrder,setSortOrder]= useState(true)
+
     const [totalCount, setTotalCount] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
     const [propertyOptions, setPropertyOptions] = useState()
@@ -388,8 +391,8 @@ export default function SettingsALLJobs() {
 
             statusFilter: status_filter,
             typeFilters: jobType_filter,
-            sortBy: 'updatedAt',
-            sortOrder: 'desc',
+            sortBy: sort,
+            sortOrder: sortOrder ? 'DESC' : 'ASC',
         }
         if(date){
             if(date.type =='relative'){
@@ -443,7 +446,7 @@ export default function SettingsALLJobs() {
     }
     useEffect(() => {
         GetRows()
-    }, [queries, date,page])
+    }, [queries, date,page,sort,sortOrder])
 
     const clickedJobDetails = [
         { title: 'ID', value: clickedJob?.id },
@@ -508,12 +511,11 @@ export default function SettingsALLJobs() {
                             `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
                         }
                         onSortingChange={(event) => {
-                            // setSort(event.detail.sortingColumn.sortingField)
-                            // setSortOrder(!sortOrder)
+                            setSort(event.detail.sortingColumn.sortingField)
+                            setSortOrder(!sortOrder)
                         }}
-                        // sortingColumn={sort}
-                        // sortingDescending={sortOrder}
-                        // sortingDescending={sortOrder == 'desc' ? true : false}
+                        sortingColumn={sort}
+                        sortingDescending={sortOrder}
                         // @ts-ignore
                         onRowClick={(event) => {
                             const row = event.detail.item
@@ -525,7 +527,7 @@ export default function SettingsALLJobs() {
                                 id: 'id',
                                 header: 'Id',
                                 cell: (item) => <>{item.id}</>,
-                                sortingField: 'id',
+                                // sortingField: 'id',
                                 isRowHeader: true,
                                 maxWidth: 100,
                             },
@@ -539,7 +541,7 @@ export default function SettingsALLJobs() {
                                             .split('.')[0]
                                     } `}</>
                                 ),
-                                sortingField: 'id',
+                                sortingField: 'createdAt',
                                 isRowHeader: true,
                                 maxWidth: 100,
                             },
@@ -547,7 +549,7 @@ export default function SettingsALLJobs() {
                                 id: 'type',
                                 header: 'Job Type',
                                 cell: (item) => <>{item.type}</>,
-                                sortingField: 'id',
+                                sortingField: 'type',
                                 isRowHeader: true,
                                 maxWidth: 100,
                             },
@@ -555,7 +557,7 @@ export default function SettingsALLJobs() {
                                 id: 'title',
                                 header: 'Title',
                                 cell: (item) => <>{item.title}</>,
-                                sortingField: 'id',
+                                sortingField: 'title',
                                 isRowHeader: true,
                                 maxWidth: 100,
                             },
@@ -618,7 +620,7 @@ export default function SettingsALLJobs() {
                                         </Badge>
                                     )
                                 },
-                                sortingField: 'id',
+                                sortingField: 'status',
                                 isRowHeader: true,
                                 maxWidth: 100,
                             },
@@ -632,7 +634,7 @@ export default function SettingsALLJobs() {
                                             .split('.')[0]
                                     } `}</>
                                 ),
-                                sortingField: 'id',
+                                sortingField: 'updatedAt',
                                 isRowHeader: true,
                                 maxWidth: 100,
                             },
