@@ -420,7 +420,7 @@ export default function ResourcesWithFailure({ query }: ICount) {
                                             justifyContent="center"
                                             className="h-full"
                                         >
-                                            <Text className="text-gray-800">{`${item.totalCount} issues`}</Text>
+                                            <Text className="text-gray-800">{`${item.totalCount} incidents`}</Text>
                                             <Text>{`${
                                                 item.totalCount -
                                                 item.failedCount

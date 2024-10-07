@@ -102,7 +102,7 @@ export default function ResourceFindingDetail({
         return failingControls.size > 0 ? (
             <Flex className="w-fit gap-1.5">
                 <XCircleIcon className="h-4 text-rose-600" />
-                <Text>{failingControls.size} Failing</Text>
+                <Text>{failingControls.size} Failing Controls</Text>
             </Flex>
         ) : (
             <Flex className="w-fit gap-1.5">
