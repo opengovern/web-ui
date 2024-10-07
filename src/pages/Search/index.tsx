@@ -109,7 +109,7 @@ export default function Search() {
                                     setTab(0)
                                 }}
                             >
-                                Run a Query
+                                Query Library
                             </Tab>
                             <Tab
                                 value={1}
@@ -117,7 +117,7 @@ export default function Search() {
                                     setTab(1)
                                 }}
                             >
-                                Query Library
+                                Run a Query
                             </Tab>
                         </TabList>
                         <TabPanels>
