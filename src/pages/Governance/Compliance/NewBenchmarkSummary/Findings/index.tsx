@@ -107,7 +107,7 @@ export default function Findings({ id }: Props) {
         controlID: [],
         benchmarkID: [id],
         resourceTypeID: [],
-        lifecycle: [true, false],
+        lifecycle: [true],
         activeTimeRange: undefined,
         eventTimeRange: undefined,
         jobID: [],

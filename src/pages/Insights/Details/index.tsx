@@ -392,7 +392,7 @@ export default function ScoreDetails() {
                                         setQuery(modalData)
                                     }}
                                 >
-                                    <Link to={`/ws/${ws}/search?tab_id=1`}>
+                                    <Link to={`/ws/${ws}/finder?tab_id=1`}>
                                         Open in Query
                                     </Link>
                                 </Button>

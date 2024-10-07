@@ -263,7 +263,7 @@ export default function ControlFindings({
         controlID: [controlId || ''],
         benchmarkID: [],
         resourceTypeID: [],
-        lifecycle: [true, false],
+        lifecycle: [true],
         activeTimeRange: undefined,
         eventTimeRange: undefined,
         jobID: [],

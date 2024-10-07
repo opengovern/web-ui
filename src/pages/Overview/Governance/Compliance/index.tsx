@@ -73,7 +73,7 @@ export default function Compliance() {
          per_page: 4,
          sort_by: 'incidents',
          assigned: true,
-         is_sre_benchmark: false,
+         is_baseline: false,
      }
      axios
          .post(`${url}/main/compliance/api/v3/benchmarks`, body,config)

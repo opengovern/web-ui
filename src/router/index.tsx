@@ -433,7 +433,7 @@ const authRoutes = [
 
     {
         key: 'Search',
-        path: '/ws/:ws/search',
+        path: '/ws/:ws/finder',
         element: <Search />,
     },
     // {

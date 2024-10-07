@@ -225,7 +225,7 @@ export default function ImpactedAccounts({ controlId }: IImpactedAccounts) {
                                             justifyContent="center"
                                             className="h-full"
                                         >
-                                            <Text className="text-gray-800">{`${item.count} issues`}</Text>
+                                            <Text className="text-gray-800">{`${item.count} incidents`}</Text>
                                             <Text>{`${
                                                 // @ts-ignore
                                                 item.totalCount - item.count

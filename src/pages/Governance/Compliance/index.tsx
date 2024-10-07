@@ -1,7 +1,19 @@
 // @ts-nocheck
-import { Card, Col, Flex, Grid, Icon, ProgressCircle, Title } from '@tremor/react'
+import {
+    Card,
+    Col,
+    Flex,
+    Grid,
+    Icon,
+    ProgressCircle,
+    Title,
+} from '@tremor/react'
 import { useEffect, useState } from 'react'
-import { DocumentTextIcon, PuzzlePieceIcon, ShieldCheckIcon } from '@heroicons/react/24/outline'
+import {
+    DocumentTextIcon,
+    PuzzlePieceIcon,
+    ShieldCheckIcon,
+} from '@heroicons/react/24/outline'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
@@ -24,7 +36,12 @@ import Spinner from '../../../components/Spinner'
 import axios from 'axios'
 import BenchmarkCard from './BenchmarkCard'
 import BenchmarkCards from './BenchmarkCard'
-import { Header, Pagination, PropertyFilter, Tabs } from '@cloudscape-design/components'
+import {
+    Header,
+    Pagination,
+    PropertyFilter,
+    Tabs,
+} from '@cloudscape-design/components'
 import Multiselect from '@cloudscape-design/components/multiselect'
 import Select from '@cloudscape-design/components/select'
 import ScoreCategoryCard from '../../../components/Cards/ScoreCategoryCard'
@@ -38,396 +55,386 @@ const CATEGORY = {
 
 export default function Compliance() {
     const defaultSelectedConnectors = ''
-  
-    const [loading,setLoading] = useState<boolean>(false);
+
+    const [loading, setLoading] = useState<boolean>(false)
     const [query, setQuery] = useState({
         tokens: [],
         operation: 'and',
     })
-    const [connectors, setConnectors] = useState(
-        {
-            label: 'Any',
-            value: 'Any',
-        },
-       
-    )
-    const [enable, setEnanble] = useState(
-        {
-            label: 'No',
-            value: false,
-        },
-    )
+    const [connectors, setConnectors] = useState({
+        label: 'Any',
+        value: 'Any',
+    })
+    const [enable, setEnanble] = useState({
+        label: 'No',
+        value: false,
+    })
     const [isSRE, setIsSRE] = useState({
         label: 'Compliance Benchmark',
         value: false,
     })
-    
-        const [AllBenchmarks,setBenchmarks] = useState();
-        const [BenchmarkDetails, setBenchmarksDetails] = useState()
+
+    const [AllBenchmarks, setBenchmarks] = useState()
+    const [BenchmarkDetails, setBenchmarksDetails] = useState()
     const [page, setPage] = useState<number>(1)
-const [totalPage, setTotalPage] = useState<number>(0)
-const [totalCount, setTotalCount] = useState<number>(0)
- const [response, setResponse] = useState()
- const [isLoading, setIsLoading] = useState(false)
+    const [totalPage, setTotalPage] = useState<number>(0)
+    const [totalCount, setTotalCount] = useState<number>(0)
+    const [response, setResponse] = useState()
+    const [isLoading, setIsLoading] = useState(false)
 
-
- const GetCard = () => {
-     let url = ''
-     setLoading(true)
-     if (window.location.origin === 'http://localhost:3000') {
-         url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
-     } else {
-         url = window.location.origin
-     }
-     // @ts-ignore
-     const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
-
-     const config = {
-         headers: {
-             Authorization: `Bearer ${token}`,
-         },
-     }
-     const connectors= []
-     const enable = []
-     const isSRE = []
-    query.tokens.map((item) => {
-        if(item.propertyKey == 'connector'){
-            connectors.push(item.value)
+    const GetCard = () => {
+        let url = ''
+        setLoading(true)
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
         }
-        if(item.propertyKey == 'enable'){
-            enable.push(item.value)
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         }
-        // if(item.propertyKey == 'family'){
-        //     isSRE.push(item.value)
-        // }
-    }
-    )
-    const connector_filter = connectors.length ==1 ? connectors : []
-
-    let  sre_filter = false
-    if(isSRE.length == 1){
-        if(isSRE[0] == 'SRE benchmark'){
-            sre_filter = true
-        }
-    }
-
-    let enable_filter = true
-    if(enable.length == 1){
-        if(enable[0] == 'No'){
-            enable_filter = false
-        }
-
-    }
-     
-     const body = {
-         cursor: page,
-         per_page: 6,
-         sort_by: 'incidents',
-         assigned: false,
-         is_sre_benchmark: sre_filter,
-         connectors: connector_filter,
-         root: true,
-     }
-
-     axios
-         .post(`${url}/main/compliance/api/v3/benchmarks`, body,config)
-         .then((res) => {
-             //  const temp = []
-            if(!res.data.items){
-            setLoading(false)
-
+        const connectors = []
+        const enable = []
+        const isSRE = []
+        query.tokens.map((item) => {
+            if (item.propertyKey == 'connector') {
+                connectors.push(item.value)
             }
-            setBenchmarks(res.data.items)
-            setTotalPage(Math.ceil(res.data.total_count/6))
-            setTotalCount(res.data.total_count)
-         })
-         .catch((err) => {
-            setLoading(false)
-            setBenchmarks([])
+            if (item.propertyKey == 'enable') {
+                enable.push(item.value)
+            }
+            // if(item.propertyKey == 'family'){
+            //     isSRE.push(item.value)
+            // }
+        })
+        const connector_filter = connectors.length == 1 ? connectors : []
 
-             console.log(err)
-         })
- }
+        let sre_filter = false
+        if (isSRE.length == 1) {
+            if (isSRE[0] == 'SRE benchmark') {
+                sre_filter = true
+            }
+        }
 
-  const Detail = (benchmarks: string[]) => {
-      let url = ''
-      if (window.location.origin === 'http://localhost:3000') {
-          url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
-      } else {
-          url = window.location.origin
-      }
-      // @ts-ignore
-      const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+        let enable_filter = true
+        if (enable.length == 1) {
+            if (enable[0] == 'No') {
+                enable_filter = false
+            }
+        }
 
-      const config = {
-          headers: {
-              Authorization: `Bearer ${token}`,
-          },
-      }
-      const body = {
-         benchmarks: benchmarks
-      }
-      axios
-          .post(
-              `${url}/main/compliance/api/v3/compliance/summary/benchmark`,
-              body,
-              config
-          )
-          .then((res) => {
-              //  const temp = []
+        const body = {
+            cursor: page,
+            per_page: 6,
+            sort_by: 'incidents',
+            assigned: false,
+            is_baseline: sre_filter,
+            connectors: connector_filter,
+            root: true,
+        }
+
+        axios
+            .post(`${url}/main/compliance/api/v3/benchmarks`, body, config)
+            .then((res) => {
+                //  const temp = []
+                if (!res.data.items) {
+                    setLoading(false)
+                }
+                setBenchmarks(res.data.items)
+                setTotalPage(Math.ceil(res.data.total_count / 6))
+                setTotalCount(res.data.total_count)
+            })
+            .catch((err) => {
                 setLoading(false)
-              setBenchmarksDetails(res.data)
-          })
-          .catch((err) => {
-                setLoading(false)
-              setBenchmarksDetails([])
+                setBenchmarks([])
 
-              console.log(err)
-          })
-  }
- const GetBenchmarks = (benchmarks: string[]) => {
-     setIsLoading(true)
-     let url = ''
-     if (window.location.origin === 'http://localhost:3000') {
-         url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
-     } else {
-         url = window.location.origin
-     }
-     // @ts-ignore
-     const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
-
-     const config = {
-         headers: {
-             Authorization: `Bearer ${token}`,
-         },
-     }
-     const body = {
-         benchmarks: benchmarks,
-     }
-     axios
-         .post(
-             `${url}/main/compliance/api/v3/compliance/summary/benchmark`,
-             body,
-             config
-         )
-         .then((res) => {
-              const temp = [
-                  {
-                      benchmark_id: 'sre_supportability',
-                      benchmark_title: 'SRE Security',
-                      compliance_score: 0.6666666666666666,
-                      connectors: ['Azure', 'AWS'],
-                      severity_summary_by_control: {
-                          total: {
-                              total: 12,
-                              passed: 8,
-                              failed: 4,
-                          },
-                          critical: {
-                              total: 0,
-                              passed: 0,
-                              failed: 0,
-                          },
-                          high: {
-                              total: 7,
-                              passed: 4,
-                              failed: 3,
-                          },
-                          medium: {
-                              total: 3,
-                              passed: 2,
-                              failed: 1,
-                          },
-                          low: {
-                              total: 2,
-                              passed: 2,
-                              failed: 0,
-                          },
-                          none: {
-                              total: 0,
-                              passed: 0,
-                              failed: 0,
-                          },
-                      },
-                      severity_summary_by_resource: {
-                          total: {
-                              total: 19,
-                              passed: 13,
-                              failed: 6,
-                          },
-                          critical: {
-                              total: 0,
-                              passed: 0,
-                              failed: 0,
-                          },
-                          high: {
-                              total: 11,
-                              passed: 7,
-                              failed: 4,
-                          },
-                          medium: {
-                              total: 6,
-                              passed: 4,
-                              failed: 2,
-                          },
-                          low: {
-                              total: 2,
-                              passed: 2,
-                              failed: 0,
-                          },
-                          none: {
-                              total: 0,
-                              passed: 0,
-                              failed: 0,
-                          },
-                      },
-                      severity_summary_by_incidents: {
-                          none: 0,
-                          low: 0,
-                          medium: 4,
-                          high: 8,
-                          critical: 0,
-                          total: 12,
-                      },
-                      cost_optimization: 0,
-                      findings_summary: {
-                          total_count: 30,
-                          passed: 18,
-                          failed: 12,
-                      },
-                      issues_count: 12,
-                      top_integrations: [
-                          {
-                              integration_info: {
-                                  integration: 'Azure',
-                                  type: 'azure_subscription',
-                                  id: '75b0a9a9-3222-4290-bdf9-56127d550563',
-                                  id_name: 'Policy Testing Subscription',
-                                  integration_tracker:
-                                      '1c2a6b18-ac87-4f5e-a472-1e26f8704f29',
-                              },
-                              issues: 4,
-                          },
-                          {
-                              integration_info: {
-                                  integration: 'AWS',
-                                  type: 'aws_account',
-                                  id: '861370837605',
-                                  id_name: 'ADorigi',
-                                  integration_tracker:
-                                      'e6cb0afa-e624-4ca7-8b47-fa9988831137',
-                              },
-                              issues: 4,
-                          },
-                      ],
-                      top_resources_with_issues: [
-                          {
-                              field: 'Resource',
-                              key: 'o-ng68d511a2',
-                              issues: 2,
-                          },
-                          {
-                              field: 'Resource',
-                              key: '861370837605',
-                              issues: 2,
-                          },
-                          {
-                              field: 'Resource',
-                              key: '/subscriptions/75b0a9a9-3222-4290-bdf9-56127d550563/resourceGroups/policy-testing-us-east/providers/Microsoft.KeyVault/vaults/vm-policy-test-keyvault2',
-                              issues: 1,
-                          },
-                          {
-                              field: 'Resource',
-                              key: '/subscriptions/75b0a9a9-3222-4290-bdf9-56127d550563/resourceGroups/policy-testing-us-east/providers/Microsoft.KeyVault/vaults/vm-policy-test-keyvault3',
-                              issues: 1,
-                          },
-                          {
-                              field: 'Resource',
-                              key: '/subscriptions/75b0a9a9-3222-4290-bdf9-56127d550563/resourceGroups/policy-testing-us-east/providers/Microsoft.Storage/storageAccounts/kaytustorageaccounttest',
-                              issues: 1,
-                          },
-                      ],
-                      top_resource_types_with_issues: [
-                          {
-                              field: 'ResourceType',
-                              key: 'aws::account::account',
-                              issues: 2,
-                          },
-                          {
-                              field: 'ResourceType',
-                              key: 'microsoft.keyvault/vaults',
-                              issues: 2,
-                          },
-                          {
-                              field: 'ResourceType',
-                              key: 'microsoft.storage/storageaccounts',
-                              issues: 2,
-                          },
-                      ],
-                      top_controls_with_issues: [
-                          {
-                              field: 'Control',
-                              key: 'aws_cis_v120_1_11',
-                              issues: 2,
-                          },
-                          {
-                              field: 'Control',
-                              key: 'aws_cis_v120_1_8',
-                              issues: 2,
-                          },
-                          {
-                              field: 'Control',
-                              key: 'aws_cis_v130_1_8',
-                              issues: 2,
-                          },
-                          {
-                              field: 'Control',
-                              key: 'aws_account_alternate_contact_security_registered',
-                              issues: 2,
-                          },
-                          {
-                              field: 'Control',
-                              key: 'aws_account_alternate_contacts',
-                              issues: 2,
-                          },
-                      ],
-                      last_evaluated_at: '2024-10-06T12:21:46Z',
-                      last_job_status: 'SUCCEEDED',
-                      last_job_id: '70',
-                  },
-              ]
-             setIsLoading(false)
-             res.data?.map((item) => {
-                    temp.push(item)
-             })
-             setResponse(temp)
-         })
-         .catch((err) => {
-             setIsLoading(false)
-
-             console.log(err)
-         })
- }
-   useEffect(() => {
-       GetCard()
-   }, [page, query])
- 
-   useEffect(() => {
-    if(AllBenchmarks){
-  const temp = []
-  AllBenchmarks?.map((item) => {
-      temp.push(item.benchmark.id)
-  })
-  Detail(temp)
+                console.log(err)
+            })
     }
-    
-   }, [AllBenchmarks])
+
+    const Detail = (benchmarks: string[]) => {
+        let url = ''
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
+        }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+        const body = {
+            benchmarks: benchmarks,
+        }
+        axios
+            .post(
+                `${url}/main/compliance/api/v3/compliance/summary/benchmark`,
+                body,
+                config
+            )
+            .then((res) => {
+                //  const temp = []
+                setLoading(false)
+                setBenchmarksDetails(res.data)
+            })
+            .catch((err) => {
+                setLoading(false)
+                setBenchmarksDetails([])
+
+                console.log(err)
+            })
+    }
+    const GetBenchmarks = (benchmarks: string[]) => {
+        setIsLoading(true)
+        let url = ''
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
+        }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+        const body = {
+            benchmarks: benchmarks,
+        }
+        axios
+            .post(
+                `${url}/main/compliance/api/v3/compliance/summary/benchmark`,
+                body,
+                config
+            )
+            .then((res) => {
+                const temp = [
+                    // {
+                    //     benchmark_id: 'sre_supportability',
+                    //     benchmark_title: 'SRE Security',
+                    //     compliance_score: 0.6666666666666666,
+                    //     connectors: ['Azure', 'AWS'],
+                    //     severity_summary_by_control: {
+                    //         total: {
+                    //             total: 12,
+                    //             passed: 8,
+                    //             failed: 4,
+                    //         },
+                    //         critical: {
+                    //             total: 0,
+                    //             passed: 0,
+                    //             failed: 0,
+                    //         },
+                    //         high: {
+                    //             total: 7,
+                    //             passed: 4,
+                    //             failed: 3,
+                    //         },
+                    //         medium: {
+                    //             total: 3,
+                    //             passed: 2,
+                    //             failed: 1,
+                    //         },
+                    //         low: {
+                    //             total: 2,
+                    //             passed: 2,
+                    //             failed: 0,
+                    //         },
+                    //         none: {
+                    //             total: 0,
+                    //             passed: 0,
+                    //             failed: 0,
+                    //         },
+                    //     },
+                    //     severity_summary_by_resource: {
+                    //         total: {
+                    //             total: 19,
+                    //             passed: 13,
+                    //             failed: 6,
+                    //         },
+                    //         critical: {
+                    //             total: 0,
+                    //             passed: 0,
+                    //             failed: 0,
+                    //         },
+                    //         high: {
+                    //             total: 11,
+                    //             passed: 7,
+                    //             failed: 4,
+                    //         },
+                    //         medium: {
+                    //             total: 6,
+                    //             passed: 4,
+                    //             failed: 2,
+                    //         },
+                    //         low: {
+                    //             total: 2,
+                    //             passed: 2,
+                    //             failed: 0,
+                    //         },
+                    //         none: {
+                    //             total: 0,
+                    //             passed: 0,
+                    //             failed: 0,
+                    //         },
+                    //     },
+                    //     severity_summary_by_incidents: {
+                    //         none: 0,
+                    //         low: 0,
+                    //         medium: 4,
+                    //         high: 8,
+                    //         critical: 0,
+                    //         total: 12,
+                    //     },
+                    //     cost_optimization: 0,
+                    //     findings_summary: {
+                    //         total_count: 30,
+                    //         passed: 18,
+                    //         failed: 12,
+                    //     },
+                    //     issues_count: 12,
+                    //     top_integrations: [
+                    //         {
+                    //             integration_info: {
+                    //                 integration: 'Azure',
+                    //                 type: 'azure_subscription',
+                    //                 id: '75b0a9a9-3222-4290-bdf9-56127d550563',
+                    //                 id_name: 'Policy Testing Subscription',
+                    //                 integration_tracker:
+                    //                     '1c2a6b18-ac87-4f5e-a472-1e26f8704f29',
+                    //             },
+                    //             issues: 4,
+                    //         },
+                    //         {
+                    //             integration_info: {
+                    //                 integration: 'AWS',
+                    //                 type: 'aws_account',
+                    //                 id: '861370837605',
+                    //                 id_name: 'ADorigi',
+                    //                 integration_tracker:
+                    //                     'e6cb0afa-e624-4ca7-8b47-fa9988831137',
+                    //             },
+                    //             issues: 4,
+                    //         },
+                    //     ],
+                    //     top_resources_with_issues: [
+                    //         {
+                    //             field: 'Resource',
+                    //             key: 'o-ng68d511a2',
+                    //             issues: 2,
+                    //         },
+                    //         {
+                    //             field: 'Resource',
+                    //             key: '861370837605',
+                    //             issues: 2,
+                    //         },
+                    //         {
+                    //             field: 'Resource',
+                    //             key: '/subscriptions/75b0a9a9-3222-4290-bdf9-56127d550563/resourceGroups/policy-testing-us-east/providers/Microsoft.KeyVault/vaults/vm-policy-test-keyvault2',
+                    //             issues: 1,
+                    //         },
+                    //         {
+                    //             field: 'Resource',
+                    //             key: '/subscriptions/75b0a9a9-3222-4290-bdf9-56127d550563/resourceGroups/policy-testing-us-east/providers/Microsoft.KeyVault/vaults/vm-policy-test-keyvault3',
+                    //             issues: 1,
+                    //         },
+                    //         {
+                    //             field: 'Resource',
+                    //             key: '/subscriptions/75b0a9a9-3222-4290-bdf9-56127d550563/resourceGroups/policy-testing-us-east/providers/Microsoft.Storage/storageAccounts/kaytustorageaccounttest',
+                    //             issues: 1,
+                    //         },
+                    //     ],
+                    //     top_resource_types_with_issues: [
+                    //         {
+                    //             field: 'ResourceType',
+                    //             key: 'aws::account::account',
+                    //             issues: 2,
+                    //         },
+                    //         {
+                    //             field: 'ResourceType',
+                    //             key: 'microsoft.keyvault/vaults',
+                    //             issues: 2,
+                    //         },
+                    //         {
+                    //             field: 'ResourceType',
+                    //             key: 'microsoft.storage/storageaccounts',
+                    //             issues: 2,
+                    //         },
+                    //     ],
+                    //     top_controls_with_issues: [
+                    //         {
+                    //             field: 'Control',
+                    //             key: 'aws_cis_v120_1_11',
+                    //             issues: 2,
+                    //         },
+                    //         {
+                    //             field: 'Control',
+                    //             key: 'aws_cis_v120_1_8',
+                    //             issues: 2,
+                    //         },
+                    //         {
+                    //             field: 'Control',
+                    //             key: 'aws_cis_v130_1_8',
+                    //             issues: 2,
+                    //         },
+                    //         {
+                    //             field: 'Control',
+                    //             key: 'aws_account_alternate_contact_security_registered',
+                    //             issues: 2,
+                    //         },
+                    //         {
+                    //             field: 'Control',
+                    //             key: 'aws_account_alternate_contacts',
+                    //             issues: 2,
+                    //         },
+                    //     ],
+                    //     last_evaluated_at: '2024-10-06T12:21:46Z',
+                    //     last_job_status: 'SUCCEEDED',
+                    //     last_job_id: '70',
+                    // },
+                ]
+                setIsLoading(false)
+                res.data?.map((item) => {
+                    temp.push(item)
+                })
+                setResponse(temp)
+            })
+            .catch((err) => {
+                setIsLoading(false)
+
+                console.log(err)
+            })
+    }
+    useEffect(() => {
+        GetCard()
+    }, [page, query])
+
+    useEffect(() => {
+        if (AllBenchmarks) {
+            const temp = []
+            AllBenchmarks?.map((item) => {
+                temp.push(item.benchmark.id)
+            })
+            Detail(temp)
+        }
+    }, [AllBenchmarks])
     useEffect(() => {
         GetBenchmarks([
-            'sre_efficiency',
-            'sre_reliability',
-            'sre_supportability',
-,
+            'baseline_efficiency',
+            'baseline_reliability',
+            'baseline_security',
+            'baseline_supportability',
         ])
     }, [])
 
@@ -463,7 +470,7 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                 className="gap-[30px] mt-6 w-full justify-items-center"
                                             >
                                                 {isLoading || !response
-                                                    ? [1, 2, 3,4].map((i) => (
+                                                    ? [1, 2, 3, 4].map((i) => (
                                                           <Flex className="gap-6 px-8 py-8 bg-white rounded-xl shadow-sm hover:shadow-md hover:cursor-pointer">
                                                               <Flex className="relative w-fit">
                                                                   <ProgressCircle
@@ -487,43 +494,51 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                           .sort((a, b) => {
                                                               if (
                                                                   a.benchmark_title ===
-                                                                      'SRE Supportability' &&
+                                                                      'Supportability' &&
                                                                   b.benchmark_title ===
-                                                                      'SRE Efficiency'
+                                                                      'Efficiency'
                                                               ) {
                                                                   return 1
                                                               }
                                                               if (
                                                                   a.benchmark_title ===
-                                                                      'SRE Efficiency' &&
+                                                                      'Efficiency' &&
                                                                   b.benchmark_title ===
-                                                                      'SRE Supportability'
+                                                                      'Supportability'
                                                               ) {
                                                                   return -1
                                                               }
                                                               if (
                                                                   a.benchmark_title ===
-                                                                      'SRE Reliability' &&
+                                                                      'Reliability' &&
                                                                   b.benchmark_title ===
-                                                                      'SRE Efficiency'
+                                                                      'Efficiency'
                                                               ) {
                                                                   return -1
                                                               }
                                                               if (
                                                                   a.benchmark_title ===
-                                                                      'SRE Efficiency' &&
+                                                                      'Efficiency' &&
                                                                   b.benchmark_title ===
-                                                                      'SRE Reliability'
+                                                                      'Reliability'
                                                               ) {
                                                                   return 1
                                                               }
                                                               if (
                                                                   a.benchmark_title ===
-                                                                      'SRE Supportability' &&
+                                                                      'Supportability' &&
                                                                   b.benchmark_title ===
-                                                                      'SRE Reliability'
+                                                                      'Reliability'
                                                               ) {
                                                                   return 1
+                                                              }
+                                                              if (
+                                                                  a.benchmark_title ===
+                                                                      'Security' &&
+                                                                  b.benchmark_title ===
+                                                                      'Reliability'
+                                                              ) {
+                                                                  return -1
                                                               }
                                                               return 0
                                                           })
@@ -531,11 +546,7 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                               return (
                                                                   <ScoreCategoryCard
                                                                       title={
-                                                                          item.benchmark_title
-                                                                              .split(
-                                                                                  ' '
-                                                                              )[1]
-                                                                              .trim() ||
+                                                                          item.benchmark_title ||
                                                                           ''
                                                                       }
                                                                       percentage={
@@ -728,9 +739,9 @@ const [totalCount, setTotalCount] = useState<number>(0)
                                                                                                 '=',
                                                                                             ],
                                                                                         propertyLabel:
-                                                                                            'Has Scope Assigments',
+                                                                                            'Is Active',
                                                                                         groupValuesLabel:
-                                                                                            'Has Scope Assigments values',
+                                                                                            'Is Active',
                                                                                     },
                                                                                     // {
                                                                                     //     key: 'family',

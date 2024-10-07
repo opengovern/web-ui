@@ -54,9 +54,7 @@ export default function ScoreCategoryCard({
     return (
         <Card
             onClick={() =>
-                navigate(
-                    `/ws/${ws}/compliance/${category}${searchParams}`
-                )
+                navigate(`/ws/${ws}/compliance/${category}${searchParams}`)
             }
             className={` ${
                 varient === 'default'
@@ -88,7 +86,13 @@ export default function ScoreCategoryCard({
                     </Title>
 
                     {costOptimization > 0 || title == 'Efficiency' ? (
-                        <Text>${costOptimization} Waste</Text>
+                        // <Text>${costOptimization} Waste</Text>
+                        <Text>
+                            <Flex className="gap-1">
+                                <span className="text-gray-900">{value}</span>
+                                <span>{kpiText}</span>
+                            </Flex>
+                        </Text>
                     ) : (
                         <Text>
                             <Flex className="gap-1">
