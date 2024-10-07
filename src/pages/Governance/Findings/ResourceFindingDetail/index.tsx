@@ -14,7 +14,7 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import ReactJson from '@microlink/react-json-view'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import {
@@ -31,7 +31,11 @@ import { isDemoAtom, notificationAtom } from '../../../../store'
 import Timeline from '../FindingsWithFailure/Detail/Timeline'
 import { searchAtom } from '../../../../utilities/urlstate'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
-import { Tabs } from '@cloudscape-design/components'
+import {
+    KeyValuePairs,
+    StatusIndicator,
+    Tabs,
+} from '@cloudscape-design/components'
 
 interface IResourceFindingDetail {
     resourceFinding:
@@ -107,10 +111,105 @@ export default function ResourceFindingDetail({
             </Flex>
         )
     }
+    const [items, setItems] = useState([])
+
+    useEffect(() => {
+        if (response?.controls) {
+            const temp: any = []
+            response?.controls
+                ?.filter((c) => {
+                    if (showOnlyOneControl) {
+                        return c.controlID === controlID
+                    }
+                    return true
+                })
+                .map((control) => {
+                    temp.push({
+                        label: 'Control: ',
+                        value: control.controlTitle,
+                    })
+                    temp.push({
+                        label: 'Status: ',
+                        value: (
+                            <>
+                                <StatusIndicator
+                                    type={
+                                        control.conformanceStatus ===
+                                        GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed
+                                            ? 'success'
+                                            : 'error'
+                                    }
+                                >
+                                    {control.conformanceStatus ===
+                                    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed
+                                        ? 'Passed'
+                                        : 'Failed'}
+                                </StatusIndicator>
+                            </>
+                        ),
+                    })
+
+                    temp.push({
+                        label: 'Severity: ',
+                        value: <>{severityBadge(control.severity)}</>,
+                    })
+                })
+
+            setItems(temp)
+        }
+    }, [response])
 
     return (
         <>
-            <Grid className="w-full gap-4 mb-6" numItems={2}>
+            <KeyValuePairs
+                columns={4}
+                items={[
+                    {
+                        label: 'Account',
+                        value: (
+                            <>
+                                {resourceFinding?.providerConnectionName}
+                                <Text
+                                    className={` w-full text-start mb-0.5 truncate`}
+                                >
+                                    {resourceFinding?.providerConnectionID}
+                                </Text>
+                            </>
+                        ),
+                    },
+                    {
+                        label: 'Resource',
+                        value: (
+                            <>
+                                {resourceFinding?.resourceName}
+                                <Text
+                                    className={` w-full text-start mb-0.5 truncate`}
+                                >
+                                    {resourceFinding?.kaytuResourceID}
+                                </Text>
+                            </>
+                        ),
+                    },
+                    {
+                        label: 'Resource Type',
+                        value: (
+                            <>
+                                {resourceFinding?.resourceTypeLabel}
+                                <Text
+                                    className={` w-full text-start mb-0.5 truncate`}
+                                >
+                                    {resourceFinding?.resourceType}
+                                </Text>
+                            </>
+                        ),
+                    },
+                    {
+                        label: 'Conformance Status',
+                        value: conformance(),
+                    },
+                ]}
+            />
+            {/* <Grid className="w-full gap-4 mb-6" numItems={2}>
                 <SummaryCard
                     title="Account"
                     metric={resourceFinding?.providerConnectionName}
@@ -137,7 +236,7 @@ export default function ResourceFindingDetail({
                     metric={conformance()}
                     isString
                 />
-            </Grid>
+            </Grid> */}
             <Tabs
                 tabs={[
                     {
@@ -201,63 +300,76 @@ export default function ResourceFindingDetail({
                                         </ListItem>
                                     </List>
                                 ) : (
-                                    <List>
-                                        {isLoading ? (
-                                            <Spinner className="mt-40" />
+                                    <>
+                                        {response ? (
+                                            <KeyValuePairs
+                                                columns={3}
+                                                items={items}
+                                            />
                                         ) : (
-                                            response?.controls
-                                                ?.filter((c) => {
-                                                    if (showOnlyOneControl) {
-                                                        return (
-                                                            c.controlID ===
-                                                            controlID
-                                                        )
-                                                    }
-                                                    return true
-                                                })
-                                                .map((control) => (
-                                                    <ListItem>
-                                                        <Flex
-                                                            flexDirection="col"
-                                                            alignItems="start"
-                                                            className="gap-1 w-fit max-w-[80%]"
-                                                        >
-                                                            <Text className="text-gray-800 w-full truncate">
-                                                                {
-                                                                    control.controlTitle
-                                                                }
-                                                            </Text>
-                                                            <Flex justifyContent="start">
-                                                                {control.conformanceStatus ===
-                                                                GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed ? (
-                                                                    <Flex className="w-full gap-1.5">
-                                                                        <CheckCircleIcon className="h-4 text-emerald-500" />
-                                                                        <Text>
-                                                                            Passed
+                                            <Spinner />
+                                        )}
+
+                                        {/* <List>
+                                            {isLoading ? (
+                                                <Spinner className="mt-40" />
+                                            ) : (
+                                                response?.controls
+                                                    ?.filter((c) => {
+                                                        if (
+                                                            showOnlyOneControl
+                                                        ) {
+                                                            return (
+                                                                c.controlID ===
+                                                                controlID
+                                                            )
+                                                        }
+                                                        return true
+                                                    })
+                                                    .map((control) => (
+                                                        <ListItem>
+                                                            <Flex
+                                                                flexDirection="col"
+                                                                alignItems="start"
+                                                                className="gap-1 w-fit max-w-[80%]"
+                                                            >
+                                                                <Text className="text-gray-800 w-full truncate">
+                                                                    {
+                                                                        control.controlTitle
+                                                                    }
+                                                                </Text>
+                                                                <Flex justifyContent="start">
+                                                                    {control.conformanceStatus ===
+                                                                    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed ? (
+                                                                        <Flex className="w-full gap-1.5">
+                                                                            <CheckCircleIcon className="h-4 text-emerald-500" />
+                                                                            <Text>
+                                                                                Passed
+                                                                            </Text>
+                                                                        </Flex>
+                                                                    ) : (
+                                                                        <Flex className="w-full gap-1.5">
+                                                                            <XCircleIcon className="h-4 text-rose-600" />
+                                                                            <Text>
+                                                                                Failed
+                                                                            </Text>
+                                                                        </Flex>
+                                                                    )}
+                                                                    <Flex className="border-l border-gray-200 ml-3 pl-3 h-full">
+                                                                        <Text className="text-xs">
+                                                                            SECTION:
                                                                         </Text>
                                                                     </Flex>
-                                                                ) : (
-                                                                    <Flex className="w-full gap-1.5">
-                                                                        <XCircleIcon className="h-4 text-rose-600" />
-                                                                        <Text>
-                                                                            Failed
-                                                                        </Text>
-                                                                    </Flex>
-                                                                )}
-                                                                <Flex className="border-l border-gray-200 ml-3 pl-3 h-full">
-                                                                    <Text className="text-xs">
-                                                                        SECTION:
-                                                                    </Text>
                                                                 </Flex>
                                                             </Flex>
-                                                        </Flex>
-                                                        {severityBadge(
-                                                            control.severity
-                                                        )}
-                                                    </ListItem>
-                                                ))
-                                        )}
-                                    </List>
+                                                            {severityBadge(
+                                                                control.severity
+                                                            )}
+                                                        </ListItem>
+                                                    ))
+                                            )}
+                                        </List> */}
+                                    </>
                                 )}
                             </>
                         ),
@@ -278,11 +390,9 @@ export default function ResourceFindingDetail({
                     },
                 ]}
             />
-         
         </>
     )
 }
 
-
-                        // <Timeline data={response} isLoading={isLoading} />
-// 
+// <Timeline data={response} isLoading={isLoading} />
+//

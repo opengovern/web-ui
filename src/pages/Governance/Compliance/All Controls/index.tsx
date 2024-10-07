@@ -384,8 +384,8 @@ export default function AllControls() {
             {
                 key: 'primary_table',
                 operators: ['='],
-                propertyLabel: 'Primary Table',
-                groupValuesLabel: 'Primary Table values',
+                propertyLabel: 'Primary Service',
+                groupValuesLabel: 'Primary Service values',
             },
         ]
         filters?.parent_benchmark?.map((unique, index) => {
@@ -510,9 +510,9 @@ export default function AllControls() {
     return (
         <>
             {/* <TopHeader /> */}
-          
-                <Flex alignItems="start">
-                    {/* <DrawerPanel
+
+            <Flex alignItems="start">
+                {/* <DrawerPanel
                         open={openDrawer}
                         onClose={() => setOpenDrawer(false)}
                     >
@@ -604,8 +604,8 @@ export default function AllControls() {
                             </Button>
                         </Flex>
                     )} */}
-                    <Flex flexDirection="col" className="w-full ">
-                        {/* <Transition.Root show={showEditor} as={Fragment}>
+                <Flex flexDirection="col" className="w-full ">
+                    {/* <Transition.Root show={showEditor} as={Fragment}>
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-in-out duration-500"
@@ -796,7 +796,7 @@ export default function AllControls() {
                                 </Flex>
                             </Transition.Child>
                         </Transition.Root> */}
-                        {/* <Flex flexDirection="row" className="gap-4">
+                    {/* <Flex flexDirection="row" className="gap-4">
                             <Card
                                 onClick={() => {
                                     console.log('salam')
@@ -828,12 +828,12 @@ export default function AllControls() {
                                 </Subtitle>
                             </Card>
                         </Flex> */}
-                        {/* <Filter
+                    {/* <Filter
                             type={'findings'}
                             // @ts-ignore
                             onApply={(e) => setQuery(e)}
                         /> */}
-                        {/* <Flex
+                    {/* <Flex
                             flexDirection="row"
                             justifyContent="start"
                             alignItems="center"
@@ -1035,235 +1035,226 @@ export default function AllControls() {
                             })}
                         </Flex> */}
 
-                        <Flex className=" mt-2">
-                            <AppLayout
-                                toolsOpen={false}
-                                navigationOpen={false}
-                                contentType="table"
-                                className="w-full"
-                                toolsHide={true}
-                                navigationHide={true}
-                                splitPanelOpen={open}
-                                onSplitPanelToggle={() => {
-                                    setOpen(!open)
-                                    if (open) {
-                                        setSelectedRow(undefined)
-                                    }
-                                }}
-                                splitPanel={
+                    <Flex className=" mt-2">
+                        <AppLayout
+                            toolsOpen={false}
+                            navigationOpen={false}
+                            contentType="table"
+                            className="w-full"
+                            toolsHide={true}
+                            navigationHide={true}
+                            splitPanelOpen={open}
+                            onSplitPanelToggle={() => {
+                                setOpen(!open)
+                                if (open) {
+                                    setSelectedRow(undefined)
+                                }
+                            }}
+                            splitPanel={
+                                // @ts-ignore
+                                <SplitPanel
                                     // @ts-ignore
-                                    <SplitPanel
-                                        // @ts-ignore
-                                        header={
-                                            selectedRow ? (
-                                                <>
-                                                    <Flex justifyContent="start">
-                                                        {getConnectorIcon(
-                                                            selectedRow?.connector
-                                                        )}
-                                                        <Title className="text-lg font-semibold ml-2 my-1">
-                                                            {selectedRow?.title}
-                                                        </Title>
-                                                    </Flex>
-                                                </>
-                                            ) : (
-                                                'Control not selected'
-                                            )
-                                        }
-                                    >
-                                        <ControlDetail
-                                            // type="resource"
-                                            selectedItem={selectedRow}
-                                            open={openSlider}
-                                            onClose={() => setOpenSlider(false)}
-                                            onRefresh={() => {}}
-                                        />
-                                    </SplitPanel>
-                                }
-                                content={
-                                    <KTable
-                                        className="   min-h-[450px]"
-                                        // resizableColumns
-                                        variant="full-page"
-                                        renderAriaLive={({
-                                            firstIndex,
-                                            lastIndex,
-                                            totalItemsCount,
-                                        }) =>
-                                            `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
-                                        }
-                                        onSortingChange={(event) => {
-                                            // setSort(event.detail.sortingColumn.sortingField)
-                                            // setSortOrder(!sortOrder)
-                                        }}
-                                        // sortingColumn={sort}
-                                        // sortingDescending={sortOrder}
-                                        // sortingDescending={sortOrder == 'desc' ? true : false}
-                                        // @ts-ignore
-                                        onRowClick={(event) => {
-                                            const row = event.detail.item
-
-                                            getControlDetail(row.id)
-                                            setOpen(true)
-                                        }}
-                                        columnDefinitions={[
-                                            {
-                                                id: 'title',
-                                                header: 'Title',
-                                                cell: (item) => item.title,
-                                                // sortingField: 'id',
-                                                isRowHeader: true,
-                                                maxWidth: 150,
-                                            },
-                                            {
-                                                id: 'connector',
-                                                header: 'Connector',
-                                                cell: (item) => item.connector,
-                                                // sortingField: 'title',
-                                                // minWidth: 400,
-                                                maxWidth: 70,
-                                            },
-                                            {
-                                                id: 'query',
-                                                header: 'Primary Table',
-                                                maxWidth: 120,
-                                                cell: (item) => (
-                                                    <>
-                                                        {
-                                                            item?.query
-                                                                ?.primary_table
-                                                        }
-                                                    </>
-                                                ),
-                                            },
-                                            {
-                                                id: 'severity',
-                                                header: 'Severity',
-                                                // sortingField: 'severity',
-                                                cell: (item) => (
-                                                    <Badge
-                                                        // @ts-ignore
-                                                        color={`severity-${item.severity}`}
-                                                    >
-                                                        {item.severity
-                                                            .charAt(0)
-                                                            .toUpperCase() +
-                                                            item.severity.slice(
-                                                                1
-                                                            )}
-                                                    </Badge>
-                                                ),
-                                                maxWidth: 80,
-                                            },
-                                            {
-                                                id: 'parameters',
-                                                header: 'Has Parametrs',
-                                                maxWidth: 80,
-
-                                                cell: (item) => (
-                                                    <>
-                                                        {item?.query?.parameters
-                                                            .length > 0
-                                                            ? 'True'
-                                                            : 'False'}
-                                                    </>
-                                                ),
-                                            },
-                                        ]}
-                                        columnDisplay={[
-                                            {
-                                                id: 'title',
-                                                visible: true,
-                                            },
-                                            {
-                                                id: 'connector',
-                                                visible: true,
-                                            },
-                                            // { id: 'query', visible: true },
-                                            {
-                                                id: 'severity',
-                                                visible: true,
-                                            },
-                                            { id: 'parameters', visible: true },
-                                            // {
-                                            //     id: 'evaluatedAt',
-                                            //     visible: true,
-                                            // },
-
-                                            // { id: 'action', visible: true },
-                                        ]}
-                                        enableKeyboardNavigation
-                                        // @ts-ignore
-                                        items={rows}
-                                        loading={loading}
-                                        loadingText="Loading resources"
-                                        // stickyColumns={{ first: 0, last: 1 }}
-                                        // stripedRows
-                                        trackBy="id"
-                                        empty={
-                                            <Box
-                                                margin={{ vertical: 'xs' }}
-                                                textAlign="center"
-                                                color="inherit"
-                                            >
-                                                <SpaceBetween size="m">
-                                                    <b>No resources</b>
-                                                </SpaceBetween>
-                                            </Box>
-                                        }
-                                        filter={
-                                            <PropertyFilter
-                                                // @ts-ignore
-                                                query={filterQuery}
-                                                tokenLimit={2}
-                                                
-                                                onChange={({ detail }) =>
-                                                    // @ts-ignore
-                                                    setFilterQuery(detail)
-                                                }
-                                                customGroupsText={[
-                                                    {
-                                                        properties: 'Tags',
-                                                        values: 'Tag values',
-                                                        group: 'tags',
-                                                    },
-                                                ]}
-                                                // countText="5 matches"
-                                                expandToViewport
-                                                filteringAriaLabel="Find Controls"
-                                                filteringPlaceholder="Find Controls"
-                                                filteringOptions={options}
-                                                filteringProperties={properties}
-                                                asyncProperties
-                                                virtualScroll
-                                            />
-                                        }
-                                        header={
-                                            <Header className="w-full">
-                                                Controls{' '}
-                                                <span className=" font-medium">
-                                                    ({totalCount})
-                                                </span>
-                                            </Header>
-                                        }
-                                        pagination={
-                                            <Pagination
-                                                currentPageIndex={page}
-                                                pagesCount={totalPage}
-                                                onChange={({ detail }) =>
-                                                    setPage(
-                                                        detail.currentPageIndex
-                                                    )
-                                                }
-                                            />
-                                        }
+                                    header={
+                                        selectedRow ? (
+                                            <>
+                                                <Flex justifyContent="start">
+                                                    {getConnectorIcon(
+                                                        selectedRow?.connector
+                                                    )}
+                                                    <Title className="text-lg font-semibold ml-2 my-1">
+                                                        {selectedRow?.title}
+                                                    </Title>
+                                                </Flex>
+                                            </>
+                                        ) : (
+                                            'Control not selected'
+                                        )
+                                    }
+                                >
+                                    <ControlDetail
+                                        // type="resource"
+                                        selectedItem={selectedRow}
+                                        open={openSlider}
+                                        onClose={() => setOpenSlider(false)}
+                                        onRefresh={() => {}}
                                     />
-                                }
-                            />
-                        </Flex>
+                                </SplitPanel>
+                            }
+                            content={
+                                <KTable
+                                    className="   min-h-[450px]"
+                                    // resizableColumns
+                                    variant="full-page"
+                                    renderAriaLive={({
+                                        firstIndex,
+                                        lastIndex,
+                                        totalItemsCount,
+                                    }) =>
+                                        `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
+                                    }
+                                    onSortingChange={(event) => {
+                                        // setSort(event.detail.sortingColumn.sortingField)
+                                        // setSortOrder(!sortOrder)
+                                    }}
+                                    // sortingColumn={sort}
+                                    // sortingDescending={sortOrder}
+                                    // sortingDescending={sortOrder == 'desc' ? true : false}
+                                    // @ts-ignore
+                                    onRowClick={(event) => {
+                                        const row = event.detail.item
+
+                                        getControlDetail(row.id)
+                                        setOpen(true)
+                                    }}
+                                    columnDefinitions={[
+                                        {
+                                            id: 'title',
+                                            header: 'Title',
+                                            cell: (item) => item.title,
+                                            // sortingField: 'id',
+                                            isRowHeader: true,
+                                            maxWidth: 150,
+                                        },
+                                        {
+                                            id: 'connector',
+                                            header: 'Connector',
+                                            cell: (item) => item.connector,
+                                            // sortingField: 'title',
+                                            // minWidth: 400,
+                                            maxWidth: 70,
+                                        },
+                                        {
+                                            id: 'query',
+                                            header: 'Primary Table',
+                                            maxWidth: 120,
+                                            cell: (item) => (
+                                                <>
+                                                    {item?.query?.primary_table}
+                                                </>
+                                            ),
+                                        },
+                                        {
+                                            id: 'severity',
+                                            header: 'Severity',
+                                            // sortingField: 'severity',
+                                            cell: (item) => (
+                                                <Badge
+                                                    // @ts-ignore
+                                                    color={`severity-${item.severity}`}
+                                                >
+                                                    {item.severity
+                                                        .charAt(0)
+                                                        .toUpperCase() +
+                                                        item.severity.slice(1)}
+                                                </Badge>
+                                            ),
+                                            maxWidth: 80,
+                                        },
+                                        {
+                                            id: 'parameters',
+                                            header: 'Customizable',
+                                            maxWidth: 80,
+
+                                            cell: (item) => (
+                                                <>
+                                                    {item?.query?.parameters
+                                                        .length > 0
+                                                        ? 'True'
+                                                        : 'False'}
+                                                </>
+                                            ),
+                                        },
+                                    ]}
+                                    columnDisplay={[
+                                        {
+                                            id: 'title',
+                                            visible: true,
+                                        },
+                                        {
+                                            id: 'connector',
+                                            visible: true,
+                                        },
+                                        // { id: 'query', visible: true },
+                                        {
+                                            id: 'severity',
+                                            visible: true,
+                                        },
+                                        { id: 'parameters', visible: true },
+                                        // {
+                                        //     id: 'evaluatedAt',
+                                        //     visible: true,
+                                        // },
+
+                                        // { id: 'action', visible: true },
+                                    ]}
+                                    enableKeyboardNavigation
+                                    // @ts-ignore
+                                    items={rows}
+                                    loading={loading}
+                                    loadingText="Loading resources"
+                                    // stickyColumns={{ first: 0, last: 1 }}
+                                    // stripedRows
+                                    trackBy="id"
+                                    empty={
+                                        <Box
+                                            margin={{ vertical: 'xs' }}
+                                            textAlign="center"
+                                            color="inherit"
+                                        >
+                                            <SpaceBetween size="m">
+                                                <b>No resources</b>
+                                            </SpaceBetween>
+                                        </Box>
+                                    }
+                                    filter={
+                                        <PropertyFilter
+                                            // @ts-ignore
+                                            query={filterQuery}
+                                            tokenLimit={2}
+                                            onChange={({ detail }) =>
+                                                // @ts-ignore
+                                                setFilterQuery(detail)
+                                            }
+                                            customGroupsText={[
+                                                {
+                                                    properties: 'Tags',
+                                                    values: 'Tag values',
+                                                    group: 'tags',
+                                                },
+                                            ]}
+                                            // countText="5 matches"
+                                            expandToViewport
+                                            filteringAriaLabel="Find Controls"
+                                            filteringPlaceholder="Find Controls"
+                                            filteringOptions={options}
+                                            filteringProperties={properties}
+                                            asyncProperties
+                                            virtualScroll
+                                        />
+                                    }
+                                    header={
+                                        <Header className="w-full">
+                                            Controls{' '}
+                                            <span className=" font-medium">
+                                                ({totalCount})
+                                            </span>
+                                        </Header>
+                                    }
+                                    pagination={
+                                        <Pagination
+                                            currentPageIndex={page}
+                                            pagesCount={totalPage}
+                                            onChange={({ detail }) =>
+                                                setPage(detail.currentPageIndex)
+                                            }
+                                        />
+                                    }
+                                />
+                            }
+                        />
                     </Flex>
                 </Flex>
-            
+            </Flex>
         </>
     )
 }
