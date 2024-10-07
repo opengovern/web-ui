@@ -93,7 +93,6 @@ export default function ControlDetail() {
         | undefined
     >(undefined)
     const conformanceFilterIdx = () => {
-        
         if (
             conformanceFilter?.length === 1 &&
             conformanceFilter[0] ===
@@ -129,91 +128,98 @@ export default function ControlDetail() {
                 <Spinner className="mt-56" />
             ) : (
                 <>
-                    <Container
-                        disableHeaderPaddings
-                        disableContentPaddings
-                        className="rounded-xl  bg-[#0f2940] p-0 text-white "
-                        header={
-                            <Header
-                                className={`bg-[#0f2940] p-4 pt-0 rounded-xl   text-white ${
-                                    false ? 'rounded-b-none' : ''
-                                }`}
-                                variant="h2"
-                                description=""
-                            >
-                                <SpaceBetween size="xxxs" direction="vertical">
-                                    <Box className="rounded-xl same text-white pt-3 pl-3 pb-0">
-                                        <KGrid
-                                            gridDefinition={[
-                                                {
-                                                    colspan: {
-                                                        default: 12,
-                                                        xs: 8,
-                                                        s: 9,
-                                                    },
-                                                },
-                                                {
-                                                    colspan: {
-                                                        default: 12,
-                                                        xs: 4,
-                                                        s: 3,
-                                                    },
-                                                },
-                                            ]}
+                    {controlDetail ? (
+                        <>
+                            <Container
+                                disableHeaderPaddings
+                                disableContentPaddings
+                                className="rounded-xl  bg-[#0f2940] p-0 text-white "
+                                header={
+                                    <Header
+                                        className={`bg-[#0f2940] p-4 pt-0 rounded-xl   text-white ${
+                                            false ? 'rounded-b-none' : ''
+                                        }`}
+                                        variant="h2"
+                                        description=""
+                                    >
+                                        <SpaceBetween
+                                            size="xxxs"
+                                            direction="vertical"
                                         >
-                                            <div>
-                                                <Box
-                                                    variant="h1"
-                                                    className="text-white important"
-                                                >
-                                                    <span className="text-white">
+                                            <Box className="rounded-xl same text-white pt-3 pl-3 pb-0">
+                                                <KGrid
+                                                    gridDefinition={[
                                                         {
-                                                            controlDetail
-                                                                ?.control?.title
-                                                        }
-                                                    </span>
-                                                </Box>
-                                                <Box
-                                                    variant="p"
-                                                    margin={{
-                                                        top: 'xxs',
-                                                        bottom: 's',
-                                                    }}
+                                                            colspan: {
+                                                                default: 12,
+                                                                xs: 8,
+                                                                s: 9,
+                                                            },
+                                                        },
+                                                        {
+                                                            colspan: {
+                                                                default: 12,
+                                                                xs: 4,
+                                                                s: 3,
+                                                            },
+                                                        },
+                                                    ]}
                                                 >
-                                                    <div className="group text-white important  relative flex text-wrap justify-start">
-                                                        <Text className="test-start w-full text-white ">
-                                                            {/* @ts-ignore */}
-                                                            {truncate(
-                                                                controlDetail
-                                                                    ?.control
-                                                                    ?.description
-                                                            )}
-                                                        </Text>
-                                                        <Card className="absolute w-full text-wrap z-40 top-0 scale-0 transition-all p-2 group-hover:scale-100">
-                                                            <Text>
+                                                    <div>
+                                                        <Box
+                                                            variant="h1"
+                                                            className="text-white important"
+                                                        >
+                                                            <span className="text-white">
                                                                 {
                                                                     controlDetail
                                                                         ?.control
-                                                                        ?.description
+                                                                        ?.title
                                                                 }
-                                                            </Text>
-                                                        </Card>
+                                                            </span>
+                                                        </Box>
+                                                        <Box
+                                                            variant="p"
+                                                            margin={{
+                                                                top: 'xxs',
+                                                                bottom: 's',
+                                                            }}
+                                                        >
+                                                            <div className="group text-white important  relative flex text-wrap justify-start">
+                                                                <Text className="test-start w-full text-white ">
+                                                                    {/* @ts-ignore */}
+                                                                    {truncate(
+                                                                        controlDetail
+                                                                            ?.control
+                                                                            ?.description
+                                                                    )}
+                                                                </Text>
+                                                                <Card className="absolute w-full text-wrap z-40 top-0 scale-0 transition-all p-2 group-hover:scale-100">
+                                                                    <Text>
+                                                                        {
+                                                                            controlDetail
+                                                                                ?.control
+                                                                                ?.description
+                                                                        }
+                                                                    </Text>
+                                                                </Card>
+                                                            </div>
+                                                        </Box>
                                                     </div>
-                                                </Box>
-                                            </div>
-                                        </KGrid>
-                                    </Box>
-                                    <Flex className="w-max pl-3">
-                                        {' '}
-                                        {severityBadge(
-                                            controlDetail?.control?.severity
-                                        )}
-                                    </Flex>
-                                </SpaceBetween>
-                            </Header>
-                        }
-                    ></Container>
-                    {/* <Flex
+                                                </KGrid>
+                                            </Box>
+                                            <Flex className="w-max pl-3">
+                                                {' '}
+                                                {severityBadge(
+                                                    controlDetail?.control
+                                                        ?.severity
+                                                )}
+                                            </Flex>
+                                        </SpaceBetween>
+                                    </Header>
+                                }
+                            ></Container>
+                            {/* <Flex
                                 flexDirection="row"
                                 justifyContent="start"
                                 className="hover:cursor-pointer max-w-full w-fit bg-gray-200 border-gray-300 rounded-lg border px-1"
@@ -228,7 +234,7 @@ export default function ControlDetail() {
                                     Control ID: {controlDetail?.control?.id}
                                 </Text>
                             </Flex> */}
-                    {/* <Flex
+                            {/* <Flex
                                 flexDirection="row"
                                 justifyContent="start"
                                 className="max-w-full w-fit bg-gray-200 border-gray-300 rounded-lg border px-1"
@@ -243,7 +249,7 @@ export default function ControlDetail() {
                                           )}
                                 </Text>
                             </Flex> */}
-                    {/* <Flex
+                            {/* <Flex
                         flexDirection="row"
                         alignItems="start"
                         justifyContent="between"
@@ -314,91 +320,98 @@ export default function ControlDetail() {
                             )}
                         </Flex>
                     </Flex> */}
-                    <Grid numItems={2} className=" w-full gap-4 mb-6 mt-4">
-                        <Card className="h-fit min-h-[228px]">
-                            <KeyValuePairs
-                                columns={2}
-                                items={[
-                                    {
-                                        label: 'Control ID',
-                                        value: (
+                            <Grid
+                                numItems={2}
+                                className=" w-full gap-4 mb-6 mt-4"
+                            >
+                                <Card className="h-fit min-h-[228px]">
+                                    <KeyValuePairs
+                                        columns={2}
+                                        items={[
+                                            {
+                                                label: 'Control ID',
+                                                value: (
+                                                    // @ts-ignore
+                                                    <CopyToClipboard
+                                                        variant="inline"
+                                                        textToCopy={
+                                                            controlDetail
+                                                                ?.control?.id ||
+                                                            ''
+                                                        }
+                                                        copySuccessText="Control ID copied to clipboard"
+                                                    />
+                                                ),
+                                            },
                                             // @ts-ignore
-                                            <CopyToClipboard
-                                                variant="inline"
-                                                textToCopy={
-                                                    controlDetail?.control
-                                                        ?.id || ''
-                                                }
-                                                copySuccessText="Control ID copied to clipboard"
-                                            />
-                                        ),
-                                    },
-                                    // @ts-ignore
-                                    controlDetail?.resourceType
-                                        ?.resource_type && {
-                                        label: 'Resource type',
-                                        value: (
-                                            // @ts-ignore
-                                            <CopyToClipboard
-                                                variant="inline"
-                                                textToCopy={
-                                                    controlDetail?.resourceType
-                                                        ?.resource_type || ''
-                                                }
-                                                copySuccessText="Resource type copied to clipboard"
-                                            />
-                                        ),
-                                    },
-                                    {
-                                        label: '# of impacted resources',
-                                        value: (
-                                            // @ts-ignore
-                                            <>
-                                                {
-                                                    controlDetail?.totalResourcesCount
-                                                }
-                                            </>
-                                        ),
-                                    },
-                                    {
-                                        label: '# of passed resources',
-                                        value: (
-                                            // @ts-ignore
-                                            <Text className="text-emerald-500">
-                                                {(controlDetail?.totalResourcesCount ||
-                                                    0) -
-                                                    (controlDetail?.failedResourcesCount ||
-                                                        0)}
-                                            </Text>
-                                        ),
-                                    },
-                                    {
-                                        label: '# of failed resources',
-                                        value: (
-                                            // @ts-ignore
-                                            <Text className="text-rose-600">
-                                                {' '}
-                                                {
-                                                    controlDetail?.failedResourcesCount
-                                                }
-                                            </Text>
-                                        ),
-                                    },
-                                    {
-                                        label: 'Last updated',
-                                        value: (
-                                            // @ts-ignore
-                                            <>
-                                                {dateTimeDisplay(
-                                                    controlDetail?.control
-                                                        ?.updatedAt
-                                                )}
-                                            </>
-                                        ),
-                                    },
-                                ]}
-                            />
-                            {/* <Flex justifyContent="end">
+                                            controlDetail?.resourceType
+                                                ?.resource_type && {
+                                                label: 'Resource type',
+                                                value: (
+                                                    // @ts-ignore
+                                                    <CopyToClipboard
+                                                        variant="inline"
+                                                        textToCopy={
+                                                            controlDetail
+                                                                ?.resourceType
+                                                                ?.resource_type ||
+                                                            ''
+                                                        }
+                                                        copySuccessText="Resource type copied to clipboard"
+                                                    />
+                                                ),
+                                            },
+                                            {
+                                                label: '# of impacted resources',
+                                                value: (
+                                                    // @ts-ignore
+                                                    <>
+                                                        {
+                                                            controlDetail?.totalResourcesCount
+                                                        }
+                                                    </>
+                                                ),
+                                            },
+                                            {
+                                                label: '# of passed resources',
+                                                value: (
+                                                    // @ts-ignore
+                                                    <Text className="text-emerald-500">
+                                                        {(controlDetail?.totalResourcesCount ||
+                                                            0) -
+                                                            (controlDetail?.failedResourcesCount ||
+                                                                0)}
+                                                    </Text>
+                                                ),
+                                            },
+                                            {
+                                                label: '# of failed resources',
+                                                value: (
+                                                    // @ts-ignore
+                                                    <Text className="text-rose-600">
+                                                        {' '}
+                                                        {
+                                                            controlDetail?.failedResourcesCount
+                                                        }
+                                                    </Text>
+                                                ),
+                                            },
+                                            {
+                                                label: 'Last updated',
+                                                value: (
+                                                    // @ts-ignore
+                                                    <>
+                                                        {dateTimeDisplay(
+                                                            controlDetail
+                                                                ?.control
+                                                                ?.updatedAt
+                                                        )}
+                                                    </>
+                                                ),
+                                            },
+                                        ]}
+                                    />
+                                    {/* <Flex justifyContent="end">
                                                 <Button
                                                     variant="light"
                                                     icon={ChevronRightIcon}
@@ -410,7 +423,7 @@ export default function ControlDetail() {
                                                     See more
                                                 </Button>
                                             </Flex> */}
-                            {/* <Flex
+                                    {/* <Flex
                                 flexDirection="col"
                                 alignItems="start"
                                 className="h-full"
@@ -510,67 +523,73 @@ export default function ControlDetail() {
                                 </List>
                               
                             </Flex> */}
-                        </Card>
-                        <Card className="max-h-[228px] overflow-scroll">
-                            <Editor
-                                onValueChange={() => 1}
-                                highlight={(text) =>
-                                    highlight(text, languages.sql, 'sql')
-                                }
-                                value={
-                                    controlDetail?.control?.query?.queryToExecute?.replace(
-                                        '$IS_ALL_CONNECTIONS_QUERY',
-                                        'true'
-                                    ) || ''
-                                }
-                                className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
-                                style={{
-                                    minHeight: '200px',
-                                }}
-                                placeholder="-- write your SQL query here"
-                            />
-                            <Divider />
-                            <Flex>
-                                <Flex className="gap-4">
-                                    <Button
-                                        variant="light"
-                                        icon={DocumentDuplicateIcon}
-                                        iconPosition="left"
-                                        onClick={() =>
-                                            clipboardCopy(
-                                                controlDetail?.control?.query?.queryToExecute?.replace(
-                                                    '$IS_ALL_CONNECTIONS_QUERY',
-                                                    'true'
-                                                ) || ''
-                                            ).then(() =>
-                                                setNotification({
-                                                    text: 'Query copied to clipboard',
-                                                    type: 'info',
-                                                })
+                                </Card>
+                                <Card className="max-h-[228px] overflow-scroll">
+                                    <Editor
+                                        onValueChange={() => 1}
+                                        highlight={(text) =>
+                                            highlight(
+                                                text,
+                                                languages.sql,
+                                                'sql'
                                             )
                                         }
-                                    >
-                                        Copy
-                                    </Button>
-                                    <Button
-                                        variant="secondary"
-                                        onClick={() => {
-                                            setQuery(
-                                                controlDetail?.control?.query?.queryToExecute?.replace(
-                                                    '$IS_ALL_CONNECTIONS_QUERY',
-                                                    'true'
-                                                ) || ''
-                                            )
+                                        value={
+                                            controlDetail?.control?.query?.queryToExecute?.replace(
+                                                '$IS_ALL_CONNECTIONS_QUERY',
+                                                'true'
+                                            ) || ''
+                                        }
+                                        className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
+                                        style={{
+                                            minHeight: '200px',
                                         }}
-                                    >
-                                        <Link to={`/ws/${ws}/search?tab_id=1`}>
-                                            Open in Query
-                                        </Link>
-                                    </Button>
-                                </Flex>
-                            </Flex>
-                        </Card>
-                        {/* <TabGroup className="h-full">
+                                        placeholder="-- write your SQL query here"
+                                    />
+                                    <Divider />
+                                    <Flex>
+                                        <Flex className="gap-4">
+                                            <Button
+                                                variant="light"
+                                                icon={DocumentDuplicateIcon}
+                                                iconPosition="left"
+                                                onClick={() =>
+                                                    clipboardCopy(
+                                                        controlDetail?.control?.query?.queryToExecute?.replace(
+                                                            '$IS_ALL_CONNECTIONS_QUERY',
+                                                            'true'
+                                                        ) || ''
+                                                    ).then(() =>
+                                                        setNotification({
+                                                            text: 'Query copied to clipboard',
+                                                            type: 'info',
+                                                        })
+                                                    )
+                                                }
+                                            >
+                                                Copy
+                                            </Button>
+                                            <Button
+                                                variant="secondary"
+                                                onClick={() => {
+                                                    setQuery(
+                                                        controlDetail?.control?.query?.queryToExecute?.replace(
+                                                            '$IS_ALL_CONNECTIONS_QUERY',
+                                                            'true'
+                                                        ) || ''
+                                                    )
+                                                }}
+                                            >
+                                                <Link
+                                                    to={`/ws/${ws}/search?tab_id=1`}
+                                                >
+                                                    Open in Query
+                                                </Link>
+                                            </Button>
+                                        </Flex>
+                                    </Flex>
+                                </Card>
+                                {/* <TabGroup className="h-full">
                             <TabList
                                 variant="solid"
                                 className="border border-gray-200 dark:border-gray-700"
@@ -585,43 +604,47 @@ export default function ControlDetail() {
                                 <TabPanel></TabPanel>
                             </TabPanels>
                         </TabGroup> */}
-                        <Flex
-                            flexDirection="col"
-                            alignItems="start"
-                            justifyContent="start"
-                            className="h-full"
-                        >
-                            <DrawerPanel
-                                title={docTitle}
-                                open={doc.length > 0}
-                                onClose={() => setDoc('')}
-                            >
-                                <MarkdownPreview
-                                    source={doc}
-                                    className="!bg-transparent"
-                                    wrapperElement={{
-                                        'data-color-mode': 'light',
-                                    }}
-                                    rehypeRewrite={(node, index, parent) => {
-                                        if (
-                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                            // @ts-ignore
-                                            node.tagName === 'a' &&
-                                            parent &&
-                                            /^h(1|2|3|4|5|6)/.test(
-                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                // @ts-ignore
-                                                parent.tagName
-                                            )
-                                        ) {
-                                            // eslint-disable-next-line no-param-reassign
-                                            parent.children =
-                                                parent.children.slice(1)
-                                        }
-                                    }}
-                                />
-                            </DrawerPanel>
-                            {/* <Title className="font-semibold mt-2 mb-2">
+                                <Flex
+                                    flexDirection="col"
+                                    alignItems="start"
+                                    justifyContent="start"
+                                    className="h-full"
+                                >
+                                    <DrawerPanel
+                                        title={docTitle}
+                                        open={doc.length > 0}
+                                        onClose={() => setDoc('')}
+                                    >
+                                        <MarkdownPreview
+                                            source={doc}
+                                            className="!bg-transparent"
+                                            wrapperElement={{
+                                                'data-color-mode': 'light',
+                                            }}
+                                            rehypeRewrite={(
+                                                node,
+                                                index,
+                                                parent
+                                            ) => {
+                                                if (
+                                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                    // @ts-ignore
+                                                    node.tagName === 'a' &&
+                                                    parent &&
+                                                    /^h(1|2|3|4|5|6)/.test(
+                                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                        // @ts-ignore
+                                                        parent.tagName
+                                                    )
+                                                ) {
+                                                    // eslint-disable-next-line no-param-reassign
+                                                    parent.children =
+                                                        parent.children.slice(1)
+                                                }
+                                            }}
+                                        />
+                                    </DrawerPanel>
+                                    {/* <Title className="font-semibold mt-2 mb-2">
                                 Remediation
                             </Title>
                             <Grid numItems={2} className="w-full h-full gap-4">
@@ -808,42 +831,44 @@ export default function ControlDetail() {
                                     </Text>
                                 </Card>
                             </Grid> */}
-                        </Flex>
-                    </Grid>
-                    <Flex flexDirection="row" className="w-full">
-                        <Header
-                            variant="h3"
-                            actions={
-                                <SegmentedControl
-                                    selectedId={conformanceFilterIdx()}
-                                    onChange={({ detail }) => {
-                                        switch (detail.selectedId) {
-                                            case '1':
-                                                setConformanceFilter([
-                                                    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
-                                                ])
-                                                break
-                                            case '2':
-                                                setConformanceFilter([
-                                                    GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
-                                                ])
-                                                break
-                                            default:
-                                                setConformanceFilter(undefined)
-                                        }
-                                    }}
-                                    label="Default segmented control"
-                                    options={[
-                                        { text: 'All', id: '0' },
-                                        { text: 'Failed', id: '1' },
-                                        { text: 'Passed', id: '2' },
-                                    ]}
-                                />
-                            }
-                        >
-                            Confomance Status filter:
-                        </Header>
-                        {/* <Text className="mr-2 w-fit">
+                                </Flex>
+                            </Grid>
+                            <Flex flexDirection="row" className="w-full">
+                                <Header
+                                    variant="h3"
+                                    actions={
+                                        <SegmentedControl
+                                            selectedId={conformanceFilterIdx()}
+                                            onChange={({ detail }) => {
+                                                switch (detail.selectedId) {
+                                                    case '1':
+                                                        setConformanceFilter([
+                                                            GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
+                                                        ])
+                                                        break
+                                                    case '2':
+                                                        setConformanceFilter([
+                                                            GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusPassed,
+                                                        ])
+                                                        break
+                                                    default:
+                                                        setConformanceFilter(
+                                                            undefined
+                                                        )
+                                                }
+                                            }}
+                                            label="Default segmented control"
+                                            options={[
+                                                { text: 'All', id: '0' },
+                                                { text: 'Failed', id: '1' },
+                                                { text: 'Passed', id: '2' },
+                                            ]}
+                                        />
+                                    }
+                                >
+                                    Confomance Status filter:
+                                </Header>
+                                {/* <Text className="mr-2 w-fit">
                             Confomance Status filter:
                         </Text>
                         <SegmentedControl
@@ -871,7 +896,7 @@ export default function ControlDetail() {
                                 { text: 'Passes', id: '2' },
                             ]}
                         /> */}
-                        {/* <TabGroup
+                                {/* <TabGroup
                             tabIndex={conformanceFilterIdx()}
                             className="w-fit"
                             onIndexChange={(tabIndex) => {
@@ -897,67 +922,74 @@ export default function ControlDetail() {
                                 <Tab value="3">Passed</Tab>
                             </TabList>
                         </TabGroup> */}
-                    </Flex>
-                    <Tabs
-                        tabs={[
-                            {
-                                label: 'Impacted resources',
-                                id: '0',
-                                content: (
-                                    <ImpactedResources
-                                        controlId={
-                                            controlDetail?.control?.id || ''
-                                        }
-                                        linkPrefix={`/ws/${ws}/score/categories/`}
-                                        conformanceFilter={conformanceFilter}
-                                    />
-                                ),
-                            },
-                            {
-                                id: '1',
-                                label: 'Impacted accounts',
-                                content: (
-                                    <ImpactedAccounts
-                                        controlId={controlDetail?.control?.id}
-                                    />
-                                ),
-                            },
-                            // {
-                            //     id: '2',
-                            //     label: 'Control information',
-                            //     content: (
-                            //         <Detail control={controlDetail?.control} />
-                            //     ),
-                            //     disabled:
-                            //         controlDetail?.control?.explanation
-                            //             ?.length === 0 &&
-                            //         controlDetail?.control?.nonComplianceCost
-                            //             ?.length === 0 &&
-                            //         controlDetail?.control?.usefulExample
-                            //             ?.length === 0,
-                            //     disabledReason: 'Control has no explanation',
-                            // },
-                            {
-                                id: '3',
-                                label: 'Benchmarks',
-                                content: (
-                                    <Benchmarks
-                                        benchmarks={controlDetail?.benchmarks}
-                                    />
-                                ),
-                            },
-                            // {
-                            //     id: '4',
-                            //     label: 'Incidents',
-                            //     content: (
-                            //         <ControlFindings
-                            //             controlId={controlDetail?.control?.id}
-                            //         />
-                            //     ),
-                            // },
-                        ]}
-                    />
-                    {/* <TabGroup>
+                            </Flex>
+                            <Tabs
+                                tabs={[
+                                    {
+                                        label: 'Impacted resources',
+                                        id: '0',
+                                        content: (
+                                            <ImpactedResources
+                                                controlId={
+                                                    controlDetail?.control
+                                                        ?.id || ''
+                                                }
+                                                linkPrefix={`/ws/${ws}/score/categories/`}
+                                                conformanceFilter={
+                                                    conformanceFilter
+                                                }
+                                            />
+                                        ),
+                                    },
+                                    {
+                                        id: '1',
+                                        label: 'Impacted accounts',
+                                        content: (
+                                            <ImpactedAccounts
+                                                controlId={
+                                                    controlDetail?.control?.id
+                                                }
+                                            />
+                                        ),
+                                    },
+                                    // {
+                                    //     id: '2',
+                                    //     label: 'Control information',
+                                    //     content: (
+                                    //         <Detail control={controlDetail?.control} />
+                                    //     ),
+                                    //     disabled:
+                                    //         controlDetail?.control?.explanation
+                                    //             ?.length === 0 &&
+                                    //         controlDetail?.control?.nonComplianceCost
+                                    //             ?.length === 0 &&
+                                    //         controlDetail?.control?.usefulExample
+                                    //             ?.length === 0,
+                                    //     disabledReason: 'Control has no explanation',
+                                    // },
+                                    {
+                                        id: '3',
+                                        label: 'Benchmarks',
+                                        content: (
+                                            <Benchmarks
+                                                benchmarks={
+                                                    controlDetail?.benchmarks
+                                                }
+                                            />
+                                        ),
+                                    },
+                                    // {
+                                    //     id: '4',
+                                    //     label: 'Incidents',
+                                    //     content: (
+                                    //         <ControlFindings
+                                    //             controlId={controlDetail?.control?.id}
+                                    //         />
+                                    //     ),
+                                    // },
+                                ]}
+                            />
+                            {/* <TabGroup>
                         <Flex
                             flexDirection="row"
                             justifyContent="between"
@@ -1013,35 +1045,70 @@ export default function ControlDetail() {
                             </TabPanel>
                         </TabPanels>
                     </TabGroup> */}
-                    {toErrorMessage(controlDetailError) && (
-                        <Flex
-                            flexDirection="col"
-                            justifyContent="between"
-                            className="absolute top-0 w-full left-0 h-full backdrop-blur"
-                        >
-                            <Flex
-                                flexDirection="col"
-                                justifyContent="center"
-                                alignItems="center"
-                            >
-                                <Title className="mt-6">
-                                    Failed to load component
-                                </Title>
-                                <Text className="mt-2">
-                                    {toErrorMessage(controlDetailError)}
-                                </Text>
-                            </Flex>
-                            <Button
-                                variant="secondary"
-                                className="mb-6"
-                                color="slate"
-                                onClick={() => {
-                                    refreshControlDetail()
-                                }}
-                            >
-                                Try Again
-                            </Button>
-                        </Flex>
+                            {toErrorMessage(controlDetailError) && (
+                                <Flex
+                                    flexDirection="col"
+                                    justifyContent="between"
+                                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
+                                >
+                                    <Flex
+                                        flexDirection="col"
+                                        justifyContent="center"
+                                        alignItems="center"
+                                    >
+                                        <Title className="mt-6">
+                                            Failed to load component
+                                        </Title>
+                                        <Text className="mt-2">
+                                            {toErrorMessage(controlDetailError)}
+                                        </Text>
+                                    </Flex>
+                                    <Button
+                                        variant="secondary"
+                                        className="mb-6"
+                                        color="slate"
+                                        onClick={() => {
+                                            refreshControlDetail()
+                                        }}
+                                    >
+                                        Try Again
+                                    </Button>
+                                </Flex>
+                            )}
+                        </>
+                    ) : (
+                        <>
+                            {toErrorMessage(controlDetailError) && (
+                                <Flex
+                                    flexDirection="col"
+                                    justifyContent="between"
+                                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
+                                >
+                                    <Flex
+                                        flexDirection="col"
+                                        justifyContent="center"
+                                        alignItems="center"
+                                    >
+                                        <Title className="mt-6">
+                                            Failed to load component
+                                        </Title>
+                                        <Text className="mt-2">
+                                            {toErrorMessage(controlDetailError)}
+                                        </Text>
+                                    </Flex>
+                                    <Button
+                                        variant="secondary"
+                                        className="mb-6"
+                                        color="slate"
+                                        onClick={() => {
+                                            refreshControlDetail()
+                                        }}
+                                    >
+                                        Try Again
+                                    </Button>
+                                </Flex>
+                            )}
+                        </>
                     )}
                 </>
             )}
