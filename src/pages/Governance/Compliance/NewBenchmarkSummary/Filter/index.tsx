@@ -79,7 +79,7 @@ export default function Filter({ onApply, type ,id}: IFilters) {
         GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
     ])
 
-    const defLifecycle = [true, false]
+    const defLifecycle = [true]
     const [lifecycle, setLifecycle] = useState<boolean[]>(defLifecycle)
 
     const defSeverity = [

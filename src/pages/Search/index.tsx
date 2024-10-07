@@ -109,7 +109,7 @@ export default function Search() {
                                     setTab(0)
                                 }}
                             >
-                                All Queries
+                                Run a Query
                             </Tab>
                             <Tab
                                 value={1}
@@ -117,7 +117,7 @@ export default function Search() {
                                     setTab(1)
                                 }}
                             >
-                                Queries
+                                Query Library
                             </Tab>
                         </TabList>
                         <TabPanels>
@@ -215,7 +215,7 @@ export default function Search() {
                                                     className="gap-3 w-full"
                                                 >
                                                     <Title className="flex flex-row gap-1 justify-center align-center items-center">
-                                                        Search
+                                                        Run a Query
                                                         <ChevronRightIcon className="w-[20px] mt-1" />
                                                     </Title>
                                                     <p className="dark:text-dark-tremor-cont text-tremor-default text-tremor-content">
@@ -258,7 +258,7 @@ export default function Search() {
                                                     className="gap-3 w-full"
                                                 >
                                                     <Title className="flex flex-row gap-1 justify-center align-center items-center">
-                                                        Saved Query
+                                                        Query Library
                                                         <ChevronRightIcon className="w-[20px] mt-1" />
                                                     </Title>
                                                     <p className="dark:text-dark-tremor-cont text-tremor-default text-tremor-content">

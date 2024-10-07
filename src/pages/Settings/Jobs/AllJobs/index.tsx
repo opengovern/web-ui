@@ -41,6 +41,7 @@ import {
     Link,
     Pagination,
     PropertyFilter,
+    Select,
 } from '@cloudscape-design/components'
 import {
     AppLayout,
@@ -300,6 +301,81 @@ export default function SettingsALLJobs() {
       unit: 'hour',
       type: 'relative',
   })
+    const [filter, setFilter] = useState({
+        label: 'Recent Incidents',
+        value: '1',
+    })
+      useEffect(() => {
+          // @ts-ignore
+          if (filter) {
+              // @ts-ignore
+
+              if (filter.value == '1') {
+                  setDate({
+                      key: 'previous-6-hours',
+                      amount: 6,
+                      unit: 'hour',
+                      type: 'relative',
+                  })
+                  setQueries({
+                      tokens: [
+                          {
+                              propertyKey: 'job_type',
+                              value: 'compliance',
+                              operator: '=',
+                          },
+                      ],
+                      operation: 'and',
+                  })
+              }
+              // @ts-ignore
+              else if (filter.value == '2') {
+                  setDate({
+                      key: 'previous-6-hours',
+                      amount: 6,
+                      unit: 'hour',
+                      type: 'relative',
+                  })
+                  setQueries({
+                      tokens: [
+                          {
+                              propertyKey: 'job_type',
+                              value: 'compliance',
+                              operator: '=',
+                          },
+                          {
+                              propertyKey: 'job_status',
+                              value: 'FAILED',
+                              operator: '=',
+                          },
+                      ],
+                      operation: 'and',
+                  })
+              } else if (filter.value == '3') {
+                  setDate({
+                      key: 'previous-7-days',
+                      amount: 7,
+                      unit: 'day',
+                      type: 'relative',
+                  })
+                  setQueries({
+                      tokens: [
+                          {
+                              propertyKey: 'job_type',
+                              value: 'discovery',
+                              operator: '=',
+                          },
+                          {
+                              propertyKey: 'job_status',
+                              value: 'FAILED',
+                              operator: '=',
+                          },
+                      ],
+                      operation: 'and',
+                  })
+              }
+          }
+      }, [filter])
     const [queries, setQueries] = useState({
         tokens: [],
         operation: 'and',
@@ -673,6 +749,32 @@ export default function SettingsALLJobs() {
                                 alignItems="start"
                                 className="gap-2"
                             >
+                                <Select
+                                    // @ts-ignore
+                                    selectedOption={filter}
+                                    className="w-1/5 mt-[-9px]"
+                                    inlineLabelText={'Saved Filters'}
+                                    placeholder="Select Filter Set"
+                                    // @ts-ignore
+                                    onChange={({ detail }) =>
+                                        // @ts-ignore
+                                        setFilter(detail.selectedOption)
+                                    }
+                                    options={[
+                                        {
+                                            label: 'Recent Compliance Jobs',
+                                            value: '1',
+                                        },
+                                        {
+                                            label: 'Failing Compliance Jobs',
+                                            value: '2',
+                                        },
+                                        {
+                                            label: 'All Discovery Jobs',
+                                            value: '3'
+                                        },
+                                    ]}
+                                />
                                 <PropertyFilter
                                     // @ts-ignore
                                     query={queries}

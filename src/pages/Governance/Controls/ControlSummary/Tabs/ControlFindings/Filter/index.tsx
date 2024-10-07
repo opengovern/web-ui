@@ -75,7 +75,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
         GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus.ConformanceStatusFailed,
     ])
 
-    const defLifecycle = [true, false]
+    const defLifecycle = [true]
     const [lifecycle, setLifecycle] = useState<boolean[]>(defLifecycle)
 
     const defSeverity = [
@@ -322,20 +322,20 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             data: confarmance_data,
             types: ['findings', 'resources', 'events'],
         },
-        {
-            id: 'connectionGroup',
-            name: 'Integration Groups',
-            icon: CheckCircleIcon,
+        // {
+        //     id: 'connectionGroup',
+        //     name: 'Integration Groups',
+        //     icon: CheckCircleIcon,
 
-            conditions: ['is'],
-            onChange: (c: any) => setJobs(c),
-            setCondition: (c: string) => console.log(c),
-            value: conformanceStatus,
-            defaultValue: defConformanceStatus,
-            onDelete: undefined,
-            data: connectionGroup_data,
-            types: ['findings', 'resources', 'events'],
-        },
+        //     conditions: ['is'],
+        //     onChange: (c: any) => setJobs(c),
+        //     setCondition: (c: string) => console.log(c),
+        //     value: conformanceStatus,
+        //     defaultValue: defConformanceStatus,
+        //     onDelete: undefined,
+        //     data: connectionGroup_data,
+        //     types: ['findings', 'resources', 'events'],
+        // },
         {
             id: 'job_id',
             name: 'Job Id',
