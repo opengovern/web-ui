@@ -506,8 +506,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 isPreview: false,
             },
             {
-                name: 'Adminstration',
-                page: ['adminstration'],
+                name: 'Administration',
+                page: ['administration'],
                 icon: Cog6ToothIcon,
                 isPreview: false,
             },
