@@ -245,7 +245,7 @@ const authRoutes = [
     },
     {
         key: 'settings page',
-        path: '/ws/:ws/adminstration',
+        path: '/ws/:ws/administration',
         element: <Settings />,
     },
     {
