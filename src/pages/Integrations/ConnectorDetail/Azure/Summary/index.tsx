@@ -6,6 +6,8 @@ import {
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,
 } from '../../../../../api/api'
 import OnboardCard from '../../../../../components/Cards/OnboardCard'
+import { KeyValuePairs } from '@cloudscape-design/components'
+import { numericDisplay } from '../../../../../utilities/numericDisplay'
 
 interface IAzureSummary {
     principalsSummary:
@@ -29,8 +31,35 @@ export default function AzureSummary({
     subscriptionsLoading,
 }: IAzureSummary) {
     return (
-        <Grid numItems={3} className="w-full gap-4 mt-6 mb-10">
-            <OnboardCard
+        <Grid numItems={1} className="w-full gap-4 mt-6 mb-10">
+            <KeyValuePairs
+                columns={5}
+                items={[
+                    {
+                        label: 'Total Organizations',
+                        value: numericDisplay(
+                            principalsSummary?.totalCredentialCount
+                        ),
+                    },
+                    {
+                        label: 'Active Accounts',
+                        value: numericDisplay(metrics?.connectionsEnabled),
+                    },
+                    {
+                        label: 'In Progress Accounts',
+                        value: numericDisplay(metrics?.inProgressConnections),
+                    },
+                    {
+                        label: 'Healthy Accounts',
+                        value: numericDisplay(metrics?.healthyConnections),
+                    },
+                    {
+                        label: 'Unhealthy Accounts',
+                        value: numericDisplay(metrics?.unhealthyConnections),
+                    },
+                ]}
+            />
+            {/* <OnboardCard
                 title="Active supscriptions"
                 active={metrics?.connectionsEnabled}
                 inProgress={metrics?.inProgressConnections}
@@ -42,7 +71,7 @@ export default function AzureSummary({
                 title="Service Principals"
                 metric={principalsSummary?.totalCredentialCount}
                 loading={principalsLoading}
-            />
+            /> */}
         </Grid>
     )
 }

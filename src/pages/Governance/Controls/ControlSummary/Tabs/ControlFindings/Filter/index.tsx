@@ -460,7 +460,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
         // },
         {
             id: 'benchmark',
-            name: 'Benchmark',
+            name: 'Framework',
             icon: Compliance,
 
             conditions: ['is'],
