@@ -69,10 +69,8 @@ IOnboardDrawer) {
     }
 
     const handleNext = (step: number) => {
-        if (step == 1 || step === 0) {
-            setActiveStepIndex(step)
-        }
-        if (step == 2) {
+   
+        if (step == 1) {
             if(
                 credentials?.accessKey === undefined ||
                 credentials?.secretKey === undefined ||
@@ -84,13 +82,7 @@ IOnboardDrawer) {
             
             sendNow()
         }
-        if (step == 3) {
-            if(accountSendNow){
-            accountSendNow()
-
-            }
-            close()
-        }
+       
     }
     useEffect(() => {
             setErrorField('')
@@ -121,7 +113,7 @@ IOnboardDrawer) {
                         ({ detail }) => handleNext(detail.requestedStepIndex)
                         // setActiveStepIndex(detail.requestedStepIndex)
                     }
-                    onSubmit={()=>{
+                    onSubmit={() => {
                         if (accountSendNow) {
                             accountSendNow()
                         }
@@ -132,20 +124,12 @@ IOnboardDrawer) {
                     // allowSkipTo
                     steps={[
                         {
-                            title: 'Setup Integration',
-                            info: (
-                                <Link
-                                    variant="info"
-                                    external={true}
-                                    href="https://docs.opengovernance.io/oss/how-to-guide/setup-integrations"
-                                >
-                                    Info
-                                </Link>
-                            ),
+                            title: 'Account Credentials',
+                            info: <></>,
                             description: (
                                 <>
                                     <a
-                                        className=" cursor-pointer "
+                                        className=" cursor-pointer text-xs "
                                         href="https://docs.opengovernance.io/oss/how-to-guide/setup-integrations"
                                         target="__blank"
                                     >
@@ -153,15 +137,15 @@ IOnboardDrawer) {
                                         roles for Integration to work. Click
                                         here for documentation.
                                     </a>
+                                    <Link
+                                        variant="info"
+                                        external={true}
+                                        href="https://docs.opengovernance.io/oss/how-to-guide/setup-integrations"
+                                    >
+                                        Info
+                                    </Link>
+                                   
                                 </>
-                            ),
-                            content: '',
-                        },
-                        {
-                            title: 'Account Credentials',
-                            info: '',
-                            description: (
-                                <>Please enter your Account credentials</>
                             ),
                             content: (
                                 <>

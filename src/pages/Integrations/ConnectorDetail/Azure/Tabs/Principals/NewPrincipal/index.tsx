@@ -192,6 +192,7 @@ export default function NewPrincipal({
                     credintalsSendNow()
 
                     }
+                    onClose()
                   onSubmit()
                 }}
                 onCancel={close}

@@ -163,7 +163,7 @@ export default function FirstStep({ onNext, onPrevious, spns }: IStep) {
                                 header: 'Name',
                                 cell: (item) => (
                                     <>
-                                        <span>{item.name}</span>
+                                        <span>{item.metadata?.spn_name}</span>
                                     </>
                                 ),
                                 // sortingField: 'providerConnectionID',
@@ -234,8 +234,8 @@ export default function FirstStep({ onNext, onPrevious, spns }: IStep) {
                         columnDisplay={[
                             { id: 'name', visible: true },
                             { id: 'credentialType', visible: true },
-                            { id: 'enabled', visible: true },
-                            { id: 'healthStatus', visible: true },
+                            // { id: 'enabled', visible: true },
+                            // { id: 'healthStatus', visible: true },
                             // { id: 'lifecycleState', visible: true },
 
                             // { id: 'severity', visible: true },
@@ -246,7 +246,7 @@ export default function FirstStep({ onNext, onPrevious, spns }: IStep) {
                         selectionType="single"
                         enableKeyboardNavigation
                         // @ts-ignore
-                        items={spns?.slice(page * 10, (page + 1) * 10)}
+                        items={spns?.slice(page * 5, (page + 1) * 5)}
                         loading={false}
                         loadingText="Loading resources"
                         // stickyColumns={{ first: 0, last: 1 }}
@@ -301,7 +301,7 @@ export default function FirstStep({ onNext, onPrevious, spns }: IStep) {
                         pagination={
                             <Pagination
                                 currentPageIndex={page + 1}
-                                pagesCount={Math.ceil(spns?.length / 10)}
+                                pagesCount={Math.ceil(spns?.length / 5)}
                                 onChange={({ detail }) =>
                                     setPage(detail.currentPageIndex - 1)
                                 }

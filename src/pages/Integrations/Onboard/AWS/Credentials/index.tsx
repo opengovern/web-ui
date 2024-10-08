@@ -25,64 +25,69 @@ export function Credential({
     errorField,
 }: ICredential) {
     return (
-        <Flex flexDirection="col" className="h-full">
-            <Flex flexDirection="col" alignItems="start">
-                {/* <Bold className="text-gray-800 font-bold">
-                    Please enter your account credentials:
-                </Bold> */}
-                <Flex
-                    flexDirection="col"
-                    className="w-full gap-2 mt-5"
-                    alignItems="start"
-                >
-                    <TextInput
-                        placeholder="IAM Access Key"
-                        value={credentials?.accessKey}
-                        onValueChange={(v) => {
-                            setCredentials({ ...credentials, accessKey: v })
-                        }}
-                    />
-                    <TextInput
-                        placeholder="IAM Secret Key"
-                        value={credentials?.secretKey}
-                        onValueChange={(v) => {
-                            setCredentials({ ...credentials, secretKey: v })
-                        }}
-                    />
-                    <TextInput
-                        placeholder="Role Name"
-                        value={credentials?.roleName}
-                        onValueChange={(v) => {
-                            setCredentials({ ...credentials, roleName: v })
-                        }}
-                    />
-                    {/* <TextInput
+        <>
+            <Flex
+                flexDirection="col"
+                className="w-full gap-2 mt-5"
+                alignItems="start"
+            >
+                <div className="">
+                    Please enter your Account credentials
+                </div>
+                <TextInput
+                    placeholder="IAM Access Key"
+                    value={credentials?.accessKey}
+                    onValueChange={(v) => {
+                        setCredentials({ ...credentials, accessKey: v })
+                    }}
+                />
+                <TextInput
+                    placeholder="IAM Secret Key"
+                    value={credentials?.secretKey}
+                    onValueChange={(v) => {
+                        setCredentials({ ...credentials, secretKey: v })
+                    }}
+                />
+                <TextInput
+                    placeholder="Role Name"
+                    value={credentials?.roleName}
+                    onValueChange={(v) => {
+                        setCredentials({ ...credentials, roleName: v })
+                    }}
+                />
+                {/* <TextInput
                         placeholder="External ID"
                         value={externalID}
                         onValueChange={(v) => setExternalID(v)}
                     /> */}
-                    {errormsg !== '' && (
-                        <Alert
-                            statusIconAriaLabel="Error"
-                            type="error"
-                            className="w-full"
-                            header="Your account is not onboarded"
-                        >
-                            {errormsg}
-                        </Alert>
-                    )}
-                    {errorField !== '' && (
-                        <Alert
-                            className="w-full"
-                            statusIconAriaLabel="Error"
-                            type="error"
-                            header=""
-                        >
-                            {errorField}
-                        </Alert>
-                    )}
-                </Flex>
+                {errormsg !== '' && (
+                    <Alert
+                        statusIconAriaLabel="Error"
+                        type="error"
+                        className="w-full"
+                        header="Your account is not onboarded"
+                    >
+                        {errormsg}
+                    </Alert>
+                )}
+                {errorField !== '' && (
+                    <Alert
+                        className="w-full"
+                        statusIconAriaLabel="Error"
+                        type="error"
+                        header=""
+                    >
+                        {errorField}
+                    </Alert>
+                )}
             </Flex>
+            {/* // <Flex flexDirection="col" className="h-full"> */}
+            {/* <Flex flexDirection="col" alignItems="start"> */}
+            {/* <Bold className="text-gray-800 font-bold">
+                    Please enter your account credentials:
+                </Bold> */}
+
+            {/* </Flex> */}
             {/* <Flex flexDirection="row" justifyContent="end">
                 <Button variant="secondary" onClick={() => onClose()}>
                     Cancel
@@ -95,6 +100,7 @@ export function Credential({
                     Next
                 </Button>
             </Flex> */}
-        </Flex>
+            {/* </Flex> */}
+        </>
     )
 }
