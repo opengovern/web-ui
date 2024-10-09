@@ -76,6 +76,19 @@ import QueryDetail from './QueryDetail'
 import Filter from './Filter'
 import { array } from 'prop-types'
 import KFilter from '../../../components/Filter'
+import KTable from '@cloudscape-design/components/table'
+import Box from '@cloudscape-design/components/box'
+import SpaceBetween from '@cloudscape-design/components/space-between'
+import Badge from '@cloudscape-design/components/badge'
+import {
+    BreadcrumbGroup,
+    DateRangePicker,
+    Header,
+    Link,
+    Pagination,
+    PropertyFilter,
+} from '@cloudscape-design/components'
+import { AppLayout, SplitPanel } from '@cloudscape-design/components'
 
 export const getTable = (
     headers: string[] | undefined,
@@ -220,12 +233,28 @@ export default function AllQueries({ setTab }: Props) {
     const [listofTables, setListOfTables] = useState([])
 
     const [engine, setEngine] = useState('odysseus-sql')
+    const [page, setPage] = useState(1)
+    const [totalCount, setTotalCount] = useState(0)
+    const [totalPage, setTotalPage] = useState(0)
+    const [rows, setRows] = useState<any[]>()
+    const [filterQuery, setFilterQuery] = useState({
+        tokens: [],
+        operation: 'and',
+    })
+    const [properties, setProperties] = useState<any[]>([])
+    const [options, setOptions] = useState<any[]>([])
 
-    const { response: categories, isLoading: categoryLoading } =
-        useInventoryApiV3AllQueryCategory()
+    const {
+        response: categories,
+        isLoading: categoryLoading,
+        isExecuted: categoryExec,
+    } = useInventoryApiV3AllQueryCategory()
 
-    const { response: filters, isLoading: filtersLoading } =
-        useInventoryApiV3QueryFiltersList()
+    const {
+        response: filters,
+        isLoading: filtersLoading,
+        isExecuted: filterExec,
+    } = useInventoryApiV3QueryFiltersList()
 
     // const { response: queries, isLoading: queryLoading } =
     //     useInventoryApiV2QueryList({
@@ -271,84 +300,337 @@ export default function AllQueries({ setTab }: Props) {
         }
         return undefined
     }
-    const ssr = () => {
-        return {
-            getRows: (params: IServerSideGetRowsParams) => {
-                // setLoading(true)
-                const api = new Api()
-                api.instance = AxiosAPI
-                const temp = query?.tags
-                // @ts-ignore
-                if (temp) {
-                    Object.keys(temp).map((item, index) => {
-                        const filtered = selectedFilter.filter((filter, i) => {
-                            if (filter == item) {
-                                return filter
-                            }
-                        })
-                        if (!filtered || filtered.length == 0) {
-                            // @ts-ignore
-                            delete temp[item]
-                        }
-                    })
-                }
-                if (temp?.length !== query?.tags?.length) {
-                    setQuery(
-                        // @ts-ignore
-                        (prevSelectedItem) => ({
-                            ...prevSelectedItem,
-                            tags: temp,
-                        })
-                    )
-                }
-                let body = {
-                    //  title_filter: '',
-                    tags: temp,
-                    providers: query?.providers,
-                    list_of_tables: listofTables,
-                    cursor: params.request.startRow
-                        ? Math.floor(params.request.startRow / 25)
-                        : 0,
-                    per_page: 25,
-                }
-                if (!body.providers) {
-                    delete body['providers']
-                } else {
-                    // @ts-ignore
-                    body['providers'] = ConvertParams([body?.providers],
-                        'providers'
-                    )
-                }
-                api.inventory
-                    .apiV2QueryList(body)
-                    .then((resp) => {
-                        params.success({
-                            rowData: resp.data.items || [],
-                            rowCount: resp.data.total_count,
-                        })
-                        setLoading(false)
-                    })
-                    .catch((err) => {
-                        setLoading(false)
 
-                        console.log(err)
-                        params.fail()
-                    })
-            },
+    const getRows = () => {
+        setLoading(true)
+        const api = new Api()
+        api.instance = AxiosAPI
+        
+        let body = {
+            //  title_filter: '',
+            tags: query?.tags,
+            providers: query?.providers,
+            list_of_tables: query?.list_of_tables,
+            cursor: page,
+            per_page: 15,
         }
+        if (!body.providers) {
+            delete body['providers']
+        } else {
+            // @ts-ignore
+            body['providers'] = ConvertParams([body?.providers], 'providers')
+        }
+        api.inventory
+            .apiV2QueryList(body)
+            .then((resp) => {
+                if(resp.data.items){
+                setRows(resp.data.items)
+
+                }
+                else{
+                    setRows([])
+                }
+                setTotalCount(resp.data.total_count)
+                setTotalPage(Math.ceil(resp.data.total_count / 15))
+                setLoading(false)
+            })
+            .catch((err) => {
+                setLoading(false)
+            })
     }
 
-    const serverSideRows = ssr()
+    useEffect(() => {
+        getRows()
+    }, [page,query])
+
+    useEffect(() => {
+        if (filterExec && categoryExec && !filtersLoading && !categoryLoading) {
+            const temp_option: any = [
+                { propertyKey: 'providers', value: 'AWS' },
+                { propertyKey: 'providers', value: 'Azure' },
+            ]
+            const property: any = [
+                {
+                    key: 'providers',
+                    operators: ['='],
+                    propertyLabel: 'Providers',
+                    groupValuesLabel: 'Providers values',
+                },
+            ]
+            categories?.categories?.map((item) => {
+                property.push({
+                    key: `list_of_table${item.category}`,
+                    operators: ['='],
+                    propertyLabel: item.category,
+                    groupValuesLabel: `${item.category} values`,
+                    group: 'category',
+                })
+                item?.tables?.map((sub) => {
+                    temp_option.push({
+                        propertyKey: `list_of_table${item.category}`,
+                        value: sub.table,
+                    })
+                })
+            })
+            filters?.tags?.map((unique, index) => {
+                property.push({
+                    key: unique.Key,
+                    operators: ['='],
+                    propertyLabel: unique.Key,
+                    groupValuesLabel: `${unique.Key} values`,
+                    // @ts-ignore
+                    group: 'tags',
+                })
+                unique.UniqueValues?.map((value, idx) => {
+                    temp_option.push({
+                        propertyKey: unique.Key,
+                        value: value,
+                    })
+                })
+            })
+            setOptions(temp_option)
+            setProperties(property)
+        }
+    }, [filterExec, categoryExec, filtersLoading, categoryLoading])
+
+    useEffect(() => {
+        if (filterQuery) {
+            const temp_provider: any = []
+            const temp_tables: any = []
+            const temp_tags = {}
+            filterQuery.tokens.map((item, index) => {
+              
+                // @ts-ignore
+                 if (item.propertyKey === 'providers') {
+                    // @ts-ignore
+
+                    temp_provider.push(item.value)
+                }
+                // @ts-ignore
+                else if (item.propertyKey.includes('list_of_table')) {
+                    // @ts-ignore
+
+                    temp_tables.push(item.value)
+                }
+               else {
+                    // @ts-ignore
+
+                    if (temp_tags[item.propertyKey]) {
+                        // @ts-ignore
+
+                        temp_tags[item.propertyKey].push(item.value)
+                    } else {
+                        // @ts-ignore
+
+                        temp_tags[item.propertyKey] = [item.value]
+                    }
+                }
+            })
+            // @ts-ignore
+            setQuery({
+                providers: temp_provider.length > 0 ? temp_provider : undefined,
+                list_of_tables:
+                    temp_tables.length > 0 ? temp_tables : undefined,
+                // @ts-ignore
+                tags: temp_tags,
+            })
+        }
+    }, [filterQuery])
 
     return (
         <>
             <TopHeader />
-            {categoryLoading || loading ? (
+            <AppLayout
+                toolsOpen={false}
+                navigationOpen={false}
+                contentType="table"
+                className="w-full"
+                toolsHide={true}
+                navigationHide={true}
+                splitPanelOpen={openSlider}
+                onSplitPanelToggle={() => {
+                    setOpenSlider(!openSlider)
+                    if (openSlider) {
+                        setSelectedRow(undefined)
+                    }
+                }}
+                splitPanel={
+                    // @ts-ignore
+                    <SplitPanel
+                        // @ts-ignore
+                        header={
+                            selectedRow ? (
+                                <>
+                                    <Flex justifyContent="start">
+                                        {/* {getConnectorIcon(
+                                            selectedRow?.connector
+                                        )} */}
+                                        <Title className="text-lg font-semibold ml-2 my-1">
+                                            {selectedRow?.title}
+                                        </Title>
+                                    </Flex>
+                                </>
+                            ) : (
+                                'Query not selected'
+                            )
+                        }
+                    >
+                        <>
+                        {selectedRow ? (  <QueryDetail
+                                // type="resource"
+                                query={selectedRow}
+                                open={openSlider}
+                                onClose={() => setOpenSlider(false)}
+                                onRefresh={() => window.location.reload()}
+                                setTab={setTab}
+                            />) : (<Spinner/>)}
+                          
+                        </>
+                    </SplitPanel>
+                }
+                content={
+                    <KTable
+                        className="   min-h-[450px]"
+                        // resizableColumns
+                        variant="full-page"
+                        renderAriaLive={({
+                            firstIndex,
+                            lastIndex,
+                            totalItemsCount,
+                        }) =>
+                            `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
+                        }
+                        onSortingChange={(event) => {
+                            // setSort(event.detail.sortingColumn.sortingField)
+                            // setSortOrder(!sortOrder)
+                        }}
+                        // sortingColumn={sort}
+                        // sortingDescending={sortOrder}
+                        // sortingDescending={sortOrder == 'desc' ? true : false}
+                        // @ts-ignore
+                        onRowClick={(event) => {
+                            const row = event.detail.item
+
+                            setSelectedRow(row)
+                            setOpenSlider(true)
+                        }}
+                        columnDefinitions={[
+                            {
+                                id: 'id',
+                                header: 'Id',
+                                cell: (item) => item.id,
+                                // sortingField: 'id',
+                                isRowHeader: true,
+                                maxWidth: 150,
+                            },
+                            {
+                                id: 'title',
+                                header: 'Title',
+                                cell: (item) => item.title,
+                                // sortingField: 'id',
+                                isRowHeader: true,
+                                maxWidth: 150,
+                            },
+                        ]}
+                        columnDisplay={[
+                            {
+                                id: 'id',
+                                visible: true,
+                            },
+                            {
+                                id: 'title',
+                                visible: true,
+                            },
+
+                            // { id: 'query', visible: true },
+                            // {
+                            //     id: 'severity',
+                            //     visible: true,
+                            // },
+                            // { id: 'parameters', visible: true },
+                            // {
+                            //     id: 'evaluatedAt',
+                            //     visible: true,
+                            // },
+
+                            // { id: 'action', visible: true },
+                        ]}
+                        enableKeyboardNavigation
+                        // @ts-ignore
+                        items={rows}
+                        loading={loading}
+                        loadingText="Loading resources"
+                        // stickyColumns={{ first: 0, last: 1 }}
+                        // stripedRows
+                        trackBy="id"
+                        empty={
+                            <Box
+                                margin={{ vertical: 'xs' }}
+                                textAlign="center"
+                                color="inherit"
+                            >
+                                <SpaceBetween size="m">
+                                    <b>No resources</b>
+                                </SpaceBetween>
+                            </Box>
+                        }
+                        filter={
+                            <PropertyFilter
+                                // @ts-ignore
+                                query={filterQuery}
+                                tokenLimit={2}
+                                onChange={({ detail }) =>
+                                    // @ts-ignore
+                                    setFilterQuery(detail)
+                                }
+                                customGroupsText={[
+                                    {
+                                        properties: 'Tags',
+                                        values: 'Tag values',
+                                        group: 'tags',
+                                    },
+                                    {
+                                        properties: 'Category',
+                                        values: 'Category values',
+                                        group: 'category',
+                                    },
+                                ]}
+                                // countText="5 matches"
+                                expandToViewport
+                                filteringAriaLabel="Find Query"
+                                filteringPlaceholder="Find Query"
+                                filteringOptions={options}
+                                filteringProperties={properties}
+                                asyncProperties
+                                virtualScroll
+                            />
+                        }
+                        header={
+                            <Header className="w-full">
+                                Queries{' '}
+                                <span className=" font-medium">
+                                    ({totalCount})
+                                </span>
+                            </Header>
+                        }
+                        pagination={
+                            <Pagination
+                                currentPageIndex={page}
+                                pagesCount={totalPage}
+                                onChange={({ detail }) =>
+                                    setPage(detail.currentPageIndex)
+                                }
+                            />
+                        }
+                    />
+                }
+            />
+            {/* {categoryLoading || loading ? (
                 <Spinner className="mt-56" />
             ) : (
                 <Flex alignItems="start" className="gap-4">
                     <DrawerPanel
-                        open={openDrawer}
+                        open={false}
                         onClose={() => setOpenDrawer(false)}
                     >
                         <RenderObject obj={selectedRow} />
@@ -398,7 +680,10 @@ export default function AllQueries({ setTab }: Props) {
                                                                 onClick={() => {
                                                                     if (
                                                                         // @ts-ignore
-                                                                        listofTables.includes(subCat.table
+                                                                        listofTables.includes(
+                                                                            // @ts-ignore
+
+                                                                            subCat.table
                                                                         )
                                                                     ) {
                                                                         // @ts-ignore
@@ -439,18 +724,27 @@ export default function AllQueries({ setTab }: Props) {
                                         </Accordion>
                                     )
                             )}
-                            {listofTables.length >0 && (<>
-                                <Flex flexDirection='col' justifyContent='start' alignItems='start'>
-                                    <Text>Selected Filters</Text>
-                                    {listofTables.map((item,index)=>{
-                                        return (
-                                            <Flex justifyContent='start' className='w-full'>
-                                                <Text>{item}</Text>
-                                            </Flex>
-                                        )
-                                    })}
-                                </Flex>
-                            </>)}
+                            {listofTables.length > 0 && (
+                                <>
+                                    <Flex
+                                        flexDirection="col"
+                                        justifyContent="start"
+                                        alignItems="start"
+                                    >
+                                        <Text>Selected Filters</Text>
+                                        {listofTables.map((item, index) => {
+                                            return (
+                                                <Flex
+                                                    justifyContent="start"
+                                                    className="w-full"
+                                                >
+                                                    <Text>{item}</Text>
+                                                </Flex>
+                                            )
+                                        })}
+                                    </Flex>
+                                </>
+                            )}
                             <Flex justifyContent="end" className="mt-12">
                                 <Button
                                     variant="light"
@@ -476,9 +770,9 @@ export default function AllQueries({ setTab }: Props) {
                                 </Flex>
                             </Button>
                         </Flex>
-                    )}
-                    <Flex flexDirection="col" className="w-full ">
-                        {/* <Transition.Root show={showEditor} as={Fragment}>
+                    )}*/}
+            {/* <Flex flexDirection="col" className="w-full "> */}
+            {/* <Transition.Root show={showEditor} as={Fragment}>
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-in-out duration-500"
@@ -488,7 +782,7 @@ export default function AllQueries({ setTab }: Props) {
                                 leaveFrom="h-fit opacity-100"
                                 leaveTo="h-0 opacity-0"
                             >
-                                <Flex flexDirection="col" className="mb-4">
+                                <Flex flexDirection="col" className="mb-4"> 
                                     <Card className="relative overflow-hidden">
                                         <Editor
                                             onValueChange={(text) => {
@@ -669,7 +963,7 @@ export default function AllQueries({ setTab }: Props) {
                                 </Flex>
                             </Transition.Child>
                         </Transition.Root> */}
-                        {/* <Flex flexDirection="row" className="gap-4">
+            {/* <Flex flexDirection="row" className="gap-4">
                             <Card
                                 onClick={() => {
                                     console.log('salam')
@@ -701,7 +995,7 @@ export default function AllQueries({ setTab }: Props) {
                                 </Subtitle>
                             </Card>
                         </Flex> */}
-                        <Flex
+            {/* <Flex
                             flexDirection="row"
                             justifyContent="start"
                             alignItems="center"
@@ -814,10 +1108,10 @@ export default function AllQueries({ setTab }: Props) {
                                     </div>
                                 )
                             })}
-                        </Flex>
+                        </Flex> */}
 
-                        <Flex className="mt-2">
-                            <Table
+            {/* <Flex className="mt-2"> */}
+            {/* <Table
                                 id="inventory_queries"
                                 columns={columns}
                                 serverSideDatasource={serverSideRows}
@@ -832,11 +1126,11 @@ export default function AllQueries({ setTab }: Props) {
                                     rowModelType: 'serverSide',
                                     serverSideDatasource: serverSideRows,
                                 }}
-                            />
-                        </Flex>
-                    </Flex>
-                </Flex>
-            )}
+                            /> */}
+            {/* </Flex> */}
+            {/* </Flex> */}
+            {/* </Flex> */}
+            {/* )} */}
             <QueryDetail
                 // type="resource"
                 query={selectedRow}

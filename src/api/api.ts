@@ -2886,6 +2886,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2 {
     per_page: number
     providers?: string[]
     tags?: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2TagsFilter
+    list_of_tables?: string[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2TagsFilter {

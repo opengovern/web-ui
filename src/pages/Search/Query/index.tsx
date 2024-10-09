@@ -5,6 +5,7 @@ import {
     Button,
     Card,
     Flex,
+    Grid,
     Icon,
     Select,
     SelectItem,
@@ -55,14 +56,31 @@ import { isDemoAtom, queryAtom, runQueryAtom } from '../../../store'
 import { snakeCaseToLabel } from '../../../utilities/labelMaker'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import TopHeader from '../../../components/Layout/Header'
+import KTable from '@cloudscape-design/components/table'
+import {
+    Box,
+    Header,
+    Pagination,
+    SpaceBetween,
+} from '@cloudscape-design/components'
+import AceEditor from 'react-ace-builds'
+// import 'ace-builds/src-noconflict/theme-github'
+import 'ace-builds/css/ace.css'
+import 'ace-builds/css/theme/cloud_editor.css'
+import 'ace-builds/css/theme/cloud_editor_dark.css'
+import 'ace-builds/css/theme/cloud_editor_dark.css'
+import 'ace-builds/css/theme/twilight.css'
+import 'ace-builds/css/theme/sqlserver.css'
 
+import CodeEditor from '@cloudscape-design/components/code-editor'
 export const getTable = (
     headers: string[] | undefined,
     details: any[][] | undefined,
     isDemo: boolean
 ) => {
-    const columns: IColumn<any, any>[] = []
+    const columns: any[] = []
     const rows: any[] = []
+    const column_def: any[] = []
     const headerField = headers?.map((value, idx) => {
         if (headers.filter((v) => v === value).length > 1) {
             return `${value}-${idx}`
@@ -72,20 +90,34 @@ export const getTable = (
     if (headers && headers.length) {
         for (let i = 0; i < headers.length; i += 1) {
             const isHide = headers[i][0] === '_'
+            // columns.push({
+            //     field: headerField?.at(i),
+            //     headerName: snakeCaseToLabel(headers[i]),
+            //     type: 'string',
+            //     sortable: true,
+            //     hide: isHide,
+            //     resizable: true,
+            //     filter: true,
+            //     width: 170,
+            //     cellRenderer: (param: ValueFormatterParams) => (
+            //         <span className={isDemo ? 'blur-sm' : ''}>
+            //             {param.value}
+            //         </span>
+            //     ),
+            // })
             columns.push({
-                field: headerField?.at(i),
-                headerName: snakeCaseToLabel(headers[i]),
-                type: 'string',
-                sortable: true,
-                hide: isHide,
-                resizable: true,
-                filter: true,
-                width: 170,
-                cellRenderer: (param: ValueFormatterParams) => (
-                    <span className={isDemo ? 'blur-sm' : ''}>
-                        {param.value}
-                    </span>
-                ),
+                id: headerField?.at(i),
+                header: snakeCaseToLabel(headers[i]),
+                // @ts-ignore
+                cell: (item: any) => item[headerField?.at(i)],
+                // maxWidth: '120px'
+                // sortingField: 'id',
+                // isRowHeader: true,
+                // maxWidth: 150,
+            })
+            column_def.push({
+                id: headerField?.at(i),
+                visible: !isHide,
             })
         }
     }
@@ -105,6 +137,7 @@ export const getTable = (
 
     return {
         columns,
+        column_def,
         rows,
         count,
     }
@@ -154,7 +187,9 @@ export default function Query() {
     const [pageSize, setPageSize] = useState(1000)
     const [autoRun, setAutoRun] = useState(false)
     const [engine, setEngine] = useState('odysseus-sql')
+    const [page, setPage] = useState(1)
 
+    const [preferences, setPreferences] = useState(undefined)
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2AnalyticsCategoriesList()
 
@@ -166,15 +201,13 @@ export default function Query() {
         error,
     } = useInventoryApiV1QueryRunCreate(
         {
-            page: { no: 1, size: pageSize },
+            page: { no: page, size: pageSize },
             engine,
             query: code,
         },
         {},
         autoRun
     )
-
- 
 
     useEffect(() => {
         if (autoRun) {
@@ -190,11 +223,35 @@ export default function Query() {
             sendNow()
             setLoaded(true)
         }
-    }, [])
+    }, [page])
 
     useEffect(() => {
         if (code.length) setShowEditor(true)
     }, [code])
+    const [ace, setAce] = useState()
+
+    useEffect(() => {
+        async function loadAce() {
+            const ace = await import('ace-builds')
+            await import('ace-builds/webpack-resolver')
+            ace.config.set('useStrictCSP', true)
+            // ace.config.setMode('ace/mode/sql')
+            // @ts-ignore
+            // ace.edit(element, {
+            //     mode: 'ace/mode/sql',
+            //     selectionStyle: 'text',
+            // })
+
+            return ace
+        }
+
+        loadAce()
+            .then((ace) => {
+                // @ts-ignore
+                setAce(ace)
+            })
+            .finally(() => {})
+    }, [])
 
     useEffect(() => {
         if (runQuery.length > 0) {
@@ -224,6 +281,12 @@ export default function Query() {
                 .columns,
         [queryResponse, isDemo]
     )
+    const memoColumns_def = useMemo(
+        () =>
+            getTable(queryResponse?.headers, queryResponse?.result, isDemo)
+                .column_def,
+        [queryResponse, isDemo]
+    )
     const memoCount = useMemo(
         () =>
             getTable(queryResponse?.headers, queryResponse?.result, isDemo)
@@ -234,7 +297,7 @@ export default function Query() {
     return (
         <>
             <TopHeader />
-            {categoryLoading  ? (
+            {categoryLoading ? (
                 <Spinner className="mt-56" />
             ) : (
                 <Flex alignItems="start">
@@ -342,8 +405,45 @@ export default function Query() {
                                 leaveTo="h-0 opacity-0"
                             >
                                 <Flex flexDirection="col" className="mb-4">
-                                    <Card className="relative overflow-hidden">
-                                        <Editor
+                                    {/* <Card className="relative overflow-hidden"> */}
+                                    {/* <AceEditor
+                                            mode="java"
+                                            theme="github"
+                                            onChange={(text) => {
+                                                setSavedQuery('')
+                                                setCode(text)
+                                            }}
+                                            name="editor"
+                                            value={code}
+                                        /> */}
+                                    <CodeEditor
+                                        ace={ace}
+                                        language="sql"
+                                        value={code}
+                                        languageLabel="SQL"
+                                        onChange={({ detail }) => {
+                                            setSavedQuery('')
+                                            setCode(detail.value)
+                                        }}
+                                        preferences={preferences}
+                                        onPreferencesChange={(e) =>
+                                            // @ts-ignore
+                                            setPreferences(e.detail)
+                                        }
+                                        loading={isLoading}
+                                        themes={{
+                                            light: [
+                                                'cloud_editor',
+                                                'sqlserver',
+                                            ],
+                                            dark: [
+                                                'cloud_editor_dark',
+                                                'twilight',
+                                            ],
+                                            // @ts-ignore
+                                        }}
+                                    />
+                                    {/* <Editor
                                             onValueChange={(text) => {
                                                 setSavedQuery('')
                                                 setCode(text)
@@ -363,11 +463,11 @@ export default function Query() {
                                                 overflowY: 'scroll',
                                             }}
                                             placeholder="-- write your SQL query here"
-                                        />
-                                        {isLoading && isExecuted && (
-                                            <Spinner className="bg-white/30 backdrop-blur-sm top-0 left-0 absolute flex justify-center items-center w-full h-full" />
-                                        )}
-                                    </Card>
+                                        /> */}
+                                    {isLoading && isExecuted && (
+                                        <Spinner className="bg-white/30 backdrop-blur-sm top-0 left-0 absolute flex justify-center items-center w-full h-full" />
+                                    )}
+                                    {/* </Card> */}
                                     <Flex className="w-full mt-4">
                                         <Flex justifyContent="start">
                                             <Text className="mr-2 w-fit">
@@ -648,29 +748,132 @@ export default function Query() {
                                     />
                                 </TabPanel> */}
                                 <TabPanel>
-                                    {isLoading ? (
-                                        <Spinner className="mt-56" />
-                                    ) : (
-                                        <Table
-                                            title="Query results"
-                                            id="finder_table"
-                                            columns={memoColumns}
-                                            rowData={
-                                                getTable(
-                                                    queryResponse?.headers,
-                                                    queryResponse?.result,
-                                                    isDemo
-                                                ).rows
-                                            }
-                                            downloadable
-                                            onRowClicked={(
-                                                event: RowClickedEvent
-                                            ) => {
-                                                setSelectedRow(event.data)
-                                                setOpenDrawer(true)
-                                            }}
-                                        />
-                                    )}
+                                    <div className="p-5 ">
+                                        <Grid numItems={1}>
+                                            <KTable
+                                                className="   min-h-[450px]   "
+                                                // resizableColumns
+                                                // variant="full-page"
+                                                renderAriaLive={({
+                                                    firstIndex,
+                                                    lastIndex,
+                                                    totalItemsCount,
+                                                }) =>
+                                                    `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
+                                                }
+                                                onSortingChange={(event) => {
+                                                    // setSort(event.detail.sortingColumn.sortingField)
+                                                    // setSortOrder(!sortOrder)
+                                                }}
+                                                // sortingColumn={sort}
+                                                // sortingDescending={sortOrder}
+                                                // sortingDescending={sortOrder == 'desc' ? true : false}
+                                                // @ts-ignore
+                                                // stickyHeader={true}
+                                                // resizableColumns={true}
+                                                // stickyColumns={
+                                                //  {   first:1,
+                                                //     last: 1}
+                                                // }
+                                                onRowClick={(event) => {
+                                                    const row =
+                                                        event.detail.item
+                                                    // @ts-ignore
+                                                    setSelectedRow(row)
+                                                    setOpenDrawer(true)
+                                                }}
+                                                columnDefinitions={
+                                                    getTable(
+                                                        queryResponse?.headers,
+                                                        queryResponse?.result,
+                                                        isDemo
+                                                    ).columns
+                                                }
+                                                columnDisplay={
+                                                    getTable(
+                                                        queryResponse?.headers,
+                                                        queryResponse?.result,
+                                                        isDemo
+                                                    ).column_def
+                                                }
+                                                enableKeyboardNavigation
+                                                // @ts-ignore
+                                                items={
+                                                    getTable(
+                                                        queryResponse?.headers,
+                                                        queryResponse?.result,
+                                                        isDemo
+                                                    ).rows
+                                                }
+                                                loading={isLoading}
+                                                loadingText="Loading resources"
+                                                // stickyColumns={{ first: 0, last: 1 }}
+                                                // stripedRows
+                                                trackBy="id"
+                                                empty={
+                                                    <Box
+                                                        margin={{
+                                                            vertical: 'xs',
+                                                        }}
+                                                        textAlign="center"
+                                                        color="inherit"
+                                                    >
+                                                        <SpaceBetween size="m">
+                                                            <b>No Results</b>
+                                                        </SpaceBetween>
+                                                    </Box>
+                                                }
+                                                header={
+                                                    <Header className="w-full">
+                                                        Results{' '}
+                                                        <span className=" font-medium">
+                                                            ({memoCount})
+                                                        </span>
+                                                    </Header>
+                                                }
+                                                pagination={
+                                                    <Pagination
+                                                        currentPageIndex={page}
+                                                        pagesCount={Math.ceil(
+                                                            // @ts-ignore
+                                                            getTable(
+                                                                queryResponse?.headers,
+                                                                queryResponse?.result,
+                                                                isDemo
+                                                            ).rows / 25
+                                                        )}
+                                                        onChange={({
+                                                            detail,
+                                                        }) =>
+                                                            setPage(
+                                                                detail.currentPageIndex
+                                                            )
+                                                        }
+                                                    />
+                                                }
+                                            />
+                                        </Grid>
+
+                                        {/* // <Table
+                                        //     title="Query results"
+                                        //     id="finder_table"
+                                        //     columns={memoColumns}
+                                        //     rowData={
+                                        //         getTable(
+                                        //             queryResponse?.headers,
+                                        //             queryResponse?.result,
+                                        //             isDemo
+                                        //         ).rows
+                                        //     }
+                                        //     downloadable
+                                        //     onRowClicked={(
+                                        //         event: RowClickedEvent
+                                        //     ) => {
+                                        //         setSelectedRow(event.data)
+                                        //         setOpenDrawer(true)
+                                        //     }}
+                                        // /> */}
+                                    </div>
                                 </TabPanel>
                             </TabPanels>
                         </TabGroup>
