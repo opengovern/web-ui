@@ -110,7 +110,7 @@ export const getTable = (
                 header: snakeCaseToLabel(headers[i]),
                 // @ts-ignore
                 cell: (item: any) => item[headerField?.at(i)],
-                // maxWidth: '120px'
+                maxWidth: '200px'
                 // sortingField: 'id',
                 // isRowHeader: true,
                 // maxWidth: 150,
@@ -300,113 +300,132 @@ export default function Query() {
             {categoryLoading ? (
                 <Spinner className="mt-56" />
             ) : (
-                <Flex alignItems="start">
-                    <DrawerPanel
-                        open={openDrawer}
-                        onClose={() => setOpenDrawer(false)}
-                    >
-                        <RenderObject obj={selectedRow} />
-                    </DrawerPanel>
-                    {openSearch ? (
-                        <Card className="sticky w-fit">
-                            <TextInput
-                                className="w-56 mb-6"
-                                icon={MagnifyingGlassIcon}
-                                placeholder="Search..."
-                                value={searchCategory}
-                                onChange={(e) =>
-                                    setSearchCategory(e.target.value)
-                                }
-                            />
-                            {recordToArray(
-                                categories?.categoryResourceType
-                            ).map(
-                                (cat) =>
-                                    !!cat.resource_types?.filter((catt) =>
-                                        catt
-                                            .toLowerCase()
-                                            .includes(
-                                                searchCategory.toLowerCase()
-                                            )
-                                    ).length && (
-                                        <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
-                                            <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                                                <Text className="text-gray-800">
-                                                    {cat.value}
-                                                </Text>
-                                            </AccordionHeader>
-                                            <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
-                                                <Flex
-                                                    flexDirection="col"
-                                                    justifyContent="start"
-                                                >
-                                                    {cat.resource_types
-                                                        ?.filter((catt) =>
-                                                            catt
-                                                                .toLowerCase()
-                                                                .includes(
-                                                                    searchCategory.toLowerCase()
-                                                                )
-                                                        )
-                                                        .map((subCat) => (
-                                                            <Flex
-                                                                justifyContent="start"
-                                                                onClick={() =>
-                                                                    setCode(
-                                                                        `select * from kaytu_resources where resource_type = '${subCat}'`
+                <Flex alignItems="start" flexDirection="col">
+                    <Flex flexDirection="row" className='gap-5' justifyContent='start' alignItems='start'>
+                        <DrawerPanel
+                            open={openDrawer}
+                            onClose={() => setOpenDrawer(false)}
+                        >
+                            <RenderObject obj={selectedRow} />
+                        </DrawerPanel>
+                        {openSearch ? (
+                            <Card className="sticky w-fit">
+                                <TextInput
+                                    className="w-56 mb-6"
+                                    icon={MagnifyingGlassIcon}
+                                    placeholder="Search..."
+                                    value={searchCategory}
+                                    onChange={(e) =>
+                                        setSearchCategory(e.target.value)
+                                    }
+                                />
+                                {recordToArray(
+                                    categories?.categoryResourceType
+                                ).map(
+                                    (cat) =>
+                                        !!cat.resource_types?.filter((catt) =>
+                                            catt
+                                                .toLowerCase()
+                                                .includes(
+                                                    searchCategory.toLowerCase()
+                                                )
+                                        ).length && (
+                                            <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
+                                                <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                                                    <Text className="text-gray-800">
+                                                        {cat.value}
+                                                    </Text>
+                                                </AccordionHeader>
+                                                <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
+                                                    <Flex
+                                                        flexDirection="col"
+                                                        justifyContent="start"
+                                                    >
+                                                        {cat.resource_types
+                                                            ?.filter((catt) =>
+                                                                catt
+                                                                    .toLowerCase()
+                                                                    .includes(
+                                                                        searchCategory.toLowerCase()
                                                                     )
-                                                                }
-                                                            >
-                                                                <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
-                                                                    {subCat}
-                                                                </Text>
-                                                            </Flex>
-                                                        ))}
-                                                </Flex>
-                                            </AccordionBody>
-                                        </Accordion>
-                                    )
-                            )}
-                            <Flex justifyContent="end" className="mt-12">
+                                                            )
+                                                            .map((subCat) => (
+                                                                <Flex
+                                                                    justifyContent="start"
+                                                                    onClick={() =>
+                                                                        setCode(
+                                                                            `select * from kaytu_resources where resource_type = '${subCat}'`
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
+                                                                        {subCat}
+                                                                    </Text>
+                                                                </Flex>
+                                                            ))}
+                                                    </Flex>
+                                                </AccordionBody>
+                                            </Accordion>
+                                        )
+                                )}
+                                <Flex justifyContent="end" className="mt-12">
+                                    <Button
+                                        variant="light"
+                                        onClick={() => setOpenSearch(false)}
+                                    >
+                                        <ChevronDoubleLeftIcon className="h-4" />
+                                    </Button>
+                                </Flex>
+                            </Card>
+                        ) : (
+                            <Flex
+                                flexDirection="col"
+                                justifyContent="center"
+                                className="min-h-full w-fit"
+                            >
                                 <Button
                                     variant="light"
-                                    onClick={() => setOpenSearch(false)}
+                                    onClick={() => setOpenSearch(true)}
                                 >
-                                    <ChevronDoubleLeftIcon className="h-4" />
+                                    <Flex
+                                        flexDirection="col"
+                                        className="gap-4 w-4"
+                                    >
+                                        <FunnelIcon />
+                                        <Text className="rotate-90">
+                                            Options
+                                        </Text>
+                                    </Flex>
                                 </Button>
                             </Flex>
-                        </Card>
-                    ) : (
-                        <Flex
-                            flexDirection="col"
-                            justifyContent="center"
-                            className="min-h-full w-fit"
-                        >
-                            <Button
-                                variant="light"
-                                onClick={() => setOpenSearch(true)}
-                            >
-                                <Flex flexDirection="col" className="gap-4 w-4">
-                                    <FunnelIcon />
-                                    <Text className="rotate-90">Options</Text>
-                                </Flex>
-                            </Button>
-                        </Flex>
-                    )}
-                    <Flex flexDirection="col" className="w-full pl-6">
-                        <Transition.Root show={showEditor} as={Fragment}>
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-in-out duration-500"
-                                enterFrom="h-0 opacity-0"
-                                enterTo="h-fit opacity-100"
-                                leave="ease-in-out duration-500"
-                                leaveFrom="h-fit opacity-100"
-                                leaveTo="h-0 opacity-0"
-                            >
-                                <Flex flexDirection="col" className="mb-4">
-                                    {/* <Card className="relative overflow-hidden"> */}
-                                    {/* <AceEditor
+                        )}
+                        <CodeEditor
+                            ace={ace}
+                            language="sql"
+                            value={code}
+                            languageLabel="SQL"
+                            onChange={({ detail }) => {
+                                setSavedQuery('')
+                                setCode(detail.value)
+                            }}
+                            preferences={preferences}
+                            onPreferencesChange={(e) =>
+                                // @ts-ignore
+                                setPreferences(e.detail)
+                            }
+                            loading={isLoading}
+                            themes={{
+                                light: ['cloud_editor', 'sqlserver'],
+                                dark: ['cloud_editor_dark', 'twilight'],
+                                // @ts-ignore
+                            }}
+                        />
+                    </Flex>
+
+                    <Flex flexDirection="col" className="w-full ">
+                        <Flex flexDirection="col" className="mb-4">
+                            {/* <Card className="relative overflow-hidden"> */}
+                            {/* <AceEditor
                                             mode="java"
                                             theme="github"
                                             onChange={(text) => {
@@ -416,34 +435,8 @@ export default function Query() {
                                             name="editor"
                                             value={code}
                                         /> */}
-                                    <CodeEditor
-                                        ace={ace}
-                                        language="sql"
-                                        value={code}
-                                        languageLabel="SQL"
-                                        onChange={({ detail }) => {
-                                            setSavedQuery('')
-                                            setCode(detail.value)
-                                        }}
-                                        preferences={preferences}
-                                        onPreferencesChange={(e) =>
-                                            // @ts-ignore
-                                            setPreferences(e.detail)
-                                        }
-                                        loading={isLoading}
-                                        themes={{
-                                            light: [
-                                                'cloud_editor',
-                                                'sqlserver',
-                                            ],
-                                            dark: [
-                                                'cloud_editor_dark',
-                                                'twilight',
-                                            ],
-                                            // @ts-ignore
-                                        }}
-                                    />
-                                    {/* <Editor
+
+                            {/* <Editor
                                             onValueChange={(text) => {
                                                 setSavedQuery('')
                                                 setCode(text)
@@ -464,165 +457,240 @@ export default function Query() {
                                             }}
                                             placeholder="-- write your SQL query here"
                                         /> */}
-                                    {isLoading && isExecuted && (
-                                        <Spinner className="bg-white/30 backdrop-blur-sm top-0 left-0 absolute flex justify-center items-center w-full h-full" />
+                            {isLoading && isExecuted && (
+                                <Spinner className="bg-white/30 backdrop-blur-sm top-0 left-0 absolute flex justify-center items-center w-full h-full" />
+                            )}
+                            {/* </Card> */}
+                            <Flex className="w-full mt-4">
+                                <Flex justifyContent="start" className='gap-1'>
+                                    <Text className="mr-2 w-fit">
+                                        Maximum rows:
+                                    </Text>
+                                    <Select
+                                        enableClear={false}
+                                        className="w-56"
+                                        placeholder="1,000"
+                                    >
+                                        <SelectItem
+                                            value="1000"
+                                            onClick={() => setPageSize(1000)}
+                                        >
+                                            1,000
+                                        </SelectItem>
+                                        <SelectItem
+                                            value="3000"
+                                            onClick={() => setPageSize(3000)}
+                                        >
+                                            3,000
+                                        </SelectItem>
+                                        <SelectItem
+                                            value="5000"
+                                            onClick={() => setPageSize(5000)}
+                                        >
+                                            5,000
+                                        </SelectItem>
+                                        <SelectItem
+                                            value="10000"
+                                            onClick={() => setPageSize(10000)}
+                                        >
+                                            10,000
+                                        </SelectItem>
+                                    </Select>
+                                    <Text className="mr-2 w-fit">Engine:</Text>
+                                    <Select
+                                        enableClear={false}
+                                        className="w-56"
+                                        value={engine}
+                                    >
+                                        <SelectItem
+                                            value="odysseus-sql"
+                                            onClick={() =>
+                                                setEngine('odysseus-sql')
+                                            }
+                                        >
+                                            Odysseus SQL
+                                        </SelectItem>
+                                        <SelectItem
+                                            value="odysseus-rego"
+                                            onClick={() =>
+                                                setEngine('odysseus-rego')
+                                            }
+                                        >
+                                            Odysseus Rego
+                                        </SelectItem>
+                                    </Select>
+                                </Flex>
+                                <Flex className="w-fit gap-x-3">
+                                    {!!code.length && (
+                                        <Button
+                                            variant="light"
+                                            color="gray"
+                                            icon={CommandLineIcon}
+                                            onClick={() => setCode('')}
+                                        >
+                                            Clear editor
+                                        </Button>
                                     )}
-                                    {/* </Card> */}
-                                    <Flex className="w-full mt-4">
-                                        <Flex justifyContent="start">
-                                            <Text className="mr-2 w-fit">
-                                                Maximum rows:
-                                            </Text>
-                                            <Select
-                                                enableClear={false}
-                                                className="w-56"
-                                                placeholder="1,000"
-                                            >
-                                                <SelectItem
-                                                    value="1000"
-                                                    onClick={() =>
-                                                        setPageSize(1000)
-                                                    }
-                                                >
-                                                    1,000
-                                                </SelectItem>
-                                                <SelectItem
-                                                    value="3000"
-                                                    onClick={() =>
-                                                        setPageSize(3000)
-                                                    }
-                                                >
-                                                    3,000
-                                                </SelectItem>
-                                                <SelectItem
-                                                    value="5000"
-                                                    onClick={() =>
-                                                        setPageSize(5000)
-                                                    }
-                                                >
-                                                    5,000
-                                                </SelectItem>
-                                                <SelectItem
-                                                    value="10000"
-                                                    onClick={() =>
-                                                        setPageSize(10000)
-                                                    }
-                                                >
-                                                    10,000
-                                                </SelectItem>
-                                            </Select>
-                                            <Text className="mr-2 w-fit">
-                                                Engine:
-                                            </Text>
-                                            <Select
-                                                enableClear={false}
-                                                className="w-56"
-                                                value={engine}
-                                            >
-                                                <SelectItem
-                                                    value="odysseus-sql"
-                                                    onClick={() =>
-                                                        setEngine(
-                                                            'odysseus-sql'
-                                                        )
-                                                    }
-                                                >
-                                                    Odysseus SQL
-                                                </SelectItem>
-                                                <SelectItem
-                                                    value="odysseus-rego"
-                                                    onClick={() =>
-                                                        setEngine(
-                                                            'odysseus-rego'
-                                                        )
-                                                    }
-                                                >
-                                                    Odysseus Rego
-                                                </SelectItem>
-                                            </Select>
-                                        </Flex>
-                                        <Flex className="w-fit gap-x-3">
-                                            {!!code.length && (
-                                                <Button
-                                                    variant="light"
-                                                    color="gray"
-                                                    icon={CommandLineIcon}
-                                                    onClick={() => setCode('')}
-                                                >
-                                                    Clear editor
-                                                </Button>
-                                            )}
-                                            <Button
-                                                icon={PlayCircleIcon}
-                                                onClick={() => sendNow()}
-                                                disabled={!code.length}
-                                                loading={
-                                                    isLoading && isExecuted
-                                                }
-                                                loadingText="Running"
-                                            >
-                                                Run query
-                                            </Button>
-                                        </Flex>
+                                    <Button
+                                        icon={PlayCircleIcon}
+                                        onClick={() => sendNow()}
+                                        disabled={!code.length}
+                                        loading={isLoading && isExecuted}
+                                        loadingText="Running"
+                                    >
+                                        Run query
+                                    </Button>
+                                </Flex>
+                            </Flex>
+                            <Flex className="w-full">
+                                {!isLoading && isExecuted && error && (
+                                    <Flex
+                                        justifyContent="start"
+                                        className="w-fit"
+                                    >
+                                        <Icon
+                                            icon={ExclamationCircleIcon}
+                                            color="rose"
+                                        />
+                                        <Text color="rose">
+                                            {getErrorMessage(error)}
+                                        </Text>
                                     </Flex>
-                                    <Flex className="w-full">
-                                        {!isLoading && isExecuted && error && (
-                                            <Flex
-                                                justifyContent="start"
-                                                className="w-fit"
-                                            >
+                                )}
+                                {!isLoading && isExecuted && queryResponse && (
+                                    <Flex
+                                        justifyContent="start"
+                                        className="w-fit"
+                                    >
+                                        {memoCount === pageSize ? (
+                                            <>
                                                 <Icon
                                                     icon={ExclamationCircleIcon}
-                                                    color="rose"
+                                                    color="amber"
+                                                    className="ml-0 pl-0"
                                                 />
-                                                <Text color="rose">
-                                                    {getErrorMessage(error)}
+                                                <Text color="amber">
+                                                    {`Row limit of ${numberDisplay(
+                                                        pageSize,
+                                                        0
+                                                    )} reached, results are truncated`}
                                                 </Text>
-                                            </Flex>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Icon
+                                                    icon={CheckCircleIcon}
+                                                    color="emerald"
+                                                />
+                                                <Text color="emerald">
+                                                    Success
+                                                </Text>
+                                            </>
                                         )}
-                                        {!isLoading &&
-                                            isExecuted &&
-                                            queryResponse && (
-                                                <Flex
-                                                    justifyContent="start"
-                                                    className="w-fit"
-                                                >
-                                                    {memoCount === pageSize ? (
-                                                        <>
-                                                            <Icon
-                                                                icon={
-                                                                    ExclamationCircleIcon
-                                                                }
-                                                                color="amber"
-                                                                className="ml-0 pl-0"
-                                                            />
-                                                            <Text color="amber">
-                                                                {`Row limit of ${numberDisplay(
-                                                                    pageSize,
-                                                                    0
-                                                                )} reached, results are truncated`}
-                                                            </Text>
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <Icon
-                                                                icon={
-                                                                    CheckCircleIcon
-                                                                }
-                                                                color="emerald"
-                                                            />
-                                                            <Text color="emerald">
-                                                                Success
-                                                            </Text>
-                                                        </>
-                                                    )}
-                                                </Flex>
-                                            )}
                                     </Flex>
-                                </Flex>
-                            </Transition.Child>
-                        </Transition.Root>
-                        <TabGroup
+                                )}
+                            </Flex>
+                        </Flex>
+                        <Grid numItems={1} className='w-full'>
+                            <KTable
+                                className="   min-h-[450px]   "
+                                // resizableColumns
+                                // variant="full-page"
+                                renderAriaLive={({
+                                    firstIndex,
+                                    lastIndex,
+                                    totalItemsCount,
+                                }) =>
+                                    `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
+                                }
+                                onSortingChange={(event) => {
+                                    // setSort(event.detail.sortingColumn.sortingField)
+                                    // setSortOrder(!sortOrder)
+                                }}
+                                // sortingColumn={sort}
+                                // sortingDescending={sortOrder}
+                                // sortingDescending={sortOrder == 'desc' ? true : false}
+                                // @ts-ignore
+                                // stickyHeader={true}
+                                resizableColumns={true}
+                                // stickyColumns={
+                                //  {   first:1,
+                                //     last: 1}
+                                // }
+                                onRowClick={(event) => {
+                                    const row = event.detail.item
+                                    // @ts-ignore
+                                    setSelectedRow(row)
+                                    setOpenDrawer(true)
+                                }}
+                                columnDefinitions={
+                                    getTable(
+                                        queryResponse?.headers,
+                                        queryResponse?.result,
+                                        isDemo
+                                    ).columns
+                                }
+                                columnDisplay={
+                                    getTable(
+                                        queryResponse?.headers,
+                                        queryResponse?.result,
+                                        isDemo
+                                    ).column_def
+                                }
+                                enableKeyboardNavigation
+                                // @ts-ignore
+                                items={
+                                    getTable(
+                                        queryResponse?.headers,
+                                        queryResponse?.result,
+                                        isDemo
+                                    ).rows
+                                }
+                                loading={isLoading}
+                                loadingText="Loading resources"
+                                // stickyColumns={{ first: 0, last: 1 }}
+                                // stripedRows
+                                trackBy="id"
+                                empty={
+                                    <Box
+                                        margin={{
+                                            vertical: 'xs',
+                                        }}
+                                        textAlign="center"
+                                        color="inherit"
+                                    >
+                                        <SpaceBetween size="m">
+                                            <b>No Results</b>
+                                        </SpaceBetween>
+                                    </Box>
+                                }
+                                header={
+                                    <Header className="w-full">
+                                        Results{' '}
+                                        <span className=" font-medium">
+                                            ({memoCount})
+                                        </span>
+                                    </Header>
+                                }
+                                pagination={
+                                    <Pagination
+                                        currentPageIndex={page}
+                                        pagesCount={Math.ceil(
+                                            // @ts-ignore
+                                            getTable(
+                                                queryResponse?.headers,
+                                                queryResponse?.result,
+                                                isDemo
+                                            ).rows / 25
+                                        )}
+                                        onChange={({ detail }) =>
+                                            setPage(detail.currentPageIndex)
+                                        }
+                                    />
+                                }
+                            />
+                        </Grid>
+                        {/* <TabGroup
                             id="tabs"
                             index={selectedIndex}
                             onIndexChange={setSelectedIndex}
@@ -643,7 +711,7 @@ export default function Query() {
                                             }}
                                         >
                                             All queries
-                                        </Tab> */}
+                                        </Tab> 
                                         <Tab
                                             className={
                                                 queryResponse?.query?.length &&
@@ -655,7 +723,7 @@ export default function Query() {
                                             Result
                                         </Tab>
                                     </Flex>
-                                    <Button
+                                    {/* <Button
                                         variant="light"
                                         onClick={() => {
                                             if (showEditor) {
@@ -673,7 +741,7 @@ export default function Query() {
                                         {showEditor
                                             ? 'Close query editor'
                                             : 'Open query editor'}
-                                    </Button>
+                                    </Button> 
                                 </Flex>
                             </TabList>
                             <TabPanels>
@@ -746,113 +814,10 @@ export default function Query() {
                                                 })
                                         }}
                                     />
-                                </TabPanel> */}
+                                </TabPanel> 
                                 <TabPanel>
                                     <div className="p-5 ">
-                                        <Grid numItems={1}>
-                                            <KTable
-                                                className="   min-h-[450px]   "
-                                                // resizableColumns
-                                                // variant="full-page"
-                                                renderAriaLive={({
-                                                    firstIndex,
-                                                    lastIndex,
-                                                    totalItemsCount,
-                                                }) =>
-                                                    `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
-                                                }
-                                                onSortingChange={(event) => {
-                                                    // setSort(event.detail.sortingColumn.sortingField)
-                                                    // setSortOrder(!sortOrder)
-                                                }}
-                                                // sortingColumn={sort}
-                                                // sortingDescending={sortOrder}
-                                                // sortingDescending={sortOrder == 'desc' ? true : false}
-                                                // @ts-ignore
-                                                // stickyHeader={true}
-                                                // resizableColumns={true}
-                                                // stickyColumns={
-                                                //  {   first:1,
-                                                //     last: 1}
-                                                // }
-                                                onRowClick={(event) => {
-                                                    const row =
-                                                        event.detail.item
-                                                    // @ts-ignore
-                                                    setSelectedRow(row)
-                                                    setOpenDrawer(true)
-                                                }}
-                                                columnDefinitions={
-                                                    getTable(
-                                                        queryResponse?.headers,
-                                                        queryResponse?.result,
-                                                        isDemo
-                                                    ).columns
-                                                }
-                                                columnDisplay={
-                                                    getTable(
-                                                        queryResponse?.headers,
-                                                        queryResponse?.result,
-                                                        isDemo
-                                                    ).column_def
-                                                }
-                                                enableKeyboardNavigation
-                                                // @ts-ignore
-                                                items={
-                                                    getTable(
-                                                        queryResponse?.headers,
-                                                        queryResponse?.result,
-                                                        isDemo
-                                                    ).rows
-                                                }
-                                                loading={isLoading}
-                                                loadingText="Loading resources"
-                                                // stickyColumns={{ first: 0, last: 1 }}
-                                                // stripedRows
-                                                trackBy="id"
-                                                empty={
-                                                    <Box
-                                                        margin={{
-                                                            vertical: 'xs',
-                                                        }}
-                                                        textAlign="center"
-                                                        color="inherit"
-                                                    >
-                                                        <SpaceBetween size="m">
-                                                            <b>No Results</b>
-                                                        </SpaceBetween>
-                                                    </Box>
-                                                }
-                                                header={
-                                                    <Header className="w-full">
-                                                        Results{' '}
-                                                        <span className=" font-medium">
-                                                            ({memoCount})
-                                                        </span>
-                                                    </Header>
-                                                }
-                                                pagination={
-                                                    <Pagination
-                                                        currentPageIndex={page}
-                                                        pagesCount={Math.ceil(
-                                                            // @ts-ignore
-                                                            getTable(
-                                                                queryResponse?.headers,
-                                                                queryResponse?.result,
-                                                                isDemo
-                                                            ).rows / 25
-                                                        )}
-                                                        onChange={({
-                                                            detail,
-                                                        }) =>
-                                                            setPage(
-                                                                detail.currentPageIndex
-                                                            )
-                                                        }
-                                                    />
-                                                }
-                                            />
-                                        </Grid>
+                                     
 
                                         {/* // <Table
                                         //     title="Query results"
@@ -872,11 +837,11 @@ export default function Query() {
                                         //         setSelectedRow(event.data)
                                         //         setOpenDrawer(true)
                                         //     }}
-                                        // /> */}
+                                        // />
                                     </div>
                                 </TabPanel>
                             </TabPanels>
-                        </TabGroup>
+                        </TabGroup> */}
                     </Flex>
                 </Flex>
             )}

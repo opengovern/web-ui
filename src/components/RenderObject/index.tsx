@@ -1,11 +1,47 @@
 import ReactJson from '@microlink/react-json-view'
 import { Card } from '@tremor/react'
+import 'ace-builds/css/ace.css'
+import 'ace-builds/css/theme/cloud_editor.css'
+import 'ace-builds/css/theme/cloud_editor_dark.css'
+import 'ace-builds/css/theme/cloud_editor_dark.css'
+import 'ace-builds/css/theme/twilight.css'
+import 'ace-builds/css/theme/sqlserver.css'
+import { useEffect, useState } from 'react'
+import { CodeEditor } from '@cloudscape-design/components'
+
 
 interface IRenderObjectProps {
     obj: any
 }
 
 export function RenderObject({ obj }: IRenderObjectProps) {
+    const [ace, setAce] = useState()
+    const [preferences, setPreferences] = useState(undefined)
+
+ useEffect(() => {
+        async function loadAce() {
+            const ace = await import('ace-builds')
+            await import('ace-builds/webpack-resolver')
+            ace.config.set('useStrictCSP', true)
+            console.log(ace)
+            // ace.config.setMode('ace/mode/sql')
+            // @ts-ignore
+            // ace.edit(element, {
+            //     mode: 'ace/mode/sql',
+            //     selectionStyle: 'text',
+            // })
+
+            return ace
+        }
+
+        loadAce()
+            .then((ace) => {
+                // @ts-ignore
+                setAce(ace)
+            })
+            .finally(() => {})
+    }, [])
+
     return (
         /* <List>
             {Object.keys(obj).length > 0 &&
@@ -42,13 +78,36 @@ export function RenderObject({ obj }: IRenderObjectProps) {
                     )
                 })}
         </List> */
-        <Card className="px-1.5 py-3 mb-2">
-            <ReactJson
-                src={obj}
-                style={{
-                    lineBreak: 'anywhere',
-                }}
-            />
-        </Card>
+        // <Card className="px-1.5 py-3 mb-2">
+        //     <ReactJson
+        //         src={obj}
+        //         style={{
+        //             lineBreak: 'anywhere',
+        //         }}
+        //     />
+        // </Card>
+        <CodeEditor
+        // className='h-full'
+            ace={ace}
+            language="json"
+            value={JSON.stringify(obj,null,'\t')}
+            languageLabel="JSON"
+            onChange={({ detail }) => {
+                // setSavedQuery('')
+                // setCode(detail.value)
+            }}
+            editorContentHeight={750}
+            preferences={preferences}
+            onPreferencesChange={(e) =>
+                // @ts-ignore
+                setPreferences(e.detail)
+            }
+            loading={false}
+            themes={{
+                light: ['cloud_editor', 'sqlserver'],
+                dark: ['cloud_editor_dark', 'twilight'],
+                // @ts-ignore
+            }}
+        />
     )
 }
