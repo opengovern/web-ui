@@ -219,7 +219,7 @@ export default function ControlsWithFailure({ query }: ICount) {
                                 justifyContent="center"
                                 className="h-full"
                             >
-                                <Text className="text-gray-800">{`${item.count} issues`}</Text>
+                                <Text className="text-gray-800">{`${item.count} Incidents`}</Text>
                                 <Text>{`${
                                     item.totalCount - item.count
                                 } passed`}</Text>
@@ -229,7 +229,7 @@ export default function ControlsWithFailure({ query }: ICount) {
                 },
                 {
                     id: 'resourceCount',
-                    header: 'Resources',
+                    header: 'Impacted Resources',
                     cell: (item) => (
                         <>
                             <Flex
@@ -239,12 +239,12 @@ export default function ControlsWithFailure({ query }: ICount) {
                                 className="h-full"
                             >
                                 <Text className="text-gray-800">
-                                    {item.resourceCount || 0} issues
+                                    {item.resourceCount || 0} failing
                                 </Text>
                                 <Text>
                                     {(item.resourceTotalCount || 0) -
                                         (item.resourceCount || 0)}{' '}
-                                    passed
+                                    passing
                                 </Text>
                             </Flex>
                         </>
@@ -325,7 +325,7 @@ export default function ControlsWithFailure({ query }: ICount) {
             columnDisplay={[
                 { id: 'title', visible: true },
                 { id: 'severity', visible: true },
-                { id: 'count', visible: true },
+                // { id: 'count', visible: true },
                 { id: 'resourceCount', visible: true },
                 // { id: 'severity', visible: true },
                 // { id: 'evaluatedAt', visible: true },

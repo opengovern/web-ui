@@ -13,6 +13,7 @@ import {
     TabList,
     Button,
     TextInput,
+    Divider,
 } from '@tremor/react'
 import { useParams } from 'react-router-dom'
 import { useAtom, useSetAtom } from 'jotai'
@@ -21,6 +22,7 @@ import { useEffect, useState } from 'react'
 import {
     useWorkspaceApiV1WorkspaceCurrentList,
     useWorkspaceApiV1WorkspacesLimitsDetail,
+    useWorkspaceApiV3GetShouldSetup,
     useWorkspaceApiV3LoadSampleData,
     useWorkspaceApiV3PurgeSampleData,
 } from '../../../api/workspace.gen'
@@ -240,7 +242,13 @@ export default function SettingsEntitlement() {
         const [percentage, setPercentage] = useState()
         const [intervalId, setIntervalId] = useState()
 
-
+const {
+    isExecuted:isExecutedDemo,
+    isLoading:isLoadingDemo,
+    error: errorload,
+    sendNow: getSetup,
+    response:responseDemo,
+} = useWorkspaceApiV3GetShouldSetup({})
  const GetStatus = () => {
      let url = ''
     //  setLoading(true)
@@ -359,7 +367,7 @@ export default function SettingsEntitlement() {
                     items={wsDetails.map((item) => {
                         return {
                             label: item.title,
-                            value: item.value
+                            value: item.value,
                         }
                     })}
                 />
@@ -382,6 +390,7 @@ export default function SettingsEntitlement() {
                         />
                     </ListItem>
                 </List> */}
+                <Divider />
                 <Title className="font-semibold mt-8">
                     Platform Configuration
                 </Title>
@@ -437,6 +446,7 @@ export default function SettingsEntitlement() {
                         </Flex>
                     </>
                 )}
+                <Divider />
 
                 <Title className="font-semibold mt-8">App configurations</Title>
 
@@ -479,6 +489,8 @@ export default function SettingsEntitlement() {
                         </TabList>
                     </TabGroup>
                 </Flex>
+                <Divider />
+
                 <Title className="font-semibold mt-8">Sample Data</Title>
                 <Flex justifyContent="between" alignItems="center">
                     <Text className="font-normal w-full">
@@ -491,30 +503,37 @@ export default function SettingsEntitlement() {
                         justifyContent="end"
                         alignItems="center"
                     >
-                        <Button
-                            variant="secondary"
-                            className="ml-2"
-                            loading={syncExecuted && syncLoading}
-                            onClick={() => {
-                                loadData()
-                                setSample(true)
-                                // window.location.reload()
-                            }}
-                        >
-                            Load Sample Data
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            className=""
-                            loading={syncExecuted && syncLoading}
-                            onClick={() => {
-                                PurgeData()
-                                setSample(false)
-                                // window.location.reload()
-                            }}
-                        >
-                            Purge Sample Data
-                        </Button>
+                        {responseDemo !== 'True' && (
+                            <Button
+                                variant="secondary"
+                                className="ml-2"
+                                loading={syncExecuted && syncLoading}
+                                onClick={() => {
+                                    loadData()
+                                    setSample(true)
+                                    // window.location.reload()
+                                }}
+                            >
+                                Load Sample Data
+                            </Button>
+                        )}
+
+                        {responseDemo == 'True' && (
+                            <>
+                                <Button
+                                    variant="secondary"
+                                    className=""
+                                    loading={syncExecuted && syncLoading}
+                                    onClick={() => {
+                                        PurgeData()
+                                        setSample(false)
+                                        // window.location.reload()
+                                    }}
+                                >
+                                    Purge Sample Data
+                                </Button>
+                            </>
+                        )}
                     </Flex>
                 </Flex>
             </Card>

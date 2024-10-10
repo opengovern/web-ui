@@ -97,7 +97,7 @@ export function RenderObject({ obj }: IRenderObjectProps) {
                 // setSavedQuery('')
                 // setCode(detail.value)
             }}
-            editorContentHeight={450}
+            editorContentHeight={500}
             preferences={preferences}
             onPreferencesChange={(e) =>
                 // @ts-ignore

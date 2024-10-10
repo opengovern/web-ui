@@ -25,19 +25,19 @@ export default function Overview() {
     const element = document.getElementById('myDIV')?.offsetHeight
     const [change, setChange] = useState<boolean>(false)
     const [userModal, setUserModal] = useState<boolean>(false)
- const [userData, setUserData] = useState<any>({
-     email: '',
-     password: '',
-    
- })
- const [userErrors,setUserErrors] =useState({
-    email :'',
-    success: '',
-    failed: ''
- })
+    const [userData, setUserData] = useState<any>({
+        email: '',
+        password: '',
+        confirm: '',
+    })
+    const [userErrors, setUserErrors] = useState({
+        email: '',
+        password: '',
+        success: '',
+        failed: '',
+    })
     const { user, logout } = useAuth()
 
- 
     const [password, setPassword] = useState<any>({
         current: '',
         new: '',
@@ -48,19 +48,23 @@ export default function Overview() {
         new: '',
         confirm: '',
     })
-    const [changeError,setChangeError] = useState()
-       const {
-           isExecuted,
-           isLoading,
-           error,
-           sendNow: createInvite,
-       } = useAuthApiV1UserInviteCreate(
-           { email_address: userData?.email || '', role: 'admin', password: userData?.password },
-           {},
-           false
-       )
+    const [changeError, setChangeError] = useState()
+    const {
+        isExecuted,
+        isLoading,
+        error,
+        sendNow: createInvite,
+    } = useAuthApiV1UserInviteCreate(
+        {
+            email_address: userData?.email || '',
+            role: 'admin',
+            password: userData?.password,
+        },
+        {},
+        false
+    )
     const setNotification = useSetAtom(notificationAtom)
-    const [loadingChange,setLoadingChange] = useState(false)
+    const [loadingChange, setLoadingChange] = useState(false)
     const PassCheck = () => {
         let url = ''
         if (window.location.origin === 'http://localhost:3000') {
@@ -105,8 +109,12 @@ export default function Overview() {
             setErrors({ ...errors, confirm: 'Please enter confirm password' })
             return
         }
-        if(password.confirm !== password.new){
-            setErrors({ ...errors, confirm: 'Passwords are not same' ,new: 'Passwords are not same' })
+        if (password.confirm !== password.new) {
+            setErrors({
+                ...errors,
+                confirm: 'Passwords are not same',
+                new: 'Passwords are not same',
+            })
             return
         }
         if (password.current === password.new) {
@@ -142,42 +150,70 @@ export default function Overview() {
             .then((res) => {
                 //  const temp = []
                 setChange(false)
-        setLoadingChange(false)
-  setNotification({
-      text: `Password Changed`,
-      type: 'success',
-  })
-
+                setLoadingChange(false)
+                setNotification({
+                    text: `Password Changed`,
+                    type: 'success',
+                })
             })
             .catch((err) => {
                 console.log(err)
                 setChangeError(err.response.data.message)
-        setLoadingChange(false)
-
+                setLoadingChange(false)
             })
     }
     useEffect(() => {
-        if(user?.email =='admin@example.com'){
-setUserModal(true)
-        }
-        else{
-        PassCheck()
-
+        if (user?.email == 'admin@example.com') {
+            // setUserModal(true)
+        } else {
+            PassCheck()
         }
     }, [])
-   const CheckEmail =() =>{
-        if(!userData?.email.includes("@")){
-            setUserErrors({...userErrors,email: 'Please neter a valid email'})
+    const CheckEmail = () => {
+        if (!userData?.email || userData?.email == '') {
+            setUserErrors({
+                ...userErrors,
+                email: 'Please eneter  email',
+            })
             return
         }
+        if (!userData?.password || userData?.password == '') {
+            setUserErrors({
+                ...userErrors,
+                password: 'Please eneter  password',
+            })
+            return
+        }
+        if (!userData?.confirm || userData?.confirm == '') {
+            setUserErrors({
+                ...userErrors,
+                password: 'Please eneter  password',
+            })
+            return
+        }
+        if (!userData?.email.includes('@')) {
+            setUserErrors({
+                ...userErrors,
+                email: 'Please eneter a valid email',
+            })
+            return
+        }
+        if (userData?.password !== userData?.confirm) {
+            setUserErrors({
+                ...userErrors,
+                password: 'Passwords are not same',
+            })
+            return
+        }
+
         createInvite()
-   }
-   useEffect(()=>{
-    if(!isLoading && isExecuted && (!error || error!= '')){
-        setUserErrors({...userErrors,success: 'Loggin out'})
-        setInterval(logout,3000)
     }
-   },[isLoading,isExecuted])
+    useEffect(() => {
+        if (!isLoading && isExecuted && (!error || error != '')) {
+            setUserErrors({ ...userErrors, success: 'Loggin out' })
+            setInterval(logout, 3000)
+        }
+    }, [isLoading, isExecuted])
     return (
         <>
             <Modal
@@ -274,7 +310,7 @@ setUserModal(true)
                 )}
             </Modal>
             <Modal
-                header="Demo Credentials"
+                header="Update Login Credentials"
                 visible={userModal}
                 onDismiss={() => {}}
                 footer={
@@ -285,13 +321,14 @@ setUserModal(true)
                             onClick={CheckEmail}
                             variant="primary"
                         >
-                            Create User
+                            Sumbit
                         </Button>
                     </Flex>
                 }
             >
                 <Alert type="info">
-                    You logged in with demo credential. Please Create new user
+                    You logged in with default credentials. Please create new
+                    ones.
                 </Alert>
                 <Flex
                     flexDirection="col"
@@ -313,17 +350,16 @@ setUserModal(true)
                                     ...userData,
                                     email: event.detail.value,
                                 })
-            setUserErrors({
-                ...userErrors,
-                email: '',
-            })
-
+                                setUserErrors({
+                                    ...userErrors,
+                                    email: '',
+                                })
                             }}
                         />
                     </FormField>
                     <FormField
                         // description="This is a description."
-                        // errorText={errors?.new}
+                        errorText={userErrors?.password}
                         className=" w-full"
                         label="Password"
                     >
@@ -335,17 +371,39 @@ setUserModal(true)
                                     ...userData,
                                     password: event.detail.value,
                                 })
+                                 setUserErrors({
+                                     ...userErrors,
+                                     password: '',
+                                 })
+                            }}
+                        />
+                    </FormField>
+                    <FormField
+                        // description="This is a description."
+                        errorText={userErrors?.password}
+                        className=" w-full"
+                        label="Confirm Password"
+                    >
+                        <Input
+                            value={userData?.confirm}
+                            type="password"
+                            onChange={(event) => {
+                                setUserData({
+                                    ...userData,
+                                    confirm: event.detail.value,
+                                })
+                                 setUserErrors({
+                                     ...userErrors,
+                                     password: '',
+                                 })
                             }}
                         />
                     </FormField>
                 </Flex>
                 {error && error != '' && <Alert type="error">{error}</Alert>}
                 {userErrors?.success && userErrors?.success != '' && (
-                    <Alert
-                        header='User Created'
-                    type="success">
+                    <Alert header="User Created" type="success">
                         Logging out...
-
                     </Alert>
                 )}
             </Modal>

@@ -74,8 +74,8 @@ import 'ace-builds/css/theme/twilight.css'
 import 'ace-builds/css/theme/sqlserver.css'
 import 'ace-builds/css/theme/xcode.css'
 
-
 import CodeEditor from '@cloudscape-design/components/code-editor'
+import KButton from '@cloudscape-design/components/button'
 export const getTable = (
     headers: string[] | undefined,
     details: any[][] | undefined,
@@ -112,8 +112,17 @@ export const getTable = (
                 id: headerField?.at(i),
                 header: snakeCaseToLabel(headers[i]),
                 // @ts-ignore
-                cell: (item: any) => item[headerField?.at(i)],
-                maxWidth: '200px'
+                cell: (item: any) => (
+                    <>
+                        {/* @ts-ignore */}
+                        {typeof item[headerField?.at(i)] == 'string'
+                            ? // @ts-ignore
+                              item[headerField?.at(i)]
+                            : // @ts-ignore
+                              JSON.stringify(item[headerField?.at(i)])}
+                    </>
+                ),
+                maxWidth: '200px',
                 // sortingField: 'id',
                 // isRowHeader: true,
                 // maxWidth: 150,
@@ -128,10 +137,10 @@ export const getTable = (
         for (let i = 0; i < details.length; i += 1) {
             const row: any = {}
             for (let j = 0; j < columns.length; j += 1) {
-                row[headerField?.at(j) || ''] =
-                    typeof details[i][j] === 'string'
-                        ? details[i][j]
-                        : JSON.stringify(details[i][j])
+                row[headerField?.at(j) || ''] = details[i][j]
+                //     typeof details[i][j] === 'string'
+                //         ? details[i][j]
+                //         : JSON.stringify(details[i][j])
             }
             rows.push(row)
         }
@@ -278,7 +287,6 @@ export default function Query() {
         })
     }
 
-
     const memoCount = useMemo(
         () =>
             getTable(queryResponse?.headers, queryResponse?.result, isDemo)
@@ -303,6 +311,8 @@ export default function Query() {
                             visible={openDrawer}
                             onDismiss={() => setOpenDrawer(false)}
                             header="Query Result"
+                            className="min-w-[500px]"
+                            size="large"
                         >
                             <RenderObject obj={selectedRow} />
                         </Modal>
@@ -518,26 +528,34 @@ export default function Query() {
                                         </SelectItem>
                                     </Select>
                                 </Flex>
-                                <Flex className="w-fit gap-x-3">
+                                <Flex className="w-max gap-x-3">
                                     {!!code.length && (
-                                        <Button
-                                            variant="light"
-                                            color="gray"
-                                            icon={CommandLineIcon}
+                                        <KButton
+                                            className="  w-max min-w-max  "
                                             onClick={() => setCode('')}
+                                            iconSvg={
+                                                <CommandLineIcon className="w-5 " />
+                                            }
                                         >
                                             Clear editor
-                                        </Button>
+                                        </KButton>
                                     )}
-                                    <Button
-                                        icon={PlayCircleIcon}
+                                    <KButton
+                                        // icon={PlayCircleIcon}
+                                        variant="primary"
+                                        className="w-max  min-w-[300px]  "
                                         onClick={() => sendNow()}
                                         disabled={!code.length}
                                         loading={isLoading && isExecuted}
                                         loadingText="Running"
+                                        iconSvg={
+                                            <PlayCircleIcon className="w-5 " />
+                                        }
                                     >
-                                        Run query
-                                    </Button>
+                                       
+                                            Run
+                                        
+                                    </KButton>
                                 </Flex>
                             </Flex>
                             <Flex className="w-full">
@@ -670,7 +688,7 @@ export default function Query() {
                                 }
                                 pagination={
                                     <Pagination
-                                        currentPageIndex={page+1}
+                                        currentPageIndex={page + 1}
                                         pagesCount={Math.ceil(
                                             // @ts-ignore
                                             getTable(
@@ -680,7 +698,7 @@ export default function Query() {
                                             ).rows.length / 10
                                         )}
                                         onChange={({ detail }) =>
-                                            setPage(detail.currentPageIndex-1)
+                                            setPage(detail.currentPageIndex - 1)
                                         }
                                     />
                                 }
