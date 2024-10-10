@@ -18,7 +18,8 @@ export const CallbackPage = () => {
     if (isLoading) {
         return <Spinner />
     } else {
-        if (response == 'True') {
+        // if (response == 'True') {
+        //     return 'hi'
             if (isAuthenticated) {
                 const c = sessionStorage.getItem('callbackURL')
 
@@ -37,9 +38,9 @@ export const CallbackPage = () => {
                 return <span>{error.message}</span>
             }
             return null
-        }
-        else{
+        // }
+        // else{
             return <SetupWizard />
-        }
+        // }
     }
 }
