@@ -27,6 +27,7 @@ import FindingDetail from '../../FindingsWithFailure/Detail'
 import { useComplianceApiV1FindingsSingleDetail } from '../../../../../api/compliance.gen'
 import { isDemoAtom } from '../../../../../store'
 import { Tabs } from '@cloudscape-design/components'
+import { RenderObject } from '../../../../../components/RenderObject'
 
 interface IFindingDetail {
     event: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingEvent | undefined
@@ -141,7 +142,7 @@ export default function EventDetail({ event, open, onClose }: IFindingDetail) {
                             <>
                                 <Title className="mb-2">JSON</Title>
                                 <Card className="px-1.5 py-3 mb-2">
-                                    <ReactJson src={event || {}} />
+                                    <RenderObject obj={event || {}} />
                                 </Card>
                             </>
                         ),
@@ -205,7 +206,7 @@ export default function EventDetail({ event, open, onClose }: IFindingDetail) {
                     <TabPanel>
                         <Title className="mb-2">JSON</Title>
                         <Card className="px-1.5 py-3 mb-2">
-                            <ReactJson src={event || {}} />
+                            <RenderObject obj={event || {}} />
                         </Card>
                     </TabPanel>
                 </TabPanels>

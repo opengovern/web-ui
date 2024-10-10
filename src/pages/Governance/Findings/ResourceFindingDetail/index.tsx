@@ -36,6 +36,7 @@ import {
     StatusIndicator,
     Tabs,
 } from '@cloudscape-design/components'
+import { RenderObject } from '../../../../components/RenderObject'
 
 interface IResourceFindingDetail {
     resourceFinding:
@@ -248,7 +249,9 @@ export default function ResourceFindingDetail({
                                 {' '}
                                 <Title className="mb-2">JSON</Title>
                                 <Card className="px-1.5 py-3 mb-2">
-                                    <ReactJson src={response?.resource || {}} />
+                                    <RenderObject
+                                        obj={response?.resource || {}}
+                                    />
                                 </Card>
                             </>
                         ),

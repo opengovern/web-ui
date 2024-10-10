@@ -15,6 +15,7 @@ import { useSetAtom } from 'jotai/index'
 import InformationModal from '../../../../components/Modal/InformationModal'
 import { useAuthApiV1KeyCreateCreate } from '../../../../api/auth.gen'
 import { notificationAtom } from '../../../../store'
+import KButton from '@cloudscape-design/components/button'
 
 interface CreateAPIKeyProps {
     close: () => void
@@ -137,11 +138,11 @@ export default function CreateAPIKey({ close }: CreateAPIKeyProps) {
                 }}
             />
             <List className="mt-4 h-full">
-                <ListItem>
+                {/* <ListItem>
                     <Text className="text-gray-900 font-medium py-2">
                         Properties
                     </Text>
-                </ListItem>
+                </ListItem> */}
                 <ListItem>
                     <Flex>
                         <Text className="w-1/3 font-medium text-gray-800 py-2">
@@ -197,15 +198,15 @@ export default function CreateAPIKey({ close }: CreateAPIKeyProps) {
                 </ListItem>
             </List>
             <Flex justifyContent="end" className="space-x-4">
-                <Button
-                    variant="secondary"
+                <KButton
                     onClick={() => {
                         close()
                     }}
                 >
                     Cancel
-                </Button>
-                <Button
+                </KButton>
+                <KButton
+                variant='primary'
                     disabled={apiKeyName.length === 0}
                     onClick={() => {
                         callCreate()
@@ -213,7 +214,7 @@ export default function CreateAPIKey({ close }: CreateAPIKeyProps) {
                     loading={isExecuted && isLoading}
                 >
                     Create API Key
-                </Button>
+                </KButton>
             </Flex>
         </Flex>
     )

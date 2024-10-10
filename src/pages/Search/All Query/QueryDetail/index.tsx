@@ -257,7 +257,7 @@ export default function QueryDetail({
             <Card className=" py-3 mb-2 relative ">
                 <Editor
                     onValueChange={(text) => {
-                        console.log(text)
+                        
                     }}
                     highlight={(text) => highlight(text, languages.sql, 'sql')}
                     // @ts-ignore

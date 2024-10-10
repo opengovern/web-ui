@@ -205,8 +205,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     isPreview: false,
                 },
                 {
-                    name: 'Settings',
-                    page: 'settings',
+                    name: 'Administration',
+                    page: ['administration'],
                     icon: Cog6ToothIcon,
                     isPreview: false,
                 },
@@ -446,7 +446,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
 
             {
                 name: 'Finder',
-                page: ['finder'],
+                page: ['finder-dashboard','finder'],
                 icon: MagnifyingGlassIcon,
                 isPreview: false,
                 // children: [

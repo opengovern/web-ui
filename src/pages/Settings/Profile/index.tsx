@@ -16,6 +16,7 @@ import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from '../../../api/api'
 import { colorBlindModeAtom, isDemoAtom, meAtom } from '../../../store'
 import { applyTheme, currentTheme, parseTheme } from '../../../utilities/theme'
 import { useAuth } from '../../../utilities/auth'
+import { KeyValuePairs } from '@cloudscape-design/components'
 
 export default function SettingsProfile() {
     const { user } = useAuth()
@@ -82,8 +83,8 @@ export default function SettingsProfile() {
                     alt={user.name}
                 />
             )}
-            <Title className="font-semibold">Profile Information</Title>
-            <Flex flexDirection="col">
+            <Title className="font-semibold mb-2">Profile Information</Title>
+            {/* <Flex flexDirection="col"> */}
                 {/* <Divider className="my-1 py-1" />
                 <Flex flexDirection="row" justifyContent="between">
                     <Text className="w-1/2">First Name</Text>
@@ -103,8 +104,25 @@ export default function SettingsProfile() {
                     <Text className="w-1/2">Email</Text>
                     <Text className="w-1/2 text-gray-800">{user?.email}</Text>
                 </Flex> */}
-                <Divider className="my-1 py-1" />
-                <Flex flexDirection="row" justifyContent="between">
+                {/* <Divider className="my-1 py-1" /> */}
+                <KeyValuePairs
+                    columns={3}
+                    items={[
+                        {
+                            label: 'Email',
+                            value: user?.email,
+                        },
+                        {
+                            label: 'Member Since',
+                            value: dateFormat(memberSince || '', false),
+                        },
+                        {
+                            label: 'Last Online',
+                            value: dateFormat(lastLogin || '', true),
+                        },
+                    ]}
+                />
+                {/* <Flex flexDirection="row" justifyContent="between">
                     <Text className="w-1/2">Member Since</Text>
                     <Text className="w-1/2 text-gray-800">
                         {dateFormat(memberSince || '', false)}
@@ -116,8 +134,8 @@ export default function SettingsProfile() {
                     <Text className="w-1/2 text-gray-800">
                         {dateFormat(lastLogin || '', true)}
                     </Text>
-                </Flex>
-            </Flex>
+                </Flex> */}
+            {/* </Flex> */}
             <Title className="font-semibold mt-10">Personalization</Title>
             <Flex flexDirection="col">
                 <Divider className="my-1 py-1" />
