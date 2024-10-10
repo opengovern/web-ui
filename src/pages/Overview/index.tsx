@@ -9,11 +9,347 @@ import Query from './Query'
 import SummaryCard from '../../components/Cards/SummaryCard'
 import QuickNav from './QuickNav'
 import Shortcuts from './Shortcuts'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { Alert, Button, Modal } from '@cloudscape-design/components'
+import FormField from '@cloudscape-design/components/form-field'
+import Input from '@cloudscape-design/components/input'
+import { error } from 'console'
+import { useSetAtom } from 'jotai'
+import { notificationAtom } from '../../store'
+import { useAuth } from '../../utilities/auth'
+import { useAuthApiV1UserInviteCreate } from '../../api/auth.gen'
+
 export default function Overview() {
     const { ws } = useParams()
     const element = document.getElementById('myDIV')?.offsetHeight
+    const [change, setChange] = useState<boolean>(false)
+    const [userModal, setUserModal] = useState<boolean>(false)
+ const [userData, setUserData] = useState<any>({
+     email: '',
+     password: '',
+    
+ })
+ const [userErrors,setUserErrors] =useState({
+    email :'',
+    success: '',
+    failed: ''
+ })
+    const { user, logout } = useAuth()
+
+ 
+    const [password, setPassword] = useState<any>({
+        current: '',
+        new: '',
+        confirm: '',
+    })
+    const [errors, setErrors] = useState<any>({
+        current: '',
+        new: '',
+        confirm: '',
+    })
+    const [changeError,setChangeError] = useState()
+       const {
+           isExecuted,
+           isLoading,
+           error,
+           sendNow: createInvite,
+       } = useAuthApiV1UserInviteCreate(
+           { email_address: userData?.email || '', role: 'admin', password: userData?.password },
+           {},
+           false
+       )
+    const setNotification = useSetAtom(notificationAtom)
+    const [loadingChange,setLoadingChange] = useState(false)
+    const PassCheck = () => {
+        let url = ''
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
+        }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+
+        axios
+            .get(`${url}/${ws}/auth/api/v3/user/password/check`, config)
+            .then((res) => {
+                //  const temp = []
+                if (res.data == 'CHANGE_REQUIRED') {
+                    setChange(true)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+    const ChangePassword = () => {
+        if (!password.current || password.current == '') {
+            setErrors({ ...errors, current: 'Please enter current password' })
+            return
+        }
+        if (!password.new || password.new == '') {
+            setErrors({
+                ...errors,
+                new: 'Please enter new password',
+            })
+            return
+        }
+        if (!password.confirm || password.confirm == '') {
+            setErrors({ ...errors, confirm: 'Please enter confirm password' })
+            return
+        }
+        if(password.confirm !== password.new){
+            setErrors({ ...errors, confirm: 'Passwords are not same' ,new: 'Passwords are not same' })
+            return
+        }
+        if (password.current === password.new) {
+            setErrors({
+                ...errors,
+                current: 'Passwords are  same',
+                new: 'Passwords are  same',
+            })
+            return
+        }
+        setLoadingChange(true)
+
+        let url = ''
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
+        }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+        const body = {
+            current_password: password?.current,
+            new_password: password?.new,
+        }
+        axios
+            .post(`${url}/${ws}/auth/api/v3/user/password/reset `, body, config)
+            .then((res) => {
+                //  const temp = []
+                setChange(false)
+        setLoadingChange(false)
+  setNotification({
+      text: `Password Changed`,
+      type: 'success',
+  })
+
+            })
+            .catch((err) => {
+                console.log(err)
+                setChangeError(err.response.data.message)
+        setLoadingChange(false)
+
+            })
+    }
+    useEffect(() => {
+        if(user?.email =='admin@example.com'){
+setUserModal(true)
+        }
+        else{
+        PassCheck()
+
+        }
+    }, [])
+   const CheckEmail =() =>{
+        if(!userData?.email.includes("@")){
+            setUserErrors({...userErrors,email: 'Please neter a valid email'})
+            return
+        }
+        createInvite()
+   }
+   useEffect(()=>{
+    if(!isLoading && isExecuted && (!error || error!= '')){
+        setUserErrors({...userErrors,success: 'Loggin out'})
+        setInterval(logout,3000)
+    }
+   },[isLoading,isExecuted])
     return (
         <>
+            <Modal
+                header="First Time Login"
+                visible={change}
+                onDismiss={() => {}}
+                footer={
+                    <Flex className="w-full" justifyContent="end">
+                        <Button
+                            loading={loadingChange}
+                            onClick={ChangePassword}
+                            variant="primary"
+                        >
+                            Change Password
+                        </Button>
+                    </Flex>
+                }
+            >
+                <Alert type="info">
+                    It's First time you logged in . Please Change your Password
+                </Alert>
+                <Flex
+                    flexDirection="col"
+                    className="gap-2 mt-2 mb-2 w-full"
+                    justifyContent="start"
+                    alignItems="start"
+                >
+                    <FormField
+                        // description="This is a description."
+                        errorText={errors?.current}
+                        className=" w-full"
+                        label="Current Password"
+                    >
+                        <Input
+                            value={password?.current}
+                            type="password"
+                            onChange={(event) => {
+                                setPassword({
+                                    ...password,
+                                    current: event.detail.value,
+                                })
+                                setErrors({
+                                    ...errors,
+                                    current: '',
+                                })
+                            }}
+                        />
+                    </FormField>
+                    <FormField
+                        // description="This is a description."
+                        errorText={errors?.new}
+                        className=" w-full"
+                        label="New Password"
+                    >
+                        <Input
+                            value={password?.new}
+                            type="password"
+                            onChange={(event) => {
+                                setPassword({
+                                    ...password,
+                                    new: event.detail.value,
+                                })
+                                setErrors({
+                                    ...errors,
+                                    new: '',
+                                })
+                            }}
+                        />
+                    </FormField>
+                    <FormField
+                        // description="This is a description."
+                        errorText={errors?.confirm}
+                        label="Confirm Password"
+                        className=" w-full"
+                    >
+                        <Input
+                            value={password?.confirm}
+                            type="password"
+                            onChange={(event) => {
+                                setPassword({
+                                    ...password,
+                                    confirm: event.detail.value,
+                                })
+                                setErrors({
+                                    ...errors,
+                                    confirm: '',
+                                })
+                            }}
+                        />
+                    </FormField>
+                </Flex>
+                {changeError && changeError != '' && (
+                    <Alert type="error">{changeError}</Alert>
+                )}
+            </Modal>
+            <Modal
+                header="Demo Credentials"
+                visible={userModal}
+                onDismiss={() => {}}
+                footer={
+                    <Flex className="w-full" justifyContent="end">
+                        <Button
+                            loading={isLoading && isExecuted}
+                            disabled={isLoading && isExecuted}
+                            onClick={CheckEmail}
+                            variant="primary"
+                        >
+                            Create User
+                        </Button>
+                    </Flex>
+                }
+            >
+                <Alert type="info">
+                    You logged in with demo credential. Please Create new user
+                </Alert>
+                <Flex
+                    flexDirection="col"
+                    className="gap-2 mt-2 mb-2 w-full"
+                    justifyContent="start"
+                    alignItems="start"
+                >
+                    <FormField
+                        // description="This is a description."
+                        errorText={userErrors?.email}
+                        className=" w-full"
+                        label="Email"
+                    >
+                        <Input
+                            value={userData?.email}
+                            type="email"
+                            onChange={(event) => {
+                                setUserData({
+                                    ...userData,
+                                    email: event.detail.value,
+                                })
+            setUserErrors({
+                ...userErrors,
+                email: '',
+            })
+
+                            }}
+                        />
+                    </FormField>
+                    <FormField
+                        // description="This is a description."
+                        // errorText={errors?.new}
+                        className=" w-full"
+                        label="Password"
+                    >
+                        <Input
+                            value={userData?.password}
+                            type="password"
+                            onChange={(event) => {
+                                setUserData({
+                                    ...userData,
+                                    password: event.detail.value,
+                                })
+                            }}
+                        />
+                    </FormField>
+                </Flex>
+                {error && error != '' && <Alert type="error">{error}</Alert>}
+                {userErrors?.success && userErrors?.success != '' && (
+                    <Alert
+                        header='User Created'
+                    type="success">
+                        Logging out...
+
+                    </Alert>
+                )}
+            </Modal>
+
             <TopHeader
                 // supportedFilters={['Date']}
                 // initialFilters={['Date']}

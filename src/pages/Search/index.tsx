@@ -70,7 +70,7 @@ export default function Search() {
     const [tab,setTab] = useState<number>(0);
     // find query params for tabs
     const [searchParams, setSearchParams] = useSearchParams()
-    const [show, setShow] = useState<boolean>(false)
+    const [show, setShow] = useState<boolean>(true)
 
     useEffect(() => {
        const tab_id = searchParams.get('tab_id')

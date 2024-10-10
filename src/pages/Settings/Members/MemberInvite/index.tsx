@@ -13,7 +13,7 @@ import {
 import { useSetAtom } from 'jotai/index'
 import { useAuthApiV1UserInviteCreate } from '../../../../api/auth.gen'
 import { notificationAtom } from '../../../../store'
-
+import KButton from '@cloudscape-design/components/button'
 interface MemberInviteProps {
     close: (refresh: boolean) => void
 }
@@ -135,8 +135,8 @@ export default function MemberInvite({ close }: MemberInviteProps) {
                 <ListItem key="authentication">
                     <Flex
                         justifyContent="between"
-                        alignItems='start'
-                        flexDirection='row'
+                        alignItems="start"
+                        flexDirection="row"
                         className="truncate space-x-4 py-2"
                     >
                         <Text className="font-medium text-gray-800">
@@ -154,7 +154,9 @@ export default function MemberInvite({ close }: MemberInviteProps) {
                             <SelectItem className="static" value="password">
                                 Password
                             </SelectItem>
-                            <SelectItem   className ='static' value="oicd">OIDC (SSO)</SelectItem>
+                            <SelectItem className="static" value="oicd">
+                                OIDC (SSO)
+                            </SelectItem>
                         </Select>
                     </Flex>
                 </ListItem>
@@ -202,20 +204,21 @@ export default function MemberInvite({ close }: MemberInviteProps) {
                 </ListItem>
             </List>
             <Flex justifyContent="end" className="truncate space-x-4">
-                <Button
+                <KButton
                     disabled={isExecuted && isLoading}
                     onClick={() => close(false)}
-                    variant="secondary"
+                    
                 >
                     Cancel
-                </Button>
-                <Button
+                </KButton>
+                <KButton
                     loading={isExecuted && isLoading}
                     disabled={email.length === 0}
                     onClick={() => createInvite()}
+                    variant="primary"
                 >
                     Add
-                </Button>
+                </KButton>
             </Flex>
         </Flex>
     )

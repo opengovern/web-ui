@@ -25,6 +25,7 @@ import {
     useIntegrationApiV1ConnectionsDelete,
     useIntegrationApiV1ConnectionsSummariesList,
 } from '../../../../api/integration.gen'
+import KButton from '@cloudscape-design/components/button'
 
 interface IMemberDetails {
     user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
@@ -308,22 +309,21 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                     */}
                 </List>
                 <Flex justifyContent="end" className="truncate space-x-4">
-                    <Button
+                    <KButton
                         loading={deleteExecuted && deleteLoading}
                         disabled={isExecuted && isLoading}
                         onClick={() => setDeleteConfirmation(true)}
-                        variant="secondary"
-                        color="rose"
                     >
                         <TrashIcon className="h-5 w-5" color="rose" />
-                    </Button>
-                    <Button
+                    </KButton>
+                    <KButton
                         loading={isExecuted && isLoading}
                         disabled={deleteExecuted && deleteLoading}
                         onClick={() => updateRole()}
+                        variant="primary"
                     >
                         Update Changes
-                    </Button>
+                    </KButton>
                 </Flex>
             </Flex>
         </>

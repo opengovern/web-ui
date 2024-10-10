@@ -38,7 +38,7 @@ import { useComplianceApiV1QueriesSyncList } from '../../../api/compliance.gen'
 import { getErrorMessage } from '../../../types/apierror'
 import { ConvertToBoolean } from '../../../utilities/bool'
 import axios from 'axios'
-import { ProgressBar } from '@cloudscape-design/components'
+import { KeyValuePairs, ProgressBar } from '@cloudscape-design/components'
 
 
 interface ITextMetric {
@@ -353,15 +353,24 @@ export default function SettingsEntitlement() {
                 </Card> */}
             {/* </Grid> */}
             <Card key="summary" className=" w-full">
-                <Title className="font-semibold">Settings</Title>
-                <List className="mt-3">
+                <Title className="font-semibold mb-2">Settings</Title>
+                <KeyValuePairs
+                    columns={4}
+                    items={wsDetails.map((item) => {
+                        return {
+                            label: item.title,
+                            value: item.value
+                        }
+                    })}
+                />
+                {/* <List className="mt-3">
                     {wsDetails.map((item) => (
                         <ListItem key={item.title} className="my-1">
                             <Text className="truncate">{item.title}</Text>
                             <Text className="text-gray-800">{item.value}</Text>
                         </ListItem>
                     ))}
-                    {/* <ListItem>
+                    <ListItem>
                         <Text>Show preview features</Text>
                         <Switch
                             onClick={() =>
@@ -371,8 +380,8 @@ export default function SettingsEntitlement() {
                             }
                             checked={preview === 'true'}
                         />
-                    </ListItem> */}
-                </List>
+                    </ListItem>
+                </List> */}
                 <Title className="font-semibold mt-8">
                     Platform Configuration
                 </Title>

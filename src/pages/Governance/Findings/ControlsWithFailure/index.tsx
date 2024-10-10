@@ -25,6 +25,7 @@ import {
     Pagination,
     PropertyFilter,
 } from '@cloudscape-design/components'
+import Filter from '../Filter'
 
 const policyColumns: IColumn<any, any>[] = [
     {
@@ -130,13 +131,20 @@ interface ICount {
 export default function ControlsWithFailure({ query }: ICount) {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
+ const [queries, setQuery] = useState(query)
+
     const topQuery = {
         connector: query.connector.length ? [query.connector] : [],
         connectionId: query.connectionID,
         benchmarkId: query.benchmarkID,
     }
     const { response: controls, isLoading } =
-        useComplianceApiV1FindingsTopDetail('controlID', 10000, topQuery)
+        useComplianceApiV1FindingsTopDetail('controlID', 10000, {
+            connector: queries.connector.length ? queries.connector : [],
+            severity: queries?.severity,
+            connectionId: queries.connectionID,
+            connectionGroup: queries?.connectionGroup,
+        })
     const [page, setPage] = useState(0)
 
     return (
@@ -344,31 +352,16 @@ export default function ControlsWithFailure({ query }: ICount) {
                 </Box>
             }
             filter={
-                ''
-                // <PropertyFilter
-                //     // @ts-ignore
-                //     query={undefined}
-                //     // @ts-ignore
-                //     onChange={({ detail }) => {
-                //         // @ts-ignore
-                //         setQueries(detail)
-                //     }}
-                //     // countText="5 matches"
-                //     enableTokenGroups
-                //     expandToViewport
-                //     filteringAriaLabel="Control Categories"
-                //     // @ts-ignore
-                //     // filteringOptions={filters}
-                //     filteringPlaceholder="Control Categories"
-                //     // @ts-ignore
-                //     filteringOptions={undefined}
-                //     // @ts-ignore
-
-                //     filteringProperties={undefined}
-                //     // filteringProperties={
-                //     //     filterOption
-                //     // }
-                // />
+                <Filter
+                    // @ts-ignore
+                    type={'controls'}
+                    onApply={(e) => {
+                        // @ts-ignore
+                        setQuery(e)
+                    }}
+                    setDate={()=>{}}
+                   
+                />
             }
             header={
                 <Header className="w-full">
@@ -380,9 +373,11 @@ export default function ControlsWithFailure({ query }: ICount) {
             }
             pagination={
                 <Pagination
-                    currentPageIndex={page+1}
+                    currentPageIndex={page + 1}
                     pagesCount={Math.ceil(controls?.totalCount / 10)}
-                    onChange={({ detail }) => setPage(detail.currentPageIndex-1)}
+                    onChange={({ detail }) =>
+                        setPage(detail.currentPageIndex - 1)
+                    }
                 />
             }
         />

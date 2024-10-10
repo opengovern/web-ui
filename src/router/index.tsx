@@ -46,6 +46,7 @@ import Library from '../pages/Governance/Compliance/Library'
 import Search from '../pages/Search'
 import SettingsAccess from '../pages/Settings/Access'
 import SettingsProfile from '../pages/Settings/Profile'
+import SearchLanding from '../pages/Search/landing'
 
 const authRoutes = [
     {
@@ -435,6 +436,11 @@ const authRoutes = [
         key: 'Search',
         path: '/ws/:ws/finder',
         element: <Search />,
+    },
+    {
+        key: 'Search Main',
+        path: '/ws/:ws/finder-dashboard',
+        element: <SearchLanding />,
     },
     // {
     //     key: 'test',

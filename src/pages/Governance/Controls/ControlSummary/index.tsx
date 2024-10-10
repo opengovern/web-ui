@@ -56,6 +56,7 @@ import { GithubComKaytuIoKaytuEnginePkgComplianceApiConformanceStatus } from '..
 import CodeEditor from '@cloudscape-design/components/code-editor'
 import {
     Box,
+    BreadcrumbGroup,
     Container,
     CopyToClipboard,
     Header,
@@ -114,7 +115,25 @@ export default function ControlDetail() {
             return text.length > 600 ? text.substring(0, 600) + '...' : text
         }
     }
+    const GetBreadCrumb = () =>{
+        const temp =[]
+        if(window.location.pathname.includes("incident")){
+            temp.push({
+                text: 'Incidents',
+                href: `/ws/${ws}/incidents`,
+            })
+        }
+        else if(window.location.pathname.includes("compliance")){
+            temp.push({
+                text: 'Compliance',
+                href: `/ws/${ws}/compliance`,
+            })
 
+        }
+        temp.push({ text: 'Control Detail', href: '#' })
+
+        return temp
+    }
     return (
         <>
             {/* <TopHeader
@@ -130,10 +149,17 @@ export default function ControlDetail() {
                 <>
                     {controlDetail ? (
                         <>
+                            <BreadcrumbGroup
+                                onClick={(event) => {
+                                    // event.preventDefault()
+                                }}
+                                items={GetBreadCrumb()}
+                                ariaLabel="Breadcrumbs"
+                            />
                             <Container
                                 disableHeaderPaddings
                                 disableContentPaddings
-                                className="rounded-xl  bg-[#0f2940] p-0 text-white "
+                                className="rounded-xl  bg-[#0f2940] p-0 text-white mt-4 "
                                 header={
                                     <Header
                                         className={`bg-[#0f2940] p-4 pt-0 rounded-xl   text-white ${
