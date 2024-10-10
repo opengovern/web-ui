@@ -17,6 +17,9 @@ import Cube from '../../../icons/Cube.svg'
 import { link } from 'fs'
 import { useEffect, useState } from 'react'
 import Evaluate from '../../Governance/Compliance/NewBenchmarkSummary/Evaluate'
+import { title } from 'process'
+import { Modal } from '@cloudscape-design/components'
+import MemberInvite from '../../Settings/Members/MemberInvite'
 
 const navList = [
     {
@@ -71,6 +74,8 @@ export default function Shortcuts() {
     const workspace = useParams<{ ws: string }>().ws
     const navigate = useNavigate()
     const [open,setOpen] = useState(false)
+    const [userOpen, setUserOpen] = useState(false)
+
 
     return (
         <Card>
@@ -81,7 +86,7 @@ export default function Shortcuts() {
             <Grid numItems={4} className="w-full mb-4 gap-4">
                 {navList.map((nav, i) => (
                     <>
-                        {nav?.title !== 'Audit' ? (
+                        {nav?.title !== 'Audit' && nav?.title !== 'Invite' ? (
                             <>
                                 <a
                                     href={`/ws/${workspace}/${nav.link}`}
@@ -111,9 +116,16 @@ export default function Shortcuts() {
                             </>
                         ) : (
                             <>
-                                <Card onClick={()=>{
-                                    setOpen(true)
-                                }} className="  cursor-pointer  min-h-[140px] pt-3 pb-3 hover:bg-gray-50 hover:dark:bg-gray-900">
+                                <Card
+                                    onClick={() => {
+                                        if (title == 'Audit') {
+                                            setOpen(true)
+                                        } else {
+                                            setUserOpen(true)
+                                        }
+                                    }}
+                                    className="  cursor-pointer  min-h-[140px] pt-3 pb-3 hover:bg-gray-50 hover:dark:bg-gray-900"
+                                >
                                     <Flex
                                         flexDirection="col"
                                         justifyContent="start"
@@ -133,15 +145,31 @@ export default function Shortcuts() {
                                         </Text>
                                     </Flex>
                                 </Card>
-                                <Evaluate 
-                                opened ={open}
-                                id= ''
-                                assignmentsCount={0}
-                                benchmarkDetail={undefined}
-                                setOpened={()=>{setOpen(false)}}
-                                onEvaluate={()=>{}}
-                                // complianceScore={0}
+                                <Evaluate
+                                    opened={open}
+                                    id=""
+                                    assignmentsCount={0}
+                                    benchmarkDetail={undefined}
+                                    setOpened={() => {
+                                        setOpen(false)
+                                    }}
+                                    onEvaluate={() => {}}
+                                    // complianceScore={0}
                                 />
+                                <Modal
+                                    visible={userOpen}
+                                    header={'Invite new member'}
+                                    onDismiss={() => {
+                                        setUserOpen(false)
+                                    }}
+                                >
+                                    <MemberInvite
+                                        close={(refresh: boolean) => {
+                                            setUserOpen(false)
+                                            
+                                        }}
+                                    />
+                                </Modal>
                             </>
                         )}
                     </>

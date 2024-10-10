@@ -25,6 +25,7 @@ import {
     Pagination,
     PropertyFilter,
 } from '@cloudscape-design/components'
+import Filter from '../Filter'
 
 const policyColumns: IColumn<any, any>[] = [
     {
@@ -130,13 +131,20 @@ interface ICount {
 export default function ControlsWithFailure({ query }: ICount) {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
+ const [queries, setQuery] = useState(query)
+
     const topQuery = {
         connector: query.connector.length ? [query.connector] : [],
         connectionId: query.connectionID,
         benchmarkId: query.benchmarkID,
     }
     const { response: controls, isLoading } =
-        useComplianceApiV1FindingsTopDetail('controlID', 10000, topQuery)
+        useComplianceApiV1FindingsTopDetail('controlID', 10000, {
+            connector: queries.connector.length ? queries.connector : [],
+            severities: queries?.severity,
+            connectionId: queries.connectionID,
+            connectionGroup: queries?.connectionGroup,
+        })
     const [page, setPage] = useState(0)
 
     return (
@@ -155,10 +163,10 @@ export default function ControlsWithFailure({ query }: ICount) {
             // sortingDescending={sortOrder == 'desc' ? true : false}
             // @ts-ignore
             onRowClick={(event) => {
-                const row = event.detail.item
-                if (row) {
-                    navigate(`${row?.Control.id}?${searchParams}`)
-                }
+                // const row = event.detail.item
+                // if (row) {
+                //     navigate(`${row?.Control.id}?${searchParams}`)
+                // }
             }}
             columnDefinitions={[
                 {
@@ -173,7 +181,12 @@ export default function ControlsWithFailure({ query }: ICount) {
                                 className="h-full"
                             >
                                 <Text className="text-gray-800">
-                                    {item.Control.title}
+                                    <Link
+                                        href={`${window.location}/${item.Control.id}`}
+                                        target="__blank"
+                                    >
+                                        {item.Control.title}
+                                    </Link>
                                 </Text>
                                 <Text>{item.Control.id}</Text>
                             </Flex>
@@ -211,7 +224,7 @@ export default function ControlsWithFailure({ query }: ICount) {
                                 justifyContent="center"
                                 className="h-full"
                             >
-                                <Text className="text-gray-800">{`${item.count} issues`}</Text>
+                                <Text className="text-gray-800">{`${item.count} Incidents`}</Text>
                                 <Text>{`${
                                     item.totalCount - item.count
                                 } passed`}</Text>
@@ -221,7 +234,7 @@ export default function ControlsWithFailure({ query }: ICount) {
                 },
                 {
                     id: 'resourceCount',
-                    header: 'Resources',
+                    header: 'Impacted Resources',
                     cell: (item) => (
                         <>
                             <Flex
@@ -231,12 +244,12 @@ export default function ControlsWithFailure({ query }: ICount) {
                                 className="h-full"
                             >
                                 <Text className="text-gray-800">
-                                    {item.resourceCount || 0} issues
+                                    {item.resourceCount || 0} failing
                                 </Text>
                                 <Text>
                                     {(item.resourceTotalCount || 0) -
                                         (item.resourceCount || 0)}{' '}
-                                    passed
+                                    passing
                                 </Text>
                             </Flex>
                         </>
@@ -317,7 +330,7 @@ export default function ControlsWithFailure({ query }: ICount) {
             columnDisplay={[
                 { id: 'title', visible: true },
                 { id: 'severity', visible: true },
-                { id: 'count', visible: true },
+                // { id: 'count', visible: true },
                 { id: 'resourceCount', visible: true },
                 // { id: 'severity', visible: true },
                 // { id: 'evaluatedAt', visible: true },
@@ -344,31 +357,15 @@ export default function ControlsWithFailure({ query }: ICount) {
                 </Box>
             }
             filter={
-                ''
-                // <PropertyFilter
-                //     // @ts-ignore
-                //     query={undefined}
-                //     // @ts-ignore
-                //     onChange={({ detail }) => {
-                //         // @ts-ignore
-                //         setQueries(detail)
-                //     }}
-                //     // countText="5 matches"
-                //     enableTokenGroups
-                //     expandToViewport
-                //     filteringAriaLabel="Control Categories"
-                //     // @ts-ignore
-                //     // filteringOptions={filters}
-                //     filteringPlaceholder="Control Categories"
-                //     // @ts-ignore
-                //     filteringOptions={undefined}
-                //     // @ts-ignore
-
-                //     filteringProperties={undefined}
-                //     // filteringProperties={
-                //     //     filterOption
-                //     // }
-                // />
+                <Filter
+                    // @ts-ignore
+                    type={'controls'}
+                    onApply={(e) => {
+                        // @ts-ignore
+                        setQuery(e)
+                    }}
+                    setDate={() => {}}
+                />
             }
             header={
                 <Header className="w-full">
@@ -380,9 +377,11 @@ export default function ControlsWithFailure({ query }: ICount) {
             }
             pagination={
                 <Pagination
-                    currentPageIndex={page+1}
+                    currentPageIndex={page + 1}
                     pagesCount={Math.ceil(controls?.totalCount / 10)}
-                    onChange={({ detail }) => setPage(detail.currentPageIndex-1)}
+                    onChange={({ detail }) =>
+                        setPage(detail.currentPageIndex - 1)
+                    }
                 />
             }
         />

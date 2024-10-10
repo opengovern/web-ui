@@ -13,6 +13,7 @@ import {
     TabList,
     Button,
     TextInput,
+    Divider,
 } from '@tremor/react'
 import { useParams } from 'react-router-dom'
 import { useAtom, useSetAtom } from 'jotai'
@@ -21,6 +22,7 @@ import { useEffect, useState } from 'react'
 import {
     useWorkspaceApiV1WorkspaceCurrentList,
     useWorkspaceApiV1WorkspacesLimitsDetail,
+    useWorkspaceApiV3GetShouldSetup,
     useWorkspaceApiV3LoadSampleData,
     useWorkspaceApiV3PurgeSampleData,
 } from '../../../api/workspace.gen'
@@ -38,7 +40,7 @@ import { useComplianceApiV1QueriesSyncList } from '../../../api/compliance.gen'
 import { getErrorMessage } from '../../../types/apierror'
 import { ConvertToBoolean } from '../../../utilities/bool'
 import axios from 'axios'
-import { ProgressBar } from '@cloudscape-design/components'
+import { KeyValuePairs, ProgressBar } from '@cloudscape-design/components'
 
 
 interface ITextMetric {
@@ -240,7 +242,13 @@ export default function SettingsEntitlement() {
         const [percentage, setPercentage] = useState()
         const [intervalId, setIntervalId] = useState()
 
-
+const {
+    isExecuted:isExecutedDemo,
+    isLoading:isLoadingDemo,
+    error: errorload,
+    sendNow: getSetup,
+    response:responseDemo,
+} = useWorkspaceApiV3GetShouldSetup({})
  const GetStatus = () => {
      let url = ''
     //  setLoading(true)
@@ -353,15 +361,24 @@ export default function SettingsEntitlement() {
                 </Card> */}
             {/* </Grid> */}
             <Card key="summary" className=" w-full">
-                <Title className="font-semibold">Settings</Title>
-                <List className="mt-3">
+                <Title className="font-semibold mb-2">Settings</Title>
+                <KeyValuePairs
+                    columns={4}
+                    items={wsDetails.map((item) => {
+                        return {
+                            label: item.title,
+                            value: item.value,
+                        }
+                    })}
+                />
+                {/* <List className="mt-3">
                     {wsDetails.map((item) => (
                         <ListItem key={item.title} className="my-1">
                             <Text className="truncate">{item.title}</Text>
                             <Text className="text-gray-800">{item.value}</Text>
                         </ListItem>
                     ))}
-                    {/* <ListItem>
+                    <ListItem>
                         <Text>Show preview features</Text>
                         <Switch
                             onClick={() =>
@@ -371,8 +388,9 @@ export default function SettingsEntitlement() {
                             }
                             checked={preview === 'true'}
                         />
-                    </ListItem> */}
-                </List>
+                    </ListItem>
+                </List> */}
+                <Divider />
                 <Title className="font-semibold mt-8">
                     Platform Configuration
                 </Title>
@@ -428,6 +446,7 @@ export default function SettingsEntitlement() {
                         </Flex>
                     </>
                 )}
+                <Divider />
 
                 <Title className="font-semibold mt-8">App configurations</Title>
 
@@ -470,6 +489,8 @@ export default function SettingsEntitlement() {
                         </TabList>
                     </TabGroup>
                 </Flex>
+                <Divider />
+
                 <Title className="font-semibold mt-8">Sample Data</Title>
                 <Flex justifyContent="between" alignItems="center">
                     <Text className="font-normal w-full">
@@ -482,30 +503,37 @@ export default function SettingsEntitlement() {
                         justifyContent="end"
                         alignItems="center"
                     >
-                        <Button
-                            variant="secondary"
-                            className="ml-2"
-                            loading={syncExecuted && syncLoading}
-                            onClick={() => {
-                                loadData()
-                                setSample(true)
-                                // window.location.reload()
-                            }}
-                        >
-                            Load Sample Data
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            className=""
-                            loading={syncExecuted && syncLoading}
-                            onClick={() => {
-                                PurgeData()
-                                setSample(false)
-                                // window.location.reload()
-                            }}
-                        >
-                            Purge Sample Data
-                        </Button>
+                        {responseDemo !== 'True' && (
+                            <Button
+                                variant="secondary"
+                                className="ml-2"
+                                loading={syncExecuted && syncLoading}
+                                onClick={() => {
+                                    loadData()
+                                    setSample(true)
+                                    // window.location.reload()
+                                }}
+                            >
+                                Load Sample Data
+                            </Button>
+                        )}
+
+                        {responseDemo == 'True' && (
+                            <>
+                                <Button
+                                    variant="secondary"
+                                    className=""
+                                    loading={syncExecuted && syncLoading}
+                                    onClick={() => {
+                                        PurgeData()
+                                        setSample(false)
+                                        // window.location.reload()
+                                    }}
+                                >
+                                    Purge Sample Data
+                                </Button>
+                            </>
+                        )}
                     </Flex>
                 </Flex>
             </Card>

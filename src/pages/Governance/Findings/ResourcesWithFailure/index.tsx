@@ -35,6 +35,7 @@ import {
     AppLayout,
     SplitPanel,
 } from '@cloudscape-design/components'
+import Filter from '../Filter'
 const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
@@ -189,6 +190,8 @@ export default function ResourcesWithFailure({ query }: ICount) {
     const [page, setPage] = useState(1)
     const [totalCount, setTotalCount] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
+    const [queries, setQuery] = useState(query)
+
     const isDemo = useAtomValue(isDemoAtom)
 
     const GetRows = () => {
@@ -198,13 +201,16 @@ export default function ResourcesWithFailure({ query }: ICount) {
         api.compliance
             .apiV1ResourceFindingsCreate({
                 filters: {
-                    connector: query.connector.length ? [query.connector] : [],
-                    controlID: query.controlID,
-                    connectionID: query.connectionID,
-                    benchmarkID: query.benchmarkID,
-                    severity: query.severity,
-                    resourceTypeID: query.resourceTypeID,
-                    conformanceStatus: query.conformanceStatus,
+                    // @ts-ignore
+                    connector: queries.connector.length
+                        ? queries.connector
+                        : [],
+                    controlID: queries.controlID,
+                    connectionID: queries.connectionID,
+                    benchmarkID: queries.benchmarkID,
+                    severity: queries.severity,
+                    resourceTypeID: queries.resourceTypeID,
+                    conformanceStatus: queries.conformanceStatus,
                 },
                 // sort: [],
                 limit: 100,
@@ -241,7 +247,7 @@ export default function ResourcesWithFailure({ query }: ICount) {
 
     useEffect(() => {
         GetRows()
-    }, [page])
+    }, [page,queries])
 
     return (
         <>
@@ -501,31 +507,15 @@ export default function ResourcesWithFailure({ query }: ICount) {
                             </Box>
                         }
                         filter={
-                            ''
-                            // <PropertyFilter
-                            //     // @ts-ignore
-                            //     query={undefined}
-                            //     // @ts-ignore
-                            //     onChange={({ detail }) => {
-                            //         // @ts-ignore
-                            //         setQueries(detail)
-                            //     }}
-                            //     // countText="5 matches"
-                            //     enableTokenGroups
-                            //     expandToViewport
-                            //     filteringAriaLabel="Control Categories"
-                            //     // @ts-ignore
-                            //     // filteringOptions={filters}
-                            //     filteringPlaceholder="Control Categories"
-                            //     // @ts-ignore
-                            //     filteringOptions={undefined}
-                            //     // @ts-ignore
-
-                            //     filteringProperties={undefined}
-                            //     // filteringProperties={
-                            //     //     filterOption
-                            //     // }
-                            // />
+                            <Filter
+                                // @ts-ignore
+                                type={'resources'}
+                                onApply={(e) => {
+                                    // @ts-ignore
+                                    setQuery(e)
+                                }}
+                                setDate={()=>{}}
+                            />
                         }
                         header={
                             <Header className="w-full">

@@ -175,7 +175,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
     const [selectedFilters, setSelectedFilters] = useState<string[]>([
         'conformance_status',
         'connectionGroup',
-        'provider',
+        'connector',
         'lifecycle',
         'severity',
         'limit_healthy',
@@ -317,6 +317,16 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             value: 'unhealthy',
         },
     ]
+     const connector_data = [
+         {
+             label: 'AWS',
+             value: 'AWS',
+         },
+         {
+             label: 'Azure',
+             value: 'Azure',
+         },
+     ]
     const filterOptions = [
         {
             id: 'conformance_status',
@@ -338,26 +348,26 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             data: confarmance_data,
             types: ['findings', 'resources', 'events'],
         },
-        // {
-        //     id: 'connectionGroup',
-        //     name: 'Integration Group',
-        //     icon: CheckCircleIcon,
-        //     component: (
-        //         <ConformanceStatus
-        //             value={conformanceStatus}
-        //             defaultValue={defConformanceStatus}
-        //             onChange={(c) => setConformanceStatus(c)}
-        //         />
-        //     ),
-        //     conditions: ['is'],
-        //     onChange: (c: any) => setJobs(c),
-        //     setCondition: (c: string) => console.log(c),
-        //     value: conformanceStatus,
-        //     defaultValue: defConformanceStatus,
-        //     onDelete: undefined,
-        //     data: connectionGroup_data,
-        //     types: ['findings', 'resources', 'events'],
-        // },
+        {
+            id: 'connectionGroup',
+            name: 'Integration Group',
+            icon: CheckCircleIcon,
+            component: (
+                <ConformanceStatus
+                    value={conformanceStatus}
+                    defaultValue={defConformanceStatus}
+                    onChange={(c) => setConformanceStatus(c)}
+                />
+            ),
+            conditions: ['is'],
+            onChange: (c: any) => setJobs(c),
+            setCondition: (c: string) => console.log(c),
+            value: conformanceStatus,
+            defaultValue: defConformanceStatus,
+            onDelete: undefined,
+            data: connectionGroup_data,
+            types: ['controls','resources'],
+        },
         {
             id: 'job_id',
             name: 'Job Id',
@@ -376,27 +386,28 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             defaultValue: defConformanceStatus,
             onDelete: undefined,
             data: jobData,
-            types: ['findings', 'resources', 'events'],
+            types: ['findings', 'events'],
         },
 
-        // {
-        //     id: 'provider',
-        //     name: 'Connector',
-        //     icon: CloudConnect,
-        //     component: (
-        //         <Provider
-        //             value={connector}
-        //             defaultValue={defConnector}
-        //             onChange={(p) => setConnector(p)}
-        //         />
-        //     ),
-        //     conditions: ['is'],
-        //     setCondition: (c: string) => undefined,
-        //     value: [connector],
-        //     defaultValue: [defConnector],
-        //     onDelete: () => setConnector(defConnector),
-        //     types: ['findings', 'resources', 'events', 'controls', 'accounts'],
-        // },
+        {
+            id: 'connector',
+            name: 'Connector',
+            icon: CloudConnect,
+            component: (
+                <Provider
+                    value={connector}
+                    defaultValue={defConnector}
+                    onChange={(p) => setConnector(p)}
+                />
+            ),
+            conditions: ['is'],
+            setCondition: (c: string) => undefined,
+            value: [connector],
+            defaultValue: [defConnector],
+            data: connector_data,
+            onDelete: () => setConnector(defConnector),
+            types: [ 'controls'],
+        },
         // {
         //     id: 'lifecycle',
         //     name: 'Lifecycle',
@@ -434,7 +445,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             defaultValue: defSeverity,
             data: severity_data,
             onDelete: () => setSeverity(defSeverity),
-            types: ['findings', 'resources', 'events'],
+            types: ['findings', 'events','controls'],
         },
         // {
         //     id: 'limit_healthy',
@@ -501,7 +512,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             onChange: (s: any) => setControlID(s),
             onDelete: () => setControlID([]),
             data: filters?.controlID,
-            types: ['findings', 'resources', 'events'],
+            types: ['findings', 'events'],
         },
         {
             id: 'benchmark',
@@ -525,7 +536,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             onChange: (s: any) => setBenchmarkCon(s),
             onDelete: () => setBenchmarkID([]),
             data: filters?.benchmarkID,
-            types: ['findings', 'resources', 'events', 'controls', 'accounts'],
+            types: ['findings', 'events', 'controls', 'accounts'],
         },
         {
             id: 'resource',
@@ -591,22 +602,32 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
         //     types: ['findings'],
         // },
     ]
-    const [query, setQuery] = useState({
-        tokens: [
-            {
-                propertyKey: 'conformance_status',
-                value: 'failed',
-                operator: '=',
-            },
-            // {
-            //     propertyKey: 'connectionGroup',
-            //     value: 'healthy',
-            //     operator: '=',
-            // },
-        ],
-        operation: 'and',
-    })
+    const [query, setQuery] = useState(
+        type == 'findings'
+            ? {
+                  tokens: [
+                      {
+                          propertyKey: 'conformance_status',
+                          value: 'failed',
+                          operator: '=',
+                      },
+                      // {
+                      //     propertyKey: 'connectionGroup',
+                      //     value: 'healthy',
+                      //     operator: '=',
+                      // },
+                  ],
+                  operation: 'and',
+              }
+            : {
+                  tokens: [
+                     
+                  ],
+                  operation: 'and',
+              }
+    )
     useEffect(() => {
+        const connector : any = []
         const conformance_status: any = []
         const temp_severity: any = []
         const connection: any = []
@@ -616,6 +637,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
         const job_id: any = []
         const connection_group: any = []
         // console.log(query)
+        // @ts-ignore
         query.tokens.map((t: { propertyKey: string; value: string }) => {
             if (t.propertyKey === 'conformance_status') {
                 conformance_status.push(t.value)
@@ -626,6 +648,9 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             if (t.propertyKey === 'severity') {
                 temp_severity.push(t.value)
             }
+             if (t.propertyKey === 'connector') {
+                 connector.push(t.value)
+             }
             if (t.propertyKey === 'connection') {
                 connection.push(t.value)
             }
@@ -644,7 +669,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
         })
         // @ts-ignore
         onApply({
-            connector,
+            connector: connector,
             conformanceStatus: conformance_status,
             severity: temp_severity,
             connectionID: connection,
@@ -669,7 +694,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
     })
     useEffect(() => {
         // @ts-ignore
-        if (filter) {
+        if (filter && type =='findings') {
             // @ts-ignore
 
             if (filter.value == '1') {
@@ -749,7 +774,8 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
                     f.id == 'severity' ||
                     f.id == 'conformance_status' ||
                     f.id == 'job_id' ||
-                    f.id == 'connectionGroup'
+                    f.id == 'connectionGroup'||
+                    f.id == 'connector'
                 ) {
                     f?.data?.map((d) => {
                         options.push({
@@ -789,33 +815,45 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
                     alignItems="start"
                     className="w-full gap-2"
                 >
-                    <Select
-                        // @ts-ignore
-                        selectedOption={filter}
-                        className="w-1/5 mt-[-9px]"
-                        inlineLabelText={'Saved Filters'}
-                        placeholder='Select Filter Set'
-                        // @ts-ignore
-                        onChange={({ detail }) =>
-                            // @ts-ignore
-                            setFilter(detail.selectedOption)
-                        }
-                        options={[
-                            { label: 'Recent Incidents', value: '1' },
-                            { label: 'Recent Critical Incidents', value: '2' },
-                        ]}
-                    />
+                    {type == 'findings' && (
+                        <>
+                            <Select
+                                // @ts-ignore
+                                selectedOption={filter}
+                                className="w-1/5 mt-[-9px]"
+                                inlineLabelText={'Saved Filters'}
+                                placeholder="Select Filter Set"
+                                // @ts-ignore
+                                onChange={({ detail }) =>
+                                    // @ts-ignore
+                                    setFilter(detail.selectedOption)
+                                }
+                                options={[
+                                    { label: 'Recent Incidents', value: '1' },
+                                    {
+                                        label: 'Recent Critical Incidents',
+                                        value: '2',
+                                    },
+                                ]}
+                            />
+                        </>
+                    )}
+
                     <PropertyFilter
-                    className='w-4/5'
+                        className="w-4/5"
                         // @ts-ignore
                         query={query}
                         // @ts-ignore
                         // className="w-full"
                         // @ts-ignore
-                        onChange={({ detail }) => setQuery(detail)}
+                        onChange={({ detail }) => {
+                            console.log(detail)
+                            // @ts-ignore
+                            setQuery(detail)
+                        }}
                         // countText="5 matches"
                         // enableTokenGroups
-                        expandToViewport
+                        // expandToViewport
                         hideOperations
                         tokenLimit={2}
                         filteringAriaLabel="Find Incidents"

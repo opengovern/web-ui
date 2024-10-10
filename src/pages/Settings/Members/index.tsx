@@ -13,8 +13,8 @@ import {
 } from '../../../utilities/dateDisplay'
 import TopHeader from '../../../components/Layout/Header'
 import { useSearchParams } from 'react-router-dom'
-import { Alert, Link } from '@cloudscape-design/components'
-
+import { Alert, Box, Header, Link, Modal, SpaceBetween, Table } from '@cloudscape-design/components'
+import KButton from '@cloudscape-design/components/button'
 const fixRole = (role: string) => {
     switch (role) {
         case 'admin':
@@ -68,15 +68,15 @@ export default function SettingsMembers() {
     ) : (
         <>
             {/* <TopHeader /> */}
-            <DrawerPanel
-                open={drawerOpen}
-                title={
+            <Modal
+                visible={drawerOpen}
+                header={
                     drawerParam === 'openInviteMember'
                         ? 'Invite New Members'
                         : response?.find((item) => item.userId === drawerParam)
-                              ?.userName
+                              ?.email
                 }
-                onClose={() => {
+                onDismiss={() => {
                     setDrawerOpen(false)
                 }}
             >
@@ -100,8 +100,12 @@ export default function SettingsMembers() {
                         }}
                     />
                 )}
-            </DrawerPanel>
-            <a className=' cursor-pointer' target='__blank'  href="https://docs.opengovernance.io/oss/getting-started/configure-sso">
+            </Modal>
+            <a
+                className=" cursor-pointer"
+                target="__blank"
+                href="https://docs.opengovernance.io/oss/getting-started/configure-sso"
+            >
                 <Alert statusIconAriaLabel="Info" header=" SSO Configuration">
                     Enable SSO in OpenGovernance using OIDC. Integrate with
                     Auth0, AzureAD, Google, and more.
@@ -113,18 +117,108 @@ export default function SettingsMembers() {
                     </Link>
                 </Alert>
             </a>
-            <Card key="summary" className="mt-4">
+            <Table
+                className="mt-2"
+                onRowClick={(event) => {
+                    const row = event.detail.item
+                    if (row.userId) {
+                        userDetail(row.userId)
+                    }
+                }}
+                columnDefinitions={[
+                    {
+                        id: 'email',
+                        header: 'Member',
+                        cell: (item: any) => item.email,
+                    },
+                    {
+                        id: 'createdAt',
+                        header: 'Member Since',
+                        cell: (item: any) =>
+                            item.createdAt
+                                ? dateTimeDisplay(item.createdAt)
+                                : 'Never',
+                    },
+                    {
+                        id: 'lastActivity',
+                        header: 'Last Activity',
+                        cell: (item: any) =>
+                            item.lastActivity
+                                ? dateTimeDisplay(item.lastActivity)
+                                : 'Never',
+                    },
+                    {
+                        id: 'role',
+                        header: 'Role',
+                        cell: (item: any) => (
+                            <Flex
+                                justifyContent="start"
+                                className="truncate w-full"
+                            >
+                                <div className="truncate p-1">
+                                    <Text className="truncate font-medium text-gray-800">
+                                        {fixRole(item.roleName || '')}
+                                    </Text>
+                                    {/* <Text className="truncate text-xs text-gray-400">
+                                        {(item.scopedConnectionIDs?.length ||
+                                            0) === 0
+                                            ? 'All accounts'
+                                            : `${item.scopedConnectionIDs?.length} accounts`}
+                                    </Text> */}
+                                </div>
+                            </Flex>
+                        ),
+                    },
+                ]}
+                columnDisplay={[
+                    { id: 'email', visible: true },
+                    { id: 'createdAt', visible: true },
+                    { id: 'lastActivity', visible: true },
+                    { id: 'role', visible: true },
+
+                    // { id: 'action', visible: true },
+                ]}
+                loading={isLoading}
+                // @ts-ignore
+                items={response}
+                empty={
+                    <Box
+                        margin={{ vertical: 'xs' }}
+                        textAlign="center"
+                        color="inherit"
+                    >
+                        <SpaceBetween size="m">
+                            <b>No resources</b>
+                            <Button>Create resource</Button>
+                        </SpaceBetween>
+                    </Box>
+                }
+                header={
+                    <Header
+                        actions={
+                            <>
+                                <KButton
+                                    className="float-right"
+                                    variant='primary'
+                                    onClick={() => {
+                                        openInviteMember()
+                                    }}
+                                >
+                                    Add Users
+                                </KButton>
+                            </>
+                        }
+                        className="w-full"
+                    >
+                        Members{' '}
+                    </Header>
+                }
+            />
+            {/* <Card key="summary" className="mt-4">
                 <Flex>
                     <Title className="font-semibold">All members</Title>
-                    <Button
-                        className="float-right"
-                        onClick={() => {
-                            openInviteMember()
-                        }}
-                    >
-                        Add Users
-                    </Button>
                 </Flex>
+
                 <List className="mt-4">
                     <ListItem>
                         <Text className="w-1/3 text-start">Member</Text>
@@ -192,7 +286,7 @@ export default function SettingsMembers() {
                         </ListItem>
                     ))}
                 </List>
-            </Card>
+            </Card> */}
         </>
     )
 }
