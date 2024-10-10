@@ -7,6 +7,7 @@ import {
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,
 } from '../../../../../api/api'
 import OnboardCard from '../../../../../components/Cards/OnboardCard'
+import { KeyValuePairs } from '@cloudscape-design/components'
 
 interface IAWSSummary {
     metricsLoading: boolean
@@ -24,8 +25,33 @@ export default function AWSSummary({
     credentialLoading,
 }: IAWSSummary) {
     return (
-        <Grid numItems={3} className="w-full gap-4 mt-6 mb-10">
-            <OnboardCard
+        <Grid numItems={1} className="w-full gap-4 mt-6 mb-10">
+            {/* <KeyValuePairs
+            columns={1}
+                items={[
+                    {
+                        label: 'Total Organizations',
+                        value: numericDisplay(credential?.totalCredentialCount),
+                    },
+                    {
+                        label: 'Active Accounts',
+                        value: numericDisplay(metrics?.connectionsEnabled),
+                    },
+                    {
+                        label: 'In Progress Accounts',
+                        value: numericDisplay(metrics?.inProgressConnections),
+                    },
+                    {
+                        label: 'Healthy Accounts',
+                        value: numericDisplay(metrics?.healthyConnections),
+                    },
+                    {
+                        label: 'Unhealthy Accounts',
+                        value: numericDisplay(metrics?.unhealthyConnections),
+                    },
+                ]}
+            /> */}
+            {/* <OnboardCard
                 title="Active AWS Accounts"
                 active={metrics?.connectionsEnabled}
                 inProgress={metrics?.inProgressConnections}
@@ -37,7 +63,7 @@ export default function AWSSummary({
                 title="AWS Organizations"
                 metric={credential?.totalCredentialCount}
                 loading={credentialLoading}
-            />
+            /> */}
         </Grid>
     )
 }

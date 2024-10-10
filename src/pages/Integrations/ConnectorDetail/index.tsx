@@ -34,6 +34,7 @@ export default function ConnectorDetail() {
     )
 
     const provider = StringToProvider(connector || '')
+    console.log(provider,"pr")
     const credentialType = ConnectorToCredentialType(connector || '')
     const { response: accounts, isLoading: isAccountsLoading,sendNow: accountSendNow } =
         useIntegrationApiV1ConnectionsSummariesList({
@@ -58,16 +59,17 @@ export default function ConnectorDetail() {
         if (connector === 'AWS') {
             return (
                 <>
-                    <AWSSummary
+                    {/* <AWSSummary
                         metrics={topMetrics}
                         metricsLoading={metricsLoading}
                         credential={credentials}
                         credentialLoading={isCredentialLoading}
-                    />
+                    /> */}
                     <AWSTabs
                         accounts={accounts?.connections || []}
                         organizations={credentials?.credentials || []}
                         loading={isAccountsLoading}
+                        accountSendNow={accountSendNow}
                     />
                 </>
             )
@@ -75,14 +77,14 @@ export default function ConnectorDetail() {
         if (connector === 'Azure') {
             return (
                 <>
-                    <AzureSummary
+                    {/* <AzureSummary
                         principalsSummary={credentials}
                         metrics={topMetrics}
                         metricsLoading={metricsLoading}
                         principalsLoading={isCredentialLoading}
                         subscriptionsSummary={accounts}
                         subscriptionsLoading={isAccountsLoading}
-                    />
+                    /> */}
                     <AzureTabs
                         principals={credentials?.credentials || []}
                         subscriptions={accounts?.connections || []}
@@ -95,14 +97,14 @@ export default function ConnectorDetail() {
         }
         return (
             <>
-                <EntraIDSummary
+                {/* <EntraIDSummary
                     principalsSummary={credentials}
                     metrics={topMetrics}
                     metricsLoading={metricsLoading}
                     principalsLoading={isCredentialLoading}
                     subscriptionsSummary={accounts}
                     subscriptionsLoading={isAccountsLoading}
-                />
+                /> */}
                 <EntraIDTabs
                     directories={credentials?.credentials || []}
                     loading={isAccountsLoading}
@@ -114,8 +116,8 @@ export default function ConnectorDetail() {
     return (
         <>
             <TopHeader breadCrumb={[connector]} />
-            <Flex flexDirection="col" alignItems="start">
-                <Flex flexDirection="row">
+            <Flex flexDirection="col" alignItems="start" className='gap-2'>
+                {/* <Flex flexDirection="row">
                     <Title className="font-semibold">{connector}</Title>
                     <Button
                         variant="secondary"
@@ -125,7 +127,7 @@ export default function ConnectorDetail() {
                     >
                         <Cog8ToothIcon className="w-6" />
                     </Button>
-                </Flex>
+                </Flex> */}
                 {connectorUI()}
             </Flex>
         </>

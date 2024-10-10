@@ -1,56 +1,36 @@
 import { useState } from 'react'
 import { Bold, Button, Divider, Flex, Text, TextInput } from '@tremor/react'
+import { Alert } from '@cloudscape-design/components'
 
 interface IStep {
-    iAppId: string
-    iTenId: string
-    iSecId: string
-    iObjectId: string
-    iClientSecret: string
-    iSubscriptionId: string
-    error: string
-    onNext: (
-        appId: string,
-        tenId: string,
-        secId: string,
-        objectId: string,
-        clientSecret: string,
-        subscriptionId: string
-    ) => void
-    onPrevious: () => void
+    data: any
+    setData: Function
+    error : string
 }
 
 export default function SecondStep({
-    iAppId,
-    iTenId,
-    iSecId,
-    iObjectId,
-    iClientSecret,
-    iSubscriptionId,
+   data,
+
     error,
-    onNext,
-    onPrevious,
+    setData
 }: IStep) {
-    const [appId, setAppId] = useState(iAppId)
-    const [tenId, setTenId] = useState(iTenId)
-    const [secId, setSecId] = useState(iSecId)
-    const [objectId, setObjectId] = useState(iObjectId)
-    const [clientSecret, setClientSecret] = useState(iClientSecret)
-    const [subscriptionId, setSubscriptionId] = useState(iSubscriptionId)
+   
 
     return (
         <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" alignItems="start">
-                <Bold className="my-6">Onboard your Azure SPN</Bold>
-                <Text className="mb-3">
+                {/* <Bold className="my-6">Onboard your Azure SPN</Bold> */}
+                {/* <Text className="mb-3">
                     Please fill all the following required information.
-                </Text>
+                </Text> */}
                 <Flex flexDirection="row">
                     <Text>Application ID</Text>
                     <TextInput
                         className="w-2/3"
-                        value={appId}
-                        onChange={(e) => setAppId(e.target.value)}
+                        value={data?.appId}
+                        onChange={(e) =>
+                            setData({ ...data, appId: e.target.value })
+                        }
                     />
                 </Flex>
                 <Divider />
@@ -58,8 +38,10 @@ export default function SecondStep({
                     <Text>Object ID</Text>
                     <TextInput
                         className="w-2/3"
-                        value={objectId}
-                        onChange={(e) => setObjectId(e.target.value)}
+                        value={data?.objectId}
+                        onChange={(e) =>
+                            setData({ ...data, objectId: e.target.value })
+                        }
                     />
                 </Flex>
                 <Divider />
@@ -67,8 +49,8 @@ export default function SecondStep({
                     <Text>Tenant ID</Text>
                     <TextInput
                         className="w-2/3"
-                        value={tenId}
-                        onChange={(e) => setTenId(e.target.value)}
+                        value={data?.tenId}
+                        onChange={(e) => setData({ ...data, tenId: e.target.value })}
                     />
                 </Flex>
                 <Divider />
@@ -76,15 +58,17 @@ export default function SecondStep({
                     <Text>Client Secret</Text>
                     <TextInput
                         className="w-2/3"
-                        value={clientSecret}
-                        onChange={(e) => setClientSecret(e.target.value)}
+                        value={data?.clientSecret}
+                        onChange={(e) => setData({ ...data, clientSecret: e.target.value })}
                     />
                 </Flex>
-                <Flex flexDirection="row">
-                    <Text className="text-red-600 pt-4">{error}</Text>
-                </Flex>
+                {error && error !== '' && (
+                    <Flex flexDirection="row" className="mt-2">
+                        <Alert type="error">{error}</Alert>
+                    </Flex>
+                )}
             </Flex>
-            <Flex flexDirection="row" justifyContent="end">
+            {/* <Flex flexDirection="row" justifyContent="end">
                 <Button variant="secondary" onClick={() => onPrevious()}>
                     Back
                 </Button>
@@ -111,7 +95,7 @@ export default function SecondStep({
                 >
                     Next
                 </Button>
-            </Flex>
+            </Flex> */}
         </Flex>
     )
 }

@@ -11,6 +11,7 @@ import {
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
 } from '../../../../../api/api'
 import { searchAtom } from '../../../../../utilities/urlstate'
+import { Tabs } from '@cloudscape-design/components'
 
 interface IAzure {
     principals: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
@@ -39,32 +40,56 @@ export default function AzureTabs({
         }
     }, [tabs])
     return (
-        <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
-            <TabList className="mb-3">
-                <Tab onClick={() => navigate(`#subscriptions?${searchParams}`)}>
-                    Azure Subscriptions
-                </Tab>
-                <Tab onClick={() => navigate(`#principals${searchParams}`)}>
-                    Principals
-                </Tab>
-            </TabList>
-            <TabPanels>
-                <TabPanel key="sub">
-                    <Subscriptions
-                        subscriptions={subscriptions}
-                        spns={principals}
-                        loading={loading}
-                        accountSendNow={accountSendNow}
-                        credintalsSendNow={credintalsSendNow}
-                    />
-                </TabPanel>
-                <TabPanel key="pri">
-                    <Principals
-                        credintalsSendNow={credintalsSendNow}
-                        principals={principals}
-                    />
-                </TabPanel>
-            </TabPanels>
-        </TabGroup>
+        <>
+            <Tabs
+                tabs={[
+                    {
+                        label: 'Azure Subscriptions',
+                        id: '0',
+                        content: (
+                            <>
+                                <Subscriptions
+                                    subscriptions={subscriptions}
+                                    spns={principals}
+                                    loading={loading}
+                                    accountSendNow={accountSendNow}
+                                    credintalsSendNow={credintalsSendNow}
+                                />
+                            </>
+                        ),
+                    },
+                    {
+                        label: 'Principals',
+                        id: '1',
+                        content: (
+                            <>
+                                <Principals
+                                    credintalsSendNow={credintalsSendNow}
+                                    principals={principals}
+                                />
+                            </>
+                        ),
+                    },
+                ]}
+            />
+            {/* <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
+                <TabList className="mb-3">
+                    <Tab
+                        onClick={() =>
+                            navigate(`#subscriptions?${searchParams}`)
+                        }
+                    >
+                        Azure Subscriptions
+                    </Tab>
+                    <Tab onClick={() => navigate(`#principals${searchParams}`)}>
+                        Principals
+                    </Tab>
+                </TabList>
+                <TabPanels>
+                    <TabPanel key="sub"></TabPanel>
+                    <TabPanel key="pri"></TabPanel>
+                </TabPanels>
+            </TabGroup> */}
+        </>
     )
 }

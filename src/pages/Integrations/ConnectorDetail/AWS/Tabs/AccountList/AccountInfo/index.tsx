@@ -24,6 +24,7 @@ import {
     useIntegrationApiV1ConnectionsAwsHealthcheckDetail,
     useIntegrationApiV1ConnectionsDelete,
 } from '../../../../../../../api/integration.gen'
+import { KeyValuePairs, Tabs } from '@cloudscape-design/components'
 
 interface IAccInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
@@ -122,37 +123,20 @@ export default function AccountInfo({
         (isDeleteExecuted && isDeleteLoading) ||
         (isHealthCheckExecuted && isHealthCheckLoading) ||
         (isDiscoverExecuted && isDiscoverLoading)
-
-    return (
-        <DrawerPanel title="AWS Account" open={open} onClose={() => onClose()}>
-            <Flex flexDirection="col" className="h-full">
-                <Flex flexDirection="col" alignItems="start">
-                    <Title>Summary</Title>
-                    <Divider />
-                    <Flex>
-                        <Text>Account name</Text>
-                        <Text
-                            className={
-                                isDemo ? 'blur-sm text-black' : 'text-black'
-                            }
-                        >
-                            {data?.providerConnectionName}
-                        </Text>
-                    </Flex>
-                    <Divider />
-                    <Flex>
-                        <Text>Account ID</Text>
-                        <Text
-                            className={
-                                isDemo ? 'blur-sm text-black' : 'text-black'
-                            }
-                        >
-                            {data?.metadata?.account_id}
-                        </Text>
-                    </Flex>
-                    <Divider />
-                    <Flex>
-                        <Text>Health state</Text>
+    const summaryTab =() => {
+        const temp = [
+            {
+                label: 'Account name',
+                value: data?.providerConnectionName,
+            },
+            {
+                label: 'Account ID',
+                value: data?.metadata?.account_id,
+            },
+            {
+                label: 'Health state',
+                value: (
+                    <>
                         <Flex className="w-fit gap-4">
                             <Button
                                 loading={
@@ -189,6 +173,290 @@ export default function AccountInfo({
                                 </Badge>
                             )}
                         </Flex>
+                    </>
+                ),
+            },
+           
+        ]
+
+        if(data?.healthState === 'unhealthy') {
+
+            temp.push({
+                label: 'Health reason',
+                value: data?.healthReason,
+            })
+        }
+        temp.push({
+            label: 'Account lifecycle state',
+            value: (
+                <>
+                    <Badge
+                        color={
+                            data?.lifecycleState === 'ONBOARD'
+                                ? 'emerald'
+                                : 'rose'
+                        }
+                    >
+                        {getBadgeText(data?.lifecycleState || '')}
+                    </Badge>
+                </>
+            ),
+        })
+        return temp
+    }
+    const additionalTabs =() => {
+            const temp = []
+            temp.push({
+                label: 'Account type',
+                value: type,
+            })
+            temp.push({
+                label: 'ARN',
+                value: data?.metadata?.account_organization?.Arn,
+            })
+            temp.push({
+                label: 'Onboard date',
+                value: dateTimeDisplay(data?.onboardDate),
+            })
+            temp.push({
+                label: 'Last inventory',
+                value: dateTimeDisplay(data?.lastInventory),
+            })
+            temp.push({
+                label: 'Last health check',
+                value: dateTimeDisplay(data?.lastHealthCheckTime),
+            })
+            if(data?.metadata?.organization_tags && (type === 'Organization member' || type === 'Organization manager')) {
+                temp.push({
+                    label: 'Tags',
+                    value: (
+                        <>
+                            {Object.entries(data.metadata?.organization_tags).map(([name, value]) => (
+                                <Tag isDemo={isDemo} text={`${name}: ${value}`} />
+                            ))}
+                        </>
+                    ),
+                })
+            }
+
+        return temp
+    }
+    const tabItem =() => {
+        const temp = [
+            {
+                label: 'Summary',
+                id: '1',
+                content: (
+                    <>
+                        <KeyValuePairs
+                            columns={4}
+                            // @ts-ignore
+                            items={summaryTab()}
+                        />
+                    </>
+                ),
+            },
+            {
+                label: 'Additional Detail',
+                id: '2',
+                content: (
+                    <>
+                        <KeyValuePairs
+                            columns={4}
+                            // @ts-ignore
+                            items={additionalTabs()}
+                        />
+                    </>
+                ),
+            },
+        ]
+        if (type === 'Organization member' || type === 'Organization manager'){
+            temp.push({
+                label: 'Organization info',
+                id: '3',
+                content: (
+                    <>
+                        <KeyValuePairs
+                            columns={3}
+                            items={[
+                                {
+                                    label: 'Organization ID',
+                                    value: data?.metadata?.account_organization?.Id,
+                                },
+                                {
+                                    label: 'Master account ARN',
+                                    value: data?.metadata?.account_organization?.MasterAccountArn,
+                                },
+                                {
+                                    label: 'Email',
+                                    value: data?.metadata?.account_organization?.MasterAccountEmail,
+                                },
+                            ]}
+                        />
+                    </>
+                ),
+            })
+        }
+        if (type === 'Organization manager' || type === 'Standalone'){
+            temp.push({
+                label: 'Acess credentials',
+                id: '4',
+                content: (
+                    <>
+                        <KeyValuePairs
+                            columns={2}
+                            items={[
+                                {
+                                    label: 'AWS account key',
+                                    value: (
+                                        <>
+                                            {ekey ? (
+                                                <>
+                                                    <TextInput
+                                                        className="w-full my-3"
+                                                        value={key}
+                                                        onChange={(e) =>
+                                                            setKey(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                    />
+                                                    <Flex justifyContent="end">
+                                                        <Button
+                                                            variant="secondary"
+                                                            onClick={() =>
+                                                                seteKey(false)
+                                                            }
+                                                        >
+                                                            Cancel
+                                                        </Button>
+                                                        <Button className="ml-3">
+                                                            Save
+                                                        </Button>
+                                                    </Flex>
+                                                </>
+                                            ) : (
+                                                <Flex justifyContent="end">
+                                                    <Text className="text-black">
+                                                        {
+                                                            credential?.config
+                                                                .accessKey
+                                                        }
+                                                    </Text>
+                                                    {type ===
+                                                        'Organization manager' && (
+                                                        <Button
+                                                            variant="light"
+                                                            className="ml-3"
+                                                            onClick={() => {
+                                                                setKey(
+                                                                    credential
+                                                                        ?.config
+                                                                        .accessKey
+                                                                )
+                                                                seteKey(true)
+                                                            }}
+                                                        >
+                                                            Edit
+                                                        </Button>
+                                                    )}
+                                                </Flex>
+                                            )}
+                                        </>
+                                    ),
+                                },
+                                {
+                                    label: ' AWS account secret',
+                                    value: (
+                                        <>
+                                            {esecret ? (
+                                                <>
+                                                    <TextInput
+                                                        className="w-full my-3"
+                                                        value={secret}
+                                                        onChange={(e) =>
+                                                            setSecret(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                    />
+                                                    <Flex justifyContent="end">
+                                                        <Button
+                                                            variant="secondary"
+                                                            onClick={() =>
+                                                                seteSecret(
+                                                                    false
+                                                                )
+                                                            }
+                                                        >
+                                                            Cancel
+                                                        </Button>
+                                                        <Button className="ml-3">
+                                                            Save
+                                                        </Button>
+                                                    </Flex>
+                                                </>
+                                            ) : (
+                                                <Flex justifyContent="end">
+                                                    <Text className="text-black">
+                                                        *****************
+                                                    </Text>
+                                                    <Button
+                                                        variant="light"
+                                                        className="ml-3"
+                                                        onClick={() =>
+                                                            seteSecret(true)
+                                                        }
+                                                    >
+                                                        Edit
+                                                    </Button>
+                                                </Flex>
+                                            )}
+                                        </>
+                                    ),
+                                },
+                               
+                            ]}
+                        />
+                    </>
+                ),
+            })
+        }
+            return temp
+    }
+    return (
+        <>
+            <Tabs
+                tabs={tabItem()}
+            />
+            <Flex flexDirection="col" className="h-full">
+                {/* <Flex flexDirection="col" alignItems="start"> */}
+                    {/* <Title>Summary</Title>
+                    <Divider />
+                    <Flex>
+                        <Text>Account name</Text>
+                        <Text
+                            className={
+                                isDemo ? 'blur-sm text-black' : 'text-black'
+                            }
+                        >
+                            {data?.providerConnectionName}
+                        </Text>
+                    </Flex>
+                    <Divider />
+                    <Flex>
+                        <Text>Account ID</Text>
+                        <Text
+                            className={
+                                isDemo ? 'blur-sm text-black' : 'text-black'
+                            }
+                        >
+                            {data?.metadata?.account_id}
+                        </Text>
+                    </Flex>
+                    <Divider />
+                    <Flex>
+                        <Text>Health state</Text>
                     </Flex>
                     <Divider />
                     {data?.healthState === 'unhealthy' && (
@@ -213,8 +481,8 @@ export default function AccountInfo({
                         >
                             {getBadgeText(data?.lifecycleState || '')}
                         </Badge>
-                    </Flex>
-                    <Accordion className="w-full p-0 !rounded-none border-b-0 border-x-0 border-t-gray-200">
+                    </Flex> */}
+                    {/* <Accordion className="w-full p-0 !rounded-none border-b-0 border-x-0 border-t-gray-200">
                         <AccordionHeader className="w-full p-0 py-6 border-0">
                             <Title>Additional detail</Title>
                         </AccordionHeader>
@@ -313,8 +581,8 @@ export default function AccountInfo({
                                     )}
                             </Flex>
                         </AccordionBody>
-                    </Accordion>
-                    {(type === 'Organization member' ||
+                    </Accordion> */}
+                    {/* {(type === 'Organization member' ||
                         type === 'Organization manager') && (
                         <Accordion className="w-full p-0 !rounded-none border-b-0 border-x-0 border-t-gray-200">
                             <AccordionHeader className="w-full p-0 py-6 border-0">
@@ -360,8 +628,8 @@ export default function AccountInfo({
                                 </Flex>
                             </AccordionBody>
                         </Accordion>
-                    )}
-                    {(type === 'Organization manager' ||
+                    )} */}
+                    {/* {(type === 'Organization manager' ||
                         type === 'Standalone') && (
                         <Accordion className="w-full p-0 !rounded-none border-b-0 border-x-0 border-t-gray-200">
                             <AccordionHeader className="w-full p-0 py-6">
@@ -486,9 +754,9 @@ export default function AccountInfo({
                                 </Flex>
                             </AccordionBody>
                         </Accordion>
-                    )}
-                </Flex>
-                <Flex justifyContent="end" className="mt-6">
+                    )} */}
+                {/* </Flex> */}
+                <Flex justifyContent="end" className="">
                     <Button
                         variant="secondary"
                         color="rose"
@@ -508,6 +776,6 @@ export default function AccountInfo({
                     </Button>
                 </Flex>
             </Flex>
-        </DrawerPanel>
+        </>
     )
 }

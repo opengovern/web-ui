@@ -11,11 +11,15 @@ import Spinner from '../../../../../../../components/Spinner'
 import { getErrorMessage } from '../../../../../../../types/apierror'
 import { useWorkspaceApiV1BootstrapCredentialCreate } from '../../../../../../../api/workspace.gen'
 import { useIntegrationApiV1CredentialsAzureCreate } from '../../../../../../../api/integration.gen'
+import KButton from '@cloudscape-design/components/button'
+import Wizard from '@cloudscape-design/components/wizard'
+import StatusIndicator from '@cloudscape-design/components/status-indicator'
 
 interface INewPrinciple {
     open: boolean
     onClose: () => void
     useDrawer?: boolean
+    onSubmit? : Function
     // bootstrapMode?: boolean
     onCancel?: () => void
     credintalsSendNow?: Function
@@ -27,10 +31,11 @@ export default function NewPrincipal({
     useDrawer = true,
     // bootstrapMode = false,
     onCancel,
-    credintalsSendNow
+    credintalsSendNow,
+    onSubmit = () => {}
 }: INewPrinciple) {
     const currentWorkspace = useParams<{ ws: string }>().ws
-    const [stepNum, setStepNum] = useState(1)
+    const [stepNum, setStepNum] = useState(0)
     const [data, setData] = useState({
         tenId: '',
         secId: '',
@@ -81,7 +86,7 @@ export default function NewPrincipal({
         false
     )
     const close = () => {
-        setStepNum(1)
+        setStepNum(0)
         onClose()
         if(onCancel){
             onCancel()
@@ -90,18 +95,18 @@ export default function NewPrincipal({
 
     useEffect(() => {
         if (isExecuted && !isLoading && error) {
-            setStepNum(2)
+            setStepNum(0)
         }
     }, [isLoading])
 
     useEffect(() => {
         if (bcIsExecuted && !bcIsLoading && bcError) {
-            setStepNum(2)
+            setStepNum(0)
         }
     }, [bcIsLoading])
 
     useEffect(() => {
-        if (stepNum === 3) {
+        if (stepNum === 1) {
             // if (bootstrapMode) {
             //     bcSendNow()
             // } else {
@@ -136,34 +141,9 @@ export default function NewPrincipal({
             case 2:
                 return (
                     <SecondStep
-                        iAppId={data.appId}
-                        iObjectId={data.objectId}
-                        iClientSecret={data.clientSecret}
-                        iSecId={data.secId}
-                        iTenId={data.tenId}
-                        iSubscriptionId={data.subscriptionId}
-                        onPrevious={() => setStepNum(1)}
-                        // error={getErrorMessage(bootstrapMode ? bcError : error)}
+                        data={data}
+                        setData={setData}
                         error={getErrorMessage(error)}
-
-                        onNext={(
-                            appId,
-                            tenId,
-                            secId,
-                            objectId,
-                            clientSecret,
-                            subscriptionId
-                        ) => {
-                            setData({
-                                appId,
-                                tenId,
-                                secId,
-                                objectId,
-                                clientSecret,
-                                subscriptionId,
-                            })
-                            setStepNum(3)
-                        }}
                     />
                 )
             case 3:
@@ -192,9 +172,69 @@ export default function NewPrincipal({
         )
     }
     return (
-        <Flex flexDirection="col" justifyContent="between" className="h-full">
-            <Steps steps={3} currentStep={stepNum} />
-            {showStep(stepNum)}
-        </Flex>
+            <Wizard
+                i18nStrings={{
+                    stepNumberLabel: (stepNumber) => `Step ${stepNumber}`,
+                    collapsedStepsLabel: (stepNumber, stepsCount) =>
+                        `Step ${stepNumber} of ${stepsCount}`,
+                    skipToButtonLabel: (step, stepNumber) =>
+                        `Skip to ${step.title}`,
+                    navigationAriaLabel: 'Steps',
+                    cancelButton: 'Cancel',
+                    previousButton: 'Previous',
+                    nextButton: 'Next',
+                    submitButton: 'Submit',
+                    optional: 'optional',
+                }}
+                isLoadingNextStep={false}
+                onSubmit={()=>{
+                    if(credintalsSendNow){
+                    credintalsSendNow()
+
+                    }
+                    onClose()
+                  onSubmit()
+                }}
+                onCancel={close}
+                onNavigate={
+                    ({ detail }) => {
+                        setStepNum(detail.requestedStepIndex)
+                    }
+                    // setActiveStepIndex(detail.requestedStepIndex)
+                }
+                activeStepIndex={stepNum}
+                // allowSkipTo
+                steps={[
+                    {
+                        title: 'SPN Credentials',
+
+                        description: (
+                            <>
+                                Enter the Service Principal credentials
+                            </>
+                        ),
+                        content: (
+                            <SecondStep
+                                
+                                data ={data}
+                                setData ={setData}
+                                // error={getErrorMessage(bootstrapMode ? bcError : error)}
+                                error={getErrorMessage(error)}
+                               
+                            />
+                        ),
+                    },
+                    {
+                        title: 'Final Step',
+                        description: (
+                            <>
+                                Review the Service Principal credentials
+                            </>
+                        ),
+                        content: <FinalStep data={data} health="" onNext={close} />,
+                    }
+                ]}
+            />
+            
     )
 }

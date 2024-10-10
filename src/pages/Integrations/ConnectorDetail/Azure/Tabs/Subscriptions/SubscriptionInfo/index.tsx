@@ -21,6 +21,7 @@ import {
     useIntegrationApiV1ConnectionsAzureHealthcheckDetail,
     useIntegrationApiV1ConnectionsDelete,
 } from '../../../../../../../api/integration.gen'
+import { KeyValuePairs, Tabs } from '@cloudscape-design/components'
 
 interface ISubscriptionInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
@@ -105,15 +106,165 @@ export default function SubscriptionInfo({
         (isDeleteExecuted && isDeleteLoading) ||
         (isHealthCheckExecuted && isHealthCheckLoading) ||
         (isDiscoverExecuted && isDiscoverLoading)
+    const summaryTab = () => {
+        const temp = [
+            {
+                label: 'Account name',
+                value: data?.providerConnectionName,
+            },
+            {
+                label: 'Account ID',
+                value: data?.providerConnectionID,
+            },
+            {
+                label: 'Health state',
+                value: (
+                    <>
+                        <Flex className="w-fit gap-4">
+                            <Button
+                                loading={
+                                    isHealthCheckExecuted &&
+                                    isHealthCheckLoading
+                                }
+                                variant="light"
+                                disabled={buttonsDisabled}
+                                onClick={runHealthCheckNow}
+                                icon={ArrowPathRoundedSquareIcon}
+                            >
+                                Trigger Health Check
+                            </Button>
+                            {healthResponse ? (
+                                <Badge
+                                    color={
+                                        healthResponse?.healthState ===
+                                        'healthy'
+                                            ? 'emerald'
+                                            : 'rose'
+                                    }
+                                >
+                                    {healthResponse?.healthState}
+                                </Badge>
+                            ) : (
+                                <Badge
+                                    color={
+                                        data?.healthState === 'healthy'
+                                            ? 'emerald'
+                                            : 'rose'
+                                    }
+                                >
+                                    {data?.healthState}
+                                </Badge>
+                            )}
+                        </Flex>
+                    </>
+                ),
+            },
+        ]
+
+        if (data?.healthState === 'unhealthy') {
+            temp.push({
+                label: 'Health reason',
+                value: data?.healthReason,
+            })
+        }
+        temp.push({
+            label: 'Account lifecycle state',
+            value: (
+                <>
+                    <Badge
+                        color={
+                            data?.lifecycleState === 'ONBOARD'
+                                ? 'emerald'
+                                : 'rose'
+                        }
+                    >
+                        {getBadgeText(data?.lifecycleState || '')}
+                    </Badge>
+                </>
+            ),
+        })
+        return temp
+    }
+    const additionalTabs = () => {
+        const temp = []
+        temp.push({
+            label: 'Subscription type',
+            value: <>{snakeCaseToLabel(data?.credentialType || '')}</>,
+        })
+        temp.push({
+            label: 'Last inventory',
+            value: dateTimeDisplay(data?.lastInventory),
+        })
+        temp.push({
+            label: 'Onboard date',
+            value: dateTimeDisplay(data?.onboardDate),
+        })
+        temp.push({
+            label: 'Last inventory',
+            value: dateTimeDisplay(data?.lastInventory),
+        })
+        temp.push({
+            label: 'Last health check',
+            value: dateTimeDisplay(data?.lastHealthCheckTime),
+        })
+        if (
+            data?.metadata?.organization_tags 
+           
+        ) {
+            temp.push({
+                label: 'Tags',
+                value: (
+                    <>
+                        {Object.entries(data.metadata?.organization_tags).map(
+                            ([name, value]) => (
+                                <Tag
+                                    isDemo={isDemo}
+                                    text={`${name}: ${value}`}
+                                />
+                            )
+                        )}
+                    </>
+                ),
+            })
+        }
+
+        return temp
+    }
 
     return (
-        <DrawerPanel
-            title="Azure Subscription"
-            open={open}
-            onClose={() => onClose()}
-        >
+        <>
+            <Tabs
+                tabs={[
+                    {
+                        label: 'Summary',
+                        id: '1',
+                        content: (
+                            <>
+                                <KeyValuePairs
+                                    columns={4}
+                                    // @ts-ignore
+                                    items={summaryTab()}
+                                />
+                            </>
+                        ),
+                    },
+                    {
+                        label: 'Additional Detail',
+                        id: '2',
+                        content: (
+                            <>
+                                <KeyValuePairs
+                                    columns={4}
+                                    // @ts-ignore
+                                    items={additionalTabs()}
+                                />
+                            </>
+                        ),
+                    },
+                ]}
+            />
             <Flex flexDirection="col" className="h-full">
-                <Flex flexDirection="col" alignItems="start">
+                {/* <Flex flexDirection="col" alignItems="start">
                     <Title>Summary</Title>
                     <Divider />
                     <Flex>
@@ -291,7 +442,7 @@ export default function SubscriptionInfo({
                             </Flex>
                         </AccordionBody>
                     </Accordion>
-                </Flex>
+                </Flex> */}
                 <Flex justifyContent="end">
                     <Button
                         variant="secondary"
@@ -312,6 +463,6 @@ export default function SubscriptionInfo({
                     </Button>
                 </Flex>
             </Flex>
-        </DrawerPanel>
+        </>
     )
 }

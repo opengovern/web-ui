@@ -27,17 +27,18 @@ export default function EntraIDTabs({ directories, loading }: IEntraID) {
         }
     }, [tabs])
     return (
-        <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
-            <TabList className="mb-3">
-                <Tab onClick={() => navigate(`#directories?${searchParams}`)}>
-                    EntraID Directories
-                </Tab>
-            </TabList>
-            <TabPanels>
-                <TabPanel key="pri">
-                    <Directories directories={directories} />
-                </TabPanel>
-            </TabPanels>
-        </TabGroup>
+        <Directories directories={directories} />
+
+        // <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
+        //     <TabList className="mb-3">
+        //         <Tab onClick={() => navigate(`#directories?${searchParams}`)}>
+        //             EntraID Directories
+        //         </Tab>
+        //     </TabList>
+        //     <TabPanels>
+        //         <TabPanel key="pri">
+        //         </TabPanel>
+        //     </TabPanels>
+        // </TabGroup>
     )
 }

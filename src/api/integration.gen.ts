@@ -323,7 +323,7 @@ export const useIntegrationApiV1ConnectionsSummariesList = (
     query?: {
         filter?: string
 
-        connector?: ('' | 'AWS' | 'Azure')[]
+        connector?: ('' | 'AWS' | 'Azure' | 'EntraID')[]
 
         connectionId?: string[]
 
@@ -393,7 +393,7 @@ export const useIntegrationApiV1ConnectionsSummariesList = (
             | {
                   filter?: string
 
-                  connector?: ('' | 'AWS' | 'Azure')[]
+                  connector?: ('' | 'AWS' | 'Azure' | 'EntraID')[]
 
                   connectionId?: string[]
 
@@ -527,7 +527,7 @@ export const useIntegrationApiV1ConnectionsSummariesList = (
             | {
                   filter?: string
 
-                  connector?: ('' | 'AWS' | 'Azure')[]
+                  connector?: ('' | 'AWS' | 'Azure' | 'EntraID')[]
 
                   connectionId?: string[]
 
@@ -1182,7 +1182,7 @@ interface IuseIntegrationApiV1ConnectorsMetricsListState {
  */
 export const useIntegrationApiV1ConnectorsMetricsList = (
     query?: {
-        connector?: ('' | 'AWS' | 'Azure')[]
+        connector?: ('' | 'AWS' | 'Azure' | 'EntraID')[]
 
         credentialType?: (
             | 'auto-azure'
@@ -1214,7 +1214,7 @@ export const useIntegrationApiV1ConnectorsMetricsList = (
         abortCtrl: AbortController,
         reqquery:
             | {
-                  connector?: ('' | 'AWS' | 'Azure')[]
+                  connector?: ('' | 'AWS' | 'Azure' | 'EntraID')[]
 
                   credentialType?: (
                       | 'auto-azure'
@@ -1310,7 +1310,7 @@ export const useIntegrationApiV1ConnectorsMetricsList = (
     const sendNowWithParams = (
         reqquery:
             | {
-                  connector?: ('' | 'AWS' | 'Azure')[]
+                  connector?: ('' | 'AWS' | 'Azure' | 'EntraID')[]
 
                   credentialType?: (
                       | 'auto-azure'
@@ -1489,7 +1489,7 @@ interface IuseIntegrationApiV1CredentialsListState {
  */
 export const useIntegrationApiV1CredentialsList = (
     query?: {
-        connector?: '' | 'AWS' | 'Azure'
+        connector?: '' | 'AWS' | 'Azure' | 'EntraID'
 
         health?: 'healthy' | 'unhealthy'
 
@@ -1527,7 +1527,7 @@ export const useIntegrationApiV1CredentialsList = (
         abortCtrl: AbortController,
         reqquery:
             | {
-                  connector?: '' | 'AWS' | 'Azure'
+                  connector?: '' | 'AWS' | 'Azure' | 'EntraID'
 
                   health?: 'healthy' | 'unhealthy'
 
@@ -1629,7 +1629,7 @@ export const useIntegrationApiV1CredentialsList = (
     const sendNowWithParams = (
         reqquery:
             | {
-                  connector?: '' | 'AWS' | 'Azure'
+                  connector?: '' | 'AWS' | 'Azure' | 'EntraID'
 
                   health?: 'healthy' | 'unhealthy'
 

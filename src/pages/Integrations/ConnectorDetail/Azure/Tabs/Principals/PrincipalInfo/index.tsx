@@ -18,6 +18,7 @@ import {
     useIntegrationApiV1CredentialDelete,
     useIntegrationApiV1CredentialsAzureAutoonboardCreate,
 } from '../../../../../../../api/integration.gen'
+import { KeyValuePairs } from '@cloudscape-design/components'
 
 interface IPriInfo {
     data:
@@ -68,13 +69,169 @@ export default function PrincipalInfo({
     }, [isDiscoverLoading])
 
     return (
-        <DrawerPanel
-            title="Service Principal"
-            open={open}
-            onClose={() => onClose()}
-        >
+        <>
             <Flex flexDirection="col" className="h-full">
-                <Flex flexDirection="col" alignItems="start">
+                <KeyValuePairs
+                    columns={4}
+                    items={[
+                        {
+                            label: 'Name',
+                            value: data?.metadata?.spn_name,
+                        },
+                        {
+                            label: 'Application ID',
+                            value: data?.metadata
+                                ?.organization_master_account_email,
+                        },
+                        {
+                            label: 'Object ID',
+                            value: data?.metadata?.object_id,
+                        },
+                        {
+                            label: 'Directory ID',
+                            value: data?.metadata
+                                ?.organization_master_account_email,
+                        },
+                        {
+                            label: 'State',
+                            value: (
+                                <>
+                                    <Badge
+                                        color={
+                                            data?.healthStatus === 'healthy'
+                                                ? 'green'
+                                                : 'rose'
+                                        }
+                                    >
+                                        {data?.healthStatus}
+                                    </Badge>
+                                </>
+                            ),
+                        },
+                        {
+                            label: 'Last health check',
+                            value: dateDisplay(data?.lastHealthCheckTime),
+                        },
+
+                        {
+                            label: 'Number of subscriptions',
+                            value: data?.total_connections,
+                        },
+                    ]}
+                />
+                <KeyValuePairs
+                    columns={1}
+                    className="w-full mt-4"
+                    items={[
+                        {
+                            label: 'Secret ID',
+                            value: (
+                                <>
+                                    {eid ? (
+                                        <>
+                                            <TextInput
+                                                className="w-full my-3"
+                                                value={id}
+                                                onChange={(e) =>
+                                                    setId(e.target.value)
+                                                }
+                                            />
+                                            <Flex justifyContent="end">
+                                                <Button
+                                                    variant="secondary"
+                                                    onClick={() =>
+                                                        seteId(false)
+                                                    }
+                                                >
+                                                    Cancel
+                                                </Button>
+                                                <Button className="ml-3">
+                                                    Save
+                                                </Button>
+                                            </Flex>
+                                        </>
+                                    ) : (
+                                        <Flex justifyContent="end">
+                                            <Text
+                                                className={
+                                                    isDemo
+                                                        ? 'blur-sm text-black'
+                                                        : 'text-black'
+                                                }
+                                            >
+                                                {data?.metadata?.secret_id}
+                                            </Text>
+                                            <Button
+                                                variant="light"
+                                                className="ml-3"
+                                                onClick={() => {
+                                                    setId(
+                                                        data?.metadata
+                                                            ?.secret_id
+                                                    )
+                                                    seteId(true)
+                                                }}
+                                            >
+                                                Edit
+                                            </Button>
+                                        </Flex>
+                                    )}
+                                </>
+                            ),
+                        },
+                        {
+                            label: 'Secret value',
+                            value: (
+                                <>
+                                    {evalue ? (
+                                        <>
+                                            <TextInput
+                                                className="w-full my-3"
+                                                value={value}
+                                                onChange={(e) =>
+                                                    setValue(e.target.value)
+                                                }
+                                            />
+                                            <Flex justifyContent="end">
+                                                <Button
+                                                    variant="secondary"
+                                                    onClick={() =>
+                                                        seteValue(false)
+                                                    }
+                                                >
+                                                    Cancel
+                                                </Button>
+                                                <Button className="ml-3">
+                                                    Save
+                                                </Button>
+                                            </Flex>
+                                        </>
+                                    ) : (
+                                        <Flex justifyContent="end">
+                                            <Text
+                                                className={
+                                                    isDemo
+                                                        ? 'blur-sm text-black'
+                                                        : 'text-black'
+                                                }
+                                            >
+                                                *****************
+                                            </Text>
+                                            <Button
+                                                variant="light"
+                                                className="ml-3"
+                                                onClick={() => seteValue(true)}
+                                            >
+                                                Edit
+                                            </Button>
+                                        </Flex>
+                                    )}
+                                </>
+                            ),
+                        },
+                    ]}
+                />
+                {/* <Flex flexDirection="col" alignItems="start">
                     <Title>SPN info</Title>
                     <Divider />
                     <Flex>
@@ -246,7 +403,7 @@ export default function PrincipalInfo({
                             {data?.total_connections}
                         </Text>
                     </Flex>
-                </Flex>
+                </Flex> */}
                 <Flex justifyContent="end" className="my-6">
                     <Button
                         variant="secondary"
@@ -268,6 +425,6 @@ export default function PrincipalInfo({
                     </Button>
                 </Flex>
             </Flex>
-        </DrawerPanel>
+        </>
     )
 }
