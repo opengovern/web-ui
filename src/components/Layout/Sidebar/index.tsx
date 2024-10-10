@@ -471,7 +471,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
 
             {
                 name: 'Integrations',
-                page: 'integrations',
+                page: [
+                    'integrations',
+                    'integrations/AWS',
+                    'integrations/Azure',
+                    'integrations/EntraID',
+                ],
                 icon: PuzzlePieceIcon,
                 isLoading: connectionsIsLoading,
                 count: numericDisplay(connectionCount?.count) || 0,
