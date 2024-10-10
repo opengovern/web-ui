@@ -48,6 +48,7 @@
         "pretty-checkbox-react": "^3.2.0",
         "prismjs": "^1.29.0",
         "react": "^18.2.0",
+        "react-ace-builds": "^7.4.1",
         "react-aria": "^3.30.0",
         "react-complex-tree": "^2.4.5",
         "react-csv": "^2.2.2",
