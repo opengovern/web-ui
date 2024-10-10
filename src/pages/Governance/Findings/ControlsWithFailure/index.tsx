@@ -163,10 +163,10 @@ export default function ControlsWithFailure({ query }: ICount) {
             // sortingDescending={sortOrder == 'desc' ? true : false}
             // @ts-ignore
             onRowClick={(event) => {
-                const row = event.detail.item
-                if (row) {
-                    navigate(`${row?.Control.id}?${searchParams}`)
-                }
+                // const row = event.detail.item
+                // if (row) {
+                //     navigate(`${row?.Control.id}?${searchParams}`)
+                // }
             }}
             columnDefinitions={[
                 {
@@ -181,7 +181,12 @@ export default function ControlsWithFailure({ query }: ICount) {
                                 className="h-full"
                             >
                                 <Text className="text-gray-800">
-                                    {item.Control.title}
+                                    <Link
+                                        href={`${window.location}/${item.Control.id}`}
+                                        target="__blank"
+                                    >
+                                        {item.Control.title}
+                                    </Link>
                                 </Text>
                                 <Text>{item.Control.id}</Text>
                             </Flex>
@@ -359,8 +364,7 @@ export default function ControlsWithFailure({ query }: ICount) {
                         // @ts-ignore
                         setQuery(e)
                     }}
-                    setDate={()=>{}}
-                   
+                    setDate={() => {}}
                 />
             }
             header={

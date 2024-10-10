@@ -526,10 +526,12 @@ export default function Controls({
                                 header: 'Title',
                                 cell: (item) => (
                                     <Link
-                                        href="#"
-                                        onClick={() => {
-                                            navigateToInsightsDetails(item.id)
-                                        }}
+                                        href={`${window.location}/${item.id}`}
+                                        target='__blank'
+
+                                        // onClick={() => {
+                                        //     navigateToInsightsDetails(item.id)
+                                        // }}
                                     >
                                         {item.title}
                                     </Link>
