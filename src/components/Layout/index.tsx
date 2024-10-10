@@ -39,7 +39,7 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
         if (current) {
             if (
                 (current.includes('incidents') ||
-                    current == 'integrations' ||
+                    current.includes('integrations') ||
                     current.includes('dashboard') ||
                     current.includes('compliance') ||
                     current.includes('score') ||

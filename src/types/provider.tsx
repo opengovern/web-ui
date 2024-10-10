@@ -1,4 +1,4 @@
-export type KaytuProvider = 'AWS' | 'Azure' | ''
+export type KaytuProvider = 'AWS' | 'Azure' | '' | 'EntraID'
 
 export function StringToProvider(str: string) {
     let v: KaytuProvider = ''
@@ -10,7 +10,7 @@ export function StringToProvider(str: string) {
             v = 'Azure'
             break
         case 'entraid':
-            v = 'Azure'
+            v = 'EntraID'
             break
         default:
             v = ''

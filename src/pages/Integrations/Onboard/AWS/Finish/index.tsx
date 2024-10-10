@@ -7,6 +7,8 @@ import {
 import { CheckCircleIcon } from '@heroicons/react/24/outline'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../../api/integration.gen'
 import Table, { IColumn } from '../../../../../components/Table'
+import KTable from '@cloudscape-design/components/table'
+
 
 interface IFinish {
     // bootstrapMode: boolean
@@ -121,7 +123,7 @@ export function Finish({
                     </Text>
                 </Flex>
                 {/* there is not bootstrap mode too */}
-                {!false && (
+                {/* {!false && (
                     <>
                         <Text className="mb-2">
                             Here&apos;s all the AWS accounts which have been
@@ -141,13 +143,13 @@ export function Finish({
                             />
                         </Flex>
                     </>
-                )}
+                )} */}
             </Flex>
-            <Flex flexDirection="row" justifyContent="end">
+            {/* <Flex flexDirection="row" justifyContent="end">
                 <Button variant="secondary" onClick={() => onClose()}>
                     Close
                 </Button>
-            </Flex>
+            </Flex> */}
         </Flex>
     )
 }

@@ -170,7 +170,7 @@ export default function Controls({
 }: IPolicies) {
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
-    const [page, setPage] = useState<number>(0)
+    const [page, setPage] = useState<number>(1)
     const [rows, setRows] = useState<
         GithubComKaytuIoKaytuEnginePkgControlApiListV2ResponseItem[]
     >([])

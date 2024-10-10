@@ -2886,6 +2886,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2 {
     per_page: number
     providers?: string[]
     tags?: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2TagsFilter
+    list_of_tables?: string[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequestV2TagsFilter {
@@ -5577,7 +5578,7 @@ export class Api<
                 /** Filter costs */
                 filter?: string
                 /** Connector */
-                connector?: ('' | 'AWS' | 'Azure')[]
+                connector?: ('' | 'AWS' | 'Azure' | 'EntraID')[]
                 /** Connection IDs */
                 connectionId?: string[]
                 /** Resource collection IDs to filter by */
@@ -5750,7 +5751,7 @@ export class Api<
         apiV1ConnectorsMetricsList: (
             query?: {
                 /** Connector */
-                connector?: ('' | 'AWS' | 'Azure')[]
+                connector?: ('' | 'AWS' | 'Azure' | 'EntraID')[]
                 /** filter by credential type */
                 credentialType?: (
                     | 'auto-azure'
@@ -5805,7 +5806,7 @@ export class Api<
         apiV1CredentialsList: (
             query?: {
                 /** filter by connector type */
-                connector?: '' | 'AWS' | 'Azure'
+                connector?: '' | 'AWS' | 'Azure' | 'EntraID'
                 /** filter by health status */
                 health?: 'healthy' | 'unhealthy'
                 /** filter by credential type */

@@ -11,6 +11,10 @@ import FinalStep from './FinalStep'
 import Spinner from '../../../../../../../components/Spinner'
 import { useIntegrationApiV1CredentialsAzureAutoonboardCreate } from '../../../../../../../api/integration.gen'
 import NewPrincipal from '../../Principals/NewPrincipal'
+import { Modal } from '@cloudscape-design/components'
+import KButton from '@cloudscape-design/components/button'
+import Wizard from '@cloudscape-design/components/wizard'
+import StatusIndicator from '@cloudscape-design/components/status-indicator'
 
 interface INewAzureSubscription {
     spns: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
@@ -28,7 +32,7 @@ export default function NewAzureSubscription({
     credintalsSendNow,
     accountSendNow
 }: INewAzureSubscription) {
-    const [stepNum, setStepNum] = useState(1)
+    const [stepNum, setStepNum] = useState(0)
     const [spnID, setSpnID] = useState('')
     const [isNew, setIsNew] = useState(false)
     const [choiced, setChoiced] = useState(false)
@@ -45,54 +49,40 @@ export default function NewAzureSubscription({
         if(!choiced){
             onClose()
         }
-        if (stepNum == 1) {
+        if(isNew){
+            onClose()
+            return
+        }
+        if (stepNum == 0) {
             setChoiced(false)
         } else {
-            setStepNum(1)
+            setStepNum(0)
+            setChoiced(false)
             onClose()
         }
         setSpnID('')
     }
 
     useEffect(() => {
-        if (stepNum === 2) {
+        if (stepNum === 1) {
             sendNow()
         }
     }, [stepNum])
 
-    const showStep = (s: number) => {
-        if (isLoading && isExecuted) {
-            return <Spinner />
-        }
-        switch (s) {
-            case 1:
-                return (
-                    <FirstStep
-                        onPrevious={close}
-                        onNext={(v) => {
-                            setSpnID(v)
-                            setStepNum(2)
-                        }}
-                        spns={spns}
-                    />
-                )
-            case 2:
-                return (
-                    <FinalStep
-                        subscriptions={autoOnboardResult || []}
-                        onNext={close}
-                    />
-                )
-            default:
-                return ' '
-        }
-    }
+  
+     const handleNext = (step: number) => {
+       if(step == 1 || step == 0 ){
+        
+           setStepNum(step)
+       }
+
+     }
 
     return (
-        <DrawerPanel
-            title="Add new Azure Subscription"
-            open={open}
-            onClose={close}
+        <Modal
+            header="Add new Azure Subscription"
+            visible={open}
+            onDismiss={close}
         >
             {choiced ? (
                 <>
@@ -105,26 +95,98 @@ export default function NewAzureSubscription({
                                 onClose={() => {
                                     setOpenPrencipal(false)
                                     setIsNew(false)
-                                    if(accountSendNow){
+                                    if (accountSendNow) {
                                         accountSendNow()
-
                                     }
                                 }}
                                 onCancel={() => {
                                     setChoiced(false)
                                     setIsNew(false)
                                 }}
+                                onSubmit={close}
                             />
                         </>
                     ) : (
-                        <Flex
-                            flexDirection="col"
-                            justifyContent="between"
-                            className="h-full"
-                        >
-                            <Steps steps={2} currentStep={stepNum} />
-                            {showStep(stepNum)}
-                        </Flex>
+                        <>
+                            <Wizard
+                                i18nStrings={{
+                                    stepNumberLabel: (stepNumber) =>
+                                        `Step ${stepNumber}`,
+                                    collapsedStepsLabel: (
+                                        stepNumber,
+                                        stepsCount
+                                    ) => `Step ${stepNumber} of ${stepsCount}`,
+                                    skipToButtonLabel: (step, stepNumber) =>
+                                        `Skip to ${step.title}`,
+                                    navigationAriaLabel: 'Steps',
+                                    cancelButton: 'Cancel',
+                                    previousButton: 'Previous',
+                                    nextButton: 'Next',
+                                    submitButton: 'Close',
+                                    optional: 'optional',
+                                }}
+                                isLoadingNextStep={spnID == ''}
+                                onSubmit={close}
+                                onNavigate={
+                                    ({ detail }) =>
+                                        handleNext(detail.requestedStepIndex)
+                                    // setActiveStepIndex(detail.requestedStepIndex)
+                                }
+                                activeStepIndex={stepNum}
+                                // allowSkipTo
+                                steps={[
+                                    {
+                                        title: 'Select SPN',
+
+                                        description: (
+                                            <>
+                                                Select the Service Principal
+                                                Name (SPN) that you want to use
+                                                for the integration.
+                                            </>
+                                        ),
+                                        content: (
+                                            <FirstStep
+                                                onPrevious={close}
+                                                onNext={(v) => {
+                                                    setSpnID(v)
+                                                }}
+                                                spns={spns}
+                                            />
+                                        ),
+                                    },
+                                    {
+                                        title:
+                                            isLoading && isExecuted
+                                                ? 'Onboarding In proccess'
+                                                : 'Onboarding Done',
+
+                                        description: <></>,
+                                        content: (
+                                            <>
+                                                {isLoading && isExecuted ? (
+                                                    <Spinner />
+                                                ) : (
+                                                    <>
+                                                        <StatusIndicator type="success">
+                                                            Done
+                                                        </StatusIndicator>
+                                                    </>
+                                                )}
+                                            </>
+                                        ),
+                                    },
+                                ]}
+                            />
+                            {/* <Flex
+                                flexDirection="col"
+                                justifyContent="between"
+                                className="h-full"
+                            >
+                                <Steps steps={2} currentStep={stepNum} />
+                                {showStep(stepNum)}
+                            </Flex> */}
+                        </>
                     )}
                 </>
             ) : (
@@ -134,32 +196,32 @@ export default function NewAzureSubscription({
                     className="gap-x-4  h-full "
                     alignItems="center"
                 >
-                    <Button
+                    <KButton
                         onClick={() => {
                             setIsNew(false)
                             setChoiced(true)
                         }}
                         disabled={false}
                         loading={false}
+
                         // loadingText="Running"
                     >
-                        <Text className="text-xl text-white">
-                            Use Existing SPN
-                        </Text>
-                    </Button>
-                    <Button
+                        Use Existing SPN
+                    </KButton>
+                    <KButton
                         onClick={() => {
                             setIsNew(true)
                             setChoiced(true)
                         }}
                         disabled={false}
                         loading={false}
+                        // variant="primary"
                         // loadingText="Running"
                     >
-                        <Text className="text-xl text-white">Add New SPN</Text>
-                    </Button>
+                        Add New SPN
+                    </KButton>
                 </Flex>
             )}
-        </DrawerPanel>
+        </Modal>
     )
 }

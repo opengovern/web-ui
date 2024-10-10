@@ -16,9 +16,10 @@ interface IAWS {
     accounts: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
     organizations: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
     loading: boolean
+    accountSendNow: Function
 }
 
-export default function AWSTabs({ accounts, organizations, loading }: IAWS) {
+export default function AWSTabs({ accounts, organizations, loading, accountSendNow }: IAWS) {
     const [selectedTab, setSelectedTab] = useState(0)
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
@@ -31,12 +32,13 @@ export default function AWSTabs({ accounts, organizations, loading }: IAWS) {
         }
     }, [tabs])
     return (
-        <>
+        <div className="w-full">
             <AccountList
                 accounts={accounts}
                 organizations={organizations}
                 loading={loading}
+                accountSendNow={accountSendNow}
             />
-        </>
+        </div>
     )
 }

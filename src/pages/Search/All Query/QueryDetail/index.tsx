@@ -38,6 +38,7 @@ import Editor from 'react-simple-code-editor'
 import { highlight, languages } from 'prismjs' // eslint-disable-next-line import/no-extraneous-dependencies
 import 'prismjs/components/prism-sql' // eslint-disable-next-line import/no-extraneous-dependencies
 import 'prismjs/themes/prism.css'
+import { Badge, KeyValuePairs } from '@cloudscape-design/components'
 
 interface IResourceFindingDetail {
     query:
@@ -116,19 +117,71 @@ export default function QueryDetail({
     // }
 
     return (
-        <DrawerPanel
-            open={open}
-            onClose={onClose}
-            title={
-                <Flex justifyContent="start">
-                    {getConnectorIcon(query?.connectors)}
-                    <Title className="text-lg font-semibold ml-2 my-1">
-                        {query?.title}
-                    </Title>
-                </Flex>
-            }
-        >
-            <Grid className="w-full gap-4 mb-6" numItems={1}>
+        <>
+            <KeyValuePairs
+                columns={4}
+                items={[
+                    {
+                        label: 'ID',
+                        value: query?.id,
+                    },
+                    {
+                        label: 'Description',
+                        value: query?.description,
+                    },
+                    {
+                        label: 'Connector',
+                        value: (
+                            <>
+                                {query?.connectors?.map((item, index) => {
+                                    return `${item} `
+                                })}
+                            </>
+                        ),
+                    },
+                    {
+                        label: 'Query Engine',
+                        value: query?.query?.engine,
+                    },
+                    {
+                        label: 'Tags',
+                        value: (
+                            <>
+                                {query?.tags && (
+                                    <Flex
+                                        className="gap-2 flex-wrap min-w-fit"
+                                        flexDirection="row"
+                                    >
+                                        <>
+                                            {Object.entries(
+                                                // @ts-ignore
+                                                query?.tags
+                                            ).map((key, index) => {
+                                                return (
+                                                    <Badge
+                                                        color="severity-neutral"
+                                                        className=" min-w-fit"
+                                                    >
+                                                        <Flex
+                                                            flexDirection="row"
+                                                            justifyContent="start"
+                                                            className="hover:cursor-pointer max-w-full w-fit  px-1"
+                                                        >
+                                                            <TagIcon className="min-w-4 w-4 mr-1" />
+                                                            {`${key[0]} : ${key[1]}`}
+                                                        </Flex>
+                                                    </Badge>
+                                                )
+                                            })}
+                                        </>
+                                    </Flex>
+                                )}
+                            </>
+                        ),
+                    },
+                ]}
+            />
+            {/* <Grid className="w-full gap-4 mb-6" numItems={1}>
                 <Flex
                     flexDirection="row"
                     justifyContent="between"
@@ -177,60 +230,57 @@ export default function QueryDetail({
                 >
                     <Text className="w-56 font-bold">Query Engine : </Text>
                     <Text className="w-full">
-                        {/* @ts-ignore */}
+                        {/* @ts-ignore 
                         {query?.query?.engine}
                     </Text>
                 </Flex>
-            </Grid>
-            <TabGroup>
+            </Grid> */}
+            <Flex flexDirection="row" className="mb-2 mt-3">
+                <Title className="mb-2">Query</Title>
+
+                <Button
+                    icon={PlayCircleIcon}
+                    onClick={() => {
+                        // @ts-ignore
+                        setQuery(query?.query?.queryToExecute)
+                        setTab(1)
+                    }}
+                    disabled={false}
+                    loading={false}
+                    loadingText="Running"
+                >
+                    {/* <Link to={`/ws/${ws}/finder?tab_id=1`}> */}
+                    Run in Query
+                    {/* </Link>{' '} */}
+                </Button>
+            </Flex>
+            <Card className=" py-3 mb-2 relative ">
+                <Editor
+                    onValueChange={(text) => {
+                        console.log(text)
+                    }}
+                    highlight={(text) => highlight(text, languages.sql, 'sql')}
+                    // @ts-ignore
+                    value={query?.query?.queryToExecute || ''}
+                    className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
+                    style={{
+                        minHeight: '200px',
+                        // maxHeight: '500px',
+                        overflowY: 'scroll',
+                    }}
+                    placeholder="-- write your SQL query here"
+                    disabled={true}
+                />
+            </Card>
+            {/* <TabGroup>
                 <TabPanels>
                     <TabPanel>
-                        <Flex flexDirection="row" className="mb-2">
-                            <Title className="mb-2">Query</Title>
-
-                            <Button
-                                icon={PlayCircleIcon}
-                                onClick={() => {
-                                    // @ts-ignore
-                                    setQuery(query?.query?.queryToExecute)
-                                    setTab(1)
-                                }}
-                                disabled={false}
-                                loading={false}
-                                loadingText="Running"
-                            >
-                                {/* <Link to={`/ws/${ws}/finder?tab_id=1`}> */}
-                                Run in Query
-                                {/* </Link>{' '} */}
-                            </Button>
-                        </Flex>
-                        <Card className=" py-3 mb-2 relative ">
-                            <Editor
-                                onValueChange={(text) => {
-                                    console.log(text)
-                                }}
-                                highlight={(text) =>
-                                    highlight(text, languages.sql, 'sql')
-                                }
-                                // @ts-ignore
-                                value={query?.query?.queryToExecute}
-                                className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
-                                style={{
-                                    minHeight: '200px',
-                                    // maxHeight: '500px',
-                                    overflowY: 'scroll',
-                                }}
-                                placeholder="-- write your SQL query here"
-                                disabled={true}
-                            />
-                        </Card>
                         <Flex
                             flexDirection="row"
                             alignItems="start"
                             className="gap-1 w-full flex-wrap "
                             justifyContent="start"
                         >
-                            {/* @ts-ignore */}
                             {query?.tags && (
                                 <>
                                     {Object.entries(query?.tags).map(
@@ -244,7 +294,7 @@ export default function QueryDetail({
                                                     >
                                                         <TagIcon className="min-w-4 w-4 mr-1" />
                                                         <Text className="truncate">
-                                                            {/* @ts-ignore */}
+                                                            {/* @ts-ignore 
                                                             {key[0]}:{key[1]}
                                                         </Text>
                                                     </Flex>
@@ -257,7 +307,7 @@ export default function QueryDetail({
                         </Flex>
                     </TabPanel>
                 </TabPanels>
-            </TabGroup>
-        </DrawerPanel>
+            </TabGroup> */}
+        </>
     )
 }

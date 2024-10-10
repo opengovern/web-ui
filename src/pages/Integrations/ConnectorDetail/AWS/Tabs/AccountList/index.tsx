@@ -1,4 +1,4 @@
-import { Badge, Button, Color, TextInput } from '@tremor/react'
+import { Badge, Button, Color, Flex, TextInput } from '@tremor/react'
 import { useState } from 'react'
 import {
     GridOptions,
@@ -22,11 +22,24 @@ import { isDemoAtom } from '../../../../../../store'
 import OnboardDrawer from '../../../../Onboard/AWS'
 import { Box, Modal, Select, SpaceBetween } from '@cloudscape-design/components'
 import { PencilIcon } from '@heroicons/react/24/outline'
+import KTable from '@cloudscape-design/components/table'
 
+import KBadge from '@cloudscape-design/components/badge'
+import {
+    BreadcrumbGroup,
+    Header,
+    Link,
+    Pagination,
+    PropertyFilter,
+} from '@cloudscape-design/components'
+import { AppLayout, SplitPanel } from '@cloudscape-design/components'
+import KButton from '@cloudscape-design/components/button'
+import Spinner from '../../../../../../components/Spinner'
 interface IAccountList {
     accounts: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
     organizations: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
     loading: boolean
+    accountSendNow: Function
 }
 
 function getBadgeColor(status: string) {
@@ -256,6 +269,7 @@ export default function AccountList({
     accounts,
     organizations,
     loading,
+    accountSendNow,
 }: IAccountList) {
     const [accData, setAccData] = useState<
         GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
@@ -264,12 +278,272 @@ export default function AccountList({
     const [open, setOpen] = useState(false)
     const isDemo = useAtomValue(isDemoAtom)
     const [edit, setEdit] = useState<boolean>(false)
-    const [selectedOrg, setSelectedOrg] = useState<string | undefined>(undefined)
-
+    const [selectedOrg, setSelectedOrg] = useState<string | undefined>(
+        undefined
+    )
+    const [page, setPage] = useState(0)
 
     return (
         <>
-            <Table
+            <AppLayout
+                toolsOpen={false}
+                navigationOpen={false}
+                contentType="table"
+                toolsHide={true}
+                navigationHide={true}
+                splitPanelOpen={openInfo}
+                onSplitPanelToggle={() => {
+                    setOpenInfo(!openInfo)
+                }}
+                splitPanel={
+                    <SplitPanel
+                        // @ts-ignore
+                        header={
+                            accData && openInfo
+                                ? accData?.providerConnectionName
+                                : 'No Account Selected'
+                        }
+                    >
+                        {openInfo && accData ? (
+                            <>
+                                <AccountInfo
+                                    data={accData}
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore
+                                    type={accData?.type}
+                                    open={openInfo}
+                                    onClose={() => setOpenInfo(false)}
+                                    isDemo={isDemo}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <Spinner />
+                            </>
+                        )}
+                    </SplitPanel>
+                }
+                content={
+                    <KTable
+                        className="  min-h-[450px]"
+                        variant="full-page"
+                        // resizableColumns
+                        renderAriaLive={({
+                            firstIndex,
+                            lastIndex,
+                            totalItemsCount,
+                        }) =>
+                            `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
+                        }
+                        onSortingChange={(event) => {
+                            // setSort(event.detail.sortingColumn.sortingField)
+                            // setSortOrder(!sortOrder)
+                        }}
+                        // sortingColumn={sort}
+                        // sortingDescending={sortOrder}
+                        // sortingDescending={sortOrder == 'desc' ? true : false}
+                        // @ts-ignore
+                        onRowClick={(event) => {
+                            const row = event.detail.item
+                            setAccData(row)
+                            setOpenInfo(true)
+                        }}
+                        columnDefinitions={[
+                            {
+                                id: 'providerConnectionName',
+                                header: 'Name',
+                                cell: (item) => (
+                                    <>
+                                        <span
+                                            className={isDemo ? 'blur-sm' : ''}
+                                        >
+                                            {item.providerConnectionName}
+                                        </span>
+                                    </>
+                                ),
+                                // sortingField: 'providerConnectionID',
+                                isRowHeader: true,
+                                maxWidth: 100,
+                            },
+                            {
+                                id: 'providerConnectionID',
+                                header: 'ID',
+                                cell: (item) => (
+                                    <>
+                                        <span
+                                            className={isDemo ? 'blur-sm' : ''}
+                                        >
+                                            {item.providerConnectionID}
+                                        </span>
+                                    </>
+                                ),
+                                // sortingField: 'providerConnectionID',
+                                isRowHeader: true,
+                                maxWidth: 100,
+                            },
+                            {
+                                id: 'type',
+                                header: 'Account Type',
+                                cell: (item) => <>{item.type}</>,
+                                // sortingField: 'providerConnectionID',
+                                isRowHeader: true,
+                                maxWidth: 100,
+                            },
+                            {
+                                id: 'healthState',
+                                header: 'Health state',
+                                cell: (item) => {
+                                    if (item.healthState === undefined) {
+                                        return null
+                                    }
+
+                                    let color: Color
+                                    let text: string
+                                    switch (item?.healthState) {
+                                        case SourceHealthStatus.HealthStatusHealthy:
+                                            color = 'emerald'
+                                            text = 'Healthy'
+                                            break
+                                        case SourceHealthStatus.HealthStatusUnhealthy:
+                                            color = 'rose'
+                                            text = 'Unhealthy'
+                                            break
+                                        default:
+                                            color = 'neutral'
+                                            text = String(item?.healthState)
+                                    }
+
+                                    return <Badge color={color}>{text}</Badge>
+                                },
+                                // sortingField: 'providerConnectionID',
+                                isRowHeader: true,
+                                maxWidth: 100,
+                            },
+                            {
+                                id: 'lifecycleState',
+                                header: 'State',
+                                cell: (item) => {
+                                    return (
+                                        item?.lifecycleState !== undefined && (
+                                            <Badge
+                                                color={getBadgeColor(
+                                                    item?.lifecycleState
+                                                )}
+                                            >
+                                                {getBadgeText(
+                                                    item?.lifecycleState
+                                                )}
+                                            </Badge>
+                                        )
+                                    )
+                                },
+                                // sortingField: 'providerConnectionID',
+                                isRowHeader: true,
+                                maxWidth: 100,
+                            },
+                        ]}
+                        columnDisplay={[
+                            { id: 'providerConnectionName', visible: true },
+                            { id: 'providerConnectionID', visible: true },
+                            { id: 'type', visible: true },
+                            { id: 'healthState', visible: true },
+                            { id: 'lifecycleState', visible: true },
+
+                            // { id: 'severity', visible: true },
+                            // { id: 'evaluatedAt', visible: true },
+
+                            // { id: 'action', visible: true },
+                        ]}
+                        enableKeyboardNavigation
+                        // @ts-ignore
+                        items={generateRows(accounts)?.slice(
+                            page * 10,
+                            (page + 1) * 10
+                        )}
+                        loading={loading}
+                        loadingText="Loading resources"
+                        // stickyColumns={{ first: 0, last: 1 }}
+                        // stripedRows
+                        trackBy="id"
+                        empty={
+                            <Box
+                                margin={{ vertical: 'xs' }}
+                                textAlign="center"
+                                color="inherit"
+                            >
+                                <SpaceBetween size="m">
+                                    <b>No resources</b>
+                                </SpaceBetween>
+                            </Box>
+                        }
+                        filter={
+                            ''
+                            // <PropertyFilter
+                            //     // @ts-ignore
+                            //     query={undefined}
+                            //     // @ts-ignore
+                            //     onChange={({ detail }) => {
+                            //         // @ts-ignore
+                            //         setQueries(detail)
+                            //     }}
+                            //     // countText="5 matches"
+                            //     enableTokenGroups
+                            //     expandToViewport
+                            //     filteringAriaLabel="Control Categories"
+                            //     // @ts-ignore
+                            //     // filteringOptions={filters}
+                            //     filteringPlaceholder="Control Categories"
+                            //     // @ts-ignore
+                            //     filteringOptions={undefined}
+                            //     // @ts-ignore
+
+                            //     filteringProperties={undefined}
+                            //     // filteringProperties={
+                            //     //     filterOption
+                            //     // }
+                            // />
+                        }
+                        header={
+                            <Header
+                                actions={
+                                    <Flex className="gap-1">
+                                        <KButton
+                                            // icon={PlusIcon}
+                                            onClick={() => setOpen(true)}
+                                        >
+                                            Onboard New AWS Account
+                                        </KButton>
+                                        <KButton
+                                            // icon={PencilIcon}
+                                            onClick={() => setEdit(true)}
+                                        >
+                                            Edit Credintials
+                                        </KButton>
+                                    </Flex>
+                                }
+                                className="w-full"
+                            >
+                                AWS Accounts{' '}
+                                <span className=" font-medium">
+                                    ({generateRows(accounts)?.length})
+                                </span>
+                            </Header>
+                        }
+                        pagination={
+                            <Pagination
+                                currentPageIndex={page + 1}
+                                pagesCount={Math.ceil(
+                                    generateRows(accounts)?.length / 10
+                                )}
+                                onChange={({ detail }) =>
+                                    setPage(detail.currentPageIndex - 1)
+                                }
+                            />
+                        }
+                    />
+                }
+            />
+            {/* <Table
                 // downloadable
                 title="Accounts"
                 id="aws_account_list"
@@ -292,7 +566,7 @@ export default function AccountList({
                 <Button icon={PencilIcon} onClick={() => setEdit(true)}>
                     Edit Credintials
                 </Button>
-            </Table>
+            </Table> */}
             <Modal
                 onDismiss={() => setEdit(false)}
                 visible={edit}
@@ -307,7 +581,7 @@ export default function AccountList({
                             </Button>
 
                             <Button
-                            disabled={selectedOrg === undefined}
+                                disabled={selectedOrg === undefined}
                                 onClick={() => {
                                     setEdit(false)
                                 }}
@@ -359,18 +633,11 @@ export default function AccountList({
                     </>
                 )}
             </Modal>
-            <AccountInfo
-                data={accData}
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                type={accData?.type}
-                open={openInfo}
-                onClose={() => setOpenInfo(false)}
-                isDemo={isDemo}
-            />
+
             <OnboardDrawer
                 open={open}
                 onClose={() => setOpen(false)}
+                accountSendNow={accountSendNow}
                 // bootstrapMode={false}
             />
         </>
