@@ -6,6 +6,8 @@ import 'ace-builds/css/theme/cloud_editor_dark.css'
 import 'ace-builds/css/theme/cloud_editor_dark.css'
 import 'ace-builds/css/theme/twilight.css'
 import 'ace-builds/css/theme/sqlserver.css'
+import 'ace-builds/css/theme/xcode.css'
+
 import { useEffect, useState } from 'react'
 import { CodeEditor } from '@cloudscape-design/components'
 
@@ -23,7 +25,6 @@ export function RenderObject({ obj }: IRenderObjectProps) {
             const ace = await import('ace-builds')
             await import('ace-builds/webpack-resolver')
             ace.config.set('useStrictCSP', true)
-            console.log(ace)
             // ace.config.setMode('ace/mode/sql')
             // @ts-ignore
             // ace.edit(element, {
@@ -96,7 +97,7 @@ export function RenderObject({ obj }: IRenderObjectProps) {
                 // setSavedQuery('')
                 // setCode(detail.value)
             }}
-            editorContentHeight={750}
+            editorContentHeight={450}
             preferences={preferences}
             onPreferencesChange={(e) =>
                 // @ts-ignore
@@ -104,7 +105,7 @@ export function RenderObject({ obj }: IRenderObjectProps) {
             }
             loading={false}
             themes={{
-                light: ['cloud_editor', 'sqlserver'],
+                light: ['xcode','cloud_editor', 'sqlserver'],
                 dark: ['cloud_editor_dark', 'twilight'],
                 // @ts-ignore
             }}

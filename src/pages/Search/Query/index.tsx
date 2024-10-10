@@ -60,6 +60,7 @@ import KTable from '@cloudscape-design/components/table'
 import {
     Box,
     Header,
+    Modal,
     Pagination,
     SpaceBetween,
 } from '@cloudscape-design/components'
@@ -71,6 +72,8 @@ import 'ace-builds/css/theme/cloud_editor_dark.css'
 import 'ace-builds/css/theme/cloud_editor_dark.css'
 import 'ace-builds/css/theme/twilight.css'
 import 'ace-builds/css/theme/sqlserver.css'
+import 'ace-builds/css/theme/xcode.css'
+
 
 import CodeEditor from '@cloudscape-design/components/code-editor'
 export const getTable = (
@@ -187,7 +190,7 @@ export default function Query() {
     const [pageSize, setPageSize] = useState(1000)
     const [autoRun, setAutoRun] = useState(false)
     const [engine, setEngine] = useState('odysseus-sql')
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(0)
 
     const [preferences, setPreferences] = useState(undefined)
     const { response: categories, isLoading: categoryLoading } =
@@ -201,7 +204,7 @@ export default function Query() {
         error,
     } = useInventoryApiV1QueryRunCreate(
         {
-            page: { no: page, size: pageSize },
+            page: { no: 1, size: pageSize },
             engine,
             query: code,
         },
@@ -275,18 +278,7 @@ export default function Query() {
         })
     }
 
-    const memoColumns = useMemo(
-        () =>
-            getTable(queryResponse?.headers, queryResponse?.result, isDemo)
-                .columns,
-        [queryResponse, isDemo]
-    )
-    const memoColumns_def = useMemo(
-        () =>
-            getTable(queryResponse?.headers, queryResponse?.result, isDemo)
-                .column_def,
-        [queryResponse, isDemo]
-    )
+
     const memoCount = useMemo(
         () =>
             getTable(queryResponse?.headers, queryResponse?.result, isDemo)
@@ -301,15 +293,21 @@ export default function Query() {
                 <Spinner className="mt-56" />
             ) : (
                 <Flex alignItems="start" flexDirection="col">
-                    <Flex flexDirection="row" className='gap-5' justifyContent='start' alignItems='start'>
-                        <DrawerPanel
-                            open={openDrawer}
-                            onClose={() => setOpenDrawer(false)}
+                    <Flex
+                        flexDirection="row"
+                        className="gap-5"
+                        justifyContent="start"
+                        alignItems="start"
+                    >
+                        <Modal
+                            visible={openDrawer}
+                            onDismiss={() => setOpenDrawer(false)}
+                            header="Query Result"
                         >
                             <RenderObject obj={selectedRow} />
-                        </DrawerPanel>
+                        </Modal>
                         {openSearch ? (
-                            <Card className="sticky w-fit">
+                            <Card className="sticky w-fit h-fit max-h-[550px] min-w-max   overflow-y-scroll">
                                 <TextInput
                                     className="w-56 mb-6"
                                     icon={MagnifyingGlassIcon}
@@ -415,7 +413,7 @@ export default function Query() {
                             }
                             loading={isLoading}
                             themes={{
-                                light: ['cloud_editor', 'sqlserver'],
+                                light: ['xcode', 'cloud_editor', 'sqlserver'],
                                 dark: ['cloud_editor_dark', 'twilight'],
                                 // @ts-ignore
                             }}
@@ -462,7 +460,7 @@ export default function Query() {
                             )}
                             {/* </Card> */}
                             <Flex className="w-full mt-4">
-                                <Flex justifyContent="start" className='gap-1'>
+                                <Flex justifyContent="start" className="gap-1">
                                     <Text className="mr-2 w-fit">
                                         Maximum rows:
                                     </Text>
@@ -591,7 +589,7 @@ export default function Query() {
                                 )}
                             </Flex>
                         </Flex>
-                        <Grid numItems={1} className='w-full'>
+                        <Grid numItems={1} className="w-full">
                             <KTable
                                 className="   min-h-[450px]   "
                                 // resizableColumns
@@ -639,13 +637,11 @@ export default function Query() {
                                 }
                                 enableKeyboardNavigation
                                 // @ts-ignore
-                                items={
-                                    getTable(
-                                        queryResponse?.headers,
-                                        queryResponse?.result,
-                                        isDemo
-                                    ).rows
-                                }
+                                items={getTable(
+                                    queryResponse?.headers,
+                                    queryResponse?.result,
+                                    isDemo
+                                ).rows?.slice(page * 10, (page + 1) * 10)}
                                 loading={isLoading}
                                 loadingText="Loading resources"
                                 // stickyColumns={{ first: 0, last: 1 }}
@@ -674,17 +670,17 @@ export default function Query() {
                                 }
                                 pagination={
                                     <Pagination
-                                        currentPageIndex={page}
+                                        currentPageIndex={page+1}
                                         pagesCount={Math.ceil(
                                             // @ts-ignore
                                             getTable(
                                                 queryResponse?.headers,
                                                 queryResponse?.result,
                                                 isDemo
-                                            ).rows / 25
+                                            ).rows.length / 10
                                         )}
                                         onChange={({ detail }) =>
-                                            setPage(detail.currentPageIndex)
+                                            setPage(detail.currentPageIndex-1)
                                         }
                                     />
                                 }

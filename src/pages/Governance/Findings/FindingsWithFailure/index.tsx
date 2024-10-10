@@ -543,7 +543,7 @@ export default function FindingsWithFailure({ query }: ICount) {
                             },
                             {
                                 id: 'benchmarkID',
-                                header: 'Benchmark',
+                                header: 'Framework',
                                 maxWidth: 120,
                                 cell: (item) => (
                                     <>

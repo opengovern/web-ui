@@ -45,6 +45,7 @@ import { getErrorMessage } from '../../../../../../../types/apierror'
 import { searchAtom } from '../../../../../../../utilities/urlstate'
 import { KeyValuePairs, Tabs } from '@cloudscape-design/components'
 import { severityBadge } from '../../../../../Controls'
+import { RenderObject } from '../../../../../../../components/RenderObject'
 
 
 interface IFindingDetail {
@@ -438,8 +439,8 @@ export default function FindingDetail({
                                     <>
                                         <Title className="mb-2">JSON</Title>
                                         <Card className="px-1.5 py-3 mb-2">
-                                            <ReactJson
-                                                src={response?.resource || {}}
+                                            <RenderObject
+                                                obj={response?.resource || {}}
                                             />
                                         </Card>
                                     </>

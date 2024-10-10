@@ -141,7 +141,7 @@ export default function ControlsWithFailure({ query }: ICount) {
     const { response: controls, isLoading } =
         useComplianceApiV1FindingsTopDetail('controlID', 10000, {
             connector: queries.connector.length ? queries.connector : [],
-            severity: queries?.severity,
+            severities: queries?.severity,
             connectionId: queries.connectionID,
             connectionGroup: queries?.connectionGroup,
         })
