@@ -752,6 +752,11 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             }
         }
     }, [filter])
+    const PLACEHOLDERS ={
+        'findings' : 'Incidents',
+        'controls': 'Controls',
+        'resources': 'Resources'
+    }
     const renderFilters = () => {
         let date_filter = filterOptions.find((o) => o.id === 'date')
         let has_date = selectedFilters.includes('date')
@@ -859,7 +864,9 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
                         filteringAriaLabel="Find Incidents"
                         // @ts-ignore
                         filteringOptions={options}
-                        filteringPlaceholder="Find Incidents"
+                        // @ts-ignore
+
+                        filteringPlaceholder={`Find ${PLACEHOLDERS[type]}`}
                         // @ts-ignore
 
                         filteringProperties={properties}

@@ -359,18 +359,19 @@ export default function FindingsWithFailure({ query }: ICount) {
                 stateActive: queries.lifecycle,
                 jobID: queries?.jobID,
                 connectionGroup: queries.connectionGroup,
-                ...(queries.eventTimeRange && {
-                    lastEvent: {
-                        from: queries.eventTimeRange.start.unix(),
-                        to: queries.eventTimeRange.end.unix(),
-                    },
-                }),
-                ...(!isRelative ? {
+                // ...(queries.eventTimeRange && {
+                //     lastEvent: {
+                //         from: queries.eventTimeRange.start?.unix(),
+                //         to: queries.eventTimeRange.end?.unix(),
+                //     },
+                // }),
+                ...(!isRelative && date && {
                     evaluatedAt: {
-                        from: start.unix(),
-                        to: end.unix(),
+                        from: start?.unix(),
+                        to: end?.unix(),
                     },
-                } : {
+                }), 
+                 ...(isRelative && date &&{
                     interval: relative,
                 }),
             },
@@ -727,6 +728,7 @@ export default function FindingsWithFailure({ query }: ICount) {
                                         },
                                     ]}
                                     hideTimeOffset
+                                    // showClearButton={false}
                                     absoluteFormat="long-localized"
                                     isValidRange={(range) => {
                                         if (range.type === 'absolute') {
