@@ -213,7 +213,7 @@ export default function ResourcesWithFailure({ query }: ICount) {
                     conformanceStatus: queries.conformanceStatus,
                 },
                 // sort: [],
-                limit: 100,
+                limit: 15,
                 // @ts-ignore
                 afterSortKey: page == 1 ? [] : rows[rows?.length - 1].sortKey,
 
