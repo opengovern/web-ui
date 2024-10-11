@@ -369,16 +369,17 @@ export default function FindingsWithFailure({ query }: ICount) {
                             to: queries.eventTimeRange.end.unix(),
                         },
                     }),
-                    ...(!isRelative
-                        ? {
-                              evaluatedAt: {
-                                  from: start.unix(),
-                                  to: end.unix(),
-                              },
-                          }
-                        : {
-                              interval: relative,
-                          }),
+                    ...(!isRelative &&
+                        date && {
+                            evaluatedAt: {
+                                from: start?.unix(),
+                                to: end?.unix(),
+                            },
+                        }),
+                    ...(isRelative &&
+                        date && {
+                            interval: relative,
+                        }),
                 },
                 // sort: params.request.sortModel.length
                 //     ? [

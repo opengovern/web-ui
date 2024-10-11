@@ -26,6 +26,7 @@ import {
     useIntegrationApiV1ConnectionsSummariesList,
 } from '../../../../api/integration.gen'
 import KButton from '@cloudscape-design/components/button'
+import { Modal } from '@cloudscape-design/components'
 
 interface IMemberDetails {
     user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
@@ -52,7 +53,6 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
         {
             email_address: user?.email || '',
             role: roleValue,
-           
         },
         {},
         false
@@ -62,11 +62,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
         isExecuted: deleteExecuted,
         isLoading: deleteLoading,
         sendNow: deleteRole,
-    } = useAuthApiV1UserRoleBindingDelete(
-        user?.email || '',
-        {},
-        false
-    )
+    } = useAuthApiV1UserRoleBindingDelete(user?.email || '', {}, false)
 
     useEffect(() => {
         if (role === 'viewer' || role === 'editor' || role === 'admin') {
@@ -146,7 +142,29 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
 
     return (
         <>
-            <ConfirmModal
+            <Modal
+                visible={deleteConfirmation}
+                header="Delete user"
+                footer={
+                    <Flex justifyContent="end" className="gap-2">
+                        <KButton onClick={() => setDeleteConfirmation(false)}>
+                            Cancel
+                        </KButton>
+                        <KButton
+                            loading={deleteExecuted && deleteLoading}
+                            disabled={isExecuted && isLoading}
+                            onClick={deleteRole}
+                            variant="primary"
+                        >
+                            Delete
+                        </KButton>
+                    </Flex>
+                }
+                onDismiss={() => setDeleteConfirmation(false)}
+            >
+                <>{`Are you sure you want to delete ${user.userName}?`}</>
+            </Modal>
+            {/* <ConfirmModal
                 title="Delete user"
                 description={`Are you sure you want to delete ${user.userName}?`}
                 open={deleteConfirmation}
@@ -154,7 +172,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                 noButton="Cancel"
                 onConfirm={deleteRole}
                 onClose={() => setDeleteConfirmation(false)}
-            />
+            /> */}
             <Flex
                 flexDirection="col"
                 justifyContent="between"
@@ -309,11 +327,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                     */}
                 </List>
                 <Flex justifyContent="end" className="truncate space-x-4">
-                    <KButton
-                        loading={deleteExecuted && deleteLoading}
-                        disabled={isExecuted && isLoading}
-                        onClick={() => setDeleteConfirmation(true)}
-                    >
+                    <KButton onClick={() => setDeleteConfirmation(true)}>
                         <TrashIcon className="h-5 w-5" color="rose" />
                     </KButton>
                     <KButton

@@ -101,6 +101,7 @@ export default function Compliance() {
         const connectors = []
         const enable = []
         const isSRE = []
+        const title =[]
         query.tokens.map((item) => {
             if (item.propertyKey == 'connector') {
                 connectors.push(item.value)
@@ -108,6 +109,10 @@ export default function Compliance() {
             if (item.propertyKey == 'enable') {
                 enable.push(item.value)
             }
+            if (item.propertyKey == 'title_regex') {
+                title.push(item.value)
+            }
+            
             // if(item.propertyKey == 'family'){
             //     isSRE.push(item.value)
             // }
@@ -128,6 +133,7 @@ export default function Compliance() {
             }
         }
 
+
         const body = {
             cursor: page,
             per_page: 6,
@@ -136,6 +142,7 @@ export default function Compliance() {
             is_baseline: sre_filter,
             connectors: connector_filter,
             root: true,
+            title_regex: title[0]
         }
 
         axios
@@ -676,14 +683,13 @@ export default function Compliance() {
                                                                                 onChange={({
                                                                                     detail,
                                                                                 }) => {
-                                                                                    console.log(
-                                                                                        detail
-                                                                                    )
+                                                                                  
                                                                                     setQuery(
                                                                                         detail
                                                                                     )
+                                                                                    setPage(1)
                                                                                 }}
-                                                                                countText="5 matches"
+                                                                                // countText="5 matches"
                                                                                 // enableTokenGroups
                                                                                 expandToViewport
                                                                                 filteringAriaLabel="Filter Benchmarks"
@@ -742,6 +748,17 @@ export default function Compliance() {
                                                                                             'Is Active',
                                                                                         groupValuesLabel:
                                                                                             'Is Active',
+                                                                                    },
+                                                                                    {
+                                                                                        key: 'title_regex',
+                                                                                        operators:
+                                                                                            [
+                                                                                                '=',
+                                                                                            ],
+                                                                                        propertyLabel:
+                                                                                            'Title',
+                                                                                        groupValuesLabel:
+                                                                                            'Title',
                                                                                     },
                                                                                     // {
                                                                                     //     key: 'family',

@@ -139,7 +139,7 @@ export default function SettingsProfile() {
             <Title className="font-semibold mt-10">Personalization</Title>
             <Flex flexDirection="col">
                 <Divider className="my-1 py-1" />
-                <Flex flexDirection="row" justifyContent="between">
+                {/* <Flex flexDirection="row" justifyContent="between">
                     <Text className="w-1/2">Color Theme</Text>
                     <Select
                         disabled={isExecuted && isLoading}
@@ -154,7 +154,7 @@ export default function SettingsProfile() {
                         <SelectItem value="system">System</SelectItem>
                     </Select>
                 </Flex>
-                <Divider className="my-1 py-1" />
+                <Divider className="my-1 py-1" /> */}
                 <Flex flexDirection="row" justifyContent="between">
                     <Text className="w-1/2">Accessibility Mode (WAI-ARIA)</Text>
                     <Select
