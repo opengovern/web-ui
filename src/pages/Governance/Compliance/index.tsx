@@ -683,12 +683,11 @@ export default function Compliance() {
                                                                                 onChange={({
                                                                                     detail,
                                                                                 }) => {
-                                                                                    console.log(
-                                                                                        detail
-                                                                                    )
+                                                                                  
                                                                                     setQuery(
                                                                                         detail
                                                                                     )
+                                                                                    setPage(1)
                                                                                 }}
                                                                                 // countText="5 matches"
                                                                                 // enableTokenGroups
