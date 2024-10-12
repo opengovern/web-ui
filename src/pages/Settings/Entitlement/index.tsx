@@ -40,7 +40,7 @@ import { useComplianceApiV1QueriesSyncList } from '../../../api/compliance.gen'
 import { getErrorMessage } from '../../../types/apierror'
 import { ConvertToBoolean } from '../../../utilities/bool'
 import axios from 'axios'
-import { KeyValuePairs, ProgressBar } from '@cloudscape-design/components'
+import { Alert, KeyValuePairs, ProgressBar } from '@cloudscape-design/components'
 
 
 interface ITextMetric {
@@ -241,14 +241,10 @@ export default function SettingsEntitlement() {
         const [status,setStatus] = useState();
         const [percentage, setPercentage] = useState()
         const [intervalId, setIntervalId] = useState()
+        const [loaded, setLoaded] = useState()
 
-const {
-    isExecuted:isExecutedDemo,
-    isLoading:isLoadingDemo,
-    error: errorload,
-    sendNow: getSetup,
-    response:responseDemo,
-} = useWorkspaceApiV3GetShouldSetup({})
+
+
  const GetStatus = () => {
      let url = ''
     //  setLoading(true)
@@ -300,8 +296,45 @@ const {
              console.log(err)
          })
  }
+ const GetSample = () => {
+     let url = ''
+     //  setLoading(true)
+     if (window.location.origin === 'http://localhost:3000') {
+         url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+     } else {
+         url = window.location.origin
+     }
+     // @ts-ignore
+     const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+     const config = {
+         headers: {
+             Authorization: `Bearer ${token}`,
+         },
+     }
+
+     axios
+         .put(`${url}/main/workspace/api/v3/sample/loaded `, {},config)
+         .then((res) => {
+            setLoaded(res.data)
+             //  const temp = []
+             //  if (!res.data.items) {
+             //      setLoading(false)
+             //  }
+             //  setBenchmarks(res.data.items)
+             //  setTotalPage(Math.ceil(res.data.total_count / 6))
+             //  setTotalCount(res.data.total_count)
+         })
+         .catch((err) => {
+             //  setLoading(false)
+             //  setBenchmarks([])
+
+             console.log(err)
+         })
+ }
  useEffect(()=>{
     GetStatus()
+    GetSample()
  },[])
   useEffect(() => {
         if (syncExecuted && !syncLoading) {
@@ -503,14 +536,16 @@ const {
                         justifyContent="end"
                         alignItems="center"
                     >
-                        {responseDemo !== 'True' && (
+                        {loaded != 'True' && (
                             <Button
                                 variant="secondary"
                                 className="ml-2"
-                                loading={syncExecuted && syncLoading}
+                                loading={isLoadingLoad && isExecuted}
                                 onClick={() => {
                                     loadData()
                                     setSample(true)
+                                    // @ts-ignore
+                                    setLoaded('True')
                                     // window.location.reload()
                                 }}
                             >
@@ -518,15 +553,17 @@ const {
                             </Button>
                         )}
 
-                        {responseDemo == 'True' && (
+                        {loaded == 'True' && (
                             <>
                                 <Button
                                     variant="secondary"
                                     className=""
-                                    loading={syncExecuted && syncLoading}
+                                    loading={isLoadingPurge && isExecPurge}
                                     onClick={() => {
                                         PurgeData()
                                         setSample(false)
+                                        // @ts-ignore
+                                        setLoaded('False')
                                         // window.location.reload()
                                     }}
                                 >
@@ -536,6 +573,20 @@ const {
                         )}
                     </Flex>
                 </Flex>
+                {((error && error !=='') ||
+                    (errorPurge && errorPurge !== '') )&& (
+                        <>
+                            {console.log(getErrorMessage(error))}
+                            <Alert className="mt-2" type="error">
+                                <>
+                                  
+                                        {getErrorMessage(error)}
+                                    {
+                                        getErrorMessage(errorPurge)}
+                                </>
+                            </Alert>
+                        </>
+                    )}
             </Card>
         </Flex>
     )

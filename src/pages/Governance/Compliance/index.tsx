@@ -456,7 +456,7 @@ export default function Compliance() {
                         content: (
                             <>
                                 <Flex
-                                    className="bg-white w-[90%] rounded-xl border-solid  border-2 border-gray-200   "
+                                    className="bg-white w-full rounded-xl border-solid  border-2 border-gray-200   "
                                     flexDirection="col"
                                     justifyContent="center"
                                     alignItems="center"

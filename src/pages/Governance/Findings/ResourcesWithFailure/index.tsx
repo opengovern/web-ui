@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Card, Flex, Text, Title } from '@tremor/react'
 import {
     ICellRendererParams,
@@ -26,16 +27,15 @@ import SpaceBetween from '@cloudscape-design/components/space-between'
 import Badge from '@cloudscape-design/components/badge'
 import {
     BreadcrumbGroup,
+    DateRangePicker,
     Header,
     Link,
     Pagination,
     PropertyFilter,
 } from '@cloudscape-design/components'
-import {
-    AppLayout,
-    SplitPanel,
-} from '@cloudscape-design/components'
+import { AppLayout, SplitPanel } from '@cloudscape-design/components'
 import Filter from '../Filter'
+import dayjs from 'dayjs'
 const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
@@ -194,10 +194,34 @@ export default function ResourcesWithFailure({ query }: ICount) {
 
     const isDemo = useAtomValue(isDemoAtom)
 
+    const [date, setDate] = useState({
+        key: 'previous-3-days',
+        amount: 3,
+        unit: 'day',
+        type: 'relative',
+    })
     const GetRows = () => {
         setLoading(true)
         const api = new Api()
         api.instance = AxiosAPI
+        let isRelative = false
+        let relative = ''
+        let start = ''
+        let end = ''
+        if (date) {
+            if (date.type == 'relative') {
+                // @ts-ignore
+                isRelative = true
+                relative = `${date.amount}${date.unit}s`
+            } else {
+                // @ts-ignore
+
+                start = dayjs(date?.startDate)
+                // @ts-ignore
+
+                end = dayjs(date?.endDate)
+            }
+        }
         api.compliance
             .apiV1ResourceFindingsCreate({
                 filters: {
@@ -211,6 +235,21 @@ export default function ResourcesWithFailure({ query }: ICount) {
                     severity: queries.severity,
                     resourceTypeID: queries.resourceTypeID,
                     conformanceStatus: queries.conformanceStatus,
+                    ...(!isRelative &&
+                        date && {
+                            evaluatedAt: {
+                                // @ts-ignore
+
+                                from: start?.unix(),
+                                // @ts-ignore
+
+                                to: end?.unix(),
+                            },
+                        }),
+                    ...(isRelative &&
+                        date && {
+                            interval: relative,
+                        }),
                 },
                 // sort: [],
                 limit: 15,
@@ -222,8 +261,13 @@ export default function ResourcesWithFailure({ query }: ICount) {
             })
             .then((resp) => {
                 setLoading(false)
+                if (resp.data.resourceFindings){
+                    setRows(resp.data.resourceFindings)
 
-                setRows(resp.data.resourceFindings)
+                }
+                else{
+                    setRows([])
+                }
                 // @ts-ignore
 
                 setTotalPage(Math.ceil(resp.data.totalCount / 10))
@@ -247,7 +291,7 @@ export default function ResourcesWithFailure({ query }: ICount) {
 
     useEffect(() => {
         GetRows()
-    }, [page,queries])
+    }, [page, queries, date])
 
     return (
         <>
@@ -507,15 +551,104 @@ export default function ResourcesWithFailure({ query }: ICount) {
                             </Box>
                         }
                         filter={
-                            <Filter
-                                // @ts-ignore
-                                type={'resources'}
-                                onApply={(e) => {
+                            <Flex
+                                flexDirection="row"
+                                justifyContent="start"
+                                alignItems="start"
+                                className="gap-1 mt-1"
+                            >
+                                <Filter
                                     // @ts-ignore
-                                    setQuery(e)
-                                }}
-                                setDate={()=>{}}
-                            />
+                                    type={'resources'}
+                                    onApply={(e) => {
+                                        // @ts-ignore
+                                        setQuery(e)
+                                    }}
+                                    setDate={() => {}}
+                                />
+                                <DateRangePicker
+                                    onChange={({ detail }) =>
+                                        // @ts-ignore
+                                        setDate(detail.value)
+                                    }
+                                    // @ts-ignore
+
+                                    value={date}
+                                    relativeOptions={[
+                                        {
+                                            key: 'previous-5-minutes',
+                                            amount: 5,
+                                            unit: 'minute',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-30-minutes',
+                                            amount: 30,
+                                            unit: 'minute',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-1-hour',
+                                            amount: 1,
+                                            unit: 'hour',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-6-hours',
+                                            amount: 6,
+                                            unit: 'hour',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-3-days',
+                                            amount: 3,
+                                            unit: 'day',
+                                            type: 'relative',
+                                        },
+                                        {
+                                            key: 'previous-7-days',
+                                            amount: 7,
+                                            unit: 'day',
+                                            type: 'relative',
+                                        },
+                                    ]}
+                                    hideTimeOffset
+                                    // showClearButton={false}
+                                    absoluteFormat="long-localized"
+                                    isValidRange={(range) => {
+                                        if (range.type === 'absolute') {
+                                            const [startDateWithoutTime] =
+                                                range.startDate.split('T')
+                                            const [endDateWithoutTime] =
+                                                range.endDate.split('T')
+                                            if (
+                                                !startDateWithoutTime ||
+                                                !endDateWithoutTime
+                                            ) {
+                                                return {
+                                                    valid: false,
+                                                    errorMessage:
+                                                        'The selected date range is incomplete. Select a start and end date for the date range.',
+                                                }
+                                            }
+                                            if (
+                                                new Date(range.startDate) -
+                                                    new Date(range.endDate) >
+                                                0
+                                            ) {
+                                                return {
+                                                    valid: false,
+                                                    errorMessage:
+                                                        'The selected date range is invalid. The start date must be before the end date.',
+                                                }
+                                            }
+                                        }
+                                        return { valid: true }
+                                    }}
+                                    i18nStrings={{}}
+                                    placeholder="Filter by a date and time range"
+                                />
+                            </Flex>
                         }
                         header={
                             <Header className="w-full">

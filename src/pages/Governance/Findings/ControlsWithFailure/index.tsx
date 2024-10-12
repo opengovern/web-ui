@@ -13,19 +13,21 @@ import Table, { IColumn } from '../../../../components/Table'
 import { topControls } from '../../Compliance/BenchmarkSummary/TopDetails/Controls'
 import { severityBadge } from '../../Controls'
 import { DateRange, searchAtom } from '../../../../utilities/urlstate'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import KTable from '@cloudscape-design/components/table'
 import Box from '@cloudscape-design/components/box'
 import SpaceBetween from '@cloudscape-design/components/space-between'
 import Badge from '@cloudscape-design/components/badge'
 import {
     BreadcrumbGroup,
+    DateRangePicker,
     Header,
     Link,
     Pagination,
     PropertyFilter,
 } from '@cloudscape-design/components'
 import Filter from '../Filter'
+import dayjs from 'dayjs'
 
 const policyColumns: IColumn<any, any>[] = [
     {
@@ -131,22 +133,72 @@ interface ICount {
 export default function ControlsWithFailure({ query }: ICount) {
     const navigate = useNavigate()
     const searchParams = useAtomValue(searchAtom)
- const [queries, setQuery] = useState(query)
+    const [queries, setQuery] = useState(query)
 
     const topQuery = {
         connector: query.connector.length ? [query.connector] : [],
         connectionId: query.connectionID,
         benchmarkId: query.benchmarkID,
     }
-    const { response: controls, isLoading } =
-        useComplianceApiV1FindingsTopDetail('controlID', 10000, {
+    const [date, setDate] = useState({
+        key: 'previous-3-days',
+        amount: 3,
+        unit: 'day',
+        type: 'relative',
+    })
+    const {
+        response: controls,
+        isLoading,
+        sendNowWithParams: GetRow,
+    } = useComplianceApiV1FindingsTopDetail(
+        'controlID',
+        10000,
+        {
             connector: queries.connector.length ? queries.connector : [],
             severities: queries?.severity,
             connectionId: queries.connectionID,
             connectionGroup: queries?.connectionGroup,
-        })
+        },
+        {},
+        false
+    )
     const [page, setPage] = useState(0)
 
+    useEffect(() => {
+        let isRelative = false
+        let relative = ''
+        let start = ''
+        let end = ''
+        if (date) {
+            if (date.type == 'relative') {
+                // @ts-ignore
+                isRelative = true
+                relative = `${date.amount}${date.unit}s`
+            } else {
+                // @ts-ignore
+
+                start = dayjs(date?.startDate)
+                // @ts-ignore
+
+                end = dayjs(date?.endDate)
+            }
+        }
+        GetRow('controlID', 10000, {
+            connector: queries.connector.length ? queries.connector : [],
+            severities: queries?.severity,
+            connectionId: queries.connectionID,
+            connectionGroup: queries?.connectionGroup,
+            ...(!isRelative &&
+                date && {
+                    startTime: start?.unix(),
+                    endTime: end?.unix(),
+                }),
+            ...(isRelative &&
+                date && {
+                    interval: relative,
+                }),
+        })
+    }, [queries, date])
     return (
         <KTable
             className="p-3   min-h-[450px]"
@@ -357,15 +409,104 @@ export default function ControlsWithFailure({ query }: ICount) {
                 </Box>
             }
             filter={
-                <Filter
-                    // @ts-ignore
-                    type={'controls'}
-                    onApply={(e) => {
+                <Flex
+                    flexDirection="row"
+                    justifyContent="start"
+                    alignItems="start"
+                    className="gap-1 mt-1"
+                >
+                    <Filter
                         // @ts-ignore
-                        setQuery(e)
-                    }}
-                    setDate={() => {}}
-                />
+                        type={'controls'}
+                        onApply={(e) => {
+                            // @ts-ignore
+                            setQuery(e)
+                        }}
+                        setDate={setDate}
+                    />
+                    <DateRangePicker
+                        onChange={({ detail }) =>
+                            // @ts-ignore
+                            setDate(detail.value)
+                        }
+                        // @ts-ignore
+
+                        value={date}
+                        relativeOptions={[
+                            {
+                                key: 'previous-5-minutes',
+                                amount: 5,
+                                unit: 'minute',
+                                type: 'relative',
+                            },
+                            {
+                                key: 'previous-30-minutes',
+                                amount: 30,
+                                unit: 'minute',
+                                type: 'relative',
+                            },
+                            {
+                                key: 'previous-1-hour',
+                                amount: 1,
+                                unit: 'hour',
+                                type: 'relative',
+                            },
+                            {
+                                key: 'previous-6-hours',
+                                amount: 6,
+                                unit: 'hour',
+                                type: 'relative',
+                            },
+                            {
+                                key: 'previous-3-days',
+                                amount: 3,
+                                unit: 'day',
+                                type: 'relative',
+                            },
+                            {
+                                key: 'previous-7-days',
+                                amount: 7,
+                                unit: 'day',
+                                type: 'relative',
+                            },
+                        ]}
+                        hideTimeOffset
+                        // showClearButton={false}
+                        absoluteFormat="long-localized"
+                        isValidRange={(range) => {
+                            if (range.type === 'absolute') {
+                                const [startDateWithoutTime] =
+                                    range.startDate.split('T')
+                                const [endDateWithoutTime] =
+                                    range.endDate.split('T')
+                                if (
+                                    !startDateWithoutTime ||
+                                    !endDateWithoutTime
+                                ) {
+                                    return {
+                                        valid: false,
+                                        errorMessage:
+                                            'The selected date range is incomplete. Select a start and end date for the date range.',
+                                    }
+                                }
+                                if (
+                                    new Date(range.startDate) -
+                                        new Date(range.endDate) >
+                                    0
+                                ) {
+                                    return {
+                                        valid: false,
+                                        errorMessage:
+                                            'The selected date range is invalid. The start date must be before the end date.',
+                                    }
+                                }
+                            }
+                            return { valid: true }
+                        }}
+                        i18nStrings={{}}
+                        placeholder="Filter by a date and time range"
+                    />
+                </Flex>
             }
             header={
                 <Header className="w-full">
