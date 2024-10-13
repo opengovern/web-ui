@@ -195,10 +195,7 @@ export default function Evaluate({
             connector += `connectors=${c}&`
         })
         axios
-            .get(
-                `${url}/main/onboard/api/v3/integrations?health_state=healthy&${connector}`,
-                config
-            )
+            .get(`${url}/main/onboard/api/v3/integrations?${connector}`, config)
             .then((res) => {
                 setAccounts(res.data.integrations)
                 setLoading(false)
@@ -256,10 +253,12 @@ export default function Evaluate({
     }
 
     useEffect(() => {
-        if (opened) {
+        if (opened == true) {
             setOpen(true)
             GetCard()
             GetEnabled()
+        } else if (opened == false) {
+            setOpen(false)
         }
     }, [opened])
     // useEffect(() => {
@@ -398,13 +397,50 @@ export default function Evaluate({
                 <Multiselect
                     className="w-full"
                     // @ts-ignore
-                    options={accounts?.map((c) => {
-                        return {
-                            label: c.name,
-                            value: c.integration_tracker,
-                            description: c.id,
-                        }
-                    })}
+                    options={[
+                        {
+                            label: 'Healthy',
+                            // @ts-ignore
+                            options:
+                                accounts
+                                    // @ts-ignore
+                                    ?.filter(
+                                        // @ts-ignore
+
+                                        (c) => c?.health_state == 'healthy'
+                                    )
+                                    // @ts-ignore
+                                    ?.map((c) => {
+                                        return {
+                                            label: c.name,
+                                            value: c.integration_tracker,
+                                            description: c.id,
+                                            labelTag: 'Healthy',
+                                        }
+                                    }) || [],
+                        },
+                        {
+                            label: 'Unhealthy',
+                            // @ts-ignore
+                            options:
+                                accounts
+                                    // @ts-ignore
+                                    ?.filter(
+                                        // @ts-ignore
+
+                                        (c) => c?.health_state == 'unhealthy'
+                                    )
+                                    // @ts-ignore
+                                    ?.map((c) => {
+                                        return {
+                                            label: c.name,
+                                            value: c.integration_tracker,
+                                            description: c.id,
+                                            labelTag: 'Unhealthy',
+                                        }
+                                    }) || [],
+                        },
+                    ]}
                     // @ts-ignore
                     selectedOptions={connections}
                     loadingText="Loading Accounts"

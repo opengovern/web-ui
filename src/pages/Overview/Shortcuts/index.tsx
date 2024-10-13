@@ -86,7 +86,7 @@ export default function Shortcuts() {
             <Grid numItems={4} className="w-full mb-4 gap-4">
                 {navList.map((nav, i) => (
                     <>
-                        {nav?.title !== 'Audit' && nav?.title !== 'Invite' ? (
+                        {(nav?.title !== 'Audit' && nav?.title !== 'Invite') ? (
                             <>
                                 <a
                                     href={`/ws/${workspace}/${nav.link}`}
@@ -118,7 +118,9 @@ export default function Shortcuts() {
                             <>
                                 <Card
                                     onClick={() => {
-                                        if (title == 'Audit') {
+
+                                        if (nav?.title == 'Audit') {
+                                            
                                             setOpen(true)
                                         } else {
                                             setUserOpen(true)

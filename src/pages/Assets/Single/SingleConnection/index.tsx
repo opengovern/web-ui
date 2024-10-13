@@ -642,7 +642,7 @@ export default function SingleConnection({
                     },
                 ]}
             />
-            <TabGroup className="mt-4">
+            {/* <TabGroup className="mt-4">
                 <TabList className="mb-3">
                     <Tab>Trend</Tab>
                     <Tab>Details</Tab>
@@ -710,7 +710,7 @@ export default function SingleConnection({
                         />
                     </TabPanel>
                 </TabPanels>
-            </TabGroup>
+            </TabGroup> */}
         </>
     )
 }
