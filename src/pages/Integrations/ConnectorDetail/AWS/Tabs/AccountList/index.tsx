@@ -525,6 +525,12 @@ export default function AccountList({
                                         >
                                             Edit Credintials
                                         </KButton>
+                                        <KButton
+                                            // icon={PencilIcon}
+                                            onClick={() => accountSendNow?.()}
+                                        >
+                                            Reload
+                                        </KButton>
                                     </Flex>
                                 }
                                 className="w-full"

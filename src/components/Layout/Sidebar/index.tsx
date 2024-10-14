@@ -536,21 +536,25 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 justifyContent="start"
                 className={`h-full ${collapsed ? 'w-full' : 'w-full'}`}
             >
-                <Flex
-                    justifyContent={collapsed ? 'center' : 'between'}
-                    className={`pb-[17px] pt-[6px] ${collapsed ? '' : 'px-5'}`}
-                >
-                    {collapsed ? <OpenGovernance /> : <OpenGovernanceBig />}
-                    {!collapsed && (
-                        <ChevronLeftIcon
-                            className="h-6 text-gray-400 cursor-pointer"
-                            onClick={() => {
-                                setCollapsed(true)
-                                localStorage.collapse = 'true'
-                            }}
-                        />
-                    )}
-                </Flex>
+                <a className=" cursor-pointer mr-6 w-full" href={`/ws/${workspace}/overview`}>
+                    <Flex
+                        justifyContent={collapsed ? 'center' : 'between'}
+                        className={`pb-[17px] pt-[6px] `}
+                    >
+                        {collapsed ? <OpenGovernance /> : <OpenGovernanceBig />}
+
+                        {!collapsed && (
+                            <ChevronLeftIcon
+                                className="h-6 w-6 text-gray-400 cursor-pointer "
+                                onClick={() => {
+                                    setCollapsed(true)
+                                    localStorage.collapse = 'true'
+                                }}
+                            />
+                        )}
+                    </Flex>
+                </a>
+
                 {/* <Flex
                     justifyContent="center"
                     className={collapsed ? 'p-0' : 'p-2'}

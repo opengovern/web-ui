@@ -113,8 +113,10 @@ export default function AccountInfo({
         if (isHealthCheckExecuted && !isHealthCheckLoading) {
             setNotification({ text: 'Health check triggered', type: 'info' })
             onClose()
+            accountSendNow?.()
+
         }
-    }, [isHealthCheckExecuted])
+    }, [isHealthCheckExecuted, isHealthCheckLoading])
 
     useEffect(() => {
         if (isDiscoverExecuted && !isDiscoverLoading) {
