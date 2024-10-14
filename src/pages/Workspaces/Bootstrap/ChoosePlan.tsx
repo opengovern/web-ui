@@ -29,13 +29,13 @@ function Plan({
     return (
         <Card
             className={`mx-3 w-1/3 cursor-pointer ${
-                selected ? 'ring-kaytu-500' : ''
+                selected ? 'ring-openg-500' : ''
             }`}
             onClick={onClick}
         >
             <Text
                 className={`text-base font-bold ${
-                    selected ? 'text-kaytu-500' : 'text-gray-800'
+                    selected ? 'text-openg-500' : 'text-gray-800'
                 }`}
             >
                 {name}
@@ -114,7 +114,7 @@ export function ChooseYourPlan({
                     <Flex justifyContent="start">
                         <Plan
                             name="Trial"
-                            description="Basic Kaytu plan"
+                            description="Basic OpenGovernance plan"
                             price="Free"
                             priceDescription="7 Days"
                             selected={tier === 'FREE'}

@@ -334,7 +334,7 @@ export default function AccountTable({
                 },
                 {
                     field: 'dimensionId',
-                    headerName: 'Kaytu Connection ID',
+                    headerName: 'OpenGovernance Connection ID',
                     type: 'string',
                     width: 150,
                     pinned: true,

@@ -45,7 +45,7 @@ export default function Landscape({ data, isLoading }: ILandscape) {
                     {data?.categories?.map((cat) => (
                         <Flex flexDirection="col" className="gap-3">
                             <Title className="font-semibold">{cat.name}</Title>
-                            <Card className="w-full bg-kaytu-100 p-4">
+                            <Card className="w-full bg-openg-100 p-4">
                                 <Grid
                                     numItems={2}
                                     numItemsLg={4}
@@ -65,7 +65,7 @@ export default function Landscape({ data, isLoading }: ILandscape) {
                                             >
                                                 <Card className="p-3 h-full">
                                                     <Flex flexDirection="col">
-                                                        <Text className="font-semibold text-kaytu-600">
+                                                        <Text className="font-semibold text-openg-600">
                                                             {sub.name}
                                                         </Text>
                                                         <Divider className="my-2" />
@@ -92,7 +92,7 @@ export default function Landscape({ data, isLoading }: ILandscape) {
                                                                             title={
                                                                                 item.name
                                                                             }
-                                                                            className="p-1 border border-white rounded-md hover:border-kaytu-200 transition-all"
+                                                                            className="p-1 border border-white rounded-md hover:border-openg-200 transition-all"
                                                                         >
                                                                             <img
                                                                                 className="h-10 w-10 rounded-md"

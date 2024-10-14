@@ -4084,7 +4084,7 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title Kaytu Service API
+ * @title OpenGovernance Service API
  * @version 1.0
  * @baseUrl https://api.kaytu.io
  * @contact

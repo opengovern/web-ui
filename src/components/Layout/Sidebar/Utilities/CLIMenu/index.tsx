@@ -60,7 +60,7 @@ export function CLITabs() {
                             justifyContent="center"
                             className={classNames(
                                 currentTab === tabIdx
-                                    ? 'bg-kaytu-50 dark:bg-kaytu-950 text-kaytu-800 dark:text-white fill-blue-600'
+                                    ? 'bg-openg-50 dark:bg-openg-950 text-openg-800 dark:text-white fill-blue-600'
                                     : 'bg-gray-50 dark:bg-gray-950 text-gray-600 dark:text-white fill-gray-600 hover:text-gray-700',
                                 tabIdx === 0 ? 'rounded-l-lg' : '',
                                 tabIdx === tabs.length - 1
@@ -89,7 +89,7 @@ export function CLITabs() {
                     target="_blank"
                     rel="noreferrer"
                 >
-                    <Button className="my-8 bg-kaytu-600">
+                    <Button className="my-8 bg-openg-600">
                         Download for {getCurrentTab()?.name}
                     </Button>
                 </a>
@@ -110,11 +110,11 @@ export function CLITabs() {
                                 {getCurrentTab()?.commands}
                             </Text>
                             <Flex flexDirection="col" className="h-5 w-5">
-                                <DocumentDuplicateIcon className="h-5 w-5 text-kaytu-600 cursor-pointer" />
+                                <DocumentDuplicateIcon className="h-5 w-5 text-openg-600 cursor-pointer" />
                                 <Text
                                     className={`${
                                         showCopied ? '' : 'hidden'
-                                    } absolute -bottom-4 bg-kaytu-600 text-white rounded-md p-1`}
+                                    } absolute -bottom-4 bg-openg-600 text-white rounded-md p-1`}
                                 >
                                     Copied!
                                 </Text>
@@ -137,7 +137,7 @@ export default function CLIMenu({ isCollapsed }: ICLIMenu) {
     return (
         <Popover className="relative z-50 border-0 w-full">
             <Popover.Button
-                className={`w-full px-6 py-2 flex items-center rounded-md gap-2.5 text-gray-50 hover:bg-kaytu-800 ${
+                className={`w-full px-6 py-2 flex items-center rounded-md gap-2.5 text-gray-50 hover:bg-openg-800 ${
                     isCollapsed ? '!p-2' : ''
                 }`}
                 id="CLI"

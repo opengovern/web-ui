@@ -7,7 +7,7 @@ interface ISpinner {
 
 export default function Spinner({
     className,
-    color = 'fill-kaytu-600',
+    color = 'fill-openg-600',
 }: ISpinner) {
     return (
         <Flex justifyContent="center" className={`w-full h-full ${className}`}>

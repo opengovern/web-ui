@@ -20,7 +20,7 @@ export default function NewDatePicker({ defaultTime }: INewDatePicker) {
         <Popover className="relative border-0">
             <Popover.Button
                 id="timepicker"
-                className="border border-kaytu-500 text-kaytu-500 bg-kaytu-50 py-1.5 px-2 rounded-md"
+                className="border border-openg-500 text-openg-500 bg-openg-50 py-1.5 px-2 rounded-md"
             >
                 <Flex className="w-fit gap-2">
                     <CalendarIcon className="w-4 text-inherit" />

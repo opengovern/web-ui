@@ -361,9 +361,9 @@ export default function ScoreDetails() {
                                 )}
                                 <Link
                                     to={`/ws/${ws}/compliance/library`}
-                                    className="text-kaytu-500 cursor-pointer"
+                                    className="text-openg-500 cursor-pointer"
                                 >
-                                    <Text className="text-kaytu-500">
+                                    <Text className="text-openg-500">
                                         Click here to change parameters
                                     </Text>
                                 </Link>
@@ -622,7 +622,7 @@ export default function ScoreDetails() {
                                                             Manual
                                                         </Title>
                                                     </Flex>
-                                                    <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                                    <ChevronRightIcon className="w-5 text-openg-500" />
                                                 </Flex>
                                                 <Text>
                                                     Step by Step Guided solution
@@ -676,7 +676,7 @@ export default function ScoreDetails() {
                                                             Command line (CLI)
                                                         </Title>
                                                     </Flex>
-                                                    <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                                    <ChevronRightIcon className="w-5 text-openg-500" />
                                                 </Flex>
                                                 <Text>
                                                     Guided steps to resolve the
@@ -728,7 +728,7 @@ export default function ScoreDetails() {
                                                             Guard rails
                                                         </Title>
                                                     </Flex>
-                                                    <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                                    <ChevronRightIcon className="w-5 text-openg-500" />
                                                 </Flex>
                                                 <Text>
                                                     Resolve and ensure
@@ -784,7 +784,7 @@ export default function ScoreDetails() {
                                                             Programmatic
                                                         </Title>
                                                     </Flex>
-                                                    <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                                    <ChevronRightIcon className="w-5 text-openg-500" />
                                                 </Flex>
                                                 <Text>
                                                     Scripts that help you

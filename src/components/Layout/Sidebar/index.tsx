@@ -27,7 +27,7 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { Popover, Transition } from '@headlessui/react'
 import { Fragment, useEffect } from 'react'
 import { previewAtom, sideBarCollapsedAtom } from '../../../store'
-import { KaytuIcon, KaytuIconBig } from '../../../icons/icons'
+import { OpenGovernance, OpenGovernanceBig } from '../../../icons/icons'
 import Utilities from './Utilities'
 import {
     useInventoryApiV2AnalyticsCountList,
@@ -529,7 +529,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             className={`z-50 !max-h-screen h-full  ${
                 collapsed ? 'w-20' : ' w-60'
             }
-             pt-4 bg-kaytu-950 dark:bg-gray-950 relative border-r border-r-gray-700`}
+             pt-4 bg-openg-950 dark:bg-gray-950 relative border-r border-r-gray-700`}
         >
             <Flex
                 flexDirection="col"
@@ -540,7 +540,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     justifyContent={collapsed ? 'center' : 'between'}
                     className={`pb-[17px] pt-[6px] ${collapsed ? '' : 'px-5'}`}
                 >
-                    {collapsed ? <KaytuIcon /> : <KaytuIconBig />}
+                    {collapsed ? <OpenGovernance /> : <OpenGovernanceBig />}
                     {!collapsed && (
                         <ChevronLeftIcon
                             className="h-6 text-gray-400 cursor-pointer"
@@ -677,8 +677,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     className={`my-0.5 py-2 flex rounded-md relative
                                                     ${
                                                         isCurrentPage(i.page)
-                                                            ? 'bg-kaytu-500 text-gray-200 font-semibold'
-                                                            : 'text-gray-50 hover:bg-kaytu-800'
+                                                            ? 'bg-openg-500 text-gray-200 font-semibold'
+                                                            : 'text-gray-50 hover:bg-openg-800'
                                                     }`}
                                                 >
                                                     <Text className="ml-[54px] text-inherit">
@@ -726,8 +726,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         className={`w-full rounded-md p-2 
                                                     ${
                                                         isCurrentPage(item.page)
-                                                            ? 'bg-kaytu-500 text-gray-200 font-semibold'
-                                                            : 'text-gray-50 hover:bg-kaytu-800'
+                                                            ? 'bg-openg-500 text-gray-200 font-semibold'
+                                                            : 'text-gray-50 hover:bg-openg-800'
                                                     }`}
                                                     >
                                                         <item.icon
@@ -742,7 +742,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     </div>
                                                 </Popover.Button>
                                                 <div
-                                                    className="absolute z-50 scale-0 transition-all rounded p-2 shadow-md bg-kaytu-950 group-hover:scale-100"
+                                                    className="absolute z-50 scale-0 transition-all rounded p-2 shadow-md bg-openg-950 group-hover:scale-100"
                                                     style={{
                                                         left: '50px',
                                                         top: 0,
@@ -763,7 +763,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                 leaveTo="opacity-0 translate-y-1"
                                             >
                                                 <Popover.Panel className="absolute left-[163px] top-[1px] z-40 flex w-screen max-w-max -translate-x-1/2 px-4">
-                                                    <Card className="z-50 rounded p-2 shadow-md !ring-gray-600 w-56 bg-kaytu-950">
+                                                    <Card className="z-50 rounded p-2 shadow-md !ring-gray-600 w-56 bg-openg-950">
                                                         <Text className="ml-1 mb-3 text-white">
                                                             {item.name}
                                                         </Text>
@@ -790,8 +790,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                                     className={`my-0.5 py-2 px-4 flex  rounded-md relative 
                                                     ${
                                                         isCurrentPage(i.page)
-                                                            ? 'bg-kaytu-500 text-gray-200 font-semibold'
-                                                            : 'text-gray-50 hover:bg-kaytu-800'
+                                                            ? 'bg-openg-500 text-gray-200 font-semibold'
+                                                            : 'text-gray-50 hover:bg-openg-800'
                                                     }`}
                                                                 >
                                                                     <Text className="text-inherit">
@@ -856,8 +856,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                                 isCurrentPage(
                                                                     item.page
                                                                 ))
-                                                                ? 'bg-kaytu-500 text-gray-200 font-semibold'
-                                                                : 'text-gray-50 hover:bg-kaytu-800'
+                                                                ? 'bg-openg-500 text-gray-200 font-semibold'
+                                                                : 'text-gray-50 hover:bg-openg-800'
                                                         }
                                                         ${
                                                             collapsed
@@ -897,7 +897,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                 )}
                                                 {collapsed && (
                                                     <div
-                                                        className="absolute z-50 scale-0 transition-all rounded p-2 shadow-md bg-kaytu-950 group-hover:scale-100"
+                                                        className="absolute z-50 scale-0 transition-all rounded p-2 shadow-md bg-openg-950 group-hover:scale-100"
                                                         style={{
                                                             left: '43px',
                                                             top: '-8px',

@@ -23,7 +23,7 @@ export default function Detail({ control }: IDetail) {
                         <Text
                             className={`text-gray-500 cursor-pointer ${
                                 selectedTab === 'explanation'
-                                    ? 'text-kaytu-500'
+                                    ? 'text-openg-500'
                                     : ''
                             }`}
                         >
@@ -39,7 +39,7 @@ export default function Detail({ control }: IDetail) {
                         <Text
                             className={`text-gray-500 cursor-pointer ${
                                 selectedTab === 'nonComplianceCost'
-                                    ? 'text-kaytu-500'
+                                    ? 'text-openg-500'
                                     : ''
                             }`}
                         >
@@ -55,7 +55,7 @@ export default function Detail({ control }: IDetail) {
                         <Text
                             className={`text-gray-500 cursor-pointer ${
                                 selectedTab === 'usefulExample'
-                                    ? 'text-kaytu-500'
+                                    ? 'text-openg-500'
                                     : ''
                             }`}
                         >

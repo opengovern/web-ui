@@ -695,7 +695,7 @@ export default function ControlDetail() {
                                                 Manual
                                             </Title>
                                         </Flex>
-                                        <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                        <ChevronRightIcon className="w-5 text-openg-500" />
                                     </Flex>
                                     <Text>
                                         Step by Step Guided solution to resolve
@@ -741,7 +741,7 @@ export default function ControlDetail() {
                                                 Command line (CLI)
                                             </Title>
                                         </Flex>
-                                        <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                        <ChevronRightIcon className="w-5 text-openg-500" />
                                     </Flex>
                                     <Text>
                                         Guided steps to resolve the issue
@@ -787,7 +787,7 @@ export default function ControlDetail() {
                                                 Guard rails
                                             </Title>
                                         </Flex>
-                                        <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                        <ChevronRightIcon className="w-5 text-openg-500" />
                                     </Flex>
                                     <Text>
                                         Resolve and ensure compliance, at scale
@@ -833,7 +833,7 @@ export default function ControlDetail() {
                                                 Programmatic
                                             </Title>
                                         </Flex>
-                                        <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                        <ChevronRightIcon className="w-5 text-openg-500" />
                                     </Flex>
                                     <Text>
                                         Scripts that help you resolve the issue,

@@ -381,7 +381,7 @@ export default function Filter({ onApply, type ,id}: IFilters) {
                                 f?.defaultValue?.sort()
                             )
                                 ? 'border-gray-200 bg-white'
-                                : 'border-kaytu-500 text-kaytu-500 bg-kaytu-50'
+                                : 'border-openg-500 text-openg-500 bg-openg-50'
                         } py-1.5 px-2 rounded-md`}
                     >
                         <Flex className="w-fit">
@@ -480,7 +480,7 @@ export default function Filter({ onApply, type ,id}: IFilters) {
                                                         }
                                                     )
                                                 }}
-                                                className="w-4 cursor-pointer hover:text-kaytu-500"
+                                                className="w-4 cursor-pointer hover:text-openg-500"
                                             />
                                             <Card className="absolute w-fit z-40 -top-2 left-full ml-2 scale-0 transition-all p-2 group-hover:scale-100">
                                                 <Text className="whitespace-nowrap">

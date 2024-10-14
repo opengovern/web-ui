@@ -47,11 +47,11 @@ export function CodeBlock({
                 )}
 
                 <Flex flexDirection="col" className="h-5 w-5">
-                    <DocumentDuplicateIcon className="h-5 w-5 text-kaytu-600 cursor-pointer" />
+                    <DocumentDuplicateIcon className="h-5 w-5 text-openg-600 cursor-pointer" />
                     <Text
                         className={`${
                             showCopied ? '' : 'hidden'
-                        } absolute -bottom-4 bg-kaytu-600 text-white rounded-md p-1`}
+                        } absolute -bottom-4 bg-openg-600 text-white rounded-md p-1`}
                     >
                         Copied!
                     </Text>

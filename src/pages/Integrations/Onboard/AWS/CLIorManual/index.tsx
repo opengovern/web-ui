@@ -42,7 +42,7 @@ export function CliOrManualPage({ onClose, onNext }: ICliOrManualPage) {
                                 Automated onboarding with CLI
                             </Text>
                             <Text className="ml-3 w-full">
-                                Utilizes AWS CLI and Kaytu CLI for a seamless
+                                Utilizes AWS CLI and OpenGovernance CLI for a seamless
                                 onboarding experience.
                             </Text>
                         </Flex>

@@ -217,7 +217,7 @@ export default function Settings() {
                                                     (!currentSubPage &&
                                                         item.page ===
                                                             'workspace-settings')
-                                                        ? 'bg-kaytu-100 dark:bg-kaytu-800  rounded-lg text-gray-800 dark:text-gray-100'
+                                                        ? 'bg-openg-100 dark:bg-openg-800  rounded-lg text-gray-800 dark:text-gray-100'
                                                         : 'text-gray-600 dark:text-gray-300'
                                                 } group flex gap-x-3 pt-2 pb-0 px-2 -ml-2 font-medium`}
                                             >
@@ -255,7 +255,7 @@ export default function Settings() {
                                                     (!currentSubPage &&
                                                         child.page ===
                                                             'summary')
-                                                        ? 'bg-kaytu-100 dark:bg-kaytu-800  rounded-lg text-gray-800 dark:text-gray-100'
+                                                        ? 'bg-openg-100 dark:bg-openg-800  rounded-lg text-gray-800 dark:text-gray-100'
                                                         : 'text-gray-600 dark:text-gray-300'
                                                 } group flex gap-x-3 py-2 px-8 font-medium`}
                                             >

@@ -25,10 +25,10 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
 
     const roundStyles = () => {
         if (nodeDone) {
-            return 'bg-kaytu-500'
+            return 'bg-openg-500'
         }
         if (nodeRunning) {
-            return 'border-2 border-kaytu-500 bg-white'
+            return 'border-2 border-openg-500 bg-white'
         }
         return 'border-2 border-gray-300 bg-white'
     }
@@ -53,7 +53,7 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
                     <div
                         className={`h-6 w-0.5 ml-3.5 ${
                             nodeRunning || nodeDone
-                                ? 'bg-kaytu-500'
+                                ? 'bg-openg-500'
                                 : 'bg-gray-200'
                         }`}
                     />
@@ -76,7 +76,7 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
 
                     {nodeRunning && (
                         <span
-                            className="h-2.5 w-2.5 rounded-full bg-kaytu-500"
+                            className="h-2.5 w-2.5 rounded-full bg-openg-500"
                             aria-hidden="true"
                         />
                     )}
@@ -96,7 +96,7 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
                     <div className="w-full h-1 mt-2 bg-gray-300 rounded-xl">
                         <div
                             style={{ width: progressPercentage() }}
-                            className="h-1 bg-gradient-to-r from-kaytu-400 to-kaytu-800 rounded-xl"
+                            className="h-1 bg-gradient-to-r from-openg-400 to-openg-800 rounded-xl"
                         />
                     </div>
                 </Flex>
@@ -156,7 +156,7 @@ export function Status({ workspaceName }: IStatus) {
                     In Progress
                 </Text>
                 <Text className="text-sm text-gray-800 mb-4">
-                    Kaytu is working on creating your workspace
+                    OpenGovernance is working on creating your workspace
                 </Text>
                 <Node
                     first

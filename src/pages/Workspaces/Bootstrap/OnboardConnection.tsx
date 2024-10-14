@@ -36,8 +36,8 @@ function Connector({ onClick, icon, name, description, count }: IConnector) {
             <Flex justifyContent="between">
                 <Text className="text-gray-500">{description}</Text>
                 <Flex flexDirection="row" className="w-fit">
-                    <Text className="text-kaytu-500 h-5">Add</Text>
-                    <PlusIcon className="text-kaytu-500 w-4" />
+                    <Text className="text-openg-500 h-5">Add</Text>
+                    <PlusIcon className="text-openg-500 w-4" />
                 </Flex>
             </Flex>
         </Card>

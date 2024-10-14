@@ -69,12 +69,12 @@ export default function RequestDemo() {
                         <span className="font-bold text-gray-800">
                             Book a Demo
                         </span>{' '}
-                        to navigate Kaytu product
+                        to navigate OpenGovernance product
                     </Text>
                     <Flex
                         flexDirection="row"
                         justifyContent="start"
-                        className="text-sm text-kaytu-500"
+                        className="text-sm text-openg-500"
                     >
                         <ArrowTopRightOnSquareIcon className="w-4 mr-1" />{' '}
                         Booking a Demo

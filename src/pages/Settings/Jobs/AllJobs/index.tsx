@@ -92,7 +92,7 @@ const columns = () => {
         },
         {
             field: 'connectionID',
-            headerName: 'Kaytu Connection ID',
+            headerName: 'OpenGovernance Connection ID',
             type: 'string',
             sortable: true,
             filter: false,
@@ -530,7 +530,7 @@ export default function SettingsALLJobs() {
         { title: 'Type', value: clickedJob?.type },
         { title: 'Created At', value: clickedJob?.createdAt },
         { title: 'Updated At', value: clickedJob?.updatedAt },
-        { title: 'Kaytu Connection ID', value: clickedJob?.connectionID },
+        { title: 'OpenGovernance Connection ID', value: clickedJob?.connectionID },
         { title: 'Account ID', value: clickedJob?.connectionProviderID },
         { title: 'Account Name', value: clickedJob?.connectionProviderName },
         { title: 'Status', value: clickedJob?.status },

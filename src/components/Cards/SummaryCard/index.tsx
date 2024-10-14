@@ -177,14 +177,14 @@ export default function SummaryCard({
             className={`${border ? '' : 'ring-0 !shadow-transparent p-0'} ${
                 cardClickable ? 'cursor-pointer' : ''
             } ${url ? 'cursor-pointer' : ''} ${
-                blueBorder ? 'border-l-kaytu-500 border-l-2' : ''
+                blueBorder ? 'border-l-openg-500 border-l-2' : ''
             }`}
         >
             <Flex justifyContent="start" className="mb-1.5">
                 {connector && getConnectorIcon(connector, '!h-1 mr-2')}
                 <Text className="font-semibold">{title}</Text>
                 {!border && (url || onClick) && (
-                    <ChevronRightIcon className="ml-1 h-4 text-kaytu-500" />
+                    <ChevronRightIcon className="ml-1 h-4 text-openg-500" />
                 )}
             </Flex>
             {loading ? (
