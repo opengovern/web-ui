@@ -58,13 +58,15 @@ IOnboardDrawer) {
                 setActiveStepIndex(1)
 
                 //  onNext()
+                accountSendNow?.()
             }
         }
     }, [isLoading])
     const close = () => {
         setIsOrg(undefined)
         setOnboarded(false)
-        
+        setActiveStepIndex(0)
+        accountSendNow?.()
         onClose()
     }
 
@@ -121,6 +123,7 @@ IOnboardDrawer) {
                     }}
                     onCancel={close}
                     activeStepIndex={activeStepIndex}
+                    isLoadingNextStep={isLoading && isExecuted}
                     // allowSkipTo
                     steps={[
                         {

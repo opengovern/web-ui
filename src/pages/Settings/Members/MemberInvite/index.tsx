@@ -21,7 +21,7 @@ interface MemberInviteProps {
 export default function MemberInvite({ close }: MemberInviteProps) {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
-    const [auth, setAuth] = useState<string>('')
+    const [auth, setAuth] = useState<string>('password')
 
 
     const [role, setRole] = useState<string>('viewer')
@@ -140,23 +140,25 @@ export default function MemberInvite({ close }: MemberInviteProps) {
                         className="truncate space-x-4 py-2"
                     >
                         <Text className="font-medium text-gray-800">
-                            Authentication
+                            Identity Provider
                             <span className="text-red-600 font-semibold">
                                 *
                             </span>
                         </Text>
                         <Select
-                            className=" w-1/2 z-50 static h-[150px] "
+                            className=" w-1/2 z-50 static  "
+                            // h-[150px]
                             value={auth}
+                            disabled={true}
                             onValueChange={setAuth}
-                            placeholder="Authentication"
+                            placeholder="Identity Provider"
                         >
                             <SelectItem className="static" value="password">
-                                Password
+                                Password ( Built-in)
                             </SelectItem>
-                            <SelectItem className="static" value="oicd">
+                            {/* <SelectItem className="static" value="oicd">
                                 OIDC (SSO)
-                            </SelectItem>
+                            </SelectItem> */}
                         </Select>
                     </Flex>
                 </ListItem>
@@ -207,7 +209,6 @@ export default function MemberInvite({ close }: MemberInviteProps) {
                 <KButton
                     disabled={isExecuted && isLoading}
                     onClick={() => close(false)}
-                    
                 >
                     Cancel
                 </KButton>

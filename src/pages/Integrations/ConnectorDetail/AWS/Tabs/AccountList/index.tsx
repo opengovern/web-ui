@@ -281,6 +281,11 @@ export default function AccountList({
     const [selectedOrg, setSelectedOrg] = useState<string | undefined>(
         undefined
     )
+    const [orgInfo,setOrgInfo] = useState({
+        access:'',
+        secret: '',
+        role: ''
+    })
     const [page, setPage] = useState(0)
 
     return (
@@ -314,6 +319,7 @@ export default function AccountList({
                                     open={openInfo}
                                     onClose={() => setOpenInfo(false)}
                                     isDemo={isDemo}
+                                    accountSendNow={accountSendNow}
                                 />
                             </>
                         ) : (
@@ -519,6 +525,12 @@ export default function AccountList({
                                         >
                                             Edit Credintials
                                         </KButton>
+                                        <KButton
+                                            // icon={PencilIcon}
+                                            onClick={() => accountSendNow?.()}
+                                        >
+                                            Reload
+                                        </KButton>
                                     </Flex>
                                 }
                                 className="w-full"
@@ -614,21 +626,36 @@ export default function AccountList({
                     <>
                         <TextInput
                             className="w-full my-3"
-                            value={''}
+                            value={orgInfo?.access}
                             placeholder="Access key ID"
-                            onChange={(e) => {}}
+                            onChange={(e) => {
+                                // @ts-ignore
+                                setOrgInfo({
+                                    ...orgInfo,
+                                    access: e.target.value,
+                                })
+                            }}
                         />
                         <TextInput
                             className="w-full my-3"
-                            value={''}
+                            value={orgInfo?.secret}
                             placeholder="Secret access key"
-                            onChange={(e) => {}}
+                            onChange={(e) => {
+                                // @ts-ignore
+                                setOrgInfo({
+                                    ...orgInfo,
+                                    secret: e.target.value,
+                                })
+                            }}
                         />
                         <TextInput
                             className="w-full my-3"
-                            value={''}
+                            value={orgInfo?.role}
                             placeholder="Role name"
-                            onChange={(e) => {}}
+                            onChange={(e) => {
+                                // @ts-ignore
+                                setOrgInfo({ ...orgInfo, role: e.target.value })
+                            }}
                         />
                     </>
                 )}

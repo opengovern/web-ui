@@ -225,6 +225,12 @@ export default function Controls({
             propertyLabel: `Severity`,
             groupValuesLabel: `Severity values`,
         },
+        // {
+        //     key: 'severity',
+        //     operators: ['='],
+        //     propertyLabel: `Exclude Inactive Integration'`,
+        //     groupValuesLabel: `Exclude Inactive Integration' values`,
+        // },
     ])
     const [sort, setSort] = useState('incidents')
     const [sortOrder, setSortOrder] = useState(true)

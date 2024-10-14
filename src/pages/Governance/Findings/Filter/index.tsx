@@ -928,7 +928,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
                             <Select
                                 // @ts-ignore
                                 selectedOption={filter}
-                                className="w-1/5 mt-[-9px]"
+                                className="w-1/5 min-w-[160px] mt-[-9px]"
                                 inlineLabelText={'Saved Filters'}
                                 placeholder="Select Filter Set"
                                 // @ts-ignore
