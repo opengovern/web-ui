@@ -389,7 +389,7 @@ export default function Subscriptions({
                         columnDisplay={[
                             { id: 'providerConnectionName', visible: true },
                             { id: 'providerConnectionID', visible: true },
-                            { id: 'credentialName', visible: true },
+                            // { id: 'credentialName', visible: true },
                             { id: 'healthState', visible: true },
                             // { id: 'lifecycleState', visible: true },
 
