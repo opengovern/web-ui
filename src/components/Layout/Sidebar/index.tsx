@@ -192,7 +192,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             (connectionCount?.count || 0) === 0
         ) {
             if (
-                currentPage !== 'integrations' &&
+                !currentPage.includes('integrations') &&
                 currentPage !== 'administration'
             ) {
                 navigate(`/ws/${workspace}/integrations`)
