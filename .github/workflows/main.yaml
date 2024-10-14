@@ -69,7 +69,7 @@ jobs:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            ghcr.io/${{ github.repository_owner }}/kaytu-frontend-v3:${{ steps.tag_version.outputs.new_tag }}-${{ github.event.inputs.deployTo == '' && 'dev' || github.event.inputs.deployTo }}
+            ghcr.io/${{ github.repository_owner }}/frontend:${{ steps.tag_version.outputs.new_tag }}-${{ github.event.inputs.deployTo == '' && 'dev' || github.event.inputs.deployTo }}
           file: deploy/Dockerfile
           cache-from: type=gha
           cache-to: type=gha,mode=max
