@@ -45,7 +45,12 @@ import {
     SpendrowGenerator,
 } from '../../Metric/Table'
 import { searchAtom } from '../../../../utilities/urlstate'
-import { KeyValuePairs, Modal, Tabs } from '@cloudscape-design/components'
+import {
+    KeyValuePairs,
+    Modal,
+    Select,
+    Tabs,
+} from '@cloudscape-design/components'
 import KTable from '@cloudscape-design/components/table'
 import Box from '@cloudscape-design/components/box'
 import SpaceBetween from '@cloudscape-design/components/space-between'
@@ -98,23 +103,27 @@ export default function SingleConnection({
             ? 'daily'
             : 'monthly'
     )
-     const today = new Date()
-     const lastWeek = new Date(
-         today.getFullYear(),
-         today.getMonth(),
-         today.getDate() - 7
-     )
 
-     const [dateInventory, setDateInventory] = useState({
-         startDate: activeTimeRange.start?.toISOString(),
-         endDate: activeTimeRange.end?.toISOString(),
-         type: 'absolute',
-     })
-     const [dateSpend, setDateSpend] = useState({
-         startDate: activeTimeRange.start?.toISOString(),
-         endDate: activeTimeRange.end?.toISOString(),
-         type: 'absolute',
-     })
+    const today = new Date()
+    const lastWeek = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate() - 7
+    )
+    const [granu, setGranu] = useState({
+        label: 'Monthly',
+        value: 'monthly',
+    })
+    const [dateInventory, setDateInventory] = useState({
+        startDate: activeTimeRange.start?.toISOString(),
+        endDate: activeTimeRange.end?.toISOString(),
+        type: 'absolute',
+    })
+    const [dateSpend, setDateSpend] = useState({
+        startDate: activeTimeRange.start?.toISOString(),
+        endDate: activeTimeRange.end?.toISOString(),
+        type: 'absolute',
+    })
     const query = {
         ...(id && {
             connectionId: [id],
@@ -163,12 +172,17 @@ export default function SingleConnection({
             connectionId: [String(id)],
         }
     }
-    const { response, isLoading,sendNowWithParams: sendSpend } = useInventoryApiV2AnalyticsSpendTableList(
-        tableQuery()
-    )
+    const {
+        response,
+        isLoading,
+        sendNowWithParams: sendSpend,
+    } = useInventoryApiV2AnalyticsSpendTableList(tableQuery())
 
-    const { response: metrics, isLoading: metricsLoading,sendNowWithParams: sendIntventory } =
-        useInventoryApiV2AnalyticsMetricList({ ...query, pageSize: 1000 })
+    const {
+        response: metrics,
+        isLoading: metricsLoading,
+        sendNowWithParams: sendIntventory,
+    } = useInventoryApiV2AnalyticsMetricList({ ...query, pageSize: 1000 })
     const { response: accountInfo, isLoading: accountInfoLoading } =
         useIntegrationApiV1ConnectionsSummariesList({
             ...query,
@@ -262,7 +276,7 @@ export default function SingleConnection({
             {
                 id: 'category',
                 visible: true,
-            },
+            }
             // {
             //     id: 'percent',
             //     visible: true,
@@ -293,8 +307,8 @@ export default function SingleConnection({
         }
         return temp
     }
-    useEffect(()=>{
-        if(dateInventory.startDate && dateInventory?.endDate){
+    useEffect(() => {
+        if (dateInventory.startDate && dateInventory?.endDate) {
             const { startDate, endDate } = dateInventory
             const activeTimeRange = {
                 start: dayjs(startDate),
@@ -316,30 +330,35 @@ export default function SingleConnection({
             }
             sendIntventory({ ...query, pageSize: 1000 })
         }
-    },[dateInventory])
-        useEffect(() => {
-            if (dateSpend.startDate && dateSpend?.endDate) {
-                const { startDate, endDate } = dateSpend
-                const activeTimeRange = {
-                    start: dayjs(startDate),
-                    end: dayjs(endDate),
-                }
-                  let gra: 'monthly' | 'daily' | 'yearly' = 'daily'
-                  if (selectedGranularity === 'monthly') {
-                      gra = 'monthly'
-                  }
-
-                const query = {
-                    startTime: activeTimeRange.start.unix(),
-                    endTime: activeTimeRange.end.unix(),
-                    dimension: 'metric',
-                    granularity: gra,
-                    connectionId: [String(id)],
-                }
-                sendSpend(query)
+    }, [dateInventory])
+    useEffect(() => {
+        if (dateSpend.startDate && dateSpend?.endDate) {
+            const { startDate, endDate } = dateSpend
+            const activeTimeRange = {
+                start: dayjs(startDate),
+                end: dayjs(endDate),
             }
-        }, [dateSpend])
-    
+
+            const query = {
+                startTime: activeTimeRange.start.unix(),
+                endTime: activeTimeRange.end.unix(),
+                dimension: 'metric',
+                granularity: granu?.value,
+                connectionId: [String(id)],
+            }
+            sendSpend(query)
+        } else {
+            const query = {
+                // startTime: activeTimeRange.start.unix(),
+                // endTime: activeTimeRange.end.unix(),
+                dimension: 'metric',
+                granularity: granu?.value,
+                connectionId: [String(id)],
+            }
+            sendSpend(query)
+        }
+    }, [dateSpend, granu])
+
     return (
         <>
             <Grid numItems={1} className="w-full gap-4 mb-2">
@@ -756,99 +775,140 @@ export default function SingleConnection({
                                         `Displaying items ${firstIndex} to ${lastIndex} of ${totalItemsCount}`
                                     }
                                     filter={
-                                        <DateRangePicker
-                                            onChange={({ detail }) =>
-                                                // @ts-ignore
-                                                setDateSpend(detail.value)
-                                            }
-                                            // @ts-ignore
+                                        <Flex
+                                            flexDirection="row"
+                                            justifyContent="start"
+                                            className="gap-2"
+                                        >
+                                            <Select
+                                                label="Granularity"
+                                                className=" min-w-[150px]"
+                                                inlineLabelText="Granularity"
+                                                selectedOption={granu}
+                                                onChange={({ detail }) => {
+                                                    setGranu(
+                                                        detail.selectedOption
+                                                    )
+                                                    setSelectedGranularity(
+                                                        detail.selectedOption
+                                                            .value
+                                                    )
+                                                }}
+                                                options={[
+                                                    {
+                                                        label: 'Daily',
+                                                        value: 'daily',
+                                                    },
+                                                    {
+                                                        label: 'Monthly',
+                                                        value: 'monthly',
+                                                    },
+                                                ]}
+                                            />
 
-                                            value={dateSpend}
-                                            dateOnly={true}
-                                            rangeSelectorMode={'absolute-only'}
-                                            // relativeOptions={[
-                                            //     {
-                                            //         key: 'previous-5-minutes',
-                                            //         amount: 5,
-                                            //         unit: 'minute',
-                                            //         type: 'relative',
-                                            //     },
-                                            //     {
-                                            //         key: 'previous-30-minutes',
-                                            //         amount: 30,
-                                            //         unit: 'minute',
-                                            //         type: 'relative',
-                                            //     },
-                                            //     {
-                                            //         key: 'previous-1-hour',
-                                            //         amount: 1,
-                                            //         unit: 'hour',
-                                            //         type: 'relative',
-                                            //     },
-                                            //     {
-                                            //         key: 'previous-6-hours',
-                                            //         amount: 6,
-                                            //         unit: 'hour',
-                                            //         type: 'relative',
-                                            //     },
-                                            //     {
-                                            //         key: 'previous-3-days',
-                                            //         amount: 3,
-                                            //         unit: 'day',
-                                            //         type: 'relative',
-                                            //     },
-                                            //     {
-                                            //         key: 'previous-7-days',
-                                            //         amount: 7,
-                                            //         unit: 'day',
-                                            //         type: 'relative',
-                                            //     },
-                                            // ]}
-
-                                            hideTimeOffset
-                                            // showClearButton={false}
-                                            absoluteFormat="long-localized"
-                                            isValidRange={(range) => {
-                                                if (range.type === 'absolute') {
-                                                    const [
-                                                        startDateWithoutTime,
-                                                    ] =
-                                                        range.startDate.split(
-                                                            'T'
-                                                        )
-                                                    const [endDateWithoutTime] =
-                                                        range.endDate.split('T')
-                                                    if (
-                                                        !startDateWithoutTime ||
-                                                        !endDateWithoutTime
-                                                    ) {
-                                                        return {
-                                                            valid: false,
-                                                            errorMessage:
-                                                                'The selected date range is incomplete. Select a start and end date for the date range.',
-                                                        }
-                                                    }
-                                                    if (
-                                                        new Date(
-                                                            range.startDate
-                                                        ) -
-                                                            new Date(
-                                                                range.endDate
-                                                            ) >
-                                                        0
-                                                    ) {
-                                                        return {
-                                                            valid: false,
-                                                            errorMessage:
-                                                                'The selected date range is invalid. The start date must be before the end date.',
-                                                        }
-                                                    }
+                                            <DateRangePicker
+                                                onChange={({ detail }) =>
+                                                    // @ts-ignore
+                                                    setDateSpend(detail.value)
                                                 }
-                                                return { valid: true }
-                                            }}
-                                            i18nStrings={{}}
-                                            placeholder="Filter by a date and time range"
-                                        />
+                                                // @ts-ignore
+
+                                                value={dateSpend}
+                                                dateOnly={true}
+                                                rangeSelectorMode={
+                                                    'absolute-only'
+                                                }
+                                                // relativeOptions={[
+                                                //     {
+                                                //         key: 'previous-5-minutes',
+                                                //         amount: 5,
+                                                //         unit: 'minute',
+                                                //         type: 'relative',
+                                                //     },
+                                                //     {
+                                                //         key: 'previous-30-minutes',
+                                                //         amount: 30,
+                                                //         unit: 'minute',
+                                                //         type: 'relative',
+                                                //     },
+                                                //     {
+                                                //         key: 'previous-1-hour',
+                                                //         amount: 1,
+                                                //         unit: 'hour',
+                                                //         type: 'relative',
+                                                //     },
+                                                //     {
+                                                //         key: 'previous-6-hours',
+                                                //         amount: 6,
+                                                //         unit: 'hour',
+                                                //         type: 'relative',
+                                                //     },
+                                                //     {
+                                                //         key: 'previous-3-days',
+                                                //         amount: 3,
+                                                //         unit: 'day',
+                                                //         type: 'relative',
+                                                //     },
+                                                //     {
+                                                //         key: 'previous-7-days',
+                                                //         amount: 7,
+                                                //         unit: 'day',
+                                                //         type: 'relative',
+                                                //     },
+                                                // ]}
+
+                                                hideTimeOffset
+                                                // showClearButton={false}
+                                                absoluteFormat="long-localized"
+                                                isValidRange={(range) => {
+                                                    if (
+                                                        range.type ===
+                                                        'absolute'
+                                                    ) {
+                                                        const [
+                                                            startDateWithoutTime,
+                                                        ] =
+                                                            range.startDate.split(
+                                                                'T'
+                                                            )
+                                                        const [
+                                                            endDateWithoutTime,
+                                                        ] =
+                                                            range.endDate.split(
+                                                                'T'
+                                                            )
+                                                        if (
+                                                            !startDateWithoutTime ||
+                                                            !endDateWithoutTime
+                                                        ) {
+                                                            return {
+                                                                valid: false,
+                                                                errorMessage:
+                                                                    'The selected date range is incomplete. Select a start and end date for the date range.',
+                                                            }
+                                                        }
+                                                        if (
+                                                            new Date(
+                                                                range.startDate
+                                                            ) -
+                                                                new Date(
+                                                                    range.endDate
+                                                                ) >
+                                                            0
+                                                        ) {
+                                                            return {
+                                                                valid: false,
+                                                                errorMessage:
+                                                                    'The selected date range is invalid. The start date must be before the end date.',
+                                                            }
+                                                        }
+                                                    }
+                                                    return { valid: true }
+                                                }}
+                                                i18nStrings={{}}
+                                                placeholder="Filter by a date and time range"
+                                            />
+                                        </Flex>
                                     }
                                     onSortingChange={(event) => {
                                         // setSort(event.detail.sortingColumn.sortingField)
