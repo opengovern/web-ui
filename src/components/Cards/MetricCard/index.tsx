@@ -159,7 +159,7 @@ export default function MetricCard({
             className={`w-fit ${
                 border ? '' : 'ring-0 shadow-transparent p-0'
             } ${url ? 'cursor-pointer' : ''} ${
-                blueBorder ? 'border-l-kaytu-500 border-l-2' : ''
+                blueBorder ? 'border-l-openg-500 border-l-2' : ''
             }`}
         >
             {loading ? (

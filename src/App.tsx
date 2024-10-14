@@ -9,7 +9,7 @@ import Spinner from './components/Spinner'
 import { setAuthHeader } from './api/ApiConfig'
 import { colorBlindModeAtom, meAtom, tokenAtom } from './store'
 import { applyTheme } from './utilities/theme'
-import { KaytuIcon } from './icons/icons'
+import { OpenGovernance } from './icons/icons'
 import { useAuth } from './utilities/auth'
 import { useAuthApiV1MeList, useAuthApiV1UserDetail } from './api/auth.gen'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from './api/api'
@@ -133,13 +133,13 @@ export default function App() {
                             justifyContent="center"
                             alignItems="center"
                         >
-                            <KaytuIcon className="w-14 h-14 mb-6" />
+                            <OpenGovernance className="w-14 h-14 mb-6" />
                             <Title className="mb-3 text-2xl font-bold">
                                 Your session has expired
                             </Title>
                             <Text className="mb-6 text-center">
                                 Your session has expired. Please log in again to
-                                continue accessing Kaytu platform
+                                continue accessing OpenGovernance platform
                             </Text>
                             <Button
                                 icon={ArrowPathIcon}

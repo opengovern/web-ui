@@ -10,7 +10,7 @@ interface ITag {
 export default function Tag({ text, onClick, isDemo }: ITag) {
     return (
         <Flex
-            className={`px-2.5 py-0.5 gap-2 rounded-md bg-kaytu-50 border border-kaytu-100 w-fit ${
+            className={`px-2.5 py-0.5 gap-2 rounded-md bg-openg-50 border border-openg-100 w-fit ${
                 onClick ? 'cursor-pointer' : ''
             }`}
             onClick={onClick}
@@ -18,13 +18,13 @@ export default function Tag({ text, onClick, isDemo }: ITag) {
             <Text
                 className={
                     isDemo
-                        ? 'text-kaytu-500 blur-sm break-words'
-                        : 'text-kaytu-500 break-words'
+                        ? 'text-openg-500 blur-sm break-words'
+                        : 'text-openg-500 break-words'
                 }
             >
                 {text}
             </Text>
-            {onClick && <XMarkIcon className="h-4 text-kaytu-500" />}
+            {onClick && <XMarkIcon className="h-4 text-openg-500" />}
         </Flex>
     )
 }

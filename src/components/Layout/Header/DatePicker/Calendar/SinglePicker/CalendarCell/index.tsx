@@ -29,7 +29,7 @@ export function CalendarCell({
                 ref={ref}
                 hidden={isOutsideVisibleRange}
                 className={`w-10 h-10 outline-none group ${
-                    isSelected ? 'bg-kaytu-700 text-gray-50 rounded-md' : ''
+                    isSelected ? 'bg-openg-700 text-gray-50 rounded-md' : ''
                 } ${isDisabled ? 'disabled' : ''}`}
             >
                 <div
@@ -37,7 +37,7 @@ export function CalendarCell({
                         isDisabled && !isInvalid ? 'text-gray-400' : ''
                     } ${
                         // Hover state for non-selected cells.
-                        !isSelected && !isDisabled ? 'hover:bg-kaytu-100' : ''
+                        !isSelected && !isDisabled ? 'hover:bg-openg-100' : ''
                     } cursor-default`}
                 >
                     {formattedDate}

@@ -535,7 +535,7 @@ export default function SingleSpendMetric({
                         </Callout>
                     ))}
                 <Flex justifyContent="end" className="mt-2 gap-2.5">
-                    <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
+                    <div className="h-2.5 w-2.5 rounded-full bg-openg-950" />
                     {chartAggregation === 'cumulative' ? (
                         <Text>Accumulated spend</Text>
                     ) : (

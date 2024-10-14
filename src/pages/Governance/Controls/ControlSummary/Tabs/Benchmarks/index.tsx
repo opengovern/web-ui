@@ -62,7 +62,7 @@ export default function Benchmarks({ benchmarks }: IBenchmarks) {
                                 </Badge>
                             )}
                         </Flex>
-                        <ChevronRightIcon className="h-5 ml-3 text-kaytu-500" />
+                        <ChevronRightIcon className="h-5 ml-3 text-openg-500" />
                     </Flex>
                 </Card>
             ))}

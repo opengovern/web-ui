@@ -403,7 +403,7 @@ export default function TopHeader({
                                 )
                             }
                             variant="light"
-                            className="!text-lg mr-2 hover:text-kaytu-600"
+                            className="!text-lg mr-2 hover:text-openg-600"
                         >
                             {mainPage()}
                         </Button>

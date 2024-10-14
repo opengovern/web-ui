@@ -43,7 +43,7 @@ export default function FilterSingle({
                     <Popover.Button
                         className={`border ${
                             isValueChanged
-                                ? 'border-kaytu-500 bg-kaytu-50'
+                                ? 'border-openg-500 bg-openg-50'
                                 : 'border-gray-300'
                         } ${
                             open ? 'shadow border-gray-400' : ''
@@ -55,7 +55,7 @@ export default function FilterSingle({
                                 size="sm"
                                 className={`p-0 ${
                                     isValueChanged
-                                        ? 'text-kaytu-500'
+                                        ? 'text-openg-500'
                                         : 'text-gray-500'
                                 }`}
                             />
@@ -63,7 +63,7 @@ export default function FilterSingle({
                                 <Text
                                     className={
                                         isValueChanged
-                                            ? 'text-kaytu-500'
+                                            ? 'text-openg-500'
                                             : 'text-gray-300'
                                     }
                                 >
@@ -73,7 +73,7 @@ export default function FilterSingle({
                                     <Text
                                         className={
                                             isValueChanged
-                                                ? 'text-kaytu-500'
+                                                ? 'text-openg-500'
                                                 : 'text-gray-300'
                                         }
                                     >
@@ -83,7 +83,7 @@ export default function FilterSingle({
                                 <span
                                     className={
                                         isValueChanged
-                                            ? 'text-kaytu-500'
+                                            ? 'text-openg-500'
                                             : 'text-gray-300'
                                     }
                                 >
@@ -92,7 +92,7 @@ export default function FilterSingle({
                                         valueFormatter(
                                             itemsTitles,
                                             isValueChanged
-                                                ? 'text-kaytu-500'
+                                                ? 'text-openg-500'
                                                 : 'text-gray-700'
                                         )}
                                 </span>

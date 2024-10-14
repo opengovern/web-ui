@@ -73,7 +73,7 @@ export function CalendarCell({
                             className={`w-10 h-10 outline-none group ${
                                 isRoundedLeft ? 'rounded-l-md' : ''
                             } ${isRoundedRight ? 'rounded-r-md' : ''} ${
-                                isInvalid ? 'bg-red-300' : 'bg-kaytu-300'
+                                isInvalid ? 'bg-red-300' : 'bg-openg-300'
                             } ${isDisabled ? 'disabled' : ''}`}
                         >
                             <div
@@ -84,22 +84,22 @@ export function CalendarCell({
                                 } ${
                                     // Focus ring, visible while the cell has keyboard focus.
                                     isFocusVisible
-                                        ? 'ring-2 group-focus:z-2 ring-kaytu-600 ring-offset-2'
+                                        ? 'ring-2 group-focus:z-2 ring-openg-600 ring-offset-2'
                                         : ''
                                 } ${
                                     // Darker selection background for the start and end.
                                     isInvalid
                                         ? 'bg-red-600 text-white hover:bg-red-700'
-                                        : 'bg-kaytu-600 text-white hover:bg-kaytu-700'
+                                        : 'bg-openg-600 text-white hover:bg-openg-700'
                                 } ${
                                     // Hover state for cells in the middle of the range.
                                     isInvalid
                                         ? 'hover:bg-red-400'
-                                        : 'hover:bg-kaytu-400'
+                                        : 'hover:bg-openg-400'
                                 } ${
                                     // Hover state for non-selected cells.
                                     !isSelected && !isDisabled
-                                        ? 'hover:bg-kaytu-100'
+                                        ? 'hover:bg-openg-100'
                                         : ''
                                 } cursor-default`}
                             >
@@ -123,7 +123,7 @@ export function CalendarCell({
                         className={`w-10 h-10 outline-none group ${
                             isRoundedLeft ? 'rounded-l-md' : ''
                         } ${isRoundedRight ? 'rounded-r-md' : ''} ${
-                            isInvalid ? 'bg-red-300' : 'bg-kaytu-300'
+                            isInvalid ? 'bg-red-300' : 'bg-openg-300'
                         } ${isDisabled ? 'disabled' : ''}`}
                     >
                         <div
@@ -132,20 +132,20 @@ export function CalendarCell({
                             } ${
                                 // Focus ring, visible while the cell has keyboard focus.
                                 isFocusVisible
-                                    ? 'ring-2 group-focus:z-2 ring-kaytu-600 ring-offset-2'
+                                    ? 'ring-2 group-focus:z-2 ring-openg-600 ring-offset-2'
                                     : ''
                             } ${
                                 // Darker selection background for the start and end.
                                 isInvalid
                                     ? 'bg-red-600 text-white hover:bg-red-700'
-                                    : 'bg-kaytu-600 text-white hover:bg-kaytu-700'
+                                    : 'bg-openg-600 text-white hover:bg-openg-700'
                             } ${
                                 // Hover state for cells in the middle of the range.
                                 ''
                             } ${
                                 // Hover state for non-selected cells.
                                 !isSelected && !isDisabled
-                                    ? 'hover:bg-kaytu-100'
+                                    ? 'hover:bg-openg-100'
                                     : ''
                             } cursor-default`}
                         >
@@ -174,7 +174,7 @@ export function CalendarCell({
                         className={`w-10 h-10 outline-none group ${
                             isRoundedLeft ? 'rounded-l-md' : ''
                         } ${isRoundedRight ? 'rounded-r-md' : ''} ${
-                            isInvalid ? 'bg-red-300' : 'bg-kaytu-300'
+                            isInvalid ? 'bg-red-300' : 'bg-openg-300'
                         } ${isDisabled ? 'disabled' : ''}`}
                     >
                         <div
@@ -183,7 +183,7 @@ export function CalendarCell({
                             } ${
                                 // Focus ring, visible while the cell has keyboard focus.
                                 isFocusVisible
-                                    ? 'ring-2 group-focus:z-2 ring-kaytu-600 ring-offset-2'
+                                    ? 'ring-2 group-focus:z-2 ring-openg-600 ring-offset-2'
                                     : ''
                             } ${
                                 // Darker selection background for the start and end.
@@ -192,11 +192,11 @@ export function CalendarCell({
                                 // Hover state for cells in the middle of the range.
                                 isInvalid
                                     ? 'hover:bg-red-400'
-                                    : 'hover:bg-kaytu-400'
+                                    : 'hover:bg-openg-400'
                             } ${
                                 // Hover state for non-selected cells.
                                 !isSelected && !isDisabled
-                                    ? 'hover:bg-kaytu-100'
+                                    ? 'hover:bg-openg-100'
                                     : ''
                             } cursor-default`}
                         >
@@ -218,7 +218,7 @@ export function CalendarCell({
                     className={`w-10 h-10 outline-none group ${
                         isRoundedLeft ? 'rounded-l-md' : ''
                     } ${isRoundedRight ? 'rounded-r-md' : ''} ${
-                        isInvalid ? 'bg-red-300' : 'bg-kaytu-300'
+                        isInvalid ? 'bg-red-300' : 'bg-openg-300'
                     } ${isDisabled ? 'disabled' : ''}`}
                 >
                     <div
@@ -227,7 +227,7 @@ export function CalendarCell({
                         } ${
                             // Focus ring, visible while the cell has keyboard focus.
                             isFocusVisible
-                                ? 'ring-2 group-focus:z-2 ring-kaytu-600 ring-offset-2'
+                                ? 'ring-2 group-focus:z-2 ring-openg-600 ring-offset-2'
                                 : ''
                         } ${
                             // Darker selection background for the start and end.
@@ -238,7 +238,7 @@ export function CalendarCell({
                         } ${
                             // Hover state for non-selected cells.
                             !isSelected && !isDisabled
-                                ? 'hover:bg-kaytu-100'
+                                ? 'hover:bg-openg-100'
                                 : ''
                         } cursor-default`}
                     >
@@ -277,22 +277,22 @@ export function CalendarCell({
                             } ${
                                 // Focus ring, visible while the cell has keyboard focus.
                                 isFocusVisible
-                                    ? 'ring-2 group-focus:z-2 ring-kaytu-600 ring-offset-2'
+                                    ? 'ring-2 group-focus:z-2 ring-openg-600 ring-offset-2'
                                     : ''
                             } ${
                                 // Darker selection background for the start and end.
                                 isInvalid
                                     ? 'bg-red-600 text-white hover:bg-red-700'
-                                    : 'bg-kaytu-600 text-white hover:bg-kaytu-700'
+                                    : 'bg-openg-600 text-white hover:bg-openg-700'
                             } ${
                                 // Hover state for cells in the middle of the range.
                                 isInvalid
                                     ? 'hover:bg-red-400'
-                                    : 'hover:bg-kaytu-400'
+                                    : 'hover:bg-openg-400'
                             } ${
                                 // Hover state for non-selected cells.
                                 !isSelected && !isDisabled
-                                    ? 'hover:bg-kaytu-100'
+                                    ? 'hover:bg-openg-100'
                                     : ''
                             } cursor-default`}
                         >
@@ -323,20 +323,20 @@ export function CalendarCell({
                         } ${
                             // Focus ring, visible while the cell has keyboard focus.
                             isFocusVisible
-                                ? 'ring-2 group-focus:z-2 ring-kaytu-600 ring-offset-2'
+                                ? 'ring-2 group-focus:z-2 ring-openg-600 ring-offset-2'
                                 : ''
                         } ${
                             // Darker selection background for the start and end.
                             isInvalid
                                 ? 'bg-red-600 text-white hover:bg-red-700'
-                                : 'bg-kaytu-600 text-white hover:bg-kaytu-700'
+                                : 'bg-openg-600 text-white hover:bg-openg-700'
                         } ${
                             // Hover state for cells in the middle of the range.
                             ''
                         } ${
                             // Hover state for non-selected cells.
                             !isSelected && !isDisabled
-                                ? 'hover:bg-kaytu-100'
+                                ? 'hover:bg-openg-100'
                                 : ''
                         } cursor-default`}
                     >
@@ -368,7 +368,7 @@ export function CalendarCell({
                         } ${
                             // Focus ring, visible while the cell has keyboard focus.
                             isFocusVisible
-                                ? 'ring-2 group-focus:z-2 ring-kaytu-600 ring-offset-2'
+                                ? 'ring-2 group-focus:z-2 ring-openg-600 ring-offset-2'
                                 : ''
                         } ${
                             // Darker selection background for the start and end.
@@ -377,11 +377,11 @@ export function CalendarCell({
                             // Hover state for cells in the middle of the range.
                             isInvalid
                                 ? 'hover:bg-red-400'
-                                : 'hover:bg-kaytu-400'
+                                : 'hover:bg-openg-400'
                         } ${
                             // Hover state for non-selected cells.
                             !isSelected && !isDisabled
-                                ? 'hover:bg-kaytu-100'
+                                ? 'hover:bg-openg-100'
                                 : ''
                         } cursor-default`}
                     >
@@ -412,7 +412,7 @@ export function CalendarCell({
                     } ${
                         // Focus ring, visible while the cell has keyboard focus.
                         isFocusVisible
-                            ? 'ring-2 group-focus:z-2 ring-kaytu-600 ring-offset-2'
+                            ? 'ring-2 group-focus:z-2 ring-openg-600 ring-offset-2'
                             : ''
                     } ${
                         // Darker selection background for the start and end.
@@ -422,7 +422,7 @@ export function CalendarCell({
                         ''
                     } ${
                         // Hover state for non-selected cells.
-                        !isSelected && !isDisabled ? 'hover:bg-kaytu-100' : ''
+                        !isSelected && !isDisabled ? 'hover:bg-openg-100' : ''
                     } cursor-default`}
                 >
                     {formattedDate}

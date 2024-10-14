@@ -59,7 +59,7 @@ export default function CLIWizard({
                     ),
                 },
                 {
-                    title: <Text>Kaytu CLI installed & logged-in</Text>,
+                    title: <Text>OpenGovernance CLI installed & logged-in</Text>,
                 },
             ]
         }
@@ -78,7 +78,7 @@ export default function CLIWizard({
                 title: <Text>AWS CLI is installed & logged-in</Text>,
             },
             {
-                title: <Text>Kaytu CLI installed & logged-in</Text>,
+                title: <Text>OpenGovernance CLI installed & logged-in</Text>,
             },
         ]
     }

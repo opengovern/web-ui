@@ -77,7 +77,7 @@ export default function Workspaces({ isCollapsed }: IWorkspaces) {
                             justifyContent="center"
                             className={`${
                                 isCollapsed ? 'w-9 h-9' : 'w-6 h-6'
-                            } rounded-md bg-kaytu-800`}
+                            } rounded-md bg-openg-800`}
                         >
                             <Text className="font-semibold !text-base text-orange-500">
                                 {wsName ? wsName[0].toLocaleUpperCase() : 'K'}
@@ -114,7 +114,7 @@ export default function Workspaces({ isCollapsed }: IWorkspaces) {
                         isCollapsed ? 'left-[57px] -top-[4px]' : 'top-full'
                     }`}
                 >
-                    <Card className="w-full min-w-[256px] bg-kaytu-950 p-2 mt-2 !ring-gray-600">
+                    <Card className="w-full min-w-[256px] bg-openg-950 p-2 mt-2 !ring-gray-600">
                         <div className="w-full pb-2 mb-2 border-b border-b-gray-700">
                             <Text className="mb-2 ml-2">WORKSPACES</Text>
                             {workspace.list
@@ -127,13 +127,13 @@ export default function Workspaces({ isCollapsed }: IWorkspaces) {
                                         justifyContent="start"
                                         className={`py-1 px-2 gap-2 my-1 rounded-md cursor-pointer ${
                                             wsName === ws.name
-                                                ? 'bg-kaytu-500 text-gray-200 font-semibold'
-                                                : 'text-gray-50 hover:bg-kaytu-800'
+                                                ? 'bg-openg-500 text-gray-200 font-semibold'
+                                                : 'text-gray-50 hover:bg-openg-800'
                                         }`}
                                     >
                                         <Flex
                                             justifyContent="center"
-                                            className="w-6 rounded-md bg-kaytu-800"
+                                            className="w-6 rounded-md bg-openg-800"
                                         >
                                             <Text className="font-semibold !text-base text-orange-500">
                                                 {capitalizeFirstLetter(
@@ -151,7 +151,7 @@ export default function Workspaces({ isCollapsed }: IWorkspaces) {
                         </div>
                         <Flex
                             onClick={() => navigate('/ws/workspaces')}
-                            className="p-2 text-gray-300 rounded-md cursor-pointer hover:text-gray-50 hover:bg-kaytu-800"
+                            className="p-2 text-gray-300 rounded-md cursor-pointer hover:text-gray-50 hover:bg-openg-800"
                         >
                             <Text className="text-inherit font-semibold">
                                 Workspace list

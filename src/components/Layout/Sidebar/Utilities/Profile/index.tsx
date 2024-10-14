@@ -304,7 +304,7 @@ export default function Profile({ isCollapsed }: IProfile) {
                             isCollapsed ? 'left-[57px]' : 'left-[292px]'
                         } bottom-0 z-10`}
                     >
-                        <Card className="bg-kaytu-950 px-4 py-2 w-64 !ring-gray-600">
+                        <Card className="bg-openg-950 px-4 py-2 w-64 !ring-gray-600">
                             <Flex
                                 flexDirection="col"
                                 alignItems="start"
@@ -317,7 +317,7 @@ export default function Profile({ isCollapsed }: IProfile) {
                                         // navigate(`/ws/${ws}/profile`)
                                         navigate(`/ws/main/profile`)
                                     }}
-                                    className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-kaytu-800"
+                                    className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-openg-800"
                                 >
                                     <Text className="text-inherit">
                                         Profile info
@@ -327,7 +327,7 @@ export default function Profile({ isCollapsed }: IProfile) {
                                     onClick={() => {
                                         setChange(true)
                                     }}
-                                    className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-kaytu-800"
+                                    className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-openg-800"
                                 >
                                     <Text className="text-inherit">
                                         Change Password
@@ -335,13 +335,13 @@ export default function Profile({ isCollapsed }: IProfile) {
                                 </Flex>
                                 {/* <Flex
                                 onClick={() => navigate(`/ws/billing`)}
-                                className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-kaytu-800"
+                                className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-openg-800"
                             >
                                 <Text className="text-inherit">Billing</Text>
                             </Flex> */}
                                 <Flex
                                     onClick={() => logout()}
-                                    className="py-2 px-5 text-gray-300 rounded-md cursor-pointer hover:text-gray-50 hover:bg-kaytu-800"
+                                    className="py-2 px-5 text-gray-300 rounded-md cursor-pointer hover:text-gray-50 hover:bg-openg-800"
                                 >
                                     <Text className="text-inherit">Logout</Text>
                                     <ArrowTopRightOnSquareIcon className="w-5 text-gray-400" />
@@ -352,17 +352,17 @@ export default function Profile({ isCollapsed }: IProfile) {
                             <TabGroup index={index} onIndexChange={setIndex}>
                                 <TabList
                                     variant="solid"
-                                    className="w-full bg-kaytu-800"
+                                    className="w-full bg-openg-800"
                                 >
-                                    <Tab className="w-1/3 flex justify-center ui-selected:!bg-kaytu-600 ui-selected:!border-0">
+                                    <Tab className="w-1/3 flex justify-center ui-selected:!bg-openg-600 ui-selected:!border-0">
                                         <Text className="text-white">
                                             Light
                                         </Text>
                                     </Tab>
-                                    <Tab className="w-1/3 flex justify-center  ui-selected:!bg-kaytu-600 ui-selected:!border-0">
+                                    <Tab className="w-1/3 flex justify-center  ui-selected:!bg-openg-600 ui-selected:!border-0">
                                         <Text className="text-white">Dark</Text>
                                     </Tab>
-                                    <Tab className="w-1/3 flex justify-center ui-selected:!bg-kaytu-600 ui-selected:!border-0">
+                                    <Tab className="w-1/3 flex justify-center ui-selected:!bg-openg-600 ui-selected:!border-0">
                                         <Text className="text-white">
                                             System
                                         </Text>

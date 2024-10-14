@@ -195,7 +195,7 @@ const columns = (isDemo: boolean) => {
         {
             field: 'id',
             type: 'string',
-            headerName: 'Kaytu Connection ID',
+            headerName: 'OpenGovernance Connection ID',
             sortable: true,
             filter: true,
             resizable: true,

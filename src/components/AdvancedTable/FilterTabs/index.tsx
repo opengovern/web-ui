@@ -35,7 +35,7 @@ export default function FilterTabs({ tabs, tab, setTab }: IProps) {
                                 <Flex className="w-fit gap-2">
                                     <Icon
                                         icon={t.icon}
-                                        className="w-6 max-w-[24px] text-kaytu-500"
+                                        className="w-6 max-w-[24px] text-openg-500"
                                     />
                                     <Text className="text-gray-800 w-fit">
                                         {t.name}
@@ -44,7 +44,7 @@ export default function FilterTabs({ tabs, tab, setTab }: IProps) {
                                 {/* {tab === t.type ? (
                                     <div />
                                 ) : (
-                                    <ChevronDownIcon className="w-4 text-kaytu-500" />
+                                    <ChevronDownIcon className="w-4 text-openg-500" />
                                 )} */}
                             </Flex>
                         </Card>

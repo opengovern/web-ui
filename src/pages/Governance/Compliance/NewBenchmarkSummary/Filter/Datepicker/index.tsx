@@ -141,7 +141,7 @@ export default function Datepicker({
                 <>
                     <Flex
                         onClick={() => setActiveTimeRange(last7Days())}
-                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
+                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-openg-50 dark:hover:bg-openg-700"
                     >
                         <Text className="text-gray-800 whitespace-nowrap">
                             Last 7 days
@@ -152,7 +152,7 @@ export default function Datepicker({
                     </Flex>
                     <Flex
                         onClick={() => setActiveTimeRange(last30Days())}
-                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
+                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-openg-50 dark:hover:bg-openg-700"
                     >
                         <Text className="text-gray-800 whitespace-nowrap">
                             Last 30 days
@@ -167,7 +167,7 @@ export default function Datepicker({
                     <Title className="mt-3">Calender months</Title>
                     <Flex
                         onClick={() => setActiveTimeRange(thisMonth())}
-                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
+                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-openg-50 dark:hover:bg-openg-700"
                     >
                         <Text className="text-gray-800 whitespace-nowrap">
                             This month
@@ -178,7 +178,7 @@ export default function Datepicker({
                     </Flex>
                     <Flex
                         onClick={() => setActiveTimeRange(lastMonth())}
-                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
+                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-openg-50 dark:hover:bg-openg-700"
                     >
                         <Text className="text-gray-800 whitespace-nowrap">
                             Last month
@@ -189,7 +189,7 @@ export default function Datepicker({
                     </Flex>
                     <Flex
                         onClick={() => setActiveTimeRange(thisQuarter())}
-                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
+                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-openg-50 dark:hover:bg-openg-700"
                     >
                         <Text className="text-gray-800 whitespace-nowrap">
                             This quarter
@@ -203,7 +203,7 @@ export default function Datepicker({
                     </Flex>
                     <Flex
                         onClick={() => setActiveTimeRange(lastQuarter())}
-                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
+                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-openg-50 dark:hover:bg-openg-700"
                     >
                         <Text className="text-gray-800 whitespace-nowrap">
                             Last quarter
@@ -217,7 +217,7 @@ export default function Datepicker({
                     </Flex>
                     <Flex
                         onClick={() => setActiveTimeRange(thisYear())}
-                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50 dark:hover:bg-kaytu-700"
+                        className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-openg-50 dark:hover:bg-openg-700"
                     >
                         <Text className="text-gray-800 whitespace-nowrap">
                             This year

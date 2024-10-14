@@ -29,7 +29,7 @@ export default function Notification() {
             case 'error':
                 return 'text-rose-500 bg-rose-50 ring-rose-100'
             default:
-                return 'text-kaytu-500 bg-kaytu-50 ring-kaytu-100'
+                return 'text-openg-500 bg-openg-50 ring-openg-100'
         }
     }
 

@@ -6,7 +6,7 @@ import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
 import Spinner from '../../components/Spinner'
 import TopHeader from '../../components/Layout/Header'
-import { KaytuIcon } from '../../icons/icons'
+import { OpenGovernance } from '../../icons/icons'
 import Controls from '../Governance/Controls'
 
 export default function Workspaces() {
@@ -37,7 +37,7 @@ export default function Workspaces() {
     //                     justifyContent="start"
     //                     alignItems="center"
     //                 >
-    //                     <KaytuIcon className="w-14 h-14 mb-6" />
+    //                     <OpenGovernance className="w-14 h-14 mb-6" />
     //                     <Title className="font-bold text-2xl mb-3">
     //                         Welcome
     //                     </Title>
@@ -78,13 +78,13 @@ export default function Workspaces() {
                 {!isLoading && (
                     <Flex className="w-fit gap-3">
                         <Button variant="secondary" onClick={refreshList}>
-                            <ArrowPathIcon className="h-5 text-kaytu-500" />
+                            <ArrowPathIcon className="h-5 text-openg-500" />
                         </Button>
                         {/* <Button
                             variant="secondary"
                             onClick={() => navigate(`/ws/new-ws`)}
                         >
-                            Add new Kaytu workspace
+                            Add new OpenGovernance workspace
                         </Button> */}
                     </Flex>
                 )}

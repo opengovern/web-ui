@@ -12,12 +12,12 @@ const stepNavigation = (status: string) => {
             return (
                 <>
                     <Flex className="absolute inset-0" aria-hidden="true">
-                        <div className="h-0.5 w-full bg-kaytu-600" />
+                        <div className="h-0.5 w-full bg-openg-600" />
                     </Flex>
                     <Flex
                         alignItems="center"
                         justifyContent="center"
-                        className="relative h-8 w-8 rounded-full bg-kaytu-600"
+                        className="relative h-8 w-8 rounded-full bg-openg-600"
                     >
                         <CheckIcon
                             className="h-5 w-5 text-white"
@@ -35,11 +35,11 @@ const stepNavigation = (status: string) => {
                     <Flex
                         alignItems="center"
                         justifyContent="center"
-                        className="relative h-8 w-8 rounded-full border-2 border-kaytu-600 bg-white"
+                        className="relative h-8 w-8 rounded-full border-2 border-openg-600 bg-white"
                         aria-current="step"
                     >
                         <span
-                            className="h-2.5 w-2.5 rounded-full bg-kaytu-600"
+                            className="h-2.5 w-2.5 rounded-full bg-openg-600"
                             aria-hidden="true"
                         />
                     </Flex>

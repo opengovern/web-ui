@@ -177,8 +177,8 @@ const columns: IColumn<
                 alignItems="center"
                 className="h-full"
             >
-                <PlayCircleIcon className="h-5 text-kaytu-500 mr-1" />
-                <Text className="text-kaytu-500">Run query</Text>
+                <PlayCircleIcon className="h-5 text-openg-500 mr-1" />
+                <Text className="text-openg-500">Run query</Text>
             </Flex>
         ),
     },
@@ -366,7 +366,7 @@ export default function Query() {
                                                                         )
                                                                     }
                                                                 >
-                                                                    <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
+                                                                    <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-openg-600">
                                                                         {subCat}
                                                                     </Text>
                                                                 </Flex>

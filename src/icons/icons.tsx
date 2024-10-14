@@ -7,8 +7,8 @@ export { default as EntraIDIcon } from './EntraIDIcon.png'
 export { ReactComponent as CisIcon } from './cis.svg'
 export { ReactComponent as HipaaIcon } from './hipaa.svg'
 
-export { ReactComponent as KaytuIcon } from './kaytuIconSmall.svg'
-export { ReactComponent as KaytuIconBig } from './kaytuIcon.svg'
+export { ReactComponent as OpenGovernance } from './OpenGovernanceSmall.svg'
+export { ReactComponent as OpenGovernanceBig } from './OpenGovernance.svg'
 export { ReactComponent as KaytuDarkIconBig } from './kaytu.svg'
 
 export { ReactComponent as BarChartIcon } from './barChart.svg'

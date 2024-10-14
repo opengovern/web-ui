@@ -51,7 +51,7 @@ const navList = [
     {
         title: 'Integrations',
         description:
-            'Connect your cloud environments and tools to Kaytu to gain insights.',
+            'Connect your cloud environments and tools to OpenGovernance to gain insights.',
         icon: PuzzlePieceIcon,
         children: [
             { name: 'AWS accounts', link: '/ws/:ws/integrations/AWS' },
@@ -106,7 +106,7 @@ export default function QuickNav() {
                                 {nav.children.map((c) => (
                                     <Flex
                                         justifyContent="start"
-                                        className="gap-2 py-1.5 cursor-pointer hover:text-kaytu-500"
+                                        className="gap-2 py-1.5 cursor-pointer hover:text-openg-50"
                                         onClick={() =>
                                             navigate(
                                                 c.link.replaceAll(
@@ -116,8 +116,8 @@ export default function QuickNav() {
                                             )
                                         }
                                     >
-                                        <ArrowTopRightOnSquareIcon className="h-5 text-kaytu-500" />
-                                        <Text className="text-inherit dark:hover:text-kaytu-400">
+                                        <ArrowTopRightOnSquareIcon className="h-5 text-openg-500" />
+                                        <Text className="text-inherit dark:hover:text-openg-800">
                                             {c.name}
                                         </Text>
                                     </Flex>

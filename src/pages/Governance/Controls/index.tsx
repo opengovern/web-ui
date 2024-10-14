@@ -359,7 +359,7 @@ export default function Controls({ id, assignments, enable }: IPolicies) {
                                     <TableBody className="max-w-full">
                                         {value.map((v: any, i: number) => (
                                             <TableRow
-                                                className="max-w-full cursor-pointer hover:bg-kaytu-50 dark:hover:bg-gray-900"
+                                                className="max-w-full cursor-pointer hover:bg-openg-50 dark:hover:bg-gray-900"
                                                 key={v?.id}
                                             >
                                                 <TableCell
@@ -414,7 +414,7 @@ export default function Controls({ id, assignments, enable }: IPolicies) {
                                                                         0 && (
                                                                         <div className="group relative flex justify-center">
                                                                             <CommandLineIcon
-                                                                                className="text-kaytu-500 w-5"
+                                                                                className="text-openg-500 w-5"
                                                                                 onClick={() => {
                                                                                     setDoc(
                                                                                         v?.cliRemediation
@@ -440,7 +440,7 @@ export default function Controls({ id, assignments, enable }: IPolicies) {
                                                                         0 && (
                                                                         <div className="group relative flex justify-center">
                                                                             <BookOpenIcon
-                                                                                className="text-kaytu-500 w-5"
+                                                                                className="text-openg-500 w-5"
                                                                                 onClick={() => {
                                                                                     setDoc(
                                                                                         v?.manualRemediation
@@ -464,7 +464,7 @@ export default function Controls({ id, assignments, enable }: IPolicies) {
                                                                         0 && (
                                                                         <div className="group relative flex justify-center">
                                                                             <CodeBracketIcon
-                                                                                className="text-kaytu-500 w-5"
+                                                                                className="text-openg-500 w-5"
                                                                                 onClick={() => {
                                                                                     setDoc(
                                                                                         v?.programmaticRemediation
@@ -488,7 +488,7 @@ export default function Controls({ id, assignments, enable }: IPolicies) {
                                                                         0 && (
                                                                         <div className="group relative flex justify-center">
                                                                             <Cog8ToothIcon
-                                                                                className="text-kaytu-500 w-5"
+                                                                                className="text-openg-500 w-5"
                                                                                 onClick={() => {
                                                                                     setDoc(
                                                                                         v?.guardrailRemediation
@@ -566,7 +566,7 @@ export default function Controls({ id, assignments, enable }: IPolicies) {
                                                         )
                                                     }
                                                 >
-                                                    <ChevronRightIcon className="h-5 text-kaytu-500" />
+                                                    <ChevronRightIcon className="h-5 text-openg-500" />
                                                 </TableCell>
                                             </TableRow>
                                         ))}

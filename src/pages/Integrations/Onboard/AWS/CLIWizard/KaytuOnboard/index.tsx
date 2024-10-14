@@ -21,7 +21,7 @@ export function KaytuOnboard({
     const [profile, setProfile] = useState('')
 
     const command = () => {
-        let txt = 'kaytu onboard aws'
+        let txt = 'OpenGovernance onboard aws'
 
         // if (bootstrapMode) {
         //     txt = `${txt} -b`
@@ -55,11 +55,11 @@ export function KaytuOnboard({
                     onClick={() => setOpenProfile(!openProfile)}
                 >
                     {openProfile ? (
-                        <MinusCircleIcon className="text-kaytu-600 w-4" />
+                        <MinusCircleIcon className="text-openg-600 w-4" />
                     ) : (
-                        <PlusCircleIcon className="text-kaytu-600 w-4" />
+                        <PlusCircleIcon className="text-openg-600 w-4" />
                     )}
-                    <Text className="text-kaytu-600 ml-1 mt-1 mb-2">
+                    <Text className="text-openg-600 ml-1 mt-1 mb-2">
                         Specify your AWS CLI profile
                     </Text>
                 </Flex>
@@ -76,15 +76,15 @@ export function KaytuOnboard({
                     <>
                         <Flex
                             justifyContent="start"
-                            className="text-kaytu-600"
+                            className="text-openg-600"
                             onClick={() => setOpenOU(!openOU)}
                         >
                             {openOU ? (
-                                <MinusCircleIcon className="text-kaytu-600 w-4" />
+                                <MinusCircleIcon className="text-openg-600 w-4" />
                             ) : (
-                                <PlusCircleIcon className="text-kaytu-600 w-4" />
+                                <PlusCircleIcon className="text-openg-600 w-4" />
                             )}
-                            <Text className="text-kaytu-600 ml-1 mt-1 mb-2">
+                            <Text className="text-openg-600 ml-1 mt-1 mb-2">
                                 Specify organization units to onboard
                             </Text>
                         </Flex>

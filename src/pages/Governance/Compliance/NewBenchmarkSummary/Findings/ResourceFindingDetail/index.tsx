@@ -180,7 +180,7 @@ export default function ResourceFindingDetail({
                                         <div className="animate-pulse h-3 w-64 my-1 bg-slate-200 dark:bg-slate-700 rounded" />
                                     ) : (
                                         <Link
-                                            className="text-right text-kaytu-500 cursor-pointer underline"
+                                            className="text-right text-openg-500 cursor-pointer underline"
                                             to={`${linkPrefix}${finding?.controlID}?${searchParams}`}
                                         >
                                             {response?.controls

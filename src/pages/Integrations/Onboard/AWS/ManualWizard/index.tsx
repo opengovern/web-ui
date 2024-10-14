@@ -189,7 +189,7 @@ export default function ManualWizard({
             return [
                 {
                     title: (
-                        <Text className="text-kaytu-600 underline cursor-pointer">
+                        <Text className="text-openg-600 underline cursor-pointer">
                             I understanding how no-password secure onboarding
                             works
                         </Text>
@@ -201,7 +201,7 @@ export default function ManualWizard({
                             OpenGovernance only has Read-only access to your
                             resources{' '}
                             <a
-                                className="text-kaytu-600 underline"
+                                className="text-openg-600 underline"
                                 target="_blank"
                                 href="https://repost.aws/knowledge-center/cross-account-access-iam"
                                 rel="noreferrer"

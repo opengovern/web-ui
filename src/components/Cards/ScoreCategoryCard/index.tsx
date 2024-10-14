@@ -62,7 +62,7 @@ export default function ScoreCategoryCard({
                     : 'pl-5 pr-4 py-6 rounded-lg'
             } ${
                 varient === 'default' ? 'items-center' : 'items-start'
-            } flex bg-white dark:bg-kaytu-950 shadow-sm  hover:shadow-lg hover:cursor-pointer`}
+            } flex bg-white dark:bg-openg-950 shadow-sm  hover:shadow-lg hover:cursor-pointer`}
         >
             <Flex className="relative w-fit">
                 <ProgressCircle color={color} value={percentage} size="md">

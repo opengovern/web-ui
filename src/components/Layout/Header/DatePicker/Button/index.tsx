@@ -19,10 +19,10 @@ export function CalendarButton(props: AriaButtonProps) {
                 props?.isDisabled ? 'text-gray-400' : ''
             } ${
                 !props?.isDisabled
-                    ? 'hover:bg-kaytu-100 active:bg-kaytu-200'
+                    ? 'hover:bg-openg-100 active:bg-openg-200'
                     : ''
             } outline-none ${
-                isFocusVisible ? 'ring-2 ring-offset-2 ring-kaytu-600' : ''
+                isFocusVisible ? 'ring-2 ring-offset-2 ring-openg-600' : ''
             }`}
         >
             {props?.children}
@@ -38,7 +38,7 @@ export function FieldButton(props: AriaButtonProps & { isPressed?: boolean }) {
             type="button"
             {...buttonProps}
             ref={ref}
-            className={`px-2 -ml-px border dark:border-gray-700 transition-colors rounded-r-lg group-focus-within:border-kaytu-600 group-focus-within:group-hover:border-blue-600 outline-none ${
+            className={`px-2 -ml-px border dark:border-gray-700 transition-colors rounded-r-lg group-focus-within:border-openg-600 group-focus-within:group-hover:border-blue-600 outline-none ${
                 isPressed || props?.isPressed
                     ? 'bg-gray-200 border-gray-400 dark:bg-gray-700'
                     : 'bg-gray-50 border-gray-300 dark:bg-gray-700 group-hover:border-gray-400'

@@ -244,7 +244,7 @@ export default function JobsMenu({ isCollapsed, workspace }: IJobsMenu) {
     return (
         <Popover className="relative z-50 border-0 w-full">
             <Popover.Button
-                className={`w-full px-6 py-2 flex items-center rounded-md gap-2.5 text-gray-50 hover:bg-kaytu-800 ${
+                className={`w-full px-6 py-2 flex items-center rounded-md gap-2.5 text-gray-50 hover:bg-openg-800 ${
                     isCollapsed ? '!p-2' : ''
                 }`}
                 id="Jobs"

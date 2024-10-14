@@ -157,7 +157,7 @@ const columns = (isDemo: boolean) => {
         },
         {
             field: 'connectionID',
-            headerName: 'Kaytu connection ID',
+            headerName: 'OpenGovernance connection ID',
             type: 'string',
             hide: true,
             enableRowGroup: true,

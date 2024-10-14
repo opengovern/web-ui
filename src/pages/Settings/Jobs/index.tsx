@@ -80,7 +80,7 @@ const columns = () => {
         },
         {
             field: 'connectionID',
-            headerName: 'Kaytu Connection ID',
+            headerName: 'OpenGovernance Connection ID',
             type: 'string',
             sortable: true,
             filter: false,

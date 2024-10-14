@@ -186,7 +186,7 @@ export default function Trends({
                     </Callout>
                 ))}
             <Flex justifyContent="end" className="mt-2 gap-2.5">
-                <div className="h-2.5 w-2.5 rounded-full bg-kaytu-800" />
+                <div className="h-2.5 w-2.5 rounded-full bg-openg-800" />
                 <Text>{trendName}</Text>
             </Flex>
             <Chart

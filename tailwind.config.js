@@ -13,7 +13,7 @@ module.exports = {
         current: 'currentColor',
         extend: {
             colors: {
-                kaytu: {
+                openg: {
                     50: '#EAF2FA',
                     100: '#C0D8F1',
                     200: '#96BEE8',

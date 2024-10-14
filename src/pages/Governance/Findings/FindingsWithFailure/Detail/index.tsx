@@ -297,7 +297,7 @@ export default function FindingDetail({
                                                     value: (
                                                         <>
                                                             <Link
-                                                                className="text-kaytu-500 cursor-pointer underline"
+                                                                className="text-openg-500 cursor-pointer underline"
                                                                 to={`${finding?.controlID}?${searchParams}`}
                                                             >
                                                                 {
@@ -365,7 +365,7 @@ export default function FindingDetail({
                                             <ListItem className="py-6">
                                                 <Text>Control</Text>
                                                 <Link
-                                                    className="text-kaytu-500 cursor-pointer underline"
+                                                    className="text-openg-500 cursor-pointer underline"
                                                     to={`${finding?.controlID}?${searchParams}`}
                                                 >
                                                     {finding?.controlTitle}
@@ -531,7 +531,7 @@ export default function FindingDetail({
                                 <ListItem className="py-6">
                                     <Text>Control</Text>
                                     <Link
-                                        className="text-kaytu-500 cursor-pointer underline"
+                                        className="text-openg-500 cursor-pointer underline"
                                         to={`${finding?.controlID}?${searchParams}`}
                                     >
                                         {finding?.controlTitle}
