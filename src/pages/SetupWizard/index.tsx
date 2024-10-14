@@ -128,9 +128,12 @@ export default function SetupWizard() {
                     clientId: wizardData?.azureData?.applicationId,
                 },
             }
+            // @ts-ignore
+            const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
             const config = {
                 headers: {
-                    Authorization: `Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjA5MTQ5ZDhkOGJiZDc3ZTQwMTdiNTNiYjg1NTVhODUyODViODI4NzYifQ.eyJpc3MiOiJodHRwczovL2RlbW81Lm9wZW5nb3Zlcm5hbmNlLmlvL2RleCIsInN1YiI6IkNpUXdPR0U0TmpnMFlpMWtZamc0TFRSaU56TXRPVEJoT1MwelkyUXhOall4WmpVME5qWVNCV3h2WTJGcyIsImF1ZCI6InB1YmxpYy1jbGllbnQiLCJleHAiOjE3MjczODg0NjYsImlhdCI6MTcyNzMwMjA2NiwiYXRfaGFzaCI6ImR3UXZUakZhY3ZtdG5TMUo3Y1RkbnciLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.aX8AhgADWJu2ErTuHJbiN715xMsV3XWoo0443j5djT4X9N9Y3meoq40LMkUeuhvJb66sBbQNdEYG_FIZkij5xTWPBew9jfxY7YsdurLxOM-akRmMF7uxPSVJRpUIwA1qESbZeQjhH-3KsKVg3ty_azRzXB-DN_IJYWpuAWWUbMPNfv25ZXKoH9Dwob-koCBZUYsMv8rs-_-EaMRQ-TyDenRhWQyVCjzu3e6_3ga6BR0Z0HsBZ-55JW1KjKJpWxPrGpy09xPhG4ohYMNgmZFik75mR3PfUAh5rRSPfpy6EgJ-xnFarvHQK_vo2HeydpNuZPq0B_VfsoKjN0juEQWbsA`,
+                    Authorization: `Bearer ${token}`,
                 },
             }
             axios
@@ -193,9 +196,12 @@ export default function SetupWizard() {
                 password: wizardData?.userData?.password,
             },
         }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
         const config = {
             headers: {
-                Authorization: `Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjA5MTQ5ZDhkOGJiZDc3ZTQwMTdiNTNiYjg1NTVhODUyODViODI4NzYifQ.eyJpc3MiOiJodHRwczovL2RlbW81Lm9wZW5nb3Zlcm5hbmNlLmlvL2RleCIsInN1YiI6IkNpUXdPR0U0TmpnMFlpMWtZamc0TFRSaU56TXRPVEJoT1MwelkyUXhOall4WmpVME5qWVNCV3h2WTJGcyIsImF1ZCI6InB1YmxpYy1jbGllbnQiLCJleHAiOjE3MjczODg0NjYsImlhdCI6MTcyNzMwMjA2NiwiYXRfaGFzaCI6ImR3UXZUakZhY3ZtdG5TMUo3Y1RkbnciLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.aX8AhgADWJu2ErTuHJbiN715xMsV3XWoo0443j5djT4X9N9Y3meoq40LMkUeuhvJb66sBbQNdEYG_FIZkij5xTWPBew9jfxY7YsdurLxOM-akRmMF7uxPSVJRpUIwA1qESbZeQjhH-3KsKVg3ty_azRzXB-DN_IJYWpuAWWUbMPNfv25ZXKoH9Dwob-koCBZUYsMv8rs-_-EaMRQ-TyDenRhWQyVCjzu3e6_3ga6BR0Z0HsBZ-55JW1KjKJpWxPrGpy09xPhG4ohYMNgmZFik75mR3PfUAh5rRSPfpy6EgJ-xnFarvHQK_vo2HeydpNuZPq0B_VfsoKjN0juEQWbsA`,
+                Authorization: `Bearer ${token}`,
             },
         }
         axios
@@ -239,9 +245,12 @@ export default function SetupWizard() {
         const body = {
             trigger_id: id,
         }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
         const config = {
             headers: {
-                Authorization: `Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjA5MTQ5ZDhkOGJiZDc3ZTQwMTdiNTNiYjg1NTVhODUyODViODI4NzYifQ.eyJpc3MiOiJodHRwczovL2RlbW81Lm9wZW5nb3Zlcm5hbmNlLmlvL2RleCIsInN1YiI6IkNpUXdPR0U0TmpnMFlpMWtZamc0TFRSaU56TXRPVEJoT1MwelkyUXhOall4WmpVME5qWVNCV3h2WTJGcyIsImF1ZCI6InB1YmxpYy1jbGllbnQiLCJleHAiOjE3MjczODg0NjYsImlhdCI6MTcyNzMwMjA2NiwiYXRfaGFzaCI6ImR3UXZUakZhY3ZtdG5TMUo3Y1RkbnciLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.aX8AhgADWJu2ErTuHJbiN715xMsV3XWoo0443j5djT4X9N9Y3meoq40LMkUeuhvJb66sBbQNdEYG_FIZkij5xTWPBew9jfxY7YsdurLxOM-akRmMF7uxPSVJRpUIwA1qESbZeQjhH-3KsKVg3ty_azRzXB-DN_IJYWpuAWWUbMPNfv25ZXKoH9Dwob-koCBZUYsMv8rs-_-EaMRQ-TyDenRhWQyVCjzu3e6_3ga6BR0Z0HsBZ-55JW1KjKJpWxPrGpy09xPhG4ohYMNgmZFik75mR3PfUAh5rRSPfpy6EgJ-xnFarvHQK_vo2HeydpNuZPq0B_VfsoKjN0juEQWbsA`,
+                Authorization: `Bearer ${token}`,
             },
         }
         axios
@@ -271,9 +280,12 @@ export default function SetupWizard() {
         }
         setProgressLoading(true)
 
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
         const config = {
             headers: {
-                Authorization: `Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjA5MTQ5ZDhkOGJiZDc3ZTQwMTdiNTNiYjg1NTVhODUyODViODI4NzYifQ.eyJpc3MiOiJodHRwczovL2RlbW81Lm9wZW5nb3Zlcm5hbmNlLmlvL2RleCIsInN1YiI6IkNpUXdPR0U0TmpnMFlpMWtZamc0TFRSaU56TXRPVEJoT1MwelkyUXhOall4WmpVME5qWVNCV3h2WTJGcyIsImF1ZCI6InB1YmxpYy1jbGllbnQiLCJleHAiOjE3MjczODg0NjYsImlhdCI6MTcyNzMwMjA2NiwiYXRfaGFzaCI6ImR3UXZUakZhY3ZtdG5TMUo3Y1RkbnciLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.aX8AhgADWJu2ErTuHJbiN715xMsV3XWoo0443j5djT4X9N9Y3meoq40LMkUeuhvJb66sBbQNdEYG_FIZkij5xTWPBew9jfxY7YsdurLxOM-akRmMF7uxPSVJRpUIwA1qESbZeQjhH-3KsKVg3ty_azRzXB-DN_IJYWpuAWWUbMPNfv25ZXKoH9Dwob-koCBZUYsMv8rs-_-EaMRQ-TyDenRhWQyVCjzu3e6_3ga6BR0Z0HsBZ-55JW1KjKJpWxPrGpy09xPhG4ohYMNgmZFik75mR3PfUAh5rRSPfpy6EgJ-xnFarvHQK_vo2HeydpNuZPq0B_VfsoKjN0juEQWbsA`,
+                Authorization: `Bearer ${token}`,
             },
         }
         axios
@@ -299,9 +311,12 @@ export default function SetupWizard() {
         }
         setProgressLoading(true)
 
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
         const config = {
             headers: {
-                Authorization: `Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjA5MTQ5ZDhkOGJiZDc3ZTQwMTdiNTNiYjg1NTVhODUyODViODI4NzYifQ.eyJpc3MiOiJodHRwczovL2RlbW81Lm9wZW5nb3Zlcm5hbmNlLmlvL2RleCIsInN1YiI6IkNpUXdPR0U0TmpnMFlpMWtZamc0TFRSaU56TXRPVEJoT1MwelkyUXhOall4WmpVME5qWVNCV3h2WTJGcyIsImF1ZCI6InB1YmxpYy1jbGllbnQiLCJleHAiOjE3MjczODg0NjYsImlhdCI6MTcyNzMwMjA2NiwiYXRfaGFzaCI6ImR3UXZUakZhY3ZtdG5TMUo3Y1RkbnciLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.aX8AhgADWJu2ErTuHJbiN715xMsV3XWoo0443j5djT4X9N9Y3meoq40LMkUeuhvJb66sBbQNdEYG_FIZkij5xTWPBew9jfxY7YsdurLxOM-akRmMF7uxPSVJRpUIwA1qESbZeQjhH-3KsKVg3ty_azRzXB-DN_IJYWpuAWWUbMPNfv25ZXKoH9Dwob-koCBZUYsMv8rs-_-EaMRQ-TyDenRhWQyVCjzu3e6_3ga6BR0Z0HsBZ-55JW1KjKJpWxPrGpy09xPhG4ohYMNgmZFik75mR3PfUAh5rRSPfpy6EgJ-xnFarvHQK_vo2HeydpNuZPq0B_VfsoKjN0juEQWbsA`,
+                Authorization: `Bearer ${token}`,
             },
         }
         axios

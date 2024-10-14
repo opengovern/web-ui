@@ -279,13 +279,21 @@ export default function NewBenchmarkSummary() {
             )
             .then((res) => {
                 if (res.data) {
-                    if (res.data.items.length > 0) {
-                        setEnable(true)
-                        setTab(0)
-                    } else {
-                        setEnable(false)
-                        setTab(1)
+                    if (res.data.status == 'enabled') {
+                         setEnable(true)
+                         setTab(0)
                     }
+                    else{
+                         setEnable(false)
+                         setTab(1)
+                    }
+                    // if (res.data.items.length > 0) {
+                    //     setEnable(true)
+                    //     setTab(0)
+                    // } else {
+                    //     setEnable(false)
+                    //     setTab(1)
+                    // }
                 } else {
                     setEnable(false)
                     setTab(1)

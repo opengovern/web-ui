@@ -121,6 +121,7 @@ export default function Settings({
         status: false,
     })
     const [allEnable, setAllEnable] = useState(autoAssign)
+    const [enableStatus,setEnableStatus] = useState('')
     const [banner, setBanner] = useState(autoAssign)
     const isDemo = useAtomValue(isDemoAtom)
     const [loading, setLoading] = useState(false)
@@ -246,6 +247,7 @@ export default function Settings({
            )
            .then((res) => {
             setRows(res.data.items)
+            setEnableStatus(res.data.status)
        setLoading(false)
               
            })
@@ -255,6 +257,87 @@ export default function Settings({
                console.log(err)
            })
    }
+   const ChangeStatus = (status: string) => {
+       // /compliance/api/v3/benchmark/{benchmark-id}/assignments
+       setLoading(true)
+       setEnableStatus(status)
+       let url = ''
+       if (window.location.origin === 'http://localhost:3000') {
+           url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+       } else {
+           url = window.location.origin
+       }
+       // @ts-ignore
+       const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+       const config = {
+           headers: {
+               Authorization: `Bearer ${token}`,
+           },
+       }
+       const body = {
+           auto_enable: status == 'auto-enable' ? true : false,
+           disable: status == 'disabled' ? true : false,
+       }
+       console.log(body)
+       axios
+           .post(
+               `${url}/main/compliance/api/v3/benchmark/${id}/assign`,body,
+               config
+           )
+           .then((res) => {
+                // window.location.reload()
+           })
+           .catch((err) => {
+               setLoading(false)
+
+               console.log(err)
+           })
+   }
+    const ChangeStatusItem = (status: string,tracker_id: string) => {
+        // /compliance/api/v3/benchmark/{benchmark-id}/assignments
+        setLoading(true)
+        setEnableStatus(status)
+        let url = ''
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
+        }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+        const body = {
+            auto_enable: status == 'auto-enable' ? true : false,
+            disable: status == 'disabled' ? true : false,
+            integration: [
+                {
+                    integration_tracker: tracker_id,
+                },
+            ],
+        }
+        
+        axios
+            .post(
+                `${url}/main/compliance/api/v3/benchmark/${id}/assign`,
+                body,
+                config
+            )
+            .then((res) => {
+                // window.location.reload()
+                getEnabled()
+            })
+            .catch((err) => {
+                setLoading(false)
+
+                console.log(err)
+            })
+    }
    useEffect(() => {
        GetEnabled()
    }, [enableExecuted, disableExecuted])
@@ -267,27 +350,27 @@ export default function Settings({
             >
                 <Flex className="w-full mb-3">
                     <Tiles
-                        value={allEnable ? 'all' : 'manual'}
+                        value={enableStatus}
                         className="gap-8"
                         onChange={({ detail }) => {
-                            sendEnableAll()
+                          ChangeStatus(detail?.value)
                         }}
                         items={[
                             {
-                                value: 'Disable',
+                                value: 'disabled',
                                 label: 'Disabled',
                                 description:
                                     'Makes the framework inactive, with no assignments or audits.',
                                 // disabled: true,
                             },
                             {
-                                value: 'manual',
+                                value: 'enabled',
                                 label: `Enabled`,
                                 description:
                                     'Select integrations from the list below to enable the framework for auditing.',
                             },
                             {
-                                value: 'all',
+                                value: 'auto-enable',
                                 label: `Auto Enabled`,
                                 description:
                                     'Activates the framework on all integrations including any future integrations supported by the framework',
@@ -366,15 +449,14 @@ export default function Settings({
                                 cell: (item) => (
                                     <>
                                         <Switch
-                                        disabled={banner}
+                                            disabled={banner}
                                             onChange={(e) => {
-                                                setTransfer({
-                                                    connectionID:
-                                                        item?.integration
-                                                            ?.integration_tracker ||
-                                                        '',
-                                                    status: e,
-                                                })
+                                                ChangeStatusItem(
+                                                    e
+                                                        ? 'auto-enable'
+                                                        : 'disabled'
+                                                        ,item?.integration?.integration_tracker
+                                                )
                                             }}
                                             checked={item?.assigned}
                                         />
@@ -393,7 +475,9 @@ export default function Settings({
                         ]}
                         enableKeyboardNavigation
                         // @ts-ignore
-                        items={rows ?rows.slice(page * 10, (page + 1) * 10) : []}
+                        items={
+                            rows ? rows.slice(page * 10, (page + 1) * 10) : []
+                        }
                         loading={loading}
                         loadingText="Loading resources"
                         // stickyColumns={{ first: 0, last: 1 }}

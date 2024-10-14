@@ -117,7 +117,7 @@ export default function Search() {
                                     setTab(1)
                                 }}
                             >
-                                Run a Query
+                                CloudQL
                             </Tab>
                         </TabList>
                         <TabPanels>
@@ -215,7 +215,7 @@ export default function Search() {
                                                     className="gap-3 w-full"
                                                 >
                                                     <Title className="flex flex-row gap-1 justify-center align-center items-center">
-                                                        Run a Query
+                                                        CloudQL
                                                         <ChevronRightIcon className="w-[20px] mt-1" />
                                                     </Title>
                                                     <p className="dark:text-dark-tremor-cont text-tremor-default text-tremor-content">
