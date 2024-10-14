@@ -516,16 +516,16 @@ export default function Query() {
                                                 setEngine('odysseus-sql')
                                             }
                                         >
-                                            Odysseus SQL
+                                            CloudQL
                                         </SelectItem>
-                                        <SelectItem
+                                        {/* <SelectItem
                                             value="odysseus-rego"
                                             onClick={() =>
                                                 setEngine('odysseus-rego')
                                             }
                                         >
                                             Odysseus Rego
-                                        </SelectItem>
+                                        </SelectItem> */}
                                     </Select>
                                 </Flex>
                                 <Flex className="w-max gap-x-3">
@@ -552,9 +552,7 @@ export default function Query() {
                                             <PlayCircleIcon className="w-5 " />
                                         }
                                     >
-                                       
-                                            Run
-                                        
+                                        Run
                                     </KButton>
                                 </Flex>
                             </Flex>

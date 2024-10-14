@@ -111,9 +111,7 @@ export default function SearchLanding() {
                                     <Card
                                         className=" cursor-pointer flex justify-center items-center"
                                         onClick={() => {
-                                            navigate(
-                                                '/ws/main/finder?tab_id=1'
-                                            )
+                                            navigate('/ws/main/finder?tab_id=1')
                                         }}
                                     >
                                         <Flex
@@ -128,7 +126,7 @@ export default function SearchLanding() {
                                                 className="gap-3 w-full"
                                             >
                                                 <Title className="flex flex-row gap-1 justify-center align-center items-center">
-                                                    Run a Query
+                                                    CloudQL
                                                     <ChevronRightIcon className="w-[20px] mt-1" />
                                                 </Title>
                                                 <p className="dark:text-dark-tremor-cont text-tremor-default text-tremor-content">

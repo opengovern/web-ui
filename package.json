@@ -18,8 +18,6 @@
         "@react-aria/overlays": "^3.19.0",
         "@react-spectrum/view": "^3.6.5",
         "@react-spring/web": "^9.7.2",
-        "@sentry/cli": "^2.22.3",
-        "@sentry/react": "^7.119.1",
         "@superset-ui/embedded-sdk": "^0.1.0-alpha.11",
         "@tailwindcss/forms": "^0.5.7",
         "@testing-library/jest-dom": "^5.17.0",
@@ -37,6 +35,8 @@
         "ag-grid-react": "^31.0.0",
         "axios": "^1.6.2",
         "clipboard-copy": "^4.0.1",
+        "cookie": "^1.0.1",
+        "css-select": "^5.1.0",
         "dayjs": "^1.11.10",
         "echarts": "^5.5.1",
         "echarts-for-react": "^3.0.2",
@@ -45,6 +45,7 @@
         "jotai": "^2.6.0",
         "jwt-decode": "^3.1.2",
         "maskdata": "^1.2.6",
+        "postcss": "^8.4.47",
         "pretty-checkbox-react": "^3.2.0",
         "prismjs": "^1.29.0",
         "react": "^18.2.0",
@@ -56,7 +57,7 @@
         "react-markdown": "^8.0.6",
         "react-querybuilder": "^6.5.4",
         "react-router-dom": "^6.20.1",
-        "react-scripts": "5.0.1",
+        "react-scripts": "^5.0.1",
         "react-simple-code-editor": "^0.13.1",
         "react-spring": "^9.7.2",
         "react-stately": "^3.28.0",
@@ -83,8 +84,7 @@
         "format": "prettier --write \"**/*.+(js|jsx|ts|tsx|json|css|md)\"",
         "chromatic": "npx chromatic --project-token=2ae656df246a --allow-console-errors",
         "codegen": "npx swagger-typescript-api --axios -p https://swagger.kaytu.dev/swagger/doc.json -o ./src/api -n api.ts && go run codegen/generate.go && prettier --write \"**/*.+(js|jsx|ts|tsx|json|css|md)\"",
-        "codegen:local": "npx swagger-typescript-api --axios -p ../kaytu-engine/pkg/docs/swagger.json -o ./src/api -n api.ts && go run codegen/generate.go && prettier --write \"**/*.+(js|jsx|ts|tsx|json|css|md)\"",
-        "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sentry --project kaytu ./build && sentry-cli --url https://sen.kaytu.io/ sourcemaps upload --org sentry --release v1.0.0 --project kaytu ./build"
+        "codegen:local": "npx swagger-typescript-api --axios -p ../kaytu-engine/pkg/docs/swagger.json -o ./src/api -n api.ts && go run codegen/generate.go && prettier --write \"**/*.+(js|jsx|ts|tsx|json|css|md)\""
     },
     "browserslist": {
         "production": [

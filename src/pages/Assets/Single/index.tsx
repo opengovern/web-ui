@@ -44,8 +44,8 @@ export default function Single() {
             return (
                 <>
                     <TopHeader
-                        supportedFilters={['Date']}
-                        initialFilters={['Date']}
+                        supportedFilters={[]}
+                        initialFilters={[]}
                         breadCrumb={['Cloud account detail']}
                     />
                     <SingleConnection

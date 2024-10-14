@@ -12,7 +12,7 @@ import { useSetAtom } from 'jotai/index'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { notificationAtom } from '../../../../store'
 import { IColumn } from '../../../../components/Table'
-import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../api/api'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric, GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../../api/api'
 import { badgeDelta } from '../../../../utilities/deltaType'
 import { useInventoryApiV2AnalyticsMetricList } from '../../../../api/inventory.gen'
 import { MSort } from '../../../Spend/Account/AccountTable'
@@ -66,6 +66,78 @@ export const rowGenerator = (
 
     return rows
 }
+
+export const SpendrowGenerator = (
+    input:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
+        | undefined,
+    inputPrev:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
+        | undefined,
+    loading: boolean
+) => {
+    let sum = 0
+    const roww = []
+    const granularity: any = {}
+    let pinnedRow = [
+        { totalCost: sum, dimension: 'aTotal spend', ...granularity },
+    ]
+    if (!loading) {
+        const rows =
+            input?.map((row) => {
+                let temp = {}
+                let totalCost = 0
+                if (row.costValue) {
+                    temp = Object.fromEntries(Object.entries(row.costValue))
+                }
+                Object.values(temp).map(
+                    // eslint-disable-next-line no-return-assign
+                    (v: number | unknown) => (totalCost += Number(v))
+                )
+                return {
+                    dimension: row.dimensionName
+                        ? row.dimensionName
+                        : row.dimensionId,
+                    dimensionId: row.dimensionId,
+                    category: row.category,
+                    accountId: row.accountID,
+                    connector: row.connector,
+                    id: row.dimensionId,
+                    totalCost,
+                    ...temp,
+                }
+            }) || []
+        for (let i = 0; i < rows.length; i += 1) {
+            sum += rows[i].totalCost
+            // eslint-disable-next-line array-callback-return
+            Object.entries(rows[i]).map(([key, value]) => {
+                if (Number(key[0])) {
+                    if (granularity[key]) {
+                        granularity[key] += value
+                    } else {
+                        granularity[key] = value
+                    }
+                }
+            })
+        }
+        pinnedRow = [
+            { totalCost: sum, dimension: 'bTotal spend', ...granularity },
+        ]
+        for (let i = 0; i < rows.length; i += 1) {
+            roww.push({
+                ...rows[i],
+                percent: (rows[i].totalCost / sum) * 100,
+                spendInPrev: 0,
+            })
+        }
+    }
+    const finalRow = roww.sort((a, b) => b.totalCost - a.totalCost)
+    return {
+        finalRow,
+        pinnedRow,
+    }
+}
+
 
 export const defaultColumns: IColumn<any, any>[] = [
     {

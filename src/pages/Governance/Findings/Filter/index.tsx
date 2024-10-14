@@ -688,10 +688,16 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             //     : undefined,
         })
     }, [query])
-    const [filter, setFilter] = useState({
-        label: 'Recent Incidents',
-        value: '1',
-    })
+    const GetDefaultFilter =()=>{
+         if (type == 'findings') {
+            return  { label: 'Recent Incidents', value: '1' }
+           
+         } else if (type == 'controls') {
+            return { label: 'Priority Controls', value: '1' }
+         }
+         return undefined
+    }
+    const [filter, setFilter] = useState(GetDefaultFilter())
     useEffect(() => {
         // @ts-ignore
         if (filter && type =='findings') {
@@ -751,11 +757,108 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
                 })
             }
         }
+        if(filter && type== 'controls'){
+            // @ts-ignore
+
+            if (filter.value == '1') {
+                setDate({
+                    key: 'previous-3-days',
+                    amount: 3,
+                    unit: 'day',
+                    type: 'relative',
+                })
+                setQuery({
+                    tokens: [
+                        {
+                            propertyKey: 'severity',
+                            value: 'high',
+                            operator: '=',
+                        },
+                        {
+                            propertyKey: 'severity',
+                            value: 'critical',
+                            operator: '=',
+                        },
+                        {
+                            propertyKey: 'connectionGroup',
+                            value: 'healthy',
+                            operator: '=',
+                        },
+                    ],
+                    operation: 'and',
+                })
+            }
+            // @ts-ignore
+            else if (filter.value == '2') {
+                setDate({
+                    key: 'previous-3-days',
+                    amount: 3,
+                    unit: 'day',
+                    type: 'relative',
+                })
+                setQuery({
+                    tokens: [
+                        {
+                            propertyKey: 'severity',
+                            value: 'critical',
+                            operator: '=',
+                        },
+                        // {
+                        //     propertyKey: 'conformance_status',
+                        //     value: 'failed',
+                        //     operator: '=',
+                        // },
+                        {
+                            propertyKey: 'connectionGroup',
+                            value: 'healthy',
+                            operator: '=',
+                        },
+                    ],
+                    operation: 'and',
+                })
+            }
+            // @ts-ignore
+            else if (filter.value == '3') {
+                setDate({
+                    key: 'previous-7-days',
+                    amount: 7,
+                    unit: 'day',
+                    type: 'relative',
+                })
+              
+            }
+        }
     }, [filter])
     const PLACEHOLDERS ={
         'findings' : 'Incidents',
         'controls': 'Controls',
         'resources': 'Resources'
+    }
+    const getSaveSet = () => {
+        const temp =[]
+        if(type =='findings'){
+             temp.push(
+                 { label: 'Recent Incidents', value: '1' },
+                 {
+                     label: 'Recent Critical Incidents',
+                     value: '2',
+                 }
+             )
+        }
+        else if (type=='controls'){
+            temp.push(
+                { label: 'Priority Controls', value: '1' },
+                { label: 'Critical Controls', value: '2' },
+                { label: 'All Controls', value: '3' }
+            )
+        }
+      
+        return temp
+
+
+
+
+
     }
     const renderFilters = () => {
         let date_filter = filterOptions.find((o) => o.id === 'date')
@@ -818,9 +921,9 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
                     flexDirection="row"
                     justifyContent="start"
                     alignItems="start"
-                    className="w-full gap-2"
+                    className="w-max gap-2"
                 >
-                    {type == 'findings' && (
+                    {(type == 'findings' || type == 'controls') && (
                         <>
                             <Select
                                 // @ts-ignore
@@ -833,19 +936,14 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
                                     // @ts-ignore
                                     setFilter(detail.selectedOption)
                                 }
-                                options={[
-                                    { label: 'Recent Incidents', value: '1' },
-                                    {
-                                        label: 'Recent Critical Incidents',
-                                        value: '2',
-                                    },
-                                ]}
+                                options={getSaveSet()}
                             />
                         </>
                     )}
 
                     <PropertyFilter
-                        className="w-4/5"
+                        className="w-4/5 "
+                        
                         // @ts-ignore
                         query={query}
                         // @ts-ignore
