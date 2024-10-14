@@ -560,12 +560,15 @@ export default function ScoreCategory() {
                 config
             )
             .then((res) => {
-                   if (res.data.status == 'enabled') {
+                   if (
+                       res.data.status == 'enabled' ||
+                       res.data.status == 'auto-enable'
+                   ) {
                        setEnable(true)
-                    //    setTab(0)
+                       //    setTab(0)
                    } else {
                        setEnable(false)
-                    //    setTab(1)
+                       //    setTab(1)
                    }
                 // if (res.data) {
                 //     if (res.data.items.length > 0) {

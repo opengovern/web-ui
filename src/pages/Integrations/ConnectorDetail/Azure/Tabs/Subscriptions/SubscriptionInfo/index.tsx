@@ -28,6 +28,7 @@ interface ISubscriptionInfo {
     open: boolean
     onClose: () => void
     isDemo: boolean
+    accountSendNow?:Function
 }
 
 function getBadgeText(status: string) {
@@ -52,6 +53,7 @@ export default function SubscriptionInfo({
     open,
     onClose,
     isDemo,
+    accountSendNow,
 }: ISubscriptionInfo) {
     const {
         isExecuted: isDeleteExecuted,
@@ -87,6 +89,7 @@ export default function SubscriptionInfo({
     useEffect(() => {
         if (isDeleteExecuted && !isDeleteLoading) {
             onClose()
+            accountSendNow?.()
         }
     }, [isDeleteLoading])
 
@@ -99,6 +102,7 @@ export default function SubscriptionInfo({
     useEffect(() => {
         if (isDiscoverExecuted && !isDiscoverLoading) {
             onClose()
+            accountSendNow?.()
         }
     }, [isDiscoverLoading])
 
@@ -207,10 +211,7 @@ export default function SubscriptionInfo({
             label: 'Last health check',
             value: dateTimeDisplay(data?.lastHealthCheckTime),
         })
-        if (
-            data?.metadata?.organization_tags 
-           
-        ) {
+        if (data?.metadata?.organization_tags) {
             temp.push({
                 label: 'Tags',
                 value: (

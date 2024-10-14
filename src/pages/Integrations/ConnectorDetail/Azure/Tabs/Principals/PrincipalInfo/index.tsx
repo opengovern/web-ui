@@ -27,6 +27,7 @@ interface IPriInfo {
     open: boolean
     onClose: () => void
     isDemo: boolean
+    credintalsSendNow?: Function
 }
 
 export default function PrincipalInfo({
@@ -34,6 +35,7 @@ export default function PrincipalInfo({
     open,
     onClose,
     isDemo,
+    credintalsSendNow,
 }: IPriInfo) {
     const [id, setId] = useState('')
     const [eid, seteId] = useState(false)
@@ -56,15 +58,18 @@ export default function PrincipalInfo({
         false
     )
 
-    // useEffect(() => {
-    //     if (isDeleteExecuted && !isDeleteLoading) {
-    //         onClose()
-    //     }
-    // }, [isDeleteLoading])
+    useEffect(() => {
+        if (isDeleteExecuted && !isDeleteLoading) {
+            onClose()
+            credintalsSendNow?.()
+        }
+    }, [isDeleteLoading])
 
     useEffect(() => {
         if (isDiscoverExecuted && !isDiscoverLoading) {
             onClose()
+            credintalsSendNow?.()
+
         }
     }, [isDiscoverLoading])
 
@@ -408,9 +413,9 @@ export default function PrincipalInfo({
                     <Button
                         variant="secondary"
                         color="rose"
-                        // loading={isDeleteExecuted && isDeleteLoading}
+                        loading={isDeleteExecuted && isDeleteLoading}
                         disabled={isDiscoverExecuted && isDiscoverLoading}
-                        // onClick={deleteNow}
+                        onClick={deleteNow}
                     >
                         Delete
                     </Button>
@@ -418,7 +423,7 @@ export default function PrincipalInfo({
                     <Button
                         className="ml-3"
                         loading={isDiscoverExecuted && isDiscoverLoading}
-                        // disabled={isDeleteExecuted && isDeleteLoading}
+                        disabled={isDeleteExecuted && isDeleteLoading}
                         onClick={discoverNow}
                     >
                         Discover New Subscriptions

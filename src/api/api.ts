@@ -5644,7 +5644,7 @@ export class Api<
          * @tags connections
          * @name ApiV1ConnectionsDelete
          * @summary Delete connection
-         * @request DELETE:/integration/api/v1/connections/{connectionId}
+         * @request DELETE:/onboard/api/v1/source/{sourceId}
          * @secure
          */
         apiV1ConnectionsDelete: (
@@ -5652,7 +5652,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
-                path: `/integration/api/v1/connections/${connectionId}`,
+                path: `/onboard/api/v1/source/${connectionId}`,
                 method: 'DELETE',
                 secure: true,
                 ...params,
@@ -5780,7 +5780,7 @@ export class Api<
          * @tags credentials
          * @name ApiV1CredentialDelete
          * @summary Delete credential
-         * @request DELETE:/integration/api/v1/credential/{credentialId}
+         * @request DELETE:/onboard/api/v1/credential/
          * @secure
          */
         apiV1CredentialDelete: (
@@ -5788,7 +5788,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
-                path: `/integration/api/v1/credential/${credentialId}`,
+                path: `/onboard/api/v1/credential/${credentialId}`,
                 method: 'DELETE',
                 secure: true,
                 ...params,
