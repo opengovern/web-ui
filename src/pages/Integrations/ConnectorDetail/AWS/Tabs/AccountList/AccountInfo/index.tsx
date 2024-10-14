@@ -32,6 +32,7 @@ interface IAccInfo {
     type: string
     onClose: () => void
     isDemo: boolean
+     accountSendNow? : Function
 }
 
 function getBadgeText(status: string) {
@@ -57,6 +58,7 @@ export default function AccountInfo({
     type,
     onClose,
     isDemo,
+    accountSendNow 
 }: IAccInfo) {
     const { response: credential } = useOnboardApiV1CredentialDetail(
         data?.credentialID || '',
@@ -103,6 +105,7 @@ export default function AccountInfo({
     useEffect(() => {
         if (isDeleteExecuted && !isDeleteLoading) {
             onClose()
+            accountSendNow?.()
         }
     }, [isDeleteLoading])
 
@@ -123,7 +126,7 @@ export default function AccountInfo({
         (isDeleteExecuted && isDeleteLoading) ||
         (isHealthCheckExecuted && isHealthCheckLoading) ||
         (isDiscoverExecuted && isDiscoverLoading)
-    const summaryTab =() => {
+    const summaryTab = () => {
         const temp = [
             {
                 label: 'Account name',
@@ -176,11 +179,9 @@ export default function AccountInfo({
                     </>
                 ),
             },
-           
         ]
 
-        if(data?.healthState === 'unhealthy') {
-
+        if (data?.healthState === 'unhealthy') {
             temp.push({
                 label: 'Health reason',
                 value: data?.healthReason,
@@ -204,44 +205,52 @@ export default function AccountInfo({
         })
         return temp
     }
-    const additionalTabs =() => {
-            const temp = []
+    const additionalTabs = () => {
+        const temp = []
+        temp.push({
+            label: 'Account type',
+            value: type,
+        })
+        temp.push({
+            label: 'ARN',
+            value: data?.metadata?.account_organization?.Arn,
+        })
+        temp.push({
+            label: 'Onboard date',
+            value: dateTimeDisplay(data?.onboardDate),
+        })
+        temp.push({
+            label: 'Last inventory',
+            value: dateTimeDisplay(data?.lastInventory),
+        })
+        temp.push({
+            label: 'Last health check',
+            value: dateTimeDisplay(data?.lastHealthCheckTime),
+        })
+        if (
+            data?.metadata?.organization_tags &&
+            (type === 'Organization member' || type === 'Organization manager')
+        ) {
             temp.push({
-                label: 'Account type',
-                value: type,
+                label: 'Tags',
+                value: (
+                    <>
+                        {Object.entries(data.metadata?.organization_tags).map(
+                            ([name, value]) => (
+                                <Tag
+                                    isDemo={isDemo}
+                                    text={`${name}: ${value}`}
+                                />
+                            )
+                        )}
+                    </>
+                ),
             })
-            temp.push({
-                label: 'ARN',
-                value: data?.metadata?.account_organization?.Arn,
-            })
-            temp.push({
-                label: 'Onboard date',
-                value: dateTimeDisplay(data?.onboardDate),
-            })
-            temp.push({
-                label: 'Last inventory',
-                value: dateTimeDisplay(data?.lastInventory),
-            })
-            temp.push({
-                label: 'Last health check',
-                value: dateTimeDisplay(data?.lastHealthCheckTime),
-            })
-            if(data?.metadata?.organization_tags && (type === 'Organization member' || type === 'Organization manager')) {
-                temp.push({
-                    label: 'Tags',
-                    value: (
-                        <>
-                            {Object.entries(data.metadata?.organization_tags).map(([name, value]) => (
-                                <Tag isDemo={isDemo} text={`${name}: ${value}`} />
-                            ))}
-                        </>
-                    ),
-                })
-            }
+        }
 
         return temp
     }
-    const tabItem =() => {
+    const tabItem = () => {
         const temp = [
             {
                 label: 'Summary',
@@ -270,7 +279,7 @@ export default function AccountInfo({
                 ),
             },
         ]
-        if (type === 'Organization member' || type === 'Organization manager'){
+        if (type === 'Organization member' || type === 'Organization manager') {
             temp.push({
                 label: 'Organization info',
                 id: '3',
@@ -281,15 +290,18 @@ export default function AccountInfo({
                             items={[
                                 {
                                     label: 'Organization ID',
-                                    value: data?.metadata?.account_organization?.Id,
+                                    value: data?.metadata?.account_organization
+                                        ?.Id,
                                 },
                                 {
                                     label: 'Master account ARN',
-                                    value: data?.metadata?.account_organization?.MasterAccountArn,
+                                    value: data?.metadata?.account_organization
+                                        ?.MasterAccountArn,
                                 },
                                 {
                                     label: 'Email',
-                                    value: data?.metadata?.account_organization?.MasterAccountEmail,
+                                    value: data?.metadata?.account_organization
+                                        ?.MasterAccountEmail,
                                 },
                             ]}
                         />
@@ -297,7 +309,7 @@ export default function AccountInfo({
                 ),
             })
         }
-        if (type === 'Organization manager' || type === 'Standalone'){
+        if (type === 'Organization manager' || type === 'Standalone') {
             temp.push({
                 label: 'Acess credentials',
                 id: '4',
@@ -415,23 +427,20 @@ export default function AccountInfo({
                                         </>
                                     ),
                                 },
-                               
                             ]}
                         />
                     </>
                 ),
             })
         }
-            return temp
+        return temp
     }
     return (
         <>
-            <Tabs
-                tabs={tabItem()}
-            />
+            <Tabs tabs={tabItem()} />
             <Flex flexDirection="col" className="h-full">
                 {/* <Flex flexDirection="col" alignItems="start"> */}
-                    {/* <Title>Summary</Title>
+                {/* <Title>Summary</Title>
                     <Divider />
                     <Flex>
                         <Text>Account name</Text>
@@ -482,7 +491,7 @@ export default function AccountInfo({
                             {getBadgeText(data?.lifecycleState || '')}
                         </Badge>
                     </Flex> */}
-                    {/* <Accordion className="w-full p-0 !rounded-none border-b-0 border-x-0 border-t-gray-200">
+                {/* <Accordion className="w-full p-0 !rounded-none border-b-0 border-x-0 border-t-gray-200">
                         <AccordionHeader className="w-full p-0 py-6 border-0">
                             <Title>Additional detail</Title>
                         </AccordionHeader>
@@ -582,7 +591,7 @@ export default function AccountInfo({
                             </Flex>
                         </AccordionBody>
                     </Accordion> */}
-                    {/* {(type === 'Organization member' ||
+                {/* {(type === 'Organization member' ||
                         type === 'Organization manager') && (
                         <Accordion className="w-full p-0 !rounded-none border-b-0 border-x-0 border-t-gray-200">
                             <AccordionHeader className="w-full p-0 py-6 border-0">
@@ -629,7 +638,7 @@ export default function AccountInfo({
                             </AccordionBody>
                         </Accordion>
                     )} */}
-                    {/* {(type === 'Organization manager' ||
+                {/* {(type === 'Organization manager' ||
                         type === 'Standalone') && (
                         <Accordion className="w-full p-0 !rounded-none border-b-0 border-x-0 border-t-gray-200">
                             <AccordionHeader className="w-full p-0 py-6">
