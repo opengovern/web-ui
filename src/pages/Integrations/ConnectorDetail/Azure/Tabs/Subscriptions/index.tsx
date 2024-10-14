@@ -279,6 +279,7 @@ export default function Subscriptions({
                                     open={openInfo}
                                     onClose={() => setOpenInfo(false)}
                                     isDemo={isDemo}
+                                    accountSendNow={accountSendNow}
                                 />
                             </>
                         ) : (
@@ -453,11 +454,13 @@ export default function Subscriptions({
                                         <KButton onClick={() => setOpen(true)}>
                                             Onboard New Azure Principal
                                         </KButton>
-                                        <KButton onClick={() => {
-                                            if(accountSendNow){
-                                                accountSendNow()
-                                            }
-                                        }}>
+                                        <KButton
+                                            onClick={() => {
+                                                if (accountSendNow) {
+                                                    accountSendNow()
+                                                }
+                                            }}
+                                        >
                                             Realod
                                         </KButton>
                                     </Flex>

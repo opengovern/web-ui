@@ -185,6 +185,7 @@ export default function Principals({ principals ,credintalsSendNow}: IPrincipals
                                     open={openInfo}
                                     onClose={() => setOpenInfo(false)}
                                     isDemo={isDemo}
+                                    credintalsSendNow={credintalsSendNow}
                                 />
                             </>
                         ) : (
@@ -364,15 +365,15 @@ export default function Principals({ principals ,credintalsSendNow}: IPrincipals
                                         <KButton onClick={() => setOpen(true)}>
                                             Create New Principal
                                         </KButton>
-                                        {/* <KButton
+                                        <KButton
                                             onClick={() => {
-                                                // if (accountSendNow) {
-                                                //     accountSendNow()
-                                                // }
+                                                if (credintalsSendNow) {
+                                                    credintalsSendNow()
+                                                }
                                             }}
                                         >
                                             Realod
-                                        </KButton> */}
+                                        </KButton>
                                     </Flex>
                                 }
                                 className="w-full"

@@ -286,7 +286,7 @@ export default function Settings({
                config
            )
            .then((res) => {
-                // window.location.reload()
+                window.location.reload()
            })
            .catch((err) => {
                setLoading(false)
@@ -329,7 +329,7 @@ export default function Settings({
                 config
             )
             .then((res) => {
-                window.location.reload()
+                // window.location.reload()
                 getEnabled()
             })
             .catch((err) => {
