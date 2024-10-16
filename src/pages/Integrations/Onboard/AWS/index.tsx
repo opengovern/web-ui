@@ -34,7 +34,7 @@ IOnboardDrawer) {
     const [credentials, setCredentials] = useState<any>({
         accessKey: undefined,
         secretKey: undefined,
-        roleName: undefined,
+        roleName: 'OpenGovernanceReadOnly',
         externalID: undefined,
     })
     const { isLoading, isExecuted, error, sendNow } =
