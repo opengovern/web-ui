@@ -16,6 +16,7 @@ import InformationModal from '../../../../components/Modal/InformationModal'
 import { useAuthApiV1KeyCreateCreate } from '../../../../api/auth.gen'
 import { notificationAtom } from '../../../../store'
 import KButton from '@cloudscape-design/components/button'
+import { Modal } from '@cloudscape-design/components'
 
 interface CreateAPIKeyProps {
     close: () => void
@@ -84,59 +85,55 @@ export default function CreateAPIKey({ close }: CreateAPIKeyProps) {
 
     return (
         <Flex flexDirection="col" justifyContent="between" className="h-full">
-            <InformationModal
-                title={error === undefined ? 'Successful' : 'Failed'}
-                description={
-                    error === undefined ? (
-                        <Flex
-                            flexDirection="col"
-                            justifyContent="start"
-                            alignItems="start"
-                        >
-                            API key created, copy the key and keep it safe:
-                            <Card
-                                className="w-full cursor-pointer"
-                                onClick={() => {
-                                    setShowCopied(true)
-                                    setTimeout(() => setShowCopied(false), 2000)
-                                    clipboardCopy(response?.token || '')
-                                }}
-                            >
-                                <Flex
-                                    flexDirection="row"
-                                    justifyContent="between"
-                                >
-                                    <div className="w-full break-all">
-                                        {response?.token}
-                                    </div>
-                                    <Flex
-                                        flexDirection="col"
-                                        justifyContent="start"
-                                        className="h-5 w-5"
-                                    >
-                                        <DocumentDuplicateIcon className="h-5 w-5 text-openg-600 " />
-                                        <Text
-                                            className={`${
-                                                showCopied ? '' : 'hidden'
-                                            } absolute mt-6 bg-openg-600 text-white rounded-md p-1`}
-                                        >
-                                            Copied!
-                                        </Text>
-                                    </Flex>
-                                </Flex>
-                            </Card>
-                        </Flex>
-                    ) : (
-                        `Failed to create the API Key`
-                    )
-                }
-                successful={error === undefined}
-                open={!isLoading && isExecuted}
-                okButton="Done"
-                onClose={() => {
+            <Modal
+                header={error === undefined ? 'Successful' : 'Failed'}
+               
+                visible={!isLoading && isExecuted}
+              
+                onDismiss={() => {
                     close()
                 }}
-            />
+            >
+                <>
+                  {  error === undefined ? (
+                    <Flex
+                        flexDirection="col"
+                        justifyContent="start"
+                        alignItems="start"
+                    >
+                        API key created, copy the key and keep it safe:
+                        <Card
+                            className="w-full cursor-pointer mt-2"
+                            onClick={() => {
+                                setShowCopied(true)
+                                setTimeout(() => setShowCopied(false), 2000)
+                                clipboardCopy(response?.token || '')
+                            }}
+                        >
+                            <Flex flexDirection="row" justifyContent="between">
+                                <div className="w-full break-all">
+                                    {response?.token}
+                                </div>
+                                <Flex
+                                    flexDirection="col"
+                                    justifyContent="start"
+                                    className="h-5 w-5"
+                                >
+                                    <DocumentDuplicateIcon className="h-5 w-5 text-openg-600 " />
+                                    <Text
+                                        className={`${
+                                            showCopied ? '' : 'hidden'
+                                        } absolute mt-6 bg-openg-600 text-white rounded-md p-1`}
+                                    >
+                                        Copied!
+                                    </Text>
+                                </Flex>
+                            </Flex>
+                        </Card>
+                    </Flex>
+                    ) : ( `Failed to create the API Key` )}
+                </>
+            </Modal>
             <List className="mt-4 h-full">
                 {/* <ListItem>
                     <Text className="text-gray-900 font-medium py-2">
@@ -206,7 +203,7 @@ export default function CreateAPIKey({ close }: CreateAPIKeyProps) {
                     Cancel
                 </KButton>
                 <KButton
-                variant='primary'
+                    variant="primary"
                     disabled={apiKeyName.length === 0}
                     onClick={() => {
                         callCreate()
