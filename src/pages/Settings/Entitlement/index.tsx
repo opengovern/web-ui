@@ -190,7 +190,8 @@ export default function SettingsEntitlement() {
         // },
         {
             title: 'Version',
-            value: currentWorkspace?.version,
+            // @ts-ignore
+            value: currentWorkspace?.app_version,
         },
         {
             title: 'License',

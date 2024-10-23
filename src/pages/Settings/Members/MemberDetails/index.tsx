@@ -35,8 +35,10 @@ interface IMemberDetails {
 
 export default function MemberDetails({ user, close }: IMemberDetails) {
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
-    const [role, setRole] = useState<string>(user?.role_name || 'viewer')
-    const [isActive, setIsActive] = useState<boolean>(user?.is_active == true ? true :false)
+    const [role, setRole] = useState<any>(user?.role_name )
+    const [isActive, setIsActive] = useState<any>(
+        user?.is_active 
+    )
 
     const [password, setPassword] = useState<string>('')
     const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
@@ -72,6 +74,10 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
             setRoleValue(role)
         }
     }, [role])
+     useEffect(() => {
+        setIsActive(user?.is_active)
+        setRole(user?.role_name)
+     }, [user])
 
     useEffect(() => {
         if ((isExecuted && !isLoading) || (deleteExecuted && !deleteLoading)) {
@@ -219,6 +225,10 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                             </Text>
                         </Flex>
                         <div className="relative flex items-start">
+                            <>{console.log(user)}</>
+                            <>{console.log(isActive)}</>
+                            <>{console.log(role)}</>
+
                             <Toggle
                                 onChange={({ detail }) =>
                                     setIsActive(detail.checked)

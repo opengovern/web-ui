@@ -7899,7 +7899,7 @@ export class Api<
                 GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
                 any
             >({
-                path: `/workspace/api/v1/workspace/current`,
+                path: `/metadata/api/v3/about`,
                 method: 'GET',
                 secure: true,
                 type: ContentType.Json,
