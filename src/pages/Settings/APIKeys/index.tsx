@@ -135,7 +135,7 @@ const fixRole = (role: string) => {
                                 className="w-1/4"
                             >
                                 <Text className="text-sm font-medium">
-                                    {fixRole(item.roleName || '')}
+                                    {fixRole(item.role_name || '')}
                                 </Text>
                                 <Text className="text-xs">
                                     {item.maskedKey?.replace('...', '*******')}
@@ -146,7 +146,8 @@ const fixRole = (role: string) => {
                     {
                         id: 'created_by',
                         header: 'Created by',
-                        cell: (item: any) => item.creatorUserID?.split("|")[1] || '',
+                        cell: (item: any) =>
+                            item.creator_user_id?.split('|')[1] || '',
                     },
                     {
                         id: 'create_date',
@@ -158,9 +159,21 @@ const fixRole = (role: string) => {
                             >
                                 {new Date(
                                     Date.parse(
-                                        item.createdAt || Date.now().toString()
+                                        item.created_at || Date.now().toString()
                                     )
                                 ).toLocaleDateString()}
+                            </Flex>
+                        ),
+                    },
+                    {
+                        id: 'active',
+                        header: 'Active',
+                        cell: (item: any) => (
+                            <Flex
+                                justifyContent="start"
+                                className="truncate w-full"
+                            >
+                                {item.active ? 'Yes' : 'No'}
                             </Flex>
                         ),
                     },
@@ -195,13 +208,15 @@ const fixRole = (role: string) => {
                     { id: 'role', visible: true },
                     { id: 'created_by', visible: true },
                     { id: 'created_date', visible: true },
+                    { id: 'active', visible: true },
+
                     { id: 'action', visible: true },
 
                     // { id: 'action', visible: true },
                 ]}
                 loading={isLoading}
                 // @ts-ignore
-                items={response ? response: []}
+                items={response ? response : []}
                 empty={
                     <Box
                         margin={{ vertical: 'xs' }}
@@ -220,7 +235,7 @@ const fixRole = (role: string) => {
                             <>
                                 <KButton
                                     className="float-right"
-                                    variant='primary'
+                                    variant="primary"
                                     onClick={() => {
                                         openCreateMenu()
                                     }}

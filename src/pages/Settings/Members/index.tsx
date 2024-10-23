@@ -30,7 +30,7 @@ const fixRole = (role: string) => {
 
 export default function SettingsMembers() {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
-    const [drawerParam, setDrawerParam] = useState<string>('')
+    const [drawerParam, setDrawerParam] = useState<number | string>(0)
 
     const {
         response,
@@ -38,7 +38,7 @@ export default function SettingsMembers() {
         sendNow: refreshRoleBindings,
     } = useAuthApiV1WorkspaceRoleBindingsList()
 
-    const userDetail = (userId: string) => {
+    const userDetail = (userId: number) => {
         setDrawerParam(userId)
         setDrawerOpen(true)
     }
@@ -73,7 +73,7 @@ export default function SettingsMembers() {
                 header={
                     drawerParam === 'openInviteMember'
                         ? 'Invite New Members'
-                        : response?.find((item) => item.userId === drawerParam)
+                        : response?.find((item) => item?.id === drawerParam)
                               ?.email
                 }
                 onDismiss={() => {
@@ -91,9 +91,7 @@ export default function SettingsMembers() {
                     />
                 ) : (
                     <MemberDetails
-                        user={response?.find(
-                            (item) => item.userId === drawerParam
-                        )}
+                        user={response?.find((item) => item.id === drawerParam)}
                         close={() => {
                             setDrawerOpen(false)
                             refreshRoleBindings()
@@ -121,8 +119,8 @@ export default function SettingsMembers() {
                 className="mt-2"
                 onRowClick={(event) => {
                     const row = event.detail.item
-                    if (row.userId) {
-                        userDetail(row.userId)
+                    if (row.id) {
+                        userDetail(row.id)
                     }
                 }}
                 columnDefinitions={[
@@ -132,19 +130,19 @@ export default function SettingsMembers() {
                         cell: (item: any) => item.email,
                     },
                     {
-                        id: 'createdAt',
+                        id: 'created_at',
                         header: 'Member Since',
                         cell: (item: any) =>
-                            item.createdAt
-                                ? dateTimeDisplay(item.createdAt)
+                            item.created_at
+                                ? dateTimeDisplay(item.created_at)
                                 : 'Never',
                     },
                     {
-                        id: 'lastActivity',
+                        id: 'last_activity',
                         header: 'Last Activity',
                         cell: (item: any) =>
-                            item.lastActivity
-                                ? dateTimeDisplay(item.lastActivity)
+                            item.last_activity
+                                ? dateTimeDisplay(item.last_activity)
                                 : 'Never',
                     },
                     {
@@ -157,7 +155,7 @@ export default function SettingsMembers() {
                             >
                                 <div className="truncate p-1">
                                     <Text className="truncate font-medium text-gray-800">
-                                        {fixRole(item.roleName || '')}
+                                        {fixRole(item.role_name || '')}
                                     </Text>
                                     {/* <Text className="truncate text-xs text-gray-400">
                                         {(item.scopedConnectionIDs?.length ||
@@ -169,12 +167,25 @@ export default function SettingsMembers() {
                             </Flex>
                         ),
                     },
+                    {
+                        id: 'active',
+                        header: 'Status',
+                        cell: (item: any) => (
+                            <Flex
+                                justifyContent="start"
+                                className="truncate w-full"
+                            >
+                                {item?.is_active ? 'Active' : 'Inactive'}
+                            </Flex>
+                        ),
+                    },
                 ]}
                 columnDisplay={[
                     { id: 'email', visible: true },
-                    { id: 'createdAt', visible: true },
-                    { id: 'lastActivity', visible: true },
+                    { id: 'created_at', visible: true },
+                    { id: 'last_activity', visible: true },
                     { id: 'role', visible: true },
+                    { id: 'active', visible: true },
 
                     // { id: 'action', visible: true },
                 ]}
@@ -199,7 +210,7 @@ export default function SettingsMembers() {
                             <>
                                 <KButton
                                     className="float-right"
-                                    variant='primary'
+                                    variant="primary"
                                     onClick={() => {
                                         openInviteMember()
                                     }}

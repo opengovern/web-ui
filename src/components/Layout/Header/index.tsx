@@ -366,7 +366,7 @@ export default function TopHeader({
         if (url[2] === 'infrastructure-metrics') {
             return 'Inventory'
         }
-        return url[2] ? kebabCaseToLabel(url[2]) : 'Workspaces'
+        return url[2] ? kebabCaseToLabel(url[2]) : 'OpenGovernance'
     }
 
     const subPages = () => {
@@ -385,7 +385,7 @@ export default function TopHeader({
         return temp
     }
 
-    document.title = `${mainPage()} | OpenGovernance`
+    document.title = `${mainPage()} `
 
     return (
         <div className="px-12 pl-48 z-10 absolute  top-0  left-0 w-full flex h-16 items-center justify-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm">

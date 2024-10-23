@@ -107,7 +107,7 @@ export default function Profile({ isCollapsed }: IProfile) {
          new_password: password?.new,
      }
      axios
-         .post(`${url}/main/auth/api/v3/user/password/reset `, body, config)
+         .post(`${url}/main/auth/api/v1/user/password/reset `, body, config)
          .then((res) => {
              //  const temp = []
               setNotification({

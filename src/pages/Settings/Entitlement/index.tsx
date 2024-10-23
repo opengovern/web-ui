@@ -264,23 +264,21 @@ export default function SettingsEntitlement() {
     
 
      axios
-         .get(`${url}/main/workspace/api/v3/migration/status `, config)
+         .get(`${url}/main/metadata/api/v3/migration/status `, config)
          .then((res) => {
-            setStatus(res.data.status)
-            setPercentage(res.data.Summary?.progress_percentage)
-            if(intervalId){
-                if(res.data.status === 'SUCCEEDED'){
-                    clearInterval(intervalId)
-                }
-               
-            }
-            else{
-                if(res.data.status !== 'SUCCEEDED'){
-                   const id = setInterval(GetStatus, 10000)
-                   // @ts-ignore
-                   setIntervalId(id)
-                }
-            }
+             setStatus(res.data.status)
+             setPercentage(res.data.Summary?.progress_percentage)
+             if (intervalId) {
+                 if (res.data.status === 'SUCCEEDED') {
+                     clearInterval(intervalId)
+                 }
+             } else {
+                 if (res.data.status !== 'SUCCEEDED') {
+                     const id = setInterval(GetStatus, 10000)
+                     // @ts-ignore
+                     setIntervalId(id)
+                 }
+             }
              //  const temp = []
              //  if (!res.data.items) {
              //      setLoading(false)
@@ -290,6 +288,7 @@ export default function SettingsEntitlement() {
              //  setTotalCount(res.data.total_count)
          })
          .catch((err) => {
+             clearInterval(intervalId)
              //  setLoading(false)
              //  setBenchmarks([])
 
@@ -314,9 +313,9 @@ export default function SettingsEntitlement() {
      }
 
      axios
-         .put(`${url}/main/workspace/api/v3/sample/loaded `, {},config)
+         .put(`${url}/main/metadata/api/v3/sample/loaded `, {}, config)
          .then((res) => {
-            setLoaded(res.data)
+             setLoaded(res.data)
              //  const temp = []
              //  if (!res.data.items) {
              //      setLoading(false)

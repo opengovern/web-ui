@@ -33,7 +33,7 @@ const fixRole = (role: string) => {
 export default function APIKeyRecord({ item, refresh }: APIKeyRecordProps) {
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
     const { response, isLoading } = useAuthApiV1UserDetail(
-        item.creatorUserID || ''
+        item.creator_user_id || ''
     )
     const setNotification = useSetAtom(notificationAtom)
     const {
@@ -84,7 +84,7 @@ export default function APIKeyRecord({ item, refresh }: APIKeyRecordProps) {
                     className="w-1/4"
                 >
                     <Text className="text-sm font-medium">
-                        {fixRole(item.roleName || '')}
+                        {fixRole(item.role_name || '')}
                     </Text>
                     <Text className="text-xs">
                         {item.maskedKey?.replace('...', '*******')}
@@ -106,7 +106,7 @@ export default function APIKeyRecord({ item, refresh }: APIKeyRecordProps) {
                 >
                     <Text className="text-base">
                         {new Date(
-                            Date.parse(item.createdAt || Date.now().toString())
+                            Date.parse(item.created_at || Date.now().toString())
                         ).toLocaleDateString()}
                     </Text>
                     {deleteIsLoading && deleteIsExecuted ? (

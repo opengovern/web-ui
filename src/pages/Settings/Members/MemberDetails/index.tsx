@@ -35,7 +35,9 @@ interface IMemberDetails {
 
 export default function MemberDetails({ user, close }: IMemberDetails) {
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
-    const [role, setRole] = useState<string>(user?.roleName || 'viewer')
+    const [role, setRole] = useState<string>(user?.role_name || 'viewer')
+    const [isActive, setIsActive] = useState<boolean>(user?.is_active || true)
+
     const [password, setPassword] = useState<string>('')
     const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
         'viewer'
@@ -53,6 +55,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
         {
             email_address: user?.email || '',
             role: roleValue,
+            is_active: isActive
         },
         {},
         false
@@ -62,7 +65,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
         isExecuted: deleteExecuted,
         isLoading: deleteLoading,
         sendNow: deleteRole,
-    } = useAuthApiV1UserRoleBindingDelete(user?.email || '', {}, false)
+    } = useAuthApiV1UserRoleBindingDelete(user?.id || 0, {}, false)
 
     useEffect(() => {
         if (role === 'viewer' || role === 'editor' || role === 'admin') {
@@ -92,11 +95,11 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
     }
 
     const lastActivity = () => {
-        if (user.lastActivity === undefined) {
+        if (user.last_activity === undefined) {
             return 'Never'
         }
 
-        return dateTimeDisplay(user.lastActivity)
+        return dateTimeDisplay(user.last_activity)
     }
 
     const items = [
@@ -106,7 +109,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
         },
         {
             title: 'Member Since',
-            value: dateTimeDisplay(user.createdAt || Date.now().toString()),
+            value: dateTimeDisplay(user.created_at || Date.now().toString()),
         },
         {
             title: 'Last Activity',
@@ -206,6 +209,35 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                             </ListItem>
                         )
                     })}
+                    <ListItem key={'is_active'} className="py-4">
+                        <Flex
+                            justifyContent="start"
+                            className="truncate space-x-4 w-fit"
+                        >
+                            <Text className="font-medium text-gray-500">
+                                User Status
+                            </Text>
+                        </Flex>
+                        <div className="relative flex items-start">
+                            <div className="absolute flex h-6 items-center">
+                                <input
+                                    name="roles"
+                                    type="radio"
+                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                    onClick={() => {
+                                        setIsActive(!isActive)
+                                    }}
+                                    checked={isActive == true ? true : false}
+                                  
+                                />
+                            </div>
+                            <div className="pl-7 text-sm leading-6">
+                                <div className="font-medium text-gray-900">
+                                    {isActive ? 'Active' : 'In Active'}
+                                </div>
+                            </div>
+                        </div>
+                    </ListItem>
                     {/* <ListItem key="password">
                         <Flex
                             justifyContent="between"

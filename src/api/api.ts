@@ -78,7 +78,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest {
      * Name of the role
      * @example "admin"
      */
-    roleName?: 'admin' | 'editor' | 'viewer'
+    role?: 'admin' | 'editor' | 'viewer'
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse {
@@ -272,6 +272,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest {
      */
     role?: 'admin' | 'editor' | 'viewer'
     password: string
+    is_active : boolean
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgAuthApiInviteStatus {
@@ -295,6 +296,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest {
      */
     // password: string
     // userId: string
+    is_active: boolean
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgAuthApiTheme {
@@ -326,12 +328,12 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey {
      * Creation timestamp in UTC
      * @example "2023-03-31T09:36:09.855Z"
      */
-    createdAt?: string
+    created_at?: string
     /**
      * Unique identifier of the user who created the key
      * @example "auth|123456789"
      */
-    creatorUserID?: string
+    creator_user_id?: string
     /**
      * Unique identifier for the key
      * @example 1
@@ -351,12 +353,12 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey {
      * Name of the role
      * @example "admin"
      */
-    roleName?: 'admin' | 'editor' | 'viewer'
+    role_name?: 'admin' | 'editor' | 'viewer'
     /**
      * Last update timestamp in UTC
      * @example "2023-04-21T08:53:09.928Z"
      */
-    updatedAt?: string
+    updated_at?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding {
@@ -364,7 +366,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding {
      * Creation timestamp in UTC
      * @example "2023-03-31T09:36:09.855Z"
      */
-    createdAt?: string
+    created_at?: string
     /**
      * Email address of the user
      * @example "johndoe@example.com"
@@ -374,12 +376,12 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding {
      * Last activity timestamp in UTC
      * @example "2023-04-21T08:53:09.928Z"
      */
-    lastActivity?: string
+    last_activity?: string
     /**
      * Name of the role
      * @example "admin"
      */
-    roleName?: 'admin' | 'editor' | 'viewer'
+    role_name?: 'admin' | 'editor' | 'viewer'
     scopedConnectionIDs?: string[]
     /**
      * Invite status
@@ -390,12 +392,13 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding {
      * Unique identifier for the user
      * @example "auth|123456789"
      */
-    userId?: string
+    id?: number
     /**
      * Username
      * @example "John Doe"
      */
     userName?: string
+    is_active? : boolean
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSummary {
@@ -4110,7 +4113,7 @@ export class Api<
                 GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
                 EchoHTTPError
             >({
-                path: `/auth/api/v1/key/create`,
+                path: `/auth/api/v1/keys/`,
                 method: 'POST',
                 body: request,
                 secure: true,
@@ -4130,7 +4133,7 @@ export class Api<
          */
         apiV1KeyDeleteDelete: (id: string, params: RequestParams = {}) =>
             this.request<void, any>({
-                path: `/auth/api/v1/key/${id}/delete`,
+                path: `/auth/api/v1/key/${id}`,
                 method: 'DELETE',
                 secure: true,
                 ...params,
@@ -4192,7 +4195,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
-                path: `/auth/api/v3/user/create`,
+                path: `/auth/api/v1/user`,
                 method: 'POST',
                 body: request,
                 secure: true,
@@ -4236,8 +4239,8 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
-                path: `/auth/api/v3/user/update`,
-                method: 'POST',
+                path: `/auth/api/v1/user`,
+                method: 'PUT',
                 body: request,
                 secure: true,
                 type: ContentType.Json,
@@ -4258,11 +4261,11 @@ export class Api<
             //     /** User ID */
             //     userId: string
             // },
-            email: string,
+            id: number,
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
-                path: `/auth/api/v3/user/${email}/delete`,
+                path: `/auth/api/v1/user/${id}`,
                 method: 'DELETE',
                 // query: query,
                 secure: true,
@@ -4351,7 +4354,7 @@ export class Api<
                 GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding[],
                 any
             >({
-                path: `/auth/api/v1/workspace/role/bindings`,
+                path: `/auth/api/v1/users`,
                 method: 'GET',
                 secure: true,
                 format: 'json',
@@ -7990,7 +7993,7 @@ export class Api<
                 GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
                 any
             >({
-                path: `/workspace/api/v3/sample/sync`,
+                path: `/metadata/api/v3/sample/sync`,
                 method: 'PUT',
                 // query: query,
                 secure: true,
@@ -8012,7 +8015,7 @@ export class Api<
                 GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
                 any
             >({
-                path: `/workspace/api/v3/sample/purge`,
+                path: `/metadata/api/v3/sample/purge`,
                 method: 'PUT',
                 // query: query,
                 secure: true,
@@ -8031,7 +8034,7 @@ export class Api<
          */
         apiV3GetSetup: (data: any, params: RequestParams = {}) =>
             this.request<string, any>({
-                path: `/workspace/api/v3/configured/status`,
+                path: `/metadata/api/v3/configured/status`,
                 method: 'GET',
                 // query: query,
                 secure: true,
@@ -8050,7 +8053,7 @@ export class Api<
          */
         apiV3DoneSetup: (data: any, params: RequestParams = {}) =>
             this.request<string, any>({
-                path: `/workspace/api/v3/configured/set`,
+                path: `/metadata/api/v3/configured/set`,
                 method: 'PUT',
                 // query: query,
                 secure: true,

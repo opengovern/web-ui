@@ -56,7 +56,7 @@ export default function CreateAPIKey({ close }: CreateAPIKeyProps) {
         error,
         sendNow: callCreate,
     } = useAuthApiV1KeyCreateCreate(
-        { name: apiKeyName, roleName: roleValue },
+        { name: apiKeyName, role: roleValue },
         {},
         false
     )

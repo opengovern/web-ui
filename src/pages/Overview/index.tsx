@@ -59,6 +59,7 @@ export default function Overview() {
             email_address: userData?.email || '',
             role: 'admin',
             password: userData?.password,
+            is_active: true
         },
         {},
         false
@@ -82,7 +83,7 @@ export default function Overview() {
         }
 
         axios
-            .get(`${url}/main/auth/api/v3/user/password/check`, config)
+            .get(`${url}/main/auth/api/v1/user/password/check`, config)
             .then((res) => {
                 //  const temp = []
                 if (res.data == 'CHANGE_REQUIRED') {
@@ -146,7 +147,7 @@ export default function Overview() {
             new_password: password?.new,
         }
         axios
-            .post(`${url}/main/auth/api/v3/user/password/reset `, body, config)
+            .post(`${url}/main/auth/api/v1/user/password/reset `, body, config)
             .then((res) => {
                 //  const temp = []
                 setChange(false)

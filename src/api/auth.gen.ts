@@ -981,7 +981,7 @@ interface IuseAuthApiV1UserRoleBindingDeleteState {
  * URL:
  */
 export const useAuthApiV1UserRoleBindingDelete = (
-    email: string,
+    id: number,
     params: RequestParams = {},
     autoExecute = true,
     overwriteWorkspace: string | undefined = undefined
@@ -1004,7 +1004,7 @@ export const useAuthApiV1UserRoleBindingDelete = (
 
     const sendRequest = (
         abortCtrl: AbortController,
-        reqemail: string,
+        reqid: number,
         reqparams: RequestParams
     ) => {
         if (!api.instance.defaults.headers.common.Authorization) {
@@ -1028,7 +1028,7 @@ export const useAuthApiV1UserRoleBindingDelete = (
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.auth
-                .apiV1UserRoleBindingDelete(reqemail, reqparamsSignal)
+                .apiV1UserRoleBindingDelete(reqid, reqparamsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1073,7 +1073,7 @@ export const useAuthApiV1UserRoleBindingDelete = (
             controller.abort()
             const newController = new AbortController()
             setController(newController)
-            sendRequest(newController, email, params)
+            sendRequest(newController, id, params)
         }
     }, [lastInput])
 
@@ -1085,14 +1085,14 @@ export const useAuthApiV1UserRoleBindingDelete = (
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController, email, params)
+        sendRequest(newController, id, params)
     }
 
-    const sendNowWithParams = (reqemail: string, reqparams: RequestParams) => {
+    const sendNowWithParams = (reqid: number, reqparams: RequestParams) => {
         controller.abort()
         const newController = new AbortController()
         setController(newController)
-        sendRequest(newController, reqemail, reqparams)
+        sendRequest(newController, reqid, reqparams)
     }
 
     return {
