@@ -60,7 +60,7 @@ export const useWorkspaceApiV1BootstrapDetail = (
             isExecuted: true,
         })
         try {
-            setWorkspace('kaytu')
+            setWorkspace('main')
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
@@ -194,7 +194,7 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
             isExecuted: true,
         })
         try {
-            setWorkspace('kaytu')
+            setWorkspace('main')
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
@@ -336,7 +336,7 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
             isExecuted: true,
         })
         try {
-            setWorkspace('kaytu')
+            setWorkspace('main')
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
@@ -467,7 +467,7 @@ export const useWorkspaceApiV1WorkspaceCreate = (
             isExecuted: true,
         })
         try {
-            setWorkspace('kaytu')
+            setWorkspace('main')
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
@@ -602,7 +602,7 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -731,7 +731,7 @@ export const useWorkspaceApiV1WorkspaceDelete = (
             isExecuted: true,
         })
         try {
-            setWorkspace('kaytu')
+            setWorkspace('main')
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
@@ -860,7 +860,7 @@ export const useWorkspaceApiV1WorkspacesList = (
             isExecuted: true,
         })
         try {
-            setWorkspace('kaytu')
+            setWorkspace('main')
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
@@ -997,7 +997,7 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
             isExecuted: true,
         })
         try {
-            setWorkspace('kaytu')
+            setWorkspace('main')
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
@@ -1139,7 +1139,7 @@ export const useWorkspaceApiV3LoadSampleData = (
             isExecuted: true,
         })
         try {
-            setWorkspace('kaytu')
+            setWorkspace('main')
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
@@ -1254,7 +1254,7 @@ export const useWorkspaceApiV3PurgeSampleData = (
             isExecuted: true,
         })
         try {
-            setWorkspace('kaytu')
+            setWorkspace('main')
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
@@ -1375,7 +1375,7 @@ export const useWorkspaceApiV3GetShouldSetup = (
             isExecuted: true,
         })
         try {
-            setWorkspace('kaytu')
+            setWorkspace('main')
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace
@@ -1497,7 +1497,7 @@ export const useWorkspaceApiV3DoneSetup = (
             isExecuted: true,
         })
         try {
-            setWorkspace('kaytu')
+            setWorkspace('main')
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
             api.workspace

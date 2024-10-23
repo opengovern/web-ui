@@ -66,7 +66,7 @@ export const useWastageApiV1WastageAwsRdsCreate = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -204,7 +204,7 @@ export const useWastageApiV1WastageAwsRdsClusterCreate = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -342,7 +342,7 @@ export const useWastageApiV1WastageEc2InstanceCreate = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }

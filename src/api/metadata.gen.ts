@@ -62,7 +62,7 @@ export const useMetadataApiV1FilterList = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -196,7 +196,7 @@ export const useMetadataApiV1FilterCreate = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -333,7 +333,7 @@ export const useMetadataApiV1MetadataCreate = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -470,7 +470,7 @@ export const useMetadataApiV1MetadataDetail = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -603,7 +603,7 @@ export const useMetadataApiV1QueryParameterList = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -738,7 +738,7 @@ export const useMetadataApiV1QueryParameterCreate = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }

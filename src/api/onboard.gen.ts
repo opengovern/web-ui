@@ -85,7 +85,7 @@ export const useOnboardApiV1CatalogMetricsList = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -233,7 +233,7 @@ export const useOnboardApiV1ConnectionGroupsList = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -383,7 +383,7 @@ export const useOnboardApiV1ConnectionGroupsDetail = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -535,7 +535,7 @@ export const useOnboardApiV1ConnectionsAwsCreate = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -755,7 +755,7 @@ export const useOnboardApiV1ConnectionsSummaryList = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -937,7 +937,7 @@ export const useOnboardApiV1ConnectionsStateCreate = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -1082,7 +1082,7 @@ export const useOnboardApiV1ConnectorList = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -1248,7 +1248,7 @@ export const useOnboardApiV1CredentialList = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -1402,7 +1402,7 @@ export const useOnboardApiV1CredentialCreate = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -1539,7 +1539,7 @@ export const useOnboardApiV1CredentialDetail = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -1678,7 +1678,7 @@ export const useOnboardApiV1CredentialUpdate = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -1825,7 +1825,7 @@ export const useOnboardApiV1CredentialDelete = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -1963,7 +1963,7 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -2103,7 +2103,7 @@ export const useOnboardApiV1SourceAwsCreate = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -2240,7 +2240,7 @@ export const useOnboardApiV1SourceAzureCreate = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -2377,7 +2377,7 @@ export const useOnboardApiV1SourceDelete = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -2523,7 +2523,7 @@ export const useOnboardApiV1SourceHealthcheckDetail = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }
@@ -2669,7 +2669,7 @@ export const useOnboardApiV2CredentialCreate = (
             } else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
 
             const reqparamsSignal = { ...reqparams, signal: abortCtrl.signal }

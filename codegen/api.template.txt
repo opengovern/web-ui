@@ -50,7 +50,7 @@ export const {{ .APIName }} = ({{ .Func.Params }}, autoExecute = true, overwrite
         })
         try {
             {{ if and (eq .ModuleName "workspace") (ne .Func.Name "apiV1WorkspaceCurrentList") }}
-            setWorkspace('kaytu')
+            setWorkspace('main')
             {{ else }}
             if (overwriteWorkspace) {
                 setWorkspace(overwriteWorkspace)
@@ -58,7 +58,7 @@ export const {{ .APIName }} = ({{ .Func.Params }}, autoExecute = true, overwrite
             else if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
-                setWorkspace('kaytu')
+                setWorkspace('main')
             }
             {{ end }}
 
