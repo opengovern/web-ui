@@ -26,7 +26,7 @@ import {
     useIntegrationApiV1ConnectionsSummariesList,
 } from '../../../../api/integration.gen'
 import KButton from '@cloudscape-design/components/button'
-import { Modal } from '@cloudscape-design/components'
+import { Modal, Toggle } from '@cloudscape-design/components'
 
 interface IMemberDetails {
     user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
@@ -36,7 +36,7 @@ interface IMemberDetails {
 export default function MemberDetails({ user, close }: IMemberDetails) {
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
     const [role, setRole] = useState<string>(user?.role_name || 'viewer')
-    const [isActive, setIsActive] = useState<boolean>(user?.is_active || true)
+    const [isActive, setIsActive] = useState<boolean>(user?.is_active == true ? true :false)
 
     const [password, setPassword] = useState<string>('')
     const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
@@ -219,23 +219,14 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                             </Text>
                         </Flex>
                         <div className="relative flex items-start">
-                            <div className="absolute flex h-6 items-center">
-                                <input
-                                    name="roles"
-                                    type="radio"
-                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                    onClick={() => {
-                                        setIsActive(!isActive)
-                                    }}
-                                    checked={isActive == true ? true : false}
-                                  
-                                />
-                            </div>
-                            <div className="pl-7 text-sm leading-6">
-                                <div className="font-medium text-gray-900">
-                                    {isActive ? 'Active' : 'In Active'}
-                                </div>
-                            </div>
+                            <Toggle
+                                onChange={({ detail }) =>
+                                    setIsActive(detail.checked)
+                                }
+                                checked={isActive}
+                            >
+                                {isActive ? 'Active' : 'Inactive'}
+                            </Toggle>
                         </div>
                     </ListItem>
                     {/* <ListItem key="password">

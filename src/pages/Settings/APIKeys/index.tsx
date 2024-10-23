@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Card, Flex, Text, Title } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { useAuthApiV1KeyDeleteDelete, useAuthApiV1KeysList } from '../../../api/auth.gen'
@@ -12,16 +12,22 @@ import {
     Alert,
     Box,
     Header,
+    KeyValuePairs,
     Link,
     Modal,
     SpaceBetween,
     Table,
+    Toggle,
 } from '@cloudscape-design/components'
 import KButton from '@cloudscape-design/components/button'
 import { TrashIcon } from '@heroicons/react/24/outline'
+import axios from 'axios'
 export default function SettingsWorkspaceAPIKeys() {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+    const [drawerOpenEdit, setDrawerOpenEdit] = useState<boolean>(false)
+
     const [deletModalOpen, setDeleteModalOpen] = useState<boolean>(false)
+    const [editLoading,setEditLoading] = useState(false)
     const [selectedItem, setSelectedItem] = useState<any>()
 
    const {
@@ -34,14 +40,24 @@ export default function SettingsWorkspaceAPIKeys() {
 
 
     const { response, isLoading, sendNow } = useAuthApiV1KeysList()
+ const roleItems = [
+     {
+         value: 'admin',
+         title: 'Admin',
+         description: 'Have full access',
+     },
+     {
+         value: 'editor',
+         title: 'Editor',
+         description: 'Can view, edit and delete data',
+     },
+     {
+         value: 'viewer',
+         title: 'Viewer',
+         description: 'Member can only view the data',
+     },
+ ]
 
-    if (isLoading) {
-        return (
-            <Flex justifyContent="center" className="mt-56">
-                <Spinner />
-            </Flex>
-        )
-    }
 const fixRole = (role: string) => {
     switch (role) {
         case 'admin':
@@ -53,17 +69,59 @@ const fixRole = (role: string) => {
         default:
             return role
     }
-}
-
+}   
+  
     const openCreateMenu = () => {
         setDrawerOpen(true)
     }
+  
+       useEffect(() => {
+            if(deleteIsExecuted && !deleteIsLoading && error!='') {
+                sendNow()
+                setDeleteModalOpen(false)
+            }
+       }, [responseDelete,deleteIsExecuted,deleteIsLoading])
+       
+     const EditKey = () => {
+         // /compliance/api/v3/benchmark/{benchmark-id}/assignments
+         setEditLoading(true)
+         let url = ''
+         if (window.location.origin === 'http://localhost:3000') {
+             url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+         } else {
+             url = window.location.origin
+         }
+         // @ts-ignore
+         const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
-    return isLoading ? (
-        <Flex justifyContent="center" className="mt-56">
-            <Spinner />
-        </Flex>
-    ) : (
+         const config = {
+             headers: {
+                 Authorization: `Bearer ${token}`,
+             },
+         }
+         const body = {
+             is_active: selectedItem?.active,
+             role: selectedItem?.role_name,
+         }
+         axios
+             .put(
+                 `${url}/main/auth/api/v1/key/${selectedItem?.id}`,
+                 body,
+                 config
+             )
+             .then((res) => {
+                    setEditLoading(false)
+                    sendNow()
+                    setDrawerOpenEdit(false)
+             })
+             .catch((err) => {
+                 console.log(err)
+                    setEditLoading(false)
+
+             })
+     }
+   
+    return (
         <>
             {/* <TopHeader /> */}
 
@@ -80,6 +138,119 @@ const fixRole = (role: string) => {
                         sendNow()
                     }}
                 />
+            </Modal>
+            <Modal
+                visible={drawerOpenEdit}
+                header={selectedItem?.name}
+                onDismiss={() => {
+                    setDrawerOpenEdit(false)
+                }}
+            >
+                {selectedItem ? (
+                    <>
+                        <Flex
+                            flexDirection="col"
+                            justifyContent="start"
+                            alignItems="start"
+                            className="gap-2"
+                        >
+                            <KeyValuePairs
+                                columns={2}
+                                items={[
+                                    {
+                                        label: 'Name',
+                                        value: selectedItem?.name,
+                                    },
+                                    {
+                                        label: 'Creator User',
+                                        value: selectedItem?.creator_user_id,
+                                    },
+                                ]}
+                            />
+                        </Flex>
+                        <Flex className="mt-2">
+                            <Text className=" font-bold text-black text-l">
+                                Status
+                            </Text>
+                            <Toggle
+                                onChange={({ detail }) =>
+                                    setSelectedItem({
+                                        ...selectedItem,
+                                        active: detail.checked,
+                                    })
+                                }
+                                checked={selectedItem?.active}
+                            >
+                                {selectedItem?.active ? 'Active' : 'Inactive'}
+                            </Toggle>
+                        </Flex>
+                        <Flex
+                            justifyContent="between"
+                            alignItems="start"
+                            className="truncate space-x-4 mt-4"
+                        >
+                            <Text className=" font-bold text-black text-l">
+                                Role
+                            </Text>
+
+                            <div className="space-y-5 sm:mt-0">
+                                {roleItems.map((item) => {
+                                    return (
+                                        <div className="relative flex items-start">
+                                            <div className="absolute flex h-6 items-center">
+                                                <input
+                                                    name="roles"
+                                                    type="radio"
+                                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                                    onClick={() => {
+                                                        setSelectedItem({
+                                                            ...selectedItem,
+                                                            role_name:
+                                                                item.value,
+                                                        })
+                                                    }}
+                                                    checked={
+                                                        item.value ===
+                                                        selectedItem.role_name
+                                                    }
+                                                />
+                                            </div>
+                                            <div className="pl-7 text-sm leading-6">
+                                                <div className="font-medium text-gray-900">
+                                                    {item.title}
+                                                </div>
+                                                <p className="text-gray-500">
+                                                    {item.description}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </Flex>
+                        <Flex className="w-full justify-end mt-2 gap-3">
+                            <KButton
+                                loading={deleteIsLoading && deleteIsExecuted}
+                                disabled={deleteIsExecuted && deleteIsLoading}
+                                onClick={(event) => {
+                                    setDeleteModalOpen(true)
+                                    setDrawerOpenEdit(false)
+                                }}
+                            >
+                                <TrashIcon className="h-5 w-5" color="rose" />
+                            </KButton>
+                            <KButton
+                                loading={editLoading}
+                                onClick={() => EditKey()}
+                                variant="primary"
+                            >
+                                Update Changes
+                            </KButton>
+                        </Flex>
+                    </>
+                ) : (
+                    <Spinner />
+                )}
             </Modal>
             <Modal
                 visible={deletModalOpen}
@@ -118,6 +289,14 @@ const fixRole = (role: string) => {
             </Modal>
             <Table
                 className="mt-2"
+                onRowClick={(event) => {
+                    const row = event.detail.item
+                    console.log(event)
+                    if (row) {
+                        setSelectedItem(row)
+                        setDrawerOpenEdit(true)
+                    }
+                }}
                 columnDefinitions={[
                     {
                         id: 'name',
@@ -180,27 +359,7 @@ const fixRole = (role: string) => {
                     {
                         id: 'action',
                         header: 'Actions',
-                        cell: (item: any) => (
-                            <>
-                                <KButton
-                                    loading={
-                                        deleteIsLoading && deleteIsExecuted
-                                    }
-                                    disabled={
-                                        deleteIsExecuted && deleteIsLoading
-                                    }
-                                    onClick={() => {
-                                        setSelectedItem(item)
-                                        setDeleteModalOpen(true)
-                                    }}
-                                >
-                                    <TrashIcon
-                                        className="h-5 w-5"
-                                        color="rose"
-                                    />
-                                </KButton>
-                            </>
-                        ),
+                        cell: (item: any) => <></>,
                     },
                 ]}
                 columnDisplay={[
@@ -210,7 +369,7 @@ const fixRole = (role: string) => {
                     { id: 'created_date', visible: true },
                     { id: 'active', visible: true },
 
-                    { id: 'action', visible: true },
+                    // { id: 'action', visible: true },
 
                     // { id: 'action', visible: true },
                 ]}

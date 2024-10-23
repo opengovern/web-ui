@@ -43,6 +43,8 @@ const roleItems = [
 export default function CreateAPIKey({ close }: CreateAPIKeyProps) {
     const [apiKeyName, setApiKeyName] = useState<string>('')
     const [showCopied, setShowCopied] = useState<boolean>(false)
+    const [copyOpen, setCopyOpen] = useState<boolean>(false)
+
     const [role, setRole] = useState<string>('viewer')
     const [roleValue, setRoleValue] = useState<
         'admin' | 'editor' | 'viewer' | undefined
@@ -62,13 +64,14 @@ export default function CreateAPIKey({ close }: CreateAPIKeyProps) {
     )
 
     useEffect(() => {
-        // if (isExecuted && !isLoading) {
-        //     setNotification({
-        //         text: 'API key successfully added',
-        //         type: 'success',
-        //     })
-        //     close()
-        // }
+        if (isExecuted && !isLoading) {
+            setNotification({
+                text: 'API key successfully added',
+                type: 'success',
+            })
+            // close()
+            setCopyOpen(true)
+        }
         if (error) {
             setNotification({
                 text: 'Unable to add new API key',
@@ -87,51 +90,56 @@ export default function CreateAPIKey({ close }: CreateAPIKeyProps) {
         <Flex flexDirection="col" justifyContent="between" className="h-full">
             <Modal
                 header={error === undefined ? 'Successful' : 'Failed'}
-               
-                visible={!isLoading && isExecuted}
-              
+                visible={copyOpen}
                 onDismiss={() => {
                     close()
+                    setCopyOpen(false)
+                    setApiKeyName('')
                 }}
             >
                 <>
-                  {  error === undefined ? (
-                    <Flex
-                        flexDirection="col"
-                        justifyContent="start"
-                        alignItems="start"
-                    >
-                        API key created, copy the key and keep it safe:
-                        <Card
-                            className="w-full cursor-pointer mt-2"
-                            onClick={() => {
-                                setShowCopied(true)
-                                setTimeout(() => setShowCopied(false), 2000)
-                                clipboardCopy(response?.token || '')
-                            }}
+                    {error === undefined ? (
+                        <Flex
+                            flexDirection="col"
+                            justifyContent="start"
+                            alignItems="start"
                         >
-                            <Flex flexDirection="row" justifyContent="between">
-                                <div className="w-full break-all">
-                                    {response?.token}
-                                </div>
+                            API key created, copy the key and keep it safe:
+                            <Card
+                                className="w-full cursor-pointer mt-2"
+                                onClick={() => {
+                                    setShowCopied(true)
+                                    setTimeout(() => setShowCopied(false), 2000)
+                                    clipboardCopy(response?.token || '')
+                                }}
+                            >
                                 <Flex
-                                    flexDirection="col"
-                                    justifyContent="start"
-                                    className="h-5 w-5"
+                                    flexDirection="row"
+                                    justifyContent="between"
                                 >
-                                    <DocumentDuplicateIcon className="h-5 w-5 text-openg-600 " />
-                                    <Text
-                                        className={`${
-                                            showCopied ? '' : 'hidden'
-                                        } absolute mt-6 bg-openg-600 text-white rounded-md p-1`}
+                                    <div className="w-full break-all">
+                                        {response?.token}
+                                    </div>
+                                    <Flex
+                                        flexDirection="col"
+                                        justifyContent="start"
+                                        className="h-5 w-5"
                                     >
-                                        Copied!
-                                    </Text>
+                                        <DocumentDuplicateIcon className="h-5 w-5 text-openg-600 " />
+                                        <Text
+                                            className={`${
+                                                showCopied ? '' : 'hidden'
+                                            } absolute mt-6 bg-openg-600 text-white rounded-md p-1`}
+                                        >
+                                            Copied!
+                                        </Text>
+                                    </Flex>
                                 </Flex>
-                            </Flex>
-                        </Card>
-                    </Flex>
-                    ) : ( `Failed to create the API Key` )}
+                            </Card>
+                        </Flex>
+                    ) : (
+                        `Failed to create the API Key`
+                    )}
                 </>
             </Modal>
             <List className="mt-4 h-full">
