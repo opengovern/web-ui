@@ -54,7 +54,7 @@ export default function ScoreCategoryCard({
     return (
         <Card
             onClick={() =>
-                navigate(`/ws/${ws}/compliance/${category}${searchParams}`)
+                navigate(`/compliance/${category}${searchParams}`)
             }
             className={` ${
                 varient === 'default'

@@ -178,7 +178,7 @@ export default function Dashboard() {
                                                     // @ts-ignore
                                                     e.preventDefault()
                                                 }}
-                                                href={`/ws/${workspace}/dashboard/${item.page}`}
+                                                href={`/dashboard/${item.page}`}
                                                 fontSize="heading-m"
                                             >
                                                 <Flex

@@ -49,15 +49,15 @@ import SettingsProfile from '../pages/Settings/Profile'
 import SearchLanding from '../pages/Search/landing'
 
 const authRoutes = [
-    {
-        key: 'url',
-        path: '/',
-        element: <Navigate to="/ws/workspaces?onLogin" replace />,
-        noAuth: true,
-    },
+    // {
+    //     key: 'url',
+    //     path: '/',
+    //     element: <Navigate to="/ws/workspaces?onLogin" replace />,
+    //     noAuth: true,
+    // },
     {
         key: 'ws name',
-        path: '/ws/:ws',
+        path: '/',
         element: <Navigate to="overview" />,
         noAuth: true,
     },
@@ -79,311 +79,311 @@ const authRoutes = [
         element: <NotFound />,
         noAuth: true,
     },
-    {
-        key: 'workspaces',
-        path: '/ws/workspaces',
-        element: <Workspaces />,
-    },
+    // {
+    //     key: 'workspaces',
+    //     path: '/ws/workspaces',
+    //     element: <Workspaces />,
+    // },
     {
         key: 'workload optimizer',
-        path: '/ws/:ws/workload-optimizer',
+        path: '/workload-optimizer',
         element: <RequestAccess />,
     },
     {
         key: 'stacks',
-        path: '/ws/:ws/stacks',
+        path: '/stacks',
         element: <RequestAccess />,
     },
     {
         key: 'Automation',
-        path: '/ws/:ws/automation',
+        path: '/automation',
         element: <RequestAccess />,
     },
     {
         key: 'dashboards',
-        path: '/ws/:ws/dashboard',
+        path: '/dashboard',
         element: <Dashboard />,
     },
     {
         key: 'infrastructure',
-        path: '/ws/:ws/dashboard/infrastructure',
+        path: '/dashboard/infrastructure',
         element: <Assets />,
     },
     {
         key: 'infrastructure single',
-        path: '/ws/:ws/dashboard/infrastructure/:id',
+        path: '/dashboard/infrastructure/:id',
         element: <Single />,
     },
     {
         key: 'infrastructure single metric',
-        path: '/ws/:ws/dashboard/infrastructure/:id/:metric',
+        path: '/dashboard/infrastructure/:id/:metric',
         element: <Single />,
     },
     {
         key: 'infrastructure single metric',
-        path: '/ws/:ws/dashboard/infrastructure-cloud-account/:id/:metric',
+        path: '/dashboard/infrastructure-cloud-account/:id/:metric',
         element: <Single />,
     },
     {
         key: 'infrastructure account detail',
-        path: '/ws/:ws/dashboard/infrastructure-cloud-accounts',
+        path: '/dashboard/infrastructure-cloud-accounts',
         element: <AssetAccounts />,
     },
     {
         key: 'infrastructure account detail single',
-        path: '/ws/:ws/dashboard/infrastructure-cloud-accounts/:id/:metric',
+        path: '/dashboard/infrastructure-cloud-accounts/:id/:metric',
         element: <Single />,
     },
     {
         key: 'infrastructure account detail single',
-        path: '/ws/:ws/dashboard/infrastructure-cloud-accounts/:id',
+        path: '/dashboard/infrastructure-cloud-accounts/:id',
         element: <Single />,
     },
     {
         key: 'infrastructure metric detail',
-        path: '/ws/:ws/dashboard/infrastructure-metrics',
+        path: '/dashboard/infrastructure-metrics',
         element: <AssetMetrics />,
     },
     {
         key: 'infrastructure single 2',
-        path: '/ws/:ws/dashboard/infrastructure-metrics/:id',
+        path: '/dashboard/infrastructure-metrics/:id',
         element: <Single />,
     },
     {
         key: 'infrastructure single metric 2',
-        path: '/ws/:ws/dashboard/infrastructure-metrics/:id/:metric',
+        path: '/dashboard/infrastructure-metrics/:id/:metric',
         element: <Single />,
     },
     {
         key: 'spend',
-        path: '/ws/:ws/dashboard/spend',
+        path: '/dashboard/spend',
         element: <SpendOverview />,
     },
     {
         key: 'spend single 1',
-        path: '/ws/:ws/dashboard/spend/:id',
+        path: '/dashboard/spend/:id',
         element: <SingleSpend />,
     },
     {
         key: 'spend single metric 1',
-        path: '/ws/:ws/dashboard/spend/:id/:metric',
+        path: '/dashboard/spend/:id/:metric',
         element: <SingleSpend />,
     },
     {
         key: 'spend',
-        path: '/ws/:ws/dashboard/spend-metrics',
+        path: '/dashboard/spend-metrics',
         element: <SpendMetrics />,
     },
     {
         key: 'spend',
-        path: '/ws/:ws/dashboard/spend-accounts',
+        path: '/dashboard/spend-accounts',
         element: <SpendAccounts />,
     },
     {
         key: 'spend single',
-        path: '/ws/:ws/dashboard/spend-accounts/:id',
+        path: '/dashboard/spend-accounts/:id',
         element: <SingleSpend />,
     },
     {
         key: 'spend single metric',
-        path: '/ws/:ws/dashboard/spend-accounts/:id/:metric',
+        path: '/dashboard/spend-accounts/:id/:metric',
         element: <SingleSpend />,
     },
     {
         key: 'spend single',
-        path: '/ws/:ws/dashboard/spend-metrics/:id',
+        path: '/dashboard/spend-metrics/:id',
         element: <SingleSpend />,
     },
     {
         key: 'spend single metric',
-        path: '/ws/:ws/dashboard/spend-metrics/:id/:metric',
+        path: '/dashboard/spend-metrics/:id/:metric',
         element: <SingleSpend />,
     },
     {
         key: 'spend single 2',
-        path: '/ws/:ws/dashboard/spend/spend-details/:id',
+        path: '/dashboard/spend/spend-details/:id',
         element: <SingleSpend />,
     },
     {
         key: 'spend single metric 2',
-        path: '/ws/:ws/dashboard/spend/spend-details/:id/:metric',
+        path: '/dashboard/spend/spend-details/:id/:metric',
         element: <SingleSpend />,
     },
     {
         key: 'score',
-        path: '/ws/:ws/score',
+        path: '/score',
         element: <ScoreOverview />,
     },
     {
         key: 'score category',
-        path: '/ws/:ws/score/:category',
+        path: '/score/:category',
         element: <ScoreCategory />,
     },
     {
         key: 'score details',
-        path: '/ws/:ws/score/:category/:id',
+        path: '/score/:category/:id',
         element: <ScoreDetails />,
     },
     {
         key: 'integrations',
-        path: '/ws/:ws/integrations',
+        path: '/integrations',
         element: <Integrations />,
     },
     {
         key: 'request-access',
-        path: '/ws/:ws/request-access',
+        path: '/request-access',
         element: <RequestAccess />,
     },
     {
         key: 'connector detail',
-        path: '/ws/:ws/integrations/:connector',
+        path: '/integrations/:connector',
         element: <ConnectorDetail />,
     },
     {
         key: 'connector resource types',
-        path: '/ws/:ws/integrations/:connector/resourcetypes',
+        path: '/integrations/:connector/resourcetypes',
         element: <ConnectorResourceTypes />,
     },
     {
         key: 'settings page',
-        path: '/ws/:ws/administration',
+        path: '/administration',
         element: <Settings />,
     },
     {
         key: 'Profile',
-        path: '/ws/:ws/profile',
+        path: '/profile',
         element: <SettingsProfile />,
     },
     {
         key: 'settings Jobs',
-        path: '/ws/:ws/jobs',
+        path: '/jobs',
         element: <SettingsJobs />,
     },
     {
         key: 'settings APi Keys',
-        path: '/ws/:ws/settings/api-keys',
+        path: '/settings/api-keys',
         element: <SettingsWorkspaceAPIKeys />,
     },
     // {
     //     key: 'settings variables',
-    //     path: '/ws/:ws/settings/variables',
+    //     path: '/settings/variables',
     //     element: <SettingsParameters />,
     // },
     {
         key: 'settings Authentications',
-        path: '/ws/:ws/settings/authentication',
+        path: '/settings/authentication',
         element: <SettingsMembers />,
     },
     {
         key: 'settings Access',
-        path: '/ws/:ws/settings/access',
+        path: '/settings/access',
         element: <SettingsAccess />,
     },
     {
         key: 'security overview',
-        path: '/ws/:ws/security-overview',
+        path: '/security-overview',
         element: <SecurityOverview />,
     },
     {
         key: 'Compliance',
-        path: '/ws/:ws/compliance',
+        path: '/compliance',
         element: <Compliance />,
     },
 
     {
         key: 'benchmark summary',
-        path: '/ws/:ws/compliance/old/:benchmarkId',
+        path: '/compliance/old/:benchmarkId',
         element: <BenchmarkSummary />,
     },
     {
         key: 'benchmark summary 2',
-        path: '/ws/:ws/compliance/:benchmarkId',
+        path: '/compliance/:benchmarkId',
         element: <NewBenchmarkSummary />,
     },
     {
         key: 'allControls',
-        path: '/ws/:ws/compliance/library',
+        path: '/compliance/library',
         element: <Library />,
     },
     {
         key: 'allControls',
-        path: '/ws/:ws/compliance/library/parameters',
+        path: '/compliance/library/parameters',
         element: <SettingsParameters />,
     },
     // {
     //     key: 'allBenchmarks',
-    //     path: '/ws/:ws/compliance/benchmarks',
+    //     path: '/compliance/benchmarks',
     //     element: <AllBenchmarks />,
     // },
     {
         key: 'benchmark summary',
-        path: '/ws/:ws/compliance/:benchmarkId/:controlId',
+        path: '/compliance/:benchmarkId/:controlId',
         element: <ControlDetail />,
     },
     {
         key: 'benchmark single connection',
-        path: '/ws/:ws/compliance/:benchmarkId/:connectionId',
+        path: '/compliance/:benchmarkId/:connectionId',
         element: <SingleComplianceConnection />,
     },
     {
         key: 'Incidents control',
-        path: '/ws/:ws/incidents',
+        path: '/incidents',
         element: <Findings />,
     },
     // {
     //     key: 'Resource summary',
-    //     path: '/ws/:ws/incidents/resource-summary',
+    //     path: '/incidents/resource-summary',
     //     element: <Findings />,
     // },
     {
         key: ' summary',
-        path: '/ws/:ws/incidents/summary',
+        path: '/incidents/summary',
         element: <Findings />,
     },
 
     // {
     //     key: 'Drift Events',
-    //     path: '/ws/:ws/incidents/drift-events',
+    //     path: '/incidents/drift-events',
     //     element: <Findings />,
     // },
     {
         key: 'Account Posture',
-        path: '/ws/:ws/incidents/account-posture',
+        path: '/incidents/account-posture',
         element: <Findings />,
     },
     // {
     //     key: 'Control Summary',
-    //     path: '/ws/:ws/incidents/control-summary',
+    //     path: '/incidents/control-summary',
     //     element: <Findings />,
     // },
     {
         key: 'incidents',
-        path: '/ws/:ws/incidents/:controlId',
+        path: '/incidents/:controlId',
         element: <ControlDetail />,
     },
     {
         key: 'service advisor summary',
-        path: '/ws/:ws/service-advisor/:id',
+        path: '/service-advisor/:id',
         element: <BenchmarkSummary />,
     },
     {
         key: 'home',
-        path: '/ws/:ws/overview',
+        path: '/overview',
         element: <Overview />,
     },
     {
         key: 'deployment',
-        path: '/ws/:ws/deployment',
+        path: '/deployment',
         element: <Stack />,
     },
     // {
     //     key: 'query',
-    //     path: '/ws/:ws/query',
+    //     path: '/query',
     //     element: <Query />,
     // },
     // {
     //     key: 'bootstrap',
-    //     path: '/ws/:ws/bootstrap',
+    //     path: '/bootstrap',
     //     element: <Boostrap />,
     // },
     // {
@@ -393,22 +393,22 @@ const authRoutes = [
     // },
     {
         key: 'resource collection',
-        path: '/ws/:ws/resource-collection',
+        path: '/resource-collection',
         element: <ResourceCollection />,
     },
     {
         key: 'resource collection detail',
-        path: '/ws/:ws/resource-collection/:resourceId',
+        path: '/resource-collection/:resourceId',
         element: <ResourceCollectionDetail />,
     },
     {
         key: 'benchmark summary',
-        path: '/ws/:ws/resource-collection/:resourceId/:id',
+        path: '/resource-collection/:resourceId/:id',
         element: <BenchmarkSummary />,
     },
     {
         key: 'benchmark single connection',
-        path: '/ws/:ws/resource-collection/:resourceId/:id/:connection',
+        path: '/resource-collection/:resourceId/:id/:connection',
         element: <SingleComplianceConnection />,
     },
     // {
@@ -418,12 +418,12 @@ const authRoutes = [
     // },
     {
         key: 'resource collection infrastructure single 2',
-        path: '/ws/:ws/resource-collection/:resourceId/infrastructure-details/:id',
+        path: '/resource-collection/:resourceId/infrastructure-details/:id',
         element: <Single />,
     },
     {
         key: 'resource collection infrastructure single metric 2',
-        path: '/ws/:ws/resource-collection/:resourceId/infrastructure-details/:id/:metric',
+        path: '/resource-collection/:resourceId/infrastructure-details/:id/:metric',
         element: <Single />,
     },
     {
@@ -434,17 +434,17 @@ const authRoutes = [
 
     {
         key: 'Search',
-        path: '/ws/:ws/finder',
+        path: '/finder',
         element: <Search />,
     },
     {
         key: 'Search Main',
-        path: '/ws/:ws/finder-dashboard',
+        path: '/finder-dashboard',
         element: <SearchLanding />,
     },
     // {
     //     key: 'test',
-    //     path: '/ws/:ws/test',
+    //     path: '/test',
     //     element: <Test />,
     // },
 ]
@@ -453,13 +453,11 @@ export default function Router() {
     const navigate = useNavigate()
 
     const url = window.location.pathname.split('/')
-    if (url[1] === 'ws') {
-        url.shift()
-    }
+  
 
     useEffect(() => {
         if (url[1] === 'undefined') {
-            navigate('/ws/workspaces?onLogin')
+            navigate('/')
         }
     }, [url])
 

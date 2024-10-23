@@ -139,7 +139,7 @@ export default function Filter({ onApply, type, setDate }: IFilters) {
             benchmark_id: [benchmarkId],
         }
         // @ts-ignore
-        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+        const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
         const config = {
             headers: {

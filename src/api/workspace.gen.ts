@@ -350,7 +350,7 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
                         isExecuted: true,
                     })
                 })
-                .catch((err) => {
+                .catch((err: any) => {
                     if (
                         err.name === 'AbortError' ||
                         err.name === 'CanceledError'

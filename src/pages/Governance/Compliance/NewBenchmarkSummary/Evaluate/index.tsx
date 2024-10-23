@@ -145,7 +145,7 @@ export default function Evaluate({
             benchmark_ids: [selectedbenchmarks?.value],
         }
         // @ts-ignore
-        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+        const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
         const config = {
             headers: {
@@ -183,7 +183,7 @@ export default function Evaluate({
             url = window.location.origin
         }
         // @ts-ignore
-        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+        const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
         const config = {
             headers: {
@@ -219,7 +219,7 @@ export default function Evaluate({
             url = window.location.origin
         }
         // @ts-ignore
-        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+        const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
         const config = {
             headers: {

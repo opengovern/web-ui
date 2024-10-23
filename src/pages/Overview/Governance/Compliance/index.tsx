@@ -61,7 +61,7 @@ export default function Compliance() {
          url = window.location.origin
      }
      // @ts-ignore
-     const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+     const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
      const config = {
          headers: {
@@ -97,7 +97,7 @@ export default function Compliance() {
           url = window.location.origin
       }
       // @ts-ignore
-      const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+      const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
       const config = {
           headers: {
@@ -149,7 +149,7 @@ export default function Compliance() {
                     icon={ChevronRightIcon}
                     iconPosition="right"
                     onClick={() =>
-                        navigate(`/ws/${workspace}/compliance?${searchParams}`)
+                        navigate(`/compliance?${searchParams}`)
                     }
                 >
                     Show all
@@ -192,7 +192,7 @@ export default function Compliance() {
     /* <Card
                                         onClick={() =>
                                             navigate(
-                                                `/ws/${workspace}/compliance/${bs.id}?${searchParams}`
+                                                `/compliance/${bs.id}?${searchParams}`
                                             )
                                         }
                                         className="p-3 cursor-pointer shadow-none ring-0  border-none dark:ring-gray-500 hover:shadow-md"

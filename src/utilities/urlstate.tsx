@@ -67,14 +67,7 @@ export function defaultSpendTime(wsName: string) {
     }
 }
 
-export function defaultHomepageTime(wsName: string) {
-    if (wsName === 'genco-olive') {
-        const v: DateRange = {
-            start: dayjs.utc('2024-01-07').startOf('day'),
-            end: dayjs.utc('2024-01-14').endOf('day'),
-        }
-        return v
-    }
+export function defaultHomepageTime() {
     const v: DateRange = {
         start: dayjs.utc().add(-7, 'days').startOf('day'),
         end: dayjs.utc().endOf('day'),

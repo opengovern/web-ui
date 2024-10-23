@@ -24,8 +24,6 @@ export default function Profile({ isCollapsed }: IProfile) {
     const navigate = useNavigate()
     const { user, logout } = useAuth()
 
-    const workspace = useAtomValue(workspaceAtom)
-    const { ws } = useParams()
     const setNotification = useSetAtom(notificationAtom)
 
     const [index, setIndex] = useState(
@@ -97,7 +95,7 @@ export default function Profile({ isCollapsed }: IProfile) {
          url = window.location.origin
      }
      // @ts-ignore
-     const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+     const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
      const config = {
          headers: {
@@ -314,8 +312,8 @@ export default function Profile({ isCollapsed }: IProfile) {
                                 {/* <Text className="mb-1">ACCOUNT</Text> */}
                                 <Flex
                                     onClick={() => {
-                                        // navigate(`/ws/${ws}/profile`)
-                                        navigate(`/ws/main/profile`)
+                                        // navigate(`/profile`)
+                                        navigate(`/profile`)
                                     }}
                                     className="py-2 px-5 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-openg-800"
                                 >

@@ -82,7 +82,7 @@ export default function ScoreKPIs() {
           url = window.location.origin
       }
       // @ts-ignore
-      const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+      const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
       const config = {
           headers: {
@@ -241,7 +241,7 @@ export default function ScoreKPIs() {
                                     .map((item) => {
                                         return (
                                             <KPICard
-                                                link={`/ws/${ws}/compliance/${item.benchmark_id}`}
+                                                link={`/compliance/${item.benchmark_id}`}
                                                 name={item.benchmark_title
                                                     .split('SRE')[1]
                                                     .trim()}

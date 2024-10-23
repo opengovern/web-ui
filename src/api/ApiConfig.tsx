@@ -15,7 +15,7 @@ const apiHostname = () => {
     return window.location.origin
 }
 const instance = axios.create({
-    baseURL: `${apiHostname()}${'/kaytu/'}`,
+    baseURL: `${apiHostname()}${'/main/'}`,
     headers: {
         'Content-Type': 'application/json',
         'X-Kaytu-Demo': isDemo() ? 'true' : 'false',

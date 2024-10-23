@@ -21,7 +21,7 @@ import { useAuth } from '../../utilities/auth'
 import { useAuthApiV1UserInviteCreate } from '../../api/auth.gen'
 
 export default function Overview() {
-    const { ws } = useParams()
+   
     const element = document.getElementById('myDIV')?.offsetHeight
     const [change, setChange] = useState<boolean>(false)
     const [userModal, setUserModal] = useState<boolean>(false)
@@ -73,7 +73,7 @@ export default function Overview() {
             url = window.location.origin
         }
         // @ts-ignore
-        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+        const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
         const config = {
             headers: {
@@ -82,7 +82,7 @@ export default function Overview() {
         }
 
         axios
-            .get(`${url}/${ws}/auth/api/v3/user/password/check`, config)
+            .get(`${url}/main/auth/api/v3/user/password/check`, config)
             .then((res) => {
                 //  const temp = []
                 if (res.data == 'CHANGE_REQUIRED') {
@@ -134,7 +134,7 @@ export default function Overview() {
             url = window.location.origin
         }
         // @ts-ignore
-        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+        const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
         const config = {
             headers: {
@@ -146,7 +146,7 @@ export default function Overview() {
             new_password: password?.new,
         }
         axios
-            .post(`${url}/${ws}/auth/api/v3/user/password/reset `, body, config)
+            .post(`${url}/main/auth/api/v3/user/password/reset `, body, config)
             .then((res) => {
                 //  const temp = []
                 setChange(false)
@@ -411,7 +411,7 @@ export default function Overview() {
             <TopHeader
                 // supportedFilters={['Date']}
                 // initialFilters={['Date']}
-                datePickerDefault={defaultHomepageTime(ws || '')}
+                datePickerDefault={defaultHomepageTime()}
             />
             {/* <Grid numItems={4} className="w-full gap-4 h-fit mb-4">
                 <Col numColSpan={1}>

@@ -52,7 +52,7 @@ const badgeStyle = {
 }
 
 interface ISidebar {
-    workspace: string | undefined
+   
     currentPage: string
 }
 
@@ -68,7 +68,7 @@ interface ISidebarItem {
     selected?: string
 }
 
-export default function Sidebar({ workspace, currentPage }: ISidebar) {
+export default function Sidebar({  currentPage }: ISidebar) {
     const navigate = useNavigate()
     const { isAuthenticated, getAccessTokenSilently } = useAuth()
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
@@ -90,14 +90,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     //     isLoading: findingsIsLoading,
     //     error: findingsErr,
     //     sendNow: sendFindings,
-    // } = useComplianceApiV1FindingsCountList({}, {}, false, workspace)
-    const {
-        response: connectionCount,
-        isExecuted: connectionsIsExecuted,
-        isLoading: connectionsIsLoading,
-        error: connectionsErr,
-        sendNow: sendConnections,
-    } = useIntegrationApiV1ConnectionsCountList({}, {}, false, workspace)
+    // // } = useComplianceApiV1FindingsCountList({}, {}, false, workspace)
+    // const {
+    //     response: connectionCount,
+    //     isExecuted: connectionsIsExecuted,
+    //     isLoading: connectionsIsLoading,
+    //     error: connectionsErr,
+    //     sendNow: sendConnections,
+    // } = useIntegrationApiV1ConnectionsCountList({}, {}, false, workspace)
 
     const searchParams = useAtomValue(searchAtom)
     const setOldUrl = useSetAtom(oldUrlAtom)
@@ -138,35 +138,35 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 nextUrl.includes(item.page[0])
             ) {
                 if (Array.isArray(page)) {
-                    return `/ws/${workspace}/${page[0]}?${searchParams}`
+                    return `/${page[0]}?${searchParams}`
                 } else {
-                    return `/ws/${workspace}/${page}?${searchParams}`
+                    return `/${page}?${searchParams}`
                 }
             } else {
                 if (Array.isArray(page)) {
-                    return `/ws/${workspace}/${page[0]}`
+                    return `/${page[0]}`
                 } else {
-                    return `/ws/${workspace}/${page}`
+                    return `/${page}`
                 }
             }
         } else {
             if (oldUrl.includes(item.page) || nextUrl.includes(item.page)) {
-                return `/ws/${workspace}/${page}?${searchParams}`
+                return `/${page}?${searchParams}`
             } else {
-                return `/ws/${workspace}/${page}`
+                return `/${page}`
             }
         }
 
         // if (page.includes('?')) {
-        //     return `/ws/${workspace}/${page}`
+        //     return `/${page}`
         // }
         // // if (searchParams) {
-        // //     return `/ws/${workspace}/${page}?${searchParams}`
+        // //     return `/${page}?${searchParams}`
         // // }
         // if (page.includes('/')) {
-        //     return `/ws/${workspace}/${page}`
+        //     return `/${page}`
         // }
-        // return `/ws/${workspace}/${page}?${searchParams}`
+        // return `/${page}?${searchParams}`
     }
     useEffect(() => {
         if (isAuthenticated) {
@@ -176,35 +176,39 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     // sendSpend()
                     // sendAssets()
                     // sendFindings()
-                    sendConnections()
+                    // sendConnections()
                     // fetchDashboardToken()
                 })
                 .catch((e) => {
                     console.log('====> failed to get token due to', e)
                 })
         }
-    }, [isAuthenticated, workspace])
+    }, [isAuthenticated])
 
     const navigation: () => ISidebarItem[] = () => {
         if (
-            connectionsIsExecuted &&
-            !connectionsIsLoading &&
-            (connectionCount?.count || 0) === 0
+            // connectionsIsExecuted &&
+            // !connectionsIsLoading &&
+            // (connectionCount?.count || 0) === 0
+            false
         ) {
             if (
                 !currentPage.includes('integrations') &&
                 currentPage !== 'administration'
             ) {
-                navigate(`/ws/${workspace}/integrations`)
+                navigate(`/integrations`)
             }
             return [
                 {
                     name: 'Integrations',
                     page: 'integrations',
                     icon: PuzzlePieceIcon,
-                    isLoading: connectionsIsLoading,
-                    count: numericDisplay(connectionCount?.count) || 0,
-                    error: connectionsErr,
+                    // isLoading: connectionsIsLoading,
+                    isLoading: false,
+                    count:  0,
+
+                    // count: numericDisplay(connectionCount?.count) || 0,
+                    error: undefined,
                     isPreview: false,
                 },
                 {
@@ -449,7 +453,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
 
             {
                 name: 'Finder',
-                page: ['finder-dashboard','finder'],
+                page: ['finder-dashboard', 'finder'],
                 icon: MagnifyingGlassIcon,
                 isPreview: false,
                 // children: [
@@ -481,9 +485,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     'integrations/EntraID',
                 ],
                 icon: PuzzlePieceIcon,
-                isLoading: connectionsIsLoading,
-                count: numericDisplay(connectionCount?.count) || 0,
-                error: connectionsErr,
+                // isLoading: connectionsIsLoading,
+                isLoading: false,
+                // count: 0,
+
+                // count: numericDisplay(connectionCount?.count) || 0,
+                error: undefined,
                 isPreview: false,
             },
             // {
@@ -536,7 +543,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 justifyContent="start"
                 className={`h-full ${collapsed ? 'w-full' : 'w-full'}`}
             >
-                <a className=" cursor-pointer mr-6 w-full" href={`/ws/${workspace}/overview`}>
+                <a className=" cursor-pointer mr-6 w-full" href={`/overview`}>
                     <Flex
                         justifyContent={collapsed ? 'center' : 'between'}
                         className={`pb-[17px] pt-[6px] `}
@@ -939,7 +946,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                             )}
                     </div>
                 </Flex>
-                <Utilities isCollapsed={collapsed} workspace={workspace} />
+                <Utilities isCollapsed={collapsed}  />
             </Flex>
         </Flex>
     )

@@ -42,7 +42,6 @@ export default function InsightCategoryCard({
     color,
 }: IInsightCategoryCard) {
     const navigate = useNavigate()
-    const workspace = useParams<{ ws: string }>().ws
     const searchParams = useAtomValue(searchAtom)
 
     let insightCondition = { text: 'none', color: 'gray' }
@@ -86,7 +85,7 @@ export default function InsightCategoryCard({
                     className="hidden"
                     onClick={() =>
                         navigate(
-                            `/ws/${workspace}/insights?category=${category}&${searchParams}`
+                            `/insights?category=${category}&${searchParams}`
                         )
                     }
                 >

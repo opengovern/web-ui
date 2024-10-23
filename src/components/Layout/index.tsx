@@ -16,25 +16,17 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
     const url = window.location.pathname.split('/')
     const smaple = useAtomValue(sampleAtom)
     const navigate = useNavigate()
-    if (url[1] === 'ws') {
-        url.shift()
-    }
-    let current = url[2]
+    
+    let current = url[1]
     let sub_page= false
-    if (url.length > 3) {
-        for (let i = 3; i < url.length; i += 1) {
+    if (url.length > 2) {
+        for (let i = 2; i < url.length; i += 1) {
             current += `/${url[i]}`
         }
         sub_page= true
     }
-    const workspace = url[1]
-    const showSidebar =
-        workspace !== 'workspaces' &&
-        workspace !== 'billing' &&
-        workspace !== 'requestdemo' &&
-        workspace !== 'new-ws' &&
-        current !== 'bootstrap' &&
-        workspace !== 'callback'
+    
+    const showSidebar = true
     const hasTop = () => {
         if (current) {
             if (
@@ -60,7 +52,7 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
             justifyContent="start"
         >
             {showSidebar && (
-                <Sidebar workspace={workspace} currentPage={current} />
+                <Sidebar  currentPage={current} />
             )}
             <div className="z-10 w-full h-full relative">
                 <Flex

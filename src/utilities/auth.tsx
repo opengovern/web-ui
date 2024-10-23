@@ -11,7 +11,7 @@ interface IAuthModel {
     resp: any
 }
 
-const sessionAuth = localStorage.getItem('kaytu_auth')
+const sessionAuth = localStorage.getItem('openg_auth')
 const sessionAuthModel =
     sessionAuth && sessionAuth.length > 0
         ? (JSON.parse(sessionAuth) as IAuthModel)
@@ -85,7 +85,7 @@ export function useAuth() {
                 resp: {},
             }
             setAuth(newAuth)
-            localStorage.setItem('kaytu_auth', JSON.stringify(newAuth))
+            localStorage.setItem('openg_auth', JSON.stringify(newAuth))
             window.location.href = '/'
         },
         loginWithCode: (code: string) => {
@@ -153,7 +153,7 @@ export function useAuth() {
                         }
                         setAuth(newAuth)
                         localStorage.setItem(
-                            'kaytu_auth',
+                            'openg_auth',
                             JSON.stringify(newAuth)
                         )
                     }

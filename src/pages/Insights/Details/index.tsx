@@ -303,7 +303,7 @@ export default function ScoreDetails() {
                                                 className="hover:cursor-pointer max-w-full w-fit bg-gray-200 border-gray-300 rounded-lg border px-1"
                                                 onClick={() => {
                                                     navigate(
-                                                        `/ws/${ws}compliance/library/parameters&key=${item.key}`
+                                                        `compliance/library/parameters&key=${item.key}`
                                                     )
                                                 }}
                                             >
@@ -360,7 +360,7 @@ export default function ScoreDetails() {
                                     }
                                 )}
                                 <Link
-                                    to={`/ws/${ws}/compliance/library`}
+                                    to={`/compliance/library`}
                                     className="text-openg-500 cursor-pointer"
                                 >
                                     <Text className="text-openg-500">
@@ -392,7 +392,7 @@ export default function ScoreDetails() {
                                         setQuery(modalData)
                                     }}
                                 >
-                                    <Link to={`/ws/${ws}/finder?tab_id=1`}>
+                                    <Link to={`/finder?tab_id=1`}>
                                         Open in Query
                                     </Link>
                                 </Button>
@@ -863,7 +863,7 @@ export default function ScoreDetails() {
                                             conformanceFilter={
                                                 conformanceFilter
                                             }
-                                            linkPrefix={`/ws/${ws}/score/categories/`}
+                                            linkPrefix={`/score/categories/`}
                                             isCostOptimization={
                                                 costSaving !== 0
                                             }

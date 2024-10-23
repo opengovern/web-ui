@@ -233,7 +233,7 @@ export default function SingleMetric({
                                 setQuery(modalData)
                             }}
                         >
-                            <Link to={`/ws/${ws}/finder?tab_id=1`}>
+                            <Link to={`/finder?tab_id=1`}>
                                 Open in Query
                             </Link>
                         </Button>

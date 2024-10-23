@@ -35,9 +35,9 @@ import {
 } from '../../../utilities/urlstate'
 
 export default function Spend() {
-    const workspace = useParams<{ ws: string }>().ws
+   
     const { value: activeTimeRange } = useUrlDateRangeState(
-        defaultHomepageTime(workspace || '')
+        defaultHomepageTime()
     )
     const { value: selectedConnections } = useFilterState()
     const navigate = useNavigate()
@@ -130,7 +130,7 @@ export default function Spend() {
                         icon={ChevronRightIcon}
                         iconPosition="right"
                         onClick={() =>
-                            navigate(`/ws/${workspace}/spend?${searchParams}`)
+                            navigate(`/spend?${searchParams}`)
                         }
                     >
                         View details

@@ -265,7 +265,7 @@ export default function NewBenchmarkSummary() {
             url = window.location.origin
         }
         // @ts-ignore
-        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+        const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
         const config = {
             headers: {
@@ -314,7 +314,7 @@ export default function NewBenchmarkSummary() {
             url = window.location.origin
         }
         // @ts-ignore
-        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+        const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
         const config = {
             headers: {
@@ -379,7 +379,7 @@ export default function NewBenchmarkSummary() {
             }),
         }
         // @ts-ignore
-        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+        const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
         const config = {
             headers: {
@@ -542,7 +542,7 @@ export default function NewBenchmarkSummary() {
                         items={[
                             {
                                 text: 'Compliance',
-                                href: `/ws/${ws}/compliance`,
+                                href: `/compliance`,
                             },
                             { text: 'Frameworks', href: '#' },
                         ]}

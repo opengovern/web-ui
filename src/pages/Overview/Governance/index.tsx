@@ -16,7 +16,7 @@ export default function Governance() {
                 </Flex>
                 <a
                     target="__blank"
-                    href={`/ws/${workspace}/compliance`}
+                    href={`/compliance`}
                     className=" cursor-pointer"
                 >
                     <Button

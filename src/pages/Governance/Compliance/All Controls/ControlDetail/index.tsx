@@ -300,7 +300,7 @@ export default function ControlDetail({
                                                         loadingText="Running"
                                                     >
                                                         <Link
-                                                            to={`/ws/${ws}/finder?tab_id=1`}
+                                                            to={`/finder?tab_id=1`}
                                                         >
                                                             Run in Query
                                                         </Link>{' '}

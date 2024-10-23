@@ -210,7 +210,7 @@ export default function Settings() {
                                     return (
                                         <li key={item.name}>
                                             <Link
-                                                to={`/ws/${workspace}/settings/about?sp=${item.page}`}
+                                                to={`/settings/about?sp=${item.page}`}
                                                 className={`${
                                                     item.page ===
                                                         currentSubPage ||
@@ -248,7 +248,7 @@ export default function Settings() {
                                         </Flex>
                                         {item.children.map((child: any) => (
                                             <Link
-                                                to={`/ws/${workspace}/settings/about?sp=${child.page}`}
+                                                to={`/settings/about?sp=${child.page}`}
                                                 className={`${
                                                     child.page ===
                                                         currentSubPage ||

@@ -89,7 +89,7 @@ export default function Shortcuts() {
                         {(nav?.title !== 'Audit' && nav?.title !== 'Invite') ? (
                             <>
                                 <a
-                                    href={`/ws/${workspace}/${nav.link}`}
+                                    href={`/${nav.link}`}
                                     target={nav.new ? '_blank' : '_self'}
                                 >
                                     <Card className="  cursor-pointer  min-h-[140px] pt-3 pb-3 hover:bg-gray-50 hover:dark:bg-gray-900">

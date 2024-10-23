@@ -120,12 +120,12 @@ export default function ControlDetail() {
         if (window.location.pathname.includes('incident')) {
             temp.push({
                 text: 'Incidents',
-                href: `/ws/${ws}/incidents`,
+                href: `/incidents`,
             })
         } else if (window.location.pathname.includes('compliance')) {
             temp.push({
                 text: 'Compliance',
-                href: `/ws/${ws}/compliance`,
+                href: `/compliance`,
             })
         }
         temp.push({ text: 'Control Detail', href: '#' })
@@ -390,7 +390,7 @@ export default function ControlDetail() {
                                             className="hover:cursor-pointer max-w-full w-fit bg-gray-200 border-gray-300 rounded-lg border px-1"
                                             onClick={() => {
                                                 navigate(
-                                                    `/ws/${ws}/compliance/library/parameters?key=${item.key}`
+                                                    `/compliance/library/parameters?key=${item.key}`
                                                 )
                                             }}
                                         >
@@ -591,7 +591,7 @@ export default function ControlDetail() {
                                                 }}
                                             >
                                                 <Link
-                                                    to={`/ws/${ws}/finder?tab_id=1`}
+                                                    to={`/finder?tab_id=1`}
                                                 >
                                                     Open in Query
                                                 </Link>
@@ -944,7 +944,7 @@ export default function ControlDetail() {
                                                     controlDetail?.control
                                                         ?.id || ''
                                                 }
-                                                linkPrefix={`/ws/${ws}/score/categories/`}
+                                                linkPrefix={`/score/categories/`}
                                                 conformanceFilter={
                                                     conformanceFilter
                                                 }
@@ -1031,7 +1031,7 @@ export default function ControlDetail() {
                             <TabPanel>
                                 <ImpactedResources
                                     controlId={controlDetail?.control?.id || ''}
-                                    linkPrefix={`/ws/${ws}/score/categories/`}
+                                    linkPrefix={`/score/categories/`}
                                     conformanceFilter={conformanceFilter}
                                 />
                             </TabPanel>

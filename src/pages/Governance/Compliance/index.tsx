@@ -91,7 +91,7 @@ export default function Compliance() {
             url = window.location.origin
         }
         // @ts-ignore
-        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+        const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
         const config = {
             headers: {
@@ -172,7 +172,7 @@ export default function Compliance() {
             url = window.location.origin
         }
         // @ts-ignore
-        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+        const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
         const config = {
             headers: {
@@ -209,7 +209,7 @@ export default function Compliance() {
             url = window.location.origin
         }
         // @ts-ignore
-        const token = JSON.parse(localStorage.getItem('kaytu_auth')).token
+        const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
         const config = {
             headers: {

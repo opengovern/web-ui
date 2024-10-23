@@ -43,7 +43,7 @@ const getQueries = (
     ]
     if (response) {
         for (let i = 0; i < queryId.length; i += 1) {
-            const query = response.find((q) => q.id === queryId[i])
+            const query = response?.find((q) => q.id === queryId[i])
             data.push(query)
         }
     }
@@ -77,7 +77,7 @@ export default function Query({ height }: IQuery) {
                 </Flex>
                 <a
                     target="__blank"
-                    href={`/ws/${workspace}/finder?tab_id=0`}
+                    href={`/finder?tab_id=0`}
                     className=" cursor-pointer"
                 >
                     <Button
@@ -87,7 +87,7 @@ export default function Query({ height }: IQuery) {
                         iconPosition="right"
                         className="my-3"
                         // onClick={() => {
-                        //     navigate(`/ws/${workspace}/finder?tab_id=0`)
+                        //     navigate(`/finder?tab_id=0`)
                         // }}
                     >
                         All Queries
@@ -168,7 +168,7 @@ export default function Query({ height }: IQuery) {
                                       onClick={() => {
                                           setRunQuery(q?.query || '')
                                           navigate(
-                                              `/ws/${workspace}/finder?tab_id=1`
+                                              `/finder?tab_id=1`
                                           )
                                       }}
                                   >

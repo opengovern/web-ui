@@ -3,10 +3,9 @@ import Profile from './Profile'
 
 interface IUtilities {
     isCollapsed: boolean
-    workspace: string | undefined
 }
 
-export default function Utilities({ isCollapsed, workspace }: IUtilities) {
+export default function Utilities({ isCollapsed }: IUtilities) {
     return (
         <Flex
             flexDirection="col"
