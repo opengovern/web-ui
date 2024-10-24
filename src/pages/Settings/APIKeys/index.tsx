@@ -298,7 +298,6 @@ const fixRole = (role: string) => {
                 className="mt-2"
                 onRowClick={(event) => {
                     const row = event.detail.item
-                    console.log(event)
                     if (row) {
                         setSelectedItem(row)
                         setDrawerOpenEdit(true)

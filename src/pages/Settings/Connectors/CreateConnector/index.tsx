@@ -16,7 +16,8 @@ import InformationModal from '../../../../components/Modal/InformationModal'
 import { useAuthApiV1KeyCreateCreate } from '../../../../api/auth.gen'
 import { notificationAtom } from '../../../../store'
 import KButton from '@cloudscape-design/components/button'
-import { Modal } from '@cloudscape-design/components'
+import { Alert, Input, Modal, Select } from '@cloudscape-design/components'
+import axios from 'axios'
 
 interface CreateAPIKeyProps {
     close: () => void
@@ -41,167 +42,177 @@ const roleItems = [
 ]
 
 export default function CreateConnector({ close }: CreateAPIKeyProps) {
-    const [apiKeyName, setApiKeyName] = useState<string>('')
-    const [showCopied, setShowCopied] = useState<boolean>(false)
-    const [copyOpen, setCopyOpen] = useState<boolean>(false)
-
-    const [role, setRole] = useState<string>('viewer')
-    const [roleValue, setRoleValue] = useState<
-        'admin' | 'editor' | 'viewer' | undefined
-    >()
+    const [isLoading, setIsLoading] = useState(false)
+    const [connector, setConnector] = useState<any>({
+        connector_type: 'oidc',
+        connector_sub_type: undefined,
+        id: undefined,
+        name: undefined,
+        tenant_id: undefined,
+        client_id: undefined,
+        client_secret: undefined,
+    })
+    const [error, setError] = useState<any>(null)
     const setNotification = useSetAtom(notificationAtom)
 
-    const {
-        response,
-        isLoading,
-        isExecuted,
-        error,
-        sendNow: callCreate,
-    } = useAuthApiV1KeyCreateCreate(
-        { name: apiKeyName, role: roleValue },
-        {},
-        false
-    )
+    const CreateConnector = () => {
+        if(!connector.id || !connector.name || !connector.client_id || !connector.client_secret || !connector.connector_sub_type){
 
-    useEffect(() => {
-        if (isExecuted && !isLoading) {
-            setNotification({
-                text: 'API key successfully added',
-                type: 'success',
-            })
-            // close()
-            setCopyOpen(true)
+            setError('Please fill all the fields')
+            return
         }
-        if (error) {
-            setNotification({
-                text: 'Unable to add new API key',
-                type: 'error',
-            })
+        if(connector.connector_sub_type?.value === 'entraid' && !connector.tenant_id){
+            setError('Please fill all the fields')
+            return
         }
-    }, [isLoading, error])
+        setIsLoading(true)
+        let url = ''
+        if (window.location.origin === 'http://localhost:3000') {
+            url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+        } else {
+            url = window.location.origin
+        }
+        // @ts-ignore
+        const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
-    useEffect(() => {
-        if (role === 'viewer' || role === 'editor' || role === 'admin') {
-            setRoleValue(role)
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         }
-    }, [role])
+        const body = {
+            connector_type: connector.connector_type,
+            connector_sub_type: connector.connector_sub_type?.value,
+            id: connector.id.trim(),
+            name: connector.name,
+            tenant_id: connector.tenant_id,
+            client_id: connector.client_id,
+            client_secret: connector.client_secret,
+        }
+        axios
+            .post(`${url}/main/auth/api/v1/connector`, body, config)
+            .then((res) => {
+                setIsLoading(false)
+                setNotification({
+                    type: 'success',
+                    text: 'Connector created successfully',
+                })
+                close()
+            })
+            .catch((err) => {
+                console.log(err)
+                var error = err.response.data.message
+                if(!error){
+                    error = 'Failed to create connector'
+                }
+                setIsLoading(false)
+                setNotification({
+                    type: 'error',
+                    text: error,
+                })
+                setError(error)
+            })
+    }
 
     return (
-        <Flex flexDirection="col" justifyContent="between" className="h-full">
-            <Modal
-                header={error === undefined ? 'Successful' : 'Failed'}
-                visible={copyOpen}
-                onDismiss={() => {
-                    close()
-                    setCopyOpen(false)
-                    setApiKeyName('')
-                }}
+        <Flex flexDirection="col" alignItems='start' justifyContent="between" className="h-full">
+            <Flex
+                flexDirection="col"
+                justifyContent="start"
+                alignItems='start'
+                className="gap-2 w-full mb-4"
             >
-                <>
-                    {error === undefined ? (
-                        <Flex
-                            flexDirection="col"
-                            justifyContent="start"
-                            alignItems="start"
-                        >
-                            API key created, copy the key and keep it safe:
-                            <Card
-                                className="w-full cursor-pointer mt-2"
-                                onClick={() => {
-                                    setShowCopied(true)
-                                    setTimeout(() => setShowCopied(false), 2000)
-                                    clipboardCopy(response?.token || '')
-                                }}
-                            >
-                                <Flex
-                                    flexDirection="row"
-                                    justifyContent="between"
-                                >
-                                    <div className="w-full break-all">
-                                        {response?.token}
-                                    </div>
-                                    <Flex
-                                        flexDirection="col"
-                                        justifyContent="start"
-                                        className="h-5 w-5"
-                                    >
-                                        <DocumentDuplicateIcon className="h-5 w-5 text-openg-600 " />
-                                        <Text
-                                            className={`${
-                                                showCopied ? '' : 'hidden'
-                                            } absolute mt-6 bg-openg-600 text-white rounded-md p-1`}
-                                        >
-                                            Copied!
-                                        </Text>
-                                    </Flex>
-                                </Flex>
-                            </Card>
-                        </Flex>
-                    ) : (
-                        `Failed to create the API Key`
-                    )}
-                </>
-            </Modal>
-            <List className="mt-4 h-full">
-                {/* <ListItem>
-                    <Text className="text-gray-900 font-medium py-2">
-                        Properties
-                    </Text>
-                </ListItem> */}
-                <ListItem>
-                    <Flex>
-                        <Text className="w-1/3 font-medium text-gray-800 py-2">
-                            API Key Name *
-                        </Text>
-                        <TextInput
-                            className="w-2/3"
-                            onChange={(p) => {
-                                setApiKeyName(p.target.value)
+                <Input
+                    onChange={({ detail }) => {
+                        setConnector({
+                            ...connector,
+                            id: detail.value,
+                        })
+                        setError(null)
+
+                    }}
+                    className="w-full"
+                    value={connector?.id}
+                    placeholder="Id"
+                />
+                <Input
+                    onChange={({ detail }) => {
+                        setConnector({
+                            ...connector,
+                            name: detail.value,
+                        })
+                        setError(null)
+                    }}
+                    value={connector?.name}
+                    placeholder="Name"
+                    className="w-full"
+                />
+                <Select
+                    selectedOption={connector?.connector_sub_type}
+                    onChange={({ detail }) => {
+                        setConnector({
+                            ...connector,
+                            connector_sub_type: detail.selectedOption,
+                        })
+                        setError(null)
+                    }}
+                    options={[
+                        { label: 'General', value: 'general' },
+                        { label: 'Entra Id', value: 'entraid' },
+                        {
+                            label: 'Google Workspace',
+                            value: 'google-workspace',
+                        },
+                    ]}
+                    placeholder="Select Connector Sub Type"
+                    className="w-full"
+                />
+                <Input
+                    onChange={({ detail }) => {
+                        setConnector({
+                            ...connector,
+                            client_id: detail.value,
+                        })
+                        setError(null)
+                    }}
+                    value={connector?.client_id}
+                    placeholder="Client Id"
+                    className="w-full"
+                />
+                <Input
+                    onChange={({ detail }) => {
+                        setConnector({
+                            ...connector,
+                            client_secret: detail.value,
+                        })
+                        setError(null)
+                    }}
+                    value={connector?.client_secret}
+                    placeholder="Client Secret"
+                    className="w-full"
+                />
+                {connector?.connector_sub_type?.value === 'entraid' && (
+                    <>
+                        <Input
+                            onChange={({ detail }) => {
+                                setConnector({
+                                    ...connector,
+                                    tenant_id: detail.value,
+                                })
+                                setError(null)
                             }}
+                            value={connector?.tenant_id}
+                            placeholder="Tenant Id"
+                            className="w-full"
                         />
-                    </Flex>
-                </ListItem>
-                <ListItem>
-                    <Flex alignItems="start">
-                        <Text className="w-1/3 te font-medium text-gray-800 py-2">
-                            Role *
-                        </Text>
-                        <Flex
-                            flexDirection="col"
-                            alignItems="start"
-                            className="w-2/3 space-y-5"
-                        >
-                            {roleItems.map((item) => {
-                                return (
-                                    <Flex>
-                                        <input
-                                            name="roles"
-                                            type="radio"
-                                            className="h-4 w-4"
-                                            onClick={() => {
-                                                setRole(item.value)
-                                            }}
-                                            checked={item.value === role}
-                                        />
-                                        <Flex
-                                            flexDirection="col"
-                                            alignItems="start"
-                                            className="pl-7"
-                                        >
-                                            <Text className="font-medium text-gray-900">
-                                                {item.title}
-                                            </Text>
-                                            <Subtitle className="text-gray-500">
-                                                {item.description}
-                                            </Subtitle>
-                                        </Flex>
-                                    </Flex>
-                                )
-                            })}
-                        </Flex>
-                    </Flex>
-                </ListItem>
-            </List>
+                    </>
+                )}
+            </Flex>
+            {error && (
+                <Alert header="Attention" className="w-full mb-3" type="error">
+                    {error}
+                </Alert>
+            )}
             <Flex justifyContent="end" className="space-x-4">
                 <KButton
                     onClick={() => {
@@ -212,11 +223,10 @@ export default function CreateConnector({ close }: CreateAPIKeyProps) {
                 </KButton>
                 <KButton
                     variant="primary"
-                    disabled={apiKeyName.length === 0}
                     onClick={() => {
-                        callCreate()
+                        CreateConnector()
                     }}
-                    loading={isExecuted && isLoading}
+                    loading={isLoading}
                 >
                     Create API Key
                 </KButton>
