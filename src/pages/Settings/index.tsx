@@ -31,6 +31,7 @@ import {
 import { recordToMap } from '../../utilities/record'
 import { ApiRole } from '../../api/api'
 import { Tabs } from '@cloudscape-design/components'
+import SettingsConnectors from './Connectors'
 
 const navigation = [
     {
@@ -184,13 +185,22 @@ export default function Settings() {
                         id: '1',
                     },
                     {
+                        label: 'SSO Configuration',
+                        content: (
+                            <>
+                                <SettingsConnectors />
+                            </>
+                        ),
+                        id: '2',
+                    },
+                    {
                         label: 'API',
                         content: (
                             <>
                                 <SettingsWorkspaceAPIKeys />
                             </>
                         ),
-                        id: '2',
+                        id: '3',
                     },
                 ]}
             />

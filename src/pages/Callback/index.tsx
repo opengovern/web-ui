@@ -18,6 +18,7 @@ export const CallbackPage = () => {
     if (isLoading) {
         return <Spinner />
     } else {
+        debugger;
         // if (response == 'True') {
         //     return 'hi'
             if (isAuthenticated) {

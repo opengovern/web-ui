@@ -155,7 +155,7 @@ export default function SettingsProfile() {
                     </Select>
                 </Flex>
                 <Divider className="my-1 py-1" /> */}
-                <Flex flexDirection="row" justifyContent="between">
+                {/* <Flex flexDirection="row" justifyContent="between">
                     <Text className="w-1/2">Accessibility Mode (WAI-ARIA)</Text>
                     <Select
                         disabled={isExecuted && isLoading}
@@ -168,7 +168,7 @@ export default function SettingsProfile() {
                         <SelectItem value="true">Enabled</SelectItem>
                         <SelectItem value="false">Disabled</SelectItem>
                     </Select>
-                </Flex>
+                </Flex> */}
                 {/* <Divider className="my-1 py-1" />
                 <Flex flexDirection="row" justifyContent="between">
                     <Text className="w-1/2">Demo mode</Text>
@@ -184,7 +184,7 @@ export default function SettingsProfile() {
                         <SelectItem value="false">False</SelectItem>
                     </Select>
                 </Flex> */}
-                <Flex flexDirection="row" justifyContent="end" className="mt-2">
+                {/* <Flex flexDirection="row" justifyContent="end" className="mt-2">
                     <Button
                         loading={isExecuted && isLoading}
                         variant="secondary"
@@ -192,7 +192,7 @@ export default function SettingsProfile() {
                     >
                         Save
                     </Button>
-                </Flex>
+                </Flex> */}
             </Flex>
         </Card>
     )

@@ -1209,9 +1209,7 @@ export default function ScoreCategory() {
                                             >
                                                 <SpaceBetween size="m">
                                                     <b>No resources</b>
-                                                    <Button>
-                                                        Create resource
-                                                    </Button>
+                                                 
                                                 </SpaceBetween>
                                             </Box>
                                         }

@@ -705,7 +705,6 @@ export default function Controls({
                             >
                                 <SpaceBetween size="m">
                                     <b>No resources</b>
-                                    <Button>Create resource</Button>
                                 </SpaceBetween>
                             </Box>
                         }

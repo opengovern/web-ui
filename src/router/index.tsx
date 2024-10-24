@@ -55,12 +55,12 @@ const authRoutes = [
     //     element: <Navigate to="/ws/workspaces?onLogin" replace />,
     //     noAuth: true,
     // },
-    {
-        key: 'ws name',
-        path: '/',
-        element: <Navigate to="overview" />,
-        noAuth: true,
-    },
+    // {
+    //     key: 'ws name',
+    //     path: '/',
+    //     element: <Navigate to="overview" />,
+    //     noAuth: true,
+    // },
     {
         key: 'callback',
         path: '/callback',
@@ -368,7 +368,7 @@ const authRoutes = [
     },
     {
         key: 'home',
-        path: '/overview',
+        path: '/',
         element: <Overview />,
     },
     {
