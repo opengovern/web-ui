@@ -26,7 +26,7 @@ import {
     useIntegrationApiV1ConnectionsSummariesList,
 } from '../../../../api/integration.gen'
 import KButton from '@cloudscape-design/components/button'
-import { KeyValuePairs, Modal, RadioGroup, Toggle } from '@cloudscape-design/components'
+import { Checkbox, KeyValuePairs, Modal, RadioGroup, Toggle } from '@cloudscape-design/components'
 
 interface IMemberDetails {
     user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
@@ -41,7 +41,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
     )
 
     const [password, setPassword] = useState<string>('')
-    
+    const [changePassword, setChangePassword] = useState<boolean>(false)
     const [scopedConnectionIDs, setScopedConnectionIDs] = useState<string[]>(
         user?.scopedConnectionIDs || []
     )
@@ -55,7 +55,9 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
         {
             email_address: user?.email || '',
             role: role,
-            is_active: isActive
+            is_active: isActive,
+            // @ts-ignore
+            password: password
         },
         {},
         false
@@ -186,8 +188,9 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                 }
                 onDismiss={() => setDeleteConfirmation(false)}
             >
-                <>{`Are you sure you want to delete ${user.userName}?`}</>
+                <>{`Are you sure you want to delete ${user.email}?`}</>
             </Modal>
+
             {/* <ConfirmModal
                 title="Delete user"
                 description={`Are you sure you want to delete ${user.userName}?`}
@@ -211,9 +214,10 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                 <Flex
                     justifyContent="between"
                     alignItems="start"
-                    className="truncate space-x-4 mt-4"
+                    flexDirection="col"
+                    className="truncate space-x-4 gap-2 mt-4 mb-4"
                 >
-                    <Text className="font-bold text-black text-l">Role</Text>
+                    <Text className=" font-bold text-black text-l">Role</Text>
 
                     <div className="space-y-5 sm:mt-0">
                         <RadioGroup
@@ -229,8 +233,33 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                         />
                     </div>
                 </Flex>
-                <List className="pt-4">
-                    {/* <ListItem key="password">
+                <Flex
+                    justifyContent="start"
+                    alignItems="start"
+                    flexDirection="col"
+                    className="mt-4 w-full mb-4 gap-2 space-x-4"
+                >
+                    <Checkbox
+                        onChange={({ detail }) =>
+                            setChangePassword(detail.checked)
+                        }
+                        checked={changePassword}
+                    >
+                        Change Password
+                    </Checkbox>
+                    {changePassword && (
+                        <TextInput
+                            type="password"
+                            placeholder="password"
+                            className="font-medium w-1/2 text-gray-800"
+                            onChange={(e) => {
+                                setPassword(e.target.value)
+                            }}
+                        />
+                    )}
+                </Flex>
+                {/* <List className="pt-4"> */}
+                {/* <ListItem key="password">
                         <Flex
                             justifyContent="between"
                             className="truncate space-x-4 py-2"
@@ -252,7 +281,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                         </Flex>
                     </ListItem> */}
 
-                    {/*
+                {/*
                     <ListItem key="item" className="py-4">
                         <Flex
                             justifyContent="between"
@@ -309,11 +338,12 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                         </Flex>
                     </ListItem>
                     */}
-                </List>
+                {/* </List> */}
                 <Flex justifyContent="end" className="truncate space-x-4">
                     <KButton onClick={() => setDeleteConfirmation(true)}>
                         <TrashIcon className="h-5 w-5" color="rose" />
                     </KButton>
+
                     <KButton
                         loading={isExecuted && isLoading}
                         disabled={deleteExecuted && deleteLoading}

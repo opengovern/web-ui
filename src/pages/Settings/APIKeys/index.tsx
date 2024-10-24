@@ -153,10 +153,11 @@ const fixRole = (role: string) => {
                             flexDirection="col"
                             justifyContent="start"
                             alignItems="start"
-                            className="gap-2"
+                            className="gap-4 w-full"
                         >
                             <KeyValuePairs
                                 columns={2}
+                                className="w-full"
                                 items={[
                                     {
                                         label: 'Name',
@@ -164,31 +165,52 @@ const fixRole = (role: string) => {
                                     },
                                     {
                                         label: 'Creator User',
-                                        value: selectedItem?.creator_user_id,
+                                        value:
+                                            selectedItem?.creator_user_id?.split(
+                                                '|'
+                                            )[1] || '',
+                                    },
+                                ]}
+                            />
+                            <KeyValuePairs
+                                className="w-full"
+                                columns={2}
+                                items={[
+                                    {
+                                        label: 'Status',
+                                        value: '',
+                                    },
+                                    {
+                                        label: '',
+                                        value: (
+                                            <Toggle
+                                                onChange={({ detail }) =>
+                                                    setSelectedItem({
+                                                        ...selectedItem,
+                                                        active: detail.checked,
+                                                    })
+                                                }
+                                                checked={selectedItem?.active}
+                                            >
+                                                {selectedItem?.active
+                                                    ? 'Active'
+                                                    : 'Inactive'}
+                                            </Toggle>
+                                        ),
                                     },
                                 ]}
                             />
                         </Flex>
-                        <Flex className="mt-2">
+                        {/* <Flex className="mt-2">
                             <Text className=" font-bold text-black text-l">
                                 Status
                             </Text>
-                            <Toggle
-                                onChange={({ detail }) =>
-                                    setSelectedItem({
-                                        ...selectedItem,
-                                        active: detail.checked,
-                                    })
-                                }
-                                checked={selectedItem?.active}
-                            >
-                                {selectedItem?.active ? 'Active' : 'Inactive'}
-                            </Toggle>
-                        </Flex>
+                        </Flex> */}
                         <Flex
                             justifyContent="between"
                             alignItems="start"
-                            className="truncate space-x-4 mt-4 mb-4"
+                            flexDirection='col'
+                            className="truncate space-x-4 gap-2 mt-4 mb-4"
                         >
                             <Text className=" font-bold text-black text-l">
                                 Role
@@ -204,15 +226,13 @@ const fixRole = (role: string) => {
                                     }
                                     value={selectedItem.role_name}
                                     items={roleItems.map((item) => {
-                                        return{
+                                        return {
                                             value: item.value,
                                             label: item.title,
                                             description: item.description,
-                                           
-                                            
-                                    }})}
+                                        }
+                                    })}
                                 />
-                      
                             </div>
                         </Flex>
                         <Flex className="w-full justify-end mt-2 gap-3">

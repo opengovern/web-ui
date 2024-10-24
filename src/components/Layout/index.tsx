@@ -25,8 +25,7 @@ export default function Layout({ children, onScroll, scrollRef }: IProps) {
         }
         sub_page= true
     }
-    
-    const showSidebar = true
+    const showSidebar = url[1] == "callback" ? false : true
     const hasTop = () => {
         if (current) {
             if (

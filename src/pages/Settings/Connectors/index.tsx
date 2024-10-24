@@ -129,14 +129,11 @@ export default function SettingsConnectors() {
                  Authorization: `Bearer ${token}`,
              },
          }
-         const body = {
-             is_active: selectedItem?.active,
-             role: selectedItem?.role_name,
-         }
+      
          axios
-             .put(
+             .get(
                  `${url}/main/auth/api/v1/connectors`,
-                 body,
+                
                  config
              )
              .then((res) => {
@@ -271,7 +268,7 @@ export default function SettingsConnectors() {
             </Modal>
             <Modal
                 visible={deletModalOpen}
-                header="Delete API Key"
+                header="Delete Connector"
                 onDismiss={() => {
                     setDeleteModalOpen(false)
                 }}
@@ -299,7 +296,7 @@ export default function SettingsConnectors() {
                 {error && error !== '' && (
                     <>
                         <Alert header="failed" type="error">
-                            Failed to delete API Key
+                            Failed to delete Connector
                         </Alert>
                     </>
                 )}
@@ -348,13 +345,13 @@ export default function SettingsConnectors() {
                                         openCreateMenu()
                                     }}
                                 >
-                                    Create API Key
+                                    Create Connector
                                 </KButton>
                             </>
                         }
                         className="w-full"
                     >
-                        API Keys{' '}
+                        Connectors{' '}
                     </Header>
                 }
             />

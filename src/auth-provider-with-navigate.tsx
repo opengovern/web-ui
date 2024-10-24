@@ -28,8 +28,7 @@ export const AuthProviderWithNavigate = ({
         }
 
         if (!isAuthenticated && page[1] !== 'callback') {
-            // const callback = `${window.location.origin}/callback`
-            const callback = `https://demo.opengovernance.io/callback`
+            const callback = `${window.location.origin}/callback`
 
 
             const searchParams = new URLSearchParams()

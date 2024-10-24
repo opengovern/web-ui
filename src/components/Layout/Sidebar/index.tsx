@@ -222,7 +222,7 @@ export default function Sidebar({  currentPage }: ISidebar) {
         return [
             {
                 name: 'Overview',
-                page: 'overview',
+                page: '',
                 icon: Squares2X2Icon,
                 isPreview: false,
             },

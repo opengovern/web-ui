@@ -22,6 +22,7 @@ export default function MemberInvite({ close }: MemberInviteProps) {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [auth, setAuth] = useState<string>('password')
+    const [emailError, setEmailError] = useState<string>('')
 
 
     const [role, setRole] = useState<string>('viewer')
@@ -36,7 +37,8 @@ export default function MemberInvite({ close }: MemberInviteProps) {
         error,
         sendNow: createInvite,
     } = useAuthApiV1UserInviteCreate(
-        { email_address: email || '', role: roleValue ,password: password,is_active: true },
+        // @ts-ignore
+        { email_address: email || '', role: role ,password: password,is_active: true },
         {},
         false
     )
@@ -46,6 +48,14 @@ export default function MemberInvite({ close }: MemberInviteProps) {
             setRoleValue(role)
         }
     }, [role])
+     useEffect(() => {
+         if(!email.includes("@") || !email.includes(".")){
+                setEmailError("Invalid email address")
+         }
+         else{
+                setEmailError("")
+         }
+     }, [email])
 
     useEffect(() => {
         if (isExecuted && !isLoading) {
@@ -103,6 +113,8 @@ export default function MemberInvite({ close }: MemberInviteProps) {
                             </span>
                         </Text>
                         <TextInput
+                        error={emailError!=''}
+                        errorMessage={emailError}
                             placeholder="email"
                             className="font-medium w-1/2 text-gray-800"
                             onChange={(e) => {

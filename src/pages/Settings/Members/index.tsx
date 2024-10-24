@@ -99,7 +99,7 @@ export default function SettingsMembers() {
                     />
                 )}
             </Modal>
-            <a
+            {/* <a
                 className=" cursor-pointer"
                 target="__blank"
                 href="https://docs.opengovernance.io/oss/getting-started/configure-sso"
@@ -114,7 +114,7 @@ export default function SettingsMembers() {
                         Click here.
                     </Link>
                 </Alert>
-            </a>
+            </a> */}
             <Table
                 className="mt-2"
                 onRowClick={(event) => {
@@ -126,7 +126,7 @@ export default function SettingsMembers() {
                 columnDefinitions={[
                     {
                         id: 'email',
-                        header: 'Member',
+                        header: 'Email',
                         cell: (item: any) => item.email,
                     },
                     {
