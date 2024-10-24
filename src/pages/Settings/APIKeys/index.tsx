@@ -15,6 +15,7 @@ import {
     KeyValuePairs,
     Link,
     Modal,
+    RadioGroup,
     SpaceBetween,
     Table,
     Toggle,
@@ -187,45 +188,31 @@ const fixRole = (role: string) => {
                         <Flex
                             justifyContent="between"
                             alignItems="start"
-                            className="truncate space-x-4 mt-4"
+                            className="truncate space-x-4 mt-4 mb-4"
                         >
                             <Text className=" font-bold text-black text-l">
                                 Role
                             </Text>
 
                             <div className="space-y-5 sm:mt-0">
-                                {roleItems.map((item) => {
-                                    return (
-                                        <div className="relative flex items-start">
-                                            <div className="absolute flex h-6 items-center">
-                                                <input
-                                                    name="roles"
-                                                    type="radio"
-                                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                                    onClick={() => {
-                                                        setSelectedItem({
-                                                            ...selectedItem,
-                                                            role_name:
-                                                                item.value,
-                                                        })
-                                                    }}
-                                                    checked={
-                                                        item.value ===
-                                                        selectedItem.role_name
-                                                    }
-                                                />
-                                            </div>
-                                            <div className="pl-7 text-sm leading-6">
-                                                <div className="font-medium text-gray-900">
-                                                    {item.title}
-                                                </div>
-                                                <p className="text-gray-500">
-                                                    {item.description}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    )
-                                })}
+                                <RadioGroup
+                                    onChange={({ detail }) =>
+                                        setSelectedItem({
+                                            ...selectedItem,
+                                            role_name: detail.value,
+                                        })
+                                    }
+                                    value={selectedItem.role_name}
+                                    items={roleItems.map((item) => {
+                                        return{
+                                            value: item.value,
+                                            label: item.title,
+                                            description: item.description,
+                                           
+                                            
+                                    }})}
+                                />
+                      
                             </div>
                         </Flex>
                         <Flex className="w-full justify-end mt-2 gap-3">

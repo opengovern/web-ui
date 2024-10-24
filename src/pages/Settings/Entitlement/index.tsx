@@ -207,7 +207,9 @@ export default function SettingsEntitlement() {
         {
             title: 'Creation date',
             value: dateDisplay(
-                currentWorkspace?.createdAt || Date.now().toString()
+                // @ts-ignore
+                currentWorkspace?.workspace_creation_time ||
+                    Date.now().toString()
             ),
         },
         {

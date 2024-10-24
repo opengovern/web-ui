@@ -26,7 +26,7 @@ import {
     useIntegrationApiV1ConnectionsSummariesList,
 } from '../../../../api/integration.gen'
 import KButton from '@cloudscape-design/components/button'
-import { Modal, Toggle } from '@cloudscape-design/components'
+import { KeyValuePairs, Modal, RadioGroup, Toggle } from '@cloudscape-design/components'
 
 interface IMemberDetails {
     user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
@@ -41,9 +41,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
     )
 
     const [password, setPassword] = useState<string>('')
-    const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
-        'viewer'
-    )
+    
     const [scopedConnectionIDs, setScopedConnectionIDs] = useState<string[]>(
         user?.scopedConnectionIDs || []
     )
@@ -56,7 +54,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
     } = useAuthApiV1UserRoleBindingUpdate(
         {
             email_address: user?.email || '',
-            role: roleValue,
+            role: role,
             is_active: isActive
         },
         {},
@@ -69,11 +67,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
         sendNow: deleteRole,
     } = useAuthApiV1UserRoleBindingDelete(user?.id || 0, {}, false)
 
-    useEffect(() => {
-        if (role === 'viewer' || role === 'editor' || role === 'admin') {
-            setRoleValue(role)
-        }
-    }, [role])
+
      useEffect(() => {
         setIsActive(user?.is_active)
         setRole(user?.role_name)
@@ -148,6 +142,27 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
             </div>
         )
     }
+    const GetKeyItems =()=>{
+        const temp =[]
+         items.map((item) => {
+             temp.push( {
+                 label: item.title,
+                 value: item.value,
+             })
+         })
+         temp.push({
+             label: 'User Status',
+             value: (
+                 <Toggle
+                     onChange={({ detail }) => setIsActive(detail.checked)}
+                     checked={isActive}
+                 >
+                     {isActive ? 'Active' : 'Inactive'}
+                 </Toggle>
+             ),
+         })
+         return temp
+    }
 
     return (
         <>
@@ -187,58 +202,34 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                 justifyContent="between"
                 className="h-full"
             >
-                <List className="pt-4">
-                    <ListItem key="title" className="py-4">
-                        <Flex
-                            justifyContent="start"
-                            className="truncate space-x-4"
-                        >
-                            <Text className="font-medium text-gray-800">
-                                Member Info
-                            </Text>
-                        </Flex>
-                    </ListItem>
-                    {items.map((item) => {
-                        return (
-                            <ListItem key={item.title} className="py-4">
-                                <Flex
-                                    justifyContent="start"
-                                    className="truncate space-x-4 w-fit"
-                                >
-                                    <Text className="font-medium text-gray-500">
-                                        {item.title}
-                                    </Text>
-                                </Flex>
-                                <Text className="text-gray-900">
-                                    {item.value}
-                                </Text>
-                            </ListItem>
-                        )
-                    })}
-                    <ListItem key={'is_active'} className="py-4">
-                        <Flex
-                            justifyContent="start"
-                            className="truncate space-x-4 w-fit"
-                        >
-                            <Text className="font-medium text-gray-500">
-                                User Status
-                            </Text>
-                        </Flex>
-                        <div className="relative flex items-start">
-                            <>{console.log(user)}</>
-                            <>{console.log(isActive)}</>
-                            <>{console.log(role)}</>
+                <KeyValuePairs
+                    className="w-full"
+                    columns={2}
+                    // @ts-ignore
+                    items={GetKeyItems()}
+                />
+                <Flex
+                    justifyContent="between"
+                    alignItems="start"
+                    className="truncate space-x-4 mt-4"
+                >
+                    <Text className="font-bold text-black text-l">Role</Text>
 
-                            <Toggle
-                                onChange={({ detail }) =>
-                                    setIsActive(detail.checked)
+                    <div className="space-y-5 sm:mt-0">
+                        <RadioGroup
+                            onChange={({ detail }) => setRole(detail.value)}
+                            value={role}
+                            items={roleItems.map((item) => {
+                                return {
+                                    value: item.value,
+                                    label: item.title,
+                                    description: item.description,
                                 }
-                                checked={isActive}
-                            >
-                                {isActive ? 'Active' : 'Inactive'}
-                            </Toggle>
-                        </div>
-                    </ListItem>
+                            })}
+                        />
+                    </div>
+                </Flex>
+                <List className="pt-4">
                     {/* <ListItem key="password">
                         <Flex
                             justifyContent="between"
@@ -260,47 +251,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                             />
                         </Flex>
                     </ListItem> */}
-                    <ListItem key="item" className="py-4">
-                        <Flex
-                            justifyContent="between"
-                            alignItems="start"
-                            className="truncate space-x-4"
-                        >
-                            <Text className="font-medium text-gray-500">
-                                Role
-                            </Text>
 
-                            <div className="space-y-5 sm:mt-0">
-                                {roleItems.map((item) => {
-                                    return (
-                                        <div className="relative flex items-start">
-                                            <div className="absolute flex h-6 items-center">
-                                                <input
-                                                    name="roles"
-                                                    type="radio"
-                                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                                    onClick={() => {
-                                                        setRole(item.value)
-                                                    }}
-                                                    checked={
-                                                        item.value === role
-                                                    }
-                                                />
-                                            </div>
-                                            <div className="pl-7 text-sm leading-6">
-                                                <div className="font-medium text-gray-900">
-                                                    {item.title}
-                                                </div>
-                                                <p className="text-gray-500">
-                                                    {item.description}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                        </Flex>
-                    </ListItem>
                     {/*
                     <ListItem key="item" className="py-4">
                         <Flex
