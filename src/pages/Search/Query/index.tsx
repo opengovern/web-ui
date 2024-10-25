@@ -198,7 +198,7 @@ export default function Query() {
     const isDemo = useAtomValue(isDemoAtom)
     const [pageSize, setPageSize] = useState(1000)
     const [autoRun, setAutoRun] = useState(false)
-    const [engine, setEngine] = useState('odysseus-sql')
+    const [engine, setEngine] = useState('cloudql')
     const [page, setPage] = useState(0)
 
     const [preferences, setPreferences] = useState(undefined)

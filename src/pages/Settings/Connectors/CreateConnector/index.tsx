@@ -46,9 +46,8 @@ export default function CreateConnector({ close }: CreateAPIKeyProps) {
     const [connector, setConnector] = useState<any>({
         connector_type: 'oidc',
         connector_sub_type: undefined,
-        id: undefined,
-        name: undefined,
         tenant_id: undefined,
+        issuer: undefined,
         client_id: undefined,
         client_secret: undefined,
     })
@@ -56,12 +55,16 @@ export default function CreateConnector({ close }: CreateAPIKeyProps) {
     const setNotification = useSetAtom(notificationAtom)
 
     const CreateConnector = () => {
-        if(!connector.id || !connector.name || !connector.client_id || !connector.client_secret || !connector.connector_sub_type){
+        if(  !connector.client_secret || !connector.connector_sub_type){
 
             setError('Please fill all the fields')
             return
         }
         if(connector.connector_sub_type?.value === 'entraid' && !connector.tenant_id){
+            setError('Please fill all the fields')
+            return
+        }
+        if(connector.connector_sub_type?.value === 'general' && !connector.issuer){
             setError('Please fill all the fields')
             return
         }
@@ -83,8 +86,7 @@ export default function CreateConnector({ close }: CreateAPIKeyProps) {
         const body = {
             connector_type: connector.connector_type,
             connector_sub_type: connector.connector_sub_type?.value,
-            id: connector.id.trim(),
-            name: connector.name,
+            issuer: connector.issuer,
             tenant_id: connector.tenant_id,
             client_id: connector.client_id,
             client_secret: connector.client_secret,
@@ -122,33 +124,10 @@ export default function CreateConnector({ close }: CreateAPIKeyProps) {
                 alignItems='start'
                 className="gap-2 w-full mb-4"
             >
-                <Input
-                    onChange={({ detail }) => {
-                        setConnector({
-                            ...connector,
-                            id: detail.value,
-                        })
-                        setError(null)
-
-                    }}
-                    className="w-full"
-                    value={connector?.id}
-                    placeholder="Id"
-                />
-                <Input
-                    onChange={({ detail }) => {
-                        setConnector({
-                            ...connector,
-                            name: detail.value,
-                        })
-                        setError(null)
-                    }}
-                    value={connector?.name}
-                    placeholder="Name"
-                    className="w-full"
-                />
+              
                 <Select
                     selectedOption={connector?.connector_sub_type}
+                    inlineLabelText='Connector Sub Type'
                     onChange={({ detail }) => {
                         setConnector({
                             ...connector,
@@ -177,6 +156,7 @@ export default function CreateConnector({ close }: CreateAPIKeyProps) {
                     }}
                     value={connector?.client_id}
                     placeholder="Client Id"
+                    
                     className="w-full"
                 />
                 <Input
@@ -191,6 +171,22 @@ export default function CreateConnector({ close }: CreateAPIKeyProps) {
                     placeholder="Client Secret"
                     className="w-full"
                 />
+                {connector?.connector_sub_type?.value === 'general' && (
+                    <>
+                        <Input
+                            onChange={({ detail }) => {
+                                setConnector({
+                                    ...connector,
+                                    issuer: detail.value,
+                                })
+                                setError(null)
+                            }}
+                            value={connector?.issuer}
+                            placeholder="Issuer"
+                            className="w-full"
+                        />
+                    </>
+                )}
                 {connector?.connector_sub_type?.value === 'entraid' && (
                     <>
                         <Input
@@ -228,7 +224,7 @@ export default function CreateConnector({ close }: CreateAPIKeyProps) {
                     }}
                     loading={isLoading}
                 >
-                    Create API Key
+                    Create Connector
                 </KButton>
             </Flex>
         </Flex>

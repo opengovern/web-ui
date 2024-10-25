@@ -31,6 +31,7 @@ import axios from 'axios'
 import CreateConnector from './CreateConnector'
 import { useSetAtom } from 'jotai'
 import { notificationAtom } from '../../../store'
+import { dateTimeDisplay } from '../../../utilities/dateDisplay'
 export default function SettingsConnectors() {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
     const [drawerOpenEdit, setDrawerOpenEdit] = useState<boolean>(false)
@@ -50,17 +51,16 @@ export default function SettingsConnectors() {
 
     const EditConnector = () => {
         if (
-            !selectedItem.id ||
-            !selectedItem.name ||
             !selectedItem.client_id ||
             !selectedItem.client_secret ||
-            !selectedItem.connector_sub_type
+            !selectedItem.sub_type
         ) {
             setEditError('Please fill all the fields')
             return
         }
         if (
-            selectedItem.connector_sub_type?.value === 'entraid' &&
+            (selectedItem.sub_type?.value === 'entraid' ||
+                selectedItem.sub_type === 'entraid') &&
             !selectedItem.tenant_id
         ) {
             setEditError('Please fill all the fields')
@@ -83,12 +83,14 @@ export default function SettingsConnectors() {
         }
         const body = {
             connector_type: selectedItem?.type,
-            connector_sub_type: selectedItem?.connector_sub_type?.value,
-            id: selectedItem?.id,
-            name: selectedItem?.name,
+            connector_sub_type: selectedItem?.sub_type?.value ? selectedItem?.sub_type?.value : selectedItem?.sub_type,
+            issuer: selectedItem?.issuer,
             tenant_id: selectedItem?.tenant_id,
             client_id: selectedItem?.client_id,
             client_secret: selectedItem?.client_id,
+            is_active: selectedItem?.is_active,
+            id: selectedItem?.id,
+            connector_id: selectedItem?.connector_id,
         }
         axios
             .put(`${url}/main/auth/api/v1/connector`, body, config)
@@ -137,7 +139,7 @@ export default function SettingsConnectors() {
 
         axios
             .delete(
-                `${url}/main/auth/api/v1/connector/${selectedItem?.id}`,
+                `${url}/main/auth/api/v1/connector/${selectedItem?.connector_id}`,
 
                 config
             )
@@ -184,10 +186,29 @@ export default function SettingsConnectors() {
                 setIsLoading(false)
             })
     }
+    const checkDate =(date: string) =>{
+        if(date == "0001-01-01T00:00:00Z"){
+            return 'Not Available'
+        }
+        return dateTimeDisplay(date)
+
+    }
 
     useEffect(() => {
         GetRows()
     }, [])
+    const FindSubtype=(value: string)=> {
+        if(value === 'general'){
+           return  { label: 'General', value: 'general' }
+        }
+        if(value === 'entraid'){
+            return { label: 'Entra Id', value: 'entraid' }
+        }
+        if(value === 'google-workspaces'){
+            return { label: 'Google Workspace', value: 'google-workspaces' }
+        }
+
+    }
 
     return (
         <>
@@ -222,39 +243,16 @@ export default function SettingsConnectors() {
                             alignItems="start"
                             className="gap-2 w-full mb-4"
                         >
-                            <Input
-                                onChange={({ detail }) => {
-                                    setSelectedItem({
-                                        ...selectedItem,
-                                        id: detail.value,
-                                    })
-                                    setEditError(null)
-                                }}
-                                className="w-full"
-                                value={selectedItem?.id}
-                                placeholder="Id"
-                            />
-                            <Input
-                                onChange={({ detail }) => {
-                                    setSelectedItem({
-                                        ...selectedItem,
-                                        name: detail.value,
-                                    })
-                                    setEditError(null)
-                                }}
-                                value={selectedItem?.name}
-                                placeholder="Name"
-                                className="w-full"
-                            />
                             <Select
                                 selectedOption={
-                                    selectedItem?.connector_sub_type
+                                    selectedItem?.sub_type?.value
+                                        ? selectedItem?.sub_type
+                                        : FindSubtype(selectedItem?.sub_type)
                                 }
                                 onChange={({ detail }) => {
                                     setSelectedItem({
                                         ...selectedItem,
-                                        connector_sub_type:
-                                            detail.selectedOption,
+                                        sub_type: detail.selectedOption,
                                     })
                                     setEditError(null)
                                 }}
@@ -263,7 +261,7 @@ export default function SettingsConnectors() {
                                     { label: 'Entra Id', value: 'entraid' },
                                     {
                                         label: 'Google Workspace',
-                                        value: 'google-workspace',
+                                        value: 'google-workspaces',
                                     },
                                 ]}
                                 placeholder="Select Connector Sub Type"
@@ -293,8 +291,25 @@ export default function SettingsConnectors() {
                                 placeholder="Client Secret"
                                 className="w-full"
                             />
-                            {selectedItem?.connector_sub_type?.value ===
-                                'entraid' && (
+                            {(selectedItem?.sub_type?.value === 'general' ||
+                                selectedItem?.sub_type === 'general') && (
+                                <>
+                                    <Input
+                                        onChange={({ detail }) => {
+                                            setSelectedItem({
+                                                ...selectedItem,
+                                                issuer: detail.value,
+                                            })
+                                            setEditError(null)
+                                        }}
+                                        value={selectedItem?.issuer}
+                                        placeholder="Issuer"
+                                        className="w-full"
+                                    />
+                                </>
+                            )}
+                            {(selectedItem?.sub_type?.value === 'entraid' ||
+                                selectedItem?.sub_type) && (
                                 <>
                                     <Input
                                         onChange={({ detail }) => {
@@ -310,6 +325,38 @@ export default function SettingsConnectors() {
                                     />
                                 </>
                             )}
+
+                            <KeyValuePairs
+                                className="w-full"
+                                columns={2}
+                                items={[
+                                    {
+                                        label: 'Status',
+                                        value: '',
+                                    },
+                                    {
+                                        label: '',
+                                        value: (
+                                            <Toggle
+                                                onChange={({ detail }) =>
+                                                    setSelectedItem({
+                                                        ...selectedItem,
+                                                        is_active:
+                                                            detail.checked,
+                                                    })
+                                                }
+                                                checked={
+                                                    selectedItem?.is_active
+                                                }
+                                            >
+                                                {selectedItem?.is_active
+                                                    ? 'Active'
+                                                    : 'Inactive'}
+                                            </Toggle>
+                                        ),
+                                    },
+                                ]}
+                            />
                         </Flex>
                         {editError && (
                             <Alert className="w-full mb-3" type="error">
@@ -383,16 +430,17 @@ export default function SettingsConnectors() {
                 className="mt-2"
                 onRowClick={(event) => {
                     const row = event.detail.item
-                    if (row && row.id != 'local') {
+                    if (row && row.connector_id != 'local') {
                         setSelectedItem(row)
                         setDrawerOpenEdit(true)
                     }
                 }}
+                resizableColumns
                 columnDefinitions={[
                     {
                         id: 'id',
                         header: 'ID',
-                        cell: (item: any) => item.id,
+                        cell: (item: any) => item.connector_id,
                     },
                     {
                         id: 'name',
@@ -407,26 +455,60 @@ export default function SettingsConnectors() {
                     {
                         id: 'sub_type',
                         header: 'Connector Sub Type',
-                        cell: (item: any) => item?.connector_sub_type,
+                        cell: (item: any) => item?.sub_type,
                     },
                     {
                         id: 'client_id',
                         header: 'Client Id',
+                        width: 200,
+                        maxWidth: 102000,
                         cell: (item: any) => item?.client_id,
                     },
                     {
                         id: 'issuer',
                         header: 'Issuer',
+                        width: 100,
+                        maxWidth: 100,
                         cell: (item: any) => item?.issuer,
+                    },
+                    {
+                        id: 'user_count',
+                        header: 'User Count',
+                        cell: (item: any) => item?.user_count,
+                    },
+                    {
+                        id: 'user_count',
+                        header: 'User Count',
+                        cell: (item: any) => item?.user_count,
+                    },
+                    {
+                        id: 'created_at',
+                        header: 'Created At',
+                        cell: (item: any) => checkDate(item?.created_at),
+                    },
+                    {
+                        id: 'last_update',
+                        header: 'Updated At',
+                        cell: (item: any) => checkDate(item?.last_update),
+                    },
+                    {
+                        id: 'status',
+                        header: 'Status',
+                        cell: (item: any) =>
+                            item?.is_active ? 'Active' : 'Inactive',
                     },
                 ]}
                 columnDisplay={[
                     { id: 'id', visible: true },
                     { id: 'name', visible: true },
                     { id: 'type', visible: true },
-                    { id: 'sub_type', visible: false },
+                    { id: 'sub_type', visible: true },
                     { id: 'client_id', visible: true },
-                    { id: 'issuer', visible: false },
+                    { id: 'issuer', visible: true },
+                    { id: 'user_count', visible: true },
+                    { id: 'created_at', visible: true },
+                    { id: 'last_update', visible: true },
+                    { id: 'status', visible: true },
                 ]}
                 loading={isLoading}
                 // @ts-ignore
