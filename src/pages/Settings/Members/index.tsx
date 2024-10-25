@@ -13,8 +13,9 @@ import {
 } from '../../../utilities/dateDisplay'
 import TopHeader from '../../../components/Layout/Header'
 import { useSearchParams } from 'react-router-dom'
-import { Alert, Box, Header, Link, Modal, SpaceBetween, Table } from '@cloudscape-design/components'
+import { Alert, Box, Header, Link, Modal, SpaceBetween, Table, Toggle } from '@cloudscape-design/components'
 import KButton from '@cloudscape-design/components/button'
+import SettingsConnectors from '../Connectors'
 const fixRole = (role: string) => {
     switch (role) {
         case 'admin':
@@ -31,6 +32,7 @@ const fixRole = (role: string) => {
 export default function SettingsMembers() {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
     const [drawerParam, setDrawerParam] = useState<number | string>(0)
+    // const [showSSO, setShowSSO] = useState<boolean>(false)
 
     const {
         response,
@@ -116,7 +118,7 @@ export default function SettingsMembers() {
                 </Alert>
             </a> */}
             <Table
-                className="mt-2"
+                className="mt-2 mb-5"
                 onRowClick={(event) => {
                     const row = event.detail.item
                     if (row.id) {
@@ -200,7 +202,6 @@ export default function SettingsMembers() {
                     >
                         <SpaceBetween size="m">
                             <b>No resources</b>
-                          
                         </SpaceBetween>
                     </Box>
                 }
@@ -298,6 +299,10 @@ export default function SettingsMembers() {
                     ))}
                 </List>
             </Card> */}
+            {/* <Toggle checked={showSSO} onChange={() => setShowSSO(!showSSO)}>
+                Show SSO Providers
+            </Toggle>
+            {showSSO && <SettingsConnectors />} */}
         </>
     )
 }

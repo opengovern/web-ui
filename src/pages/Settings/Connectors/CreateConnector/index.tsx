@@ -117,17 +117,21 @@ export default function CreateConnector({ close }: CreateAPIKeyProps) {
     }
 
     return (
-        <Flex flexDirection="col" alignItems='start' justifyContent="between" className="h-full">
+        <Flex
+            flexDirection="col"
+            alignItems="start"
+            justifyContent="between"
+            className="h-full"
+        >
             <Flex
                 flexDirection="col"
                 justifyContent="start"
-                alignItems='start'
+                alignItems="start"
                 className="gap-2 w-full mb-4"
             >
-              
                 <Select
                     selectedOption={connector?.connector_sub_type}
-                    inlineLabelText='Connector Sub Type'
+                    inlineLabelText="OIDC Provider"
                     onChange={({ detail }) => {
                         setConnector({
                             ...connector,
@@ -143,7 +147,7 @@ export default function CreateConnector({ close }: CreateAPIKeyProps) {
                             value: 'google-workspace',
                         },
                     ]}
-                    placeholder="Select Connector Sub Type"
+                    placeholder="OIDC Provider"
                     className="w-full"
                 />
                 <Input
@@ -156,7 +160,6 @@ export default function CreateConnector({ close }: CreateAPIKeyProps) {
                     }}
                     value={connector?.client_id}
                     placeholder="Client Id"
-                    
                     className="w-full"
                 />
                 <Input
@@ -224,7 +227,7 @@ export default function CreateConnector({ close }: CreateAPIKeyProps) {
                     }}
                     loading={isLoading}
                 >
-                    Create Connector
+                    Add Provider
                 </KButton>
             </Flex>
         </Flex>

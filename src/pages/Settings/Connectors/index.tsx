@@ -243,6 +243,51 @@ export default function SettingsConnectors() {
                             alignItems="start"
                             className="gap-2 w-full mb-4"
                         >
+                            <KeyValuePairs
+                                className="w-full"
+                                columns={3}
+                                items={[
+                                    {
+                                        label: 'ID',
+                                        value: selectedItem?.connector_id,
+                                    },
+                                    {
+                                        label: 'Name',
+                                        value: selectedItem?.name,
+                                    },
+                                    {
+                                        label: 'Type',
+                                        value: selectedItem?.type.toUpperCase(),
+                                    },
+
+                                    {
+                                        label: 'Created At',
+                                        value: checkDate(
+                                            selectedItem?.created_at
+                                        ),
+                                    },
+                                    {
+                                        label: 'Updated At',
+                                        value: checkDate(
+                                            selectedItem?.last_update
+                                        ),
+                                    },
+                                    {
+                                        label: 'User Count',
+                                        value: selectedItem?.user_count,
+                                    },
+                                ]}
+                            />
+                            <KeyValuePairs
+                                className="w-full"
+                                columns={1}
+                                items={[
+                                    {
+                                        label: 'Issuer',
+                                        value: selectedItem?.issuer,
+                                    },
+                                ]}
+                            />
                             <Select
                                 selectedOption={
                                     selectedItem?.sub_type?.value
@@ -264,7 +309,8 @@ export default function SettingsConnectors() {
                                         value: 'google-workspaces',
                                     },
                                 ]}
-                                placeholder="Select Connector Sub Type"
+                                placeholder="OIDC Provider"
+                                inlineLabelText="OIDC Provider"
                                 className="w-full"
                             />
                             <Input
@@ -326,37 +372,7 @@ export default function SettingsConnectors() {
                                 </>
                             )}
 
-                            <KeyValuePairs
-                                className="w-full"
-                                columns={2}
-                                items={[
-                                    {
-                                        label: 'Status',
-                                        value: '',
-                                    },
-                                    {
-                                        label: '',
-                                        value: (
-                                            <Toggle
-                                                onChange={({ detail }) =>
-                                                    setSelectedItem({
-                                                        ...selectedItem,
-                                                        is_active:
-                                                            detail.checked,
-                                                    })
-                                                }
-                                                checked={
-                                                    selectedItem?.is_active
-                                                }
-                                            >
-                                                {selectedItem?.is_active
-                                                    ? 'Active'
-                                                    : 'Inactive'}
-                                            </Toggle>
-                                        ),
-                                    },
-                                ]}
-                            />
+                           
                         </Flex>
                         {editError && (
                             <Alert className="w-full mb-3" type="error">
@@ -454,7 +470,7 @@ export default function SettingsConnectors() {
                     },
                     {
                         id: 'sub_type',
-                        header: 'Connector Sub Type',
+                        header: 'OIDC Provider',
                         cell: (item: any) => item?.sub_type,
                     },
                     {
@@ -499,16 +515,16 @@ export default function SettingsConnectors() {
                     },
                 ]}
                 columnDisplay={[
-                    { id: 'id', visible: true },
+                    { id: 'id', visible: false },
                     { id: 'name', visible: true },
-                    { id: 'type', visible: true },
+                    { id: 'type', visible: false },
                     { id: 'sub_type', visible: true },
                     { id: 'client_id', visible: true },
-                    { id: 'issuer', visible: true },
+                    { id: 'issuer', visible: false },
                     { id: 'user_count', visible: true },
-                    { id: 'created_at', visible: true },
+                    { id: 'created_at', visible: false },
                     { id: 'last_update', visible: true },
-                    { id: 'status', visible: true },
+                    { id: 'status', visible: false },
                 ]}
                 loading={isLoading}
                 // @ts-ignore
@@ -536,13 +552,13 @@ export default function SettingsConnectors() {
                                         openCreateMenu()
                                     }}
                                 >
-                                    Create Connector
+                                   Add SSO Provider
                                 </KButton>
                             </>
                         }
                         className="w-full"
                     >
-                        Connectors{' '}
+                        SSO Providers{' '}
                     </Header>
                 }
             />
