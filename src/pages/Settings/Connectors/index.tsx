@@ -88,7 +88,6 @@ export default function SettingsConnectors() {
             tenant_id: selectedItem?.tenant_id,
             client_id: selectedItem?.client_id,
             client_secret: selectedItem?.client_id,
-            is_active: selectedItem?.is_active,
             id: selectedItem?.id,
             connector_id: selectedItem?.connector_id,
         }
@@ -507,12 +506,7 @@ export default function SettingsConnectors() {
                         header: 'Updated At',
                         cell: (item: any) => checkDate(item?.last_update),
                     },
-                    {
-                        id: 'status',
-                        header: 'Status',
-                        cell: (item: any) =>
-                            item?.is_active ? 'Active' : 'Inactive',
-                    },
+                   
                 ]}
                 columnDisplay={[
                     { id: 'id', visible: false },
@@ -524,7 +518,6 @@ export default function SettingsConnectors() {
                     { id: 'user_count', visible: true },
                     { id: 'created_at', visible: false },
                     { id: 'last_update', visible: true },
-                    { id: 'status', visible: false },
                 ]}
                 loading={isLoading}
                 // @ts-ignore
