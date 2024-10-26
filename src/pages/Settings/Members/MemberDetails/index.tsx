@@ -200,7 +200,7 @@ const GetProviders = () => {
             const data = res.data
             const temp = []
             temp.push({ value: 'local', label: 'Password (Built-in)' })
-            data.map((item: any) => {
+            data?.map((item: any) => {
                 temp.push({ value: item.connector_id, label: item.name })
             })
             setProviders(temp)
