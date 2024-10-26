@@ -399,6 +399,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding {
      */
     userName?: string
     is_active? : boolean
+    connector_id? : string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSummary {

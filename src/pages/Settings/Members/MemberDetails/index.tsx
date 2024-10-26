@@ -7,6 +7,8 @@ import {
     ListItem,
     MultiSelect,
     MultiSelectItem,
+    Select,
+    SelectItem,
     Text,
     TextInput,
 } from '@tremor/react'
@@ -27,6 +29,7 @@ import {
 } from '../../../../api/integration.gen'
 import KButton from '@cloudscape-design/components/button'
 import { Checkbox, KeyValuePairs, Modal, RadioGroup, Toggle } from '@cloudscape-design/components'
+import axios from 'axios'
 
 interface IMemberDetails {
     user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
@@ -42,9 +45,14 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
 
     const [password, setPassword] = useState<string>('')
     const [changePassword, setChangePassword] = useState<boolean>(false)
+    const [changeProvider, setChangeProvider] = useState<boolean>(false)
+    const [connectorID, setConnectorId] = useState<any>(user?.connector_id)
     const [scopedConnectionIDs, setScopedConnectionIDs] = useState<string[]>(
         user?.scopedConnectionIDs || []
     )
+    const [providers, setProviders] = useState<any>([])
+    
+
     const setNotification = useSetAtom(notificationAtom)
 
     const {
@@ -57,7 +65,8 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
             role: role,
             is_active: isActive,
             // @ts-ignore
-            password: password
+           password: connectorID =='local'?password : '',
+            connector_id: connectorID,
         },
         {},
         false
@@ -165,7 +174,45 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
          })
          return temp
     }
+const GetProviders = () => {
+    let url = ''
+    if (window.location.origin === 'http://localhost:3000') {
+        url = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL
+    } else {
+        url = window.location.origin
+    }
+    // @ts-ignore
+    const token = JSON.parse(localStorage.getItem('openg_auth')).token
 
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
+    axios
+        .get(
+            `${url}/main/auth/api/v1/connectors`,
+
+            config
+        )
+        .then((res) => {
+            const data = res.data
+            const temp = []
+            temp.push({ value: 'local', label: 'Password (Built-in)' })
+            data.map((item: any) => {
+                temp.push({ value: item.connector_id, label: item.name })
+            })
+            setProviders(temp)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+}
+
+useEffect(() => {
+    GetProviders()
+}, [])
     return (
         <>
             <Modal
@@ -233,6 +280,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                         />
                     </div>
                 </Flex>
+
                 <Flex
                     justifyContent="start"
                     alignItems="start"
@@ -241,23 +289,64 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
                 >
                     <Checkbox
                         onChange={({ detail }) =>
-                            setChangePassword(detail.checked)
+                            setChangeProvider(detail.checked)
                         }
-                        checked={changePassword}
+                        checked={changeProvider}
                     >
-                        Change Password
+                        Change Identity Provider
                     </Checkbox>
-                    {changePassword && (
-                        <TextInput
-                            type="password"
-                            placeholder="password"
-                            className="font-medium w-1/2 text-gray-800"
-                            onChange={(e) => {
-                                setPassword(e.target.value)
-                            }}
-                        />
+                    {changeProvider && (
+                        <Select
+                            className=" w-1/2 z-50 static  "
+                            // h-[150px]
+                            value={connectorID}
+                            disabled={false}
+                            onValueChange={setConnectorId}
+                            placeholder="Identity Provider"
+                        >
+                            {providers.map((item: any) => {
+                                return (
+                                    <SelectItem
+                                        key={item.value}
+                                        value={item.value}
+                                    >
+                                        {item.label}
+                                    </SelectItem>
+                                )
+                            })}
+                            {/* <SelectItem className="static" value="oicd">
+                                OIDC (SSO)
+                            </SelectItem> */}
+                        </Select>
                     )}
                 </Flex>
+                {connectorID === 'local' && (
+                    <Flex
+                        justifyContent="start"
+                        alignItems="start"
+                        flexDirection="col"
+                        className="mt-4 w-full mb-4 gap-2 space-x-4"
+                    >
+                        <Checkbox
+                            onChange={({ detail }) =>
+                                setChangePassword(detail.checked)
+                            }
+                            checked={changePassword}
+                        >
+                            Change Password
+                        </Checkbox>
+                        {changePassword && (
+                            <TextInput
+                                type="password"
+                                placeholder="password"
+                                className="font-medium w-1/2 text-gray-800"
+                                onChange={(e) => {
+                                    setPassword(e.target.value)
+                                }}
+                            />
+                        )}
+                    </Flex>
+                )}
                 {/* <List className="pt-4"> */}
                 {/* <ListItem key="password">
                         <Flex
