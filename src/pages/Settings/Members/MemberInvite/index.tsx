@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 import {
     Button,
+    Divider,
     Flex,
     List,
     ListItem,
-    Select,
-    SelectItem,
     Subtitle,
     Text,
     TextInput,
@@ -15,6 +14,7 @@ import { useAuthApiV1UserInviteCreate } from '../../../../api/auth.gen'
 import { notificationAtom } from '../../../../store'
 import KButton from '@cloudscape-design/components/button'
 import axios from 'axios'
+import { Select } from '@cloudscape-design/components'
 interface MemberInviteProps {
     close: (refresh: boolean) => void
 }
@@ -22,7 +22,10 @@ interface MemberInviteProps {
 export default function MemberInvite({ close }: MemberInviteProps) {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
-    const [connectorID, setConnectorId] = useState<string>('local')
+    const [connectorID, setConnectorId] = useState<any>({
+        value: 'local',
+        label: 'Password (Built-in)',
+    })
    
     const [emailError, setEmailError] = useState<string>('')
     const [providers, setProviders] = useState<any>([])
@@ -41,7 +44,15 @@ export default function MemberInvite({ close }: MemberInviteProps) {
         sendNow: createInvite,
     } = useAuthApiV1UserInviteCreate(
         // @ts-ignore
-        { email_address: email || '', role: role ,password: connectorID =='local'?password : '',is_active: true,connector_id: connectorID },
+        {
+            // @ts-ignore
+            email_address: email || '',
+            // @ts-ignore
+            role: role,
+            password: connectorID.value == 'local' ? password : '',
+            is_active: true,
+            connector_id: connectorID.value,
+        },
         {},
         false
     )
@@ -139,142 +150,113 @@ export default function MemberInvite({ close }: MemberInviteProps) {
     },[])
     return (
         <Flex flexDirection="col" justifyContent="between" className="h-full">
-            <List className="mt-4">
-                <ListItem key="title">
-                    <Flex justifyContent="start" className="truncate space-x-4">
-                        <Subtitle className="text-gray-800 py-2">
-                            New Member Info
-                        </Subtitle>
-                    </Flex>
-                </ListItem>
-                <ListItem key="email">
+            <Flex justifyContent="between" className="truncate space-x-4 py-2">
+                <Text className="font-medium text-gray-800">
+                    Email
+                    <span className="text-red-600 font-semibold">*</span>
+                </Text>
+                <TextInput
+                    error={emailError != ''}
+                    errorMessage={emailError}
+                    placeholder="email"
+                    className="font-medium w-1/2 text-gray-800"
+                    onChange={(e) => {
+                        setEmail(e.target.value)
+                    }}
+                />
+            </Flex>
+
+            <Divider />
+
+            <Flex
+                justifyContent="between"
+                alignItems="start"
+                flexDirection="row"
+                className=" space-x-4 py-2"
+            >
+                <Text className="font-medium text-gray-800">
+                    Identity Provider
+                    <span className="text-red-600 font-semibold">*</span>
+                </Text>
+                <Select
+                    className=" w-1/2    "
+                    // h-[150px]
+                    selectedOption={connectorID}
+                    disabled={false}
+                    onChange={({ detail }) =>
+                        setConnectorId(detail.selectedOption)
+                    }
+                    placeholder="Identity Provider"
+                    // @ts-ignore
+                    options={providers}
+                />
+            </Flex>
+
+            {connectorID.value == 'local' && (
+                <>
+                    <Divider />
                     <Flex
                         justifyContent="between"
                         className="truncate space-x-4 py-2"
                     >
                         <Text className="font-medium text-gray-800">
-                            Email
+                            Password
                             <span className="text-red-600 font-semibold">
                                 *
                             </span>
                         </Text>
                         <TextInput
-                            error={emailError != ''}
-                            errorMessage={emailError}
-                            placeholder="email"
+                            type="password"
+                            placeholder="password"
                             className="font-medium w-1/2 text-gray-800"
                             onChange={(e) => {
-                                setEmail(e.target.value)
+                                setPassword(e.target.value)
                             }}
                         />
                     </Flex>
-                </ListItem>
+                </>
+            )}
+            <Divider />
+                <Flex
+                    justifyContent="between"
+                    alignItems="start"
+                    className="truncate space-x-4"
+                >
+                    <Text className="font-medium text-gray-800">
+                        Role
+                        <span className="text-red-600 font-semibold">*</span>
+                    </Text>
 
-                <ListItem key="authentication">
-                    <Flex
-                        justifyContent="between"
-                        alignItems="start"
-                        flexDirection="row"
-                        className="truncate space-x-4 py-2"
-                    >
-                        <Text className="font-medium text-gray-800">
-                            Identity Provider
-                            <span className="text-red-600 font-semibold">
-                                *
-                            </span>
-                        </Text>
-                        <Select
-                            className=" w-1/2 z-50 static  "
-                            // h-[150px]
-                            value={connectorID}
-                            disabled={false}
-                            onValueChange={setConnectorId}
-                            placeholder="Identity Provider"
-                        >
-                            {providers.map((item: any) => {
-                                return (
-                                    <SelectItem
-                                        key={item.value}
-                                        value={item.value}
-                                    >
-                                        {item.label}
-                                    </SelectItem>
-                                )
-                            })}
-                            {/* <SelectItem className="static" value="oicd">
-                                OIDC (SSO)
-                            </SelectItem> */}
-                        </Select>
-                    </Flex>
-                </ListItem>
-                {connectorID == 'local' && (
-                    <ListItem key="password">
-                        <Flex
-                            justifyContent="between"
-                            className="truncate space-x-4 py-2"
-                        >
-                            <Text className="font-medium text-gray-800">
-                                Password
-                                <span className="text-red-600 font-semibold">
-                                    *
-                                </span>
-                            </Text>
-                            <TextInput
-                                type="password"
-                                placeholder="password"
-                                className="font-medium w-1/2 text-gray-800"
-                                onChange={(e) => {
-                                    setPassword(e.target.value)
-                                }}
-                            />
-                        </Flex>
-                    </ListItem>
-                )}
-
-                <ListItem key="role">
-                    <Flex
-                        justifyContent="between"
-                        alignItems="start"
-                        className="truncate space-x-4"
-                    >
-                        <Text className="font-medium text-gray-800">
-                            Role
-                            <span className="text-red-600 font-semibold">
-                                *
-                            </span>
-                        </Text>
-
-                        <div className="space-y-5 sm:mt-0 w-1/2">
-                            {roleItems.map((item) => {
-                                return (
-                                    <div className="relative flex items-start">
-                                        <div className="absolute flex h-6 items-center">
-                                            <input
-                                                name="roles"
-                                                type="radio"
-                                                className="h-4 w-4 border-gray-300 text-openg-600 focus:ring-openg-700"
-                                                onClick={() => {
-                                                    setRole(item.value)
-                                                }}
-                                                checked={item.value === role}
-                                            />
-                                        </div>
-                                        <div className="pl-7 text-sm leading-6">
-                                            <div className="font-medium text-gray-900">
-                                                {item.title}
-                                            </div>
-                                            <p className="text-gray-500">
-                                                {item.description}
-                                            </p>
-                                        </div>
+                    <div className="space-y-5 sm:mt-0 w-1/2">
+                        {roleItems.map((item) => {
+                            return (
+                                <div className="relative flex items-start">
+                                    <div className="absolute flex h-6 items-center">
+                                        <input
+                                            name="roles"
+                                            type="radio"
+                                            className="h-4 w-4 border-gray-300 text-openg-600 focus:ring-openg-700"
+                                            onClick={() => {
+                                                setRole(item.value)
+                                            }}
+                                            checked={item.value === role}
+                                        />
                                     </div>
-                                )
-                            })}
-                        </div>
-                    </Flex>
-                </ListItem>
-            </List>
-            <Flex justifyContent="end" className="truncate space-x-4">
+                                    <div className="pl-7 text-sm leading-6">
+                                        <div className="font-medium text-gray-900">
+                                            {item.title}
+                                        </div>
+                                        <p className="text-gray-500">
+                                            {item.description}
+                                        </p>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </Flex>
+
+            <Flex justifyContent="end" className="truncate space-x-4 mt-4">
                 <KButton
                     disabled={isExecuted && isLoading}
                     onClick={() => close(false)}
