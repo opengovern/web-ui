@@ -89,6 +89,9 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
 useEffect(() => {
     GetProviders()
 }, [])
+useEffect(() => {
+   setConnectorId(user?.connector_id)
+}, [user])
     const setNotification = useSetAtom(notificationAtom)
 
     const {
@@ -287,38 +290,26 @@ useEffect(() => {
                     flexDirection="col"
                     className="mt-4 w-full mb-4 gap-2 space-x-4"
                 >
-                    <Checkbox
-                        onChange={({ detail }) =>
-                            setChangeProvider(detail.checked)
-                        }
-                        checked={changeProvider}
+                    <>{console.log(connectorID)}</>
+                    <Select
+                        className=" w-1/2 z-50 static  "
+                        // h-[150px]
+                        value={connectorID}
+                        disabled={false}
+                        onValueChange={setConnectorId}
+                        placeholder="Identity Provider"
                     >
-                        Change Identity Provider
-                    </Checkbox>
-                    {changeProvider && (
-                        <Select
-                            className=" w-1/2 z-50 static  "
-                            // h-[150px]
-                            value={connectorID}
-                            disabled={false}
-                            onValueChange={setConnectorId}
-                            placeholder="Identity Provider"
-                        >
-                            {providers.map((item: any) => {
-                                return (
-                                    <SelectItem
-                                        key={item.value}
-                                        value={item.value}
-                                    >
-                                        {item.label}
-                                    </SelectItem>
-                                )
-                            })}
-                            {/* <SelectItem className="static" value="oicd">
+                        {providers.map((item: any) => {
+                            return (
+                                <SelectItem key={item.value} value={item.value}>
+                                    {item.label}
+                                </SelectItem>
+                            )
+                        })}
+                        {/* <SelectItem className="static" value="oicd">
                                 OIDC (SSO)
                             </SelectItem> */}
-                        </Select>
-                    )}
+                    </Select>
                 </Flex>
                 {connectorID === 'local' && (
                     <Flex
@@ -429,7 +420,7 @@ useEffect(() => {
                     */}
                 {/* </List> */}
                 <Flex justifyContent="end" className="truncate space-x-4">
-                    <KButton onClick={() => setDeleteConfirmation(true)}>
+                    <KButton disabled={user?.id ==1 || user?.email?.includes("admin")} onClick={() => setDeleteConfirmation(true)}>
                         <TrashIcon className="h-5 w-5" color="rose" />
                     </KButton>
 
