@@ -97,7 +97,7 @@ export default function CreateConnector({ close }: CreateAPIKeyProps) {
                 setIsLoading(false)
                 setNotification({
                     type: 'success',
-                    text: 'Connector created successfully',
+                    text: 'Provider created successfully',
                 })
                 close()
             })

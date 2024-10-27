@@ -100,7 +100,7 @@ export default function SettingsConnectors() {
                 setDrawerOpenEdit(false)
                 setNotification({
                     type: 'success',
-                    text: 'Connector created successfully',
+                    text: 'Provider updated successfully',
                 })
             })
             .catch((err) => {
@@ -150,7 +150,7 @@ export default function SettingsConnectors() {
             .catch((err) => {
                 console.log(err)
                 setIsDeleteLoading(false)
-                setError('Error while deleting Connector')
+                setError('Error while deleting Provider')
             })
     }
     const GetRows = () => {
