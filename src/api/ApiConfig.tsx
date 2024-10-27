@@ -21,7 +21,9 @@ const instance = axios.create({
         'X-Kaytu-Demo': isDemo() ? 'true' : 'false',
         Accept: 'application/json',
     },
+
 })
+
 
 export const setAuthHeader = (authToken?: string) => {
     instance.defaults.headers.common.Authorization = `Bearer ${authToken}`

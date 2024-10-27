@@ -27,6 +27,7 @@ export const complianceOpenAtom = atom(false)
 export const automationOpenAtom = atom(false)
 export const queryAtom = atom('')
 export const sampleAtom = atom(true)
+export const ForbiddenAtom = atom(false)
 
 export const isDemoAtom = atom(localStorage.demoMode === 'true')
 export const workspaceAtom = atom<{

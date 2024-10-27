@@ -2,12 +2,12 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { Button, Card, Flex, Text, Title } from '@tremor/react'
 import Router from './router'
 import Spinner from './components/Spinner'
 import { setAuthHeader } from './api/ApiConfig'
-import { colorBlindModeAtom, meAtom, tokenAtom } from './store'
+import { colorBlindModeAtom, ForbiddenAtom, meAtom, tokenAtom } from './store'
 import { applyTheme } from './utilities/theme'
 import { OpenGovernance } from './icons/icons'
 import { useAuth } from './utilities/auth'
@@ -57,6 +57,7 @@ export default function App() {
     const [colorBlindMode, setColorBlindMode] = useAtom(colorBlindModeAtom)
     const [expire, setExpire] = useState<number>(0)
     const [showExpired, setShowExpired] = useState<boolean>(false)
+    const forbidden = useAtomValue(ForbiddenAtom)
     const {
         response: meResponse,
         isExecuted: meIsExecuted,
@@ -150,6 +151,31 @@ export default function App() {
                             >
                                 Re-Login
                             </Button>
+                        </Flex>
+                    </Card>
+                </Flex>
+            )}
+            {forbidden && (
+                <Flex
+                    flexDirection="col"
+                    className="fixed top-0 left-0 w-screen h-screen bg-gray-900/80 z-50"
+                >
+                    <Card className="w-1/3 mt-56">
+                        <Flex
+                            flexDirection="col"
+                            justifyContent="center"
+                            alignItems="center"
+                        >
+                            <OpenGovernance className="w-14 h-14 mb-6" />
+                            <Title className="mb-3 text-2xl font-bold">
+                                Access Denied
+                            </Title>
+                            <Text className="mb-6 text-center">
+                                You do not have permission to access this page.
+                                Please contact your administrator for more
+                                information.
+                            </Text>
+                          
                         </Flex>
                     </Card>
                 </Flex>

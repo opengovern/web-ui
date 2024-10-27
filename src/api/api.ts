@@ -272,7 +272,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest {
      */
     role?: 'admin' | 'editor' | 'viewer'
     password: string
-    is_active : boolean
+    is_active: boolean
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgAuthApiInviteStatus {
@@ -398,8 +398,8 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding {
      * @example "John Doe"
      */
     userName?: string
-    is_active? : boolean
-    connector_id? : string
+    is_active?: boolean
+    connector_id?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSummary {
@@ -1402,7 +1402,6 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest {
     titleFilter?: string
 }
 
-
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse {
     others?: GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair
     top_values?: Record<
@@ -1614,9 +1613,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem {
     tags?: Record<string, string>
     /** Title */
     title?: string
- 
 }
-
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQuerySortItem {
     direction?: 'asc' | 'desc'
@@ -1661,8 +1658,6 @@ export interface GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata {
     type?: GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadataType
     value?: string
 }
-
-
 
 export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadataType {
     ConfigMetadataTypeString = 'string',
@@ -2778,10 +2773,10 @@ export interface GithubComKaytuIoKaytuEnginePkgControlApiListV2 {
     finding_summary?: boolean
     connector?: string[]
     parent_benchmark?: string[]
-    root_benchmark? : string[]
+    root_benchmark?: string[]
     has_parameters?: boolean
     tags?: GithubComKaytuIoKaytuEnginePkgControlApiListV2Tags[]
-    list_of_tables? : string[]
+    list_of_tables?: string[]
 }
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiV3ControlListFiltersTags {
     Key: string
@@ -2874,7 +2869,7 @@ export interface GithubComKaytuIoKaytuEnginePkgControlDetailV3Benchmarks {
     roots: string[]
 }
 export interface GithubComKaytuIoKaytuEnginePkgControlDetailV3Tags {
-   [key: string] : string[]
+    [key: string]: string[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgControlDetailV3Query {
@@ -2918,8 +2913,6 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2Query
     updatedAt: Date
 }
 
-
-
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2Response {
     /** List of items */
     items: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItemV2[]
@@ -2947,7 +2940,6 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiV3BenchmarkListFilter
     Key: string
     UniqueValues: string[]
 }
-
 
 export enum SourceAssetDiscoveryMethodType {
     AssetDiscoveryMethodTypeScheduled = 'scheduled',
@@ -3918,6 +3910,8 @@ import axios, {
     HeadersDefaults,
     ResponseType,
 } from 'axios'
+import { useSetAtom } from 'jotai'
+import { ForbiddenAtom } from '../store'
 
 export type QueryParamsType = Record<string | number, any>
 
@@ -4070,20 +4064,35 @@ export class HttpClient<SecurityDataType = unknown> {
         ) {
             body = JSON.stringify(body)
         }
-
-        return this.instance.request({
-            ...requestParams,
-            headers: {
-                ...(requestParams.headers || {}),
-                ...(type && type !== ContentType.FormData
-                    ? { 'Content-Type': type }
-                    : {}),
+        const instance = this.instance
+        const setForbbiden = useSetAtom(ForbiddenAtom)
+        instance.interceptors.response.use(
+            (response) => {
+                return response
             },
-            params: query,
-            responseType: responseFormat,
-            data: body,
-            url: path,
-        })
+            (error) => {
+                if (error.response && (error.response.status === 403 || error.response.status === 401)) {
+                    setForbbiden(true)
+                }
+                // handle for 403
+
+                return Promise.reject(error)
+            }
+        )
+        return this.instance
+            .request({
+                ...requestParams,
+                headers: {
+                    ...(requestParams.headers || {}),
+                    ...(type && type !== ContentType.FormData
+                        ? { 'Content-Type': type }
+                        : {}),
+                },
+                params: query,
+                responseType: responseFormat,
+                data: body,
+                url: path,
+            })
     }
 }
 
