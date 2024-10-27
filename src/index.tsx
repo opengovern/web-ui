@@ -11,6 +11,7 @@ import { applyTheme, currentTheme } from './utilities/theme'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from './api/api'
 import enMessages from '@cloudscape-design/components/i18n/messages/all.en'
 import { I18nProvider } from '@cloudscape-design/components/i18n'
+import { AxiosInterceptor } from './api/ApiConfig'
 const currentThemeValue = currentTheme()
 if (
     currentThemeValue ===
@@ -40,9 +41,11 @@ root.render(
         <JotaiProvider>
             <BrowserRouter>
                 <AuthProviderWithNavigate>
-                    <I18nProvider locale="en" messages={[enMessages]}>
-                        <App />
-                    </I18nProvider>
+                    <AxiosInterceptor>
+                        <I18nProvider locale="en" messages={[enMessages]}>
+                            <App />
+                        </I18nProvider>
+                    </AxiosInterceptor>
                 </AuthProviderWithNavigate>
             </BrowserRouter>
         </JotaiProvider>

@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { isDemo } from '../utilities/demo'
 import { atom, useAtom, useSetAtom } from 'jotai'
+import { useEffect } from 'react'
+import { ForbiddenAtom } from '../store'
 
 
 const { hostname } = window.location
@@ -25,7 +27,39 @@ const instance = axios.create({
     },
 
 })
+// @ts-ignore
+const AxiosInterceptor = ({ children }) => {
+    const setForbbiden = useSetAtom(ForbiddenAtom)
 
+    useEffect(() => {
+        // @ts-ignore
+        const resInterceptor = (response) => {
+            return response
+        }
+        // @ts-ignore
+
+        const errInterceptor = (error) => {
+            if (
+                error.response.status === 401 ||
+                error.response.status === 403
+            ) {
+                setForbbiden(true)
+            }
+
+            return Promise.reject(error)
+        }
+
+        const interceptor = instance.interceptors.response.use(
+            resInterceptor,
+            errInterceptor
+        )
+
+        return () => instance.interceptors.response.eject(interceptor)
+    }, [])
+
+    return children
+}
+export { AxiosInterceptor }
 export const setAuthHeader = (authToken?: string) => {
     instance.defaults.headers.common.Authorization = `Bearer ${authToken}`
 }
