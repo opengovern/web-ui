@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { ArrowPathIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftStartOnRectangleIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useAtom, useAtomValue } from 'jotai'
@@ -50,6 +50,7 @@ export default function App() {
         isAuthenticated,
         getAccessTokenSilently,
         getIdTokenClaims,
+        logout
     } = useAuth()
     const [token, setToken] = useAtom(tokenAtom)
     const [me, setMe] = useAtom(meAtom)
@@ -155,7 +156,7 @@ export default function App() {
                     </Card>
                 </Flex>
             )}
-           
+
             {forbidden && (
                 <Flex
                     flexDirection="col"
@@ -176,7 +177,12 @@ export default function App() {
                                 Please contact your administrator for more
                                 information.
                             </Text>
-                          
+                            <Button
+                                icon={ArrowLeftStartOnRectangleIcon}
+                                onClick={() => logout()}
+                            >
+                                Logout
+                            </Button>
                         </Flex>
                     </Card>
                 </Flex>
