@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { isDemo } from '../utilities/demo'
+import { atom, useAtom, useSetAtom } from 'jotai'
+
 
 const { hostname } = window.location
 export const authHostname = () => {
@@ -23,7 +25,6 @@ const instance = axios.create({
     },
 
 })
-
 
 export const setAuthHeader = (authToken?: string) => {
     instance.defaults.headers.common.Authorization = `Bearer ${authToken}`

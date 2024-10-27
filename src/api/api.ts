@@ -3911,7 +3911,7 @@ import axios, {
     ResponseType,
 } from 'axios'
 import { useSetAtom } from 'jotai'
-import { ForbiddenAtom } from '../store'
+import { useNavigate } from 'react-router-dom'
 
 export type QueryParamsType = Record<string | number, any>
 
@@ -3975,6 +3975,7 @@ export class HttpClient<SecurityDataType = unknown> {
         this.secure = secure
         this.format = format
         this.securityWorker = securityWorker
+      
     }
 
     public setSecurityData = (data: SecurityDataType | null) => {
@@ -4065,34 +4066,36 @@ export class HttpClient<SecurityDataType = unknown> {
             body = JSON.stringify(body)
         }
         const instance = this.instance
-        const setForbbiden = useSetAtom(ForbiddenAtom)
         instance.interceptors.response.use(
             (response) => {
                 return response
             },
             (error) => {
-                if (error.response && (error.response.status === 403 || error.response.status === 401)) {
-                    setForbbiden(true)
+                if (
+                    error.response &&
+                    (error.response.status === 403 ||
+                        error.response.status === 401)
+                ) {
+                   
                 }
                 // handle for 403
 
                 return Promise.reject(error)
             }
         )
-        return this.instance
-            .request({
-                ...requestParams,
-                headers: {
-                    ...(requestParams.headers || {}),
-                    ...(type && type !== ContentType.FormData
-                        ? { 'Content-Type': type }
-                        : {}),
-                },
-                params: query,
-                responseType: responseFormat,
-                data: body,
-                url: path,
-            })
+        return this.instance.request({
+            ...requestParams,
+            headers: {
+                ...(requestParams.headers || {}),
+                ...(type && type !== ContentType.FormData
+                    ? { 'Content-Type': type }
+                    : {}),
+            },
+            params: query,
+            responseType: responseFormat,
+            data: body,
+            url: path,
+        })
     }
 }
 

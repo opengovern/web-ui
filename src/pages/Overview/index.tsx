@@ -16,7 +16,7 @@ import FormField from '@cloudscape-design/components/form-field'
 import Input from '@cloudscape-design/components/input'
 import { error } from 'console'
 import { useSetAtom } from 'jotai'
-import { notificationAtom } from '../../store'
+import { ForbiddenAtom, notificationAtom } from '../../store'
 import { useAuth } from '../../utilities/auth'
 import { useAuthApiV1UserInviteCreate } from '../../api/auth.gen'
 
@@ -48,6 +48,7 @@ export default function Overview() {
         new: '',
         confirm: '',
     })
+    const setForbbiden = useSetAtom(ForbiddenAtom)
     const [changeError, setChangeError] = useState()
     const {
         isExecuted,
@@ -91,6 +92,10 @@ export default function Overview() {
                 }
             })
             .catch((err) => {
+                if(err.response.status === 403 || err.response.status === 401){
+                                       setForbbiden(true)
+                }
+
                 console.log(err)
             })
     }
