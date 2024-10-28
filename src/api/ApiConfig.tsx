@@ -42,12 +42,12 @@ const AxiosInterceptor = ({ children }) => {
 
         const errInterceptor = (error) => {
             if (
-                error.response.status === 401 
+                error?.response?.status === 401 
             ) {
                 setForbbiden(true)
             }
 
-            if (error.response.status === 406) {
+            if (error?.response?.status === 406) {
                 setRoleAccess(true)
             }
 
