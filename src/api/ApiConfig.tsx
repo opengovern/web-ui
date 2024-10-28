@@ -2,7 +2,7 @@ import axios from 'axios'
 import { isDemo } from '../utilities/demo'
 import { atom, useAtom, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
-import { ForbiddenAtom } from '../store'
+import { ForbiddenAtom, RoleAccess } from '../store'
 
 
 const { hostname } = window.location
@@ -30,6 +30,8 @@ const instance = axios.create({
 // @ts-ignore
 const AxiosInterceptor = ({ children }) => {
     const setForbbiden = useSetAtom(ForbiddenAtom)
+    const setRoleAccess = useSetAtom(RoleAccess)
+
 
     useEffect(() => {
         // @ts-ignore
@@ -40,11 +42,15 @@ const AxiosInterceptor = ({ children }) => {
 
         const errInterceptor = (error) => {
             if (
-                error.response.status === 401 ||
-                error.response.status === 403
+                error.response.status === 401 
             ) {
                 setForbbiden(true)
             }
+
+            if (error.response.status === 406) {
+                setRoleAccess(true)
+            }
+
 
             return Promise.reject(error)
         }

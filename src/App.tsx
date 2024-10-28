@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeftStartOnRectangleIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftStartOnRectangleIcon, ArrowPathIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useAtom, useAtomValue } from 'jotai'
@@ -7,12 +7,13 @@ import { Button, Card, Flex, Text, Title } from '@tremor/react'
 import Router from './router'
 import Spinner from './components/Spinner'
 import { setAuthHeader } from './api/ApiConfig'
-import { colorBlindModeAtom, ForbiddenAtom, meAtom, tokenAtom } from './store'
+import { colorBlindModeAtom, ForbiddenAtom, meAtom, RoleAccess, tokenAtom } from './store'
 import { applyTheme } from './utilities/theme'
 import { OpenGovernance } from './icons/icons'
 import { useAuth } from './utilities/auth'
 import { useAuthApiV1MeList, useAuthApiV1UserDetail } from './api/auth.gen'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiTheme } from './api/api'
+import { Modal } from '@cloudscape-design/components'
 
 // Sentry.init({
 //     dsn: 'https://f1ec1f17fb784a12af5cd4f7ddf29d09@sen.kaytu.io/2',
@@ -59,6 +60,7 @@ export default function App() {
     const [expire, setExpire] = useState<number>(0)
     const [showExpired, setShowExpired] = useState<boolean>(false)
     const forbidden = useAtomValue(ForbiddenAtom)
+    const [roleAccess, setRoleAccess] = useAtom(RoleAccess)
     const {
         response: meResponse,
         isExecuted: meIsExecuted,
@@ -173,7 +175,7 @@ export default function App() {
                                 Access Denied
                             </Title>
                             <Text className="mb-6 text-center">
-                                You do not have permission to access this page.
+                                You do not have permission to access the App.
                                 Please contact your administrator for more
                                 information.
                             </Text>
@@ -187,6 +189,30 @@ export default function App() {
                     </Card>
                 </Flex>
             )}
+            <Modal visible={roleAccess} onDismiss={() => {
+                setRoleAccess(false)
+            }}>
+                <Flex
+                    flexDirection="col"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    <OpenGovernance className="w-14 h-14 mb-6" />
+                    <Title className="mb-3 text-2xl font-bold">
+                        Access Denied
+                    </Title>
+                    <Text className="mb-6 text-center">
+                        You do not have permission to access this page. Please
+                        contact your administrator for more information.
+                    </Text>
+                    <Button icon={XMarkIcon} onClick={() => {
+                setRoleAccess(false)
+
+                    }}>
+                        Close
+                    </Button>
+                </Flex>
+            </Modal>
         </>
     )
 }

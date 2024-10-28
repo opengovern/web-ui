@@ -93,8 +93,8 @@ export default function Overview() {
                 }
             })
             .catch((err) => {
-                if(err.response.status === 403 || err.response.status === 401){
-                                       setForbbiden(true)
+                if( err.response.status === 401){
+                        setForbbiden(true)
                 }
 
                 console.log(err)

@@ -4069,23 +4069,7 @@ export class HttpClient<SecurityDataType = unknown> {
             body = JSON.stringify(body)
         }
         const instance = this.instance
-        instance.interceptors.response.use(
-            (response) => {
-                return response
-            },
-            (error) => {
-                if (
-                    error.response &&
-                    (error.response.status === 403 ||
-                        error.response.status === 401)
-                ) {
-                   
-                }
-                // handle for 403
-
-                return Promise.reject(error)
-            }
-        )
+        
         return this.instance.request({
             ...requestParams,
             headers: {
