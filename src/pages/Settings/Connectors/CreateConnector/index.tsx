@@ -99,6 +99,10 @@ export default function CreateConnector({ close }: CreateAPIKeyProps) {
                     type: 'success',
                     text: 'Provider created successfully',
                 })
+                setNotification({
+                    type: 'info',
+                    text: 'Please Wait for DEX POD to restart',
+                })
                 close()
             })
             .catch((err) => {

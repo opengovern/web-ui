@@ -182,6 +182,9 @@ export default function SettingsConnectors() {
             })
             .catch((err) => {
                 console.log(err)
+                if(err.response.status === 400){
+                    GetRows()
+                }
                 setIsLoading(false)
             })
     }
