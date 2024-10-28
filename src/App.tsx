@@ -85,12 +85,12 @@ export default function App() {
 
     useEffect(() => {
         if (meIsExecuted && !meIsLoading) {
+        
             setMe(meResponse)
             applyTheme(
-                meResponse?.theme ||
                     GithubComKaytuIoKaytuEnginePkgAuthApiTheme.ThemeLight
             )
-            setColorBlindMode(meResponse?.colorBlindMode || false)
+            setColorBlindMode( false)
         }
     }, [meIsLoading])
 

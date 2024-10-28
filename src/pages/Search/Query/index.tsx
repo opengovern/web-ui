@@ -362,7 +362,7 @@ export default function Query() {
                                                                     justifyContent="start"
                                                                     onClick={() =>
                                                                         setCode(
-                                                                            `select * from kaytu_resources where resource_type = '${subCat}'`
+                                                                            `select * from og_resources where resource_type = '${subCat}'`
                                                                         )
                                                                     }
                                                                 >

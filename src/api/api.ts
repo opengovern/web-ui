@@ -156,7 +156,10 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiGetMeResponse {
      * @example "John Doe"
      */
     userName?: string
+    role?: string,
+    connector_id?: string
     workspaceAccess?: Record<string, ApiRole>
+    ConnectorId?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse {

@@ -15,8 +15,8 @@ import { Alert, Button, Modal } from '@cloudscape-design/components'
 import FormField from '@cloudscape-design/components/form-field'
 import Input from '@cloudscape-design/components/input'
 import { error } from 'console'
-import { useSetAtom } from 'jotai'
-import { ForbiddenAtom, notificationAtom } from '../../store'
+import { useAtom, useSetAtom } from 'jotai'
+import { ForbiddenAtom, meAtom, notificationAtom } from '../../store'
 import { useAuth } from '../../utilities/auth'
 import { useAuthApiV1UserInviteCreate } from '../../api/auth.gen'
 
@@ -37,6 +37,7 @@ export default function Overview() {
         failed: '',
     })
     const { user, logout } = useAuth()
+    const [me, setMe] = useAtom(meAtom)
 
     const [password, setPassword] = useState<any>({
         current: '',
@@ -172,7 +173,9 @@ export default function Overview() {
         if (user?.email == 'admin@example.com') {
             setUserModal(true)
         } else {
+            if(me?.connector_id === 'local'){
             PassCheck()
+            }
         }
     }, [])
     const CheckEmail = () => {
