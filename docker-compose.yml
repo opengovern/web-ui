@@ -2,7 +2,7 @@
  services:
    front: #Define the client service so we can run it in an isolated environment.
      stdin_open: true
-     container_name : frontendv3
+     container_name : webUI
      build:
        context: .
        dockerfile: Dockerfile #The client service requires a docker file to be specified. For development, we’re going to use the Dockerfile.dev file.
