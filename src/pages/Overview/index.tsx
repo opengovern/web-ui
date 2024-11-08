@@ -174,7 +174,7 @@ export default function Overview() {
             setUserModal(true)
         } else {
             if(me?.connector_id === 'local'){
-            PassCheck()
+            // PassCheck()
             }
         }
     }, [])
@@ -182,28 +182,28 @@ export default function Overview() {
         if (!userData?.email || userData?.email == '') {
             setUserErrors({
                 ...userErrors,
-                email: 'Please eneter  email',
+                email: 'Please enter email',
             })
             return
         }
         if (!userData?.password || userData?.password == '') {
             setUserErrors({
                 ...userErrors,
-                password: 'Please eneter  password',
+                password: 'Please enter  password',
             })
             return
         }
         if (!userData?.confirm || userData?.confirm == '') {
             setUserErrors({
                 ...userErrors,
-                password: 'Please eneter  password',
+                password: 'Please enter  password',
             })
             return
         }
         if (!userData?.email.includes('@')) {
             setUserErrors({
                 ...userErrors,
-                email: 'Please eneter a valid email',
+                email: 'Please enter a valid email',
             })
             return
         }

@@ -28,6 +28,7 @@ interface IConnectorCard {
     tier?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier
     logo?: string
     onClickCard?: Function
+    name?: string
 }
 export const getConnectorsIcon = (connector: SourceType[], className = '') => {
     if (connector?.length >= 2) {
@@ -118,6 +119,7 @@ export default function ConnectorCard({
     status,
     count,
     description,
+    name,
     tier,
     logo,
     onClickCard,
@@ -140,7 +142,7 @@ export default function ConnectorCard({
 
     const onClick = () => {
         if (status === 'enabled' && (count || 0) > 0) {
-            navigate(`${connector}?${searchParams}`)
+            navigate(`${name}`, { state: { connector } })
             return
         }
         if (status === 'first-time') {
@@ -153,10 +155,10 @@ export default function ConnectorCard({
             tier ===
             GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier.TierCommunity
         ) {
-            navigate(`${connector}?${searchParams}`)
+            navigate(`${name}`, { state: { connector } })
             return
         }
-        navigate(`${connector}/../../request-access?connector=${connector}`) // it's a hack!
+        navigate(`${name}/../../request-access?connector=${title}`) // it's a hack!
     }
 
     return (

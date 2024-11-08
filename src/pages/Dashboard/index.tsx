@@ -87,7 +87,7 @@ export default function Dashboard() {
     return (
         <>
             {/* <TopHeader /> */}
-            <Flex
+            {/* <Flex
                 className="bg-white w-[90%] rounded-xl border-solid  border-2 border-gray-200   "
                 flexDirection="col"
                 justifyContent="center"
@@ -115,7 +115,7 @@ export default function Dashboard() {
                                         className="focus:outline-none"
                                         target="_blank"
                                     >
-                                        {/* Extend link to entire card */}
+                                      
                                         <span
                                             className="absolute inset-0"
                                             aria-hidden={true}
@@ -148,7 +148,8 @@ export default function Dashboard() {
                                             Last edited
                                         </SelectItem>
                                         <SelectItem value="3">Size</SelectItem>
-                                    </Select> */}
+                                    </Select> 
+
                                     <button
                                         type="button"
                                         onClick={() => {
@@ -252,7 +253,21 @@ export default function Dashboard() {
                     }}
                     config={{ layout: 'month_view' }}
                 />
-            </Modal>
+            </Modal> */}
+            <Title className="text-black !text-xl font-bold w-full text-center mb-4">
+                Create custom dashboards for teams, functions, and roles—In-App
+                or through BI tools like PowerBI, Tableau, Looker, or Grafana.
+            </Title>
+            <Cal
+                namespace="try-enterprise"
+                calLink="team/opengovernance/try-enterprise"
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    overflow: 'scroll',
+                }}
+                config={{ layout: 'month_view' }}
+            />
         </>
     )
 }

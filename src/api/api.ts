@@ -2321,41 +2321,25 @@ export enum GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectionLif
     ConnectionLifecycleStateArchived = 'ARCHIVED',
 }
 
+
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount {
-    /** @example true */
-    allowNewConnections?: boolean
-    /** @example false */
-    autoOnboardSupport?: boolean
-    /**
-     * @min 0
-     * @example 1024
-     */
-    connection_count?: number
-    /** @example "This is a long volume of words for just showing the case of the description for the demo and checking value purposes only and has no meaning whatsoever" */
-    description?: string
-    direction?: SourceConnectorDirectionType
-    /** @example "Azure" */
-    label?: string
-    /** @example "https://kaytu.io/logo.png" */
-    logo?: string
-    /**
-     * @min 0
-     * @example 10000
-     */
-    maxConnectionLimit?: number
-    /** @example "Azure" */
-    name?: string
-    /** @example "This is a short Description for this connector" */
-    shortDescription?: string
-    /** @example "enabled" */
-    status?: SourceConnectorStatus
-    tags?: Record<string, any>
-    tier?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityTier
+    id: number
+    name: string
+    platform_name: string
+    label: string
+    tier: string
+    annotations: null
+    labels: null
+    short_description: string
+    long_description: string
+    logo: string
+    enabled: boolean
 }
+
 
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorResponse {
     total_count: number
-    connectors: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount[]
+    integration_types: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount[]
 }
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCountConnectionsResponse {
     count?: number
@@ -5735,7 +5719,7 @@ export class Api<
                 GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorResponse,
                 any
             >({
-                path: `/onboard/api/v3/connector?per_page=${per_page}&cursor=${cursor}`,
+                path: `/integration/api/v1/integrations/types?per_page=${per_page}&cursor=${cursor}`,
                 method: 'GET',
                 secure: true,
                 format: 'json',

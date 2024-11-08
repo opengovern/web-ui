@@ -17,71 +17,11 @@ export default function Integrations() {
         sendNow: getList,
     } = useIntegrationApiV1ConnectorsList(9, pageNo)
 
-    const connectorList = responseConnectors?.connectors || []
+    const connectorList = responseConnectors?.integration_types || []
        
     // @ts-ignore
 
-    function classNames(...classes) {
-        return classes.filter(Boolean).join(' ')
-    }
-    // @ts-ignore
-
-    const MobileButton = ({ onClick, disabled, children, position }) => {
-        return (
-            <button
-                type="button"
-                className={classNames(
-                    'group p-2 text-tremor-default ring-1 ring-inset ring-tremor-ring hover:bg-tremor-background-muted disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-tremor-background dark:ring-dark-tremor-ring hover:dark:bg-dark-tremor-background disabled:hover:dark:bg-dark-tremor-background',
-                    position === 'left'
-                        ? 'rounded-l-tremor-small'
-                        : position === 'right'
-                        ? '-ml-px rounded-r-tremor-small'
-                        : ''
-                )}
-                onClick={onClick}
-                disabled={disabled}
-            >
-                {children}
-            </button>
-        )
-    }
-    // @ts-ignore
-    const TextButton = ({ onClick, disabled, children }) => {
-        return (
-            <button
-                type="button"
-                className="group rounded-tremor-small bg-tremor-background p-2 text-tremor-default shadow-tremor-input ring-1 ring-inset ring-tremor-ring hover:bg-tremor-background-muted disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-tremor-background dark:bg-dark-tremor-background dark:shadow-dark-tremor-input dark:ring-dark-tremor-ring hover:dark:bg-dark-tremor-background-muted disabled:hover:dark:bg-dark-tremor-background"
-                onClick={onClick}
-                disabled={disabled}
-            >
-                {children}
-            </button>
-        )
-    }
-    // @ts-ignore
-    const NumberButton = ({ active, onClick, children, position }) => {
-        return (
-            // @ts-ignore
-            <button
-                type="button"
-                className={classNames(
-                    'min-w-[36px] rounded-tremor-small p-2 text-tremor-default text-tremor-content-strong disabled:opacity-50 dark:text-dark-tremor-content-strong',
-                    active
-                        ? 'bg-tremor-brand font-semibold text-white dark:bg-dark-tremor-brand dark:text-dark-tremor-brand-inverted'
-                        : 'hover:bg-tremor-background-muted hover:dark:bg-dark-tremor-background',
-                    position === 'left'
-                        ? 'rounded-l-tremor-small'
-                        : position === 'right'
-                        ? 'rounded-r-tremor-small'
-                        : ''
-                )}
-                onClick={onClick}
-                aria-current={classNames(active ? 'Page' : '')}
-            >
-                {children}
-            </button>
-        )
-    }
+   
     //@ts-ignore
     const totalPages = Math.ceil(responseConnectors?.total_count / 9)
     useEffect(() => {
@@ -206,8 +146,9 @@ export default function Integrations() {
                                                             <>
                                                                 <ConnectorCard
                                                                     connector={
-                                                                        connector.name
+                                                                        connector.platform_name
                                                                     }
+                                                                    name ={connector?.name}
                                                                     title={
                                                                         connector.label
                                                                     }

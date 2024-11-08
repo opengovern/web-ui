@@ -34,7 +34,6 @@ export default function ConnectorDetail() {
     )
 
     const provider = StringToProvider(connector || '')
-    console.log(provider,"pr")
     const credentialType = ConnectorToCredentialType(connector || '')
     const { response: accounts, isLoading: isAccountsLoading,sendNow: accountSendNow } =
         useIntegrationApiV1ConnectionsSummariesList({

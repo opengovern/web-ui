@@ -426,21 +426,7 @@ export default function Sidebar({  currentPage }: ISidebar) {
                 //     // },
                 // ],
             },
-            {
-                name: 'Dashboards',
-                page: [
-                    'dashboard',
-                    'dashboard/infrastructure',
-                    'dashboard/spend',
-                    'dashboard/infrastructure-cloud-accounts',
-                    'dashboard/infrastructure-metrics',
-                    'dashboard/spend-accounts',
-                    'dashboard/spend-metrics',
-                ],
-                icon: PresentationChartBarIcon,
-                isPreview: false,
-                count: 6,
-            },
+
             // {
             //     name: 'Security',
             //     icon: ShieldCheckIcon,
@@ -508,12 +494,7 @@ export default function Sidebar({  currentPage }: ISidebar) {
             //     icon: RectangleStackIcon,
             //     isPreview: true,
             // },
-            {
-                name: 'Automation',
-                page: 'automation',
-                icon: BoltIcon,
-                isPreview: true,
-            },
+
             {
                 name: 'Jobs',
                 page: 'jobs',
@@ -525,6 +506,26 @@ export default function Sidebar({  currentPage }: ISidebar) {
                 page: ['administration'],
                 icon: Cog6ToothIcon,
                 isPreview: false,
+            },
+            {
+                name: 'Automation',
+                page: 'automation',
+                icon: BoltIcon,
+                isPreview: true,
+            },
+            {
+                name: 'Dashboards',
+                page: [
+                    'dashboard',
+                    'dashboard/infrastructure',
+                    'dashboard/spend',
+                    'dashboard/infrastructure-cloud-accounts',
+                    'dashboard/infrastructure-metrics',
+                    'dashboard/spend-accounts',
+                    'dashboard/spend-metrics',
+                ],
+                icon: PresentationChartBarIcon,
+                isPreview: true,
             },
         ]
     }

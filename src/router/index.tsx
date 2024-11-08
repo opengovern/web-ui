@@ -47,6 +47,7 @@ import Search from '../pages/Search'
 import SettingsAccess from '../pages/Settings/Access'
 import SettingsProfile from '../pages/Settings/Profile'
 import SearchLanding from '../pages/Search/landing'
+import TypeDetail from '../pages/Integrations/TypeDetailNew'
 
 const authRoutes = [
     // {
@@ -236,9 +237,15 @@ const authRoutes = [
     },
     {
         key: 'connector detail',
-        path: '/integrations/:connector',
+        path: '/integrations/old/:connector',
         element: <ConnectorDetail />,
     },
+    {
+        key: 'connector detail',
+        path: '/integrations/:type',
+        element: <TypeDetail />,
+    },
+
     {
         key: 'connector resource types',
         path: '/integrations/:connector/resourcetypes',

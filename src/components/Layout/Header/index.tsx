@@ -28,7 +28,7 @@ import {
     SeverityFilter,
 } from '../../FilterGroup/FilterTypes'
 import { CheckboxItem } from '../../FilterGroup/CheckboxSelector'
-import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
+// import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
 import { DateSelectorOptions } from '../../FilterGroup/ConditionSelector/DateConditionSelector'
 
 interface IHeader {
@@ -179,13 +179,13 @@ export default function TopHeader({
         calcInitialFilters()
     )
     const [connectionSearch, setConnectionSearch] = useState('')
-    const { response } = useIntegrationApiV1ConnectionsSummariesList({
-        connector: selectedConnectors.length ? [selectedConnectors] : [],
-        pageNumber: 1,
-        pageSize: 10000,
-        needCost: false,
-        needResourceCount: false,
-    })
+    // const { response } = useIntegrationApiV1ConnectionsSummariesList({
+    //     connector: selectedConnectors.length ? [selectedConnectors] : [],
+    //     pageNumber: 1,
+    //     pageSize: 10000,
+    //     needCost: false,
+    //     needResourceCount: false,
+    // })
 
     const filters: IFilter[] = [
         ConnectorFilter(
@@ -216,47 +216,47 @@ export default function TopHeader({
             () => setSelectedSeverities(defaultSelectedSeverities)
         ),
 
-        CloudAccountFilter(
-            response?.connections
-                ?.filter((v) => {
-                    if (connectionSearch === '') {
-                        return true
-                    }
-                    return (
-                        v.providerConnectionID
-                            ?.toLowerCase()
-                            .includes(connectionSearch.toLowerCase()) ||
-                        v.providerConnectionName
-                            ?.toLowerCase()
-                            .includes(connectionSearch.toLowerCase())
-                    )
-                })
-                .map((c) => {
-                    const vc: CheckboxItem = {
-                        title: c.providerConnectionName || '',
-                        titleSecondLine: c.providerConnectionID || '',
-                        value: c.id || '',
-                    }
-                    return vc
-                }) || [],
-            (sv) => {
-                if (selectedCloudAccounts.includes(sv)) {
-                    setSelectedCloudAccounts(
-                        selectedCloudAccounts.filter((i) => i !== sv)
-                    )
-                } else setSelectedCloudAccounts([...selectedCloudAccounts, sv])
-            },
-            selectedCloudAccounts,
-            selectedCloudAccounts.length > 0,
-            () => {
-                setAddedFilters(
-                    addedFilters.filter((a) => a !== 'Cloud Account')
-                )
-                setSelectedCloudAccounts(defaultSelectedCloudAccounts)
-            },
-            () => setSelectedCloudAccounts(defaultSelectedCloudAccounts),
-            (s) => setConnectionSearch(s)
-        ),
+        // CloudAccountFilter(
+        //     response?.connections
+        //         ?.filter((v) => {
+        //             if (connectionSearch === '') {
+        //                 return true
+        //             }
+        //             return (
+        //                 v.providerConnectionID
+        //                     ?.toLowerCase()
+        //                     .includes(connectionSearch.toLowerCase()) ||
+        //                 v.providerConnectionName
+        //                     ?.toLowerCase()
+        //                     .includes(connectionSearch.toLowerCase())
+        //             )
+        //         })
+        //         .map((c) => {
+        //             const vc: CheckboxItem = {
+        //                 title: c.providerConnectionName || '',
+        //                 titleSecondLine: c.providerConnectionID || '',
+        //                 value: c.id || '',
+        //             }
+        //             return vc
+        //         }) || [],
+        //     (sv) => {
+        //         if (selectedCloudAccounts.includes(sv)) {
+        //             setSelectedCloudAccounts(
+        //                 selectedCloudAccounts.filter((i) => i !== sv)
+        //             )
+        //         } else setSelectedCloudAccounts([...selectedCloudAccounts, sv])
+        //     },
+        //     selectedCloudAccounts,
+        //     selectedCloudAccounts.length > 0,
+        //     () => {
+        //         setAddedFilters(
+        //             addedFilters.filter((a) => a !== 'Cloud Account')
+        //         )
+        //         setSelectedCloudAccounts(defaultSelectedCloudAccounts)
+        //     },
+        //     () => setSelectedCloudAccounts(defaultSelectedCloudAccounts),
+        //     (s) => setConnectionSearch(s)
+        // ),
 
         ServiceNameFilter(
             serviceNames?.map((i) => {
